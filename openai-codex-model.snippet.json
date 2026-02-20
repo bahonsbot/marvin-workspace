@@ -1,0 +1,26 @@
+    "mode": "merge",
+    "providers": {
+      "nexos": {
+        "baseUrl": "https://api.nexos.ai/v1",
+        "apiKey": "nexos-team-9660ad1577b7e9977eaee85139e2074ee2364b9a4fe12b5f63df645a8f3d4dfd0d4e380d5c0069b85d7a83475eafbf072324473f92d3ab8f8b6f4a86c22a04f8",
+        "api": "openai-completions",
+        "auth": "api-key",
+        "models": [
+          ...existing models...
+        ]
+      },
+      "openai-codex": {
+        "auth": "oauth",
+        "models": [
+          {
+            "id": "gpt-5.2-codex",
+            "name": "OpenAI Codex GPT-5.2",
+            "input": ["text"],
+            "reasoning": true,
+            "cost": {"input": 0, "output": 0},
+            "maxTokens": 8192,
+            "contextWindow": 200000
+          }
+        ]
+      }
+    }
