@@ -1,0 +1,12 @@
+# Sensitive files
+*.json
+*.md
+*.sh
+backup/
+memory/
+.git/
+openclaw/
+node_modules/
+*.swp
+*~
+.DS_Store
