@@ -1,12 +1,11 @@
-# Sensitive files
-*.json
+# Ignore these (sensitive/workspace)
 *.md
-*.sh
 backup/
 memory/
-.git/
-openclaw/
+.openclaw/
 node_modules/
-*.swp
-*~
-.DS_Store
+*.bak
+
+# Keep these
+!*.gitignore
+*.py
