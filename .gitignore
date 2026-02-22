@@ -5,6 +5,9 @@ memory/
 .openclaw/
 node_modules/
 *.bak
+auth.json
+*.json.bak*
+*.json.bak
 
 # Keep these
 !*.gitignore
