@@ -41,6 +41,7 @@
 
 ### Preferences
 - Always ask for confirmation before installing skills flagged as suspicious by VirusTotal
+- For non-trivial cleanup/fix actions, propose the plan first and wait for Philippe’s explicit confirmation before executing
 - NEVER store tokens/API keys in git remote URLs - use `gh auth` or environment variables instead
 
 ### GitHub
