@@ -42,6 +42,7 @@
 ### Preferences
 - Always ask for confirmation before installing skills flagged as suspicious by VirusTotal
 - For non-trivial cleanup/fix actions, propose the plan first and wait for Philippe’s explicit confirmation before executing
+- For new skill builds, ask targeted design questions and validate constraints before implementation (prevents rework later)
 - NEVER store tokens/API keys in git remote URLs - use `gh auth` or environment variables instead
 
 ### GitHub
@@ -80,6 +81,7 @@
 - **us-stock-analysis** - Comprehensive US stock analysis (fundamentals + technical)
 - **openclaw-agent-optimize** - Optimize OpenClaw setup (cost, context, reliability)
 - **my-skills** - Personal behaviour rules (no looping, be concise, memory management, task management, error handling)
+- **google_maps_pro** - Custom travel/location planning skill with budget-safe Google Maps usage, ask-first clarifications, matrix batching, and Telegram-friendly output style
 
 ### Security Setup (Feb 2026)
 - **Nightly Security Review**: Runs at 3:30am Vietnam time, analyzes codebase from 4 perspectives (offensive, defensive, privacy, operational), delivers to Telegram
