@@ -7,7 +7,7 @@ Inputs are expected as lists compatible with Google Routes API route matrix form
 import os
 import requests
 
-URL = "https://routes.googleapis.com/v1/computeRouteMatrix"
+URL = "https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix"
 
 
 def run(origins, destinations, mode="DRIVE", traffic_aware=False):
