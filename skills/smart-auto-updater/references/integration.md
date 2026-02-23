@@ -9,7 +9,7 @@ export SMART_UPDATER_MODEL="minimax/MiniMax-M2.5"
 export SMART_UPDATER_AUTO_UPDATE="LOW"
 export SMART_UPDATER_RISK_TOLERANCE="MEDIUM"
 export SMART_UPDATER_REPORT_LEVEL="detailed"
-# Optional explicit destination
+# Explicit destination (recommended)
 export SMART_UPDATER_TELEGRAM_TO="8471960624"
 ```
 

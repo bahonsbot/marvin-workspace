@@ -13,6 +13,7 @@ Run a safe update workflow in four phases and always report progress to Telegram
 - Default `SMART_UPDATER_AUTO_UPDATE=LOW`.
 - Default `SMART_UPDATER_RISK_TOLERANCE=MEDIUM`.
 - Default `SMART_UPDATER_REPORT_LEVEL=detailed`.
+- Set `SMART_UPDATER_TELEGRAM_TO=8471960624` unless explicitly overridden.
 - Send Telegram updates in 3 moments: **check started/result**, **decision**, **final report**.
 
 ## Phase workflow
@@ -57,7 +58,10 @@ Send final Telegram report containing:
 When sending Telegram updates, use `message` tool with:
 - `action: send`
 - `channel: telegram`
-- `target: SMART_UPDATER_TELEGRAM_TO` when provided, else last paired destination.
+- `target: 8471960624` by default
+- `target: SMART_UPDATER_TELEGRAM_TO` only if explicitly set to override default
+
+Never send phase updates without an explicit `target`.
 
 ## Scheduling rule
 
