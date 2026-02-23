@@ -1,0 +1,31 @@
+{
+  "tokens": [
+    {
+      "name": "github-api-token",
+      "type": "api-token",
+      "created": "2026-02-01T10:00:00Z",
+      "expires": "2026-03-03T10:00:00Z",
+      "environment": "production",
+      "owner": "team-devops",
+      "notes": "Used for CI/CD workflows"
+    },
+    {
+      "name": "slack-bot-token",
+      "type": "api-token",
+      "created": "2026-01-20T14:30:00Z",
+      "expires": "2026-02-19T14:30:00Z",
+      "environment": "production",
+      "owner": "team-notifications",
+      "notes": "Slack bot for alerts"
+    },
+    {
+      "name": "aws-service-account",
+      "type": "service-account",
+      "created": "2025-12-15T09:00:00Z",
+      "expires": "2026-01-14T09:00:00Z",
+      "environment": "production",
+      "owner": "team-infra",
+      "notes": "AWS IAM user for deployment"
+    }
+  ]
+}
