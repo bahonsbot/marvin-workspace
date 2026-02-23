@@ -10,8 +10,8 @@
 
 ### Models
 - **Primary:** MiniMax 2.5 (minimax/MiniMax-M2.5)
-- **Fallback:** OpenAI Codex GPT-5.2 (openai-codex/gpt-5.2-codex) via OAuth
-- **Nexos:** Disabled temporarily
+- **Fallback:** OpenAI Codex GPT-5.3 (openai-codex/gpt-5.3-codex) via OAuth
+- **Nexos:** Disabled temporarily (provider block removed from active config)
 - **Switch commands:** /minimax, /codex, "switch to minimax", "switch to codex"
 
 ### Codex + Coding-Agent Skill Setup (Feb 2026)
@@ -54,11 +54,14 @@
 ### Telegram
 - Bot: Configured and working
 - Paired for direct command delivery
+- Smart updater phase delivery validated (check/decision/final report all delivered to Telegram)
 
 ### Infrastructure
 - Git repo initialized (Marvin <marvin@local.com>)
 - **Daily backup**: 4am Vietnam time, delivers to Telegram
 - **Nightly security review**: 3:30am Vietnam time, analyzes workspace, delivers to Telegram
+- **Platform health council**: 3:00am Vietnam time, currently stable after pairing fix
+- **Smart auto updater**: 10:00am Asia/Kuala_Lumpur (`smart-auto-updater-daily`) pinned to MiniMax-M2.5
 - Backup targets: USER.md, MEMORY.md, AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md
 - Workspace: /data/.openclaw/workspace
 
