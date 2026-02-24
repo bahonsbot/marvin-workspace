@@ -1,2 +1,2 @@
 # Pinned Python dependencies for workspace scripts
-requests==2.32.3
+requests==2.32.5
