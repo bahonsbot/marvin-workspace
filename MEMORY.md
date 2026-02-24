@@ -12,6 +12,7 @@
 - **Primary:** MiniMax 2.5 (minimax/MiniMax-M2.5)
 - **Fallback:** OpenAI Codex GPT-5.3 (openai-codex/gpt-5.3-codex) via OAuth
 - **Nexos:** Disabled temporarily (provider block removed from active config)
+- **Incident note (Feb 24 rollback):** bad provider-key schema edits previously caused invalid config/boot issues; only use CLI/schema-safe edits for model/provider config
 - **Switch commands:** /minimax, /codex, "switch to minimax", "switch to codex"
 
 ### Codex + Coding-Agent Skill Setup (Feb 2026)
@@ -59,11 +60,11 @@
 
 ### Infrastructure
 - Git repo initialized (Marvin <marvin@local.com>)
-- **Daily backup**: 4am Vietnam time, delivers to Telegram
 - **Nightly security review**: 3:30am Vietnam time, analyzes workspace, delivers to Telegram
-- **Platform health council**: 3:00am Vietnam time, currently stable after pairing fix
+- **Platform health council**: 3:00am Vietnam time, stable with `delivery.mode=none` to avoid flaky announce failures
 - **Smart auto updater**: 10:00am Asia/Kuala_Lumpur (`smart-auto-updater-daily`) pinned to MiniMax-M2.5
-- Backup targets: USER.md, MEMORY.md, AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md
+- **Daily backup cron**: removed by Philippe preference (he handles daily VPS snapshots manually)
+- Backup targets (manual script): USER.md, MEMORY.md, AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md
 - Workspace: /data/.openclaw/workspace
 
 ### Group Chat Rules
