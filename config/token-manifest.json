@@ -12,20 +12,20 @@
     {
       "name": "slack-bot-token",
       "type": "api-token",
-      "created": "2026-01-20T14:30:00Z",
-      "expires": "2026-02-19T14:30:00Z",
-      "environment": "production",
+      "created": "2026-02-24T06:00:00Z",
+      "expires": "2026-03-26T06:00:00Z",
+      "environment": "sample",
       "owner": "team-notifications",
-      "notes": "Slack bot for alerts"
+      "notes": "Sample manifest entry only. No real token value stored."
     },
     {
       "name": "aws-service-account",
       "type": "service-account",
-      "created": "2025-12-15T09:00:00Z",
-      "expires": "2026-01-14T09:00:00Z",
-      "environment": "production",
+      "created": "2026-02-24T06:00:00Z",
+      "expires": "2026-03-26T06:00:00Z",
+      "environment": "sample",
       "owner": "team-infra",
-      "notes": "AWS IAM user for deployment"
+      "notes": "Sample manifest entry only. No real credential value stored."
     }
   ]
 }
