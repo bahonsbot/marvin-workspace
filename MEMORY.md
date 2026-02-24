@@ -74,6 +74,8 @@
 - If channel name is "stock-analysis" → only discuss stock analysis
 - If channel name is "blender-tips" → only discuss Blender
 - Follow whatever topic the channel name indicates
+- **Small groups (2-3 people):** Be more engaged, participate actively
+- **Larger groups (4+ people):** Quality > quantity, don't overwhelm the chat
 
 ### Installed Skills (Feb 2026)
 - **humanizer** - Remove AI writing patterns, make text sound more natural
