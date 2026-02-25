@@ -9,8 +9,9 @@ TS="$(date +'%Y%m%d_%H%M%S')"
 mkdir -p "$BKDIR"
 chmod 700 "$BKDIR"
 
-# Copy sensitive files to backup directory
-for f in USER.md MEMORY.md AGENTS.md SOUL.md TOOLS.md IDENTITY.md; do
+# Copy operational files to backup directory (excludes sensitive personal/context files)
+# Excluded: USER.md (personal info), MEMORY.md (curated context), SOUL.md (system prompts)
+for f in AGENTS.md TOOLS.md IDENTITY.md; do
   [ -f "/data/.openclaw/workspace/$f" ] && cp "/data/.openclaw/workspace/$f" "$BKDIR/${f%.md}_$TS.md"
 done
 
