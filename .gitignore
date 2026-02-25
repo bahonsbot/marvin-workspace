@@ -11,4 +11,5 @@ auth.json
 
 # Keep these
 !*.gitignore
+!SUBAGENT-POLICY.md
 *.py
