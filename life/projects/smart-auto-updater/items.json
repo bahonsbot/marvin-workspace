@@ -1,0 +1,35 @@
+[
+  {
+    "id": "sau-001",
+    "fact": "Smart auto updater skill built from scratch after declining third-party install due to VirusTotal suspicious warning",
+    "category": "status",
+    "timestamp": "2026-02-23",
+    "source": "2026-02-23",
+    "status": "active",
+    "relatedEntities": ["areas/people/philippe"],
+    "lastAccessed": "2026-02-25",
+    "accessCount": 1
+  },
+  {
+    "id": "sau-002",
+    "fact": "Runs daily at 10:00 Asia/Kuala_Lumpur as cron job smart-auto-updater-daily",
+    "category": "status",
+    "timestamp": "2026-02-23",
+    "source": "2026-02-23",
+    "status": "active",
+    "relatedEntities": ["resources/cron-jobs"],
+    "lastAccessed": "2026-02-25",
+    "accessCount": 1
+  },
+  {
+    "id": "sau-003",
+    "fact": "Philippe disabled smart-auto-updater-daily cron after errors caused by morning config corruption",
+    "category": "status",
+    "timestamp": "2026-02-25",
+    "source": "2026-02-25",
+    "status": "active",
+    "relatedEntities": ["areas/people/philippe"],
+    "lastAccessed": "2026-02-25",
+    "accessCount": 1
+  }
+]

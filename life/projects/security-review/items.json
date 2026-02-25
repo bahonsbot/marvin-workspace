@@ -1,0 +1,35 @@
+[
+  {
+    "id": "sec-001",
+    "fact": "Nightly security review runs at 3:30am Vietnam time, analyzes code from offensive, defensive, privacy, and operational perspectives",
+    "category": "status",
+    "timestamp": "2026-02-22",
+    "source": "2026-02-22",
+    "status": "active",
+    "relatedEntities": ["resources/cron-jobs"],
+    "lastAccessed": "2026-02-25",
+    "accessCount": 1
+  },
+  {
+    "id": "sec-002",
+    "fact": "First security review found hardcoded API keys in auth.json and analyze_image.py",
+    "category": "finding",
+    "timestamp": "2026-02-22",
+    "source": "2026-02-22",
+    "status": "resolved",
+    "relatedEntities": [],
+    "lastAccessed": "2026-02-25",
+    "accessCount": 1
+  },
+  {
+    "id": "sec-003",
+    "fact": "Fix applied: updated .gitignore to protect auth.json and *.bak files from git",
+    "category": "action",
+    "timestamp": "2026-02-22",
+    "source": "2026-02-22",
+    "status": "completed",
+    "relatedEntities": [],
+    "lastAccessed": "2026-02-25",
+    "accessCount": 1
+  }
+]
