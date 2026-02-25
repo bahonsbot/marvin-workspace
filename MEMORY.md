@@ -72,6 +72,13 @@
 - Paired for direct command delivery
 - Smart updater phase delivery validated (check/decision/final report all delivered to Telegram)
 
+### Horizons PMS (Feb 2026)
+- Phase 1 PRD established in `projects/horizons-pms/PRD.md`
+- Core emphasis: front-desk-friendly UX/UI with fast availability checks by room type + date
+- Booking/unit workflows must support remarks and special requests (late check-in/out, room maintenance context)
+- Dashboard requirements include day-specific remaining availability and occupancy rate
+- Export requirements include monthly CSV/PDF report (bookings, revenue, occupancy) plus maintenance history export
+
 ### Infrastructure
 - Git repo initialized (Marvin <marvin@local.com>)
 - **Nightly security review**: 3:30am Vietnam time, analyzes workspace, delivers to Telegram
@@ -80,6 +87,7 @@
 - **Daily backup cron**: removed by Philippe preference (he handles daily VPS snapshots manually)
 - Backup targets (manual script): USER.md, MEMORY.md, AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md
 - Workspace: /data/.openclaw/workspace
+- Incident (Feb 25 late): gateway crashed multiple times during active tool calls; file edits persisted; recovery required cleanup of corrupted half-finished tool-call logs
 
 ### Group Chat Rules
 - **DM (direct)** → anything goes (personal, random, whatever)

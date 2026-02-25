@@ -13,6 +13,11 @@ Property Management System (PMS) for Horizons - managing 76 self-owned rental un
 
 ### Must Have
 
+#### UX/UI
+- [ ] Fast, clean UI for front-desk operations (low training overhead)
+- [ ] Availability should be visible at a glance by room type and date
+- [ ] Booking, unit status, and remarks should be editable from contextual views (calendar/list/detail) without friction
+
 #### Unit Management
 - [ ] CRUD operations for 76 units
 - [ ] Unit attributes: unit number, floor, room type (studio/1bed/2bed/3bed), status
