@@ -130,9 +130,12 @@ notify() {
     local level="${2:-info}"
     
     # Try Telegram notification if available
-    if command -v openclaw &>/dev/null; then
-        # Log for now, cron can pick up
-        log "[NOTIFY] $message"
+    if [[ -x "$WORKSPACE/scripts/ralphy-notify.sh" ]]; then
+        if [[ "$level" == "error" ]]; then
+            "$WORKSPACE/scripts/ralphy-notify.sh" --urgent "🚨 Ralph Error: $message"
+        else
+            "$WORKSPACE/scripts/ralphy-notify.sh" "✅ $message"
+        fi
     fi
     
     # Also write to notification file for monitoring
