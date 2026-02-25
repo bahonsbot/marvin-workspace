@@ -125,8 +125,6 @@ In group chats where you receive every message, be **smart about when to contrib
 
 **Stay silent (HEARTBEAT_OK) when:**
 
-- It's just casual banter between humans
-- Someone already answered the question
 - Your response would just be "yeah" or "nice"
 - The conversation is flowing fine without you
 - Adding a message would interrupt the vibe
