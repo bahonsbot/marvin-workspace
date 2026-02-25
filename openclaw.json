@@ -3,6 +3,30 @@
     "lastTouchedVersion": "2026.2.19",
     "lastTouchedAt": "2026-02-22T12:12:41.173Z"
   },
+  "memory": {
+    "backend": "qmd",
+    "citations": "auto",
+    "qmd": {
+      "includeDefaultMemory": true,
+      "update": {
+        "interval": "5m",
+        "debounceMs": 15000,
+        "onBoot": true
+      },
+      "paths": [
+        {
+          "name": "life",
+          "path": "life",
+          "pattern": "**/*.md"
+        },
+        {
+          "name": "life-json",
+          "path": "life",
+          "pattern": "**/*.json"
+        }
+      ]
+    }
+  },
   "agents": {
     "defaults": {
       "model": {

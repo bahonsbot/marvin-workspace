@@ -13,3 +13,4 @@ auth.json
 !*.gitignore
 !SUBAGENT-POLICY.md
 *.py
+blender-test/
