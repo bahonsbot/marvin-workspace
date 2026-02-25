@@ -11,7 +11,7 @@
 ### Models
 - **Primary:** MiniMax 2.5 (minimax/MiniMax-M2.5)
 - **Fallback:** OpenAI Codex GPT-5.3 (openai-codex/gpt-5.3-codex) via OAuth
-- **Nexos:** Disabled temporarily (provider block removed from active config)
+- **Nexos:** Removed (caused cron job issues, won't use going forward)
 - **Incident note (Feb 24 rollback):** bad provider-key schema edits previously caused invalid config/boot issues; only use CLI/schema-safe edits for model/provider config
 - **Switch commands:** /minimax, /codex, "switch to minimax", "switch to codex"
 
