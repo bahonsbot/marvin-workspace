@@ -196,8 +196,8 @@ You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it
 ```json
 {
   "lastChecks": {
-    "email": 1703275200,
-    "calendar": 1703260800,
+    "email": 1772515200,
+    "calendar": 1772500800,
     "weather": null
   }
 }
@@ -212,7 +212,7 @@ You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it
 
 **When to stay quiet (HEARTBEAT_OK):**
 
-- Late night (23:00-08:00) unless urgent
+- Late night (22:00-09:00) unless urgent
 - Human is clearly busy
 - Nothing new since last check
 - You just checked &lt;30 minutes ago
