@@ -1,7 +1,7 @@
 # HEARTBEAT.md
 
 ## Active Hours
-- **Default:** Active between 08:00 - 23:00 local (Asia/Ho_Chi_Minh) time
+- **Default:** Active between 09:00 - 22:00 Ho Chi Minh (Asia/Ho_Chi_Minh) time
 - Outside these hours: stay quiet unless urgent
 
 ## Model
@@ -20,8 +20,9 @@
 3. Run quick system health checks
 
 ## When to Stay Quiet (HEARTBEAT_OK)
-- Outside active hours (23:00-08:00)
+- Outside active hours (22:00-09:00)
 - Human is clearly busy or in an active conversation
+- In the middle of a task, command, or ongoing conversation
 - Nothing significant needs attention
 - Recently checked (<30 min ago)
 
