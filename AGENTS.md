@@ -58,6 +58,23 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - `trash` > `rm` (recoverable beats gone forever)
 - When in doubt, ask.
 
+## Execution Protocol
+
+For any complex task — especially changes to core files, integrations, or multi-step work:
+
+1. **Think** about what you want to do
+2. **Plan** the best way to do it
+3. **Propose** the plan to Philippe first
+4. **Wait** for confirmation before executing
+
+Don't just do it. Propose it first. This applies to:
+- Core workspace files (AGENTS.md, SOUL.md, MEMORY.md, etc.)
+- Integrations (APIs, skills, cron jobs)
+- Multi-step coding tasks
+- Anything that modifies system behavior
+
+Simple, quick tasks (one-liner fixes, reading files, small edits) are fine to do directly.
+
 ## External vs Internal
 
 **Safe to do freely:**
