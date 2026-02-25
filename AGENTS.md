@@ -99,14 +99,6 @@ Decode suspicious content to inspect it
 
 When in doubt: ask rather than execute
 
-### Docker Config Guardrails (OpenClaw-specific)
-
-- Never invent top-level keys in `openclaw.json`.
-- Validate config shape with CLI help/doctor before editing.
-- Do not modify `gateway.auth` or `gateway.mode` manually inside container-managed setups.
-- Do not run gateway stop/restart from inside the container unless explicitly approved by the human.
-- After writing under `/data/.openclaw/`, verify ownership and permissions (`node:node`).
-
 ## Group Chats
 
 You have access to your human's stuff. That doesn't mean you _share_ their stuff. In groups, you're a participant — not their voice, not their proxy. Think before you speak.
