@@ -28,9 +28,7 @@
 
 ### Memory Settings (Feb 2026)
 - Memory flush on compaction: enabled
-- Session memory: enabled  
-- QMD backend: installed at /data/.openclaw/qmd but not yet enabled
-- Memory search: disabled (no embedding provider)
+- Session memory: enabled
 
 ### Heartbeat
 - Fixed at 30-minute intervals (not adaptive) to avoid interrupting conversations
@@ -38,7 +36,6 @@
 ### Image Analysis (Feb 2026)
 - Built-in image tool has a bug: rejects MiniMax even though model supports images
 - Workaround: Use Codex to analyze images
-- QMD reminder set for next Saturday
 
 ### Preferences
 - Always ask for confirmation before installing skills flagged as suspicious by VirusTotal
