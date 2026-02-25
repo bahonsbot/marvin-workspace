@@ -17,6 +17,7 @@ Property Management System (PMS) for Horizons - managing 76 self-owned rental un
 - [ ] CRUD operations for 76 units
 - [ ] Unit attributes: unit number, floor, room type (studio/1bed/2bed/3bed), status
 - [ ] Unit status tracking: available, occupied, maintenance, reserved
+- [ ] Maintenance tracking: issue description, reported date, status, resolution notes
 
 #### Room Types (4 types)
 - [ ] Studios
@@ -35,6 +36,8 @@ Property Management System (PMS) for Horizons - managing 76 self-owned rental un
 - [ ] Booking statuses: confirmed, checked-in, checked-out, cancelled, no-show
 - [ ] Calendar view of all bookings
 - [ ] Conflict detection (prevent double-booking)
+- [ ] Special requests/remarks: late check-in/out, early check-in, extra bed, etc.
+- [ ] Quick availability search by date range and room type
 
 #### User Management
 - [ ] Multi-user support with roles
@@ -45,10 +48,13 @@ Property Management System (PMS) for Horizons - managing 76 self-owned rental un
 - [ ] Occupancy rate (current/target)
 - [ ] Today's arrivals/departures
 - [ ] Revenue snapshot (daily/weekly/monthly)
+- [ ] Available rooms count per day (by room type)
+- [ ] Quick availability check for any date range
 
 ### Nice to Have
 - [ ] Basic reporting (occupancy, revenue by room type)
-- [ ] Export to CSV
+- [ ] Monthly report export (CSV/PDF) - bookings, revenue, occupancy
+- [ ] Maintenance history export
 
 ## Technical Approach
 
