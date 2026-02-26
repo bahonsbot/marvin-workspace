@@ -1,0 +1,31 @@
+export const UNIT_STATUSES = ["available", "occupied", "maintenance", "reserved"] as const;
+
+export type UnitStatus = (typeof UNIT_STATUSES)[number];
+
+export type Unit = {
+  id: string;
+  unit_number: string;
+  floor: number;
+  room_type_id: string;
+  status: UnitStatus;
+  amenities: string[];
+  base_rate: string;
+  maintenance_issue_description: string | null;
+  maintenance_reported_at: string | null;
+  maintenance_status: string | null;
+  maintenance_resolution_notes: string | null;
+  created_at: string;
+  updated_at: string;
+  room_type?: {
+    id: string;
+    name: string;
+  } | null;
+};
+
+export type CreateUnitInput = {
+  unit_number: string;
+  floor: number;
+  room_type_id: string;
+  status: UnitStatus;
+  base_rate: number;
+};
