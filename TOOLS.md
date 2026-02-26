@@ -61,7 +61,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **Workspace:** `/data/.openclaw/workspace`
 
 ### Cron Jobs (Active)
-| Job | Time (ICT) | Purpose |
+| Job | Time (GMT+7) | Purpose |
 |-----|------------|---------|
 | platform-health-council | 03:00 | Daily system audit |
 | nightly-security-review | 03:30 | Security analysis |
@@ -92,8 +92,11 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - `scripts/check-token-age.sh` — Token expiration checker
 - `skills/google_maps_pro/scripts/get_tour_plan.py` — Route matrix helper
 
+### Active Projects
+- `projects/horizons-pms/` — PMS system for hotel front-desk (PRD in progress)
+
 ### Environment
-- **Timezone:** Asia/Ho_Chi_Minh (ICT, GMT+7)
+- **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
 - **User:** Philippe (Netherlands → Vietnam since Sep 2024)
 - **Partner:** Girlfriend in Vietnam
 

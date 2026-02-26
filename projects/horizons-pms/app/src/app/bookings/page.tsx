@@ -221,9 +221,10 @@ export default async function BookingsPage({ searchParams }: PageProps) {
                                 type="submit"
                                 style={{
                                   padding: "4px 8px",
-                                  border: "1px solid #ccc",
+                                  border: "1px solid #cbd5e1",
                                   borderRadius: 4,
-                                  background: "#fff",
+                                  background: "#f8fafc",
+                                  color: "#0f172a",
                                   cursor: "pointer",
                                 }}
                               >

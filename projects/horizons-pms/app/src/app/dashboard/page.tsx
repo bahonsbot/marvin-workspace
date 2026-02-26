@@ -2,10 +2,11 @@ import { getDashboardSummary } from "@/lib/data/dashboard";
 
 function cardStyle() {
   return {
-    border: "1px solid #ddd",
+    border: "1px solid #d1d5db",
     borderRadius: 8,
     padding: 16,
-    background: "#fff",
+    background: "#ffffff",
+    color: "#111827",
   } as const;
 }
 
@@ -22,7 +23,7 @@ export default async function DashboardPage() {
   return (
     <main style={{ maxWidth: 980, margin: "40px auto", padding: "0 16px" }}>
       <h1>Dashboard</h1>
-      <p style={{ color: "#666", marginTop: 8 }}>Live snapshot for {summary?.today ?? "today"}</p>
+      <p style={{ color: "#4b5563", marginTop: 8 }}>Live snapshot for {summary?.today ?? "today"}</p>
       {error ? <p style={{ color: "#b00020", marginTop: 12 }}>Error: {error}</p> : null}
 
       <section
@@ -47,9 +48,6 @@ export default async function DashboardPage() {
           <h2 style={{ margin: 0, fontSize: 16 }}>Current occupancy rate</h2>
           <p style={{ margin: "10px 0 0", fontSize: 28, fontWeight: 600 }}>
             {summary ? `${summary.occupancyRate.toFixed(1)}%` : "-"}
-          </p>
-          <p style={{ margin: "6px 0 0", color: "#666", fontSize: 13 }}>
-            Based on checked-in bookings / total units ({summary?.totalUnitsCount ?? 0})
           </p>
         </article>
 

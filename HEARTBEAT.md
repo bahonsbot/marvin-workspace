@@ -1,7 +1,7 @@
 # HEARTBEAT.md
 
 ## Active Hours
-- **Default:** Active between 09:00 - 22:00 Ho Chi Minh (Asia/Ho_Chi_Minh) time
+- **Default:** Active between 09:00 - 22:00 Asia/Ho_Chi_Minh (GMT+7) time
 - Outside these hours: stay quiet unless urgent
 
 ## Model

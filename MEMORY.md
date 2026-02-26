@@ -13,6 +13,7 @@
 - **Fallback:** OpenAI Codex GPT-5.3 (openai-codex/gpt-5.3-codex) via OAuth
 - **Nexos:** Removed (caused cron job issues, won't use going forward)
 - **Incident note (Feb 24 rollback):** bad provider-key schema edits previously caused invalid config/boot issues; only use CLI/schema-safe edits for model/provider config
+- **Known instability (Feb 25):** Multiple "terminated" errors from MiniMax at 21:36, 22:17, 22:52. Fallback to Codex worked. Provider may have intermittent issues.
 - **Switch commands:** /minimax, /codex, "switch to minimax", "switch to codex"
 
 ## How Philippe Works

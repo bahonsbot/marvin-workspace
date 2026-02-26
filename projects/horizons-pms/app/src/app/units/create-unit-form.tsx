@@ -30,6 +30,7 @@ export function CreateUnitForm({ blueprints, action }: CreateUnitFormProps) {
   const [roomNumber, setRoomNumber] = useState("");
 
   const normalizedRoomNumber = normalizeRoomNumber(roomNumber);
+  const hasLookupInput = floor.trim() !== "" && normalizedRoomNumber !== "";
 
   const matchedBlueprint = useMemo(
     () =>
@@ -104,7 +105,7 @@ export function CreateUnitForm({ blueprints, action }: CreateUnitFormProps) {
         <input type="hidden" name="bed_layout" value={matchedBlueprint?.bed_layout ?? ""} />
       </label>
 
-      {!matchedBlueprint ? (
+      {hasLookupInput && !matchedBlueprint ? (
         <p style={{ margin: 0, color: "#b00020" }}>
           No unit blueprint found for this tower/floor/room combination.
         </p>
