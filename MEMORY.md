@@ -168,3 +168,10 @@ These rules prevent common issues in this Docker setup:
 - Creative hobbies: animation, graphic design, photography, writing, cooking
 - Career interests: Blender, After Effects, Unreal Engine, novel writing, stock trading
 - Previously: hospitality, WoW Game Master (France), Head Teacher (Macau), marketing/comms (Amsterdam), Group Comms Manager (Tilburg)
+
+### Docker + Cron Access (Feb 2026)
+- Cron jobs configured in `/data/.openclaw/cron/jobs.json`
+- Can edit cron delivery mode: "none" (silent), "telegram" (external), "both" (internal + external)
+- Platform-health-council and self-improvement set to "both" so reports save to workspace AND Telegram
+- Workspace access includes: workspace/, cron/, skills/, ~/.codex/
+- Core config (openclaw.json): edit with caution - past bad edits caused boot issues

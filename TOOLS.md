@@ -96,7 +96,6 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ### Scripts
 - `backup-workspace.sh` — Manual backup (Philippe runs VPS snapshots)
-- `security-review.sh` — Nightly security audit
 - `switch_model.sh` / `switch_model_auto.sh` — Model switching
 - `scripts/audit-log.sh` — Security action logging
 - `scripts/check-token-age.sh` — Token expiration checker

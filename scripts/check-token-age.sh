@@ -42,23 +42,22 @@ CURRENT_EPOCH=$(date +%s)
 # Calculate threshold epoch (current time - max age days)
 THRESHOLD_EPOCH=$((CURRENT_EPOCH - MAX_AGE_DAYS * 86400))
 
-# Parse JSON and check each token
-# Using grep and awk for simple parsing without jq dependency
+# Parse JSON and check each token using jq (robust JSON parsing)
+# Check if jq is available
+if ! command -v jq &> /dev/null; then
+    echo -e "${RED}Error: jq is required but not installed${NC}"
+    exit 1
+fi
 
 EXPIRED_COUNT=0
 WARNING_COUNT=0
 OK_COUNT=0
 
-# Read tokens from manifest (simple grep approach)
-TOKEN_NAMES=$(grep -o '"name"[[:space:]]*:[[:space:]]*"[^"]*"' "$MANIFEST_PATH" | cut -d'"' -f4)
-TOKEN_CREATED=$(grep -o '"created"[[:space:]]*:[[:space:]]*"[^"]*"' "$MANIFEST_PATH" | cut -d'"' -f4)
-
-# Convert to arrays
-IFS=$'\n' read -r -d '' -a NAME_ARRAY <<< "$TOKEN_NAMES" || true
-IFS=$'\n' read -r -d '' -a CREATED_ARRAY <<< "$TOKEN_CREATED" || true
+# Read tokens from manifest using jq (reliable JSON parsing)
+TOKEN_COUNT=$(jq '.tokens | length' "$MANIFEST_PATH")
 
 # Check if we have tokens
-if [[ ${#NAME_ARRAY[@]} -eq 0 ]]; then
+if [[ "$TOKEN_COUNT" -eq 0 ]] || [[ "$TOKEN_COUNT" == "null" ]]; then
     echo -e "${YELLOW}No tokens found in manifest${NC}"
     exit 0
 fi
@@ -66,9 +65,13 @@ fi
 echo "Checking tokens..."
 echo "----------------------------------------"
 
-for i in "${!NAME_ARRAY[@]}"; do
-    TOKEN_NAME="${NAME_ARRAY[$i]}"
-    CREATED="${CREATED_ARRAY[$i]}"
+for i in $(jq '.tokens | keys | .[]' "$MANIFEST_PATH" 2>/dev/null | tr -d '"'); do
+    TOKEN_NAME=$(jq -r ".tokens[$i].name // empty" "$MANIFEST_PATH")
+    CREATED=$(jq -r ".tokens[$i].created // empty" "$MANIFEST_PATH")
+    
+    if [[ -z "$TOKEN_NAME" ]]; then
+        continue
+    fi
     
     if [[ -z "$CREATED" ]]; then
         echo -e "${RED}[ERROR]${NC} Token '$TOKEN_NAME' has no created date"
