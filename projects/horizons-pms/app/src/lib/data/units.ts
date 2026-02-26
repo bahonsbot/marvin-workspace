@@ -11,7 +11,7 @@ export async function listUnits(): Promise<Unit[]> {
   const { data, error } = await supabase
     .from("units")
     .select(
-      "id, unit_number, floor, room_type_id, tower, bed_setup, status, amenities, base_rate, maintenance_issue_description, maintenance_reported_at, maintenance_status, maintenance_resolution_notes, created_at, updated_at, room_type:room_types(id, name)"
+      "id, unit_number, floor, room_type_id, tower, bed_setup, bed_layout, status, amenities, base_rate, maintenance_issue_description, maintenance_reported_at, maintenance_status, maintenance_resolution_notes, created_at, updated_at, room_type:room_types(id, name)"
     )
     .order("floor", { ascending: true })
     .order("unit_number", { ascending: true });
@@ -37,6 +37,7 @@ export async function createUnit(input: CreateUnitInput): Promise<void> {
     room_type_id: input.room_type_id,
     tower: input.tower,
     bed_setup: input.bed_setup,
+    bed_layout: input.bed_layout,
     status: input.status,
     base_rate: input.base_rate,
   });

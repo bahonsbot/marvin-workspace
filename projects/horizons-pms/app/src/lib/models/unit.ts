@@ -1,3 +1,5 @@
+import type { BedLayout } from "@/lib/models/room-type";
+
 export const UNIT_STATUSES = ["available", "occupied", "maintenance", "reserved"] as const;
 export const UNIT_TOWERS = [1, 2] as const;
 export const BED_SETUPS = ["king", "twin"] as const;
@@ -13,6 +15,7 @@ export type Unit = {
   room_type_id: string;
   tower: UnitTower;
   bed_setup: BedSetup;
+  bed_layout: BedLayout;
   status: UnitStatus;
   amenities: string[];
   base_rate: string;
@@ -34,6 +37,7 @@ export type CreateUnitInput = {
   room_type_id: string;
   tower: UnitTower;
   bed_setup: BedSetup;
+  bed_layout: BedLayout;
   status: UnitStatus;
   base_rate: number;
 };

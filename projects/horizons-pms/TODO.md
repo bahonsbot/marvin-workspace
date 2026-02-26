@@ -33,5 +33,6 @@
 - Audit logging for important actions
 
 ## Booking rules (bed / extra bed)
-- Twin bed setup => no extra bed
+- Use `units.bed_layout` (not only `bed_setup`) when validating booking bed preference
+- Any layout containing `twin` should default to no extra bed unless manually overridden by policy
 - Room type with `allow_extra_bed = false` => no extra bed

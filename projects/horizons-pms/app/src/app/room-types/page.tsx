@@ -86,6 +86,8 @@ export default async function RoomTypesPage({ searchParams }: PageProps) {
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Name</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Base capacity</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Max capacity</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Bedrooms</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Allowed bed layouts</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Description</th>
               </tr>
             </thead>
@@ -95,6 +97,10 @@ export default async function RoomTypesPage({ searchParams }: PageProps) {
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{roomType.name}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{roomType.base_capacity}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{roomType.max_capacity}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{roomType.bedrooms_count}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
+                    {roomType.allowed_bed_layouts.join(", ")}
+                  </td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
                     {roomType.description || "-"}
                   </td>
