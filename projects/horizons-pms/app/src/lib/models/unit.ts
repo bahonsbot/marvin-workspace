@@ -11,6 +11,8 @@ export type BedSetup = (typeof BED_SETUPS)[number];
 export type Unit = {
   id: string;
   unit_number: string;
+  room_number: string;
+  unit_code: string;
   floor: number;
   room_type_id: string;
   tower: UnitTower;
@@ -32,8 +34,8 @@ export type Unit = {
 };
 
 export type CreateUnitInput = {
-  unit_number: string;
   floor: number;
+  room_number: string;
   room_type_id: string;
   tower: UnitTower;
   bed_setup: BedSetup;

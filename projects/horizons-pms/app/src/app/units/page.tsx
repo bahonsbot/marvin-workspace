@@ -12,11 +12,20 @@ type PageProps = {
   searchParams?: Promise<{ error?: string; success?: string }>;
 };
 
+function normalizeRoomNumber(roomNumber: string): string {
+  const digits = roomNumber.replace(/\D/g, "");
+  if (!digits) {
+    return "";
+  }
+
+  return digits.padStart(2, "0");
+}
+
 async function createUnitAction(formData: FormData) {
   "use server";
 
-  const unitNumber = String(formData.get("unit_number") ?? "").trim();
   const floorRaw = String(formData.get("floor") ?? "").trim();
+  const roomNumberRaw = String(formData.get("room_number") ?? "").trim();
   const roomTypeId = String(formData.get("room_type") ?? "").trim();
   const towerRaw = String(formData.get("tower") ?? "").trim();
   const bedLayout = String(formData.get("bed_layout") ?? "").trim();
@@ -26,9 +35,10 @@ async function createUnitAction(formData: FormData) {
   const floor = Number(floorRaw);
   const tower = Number(towerRaw);
   const baseRate = Number(baseRateRaw);
+  const roomNumber = normalizeRoomNumber(roomNumberRaw);
 
-  if (!unitNumber) {
-    redirect("/units?error=Unit+number+is+required");
+  if (!roomNumber) {
+    redirect("/units?error=Room+number+is+required");
   }
 
   if (!Number.isInteger(floor) || floor < 0) {
@@ -64,8 +74,8 @@ async function createUnitAction(formData: FormData) {
 
   try {
     await createUnit({
-      unit_number: unitNumber,
       floor,
+      room_number: roomNumber,
       room_type_id: roomTypeId,
       tower: tower as (typeof UNIT_TOWERS)[number],
       bed_setup: normalizedBedSetup as (typeof BED_SETUPS)[number],
@@ -110,9 +120,10 @@ export default async function UnitsPage({ searchParams }: PageProps) {
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
               <tr>
-                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Unit number</th>
-                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Floor</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Tower</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Floor</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Room</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Display code</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Room type</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Bed layout</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Status</th>
@@ -122,9 +133,10 @@ export default async function UnitsPage({ searchParams }: PageProps) {
             <tbody>
               {units.map((unit) => (
                 <tr key={unit.id}>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.unit_number}</td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.floor}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.tower}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.floor}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.room_number}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.unit_code ?? unit.unit_number}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.room_type?.name ?? "-"}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
                     {BED_LAYOUT_LABELS[unit.bed_layout] ?? unit.bed_layout}

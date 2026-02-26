@@ -29,13 +29,13 @@ export function CreateUnitForm({ roomTypes, action }: CreateUnitFormProps) {
   return (
     <form action={action} style={{ display: "grid", gap: 12, maxWidth: 480 }}>
       <label style={{ display: "grid", gap: 4 }}>
-        Unit number
-        <input name="unit_number" required />
+        Floor
+        <input name="floor" type="number" min={0} required />
       </label>
 
       <label style={{ display: "grid", gap: 4 }}>
-        Floor
-        <input name="floor" type="number" min={0} required />
+        Room number
+        <input name="room_number" inputMode="numeric" placeholder="05" required />
       </label>
 
       <label style={{ display: "grid", gap: 4 }}>
