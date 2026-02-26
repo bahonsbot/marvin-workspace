@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Booking, CreateBookingInput } from "@/lib/models/booking";
+import type { Booking, BookingStatus, CreateBookingInput } from "@/lib/models/booking";
 import { ROOM_TYPE_LABELS, type RoomTypeName } from "@/lib/models/room-type";
 
 type BookingRow = Omit<Booking, "unit" | "guest"> & {
@@ -23,6 +23,22 @@ type UnitForBookingRow = Omit<UnitForBooking, "room_type"> & {
 };
 
 const ROOM_TYPE_ORDER: RoomTypeName[] = ["studio", "1bed", "2bed", "3bed"];
+
+const NEXT_STATUS_BY_ACTION = {
+  check_in: "checked_in",
+  check_out: "checked_out",
+  cancel: "cancelled",
+} as const;
+
+export type BookingStatusAction = keyof typeof NEXT_STATUS_BY_ACTION;
+
+const ALLOWED_TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
+  confirmed: ["checked_in", "cancelled"],
+  checked_in: ["checked_out", "cancelled"],
+  checked_out: [],
+  cancelled: [],
+  no_show: [],
+};
 
 function normalizeName(fullName: string): { firstName: string; lastName: string } {
   const trimmed = fullName.trim().replace(/\s+/g, " ");
@@ -93,6 +109,41 @@ export async function listBookings(): Promise<Booking[]> {
     unit: normalizeJoin(row.unit),
     guest: normalizeJoin(row.guest),
   }));
+}
+
+export function canTransitionBookingStatus(from: BookingStatus, to: BookingStatus): boolean {
+  return ALLOWED_TRANSITIONS[from].includes(to);
+}
+
+export async function updateBookingStatus(params: { bookingId: string; action: BookingStatusAction }): Promise<void> {
+  const supabase = await createClient();
+  const nextStatus = NEXT_STATUS_BY_ACTION[params.action];
+
+  const { data: booking, error: bookingError } = await supabase
+    .from("bookings")
+    .select("id, status")
+    .eq("id", params.bookingId)
+    .maybeSingle();
+
+  if (bookingError || !booking) {
+    throw new Error("Booking not found.");
+  }
+
+  const currentStatus = booking.status as BookingStatus;
+
+  if (!canTransitionBookingStatus(currentStatus, nextStatus)) {
+    throw new Error(`Cannot change booking from ${currentStatus} to ${nextStatus}.`);
+  }
+
+  const { error: updateError } = await supabase
+    .from("bookings")
+    .update({ status: nextStatus })
+    .eq("id", params.bookingId)
+    .eq("status", currentStatus);
+
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
 }
 
 export async function listBookableUnits(): Promise<UnitForBooking[]> {

@@ -1,4 +1,11 @@
-import { createBooking, listAvailableUnits, listBookableUnits, listBookings } from "@/lib/data/bookings";
+import {
+  createBooking,
+  listAvailableUnits,
+  listBookableUnits,
+  listBookings,
+  updateBookingStatus,
+} from "@/lib/data/bookings";
+import type { BookingStatus } from "@/lib/models/booking";
 import type { RoomTypeName } from "@/lib/models/room-type";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -15,6 +22,20 @@ type SearchParams = {
 
 type PageProps = {
   searchParams?: Promise<SearchParams>;
+};
+
+const STATUS_ACTIONS: Record<BookingStatus, Array<{ action: "check_in" | "check_out" | "cancel"; label: string }>> = {
+  confirmed: [
+    { action: "check_in", label: "Check in" },
+    { action: "cancel", label: "Cancel" },
+  ],
+  checked_in: [
+    { action: "check_out", label: "Check out" },
+    { action: "cancel", label: "Cancel" },
+  ],
+  checked_out: [],
+  cancelled: [],
+  no_show: [],
 };
 
 async function createBookingAction(formData: FormData) {
@@ -69,7 +90,34 @@ async function createBookingAction(formData: FormData) {
   }
 
   revalidatePath("/bookings");
+  revalidatePath("/dashboard");
   redirect("/bookings?success=Booking+created");
+}
+
+async function updateBookingStatusAction(formData: FormData) {
+  "use server";
+
+  const bookingId = String(formData.get("booking_id") ?? "").trim();
+  const action = String(formData.get("action") ?? "").trim();
+
+  if (!bookingId) {
+    redirect("/bookings?error=Booking+id+is+required");
+  }
+
+  if (action !== "check_in" && action !== "check_out" && action !== "cancel") {
+    redirect("/bookings?error=Invalid+booking+action");
+  }
+
+  try {
+    await updateBookingStatus({ bookingId, action });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update booking status";
+    redirect(`/bookings?error=${encodeURIComponent(message)}`);
+  }
+
+  revalidatePath("/bookings");
+  revalidatePath("/dashboard");
+  redirect("/bookings?success=Booking+status+updated");
 }
 
 export default async function BookingsPage({ searchParams }: PageProps) {
@@ -138,31 +186,62 @@ export default async function BookingsPage({ searchParams }: PageProps) {
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Check-in</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Check-out</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Status</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Actions</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Rate</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Source</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Notes</th>
               </tr>
             </thead>
             <tbody>
-              {bookings.map((booking) => (
-                <tr key={booking.id}>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
-                    {new Date(booking.created_at).toLocaleString("en-GB")}
-                  </td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.unit?.unit_code ?? "-"}</td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
-                    {booking.guest ? `${booking.guest.first_name} ${booking.guest.last_name}`.trim() : "-"}
-                  </td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.check_in}</td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.check_out}</td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.status}</td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.rate}</td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.source || "-"}</td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8, whiteSpace: "pre-wrap" }}>
-                    {booking.notes || "-"}
-                  </td>
-                </tr>
-              ))}
+              {bookings.map((booking) => {
+                const actions = STATUS_ACTIONS[booking.status] ?? [];
+
+                return (
+                  <tr key={booking.id}>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
+                      {new Date(booking.created_at).toLocaleString("en-GB")}
+                    </td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.unit?.unit_code ?? "-"}</td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
+                      {booking.guest ? `${booking.guest.first_name} ${booking.guest.last_name}`.trim() : "-"}
+                    </td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.check_in}</td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.check_out}</td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.status}</td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
+                      {actions.length === 0 ? (
+                        <span style={{ color: "#777" }}>—</span>
+                      ) : (
+                        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                          {actions.map((item) => (
+                            <form key={item.action} action={updateBookingStatusAction}>
+                              <input type="hidden" name="booking_id" value={booking.id} />
+                              <input type="hidden" name="action" value={item.action} />
+                              <button
+                                type="submit"
+                                style={{
+                                  padding: "4px 8px",
+                                  border: "1px solid #ccc",
+                                  borderRadius: 4,
+                                  background: "#fff",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                {item.label}
+                              </button>
+                            </form>
+                          ))}
+                        </div>
+                      )}
+                    </td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.rate}</td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.source || "-"}</td>
+                    <td style={{ borderBottom: "1px solid #eee", padding: 8, whiteSpace: "pre-wrap" }}>
+                      {booking.notes || "-"}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         )}

@@ -11,16 +11,17 @@
 - Enforce role checks (admin, manager, frontdesk)
 
 ## 3. Dashboard
-- Occupancy widgets (today, weekly, monthly)
-- Arrivals/departures list for today
-- Availability by room type
+- ✅ `/dashboard` route with starter KPI cards (today arrivals, today departures, occupancy rate, available units)
+- Occupancy widgets (weekly, monthly trends)
+- Arrivals/departures detailed list for today
+- Availability by room type breakdown
 - Basic revenue snapshot
 
 ## 4. Booking flow
 - ✅ MVP skeleton: `/bookings` create form + latest list
 - ✅ Availability overlap check before insert for active bookings (`confirmed`, `checked_in`)
 - ✅ Extra-bed policy guardrails (deny for twin layouts or room types with `allow_extra_bed = false`)
-- Add booking edit/cancel/check-in/check-out actions
+- ✅ Booking row actions with server-side validated status transitions (`confirmed -> checked_in -> checked_out`, cancel from valid non-final states)
 - Promote extra-bed request from note-tag to dedicated DB column
 - Booking calendar view
 

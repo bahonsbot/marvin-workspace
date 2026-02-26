@@ -12,6 +12,9 @@ export default function Home() {
       <h2>Routes</h2>
       <ul>
         <li>
+          <a href="/dashboard">/dashboard</a>
+        </li>
+        <li>
           <a href="/room-types">/room-types</a>
         </li>
         <li>
