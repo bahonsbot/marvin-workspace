@@ -30,13 +30,11 @@ type CalendarBookingRow = Omit<CalendarBooking, "guest"> & {
 
 export type CalendarFilters = {
   roomTypeName?: RoomTypeName;
-  tower?: number;
 };
 
 export type CalendarOccupancyData = {
   units: CalendarUnit[];
   bookings: CalendarBooking[];
-  towers: number[];
 };
 
 function normalizeJoin<T>(value: T | T[] | null): T | null {
@@ -63,11 +61,13 @@ export async function getCalendarOccupancyData(params: {
     .order("room_number", { ascending: true });
 
   if (filters.roomTypeName) {
-    unitsQuery = unitsQuery.eq("room_types.name", filters.roomTypeName);
-  }
-
-  if (typeof filters.tower === "number") {
-    unitsQuery = unitsQuery.eq("tower", filters.tower);
+    unitsQuery = supabase
+      .from("units")
+      .select("id, unit_code, room_number, floor, tower, room_type:room_types!inner(id, name)")
+      .eq("room_type.name", filters.roomTypeName)
+      .order("tower", { ascending: true })
+      .order("floor", { ascending: true })
+      .order("room_number", { ascending: true });
   }
 
   const { data: unitsData, error: unitsError } = await unitsQuery;
@@ -81,10 +81,8 @@ export async function getCalendarOccupancyData(params: {
     room_type: normalizeJoin(unit.room_type),
   }));
 
-  const towers = Array.from(new Set(units.map((unit) => unit.tower))).sort((a, b) => a - b);
-
   if (units.length === 0) {
-    return { units: [], bookings: [], towers };
+    return { units: [], bookings: [] };
   }
 
   const unitIds = units.map((unit) => unit.id);
@@ -107,5 +105,5 @@ export async function getCalendarOccupancyData(params: {
     guest: normalizeJoin(booking.guest),
   }));
 
-  return { units, bookings, towers };
+  return { units, bookings };
 }

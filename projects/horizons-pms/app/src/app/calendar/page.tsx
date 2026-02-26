@@ -6,7 +6,6 @@ import styles from "./page.module.css";
 type SearchParams = {
   month?: string;
   roomType?: string;
-  tower?: string;
   focusBooking?: string;
 };
 
@@ -59,11 +58,10 @@ function isoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
-function buildQuery(params: { month: string; roomType?: string; tower?: string; focusBooking?: string }): string {
+function buildQuery(params: { month: string; roomType?: string; focusBooking?: string }): string {
   const search = new URLSearchParams();
   search.set("month", params.month);
   if (params.roomType) search.set("roomType", params.roomType);
-  if (params.tower) search.set("tower", params.tower);
   if (params.focusBooking) search.set("focusBooking", params.focusBooking);
   return search.toString();
 }
@@ -78,14 +76,12 @@ export default async function CalendarPage({ searchParams }: PageProps) {
   const selectedRoomType = ROOM_TYPE_NAMES.includes(params.roomType as RoomTypeName)
     ? (params.roomType as RoomTypeName)
     : undefined;
-  const selectedTower = params.tower ? Number.parseInt(params.tower, 10) : undefined;
 
   const data = await getCalendarOccupancyData({
     monthStartIso: isoDate(monthStart),
     monthEndExclusiveIso: isoDate(monthEndExclusive),
     filters: {
       roomTypeName: selectedRoomType,
-      tower: Number.isFinite(selectedTower) ? selectedTower : undefined,
     },
   });
 
@@ -120,7 +116,7 @@ export default async function CalendarPage({ searchParams }: PageProps) {
   return (
     <main className={styles.page}>
       <h1>Occupancy calendar</h1>
-      <p className={styles.muted}>View month occupancy by unit. Click a marked day cell to open a booking summary.</p>
+      <p className={styles.muted}>View month occupancy by unit. Click a marked day cell to inspect booking details in the side panel.</p>
 
       <div className={styles.toolbar}>
         <div className={styles.navLinks}>
@@ -129,7 +125,6 @@ export default async function CalendarPage({ searchParams }: PageProps) {
             href={`/calendar?${buildQuery({
               month: formatMonthParam(previousMonth),
               roomType: selectedRoomType,
-              tower: selectedTower ? String(selectedTower) : undefined,
             })}`}
           >
             ← Prev month
@@ -140,7 +135,6 @@ export default async function CalendarPage({ searchParams }: PageProps) {
             href={`/calendar?${buildQuery({
               month: formatMonthParam(nextMonth),
               roomType: selectedRoomType,
-              tower: selectedTower ? String(selectedTower) : undefined,
             })}`}
           >
             Next month →
@@ -155,16 +149,6 @@ export default async function CalendarPage({ searchParams }: PageProps) {
             {ROOM_TYPE_NAMES.map((name) => (
               <option key={name} value={name}>
                 {ROOM_TYPE_LABELS[name]}
-              </option>
-            ))}
-          </select>
-
-          <label htmlFor="tower">Tower</label>
-          <select className={styles.select} id="tower" name="tower" defaultValue={selectedTower ? String(selectedTower) : ""}>
-            <option value="">All</option>
-            {data.towers.map((tower) => (
-              <option key={tower} value={tower}>
-                Tower {tower}
               </option>
             ))}
           </select>
@@ -189,81 +173,96 @@ export default async function CalendarPage({ searchParams }: PageProps) {
         ))}
       </div>
 
-      {focusBooking ? (
-        <section className={styles.summary}>
-          <strong>Booking summary:</strong> {focusBooking.guestName} · {focusBooking.unitCode} · {focusBooking.checkIn} → {focusBooking.checkOut} · {focusBooking.status}
-        </section>
-      ) : null}
-
-      <div className={styles.tableWrap}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.headerCell} style={{ left: 0, zIndex: 4, minWidth: 180 }}>
-                Unit
-              </th>
-              {days.map((day) => (
-                <th key={day.toISOString()} className={styles.headerCell}>
-                  {day.getUTCDate()}
+      <div className={styles.gridLayout}>
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.headerCell} style={{ left: 0, zIndex: 4 }}>
+                  Unit
                 </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.units.map((unit) => {
-              const unitBookings = bookingsByUnit.get(unit.id) ?? [];
+                {days.map((day) => (
+                  <th key={day.toISOString()} className={styles.headerCell}>
+                    {day.getUTCDate()}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data.units.map((unit) => {
+                const unitBookings = bookingsByUnit.get(unit.id) ?? [];
 
-              return (
-                <tr key={unit.id}>
-                  <td className={styles.unitCell}>
-                    <strong>{unit.unit_code}</strong>
-                    <div className={styles.muted} style={{ fontSize: 12 }}>
-                      {unit.room_type ? ROOM_TYPE_LABELS[unit.room_type.name] : "No type"} · Tower {unit.tower}
-                    </div>
-                  </td>
+                return (
+                  <tr key={unit.id}>
+                    <td className={styles.unitCell}>
+                      <strong>{unit.unit_code}</strong>
+                      <div className={styles.unitMeta}>{unit.room_type ? ROOM_TYPE_LABELS[unit.room_type.name] : "No type"}</div>
+                    </td>
 
-                  {days.map((day) => {
-                    const dayIso = isoDate(day);
-                    const activeBookings = unitBookings.filter((booking) => booking.check_in <= dayIso && booking.check_out > dayIso);
-                    if (activeBookings.length === 0) {
+                    {days.map((day) => {
+                      const dayIso = isoDate(day);
+                      const activeBookings = unitBookings.filter((booking) => booking.check_in <= dayIso && booking.check_out > dayIso);
+                      if (activeBookings.length === 0) {
+                        return (
+                          <td key={`${unit.id}-${dayIso}`} className={styles.dayCell}>
+                            <span className={styles.mark}>·</span>
+                          </td>
+                        );
+                      }
+
+                      const booking = [...activeBookings].sort(
+                        (a, b) => STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status)
+                      )[0];
+
+                      const bookingQuery = buildQuery({
+                        month: currentMonthParam,
+                        roomType: selectedRoomType,
+                        focusBooking: booking.id,
+                      });
+
                       return (
                         <td key={`${unit.id}-${dayIso}`} className={styles.dayCell}>
-                          <span className={styles.mark}>·</span>
+                          <Link
+                            className={`${styles.markLink} ${booking.status}`}
+                            title={`${displayGuestName(booking.guest?.first_name, booking.guest?.last_name)} (${booking.check_in} → ${booking.check_out}, ${booking.status})`}
+                            href={`/calendar?${bookingQuery}`}
+                          >
+                            {STATUS_SHORT[booking.status] ?? "●"}
+                          </Link>
                         </td>
                       );
-                    }
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
-                    const booking = [...activeBookings].sort(
-                      (a, b) => STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status)
-                    )[0];
-
-                    const bookingQuery = buildQuery({
-                      month: currentMonthParam,
-                      roomType: selectedRoomType,
-                      tower: selectedTower ? String(selectedTower) : undefined,
-                      focusBooking: booking.id,
-                    });
-
-                    return (
-                      <td key={`${unit.id}-${dayIso}`} className={styles.dayCell}>
-                        <Link
-                          className={`${styles.markLink} ${booking.status}`}
-                          title={`${displayGuestName(booking.guest?.first_name, booking.guest?.last_name)} (${booking.check_in} → ${booking.check_out}, ${booking.status})`}
-                          href={`/calendar?${bookingQuery}`}
-                        >
-                          {STATUS_SHORT[booking.status] ?? "●"}
-                        </Link>
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <aside className={styles.sidePanel}>
+          <h2>Booking details</h2>
+          {focusBooking ? (
+            <div className={styles.summaryCard}>
+              <p>
+                <strong>Guest:</strong> {focusBooking.guestName}
+              </p>
+              <p>
+                <strong>Unit:</strong> {focusBooking.unitCode}
+              </p>
+              <p>
+                <strong>Stay:</strong> {focusBooking.checkIn} → {focusBooking.checkOut}
+              </p>
+              <p>
+                <strong>Status:</strong> {focusBooking.status}
+              </p>
+            </div>
+          ) : (
+            <p className={styles.muted}>Select a booking cell in the calendar to show details here.</p>
+          )}
+        </aside>
       </div>
 
-      {data.units.length === 0 ? <p style={{ marginTop: 16 }}>No units match the selected filters.</p> : null}
+      {data.units.length === 0 ? <p style={{ marginTop: 16 }}>No units match the selected room type.</p> : null}
     </main>
   );
 }
