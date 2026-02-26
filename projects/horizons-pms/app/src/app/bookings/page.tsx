@@ -1,9 +1,20 @@
-import { createBooking, listBookableUnits, listBookings } from "@/lib/data/bookings";
+import { createBooking, listAvailableUnits, listBookableUnits, listBookings } from "@/lib/data/bookings";
+import type { RoomTypeName } from "@/lib/models/room-type";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { BookingsForm } from "./bookings-form";
+
+type SearchParams = {
+  error?: string;
+  success?: string;
+  selected_unit_id?: string;
+  availability_check_in?: string;
+  availability_check_out?: string;
+  availability_room_type?: string;
+};
 
 type PageProps = {
-  searchParams?: Promise<{ error?: string; success?: string }>;
+  searchParams?: Promise<SearchParams>;
 };
 
 async function createBookingAction(formData: FormData) {
@@ -13,12 +24,12 @@ async function createBookingAction(formData: FormData) {
   const guestName = String(formData.get("guest_name") ?? "").trim();
   const checkIn = String(formData.get("check_in") ?? "").trim();
   const checkOut = String(formData.get("check_out") ?? "").trim();
-  const rateRaw = String(formData.get("rate") ?? "").trim();
   const source = String(formData.get("source") ?? "").trim();
   const notes = String(formData.get("notes") ?? "").trim();
   const extraBedRequested = String(formData.get("extra_bed_requested") ?? "no") === "yes";
-
-  const rate = Number(rateRaw);
+  const breakfastRequested = String(formData.get("breakfast_requested") ?? "no") === "yes";
+  const breakfastPaxRaw = String(formData.get("breakfast_pax") ?? "1").trim();
+  const breakfastPax = Number.parseInt(breakfastPaxRaw, 10);
 
   if (!unitId) {
     redirect("/bookings?error=Please+select+a+unit");
@@ -36,8 +47,8 @@ async function createBookingAction(formData: FormData) {
     redirect("/bookings?error=Check-out+must+be+after+check-in");
   }
 
-  if (!Number.isFinite(rate) || rate < 0) {
-    redirect("/bookings?error=Rate+must+be+a+number+greater+than+or+equal+to+0");
+  if (breakfastRequested && (!Number.isFinite(breakfastPax) || breakfastPax < 1 || breakfastPax > 8)) {
+    redirect("/bookings?error=Breakfast+pax+must+be+between+1+and+8");
   }
 
   try {
@@ -46,10 +57,11 @@ async function createBookingAction(formData: FormData) {
       guest_name: guestName,
       check_in: checkIn,
       check_out: checkOut,
-      rate,
       source,
       notes,
       extra_bed_requested: extraBedRequested,
+      breakfast_requested: breakfastRequested,
+      breakfast_pax: breakfastRequested ? breakfastPax : null,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to create booking";
@@ -71,6 +83,37 @@ export default async function BookingsPage({ searchParams }: PageProps) {
     [bookings, units] = await Promise.all([listBookings(), listBookableUnits()]);
   } catch (error) {
     loadError = error instanceof Error ? error.message : "Failed to load bookings data";
+  }
+
+  const selectedUnitId = String(params.selected_unit_id ?? "");
+  const availabilityCheckIn = String(params.availability_check_in ?? "");
+  const availabilityCheckOut = String(params.availability_check_out ?? "");
+  const availabilityRoomType = String(params.availability_room_type ?? "") as RoomTypeName | "";
+
+  let availabilityResult: {
+    checkIn: string;
+    checkOut: string;
+    roomTypeName: RoomTypeName | "";
+    units: Awaited<ReturnType<typeof listAvailableUnits>>;
+  } | null = null;
+
+  if (availabilityCheckIn && availabilityCheckOut && availabilityCheckIn < availabilityCheckOut) {
+    try {
+      const availableUnits = await listAvailableUnits({
+        checkIn: availabilityCheckIn,
+        checkOut: availabilityCheckOut,
+        roomTypeName: availabilityRoomType || undefined,
+      });
+
+      availabilityResult = {
+        checkIn: availabilityCheckIn,
+        checkOut: availabilityCheckOut,
+        roomTypeName: availabilityRoomType,
+        units: availableUnits,
+      };
+    } catch (error) {
+      loadError = error instanceof Error ? error.message : "Failed to load availability";
+    }
   }
 
   return (
@@ -97,6 +140,7 @@ export default async function BookingsPage({ searchParams }: PageProps) {
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Status</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Rate</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Source</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Notes</th>
               </tr>
             </thead>
             <tbody>
@@ -114,6 +158,9 @@ export default async function BookingsPage({ searchParams }: PageProps) {
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.status}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.rate}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{booking.source || "-"}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8, whiteSpace: "pre-wrap" }}>
+                    {booking.notes || "-"}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -121,72 +168,15 @@ export default async function BookingsPage({ searchParams }: PageProps) {
         )}
       </section>
 
-      <section style={{ marginTop: 32 }}>
-        <h2 style={{ marginBottom: 8 }}>Create booking</h2>
-        <form action={createBookingAction} style={{ display: "grid", gap: 12, maxWidth: 520 }}>
-          <label style={{ display: "grid", gap: 4 }}>
-            Unit
-            <select name="unit_id" required defaultValue="">
-              <option value="" disabled>
-                Select a unit
-              </option>
-              {units.map((unit) => (
-                <option key={unit.id} value={unit.id}>
-                  {unit.unit_code} (Tower {unit.tower}, Floor {unit.floor}, Room {unit.room_number})
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label style={{ display: "grid", gap: 4 }}>
-            Guest name
-            <input name="guest_name" type="text" required placeholder="e.g. John Doe" />
-          </label>
-
-          <label style={{ display: "grid", gap: 4 }}>
-            Check-in
-            <input name="check_in" type="date" required />
-          </label>
-
-          <label style={{ display: "grid", gap: 4 }}>
-            Check-out
-            <input name="check_out" type="date" required />
-          </label>
-
-          <label style={{ display: "grid", gap: 4 }}>
-            Rate
-            <input name="rate" type="number" min={0} step="0.01" required />
-          </label>
-
-          <label style={{ display: "grid", gap: 4 }}>
-            Source
-            <select name="source" defaultValue="direct">
-              <option value="direct">Direct</option>
-              <option value="walk_in">Walk-in</option>
-              <option value="ota">OTA</option>
-              <option value="agent">Agent</option>
-              <option value="other">Other</option>
-            </select>
-          </label>
-
-          <label style={{ display: "grid", gap: 4 }}>
-            Notes
-            <textarea name="notes" rows={3} />
-          </label>
-
-          <label style={{ display: "grid", gap: 4 }}>
-            Extra bed request
-            <select name="extra_bed_requested" defaultValue="no">
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </label>
-
-          <button type="submit" style={{ width: "fit-content", padding: "8px 14px" }}>
-            Create booking
-          </button>
-        </form>
-      </section>
+      <BookingsForm
+        units={units}
+        initialSelectedUnitId={selectedUnitId}
+        initialCheckIn={availabilityCheckIn}
+        initialCheckOut={availabilityCheckOut}
+        initialRoomTypeName={availabilityRoomType}
+        initialAvailability={availabilityResult}
+        action={createBookingAction}
+      />
     </main>
   );
 }

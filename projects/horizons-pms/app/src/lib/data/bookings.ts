@@ -1,20 +1,28 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Booking, CreateBookingInput } from "@/lib/models/booking";
+import { ROOM_TYPE_LABELS, type RoomTypeName } from "@/lib/models/room-type";
 
 type BookingRow = Omit<Booking, "unit" | "guest"> & {
   unit: Booking["unit"] | Booking["unit"][];
   guest: Booking["guest"] | Booking["guest"][];
 };
 
-type UnitForBooking = {
+export type UnitForBooking = {
   id: string;
   unit_code: string;
   room_number: string;
   floor: number;
   tower: number;
   bed_layout: string;
-  room_type: { id: string; name: string; allow_extra_bed: boolean } | Array<{ id: string; name: string; allow_extra_bed: boolean }> | null;
+  base_rate: string;
+  room_type: { id: string; name: RoomTypeName; allow_extra_bed: boolean } | null;
 };
+
+type UnitForBookingRow = Omit<UnitForBooking, "room_type"> & {
+  room_type: UnitForBooking["room_type"] | UnitForBooking["room_type"][];
+};
+
+const ROOM_TYPE_ORDER: RoomTypeName[] = ["studio", "1bed", "2bed", "3bed"];
 
 function normalizeName(fullName: string): { firstName: string; lastName: string } {
   const trimmed = fullName.trim().replace(/\s+/g, " ");
@@ -31,6 +39,37 @@ function normalizeJoin<T>(value: T | T[] | null): T | null {
   }
 
   return value;
+}
+
+function roomTypeOrder(name?: string): number {
+  if (!name) return ROOM_TYPE_ORDER.length;
+  const index = ROOM_TYPE_ORDER.indexOf(name as RoomTypeName);
+  return index === -1 ? ROOM_TYPE_ORDER.length : index;
+}
+
+function compareUnits(a: UnitForBooking, b: UnitForBooking): number {
+  const typeDiff = roomTypeOrder(normalizeJoin(a.room_type)?.name) - roomTypeOrder(normalizeJoin(b.room_type)?.name);
+  if (typeDiff !== 0) {
+    return typeDiff;
+  }
+
+  return a.unit_code.localeCompare(b.unit_code, undefined, { numeric: true, sensitivity: "base" });
+}
+
+function normalizeUnits(rows: UnitForBookingRow[]): UnitForBooking[] {
+  return rows
+    .map((row) => ({
+      ...row,
+      room_type: normalizeJoin(row.room_type),
+    }))
+    .sort(compareUnits);
+}
+
+export function formatUnitOptionLabel(unit: UnitForBooking): string {
+  const roomType = normalizeJoin(unit.room_type);
+  const roomTypeName = roomType?.name;
+  const roomTypeTag = roomTypeName ? `[${ROOM_TYPE_LABELS[roomTypeName]}] ` : "";
+  return `${roomTypeTag}${unit.unit_code} (Tower ${unit.tower}, Floor ${unit.floor}, Room ${unit.room_number})`;
 }
 
 export async function listBookings(): Promise<Booking[]> {
@@ -61,20 +100,57 @@ export async function listBookableUnits(): Promise<UnitForBooking[]> {
 
   const { data, error } = await supabase
     .from("units")
-    .select("id, unit_code, room_number, floor, tower, bed_layout, room_type:room_types(id, name, allow_extra_bed)")
-    .order("tower", { ascending: true })
-    .order("floor", { ascending: true })
-    .order("room_number", { ascending: true });
+    .select("id, unit_code, room_number, floor, tower, bed_layout, base_rate, room_type:room_types(id, name, allow_extra_bed)");
 
   if (error) {
     throw new Error(error.message);
   }
 
-  const rows = (data ?? []) as UnitForBooking[];
-  return rows.map((row) => ({
-    ...row,
-    room_type: normalizeJoin(row.room_type),
-  }));
+  return normalizeUnits((data ?? []) as UnitForBookingRow[]);
+}
+
+export async function listAvailableUnits(params: {
+  checkIn: string;
+  checkOut: string;
+  roomTypeName?: RoomTypeName;
+}): Promise<UnitForBooking[]> {
+  const supabase = await createClient();
+
+  let unitsQuery = supabase
+    .from("units")
+    .select("id, unit_code, room_number, floor, tower, bed_layout, base_rate, room_type:room_types!inner(id, name, allow_extra_bed)");
+
+  if (params.roomTypeName) {
+    unitsQuery = unitsQuery.eq("room_types.name", params.roomTypeName);
+  }
+
+  const { data: units, error: unitsError } = await unitsQuery;
+
+  if (unitsError) {
+    throw new Error(unitsError.message);
+  }
+
+  const candidateUnits = normalizeUnits((units ?? []) as UnitForBookingRow[]);
+  if (candidateUnits.length === 0) {
+    return [];
+  }
+
+  const unitIds = candidateUnits.map((unit) => unit.id);
+
+  const { data: conflicts, error: conflictsError } = await supabase
+    .from("bookings")
+    .select("unit_id")
+    .in("unit_id", unitIds)
+    .in("status", ["confirmed", "checked_in"])
+    .lt("check_in", params.checkOut)
+    .gt("check_out", params.checkIn);
+
+  if (conflictsError) {
+    throw new Error(conflictsError.message);
+  }
+
+  const conflictUnitIds = new Set((conflicts ?? []).map((row) => row.unit_id as string));
+  return candidateUnits.filter((unit) => !conflictUnitIds.has(unit.id));
 }
 
 export async function createBooking(input: CreateBookingInput): Promise<void> {
@@ -82,7 +158,7 @@ export async function createBooking(input: CreateBookingInput): Promise<void> {
 
   const { data: unit, error: unitError } = await supabase
     .from("units")
-    .select("id, unit_code, bed_layout, room_type:room_types(id, name, allow_extra_bed)")
+    .select("id, unit_code, bed_layout, base_rate, room_type:room_types(id, name, allow_extra_bed)")
     .eq("id", input.unit_id)
     .maybeSingle();
 
@@ -90,7 +166,7 @@ export async function createBooking(input: CreateBookingInput): Promise<void> {
     throw new Error("Please select a valid unit.");
   }
 
-  const roomType = normalizeJoin(unit.room_type as UnitForBooking["room_type"]);
+  const roomType = normalizeJoin(unit.room_type as UnitForBookingRow["room_type"]);
   if (!roomType) {
     throw new Error("Selected unit has an invalid room type setup.");
   }
@@ -139,9 +215,15 @@ export async function createBooking(input: CreateBookingInput): Promise<void> {
     throw new Error(guestError?.message || "Failed to create guest record.");
   }
 
+  const normalizedBreakfastPax = input.breakfast_requested
+    ? Math.min(Math.max(input.breakfast_pax ?? 1, 1), 8)
+    : null;
+
   const combinedNotes = [
     input.notes?.trim(),
     `extra_bed_requested: ${input.extra_bed_requested ? "yes" : "no"}`,
+    `breakfast_requested: ${input.breakfast_requested ? "yes" : "no"}`,
+    input.breakfast_requested ? `breakfast_pax: ${normalizedBreakfastPax}` : null,
   ]
     .filter(Boolean)
     .join("\n");
@@ -151,7 +233,7 @@ export async function createBooking(input: CreateBookingInput): Promise<void> {
     guest_id: guest.id,
     check_in: input.check_in,
     check_out: input.check_out,
-    rate: input.rate,
+    rate: Number(unit.base_rate ?? 0),
     status: "confirmed",
     source: input.source?.trim() || null,
     notes: combinedNotes || null,

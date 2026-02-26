@@ -44,8 +44,9 @@ export type CreateBookingInput = {
   guest_name: string;
   check_in: string;
   check_out: string;
-  rate: number;
   source?: string;
   notes?: string;
   extra_bed_requested: boolean;
+  breakfast_requested: boolean;
+  breakfast_pax?: number | null;
 };
