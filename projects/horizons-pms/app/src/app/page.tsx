@@ -23,6 +23,9 @@ export default function Home() {
         <li>
           <a href="/bookings">/bookings</a>
         </li>
+        <li>
+          <a href="/calendar">/calendar</a>
+        </li>
       </ul>
       <p>
         Next step: copy <code>.env.example</code> to <code>.env.local</code> and

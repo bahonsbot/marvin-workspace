@@ -23,7 +23,8 @@
 - ✅ Extra-bed policy guardrails (deny for twin layouts or room types with `allow_extra_bed = false`)
 - ✅ Booking row actions with server-side validated status transitions (`confirmed -> checked_in -> checked_out`, cancel from valid non-final states)
 - Promote extra-bed request from note-tag to dedicated DB column
-- Booking calendar view
+- ✅ Booking calendar view (`/calendar`) with month nav, occupancy grid by unit/day, status legend, room type+tower filters, and click-through booking summary panel
+- Improve calendar UX: sticky month/week headers, mobile condensed mode, and quick jump to today
 
 ## 5. Guest and unit operations
 - Guest profile + stay history
