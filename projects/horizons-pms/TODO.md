@@ -17,9 +17,11 @@
 - Basic revenue snapshot
 
 ## 4. Booking flow
-- Availability search (date range + room type)
-- Booking create/edit/cancel
-- Conflict handling with friendly UI messages
+- ✅ MVP skeleton: `/bookings` create form + latest list
+- ✅ Availability overlap check before insert for active bookings (`confirmed`, `checked_in`)
+- ✅ Extra-bed policy guardrails (deny for twin layouts or room types with `allow_extra_bed = false`)
+- Add booking edit/cancel/check-in/check-out actions
+- Promote extra-bed request from note-tag to dedicated DB column
 - Booking calendar view
 
 ## 5. Guest and unit operations

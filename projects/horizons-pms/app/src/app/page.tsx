@@ -8,6 +8,19 @@ export default function Home() {
         <li>Supabase client/server helpers added</li>
         <li>Initial SQL schema prepared</li>
       </ul>
+
+      <h2>Routes</h2>
+      <ul>
+        <li>
+          <a href="/room-types">/room-types</a>
+        </li>
+        <li>
+          <a href="/units">/units</a>
+        </li>
+        <li>
+          <a href="/bookings">/bookings</a>
+        </li>
+      </ul>
       <p>
         Next step: copy <code>.env.example</code> to <code>.env.local</code> and
         connect to your Supabase project.
