@@ -83,7 +83,7 @@
 - Git repo initialized (Marvin <marvin@local.com>)
 - **Nightly security review**: 3:30am Vietnam time, analyzes workspace, delivers to Telegram
 - **Platform health council**: 3:00am Vietnam time, stable with `delivery.mode=none` to avoid flaky announce failures
-- **Smart auto updater**: 10:00am Asia/Kuala_Lumpur (`smart-auto-updater-daily`) pinned to MiniMax-M2.5
+- **Smart auto updater**: REMOVED (Feb 26) - caused errors, disabled and skill deleted
 - **Daily backup cron**: removed by Philippe preference (he handles daily VPS snapshots manually)
 - Backup targets (manual script): USER.md, MEMORY.md, AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md
 - Workspace: /data/.openclaw/workspace

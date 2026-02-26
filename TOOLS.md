@@ -51,7 +51,6 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **Groups:**
   - nightly-security-review (`-1003855426803`)
   - platform-health-council (`-1003504843228`)
-  - smart-auto-updater-daily (`-1003802382625`)
   - self-improvement (`-1003721620909`)
 
 ### VPS / Infrastructure
@@ -66,11 +65,10 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 |-----|------------|---------|
 | platform-health-council | 03:00 | Daily system audit |
 | nightly-security-review | 03:30 | Security analysis |
-| smart-auto-updater-daily | 10:00 | OpenClaw/skills update check |
 | self-improvement | 04:00 | Core files review |
 | fixed-heartbeat-30m | Every 30min | Periodic health check |
 
-### Installed Skills
+### Installed Skills (Workspace)
 - humanizer
 - stock-market-pro
 - marketing-skills
@@ -78,15 +76,8 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - openclaw-agent-optimize
 - my-skills
 - google_maps_pro
-- smart-auto-updater
 - security-review
 - creative-prompts
-- skill-creator
-- healthcheck
-- video-frames
-- weather
-- gh-issues
-- clawhub
 - coding-agent
 
 ### Models (Active)
