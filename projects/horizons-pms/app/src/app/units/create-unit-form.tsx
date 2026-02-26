@@ -1,46 +1,51 @@
 "use client";
 
-import { BED_LAYOUT_LABELS, type BedLayout } from "@/lib/models/room-type";
+import { BED_LAYOUT_LABELS, ROOM_TYPE_LABELS, type BedLayout, type RoomTypeName } from "@/lib/models/room-type";
 import { UNIT_STATUSES, UNIT_TOWERS } from "@/lib/models/unit";
 import { useMemo, useState } from "react";
 
-type RoomTypeOption = {
-  id: string;
-  name: string;
-  allowed_bed_layouts: BedLayout[];
+type UnitBlueprintOption = {
+  tower: number;
+  floor: number;
+  room_number: string;
+  room_type_id: string;
+  room_type_name: RoomTypeName;
+  bed_layout: BedLayout;
 };
 
 type CreateUnitFormProps = {
-  roomTypes: RoomTypeOption[];
+  blueprints: UnitBlueprintOption[];
   action: (formData: FormData) => void;
 };
 
-export function CreateUnitForm({ roomTypes, action }: CreateUnitFormProps) {
-  const [roomTypeId, setRoomTypeId] = useState("");
-  const [bedLayout, setBedLayout] = useState("");
+function normalizeRoomNumber(roomNumber: string): string {
+  const digits = roomNumber.replace(/\D/g, "");
+  if (!digits) return "";
+  return digits.padStart(2, "0");
+}
 
-  const selectedRoomType = useMemo(
-    () => roomTypes.find((roomType) => roomType.id === roomTypeId),
-    [roomTypeId, roomTypes]
+export function CreateUnitForm({ blueprints, action }: CreateUnitFormProps) {
+  const [tower, setTower] = useState("1");
+  const [floor, setFloor] = useState("");
+  const [roomNumber, setRoomNumber] = useState("");
+
+  const normalizedRoomNumber = normalizeRoomNumber(roomNumber);
+
+  const matchedBlueprint = useMemo(
+    () =>
+      blueprints.find(
+        (blueprint) =>
+          blueprint.tower === Number(tower) &&
+          blueprint.floor === Number(floor) &&
+          blueprint.room_number === normalizedRoomNumber
+      ) ?? null,
+    [blueprints, floor, normalizedRoomNumber, tower]
   );
-
-  const allowedLayouts = selectedRoomType?.allowed_bed_layouts ?? [];
-
   return (
     <form action={action} style={{ display: "grid", gap: 12, maxWidth: 480 }}>
       <label style={{ display: "grid", gap: 4 }}>
-        Floor
-        <input name="floor" type="number" min={0} required />
-      </label>
-
-      <label style={{ display: "grid", gap: 4 }}>
-        Room number
-        <input name="room_number" inputMode="numeric" placeholder="05" required />
-      </label>
-
-      <label style={{ display: "grid", gap: 4 }}>
         Tower
-        <select name="tower" required defaultValue="1">
+        <select name="tower" required value={tower} onChange={(event) => setTower(event.target.value)}>
           {UNIT_TOWERS.map((unitTower) => (
             <option key={unitTower} value={unitTower}>
               {unitTower}
@@ -50,50 +55,60 @@ export function CreateUnitForm({ roomTypes, action }: CreateUnitFormProps) {
       </label>
 
       <label style={{ display: "grid", gap: 4 }}>
-        Room type
-        <select
-          name="room_type"
+        Floor
+        <input
+          name="floor"
+          type="number"
+          min={0}
           required
-          defaultValue=""
-          onChange={(event) => {
-            const nextRoomTypeId = event.target.value;
-            setRoomTypeId(nextRoomTypeId);
-
-            const nextRoomType = roomTypes.find((roomType) => roomType.id === nextRoomTypeId);
-            setBedLayout(nextRoomType?.allowed_bed_layouts[0] ?? "");
-          }}
-        >
-          <option value="" disabled>
-            Select a room type
-          </option>
-          {roomTypes.map((roomType) => (
-            <option key={roomType.id} value={roomType.id}>
-              {roomType.name}
-            </option>
-          ))}
-        </select>
+          value={floor}
+          onChange={(event) => setFloor(event.target.value)}
+        />
       </label>
 
       <label style={{ display: "grid", gap: 4 }}>
-        Bed layout
-        <select
-          name="bed_layout"
+        Room number
+        <input
+          name="room_number"
+          inputMode="numeric"
+          placeholder="05"
           required
-          disabled={!selectedRoomType}
-          value={bedLayout}
-          onChange={(event) => setBedLayout(event.target.value)}
-        >
-          {!selectedRoomType ? (
-            <option value="">Select room type first</option>
+          value={roomNumber}
+          onChange={(event) => setRoomNumber(event.target.value)}
+        />
+      </label>
+
+      <label style={{ display: "grid", gap: 4 }}>
+        Room type (from blueprint)
+        <select value={matchedBlueprint?.room_type_id ?? ""} disabled>
+          {!matchedBlueprint ? (
+            <option value="">Select tower/floor/room first</option>
           ) : (
-            allowedLayouts.map((layout) => (
-              <option key={layout} value={layout}>
-                {BED_LAYOUT_LABELS[layout]}
-              </option>
-            ))
+            <option value={matchedBlueprint.room_type_id}>
+              {ROOM_TYPE_LABELS[matchedBlueprint.room_type_name]}
+            </option>
           )}
         </select>
+        <input type="hidden" name="room_type" value={matchedBlueprint?.room_type_id ?? ""} />
       </label>
+
+      <label style={{ display: "grid", gap: 4 }}>
+        Bed layout (from blueprint)
+        <select value={matchedBlueprint?.bed_layout ?? ""} disabled>
+          {!matchedBlueprint ? (
+            <option value="">Select tower/floor/room first</option>
+          ) : (
+            <option value={matchedBlueprint.bed_layout}>{BED_LAYOUT_LABELS[matchedBlueprint.bed_layout]}</option>
+          )}
+        </select>
+        <input type="hidden" name="bed_layout" value={matchedBlueprint?.bed_layout ?? ""} />
+      </label>
+
+      {!matchedBlueprint ? (
+        <p style={{ margin: 0, color: "#b00020" }}>
+          No unit blueprint found for this tower/floor/room combination.
+        </p>
+      ) : null}
 
       <label style={{ display: "grid", gap: 4 }}>
         Status
@@ -111,7 +126,7 @@ export function CreateUnitForm({ roomTypes, action }: CreateUnitFormProps) {
         <input name="base_rate" type="number" min={0} step="0.01" required />
       </label>
 
-      <button type="submit" style={{ width: "fit-content", padding: "8px 14px" }}>
+      <button type="submit" disabled={!matchedBlueprint} style={{ width: "fit-content", padding: "8px 14px" }}>
         Create unit
       </button>
     </form>

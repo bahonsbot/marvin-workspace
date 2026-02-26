@@ -1,0 +1,77 @@
+tower,floor,room_number,room_type,bed_layout
+1,01,03,Studio,King
+1,01,08,Studio,King
+1,01,11,Studio,Twin
+1,02,07,Studio,Twin
+1,06,10,Studio,King
+1,07,10,Studio,King
+1,08,03,Studio,King
+1,09,03,Studio,Twin
+1,10,03,Studio,Twin
+1,10,11,Studio,Twin
+1,11,07,Studio,King
+1,11,08,Studio,Twin
+1,12,03,Studio,King
+1,12,07,Studio,Twin
+1,13,03,Studio,Twin
+1,13,11,Studio,King
+1,15,07,Studio,King
+1,15,08,Studio,King
+1,15,11,Studio,King
+1,02,05,1 BR,King
+1,02,09,1 BR,King
+1,03,05,1 BR,King
+1,03,09,1 BR,King
+1,06,09,1 BR,King
+1,07,09,1 BR,King
+1,08,05,1 BR,King
+1,10,05,1 BR,Twin
+1,12,05,1 BR,King
+1,13,05,1 BR,King
+2,07,03,1 BR,King
+2,07,05,1 BR,King
+2,08,03,1 BR,King
+2,08,06,1 BR,King
+2,09,03,1 BR,King
+2,09,05,1 BR,King
+2,09,09,1 BR,King
+2,10,03,1 BR,Twin
+2,10,05,1 BR,Twin
+2,10,07,1 BR,King
+2,10,09,1 BR,Twin
+2,11,06,1 BR,King
+2,12,06,1 BR,King
+2,12,09,1 BR,King
+1,06,12,2 BR,King + King
+1,06,13,2 BR,Twin + Twin
+1,07,02,2 BR,King + King
+1,07,13,2 BR,Twin + Twin
+1,08,12,2 BR,King + Twin
+1,09,02,2 BR,King + King
+1,10,12,2 BR,King + King
+1,11,02,2 BR,King + King
+1,13,02,2 BR,King + Twin
+1,13,12,2 BR,King + Twin
+1,15,13,2 BR,King + Twin
+2,07,02,2 BR,King + Twin
+2,08,01,2 BR,King + Twin
+2,09,01,2 BR,Twin + Twin
+2,09,12,2 BR,Twin + Twin
+2,10,11,2 BR,King + Twin
+2,10,12,2 BR,King + Twin
+2,11,02,2 BR,King + Twin
+2,12,01,2 BR,King + Twin
+2,12,11,2 BR,King + King
+2,12,12,2 BR,King + King
+2,15,03,2 BR,King + Twin
+2,15,05,2 BR,King + King
+2,15,08,2 BR,King + King
+2,17,03,2 BR,King + Twin
+2,17,05,2 BR,King + Twin
+1,01,01,3 BR,King + King + Twin
+1,10,01,3 BR,King + King + Twin
+1,11,01,3 BR,King + King + Twin
+1,13,01,3 BR,King + King + Twin
+1,15,01,3 BR,King + King + Twin
+2,15,07,3 BR,King + King + Twin
+2,17,01,3 BR,King + King + Twin

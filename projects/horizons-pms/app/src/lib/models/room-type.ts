@@ -2,6 +2,13 @@ export const ROOM_TYPE_NAMES = ["studio", "1bed", "2bed", "3bed"] as const;
 
 export type RoomTypeName = (typeof ROOM_TYPE_NAMES)[number];
 
+export const ROOM_TYPE_LABELS: Record<RoomTypeName, string> = {
+  studio: "Studio",
+  "1bed": "1 BR",
+  "2bed": "2 BR",
+  "3bed": "3 BR",
+};
+
 export const BED_LAYOUTS = ["king", "twin", "king+king", "twin+twin", "king+twin", "king+king+twin"] as const;
 
 export type BedLayout = (typeof BED_LAYOUTS)[number];

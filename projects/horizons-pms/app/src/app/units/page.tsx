@@ -1,8 +1,8 @@
+import { getUnitBlueprintByLocation, listUnitBlueprints } from "@/lib/data/unit-blueprints";
 import { listRoomTypes } from "@/lib/data/room-types";
 import { createUnit, listUnits } from "@/lib/data/units";
-import { BED_LAYOUT_LABELS, type BedLayout } from "@/lib/models/room-type";
+import { BED_LAYOUT_LABELS, ROOM_TYPE_LABELS, type BedLayout } from "@/lib/models/room-type";
 import { BED_SETUPS, UNIT_STATUSES, UNIT_TOWERS } from "@/lib/models/unit";
-import type { RoomType } from "@/lib/models/room-type";
 import type { Unit } from "@/lib/models/unit";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -26,9 +26,7 @@ async function createUnitAction(formData: FormData) {
 
   const floorRaw = String(formData.get("floor") ?? "").trim();
   const roomNumberRaw = String(formData.get("room_number") ?? "").trim();
-  const roomTypeId = String(formData.get("room_type") ?? "").trim();
   const towerRaw = String(formData.get("tower") ?? "").trim();
-  const bedLayout = String(formData.get("bed_layout") ?? "").trim();
   const status = String(formData.get("status") ?? "").trim();
   const baseRateRaw = String(formData.get("base_rate") ?? "").trim();
 
@@ -57,17 +55,29 @@ async function createUnitAction(formData: FormData) {
     redirect("/units?error=Base+rate+must+be+a+number+greater+than+or+equal+to+0");
   }
 
-  const roomTypes = await listRoomTypes();
-  const selectedRoomType = roomTypes.find((roomType) => roomType.id === roomTypeId);
+  const blueprint = await getUnitBlueprintByLocation({
+    tower,
+    floor,
+    room_number: roomNumber,
+  });
+
+  if (!blueprint) {
+    redirect("/units?error=Cannot+create+unit:+no+blueprint+found+for+that+tower%2Ffloor%2Froom");
+  }
+
+  const selectedRoomType = await listRoomTypes().then((roomTypes) =>
+    roomTypes.find((roomType) => roomType.id === blueprint.room_type_id)
+  );
+
   if (!selectedRoomType) {
-    redirect("/units?error=Please+select+a+valid+room+type");
+    redirect("/units?error=Blueprint+references+an+invalid+room+type");
   }
 
-  if (!selectedRoomType.allowed_bed_layouts.includes(bedLayout as BedLayout)) {
-    redirect("/units?error=Please+select+a+valid+bed+layout+for+the+selected+room+type");
+  if (!selectedRoomType.allowed_bed_layouts.includes(blueprint.bed_layout as BedLayout)) {
+    redirect("/units?error=Blueprint+bed+layout+is+not+allowed+for+its+room+type");
   }
 
-  const normalizedBedSetup = bedLayout.includes("twin") ? "twin" : "king";
+  const normalizedBedSetup = blueprint.bed_layout.includes("twin") ? "twin" : "king";
   if (!BED_SETUPS.includes(normalizedBedSetup as (typeof BED_SETUPS)[number])) {
     redirect("/units?error=Invalid+bed+setup");
   }
@@ -76,10 +86,10 @@ async function createUnitAction(formData: FormData) {
     await createUnit({
       floor,
       room_number: roomNumber,
-      room_type_id: roomTypeId,
+      room_type_id: blueprint.room_type_id,
       tower: tower as (typeof UNIT_TOWERS)[number],
       bed_setup: normalizedBedSetup as (typeof BED_SETUPS)[number],
-      bed_layout: bedLayout as BedLayout,
+      bed_layout: blueprint.bed_layout as BedLayout,
       status: status as (typeof UNIT_STATUSES)[number],
       base_rate: baseRate,
     });
@@ -95,11 +105,11 @@ async function createUnitAction(formData: FormData) {
 export default async function UnitsPage({ searchParams }: PageProps) {
   const params = (await searchParams) ?? {};
   let units: Unit[] = [];
-  let roomTypes: RoomType[] = [];
+  let blueprints: Awaited<ReturnType<typeof listUnitBlueprints>> = [];
   let loadError = "";
 
   try {
-    [units, roomTypes] = await Promise.all([listUnits(), listRoomTypes()]);
+    [units, blueprints] = await Promise.all([listUnits(), listUnitBlueprints()]);
   } catch (error) {
     loadError = error instanceof Error ? error.message : "Failed to load units";
   }
@@ -137,7 +147,9 @@ export default async function UnitsPage({ searchParams }: PageProps) {
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.floor}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.room_number}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.unit_code ?? unit.unit_number}</td>
-                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.room_type?.name ?? "-"}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
+                    {unit.room_type?.name ? ROOM_TYPE_LABELS[unit.room_type.name as keyof typeof ROOM_TYPE_LABELS] : "-"}
+                  </td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>
                     {BED_LAYOUT_LABELS[unit.bed_layout] ?? unit.bed_layout}
                   </td>
@@ -154,11 +166,16 @@ export default async function UnitsPage({ searchParams }: PageProps) {
         <h2 style={{ marginBottom: 8 }}>Create unit</h2>
         <CreateUnitForm
           action={createUnitAction}
-          roomTypes={roomTypes.map((roomType) => ({
-            id: roomType.id,
-            name: roomType.name,
-            allowed_bed_layouts: roomType.allowed_bed_layouts,
-          }))}
+          blueprints={blueprints
+            .filter((blueprint) => blueprint.room_type)
+            .map((blueprint) => ({
+              tower: blueprint.tower,
+              floor: blueprint.floor,
+              room_number: blueprint.room_number,
+              room_type_id: blueprint.room_type_id,
+              room_type_name: blueprint.room_type!.name,
+              bed_layout: blueprint.bed_layout,
+            }))}
         />
       </section>
     </main>

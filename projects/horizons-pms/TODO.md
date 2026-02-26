@@ -26,6 +26,7 @@
 - Guest profile + stay history
 - Unit management CRUD + status updates
 - Maintenance issue tracking UI
+- Keep `unit_blueprints` seeded (sql/005_unit_blueprints.sql) whenever room inventory changes; unit creation now depends on blueprint lookup.
 
 ## 6. Nice-to-have after core
 - CSV/PDF exports
