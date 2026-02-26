@@ -31,3 +31,7 @@
 - CSV/PDF exports
 - Basic reporting screens
 - Audit logging for important actions
+
+## Booking rules (bed / extra bed)
+- Twin bed setup => no extra bed
+- Room type with `allow_extra_bed = false` => no extra bed

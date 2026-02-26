@@ -1,6 +1,6 @@
 import { listRoomTypes } from "@/lib/data/room-types";
 import { createUnit, listUnits } from "@/lib/data/units";
-import { UNIT_STATUSES } from "@/lib/models/unit";
+import { BED_SETUPS, UNIT_STATUSES, UNIT_TOWERS } from "@/lib/models/unit";
 import type { RoomType } from "@/lib/models/room-type";
 import type { Unit } from "@/lib/models/unit";
 import { revalidatePath } from "next/cache";
@@ -16,10 +16,13 @@ async function createUnitAction(formData: FormData) {
   const unitNumber = String(formData.get("unit_number") ?? "").trim();
   const floorRaw = String(formData.get("floor") ?? "").trim();
   const roomTypeId = String(formData.get("room_type") ?? "").trim();
+  const towerRaw = String(formData.get("tower") ?? "").trim();
+  const bedSetup = String(formData.get("bed_setup") ?? "").trim();
   const status = String(formData.get("status") ?? "").trim();
   const baseRateRaw = String(formData.get("base_rate") ?? "").trim();
 
   const floor = Number(floorRaw);
+  const tower = Number(towerRaw);
   const baseRate = Number(baseRateRaw);
 
   if (!unitNumber) {
@@ -28,6 +31,14 @@ async function createUnitAction(formData: FormData) {
 
   if (!Number.isInteger(floor) || floor < 0) {
     redirect("/units?error=Floor+must+be+an+integer+greater+than+or+equal+to+0");
+  }
+
+  if (!UNIT_TOWERS.includes(tower as (typeof UNIT_TOWERS)[number])) {
+    redirect("/units?error=Please+select+a+valid+tower");
+  }
+
+  if (!BED_SETUPS.includes(bedSetup as (typeof BED_SETUPS)[number])) {
+    redirect("/units?error=Please+select+a+valid+bed+setup");
   }
 
   if (!UNIT_STATUSES.includes(status as (typeof UNIT_STATUSES)[number])) {
@@ -48,6 +59,8 @@ async function createUnitAction(formData: FormData) {
       unit_number: unitNumber,
       floor,
       room_type_id: roomTypeId,
+      tower: tower as (typeof UNIT_TOWERS)[number],
+      bed_setup: bedSetup as (typeof BED_SETUPS)[number],
       status: status as (typeof UNIT_STATUSES)[number],
       base_rate: baseRate,
     });
@@ -90,7 +103,9 @@ export default async function UnitsPage({ searchParams }: PageProps) {
               <tr>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Unit number</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Floor</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Tower</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Room type</th>
+                <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Bed setup</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Status</th>
                 <th style={{ textAlign: "left", borderBottom: "1px solid #ccc", padding: 8 }}>Base rate</th>
               </tr>
@@ -100,7 +115,9 @@ export default async function UnitsPage({ searchParams }: PageProps) {
                 <tr key={unit.id}>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.unit_number}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.floor}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.tower}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.room_type?.name ?? "-"}</td>
+                  <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.bed_setup}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.status}</td>
                   <td style={{ borderBottom: "1px solid #eee", padding: 8 }}>{unit.base_rate}</td>
                 </tr>
@@ -124,6 +141,17 @@ export default async function UnitsPage({ searchParams }: PageProps) {
           </label>
 
           <label style={{ display: "grid", gap: 4 }}>
+            Tower
+            <select name="tower" required defaultValue="1">
+              {UNIT_TOWERS.map((unitTower) => (
+                <option key={unitTower} value={unitTower}>
+                  {unitTower}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: "grid", gap: 4 }}>
             Room type
             <select name="room_type" required defaultValue="">
               <option value="" disabled>
@@ -132,6 +160,17 @@ export default async function UnitsPage({ searchParams }: PageProps) {
               {roomTypes.map((roomType) => (
                 <option key={roomType.id} value={roomType.id}>
                   {roomType.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label style={{ display: "grid", gap: 4 }}>
+            Bed setup
+            <select name="bed_setup" required defaultValue="king">
+              {BED_SETUPS.map((setup) => (
+                <option key={setup} value={setup}>
+                  {setup}
                 </option>
               ))}
             </select>

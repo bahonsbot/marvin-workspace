@@ -6,7 +6,7 @@ export async function listRoomTypes(): Promise<RoomType[]> {
 
   const { data, error } = await supabase
     .from("room_types")
-    .select("id, name, base_capacity, max_capacity, amenities, base_rate, description, created_at, updated_at")
+    .select("id, name, base_capacity, max_capacity, amenities, base_rate, description, allow_extra_bed, created_at, updated_at")
     .order("created_at", { ascending: true });
 
   if (error) {

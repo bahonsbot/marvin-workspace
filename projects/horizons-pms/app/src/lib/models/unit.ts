@@ -1,12 +1,18 @@
 export const UNIT_STATUSES = ["available", "occupied", "maintenance", "reserved"] as const;
+export const UNIT_TOWERS = [1, 2] as const;
+export const BED_SETUPS = ["king", "twin"] as const;
 
 export type UnitStatus = (typeof UNIT_STATUSES)[number];
+export type UnitTower = (typeof UNIT_TOWERS)[number];
+export type BedSetup = (typeof BED_SETUPS)[number];
 
 export type Unit = {
   id: string;
   unit_number: string;
   floor: number;
   room_type_id: string;
+  tower: UnitTower;
+  bed_setup: BedSetup;
   status: UnitStatus;
   amenities: string[];
   base_rate: string;
@@ -26,6 +32,8 @@ export type CreateUnitInput = {
   unit_number: string;
   floor: number;
   room_type_id: string;
+  tower: UnitTower;
+  bed_setup: BedSetup;
   status: UnitStatus;
   base_rate: number;
 };

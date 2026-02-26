@@ -10,6 +10,7 @@ export type RoomType = {
   amenities: string[];
   base_rate: string;
   description: string | null;
+  allow_extra_bed: boolean;
   created_at: string;
   updated_at: string;
 };
