@@ -179,8 +179,8 @@ fi
 while [[ $ITERATION -lt $MAX_ITERATIONS ]]; do
     ITERATION=$((ITERATION + 1))
     
-    local total_tasks=$(count_tasks)
-    local completed_tasks=$(count_completed)
+    total_tasks=$(count_tasks)
+    completed_tasks=$(count_completed)
     
     log "=== Iteration $ITERATION/$MAX_ITERATIONS ==="
     log "Progress: $completed_tasks/$total_tasks tasks complete"
@@ -209,8 +209,8 @@ while [[ $ITERATION -lt $MAX_ITERATIONS ]]; do
     PREV_TASK_COUNT=$completed_tasks
     
     # Run the agent
-    local prompt=$(build_prompt)
-    local iteration_log="$LOG_DIR/iteration-$ITERATION.log"
+    prompt=$(build_prompt)
+    iteration_log="$LOG_DIR/iteration-$ITERATION.log"
     
     log "Spawning Codex agent..."
     
