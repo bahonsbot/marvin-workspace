@@ -10,7 +10,7 @@ from pathlib import Path
 class DataManager:
     def __init__(self):
         self.data_dir = Path('data')
-        self.max_entries = 50  # Keep last 50 entries
+        self.max_entries = 100  # Keep last 100 entries
         
     def prune_files(self):
         """Prune old entries, keep last 50"""
