@@ -71,10 +71,10 @@
 ### Telegram
 - Bot: Configured and working
 - Paired for direct command delivery
-- Smart updater phase delivery validated (check/decision/final report all delivered to Telegram)
 
 ### Horizons PMS (Feb 2026)
 - Phase 1 PRD established in `projects/horizons-pms/PRD.md`
+- Active development ongoing
 - Core emphasis: front-desk-friendly UX/UI with fast availability checks by room type + date
 - Booking/unit workflows must support remarks and special requests (late check-in/out, room maintenance context)
 - Dashboard requirements include day-specific remaining availability and occupancy rate
@@ -84,7 +84,6 @@
 - Git repo initialized (Marvin <marvin@local.com>)
 - **Nightly security review**: 3:30am Vietnam time, analyzes workspace, delivers to Telegram
 - **Platform health council**: 3:00am Vietnam time, stable with `delivery.mode=none` to avoid flaky announce failures
-- **Smart auto updater**: REMOVED (Feb 26) - caused errors, disabled and skill deleted
 - **Daily backup cron**: removed by Philippe preference (he handles daily VPS snapshots manually)
 - Backup targets (manual script): USER.md, MEMORY.md, AGENTS.md, SOUL.md, TOOLS.md, IDENTITY.md
 - Workspace: /data/.openclaw/workspace

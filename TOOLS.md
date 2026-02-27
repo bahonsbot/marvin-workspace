@@ -44,6 +44,13 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **Repo:** https://github.com/bahonsbot/marvin-workspace (public)
 - **CLI:** `gh` authenticated and working
 
+### QMD (Semantic Memory Search)
+- **Backend:** qmd 1.0.8 for semantic search across memory layers
+- **Manual commands:**
+  - `qmd search "query" -c life -n 3` — search knowledge graph
+  - `qmd index <file>` — add file to index
+  - `qmd stats` — show index statistics
+
 ### Telegram
 - **Bot username:** @bahons_bot
 - **Bot token:** (stored in config, not here)
@@ -94,6 +101,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ### Active Projects
 - `projects/horizons-pms/` — PMS system for hotel front-desk (PRD in progress)
+- `projects/market-intel/` — Stock market analysis and research
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
