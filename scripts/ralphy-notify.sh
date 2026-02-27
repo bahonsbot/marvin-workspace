@@ -65,21 +65,16 @@ case "${1:-}" in
         echo ""
         echo "Options:"
         echo "  --chat-id ID    Telegram chat ID"
-        echo "  --token TOKEN   Telegram bot token"
         echo "  --urgent       Send as urgent (warning emoji)"
         echo ""
         echo "Environment variables:"
-        echo "  TELEGRAM_BOT_TOKEN"
+        echo "  TELEGRAM_BOT_TOKEN (or set via openclaw config)"
         echo "  TELEGRAM_CHAT_ID"
         echo "  OPENCLAW_TELEGRAM_CHAT_ID"
         exit 0
         ;;
     --chat-id)
         TELEGRAM_CHAT_ID="$2"
-        shift 2
-        ;;
-    --token)
-        TELEGRAM_BOT_TOKEN="$2"
         shift 2
         ;;
     --urgent)
