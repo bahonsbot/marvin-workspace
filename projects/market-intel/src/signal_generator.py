@@ -17,17 +17,14 @@ class SignalGenerator:
     
     def load_data(self):
         """Load patterns and alerts"""
-        # Load patterns
         with open('data/patterns.json', 'r') as f:
             data = json.load(f)
             self.patterns = data['patterns']
         
-        # Load RSS alerts
         if os.path.exists('data/rss_alerts.json'):
             with open('data/rss_alerts.json', 'r') as f:
                 self.rss_alerts = json.load(f)
         
-        # Load Reddit alerts
         if os.path.exists('data/reddit_alerts.json'):
             with open('data/reddit_alerts.json', 'r') as f:
                 self.reddit_alerts = json.load(f)
@@ -35,136 +32,110 @@ class SignalGenerator:
     def match_alert_to_patterns(self, alert: Dict) -> List[Dict]:
         """Match an alert to relevant patterns"""
         matches = []
-        text = f"{alert.get('title', '')} {alert.get('summary', '')}".lower()
+        title = alert.get('title', '').lower()
+        summary = alert.get('summary', '').lower()
+        text = f"{title} {summary}"
         
+        # Pattern-specific keywords with scoring
+        pattern_keywords = {
+            'p001': {'keywords': ['saudi', 'opec', 'abqaiq', 'aramco', 'oil attack', 'drone'], 'weight': 3},
+            'p002': {'keywords': ['ukraine', 'russia', 'putin', 'kremlin', 'kyiv', 'moscow', 'invasion'], 'weight': 3},
+            'p003': {'keywords': ['nvidia', 'amd', 'gpu', 'semiconductor', 'chip shortage'], 'weight': 2},
+            'p004': {'keywords': ['covid', 'pandemic', 'coronavirus', 'who outbreak'], 'weight': 3},
+            'p005': {'keywords': ['gme', 'gamestop', 'wsb', 'wallstreetbets', 'short squeeze', 'meme stock'], 'weight': 3},
+            'p006': {'keywords': ['svb', 'silicon valley bank', 'regional bank', 'bank failure', 'bank collapse'], 'weight': 3},
+            'p007': {'keywords': ['evergrande', 'china property', 'country garden'], 'weight': 2},
+            'p008': {'keywords': ['ftx', 'sam bankman', 'alameda', 'SBF'], 'weight': 3},
+            'p009': {'keywords': ['brexit', 'uk referendum', 'eu referendum', 'british pound'], 'weight': 3},
+            'p010': {'keywords': ['tesla', 'nvidia', 'nvda', 'stock split', '5-for-1'], 'weight': 2}
+        }
+        
+        # Check each pattern
         for pattern in self.patterns:
-            # Check category match
-            category_keywords = self.get_category_keywords(pattern['category'])
+            rule = pattern_keywords.get(pattern['id'], {'keywords': [], 'weight': 1})
+            keywords = rule['keywords']
+            weight = rule['weight']
             
-            for keyword in category_keywords:
-                if keyword.lower() in text:
+            for kw in keywords:
+                if kw in text:
                     matches.append({
                         'pattern_id': pattern['id'],
                         'pattern_name': pattern['name'],
                         'category': pattern['category'],
                         'confidence': pattern['confidence'],
                         'time_horizon': pattern['time_horizon'],
-                        'matched_keyword': keyword,
-                        'typical_lag': pattern.get('time_lag_hours', {})
+                        'matched_keyword': kw,
+                        'match_weight': weight
                     })
-                    break
+                    break  # Only match once per pattern
         
         return matches
-    
-    def get_category_keywords(self, category: str) -> List[str]:
-        """Map category to relevant keywords"""
-        mapping = {
-            'geopolitical': ['war', 'invasion', 'troops', 'military', 'sanction', 'oil', 'attack', 'conflict'],
-            'financial_credit': ['bank', 'default', 'collapse', 'failure', 'crisis', 'credit', 'svb'],
-            'sentiment_social': ['squeeze', 'reddit', 'wallstreetbets', 'meme', 'short'],
-            'macroeconomic': ['inflation', 'fed', 'rate', 'cpi', 'recession', 'pandemic'],
-            'corporate': ['earnings', 'split', 'dividend', 'buyback', 'acquisition', 'merger'],
-            'crypto': ['bitcoin', 'crypto', 'coin', 'token', 'exchange'],
-            'political': ['brexit', 'vote', 'election', 'eu']
-        }
-        return mapping.get(category, [])
     
     def generate_signals(self) -> List[Dict]:
         """Generate signals from all alerts"""
         signals = []
         
-        # Process RSS alerts
-        for alert in self.rss_alerts[:20]:  # Recent 20
+        for alert in self.rss_alerts[:20]:
             matches = self.match_alert_to_patterns(alert)
-            
             if matches:
-                # Get highest confidence match
-                best = max(matches, key=lambda x: self.confidence_score(x['confidence']))
-                
+                best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight']))
                 signals.append({
                     'source': 'rss',
                     'feed': alert.get('feed', 'unknown'),
-                    'title': alert.get('title', '')[:100],
+                    'title': alert.get('title', '')[:80],
                     'url': alert.get('link', ''),
                     'timestamp': alert.get('timestamp', ''),
                     'pattern': best['pattern_name'],
                     'category': best['category'],
                     'confidence': best['confidence'],
                     'time_horizon': best['time_horizon'],
-                    'matched_keyword': best['matched_keyword'],
-                    'signal_score': self.confidence_score(best['confidence'])
+                    'signal_score': self.confidence_score(best['confidence']) * best['match_weight']
                 })
         
-        # Process Reddit alerts
         for alert in self.reddit_alerts[:20]:
             matches = self.match_alert_to_patterns(alert)
-            
             if matches:
-                best = max(matches, key=lambda x: self.confidence_score(x['confidence']))
-                
+                best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight']))
                 signals.append({
                     'source': 'reddit',
                     'feed': f"r/{alert.get('subreddit', 'unknown')}",
-                    'title': alert.get('title', '')[:100],
+                    'title': alert.get('title', '')[:80],
                     'url': alert.get('url', ''),
                     'timestamp': alert.get('timestamp', ''),
                     'pattern': best['pattern_name'],
                     'category': best['category'],
                     'confidence': best['confidence'],
                     'time_horizon': best['time_horizon'],
-                    'matched_keyword': best['matched_keyword'],
                     'score': alert.get('score', 0),
-                    'signal_score': self.confidence_score(best['confidence'])
+                    'signal_score': self.confidence_score(best['confidence']) * best['match_weight']
                 })
         
-        # Sort by signal score
-        signals.sort(key=lambda x: x.get('signal_score', 0), reverse=True)
-        
-        return signals[:10]  # Top 10
+        signals.sort(key=lambda x: x['signal_score'], reverse=True)
+        return signals[:10]
     
     def confidence_score(self, confidence: str) -> int:
-        """Convert confidence to numeric score"""
-        mapping = {
-            'HIGH': 100,
-            'MEDIUM_HIGH': 75,
-            'MEDIUM': 50,
-            'LOW': 25
-        }
+        mapping = {'HIGH': 100, 'MEDIUM_HIGH': 75, 'MEDIUM': 50, 'LOW': 25}
         return mapping.get(confidence, 0)
     
     def save_signals(self, signals: List[Dict], output_file: str = "data/signals.json"):
-        """Save signals to file"""
         with open(output_file, 'w') as f:
             json.dump(signals, f, indent=2)
     
     def print_summary(self, signals: List[Dict]):
-        """Print signal summary"""
         print("=== MARKET INTEL SIGNALS ===\n")
         
         high = [s for s in signals if s['confidence'] == 'HIGH']
         medium = [s for s in signals if s['confidence'] in ['MEDIUM_HIGH', 'MEDIUM']]
         
-        print(f"📊 Total Signals: {len(signals)}")
-        print(f"   🔴 HIGH: {len(high)}")
-        print(f"   🟡 MEDIUM: {len(medium)}\n")
+        print(f"📊 Total: {len(signals)} | HIGH: {len(high)} | MEDIUM: {len(medium)}\n")
         
-        if high:
-            print("🔴 HIGH CONFIDENCE SIGNALS:")
-            for s in high[:5]:
-                print(f"  [{s['source'].upper()}] {s['title'][:60]}...")
-                print(f"    Pattern: {s['pattern']} | Category: {s['category']}")
-                print(f"    Source: {s['feed']}")
-                print()
-        
-        if medium:
-            print("🟡 MEDIUM CONFIDENCE SIGNALS:")
-            for s in medium[:3]:
-                print(f"  [{s['source'].upper()}] {s['title'][:50]}...")
-                print(f"    Pattern: {s['pattern']} | Category: {s['category']}")
-                print()
+        for s in signals[:8]:
+            icon = "🔴" if s['confidence'] == 'HIGH' else "🟡"
+            print(f"{icon} [{s['source'].upper()}] {s['title'][:55]}")
+            print(f"    → {s['pattern']} ({s['category']})")
+            print()
 
     def run(self):
-        """Run signal generation"""
         print("=== Generating Market Signals ===\n")
         
         signals = self.generate_signals()
@@ -174,7 +145,7 @@ class SignalGenerator:
             self.save_signals(signals)
             print(f"✓ Saved {len(signals)} signals to data/signals.json")
         else:
-            print("No signals generated yet.")
+            print("No signals generated - run RSS and Reddit monitors first.")
         
         return signals
 
