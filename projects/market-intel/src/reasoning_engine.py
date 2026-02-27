@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
 """
 Reasoning Engine: Enhanced signal analysis with confidence scoring and time horizon
+Integrates with Knowledge Graph for outcome prediction
 """
 import json
 import os
 from datetime import datetime
 from typing import List, Dict
 
+# Import knowledge graph
+import sys
+sys.path.insert(0, 'src')
+from knowledge_graph import KnowledgeGraph
+
 class ReasoningEngine:
     def __init__(self):
         self.patterns = []
         self.signals = []
+        self.kg = KnowledgeGraph()  # Initialize knowledge graph
         self.load_data()
     
     def load_data(self):
@@ -137,12 +144,18 @@ class ReasoningEngine:
         for signal in self.signals:
             reasoning = self.calculate_reasoning_score(signal)
             
+            # Knowledge graph outcome prediction
+            predicted_outcomes = self.kg.predict_outcomes(signal.get('pattern', ''))
+            root_causes = self.kg.find_root_causes(signal.get('pattern', ''))
+            
             enhanced = {
                 **signal,
                 'reasoning_score': reasoning['reasoning_score'],
                 'confidence_level': reasoning['confidence_level'],
                 'reasoning_components': reasoning['components'],
                 'reasoning': reasoning['reasoning'],
+                'predicted_outcomes': predicted_outcomes,
+                'root_causes': root_causes,
                 'timestamp': datetime.now().isoformat()
             }
             enhanced_signals.append(enhanced)
@@ -171,7 +184,10 @@ class ReasoningEngine:
             print(f"  {s['title'][:60]}...")
             print(f"  Source: {s['feed']}")
             print(f"  Reasoning: {s['reasoning']}")
-            print(f"  Components: {s['reasoning_components']}")
+            
+            if s.get('predicted_outcomes'):
+                print(f"  📈 Predicted: {' → '.join(s['predicted_outcomes'][:3])}")
+            
             print()
     
     def save(self, signals: List[Dict]):
