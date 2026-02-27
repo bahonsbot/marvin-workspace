@@ -87,6 +87,47 @@ class SignalGenerator:
                 'keywords': ['tesla', 'tsla', 'stock split', '5-for-1', 'elon'],
                 'exclude': [],
                 'weight': 2
+            },
+            # NEW PATTERNS
+            'p011': {  # Black Monday 1987
+                'keywords': ['black monday', '1987 crash', 'program trading', 'portfolio insurance'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p012': {  # Japan Lost Decade
+                'keywords': ['japan bubble', 'nikkei', 'lost decade', 'japanese real estate'],
+                'exclude': [],
+                'weight': 2
+            },
+            'p013': {  # Arab Spring
+                'keywords': ['arab spring', 'middle east protests', 'tunisia', 'egypt revolution'],
+                'exclude': [],
+                'weight': 2
+            },
+            'p014': {  # US Credit Downgrade
+                'keywords': ['s&p downgrade', 'credit rating', 'aaa downgrade', 'us debt'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p015': {  # China Devaluation
+                'keywords': ['china devaluation', 'yuan devalue', 'currency war', 'china export'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p016': {  # Iran Nuclear Deal
+                'keywords': ['iran nuclear', 'sanctions lifted', 'jcpoa', 'iran deal'],
+                'exclude': [],
+                'weight': 2
+            },
+            'p017': {  # Taiwan/China Tension
+                'keywords': ['taiwan', 'pelosi', 'china military', 'china drills', 'cross strait'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p018': {  # Regional Banking Crisis 2023
+                'keywords': ['signature bank', 'first republic', 'regional banking crisis', 'bank fears'],
+                'exclude': [],
+                'weight': 3
             }
         }
         

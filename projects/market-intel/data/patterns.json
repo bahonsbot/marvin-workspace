@@ -286,24 +286,242 @@
         "stock_splits_drive_retail",
         "index_inclusion_forced_buying"
       ]
+    },
+    {
+      "id": "p011",
+      "name": "Black Monday 1987",
+      "category": "macroeconomic",
+      "date": "1987-10-19",
+      "description": "Global stock market crash, Dow fell 22.6% in one day",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 0,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "global_stocks",
+        "direction": "crash",
+        "magnitude": "-22.6%"
+      },
+      "early_signals": [
+        "program_trading",
+        "market_volatility",
+        "option_puts"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "flash_crash_possible",
+        "portfolio_insurance_blamed"
+      ]
+    },
+    {
+      "id": "p012",
+      "name": "Japan Lost Decade",
+      "category": "macroeconomic",
+      "date": "1991-01-01",
+      "description": "Japanese asset price bubble burst, decades of stagnation",
+      "time_horizon": "long-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 8760,
+        "confirmation_to_market": 4380
+      },
+      "market_impact": {
+        "asset": "nikkei",
+        "direction": "crash",
+        "magnitude": "-60%"
+      },
+      "early_signals": [
+        "bank_lending_bubble",
+        "real_estate_prices",
+        "interest_rates"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "asset_bubble_pop",
+        "deflation_risk",
+        "zombie_banks"
+      ]
+    },
+    {
+      "id": "p013",
+      "name": "Arab Spring",
+      "category": "geopolitical",
+      "date": "2011-01-01",
+      "description": "Middle East protests toppled governments, oil spike",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 168,
+        "confirmation_to_market": 72
+      },
+      "market_impact": {
+        "asset": "oil",
+        "direction": "spike",
+        "magnitude": "+20%"
+      },
+      "early_signals": [
+        "protests",
+        "social_media",
+        "food_prices"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "social_media_revolution",
+        "commodity_supply_shock"
+      ]
+    },
+    {
+      "id": "p014",
+      "name": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "date": "2011-08-05",
+      "description": "S&P downgraded US credit rating from AAA to AA+",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "us_treasuries",
+        "direction": "volatility",
+        "magnitude": "VIX_spike"
+      },
+      "early_signals": [
+        "debt_ceiling",
+        "political_gridlock",
+        "deficit"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "sovereign_rating_matters",
+        "political_risk"
+      ]
+    },
+    {
+      "id": "p015",
+      "name": "China Devaluation 2015",
+      "category": "macroeconomic",
+      "date": "2015-08-11",
+      "description": "China devalued yuan, global market selloff",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 12,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "china_stocks",
+        "direction": "crash",
+        "magnitude": "-8%"
+      },
+      "early_signals": [
+        "china_economic_slowdown",
+        "export_data",
+        " yuan_peg"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "currency_war",
+        "china_export_shock"
+      ]
+    },
+    {
+      "id": "p016",
+      "name": "Iran Nuclear Deal",
+      "category": "geopolitical",
+      "date": "2015-07-14",
+      "description": "Iran nuclear deal signed, sanctions lifted",
+      "time_horizon": "medium-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 168,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "oil",
+        "direction": "drop",
+        "magnitude": "-5%"
+      },
+      "early_signals": [
+        "diplomacy",
+        "sanctions_negotiations",
+        "iaea"
+      ],
+      "confidence": "MEDIUM",
+      "key_lessons": [
+        "sanctions_lift_impact",
+        "geopolitical_deal"
+      ]
+    },
+    {
+      "id": "p017",
+      "name": "Tension Taiwan/China",
+      "category": "geopolitical",
+      "date": "2022-08-01",
+      "description": "China military drills around Taiwan, Pelosi visit",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "semiconductors",
+        "direction": "volatility",
+        "magnitude": "sector_rotation"
+      },
+      "early_signals": [
+        "military_exercises",
+        "diplomatic_visits",
+        "china_rhetoric"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "geopolitical_tension_semiconductors",
+        "supply_chain_risk"
+      ]
+    },
+    {
+      "id": "p018",
+      "name": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "date": "2023-03-08",
+      "description": "SVB, Signature, First Republic failed in days",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 48,
+        "confirmation_to_market": 12
+      },
+      "market_impact": {
+        "asset": "regional_banks",
+        "direction": "crash",
+        "magnitude": "-30%"
+      },
+      "early_signals": [
+        "fed_hikes",
+        "bond_losses",
+        "deposit_uninsured"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "interest_rate_risk",
+        "digital_bank_run"
+      ]
     }
   ],
   "metadata": {
-    "total_patterns": 10,
+    "total_patterns": 18,
     "last_updated": "2026-02-27",
     "confidence_distribution": {
-      "HIGH": 6,
-      "MEDIUM_HIGH": 2,
-      "MEDIUM": 2
+      "HIGH": 10,
+      "MEDIUM_HIGH": 5,
+      "MEDIUM": 3,
+      "LOW": 0
     },
     "category_distribution": {
-      "geopolitical": 3,
+      "geopolitical": 6,
       "sentiment_social": 2,
+      "macroeconomic": 5,
       "financial_credit": 2,
-      "macroeconomic": 1,
-      "corporate": 1,
       "crypto_credit": 1,
-      "political": 1
+      "political": 1,
+      "corporate": 1
     }
   }
 }
