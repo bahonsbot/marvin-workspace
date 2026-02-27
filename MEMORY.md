@@ -44,7 +44,7 @@
 - **Memory Decay:** Access tracking implemented - frequently referenced facts stay "hot"
 
 ### Heartbeat
-- Fixed at 30-minute intervals (not adaptive) to avoid interrupting conversations
+- Fixed at 60-minute intervals (not 30min - reduced to prevent delivery queue backlog)
 
 ### Image Analysis (Feb 2026)
 - Built-in image tool has a bug: rejects MiniMax even though model supports images
@@ -176,3 +176,23 @@ These rules prevent common issues in this Docker setup:
 - Platform-health-council and self-improvement set to "both" so reports save to workspace AND Telegram
 - Workspace access includes: workspace/, cron/, skills/, ~/.codex/
 - Core config (openclaw.json): edit with caution - past bad edits caused boot issues
+
+### Security Fixes Applied (Feb 27, 2026)
+All issues from nightly-security-review addressed:
+
+**High Priority:**
+- Rotated exposed Telegram bot token (Feb 27)
+- Redacted credentials from memory files (memory/2026-02-20.md, memory/security/2026-02-22_22_11_00.md)
+- Added human approval gate to ralphy.sh (prompts before execution)
+- Added PRD file ownership check in ralphy.sh
+- Removed redundant backup-workspace.sh (VPS snapshots cover recovery)
+- Fixed bash `local` syntax error in ralphy.sh (was outside function scope)
+- Removed --token CLI option from ralphy-notify.sh (use env vars instead)
+
+**Medium Priority:**
+- audit-log.sh: added input sanitization (prevents log injection)
+- nightly-memory-extraction.sh: added symlink protection + atomic writes + secure permissions
+- analyze_image.py: fixed path validation bypass (now uses os.path.commonpath)
+- switch_model.sh & switch_model_auto.sh: use mktemp instead of predictable temp files
+- analyze_image.py: added ALLOW_THIRD_PARTY_IMAGE_UPLOAD consent gate
+- life/areas/people/philippe/items.json: added retention policy metadata
