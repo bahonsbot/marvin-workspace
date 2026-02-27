@@ -1,0 +1,54 @@
+[
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "Nvidia earnings be like",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1reruk1/nvidia_earnings_be_like/",
+    "timestamp": "2026-02-27T18:00:55.078198",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "score": 25366,
+    "signal_score": 100
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "The day after NVDA earnings is becoming my favorite.",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rfei8u/the_day_after_nvda_earnings_is_becoming_my/",
+    "timestamp": "2026-02-27T18:00:55.078205",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "score": 405,
+    "signal_score": 100
+  },
+  {
+    "source": "reddit",
+    "feed": "r/investing",
+    "title": "Nvidia's China revenue is still zero despite Trump's export approval. What that ",
+    "url": "https://reddit.com/r/investing/comments/1reuxnj/nvidias_china_revenue_is_still_zero_despite/",
+    "timestamp": "2026-02-27T18:00:56.449765",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "score": 58,
+    "signal_score": 100
+  },
+  {
+    "source": "reddit",
+    "feed": "r/investing",
+    "title": "Thoughts on my current portfolio? ($VOO, $NVDA, $AMZN, and $SCHD.) \u2026And which Ai",
+    "url": "https://reddit.com/r/investing/comments/1rfum7p/thoughts_on_my_current_portfolio_voo_nvda_amzn/",
+    "timestamp": "2026-02-27T18:00:56.449787",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "score": 0,
+    "signal_score": 100
+  }
+]
