@@ -36,29 +36,78 @@ class SignalGenerator:
         summary = alert.get('summary', '').lower()
         text = f"{title} {summary}"
         
-        # Pattern-specific keywords with scoring
+        # Pattern-specific keywords with scoring - REFINED
         pattern_keywords = {
-            'p001': {'keywords': ['saudi', 'opec', 'abqaiq', 'aramco', 'oil attack', 'drone'], 'weight': 3},
-            'p002': {'keywords': ['ukraine', 'russia', 'putin', 'kremlin', 'kyiv', 'moscow', 'invasion'], 'weight': 3},
-            'p003': {'keywords': ['nvidia', 'amd', 'gpu', 'semiconductor', 'chip shortage'], 'weight': 2},
-            'p004': {'keywords': ['covid', 'pandemic', 'coronavirus', 'who outbreak'], 'weight': 3},
-            'p005': {'keywords': ['gme', 'gamestop', 'wsb', 'wallstreetbets', 'short squeeze', 'meme stock'], 'weight': 3},
-            'p006': {'keywords': ['svb', 'silicon valley bank', 'regional bank', 'bank failure', 'bank collapse'], 'weight': 3},
-            'p007': {'keywords': ['evergrande', 'china property', 'country garden'], 'weight': 2},
-            'p008': {'keywords': ['ftx', 'sam bankman', 'alameda', 'SBF'], 'weight': 3},
-            'p009': {'keywords': ['brexit', 'uk referendum', 'eu referendum', 'british pound'], 'weight': 3},
-            'p010': {'keywords': ['tesla', 'nvidia', 'nvda', 'stock split', '5-for-1'], 'weight': 2}
+            'p001': {  # Saudi Oil - ONLY Middle East
+                'keywords': ['saudi', 'opec', 'abqaiq', 'khurais', 'aramco', 'gulf oil'],
+                'exclude': ['ukraine', 'russia', 'drone strike', 'military facility'],
+                'weight': 3
+            },
+            'p002': {  # Russia-Ukraine - ONLY Eastern Europe conflict
+                'keywords': ['ukraine', 'russia', 'putin', 'kremlin', 'kyiv', 'moscow', 'invasion', 'kremlin'],
+                'exclude': ['saudi', 'opec', 'middle east'],
+                'weight': 3
+            },
+            'p003': {  # GPU/Semis
+                'keywords': ['nvidia', 'amd', 'gpu shortage', 'semiconductor shortage', 'chip shortage', 'h100'],
+                'exclude': [],
+                'weight': 2
+            },
+            'p004': {  # COVID - health crisis
+                'keywords': ['covid', 'pandemic', 'coronavirus', 'who outbreak', 'virus variant'],
+                'exclude': ['election', 'political'],
+                'weight': 3
+            },
+            'p005': {  # GameStop - meme stocks
+                'keywords': ['gme', 'gamestop', 'wallstreetbets', 'wsb', 'short squeeze', 'meme stock'],
+                'exclude': ['real estate', 'housing'],
+                'weight': 3
+            },
+            'p006': {  # SVB - banking
+                'keywords': ['svb', 'silicon valley bank', 'regional bank', 'bank failure', 'bank collapse', 'fdic'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p007': {  # Evergrande - China property
+                'keywords': ['evergrande', 'china property', 'country garden', 'chinese developer'],
+                'exclude': [],
+                'weight': 2
+            },
+            'p008': {  # FTX - crypto
+                'keywords': ['ftx', 'sam bankman', 'alameda', 'SBF', 'crypto exchange'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p009': {  # Brexit - UK politics
+                'keywords': ['brexit', 'uk referendum', 'eu referendum', 'british pound', 'uk parliament'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p010': {  # Tesla - tech/auto
+                'keywords': ['tesla', 'tsla', 'stock split', '5-for-1', 'elon'],
+                'exclude': [],
+                'weight': 2
+            }
         }
         
         # Check each pattern
         for pattern in self.patterns:
-            rule = pattern_keywords.get(pattern['id'], {'keywords': [], 'weight': 1})
-            keywords = rule['keywords']
-            weight = rule['weight']
+            rule = pattern_keywords.get(pattern['id'], {'keywords': [], 'exclude': [], 'weight': 1})
+            keywords = rule.get('keywords', [])
+            excludes = rule.get('exclude', [])
+            weight = rule.get('weight', 1)
             
             for kw in keywords:
                 if kw in text:
-                    matches.append({
+                    # Check exclusions - skip if any exclusion keyword found
+                    should_exclude = False
+                    for exc in excludes:
+                        if exc in text:
+                            should_exclude = True
+                            break
+                    
+                    if not should_exclude:
+                        matches.append({
                         'pattern_id': pattern['id'],
                         'pattern_name': pattern['name'],
                         'category': pattern['category'],
@@ -131,8 +180,9 @@ class SignalGenerator:
         
         for s in signals[:8]:
             icon = "🔴" if s['confidence'] == 'HIGH' else "🟡"
-            print(f"{icon} [{s['source'].upper()}] {s['title'][:55]}")
-            print(f"    → {s['pattern']} ({s['category']})")
+            print(f"{icon} {s['confidence']} - {s['pattern']}")
+            print(f"   {s['title'][:60]}...")
+            print(f"   Source: {s['source'].upper()} | Category: {s['category']}")
             print()
 
     def run(self):
