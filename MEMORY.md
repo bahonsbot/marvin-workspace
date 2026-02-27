@@ -178,7 +178,10 @@ These rules prevent common issues in this Docker setup:
 - Core config (openclaw.json): edit with caution - past bad edits caused boot issues
 
 ### Security Fixes Applied (Feb 27, 2026)
-All issues from nightly-security-review addressed:
+All issues from nightly-security-review addressed. Cron jobs now save reports to memory/ before Telegram:
+- nightly-security-review → memory/security/
+- platform-health-council → memory/health-council/
+- self-improvement → memory/self-improvement/
 
 **High Priority:**
 - Rotated exposed Telegram bot token (Feb 27)
