@@ -5,21 +5,12 @@
 # X / Twitter Feeds (via rss.app - Basic Plan)
 # ============================================
 # Note: 60-minute refresh rate on Basic plan
-# Add your rss.app feed URLs below
 
-# Market News / Breaking
-Business,https://rss.app/feeds/YOUR_BUSINESS_FEED_ID.xml
-FinancialJuice,https://rss.app/feeds/YOUR_FINANCIALJUICE_FEED_ID.xml
-
-# Tech / Sentiment
-YCombinator,https://rss.app/feeds/YOUR_YC_FEED_ID.xml
-
-# Sentiment / Retail
-WSB_Trending,https://rss.app/feeds/YOUR_STOCKS_HASHTAG.xml
-
-# Alternative / News
-ZeroHedge,https://rss.app/feeds/YOUR_ZEROEDGE_FEED_ID.xml
-UnusualWhales,https://rss.app/feeds/YOUR_UNUSUAL_WHALES_FEED_ID.xml
+Business,https://rss.app/feeds/J4g3h9IgJtdC9DFI.xml
+FinancialJuice,https://rss.app/feeds/mZ8QxKASBRr35JlU.xml
+YCombinator,https://rss.app/feeds/I63Gq2ltYQ3P516W.xml
+ZeroHedge,https://rss.app/feeds/2pl8vwqzm5ByJ2Zf.xml
+UnusualWhales,https://rss.app/feeds/vOjbHEjGb1OvmDK3.xml
 
 # ============================================
 # RSS Feeds (Free, Reliable)
