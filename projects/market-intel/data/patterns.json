@@ -1,0 +1,309 @@
+{
+  "patterns": [
+    {
+      "id": "p001",
+      "name": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "date": "2019-09-14",
+      "description": "Drone/missile strikes on Saudi Aramco facilities disrupted 5.7M b/d",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 48
+      },
+      "market_impact": {
+        "asset": "crude_oil",
+        "direction": "spike",
+        "magnitude": "~20% intraday"
+      },
+      "early_signals": [
+        "regional_conflict_elevated",
+        "social_media_videos",
+        "government_confirmations"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "satellite_imagery_tracking",
+        "social_media_early_indicator",
+        "energy_infrastructure_targeted"
+      ]
+    },
+    {
+      "id": "p002",
+      "name": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "date": "2022-02-24",
+      "description": "Russia invaded Ukraine, triggering energy crisis and market volatility",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 168,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "natural_gas",
+        "direction": "spike",
+        "magnitude": "multi-year highs"
+      },
+      "early_signals": [
+        "troop_buildup_satellites",
+        "diplomatic_talks_failed",
+        "intelligence_reports"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "military_buildup_precedes_invasion",
+        "energy_dependency_exposure",
+        "refugee_flows_indicator"
+      ]
+    },
+    {
+      "id": "p003",
+      "name": "Reddit GPU/Semis Thread",
+      "category": "sentiment_social",
+      "date": "2024-01-01",
+      "description": "Reddit thread identified GPU shortage impacting semis sector",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 72,
+        "confirmation_to_market": 168
+      },
+      "market_impact": {
+        "asset": "semiconductors",
+        "direction": "rally",
+        "magnitude": "sector_rotation"
+      },
+      "early_signals": [
+        "reddit_technical_discussion",
+        "supply_demand_mentions",
+        "pricing_anomalies"
+      ],
+      "confidence": "MEDIUM",
+      "key_lessons": [
+        "social_media_sector_insights",
+        "supply_chain_early_indicator",
+        "retail_knowledge_network"
+      ]
+    },
+    {
+      "id": "p004",
+      "name": "COVID-19 Market Crash",
+      "category": "macroeconomic",
+      "date": "2020-02-20",
+      "description": "Pandemic triggered fastest market crash in history, 34% in 33 days",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 504,
+        "confirmation_to_market": 168
+      },
+      "market_impact": {
+        "asset": "sp500",
+        "direction": "crash",
+        "magnitude": "-34% in 33 days"
+      },
+      "early_signals": [
+        "who_situation_reports",
+        "china_travel_data",
+        "outbreak_news_italy",
+        "oil_price_war"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "pandemic_compounding_supply_shock",
+        "fastest_crash_ever",
+        "fed_response_reverses_quickly"
+      ]
+    },
+    {
+      "id": "p005",
+      "name": "GameStop Short Squeeze",
+      "category": "sentiment_social",
+      "date": "2021-01-13",
+      "description": "Reddit retail coordination forced short squeeze on GME",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 336,
+        "confirmation_to_market": 48
+      },
+      "market_impact": {
+        "asset": "gme_stock",
+        "direction": "squeeze",
+        "magnitude": "+2700% in 3 weeks"
+      },
+      "early_signals": [
+        "reddit_coordination",
+        "ryan_cohen_board_appointment",
+        "short_interest_data",
+        "options_activity"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "social_media_coordination_moves_markets",
+        "short_squeeze_asymmetric_risk",
+        "broker_liquidity_constraints"
+      ]
+    },
+    {
+      "id": "p006",
+      "name": "SVB Collapse",
+      "category": "financial_credit",
+      "date": "2023-03-08",
+      "description": "Silicon Valley Bank failed in 48 hours due to interest rate risk",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 48,
+        "confirmation_to_market": 12
+      },
+      "market_impact": {
+        "asset": "regional_banks",
+        "direction": "crash",
+        "magnitude": "-30% sector"
+      },
+      "early_signals": [
+        "fed_rate_hike_cycle",
+        "bank_deposit_growth_rates",
+        "moodys_rating_watch",
+        "bond_sale_announcement"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "interest_rate_risk_hidden",
+        "digital_bank_runs",
+        "contagion_spreads_fast"
+      ]
+    },
+    {
+      "id": "p007",
+      "name": "Evergrande Crisis",
+      "category": "geopolitical",
+      "date": "2021-08-01",
+      "description": "China's largest property developer defaulted on $300B debt",
+      "time_horizon": "medium-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 8760,
+        "confirmation_to_market": 720
+      },
+      "market_impact": {
+        "asset": "china_real_estate",
+        "direction": "crash",
+        "magnitude": "-90% evergrande_stock"
+      },
+      "early_signals": [
+        "china_three_redlines_policy",
+        "property_bond_yields",
+        "land_sale_data",
+        "developer_default_news"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "policy_driven_crisis",
+        "slow_motion_default",
+        "china_contains_spillover"
+      ]
+    },
+    {
+      "id": "p008",
+      "name": "FTX Collapse",
+      "category": "crypto_credit",
+      "date": "2022-11-02",
+      "description": "Crypto exchange collapsed revealing customer fund misuse",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 3600,
+        "confirmation_to_market": 72
+      },
+      "market_impact": {
+        "asset": "crypto",
+        "direction": "crash",
+        "magnitude": "-15% bitcoin"
+      },
+      "early_signals": [
+        "alameda_balance_sheet",
+        "investigative_journalism",
+        "exchange_withdrawal_patterns",
+        "stablecoin_peg_deviations"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "centralized_exchange_risk",
+        "contagion_very_fast",
+        "regulatory_vacuum"
+      ]
+    },
+    {
+      "id": "p009",
+      "name": "Brexit Vote",
+      "category": "political",
+      "date": "2016-06-23",
+      "description": "UK voted to leave EU, pound crashed 8%",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 168,
+        "confirmation_to_market": 8
+      },
+      "market_impact": {
+        "asset": "gbp_usd",
+        "direction": "crash",
+        "magnitude": "-8% in hours"
+      },
+      "early_signals": [
+        "opinion_polls",
+        "betting_odds",
+        "currency_volatility",
+        "campaign_news"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "polling_can_miss",
+        "currency_moves_faster",
+        "political_black_swan"
+      ]
+    },
+    {
+      "id": "p010",
+      "name": "Tesla Stock Splits",
+      "category": "corporate",
+      "date": "2020-08-11",
+      "description": "Tesla 5-for-1 split + consistent earnings beats drove +740% rally",
+      "time_horizon": "medium-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 504,
+        "confirmation_to_market": 168
+      },
+      "market_impact": {
+        "asset": "tsla_stock",
+        "direction": "rally",
+        "magnitude": "+740% in year"
+      },
+      "early_signals": [
+        "earnings_whisper_vs_actual",
+        "delivery_guidance",
+        "snp_inclusion_rumors",
+        "options_activity"
+      ],
+      "confidence": "MEDIUM",
+      "key_lessons": [
+        "earnings_beats_build_momentum",
+        "stock_splits_drive_retail",
+        "index_inclusion_forced_buying"
+      ]
+    }
+  ],
+  "metadata": {
+    "total_patterns": 10,
+    "last_updated": "2026-02-27",
+    "confidence_distribution": {
+      "HIGH": 6,
+      "MEDIUM_HIGH": 2,
+      "MEDIUM": 2
+    },
+    "category_distribution": {
+      "geopolitical": 3,
+      "sentiment_social": 2,
+      "financial_credit": 2,
+      "macroeconomic": 1,
+      "corporate": 1,
+      "crypto_credit": 1,
+      "political": 1
+    }
+  }
+}

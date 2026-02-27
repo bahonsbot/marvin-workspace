@@ -119,6 +119,8 @@ A systematic research and detection system that:
 - Statistical validation report (CAR, t-stats, confidence scores)
 - Event taxonomy document (refined)
 - Minimum Viable Pattern Set (5-10 proven correlations)
+  - ✅ Created: `data/patterns.json` — 10 patterns with confidence scores
+  - ✅ Created: `src/pattern_matcher.py` — Query tool for matching events
 
 ---
 
