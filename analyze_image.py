@@ -25,7 +25,8 @@ def validate_path(path):
     """Validate path is within allowed directory and exists."""
     real_path = os.path.realpath(path)
     real_allowed = os.path.realpath(ALLOWED_DIR)
-    if not real_path.startswith(real_allowed):
+    # Use commonpath to prevent sibling path bypass (e.g., /data/../data/media/evil/)
+    if os.path.commonpath([real_path, real_allowed]) != real_allowed:
         raise ValueError(f"Path traversal detected: {path} is not within {ALLOWED_DIR}")
     if not os.path.isfile(path):
         raise FileNotFoundError(f"Image file not found: {path}")
@@ -36,6 +37,14 @@ def encode_image(image_path):
         return base64.b64encode(f.read()).decode("utf-8")
 
 def analyze_image(image_path, prompt="Describe this image in detail."):
+    # Consent check: require explicit opt-in before sending to third-party
+    allow_third_party = os.environ.get("ALLOW_THIRD_PARTY_IMAGE_UPLOAD", "").lower()
+    if allow_third_party not in ("1", "true", "yes"):
+        raise PermissionError(
+            "Image upload to third-party API requires explicit consent. "
+            "Set ALLOW_THIRD_PARTY_IMAGE_UPLOAD=1 to enable."
+        )
+    
     # Validate path before processing
     validate_path(image_path)
     

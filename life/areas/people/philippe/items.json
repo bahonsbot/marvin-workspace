@@ -1,4 +1,11 @@
-[
+{
+  "_metadata": {
+    "retentionPolicy": "Personal facts reviewed annually; stale facts (>2 years) flagged for review",
+    "purpose": "Maintain context for AI assistant about the user",
+    "lastReview": "2026-02-27",
+    "reviewInterval": "12 months"
+  },
+  "facts": [
   {
     "id": "philippe-001",
     "fact": "Philippe is from the Netherlands, living in Vietnam since September 2024",
@@ -59,4 +66,5 @@
     "lastAccessed": "2026-02-25",
     "accessCount": 1
   }
-]
+  ]
+}

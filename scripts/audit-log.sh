@@ -17,5 +17,14 @@ mkdir -p "$LOG_DIR"
 chmod 700 "$LOG_DIR"
 
 TS="$(date +'%Y-%m-%dT%H:%M:%S%z')"
-printf '%s | actor=%s | action=%s | details=%s\n' "$TS" "$ACTOR" "$ACTION" "$DETAILS" >> "$LOG_FILE"
+
+# Sanitize input to prevent log injection
+sanitize() {
+    printf '%s" "$1" | tr -cd '[:print:]\n\t' | head -c 500
+}
+
+sanitized_action=$(sanitize "$ACTION")
+sanitized_details=$(sanitize "$DETAILS")
+
+printf '%s | actor=%s | action=%s | details=%s\n' "$TS" "$ACTOR" "$sanitized_action" "$sanitized_details" >> "$LOG_FILE"
 chmod 600 "$LOG_FILE"
