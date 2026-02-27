@@ -4,7 +4,6 @@
 # ============================================
 # X / Twitter Feeds (via rss.app - Basic Plan)
 # ============================================
-# Note: 60-minute refresh rate on Basic plan
 
 Business,https://rss.app/feeds/J4g3h9IgJtdC9DFI.xml
 FinancialJuice,https://rss.app/feeds/mZ8QxKASBRr35JlU.xml
@@ -22,9 +21,11 @@ MarketWatch,https://feeds.marketwatch.com/marketwatch/topstories/
 The_Verge,https://www.theverge.com/rss/index.xml
 TechCrunch,https://techcrunch.com/feed/
 
+# Reuters (via rss.app)
+Reuters,https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml
+
 # Backup (if rate limited)
 Yahoo_Finance_Backup,https://finance.yahoo.com/news/rssindex
-Reuters_US,https://www.reutersagency.com/feed/?best-regions=us&post_type=best
 
 # ============================================
 # Keywords to Watch
@@ -39,7 +40,7 @@ sanction,embargo,nuclear,military,battle
 
 # Financial / Credit
 bank,failure,default,collapse,svb,regional,credit,crisis
-bankruptcy,liquidation, rescue
+bankruptcy,liquidation,rescue
 
 # Corporate
 earnings,revenue,guidance,beat,miss,quarterly,profit
