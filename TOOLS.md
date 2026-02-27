@@ -101,7 +101,8 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ### Active Projects
 - `projects/horizons-pms/` — PMS system for hotel front-desk (PRD in progress)
-- `projects/market-intel/` — Stock market analysis and research
+- `projects/market-intel/` — Stock market analysis and research (Phase 1 complete)
+- `projects/autonomous-trading-bot/` — Autonomous trading via Alpaca + TradingView webhooks
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
