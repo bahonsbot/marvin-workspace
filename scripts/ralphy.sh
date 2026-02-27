@@ -69,6 +69,19 @@ if [[ ! -f "$WORKSPACE/$PRD_FILE" ]]; then
     exit 1
 fi
 
+# Verify PRD file ownership (security check)
+PRD_OWNER=$(stat -c '%u' "$WORKSPACE/$PRD_FILE" 2>/dev/null || echo "unknown")
+CURRENT_USER=$(id -u)
+if [[ "$PRD_OWNER" != "$CURRENT_USER" && "$PRD_OWNER" != "0" ]]; then
+    echo "Warning: PRD file is owned by user ID $PRD_OWNER (running as $CURRENT_USER)"
+    echo "This may indicate a permissions issue. Continue? (y/n)"
+    read -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+fi
+
 # Derived values
 SESSION_NAME="ralphy-$(date +%s)"
 LOG_DIR="$WORKSPACE/.ralphy-logs"
@@ -145,6 +158,23 @@ notify() {
 # Main loop
 log "Starting Ralph Loop for $PRD_FILE in $WORKSPACE"
 log "Model: $MODEL, Max iterations: $MAX_ITERATIONS"
+
+# Human approval gate - prevent automated execution without review
+if [[ -t 0 ]]; then
+    echo "========================================"
+    echo "About to execute PRD: $PRD_FILE"
+    echo "Workspace: $WORKSPACE"
+    echo "Model: $MODEL"
+    echo "========================================"
+    read -p "Continue? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        log "Aborted by user"
+        exit 0
+    fi
+else
+    log "WARNING: Running in non-interactive mode - skipping approval gate"
+fi
 
 while [[ $ITERATION -lt $MAX_ITERATIONS ]]; do
     ITERATION=$((ITERATION + 1))
