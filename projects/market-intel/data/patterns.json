@@ -503,25 +503,165 @@
         "interest_rate_risk",
         "digital_bank_run"
       ]
+    },
+    {
+      "id": "p019",
+      "name": "Asian Financial Crisis 1997",
+      "category": "geopolitical",
+      "date": "1997-07-01",
+      "description": "Asian currency crisis started in Thailand, spread to Indonesia, Korea, Malaysia. IMF bailouts required.",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 168,
+        "confirmation_to_market": 72
+      },
+      "market_impact": {
+        "asset": "asian_stocks",
+        "direction": "crash",
+        "magnitude": "-40% Indonesia, -30% Korea"
+      },
+      "early_signals": [
+        "currency_attack",
+        "baht_devaluation",
+        "foreign_capital_flight"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "contagion_risk",
+        "currency_peg_collapse",
+        "imf_bailout"
+      ]
+    },
+    {
+      "id": "p020",
+      "name": "European Debt Crisis",
+      "category": "macroeconomic",
+      "date": "2010-01-01",
+      "description": "Eurozone sovereign debt crisis. Greece, Portugal, Italy needed bailouts. Bond spreads widened dramatically.",
+      "time_horizon": "medium-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 720,
+        "confirmation_to_market": 168
+      },
+      "market_impact": {
+        "asset": "european_bonds",
+        "direction": "spread_widening",
+        "magnitude": "greece_ytm_1000bp"
+      },
+      "early_signals": [
+        "deficit_spending",
+        "bond_yield_spread",
+        "piigs_acronym"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "sovereign_debt_risk",
+        "austerity_measures",
+        "ecb_intervention"
+      ]
+    },
+    {
+      "id": "p021",
+      "name": "Emerging Market Crisis 2018",
+      "category": "macroeconomic",
+      "date": "2018-08-01",
+      "description": "Argentina, Turkey, Indonesia currency crises. Fed rate hikes triggered capital flight from EM.",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 72,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "em_currencies",
+        "direction": "crash",
+        "magnitude": "-50% ars, -40% try"
+      },
+      "early_signals": [
+        "fed_hike_cycle",
+        "current_account_deficit",
+        "foreign_debt_reliance"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "fed_policy_impact_em",
+        "currency_crisis_contagion",
+        "real_yield_spreads"
+      ]
+    },
+    {
+      "id": "p022",
+      "name": "LTCM Collapse",
+      "category": "financial_credit",
+      "date": "1998-09-01",
+      "description": "Long-Term Capital Management hedge fund collapsed. Fed orchestrated bailout.",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "hedge_funds",
+        "direction": "crisis",
+        "magnitude": "systemic_risk"
+      },
+      "early_signals": [
+        "leverage_ratio",
+        "russian_debt",
+        "convergence_trade"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "leverage_risk",
+        "hedge_fund_contagion",
+        "fed_bailout_precedent"
+      ]
+    },
+    {
+      "id": "p023",
+      "name": "Dot-com Bubble",
+      "category": "corporate",
+      "date": "2000-03-01",
+      "description": "Tech bubble burst. NASDAQ fell 78%. Pets.com, Webvan, many IPOs crashed.",
+      "time_horizon": "long-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 720,
+        "confirmation_to_market": 168
+      },
+      "market_impact": {
+        "asset": "nasdaq",
+        "direction": "crash",
+        "magnitude": "-78%"
+      },
+      "early_signals": [
+        "ipo_mania",
+        "p/e_ratios",
+        "revenue_no_profit"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "bubble_psychology",
+        "cash_burn",
+        "irrational_exuberance"
+      ]
     }
   ],
   "metadata": {
-    "total_patterns": 18,
+    "total_patterns": 23,
     "last_updated": "2026-02-27",
     "confidence_distribution": {
-      "HIGH": 10,
-      "MEDIUM_HIGH": 5,
+      "HIGH": 14,
+      "MEDIUM_HIGH": 6,
       "MEDIUM": 3,
       "LOW": 0
     },
     "category_distribution": {
-      "geopolitical": 6,
+      "geopolitical": 7,
       "sentiment_social": 2,
-      "macroeconomic": 5,
-      "financial_credit": 2,
+      "macroeconomic": 7,
+      "financial_credit": 3,
       "crypto_credit": 1,
       "political": 1,
-      "corporate": 1
+      "corporate": 2
     }
   }
 }

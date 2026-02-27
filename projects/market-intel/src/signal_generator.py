@@ -128,6 +128,32 @@ class SignalGenerator:
                 'keywords': ['signature bank', 'first republic', 'regional banking crisis', 'bank fears'],
                 'exclude': [],
                 'weight': 3
+            },
+            # NEW REGIONAL PATTERNS
+            'p019': {  # Asian Financial Crisis 1997
+                'keywords': ['asian crisis', 'thailand baht', 'indonesia rupiah', 'korean won', 'asian financial', 'asean currency'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p020': {  # European Debt Crisis
+                'keywords': ['greece debt', 'portugal bailout', 'italy debt', 'eurozone crisis', 'piigs', 'european sovereign', 'bond spread'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p021': {  # Emerging Market Crisis 2018
+                'keywords': ['argentina peso', 'turkey lira', 'emerging market crisis', 'em currency', 'capital flight', 'fed rate hike emerging'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p022': {  # LTCM Collapse
+                'keywords': ['ltcm', 'long-term capital', 'hedge fund collapse', 'hedge fund bailout'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p023': {  # Dot-com Bubble
+                'keywords': ['dotcom bubble', 'pets.com', 'nasdaq crash', 'tech bubble', 'ipo bubble', 'webvan'],
+                'exclude': [],
+                'weight': 2
             }
         }
         

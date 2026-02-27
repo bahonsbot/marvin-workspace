@@ -1,0 +1,136 @@
+[
+  {
+    "source": "rss",
+    "feed": "Business",
+    "title": "Did Covid escape from a Chinese lab? World Health Organization chief Tedros Adha",
+    "url": "https://x.com/business/status/2027352273773289906",
+    "timestamp": "2026-02-27T20:50:10.610012",
+    "pattern": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 66.0,
+    "confidence_level": "SKIP",
+    "reasoning_components": {
+      "source_credibility": 70.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "high-credibility source, moderate pattern match.",
+    "predicted_outcomes": [],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Business",
+    "title": "Saudi Arabian investors sharply increased their trading in US equities in 2025, ",
+    "url": "https://x.com/business/status/2027350672069312722",
+    "timestamp": "2026-02-27T20:50:10.610060",
+    "pattern": "Saudi Oil Attacks",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 66.0,
+    "confidence_level": "SKIP",
+    "reasoning_components": {
+      "source_credibility": 70.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "high-credibility source, moderate pattern match.",
+    "predicted_outcomes": [],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Business",
+    "title": "Nvidia\u2019s explosive growth already seems like old hat to investors https://www.bl",
+    "url": "https://x.com/business/status/2027354110727430225",
+    "timestamp": "2026-02-27T20:50:10.610096",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "signal_score": 100,
+    "reasoning_score": 66.0,
+    "confidence_level": "SKIP",
+    "reasoning_components": {
+      "source_credibility": 70.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "high-credibility source, moderate pattern match.",
+    "predicted_outcomes": [],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "FinancialJuice",
+    "title": "Russia's Novak: We will seek to narrow Russia's Urals oil discount to Brent to $",
+    "url": "https://x.com/financialjuice/status/2027344523588665406",
+    "timestamp": "2026-02-27T20:50:10.610080",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 64.5,
+    "confidence_level": "SKIP",
+    "reasoning_components": {
+      "source_credibility": 65.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [],
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/investing",
+    "title": "Nvidia's China revenue is still zero despite Trump's export approval. What that ",
+    "url": "https://reddit.com/r/investing/comments/1reuxnj/nvidias_china_revenue_is_still_zero_despite/",
+    "timestamp": "2026-02-27T20:50:10.610126",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "score": 57,
+    "signal_score": 100,
+    "reasoning_score": 60.0,
+    "confidence_level": "SKIP",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [],
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "Nvidia earnings be like",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1reruk1/nvidia_earnings_be_like/",
+    "timestamp": "2026-02-27T20:50:10.610111",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "score": 25593,
+    "signal_score": 100,
+    "reasoning_score": 54.0,
+    "confidence_level": "SKIP",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [],
+    "root_causes": []
+  }
+]

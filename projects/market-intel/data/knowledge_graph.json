@@ -1,0 +1,646 @@
+{
+  "causal_chains": [
+    {
+      "chain": [
+        "COVID-19 outbreak",
+        "Lockdowns",
+        "Economic slowdown",
+        "Oil demand collapse",
+        "Oil price war",
+        "Market crash"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Fed rate hikes",
+        "Bond prices fall",
+        "Bank unrealized losses",
+        "SVB bank run",
+        "Regional bank crisis",
+        "Fed emergency action"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Russia invasion",
+        "Sanctions",
+        "Energy crisis",
+        "Natural gas spike",
+        "European recession fear",
+        "Energy stock rally"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Reddit coordination",
+        "Short squeeze",
+        "Melvin Capital losses",
+        "Broker liquidity concerns",
+        "Trading restrictions",
+        "Congressional hearing"
+      ],
+      "strength": "medium"
+    },
+    {
+      "chain": [
+        "China three red lines",
+        "Property debt crackdown",
+        "Evergrande default",
+        "China property crisis",
+        "Developer bankruptcies",
+        "China GDP impact"
+      ],
+      "strength": "medium"
+    },
+    {
+      "chain": [
+        "COVID-19 outbreak",
+        "Lockdowns",
+        "Economic slowdown",
+        "Oil demand collapse",
+        "Oil price war",
+        "Market crash"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Fed rate hikes",
+        "Bond prices fall",
+        "Bank unrealized losses",
+        "SVB bank run",
+        "Regional bank crisis",
+        "Fed emergency action"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Russia invasion",
+        "Sanctions",
+        "Energy crisis",
+        "Natural gas spike",
+        "European recession fear",
+        "Energy stock rally"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Reddit coordination",
+        "Short squeeze",
+        "Melvin Capital losses",
+        "Broker liquidity concerns",
+        "Trading restrictions",
+        "Congressional hearing"
+      ],
+      "strength": "medium"
+    },
+    {
+      "chain": [
+        "China three red lines",
+        "Property debt crackdown",
+        "Evergrande default",
+        "China property crisis",
+        "Developer bankruptcies",
+        "China GDP impact"
+      ],
+      "strength": "medium"
+    },
+    {
+      "chain": [
+        "COVID-19 outbreak",
+        "Lockdowns",
+        "Economic slowdown",
+        "Oil demand collapse",
+        "Oil price war",
+        "Market crash"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Fed rate hikes",
+        "Bond prices fall",
+        "Bank unrealized losses",
+        "SVB bank run",
+        "Regional bank crisis",
+        "Fed emergency action"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Russia invasion",
+        "Sanctions",
+        "Energy crisis",
+        "Natural gas spike",
+        "European recession fear",
+        "Energy stock rally"
+      ],
+      "strength": "strong"
+    },
+    {
+      "chain": [
+        "Reddit coordination",
+        "Short squeeze",
+        "Melvin Capital losses",
+        "Broker liquidity concerns",
+        "Trading restrictions",
+        "Congressional hearing"
+      ],
+      "strength": "medium"
+    },
+    {
+      "chain": [
+        "China three red lines",
+        "Property debt crackdown",
+        "Evergrande default",
+        "China property crisis",
+        "Developer bankruptcies",
+        "China GDP impact"
+      ],
+      "strength": "medium"
+    }
+  ],
+  "events": {
+    "COVID-19 outbreak": {
+      "category": "cause",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Lockdowns",
+          "strength": "strong"
+        },
+        {
+          "event": "Lockdowns",
+          "strength": "strong"
+        },
+        {
+          "event": "Lockdowns",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Lockdowns": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Economic slowdown",
+          "strength": "strong"
+        },
+        {
+          "event": "Economic slowdown",
+          "strength": "strong"
+        },
+        {
+          "event": "Economic slowdown",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Economic slowdown": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Oil demand collapse",
+          "strength": "strong"
+        },
+        {
+          "event": "Oil demand collapse",
+          "strength": "strong"
+        },
+        {
+          "event": "Oil demand collapse",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Oil demand collapse": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Oil price war",
+          "strength": "strong"
+        },
+        {
+          "event": "Oil price war",
+          "strength": "strong"
+        },
+        {
+          "event": "Oil price war",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Oil price war": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Market crash",
+          "strength": "strong"
+        },
+        {
+          "event": "Market crash",
+          "strength": "strong"
+        },
+        {
+          "event": "Market crash",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Market crash": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": []
+    },
+    "Fed rate hikes": {
+      "category": "cause",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Bond prices fall",
+          "strength": "strong"
+        },
+        {
+          "event": "Bond prices fall",
+          "strength": "strong"
+        },
+        {
+          "event": "Bond prices fall",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Bond prices fall": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Bank unrealized losses",
+          "strength": "strong"
+        },
+        {
+          "event": "Bank unrealized losses",
+          "strength": "strong"
+        },
+        {
+          "event": "Bank unrealized losses",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Bank unrealized losses": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "SVB bank run",
+          "strength": "strong"
+        },
+        {
+          "event": "SVB bank run",
+          "strength": "strong"
+        },
+        {
+          "event": "SVB bank run",
+          "strength": "strong"
+        }
+      ]
+    },
+    "SVB bank run": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Regional bank crisis",
+          "strength": "strong"
+        },
+        {
+          "event": "Regional bank crisis",
+          "strength": "strong"
+        },
+        {
+          "event": "Regional bank crisis",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Regional bank crisis": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Fed emergency action",
+          "strength": "strong"
+        },
+        {
+          "event": "Fed emergency action",
+          "strength": "strong"
+        },
+        {
+          "event": "Fed emergency action",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Fed emergency action": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": []
+    },
+    "Russia invasion": {
+      "category": "cause",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Sanctions",
+          "strength": "strong"
+        },
+        {
+          "event": "Sanctions",
+          "strength": "strong"
+        },
+        {
+          "event": "Sanctions",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Sanctions": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Energy crisis",
+          "strength": "strong"
+        },
+        {
+          "event": "Energy crisis",
+          "strength": "strong"
+        },
+        {
+          "event": "Energy crisis",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Energy crisis": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Natural gas spike",
+          "strength": "strong"
+        },
+        {
+          "event": "Natural gas spike",
+          "strength": "strong"
+        },
+        {
+          "event": "Natural gas spike",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Natural gas spike": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "European recession fear",
+          "strength": "strong"
+        },
+        {
+          "event": "European recession fear",
+          "strength": "strong"
+        },
+        {
+          "event": "European recession fear",
+          "strength": "strong"
+        }
+      ]
+    },
+    "European recession fear": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Energy stock rally",
+          "strength": "strong"
+        },
+        {
+          "event": "Energy stock rally",
+          "strength": "strong"
+        },
+        {
+          "event": "Energy stock rally",
+          "strength": "strong"
+        }
+      ]
+    },
+    "Energy stock rally": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": []
+    },
+    "Reddit coordination": {
+      "category": "cause",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Short squeeze",
+          "strength": "medium"
+        },
+        {
+          "event": "Short squeeze",
+          "strength": "medium"
+        },
+        {
+          "event": "Short squeeze",
+          "strength": "medium"
+        }
+      ]
+    },
+    "Short squeeze": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Melvin Capital losses",
+          "strength": "medium"
+        },
+        {
+          "event": "Melvin Capital losses",
+          "strength": "medium"
+        },
+        {
+          "event": "Melvin Capital losses",
+          "strength": "medium"
+        }
+      ]
+    },
+    "Melvin Capital losses": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Broker liquidity concerns",
+          "strength": "medium"
+        },
+        {
+          "event": "Broker liquidity concerns",
+          "strength": "medium"
+        },
+        {
+          "event": "Broker liquidity concerns",
+          "strength": "medium"
+        }
+      ]
+    },
+    "Broker liquidity concerns": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Trading restrictions",
+          "strength": "medium"
+        },
+        {
+          "event": "Trading restrictions",
+          "strength": "medium"
+        },
+        {
+          "event": "Trading restrictions",
+          "strength": "medium"
+        }
+      ]
+    },
+    "Trading restrictions": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Congressional hearing",
+          "strength": "medium"
+        },
+        {
+          "event": "Congressional hearing",
+          "strength": "medium"
+        },
+        {
+          "event": "Congressional hearing",
+          "strength": "medium"
+        }
+      ]
+    },
+    "Congressional hearing": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": []
+    },
+    "China three red lines": {
+      "category": "cause",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Property debt crackdown",
+          "strength": "medium"
+        },
+        {
+          "event": "Property debt crackdown",
+          "strength": "medium"
+        },
+        {
+          "event": "Property debt crackdown",
+          "strength": "medium"
+        }
+      ]
+    },
+    "Property debt crackdown": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Evergrande default",
+          "strength": "medium"
+        },
+        {
+          "event": "Evergrande default",
+          "strength": "medium"
+        },
+        {
+          "event": "Evergrande default",
+          "strength": "medium"
+        }
+      ]
+    },
+    "Evergrande default": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "China property crisis",
+          "strength": "medium"
+        },
+        {
+          "event": "China property crisis",
+          "strength": "medium"
+        },
+        {
+          "event": "China property crisis",
+          "strength": "medium"
+        }
+      ]
+    },
+    "China property crisis": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "Developer bankruptcies",
+          "strength": "medium"
+        },
+        {
+          "event": "Developer bankruptcies",
+          "strength": "medium"
+        },
+        {
+          "event": "Developer bankruptcies",
+          "strength": "medium"
+        }
+      ]
+    },
+    "Developer bankruptcies": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": [
+        {
+          "event": "China GDP impact",
+          "strength": "medium"
+        },
+        {
+          "event": "China GDP impact",
+          "strength": "medium"
+        },
+        {
+          "event": "China GDP impact",
+          "strength": "medium"
+        }
+      ]
+    },
+    "China GDP impact": {
+      "category": "effect",
+      "impact": "unknown",
+      "linked_events": []
+    }
+  }
+}
