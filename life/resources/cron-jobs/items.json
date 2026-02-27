@@ -29,8 +29,8 @@
     "source": "initial-setup",
     "status": "active",
     "relatedEntities": [],
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
+    "lastAccessed": "2026-02-26",
+    "accessCount": 2
   },
   {
     "id": "cron-004",
@@ -39,9 +39,11 @@
     "timestamp": "2026-02-22",
     "source": "2026-02-22",
     "status": "active",
-    "relatedEntities": ["projects/security-review"],
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
+    "relatedEntities": [
+      "projects/security-review"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 3
   },
   {
     "id": "cron-005",
@@ -51,7 +53,7 @@
     "source": "2026-02-24",
     "status": "active",
     "relatedEntities": [],
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
+    "lastAccessed": "2026-02-26",
+    "accessCount": 2
   }
 ]

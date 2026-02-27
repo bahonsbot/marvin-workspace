@@ -1,0 +1,38 @@
+[
+  {
+    "id": "hp-001",
+    "fact": "Horizons PMS MVP stack decision: Supabase cloud chosen for fastest implementation.",
+    "category": "decision",
+    "timestamp": "2026-02-26T14:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/horizons-pms"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  },
+  {
+    "id": "hp-002",
+    "fact": "End-to-end MVP flow became operational for room types, units, bookings, dashboard, and calendar.",
+    "category": "status",
+    "timestamp": "2026-02-26T21:54:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/horizons-pms"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  },
+  {
+    "id": "hp-003",
+    "fact": "Unit blueprints from CSV were set as authoritative source for room type and bed layout constraints.",
+    "category": "decision",
+    "timestamp": "2026-02-26T18:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/horizons-pms"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  }
+]

@@ -1,0 +1,39 @@
+[
+  {
+    "id": "mi-001",
+    "fact": "New market-intel project was created to detect early market-moving signals before mainstream coverage.",
+    "category": "status",
+    "timestamp": "2026-02-26T21:54:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-002",
+    "fact": "Phase 1 scope decision: run 10 historical case studies using event-study validation before realtime build.",
+    "category": "decision",
+    "timestamp": "2026-02-26T22:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-003",
+    "fact": "Operating constraints were set to manual execution, conservative confidence threshold, and €50/month budget.",
+    "category": "decision",
+    "timestamp": "2026-02-26T23:10:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "areas/people/philippe",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  }
+]

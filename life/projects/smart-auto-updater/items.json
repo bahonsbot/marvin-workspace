@@ -5,10 +5,12 @@
     "category": "status",
     "timestamp": "2026-02-23",
     "source": "2026-02-23",
-    "status": "active",
-    "relatedEntities": ["areas/people/philippe"],
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
+    "status": "deprecated",
+    "relatedEntities": [
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 2
   },
   {
     "id": "sau-002",
@@ -16,10 +18,12 @@
     "category": "status",
     "timestamp": "2026-02-23",
     "source": "2026-02-23",
-    "status": "active",
-    "relatedEntities": ["resources/cron-jobs"],
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
+    "status": "deprecated",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 2
   },
   {
     "id": "sau-003",
@@ -27,9 +31,11 @@
     "category": "status",
     "timestamp": "2026-02-25",
     "source": "2026-02-25",
-    "status": "active",
-    "relatedEntities": ["areas/people/philippe"],
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
+    "status": "completed",
+    "relatedEntities": [
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 2
   }
 ]

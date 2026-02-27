@@ -6,9 +6,11 @@
     "timestamp": "2026-02-22",
     "source": "2026-02-22",
     "status": "active",
-    "relatedEntities": ["resources/cron-jobs"],
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 2
   },
   {
     "id": "sec-002",
@@ -30,6 +32,34 @@
     "status": "completed",
     "relatedEntities": [],
     "lastAccessed": "2026-02-25",
+    "accessCount": 1
+  },
+  {
+    "id": "sec-004",
+    "fact": "Nightly security review on 2026-02-27 flagged plaintext Telegram bot token and API key exposure in memory files, requiring credential rotation and historical redaction.",
+    "category": "finding",
+    "timestamp": "2026-02-27T12:36:00+08:00",
+    "source": "memory/security/2026-02-27_12_36_00.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "areas/companies/motion-display"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  },
+  {
+    "id": "sec-005",
+    "fact": "Nightly security review on 2026-02-27 identified high-risk automation weaknesses in ralphy scripts, including PRD-driven command-injection risk and token exposure via CLI arguments.",
+    "category": "finding",
+    "timestamp": "2026-02-27T12:36:00+08:00",
+    "source": "memory/security/2026-02-27_12_36_00.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/security-review",
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-02-27",
     "accessCount": 1
   }
 ]

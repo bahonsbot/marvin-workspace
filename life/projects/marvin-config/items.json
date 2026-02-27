@@ -1,1 +1,62 @@
-[]
+[
+  {
+    "id": "mc-001",
+    "fact": "Codex OAuth was re-authenticated on Feb 26 during security review.",
+    "category": "status",
+    "timestamp": "2026-02-26T11:23:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/security-review"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-002",
+    "fact": "Cron delivery mode for platform-health-council and self-improvement jobs was changed from none to both.",
+    "category": "status",
+    "timestamp": "2026-02-26T11:45:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-003",
+    "fact": "Nightly memory extraction timeout increased from 300s to 600s to avoid timeout failures.",
+    "category": "decision",
+    "timestamp": "2026-02-26T12:34:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-004",
+    "fact": "Smart-auto-updater skill and references were removed from workspace and MEMORY as cleanup.",
+    "category": "status",
+    "timestamp": "2026-02-26T12:20:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/smart-auto-updater"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-005",
+    "fact": "Timezone display standard was unified to Asia/Ho_Chi_Minh (GMT+7) across core docs.",
+    "category": "decision",
+    "timestamp": "2026-02-26T12:33:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/timezone-standards"
+    ],
+    "lastAccessed": "2026-02-26",
+    "accessCount": 1
+  }
+]
