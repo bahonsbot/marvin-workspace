@@ -1,0 +1,27 @@
+# RSS Feed Configuration
+# Add RSS feeds here - one per line
+# Format: name,url
+
+# Free, Reliable Feeds (most important)
+Financial_Times,https://www.ft.com/rss/home
+MarketWatch,https://feeds.marketwatch.com/marketwatch/topstories/
+The_Verge,https://www.theverge.com/rss/index.xml
+TechCrunch,https://techcrunch.com/feed/
+
+# Backup feeds (if rate limited, will retry on next run)
+Yahoo_Finance_Backup,https://finance.yahoo.com/news/rssindex
+Reuters_US,https://www.reutersagency.com/feed/?best-regions=us&post_type=best
+
+# Specific keywords to watch (derived from patterns.json)
+WATCH_KEYWORDS:
+oil,attack,drone,missile,saudi,opec,energy
+war,invasion,troops,ukraine,russia,putin,conflict
+sanction,embargo,nuclear,military
+bank,failure,default,collapse,svb,regional,credit
+earnings,revenue,guidance,beat,miss,quarterly
+split,dividend,buyback,stock
+short,squeeze,gme,reddit,wallstreetbets,meme
+inflation,cpi,fed,rate,hike,interest,treasury
+pandemic,covid,virus,outbreak,health
+brexit,european,eu
+tesla,ev,battery,electric
