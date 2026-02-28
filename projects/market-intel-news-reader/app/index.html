@@ -452,12 +452,14 @@
 
         // Favorites toggle button
         const favoritesToggle = document.getElementById('favoritesToggle');
-        favoritesToggle.addEventListener('click', () => {
+        favoritesToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             // Toggle between 'all' and 'favorites'
             if (currentFilter === 'favorites') {
                 currentFilter = 'all';
                 favoritesToggle.textContent = '⭐ Show Favorites';
                 favoritesToggle.style.background = '';
+                favoritesToggle.style.color = '';
                 document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
             } else {
                 currentFilter = 'favorites';
