@@ -1,13 +1,36 @@
 [
   {
     "feed": "Business",
+    "title": "OpenAI said it has reached an agreement with the US Department of War to deploy its models in their classified network https://www.bloomberg.com/news/articles/2026-02-28/openai-reaches-agreement-with-pentagon-to-deploy-ai-models?taid=69a25f1718c5780001101a15&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
+    "link": "https://x.com/business/status/2027584773351264658",
+    "published": "Sat, 28 Feb 2026 03:20:00 GMT",
+    "matched_keywords": [
+      "war",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T12:15:05.467578"
+  },
+  {
+    "feed": "Business",
+    "title": "A Bolivian military aircraft transporting cash for the central bank crashed near El Alto International Airport in the western part of the country, leaving more than 10 people dead and an unspecified number injured https://www.bloomberg.com/news/articles/2026-02-28/bolivia-plane-carrying-bank-cash-crashes-killing-at-least-10?taid=69a25e1a6a41fe0001bdb773&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
+    "link": "https://x.com/business/status/2027583714767614234",
+    "published": "Sat, 28 Feb 2026 03:16:00 GMT",
+    "matched_keywords": [
+      "military",
+      "bank",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T12:15:05.467673"
+  },
+  {
+    "feed": "Business",
     "title": "Anthropic PBC started this year on a winning streak, with surging sales, multiple viral products and a large funding round all giving the startup a big advantage in the costly global AI race. https://www.bloomberg.com/news/articles/2026-02-28/pentagon-casts-cloud-of-doubt-over-anthropic-s-ai-business?taid=69a2596d6a41fe0001bdb73d&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
     "link": "https://x.com/business/status/2027578692096905493",
     "published": "Sat, 28 Feb 2026 02:56:00 GMT",
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:04.959352"
+    "timestamp": "2026-02-28T12:15:05.467746"
   },
   {
     "feed": "Business",
@@ -17,7 +40,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:04.959446"
+    "timestamp": "2026-02-28T12:15:05.467816"
   },
   {
     "feed": "Business",
@@ -27,7 +50,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:04.959525"
+    "timestamp": "2026-02-28T12:15:05.467891"
   },
   {
     "feed": "Business",
@@ -38,7 +61,7 @@
       "war",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:04.959597"
+    "timestamp": "2026-02-28T12:15:05.467960"
   },
   {
     "feed": "Business",
@@ -49,7 +72,7 @@
       "health",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:04.959666"
+    "timestamp": "2026-02-28T12:15:05.468027"
   },
   {
     "feed": "Business",
@@ -59,7 +82,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:04.959736"
+    "timestamp": "2026-02-28T12:15:05.468112"
   },
   {
     "feed": "Business",
@@ -70,7 +93,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:04.959805"
+    "timestamp": "2026-02-28T12:15:05.468194"
   },
   {
     "feed": "Business",
@@ -81,18 +104,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:04.959911"
-  },
-  {
-    "feed": "Business",
-    "title": "A former Moelis investment banker plans to return to the US from France to plead guilty to tipping off members of a global insider-trading ring https://www.bloomberg.com/news/articles/2026-02-28/ex-moelis-banker-to-plead-guilty-in-global-insider-trading-case?taid=69a236606a41fe0001bdb5e3&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
-    "link": "https://x.com/business/status/2027541057160831326",
-    "published": "Sat, 28 Feb 2026 00:27:00 GMT",
-    "matched_keywords": [
-      "bank",
-      "ai"
-    ],
-    "timestamp": "2026-02-28T11:15:04.959990"
+    "timestamp": "2026-02-28T12:15:05.468258"
   },
   {
     "feed": "FinancialJuice",
@@ -103,7 +115,7 @@
       "oil",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.299271"
+    "timestamp": "2026-02-28T12:15:05.783227"
   },
   {
     "feed": "FinancialJuice",
@@ -113,7 +125,7 @@
     "matched_keywords": [
       "oil"
     ],
-    "timestamp": "2026-02-28T11:15:05.299342"
+    "timestamp": "2026-02-28T12:15:05.783274"
   },
   {
     "feed": "FinancialJuice",
@@ -123,7 +135,7 @@
     "matched_keywords": [
       "bank"
     ],
-    "timestamp": "2026-02-28T11:15:05.299432"
+    "timestamp": "2026-02-28T12:15:05.783390"
   },
   {
     "feed": "FinancialJuice",
@@ -133,7 +145,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.299476"
+    "timestamp": "2026-02-28T12:15:05.783436"
   },
   {
     "feed": "FinancialJuice",
@@ -144,7 +156,7 @@
       "fed",
       "ev"
     ],
-    "timestamp": "2026-02-28T11:15:05.299641"
+    "timestamp": "2026-02-28T12:15:05.783592"
   },
   {
     "feed": "YCombinator",
@@ -156,7 +168,7 @@
       "who",
       "ev"
     ],
-    "timestamp": "2026-02-28T11:15:05.640083"
+    "timestamp": "2026-02-28T12:15:06.106957"
   },
   {
     "feed": "YCombinator",
@@ -167,7 +179,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.640171"
+    "timestamp": "2026-02-28T12:15:06.107054"
   },
   {
     "feed": "YCombinator",
@@ -178,7 +190,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.640238"
+    "timestamp": "2026-02-28T12:15:06.107121"
   },
   {
     "feed": "YCombinator",
@@ -189,7 +201,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.640324"
+    "timestamp": "2026-02-28T12:15:06.107186"
   },
   {
     "feed": "YCombinator",
@@ -201,7 +213,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.640383"
+    "timestamp": "2026-02-28T12:15:06.107245"
   },
   {
     "feed": "YCombinator",
@@ -213,7 +225,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.640448"
+    "timestamp": "2026-02-28T12:15:06.107345"
   },
   {
     "feed": "YCombinator",
@@ -227,7 +239,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.640519"
+    "timestamp": "2026-02-28T12:15:06.107416"
   },
   {
     "feed": "YCombinator",
@@ -240,7 +252,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.640599"
+    "timestamp": "2026-02-28T12:15:06.107497"
   },
   {
     "feed": "YCombinator",
@@ -250,7 +262,7 @@
     "matched_keywords": [
       "nato"
     ],
-    "timestamp": "2026-02-28T11:15:05.640627"
+    "timestamp": "2026-02-28T12:15:06.107524"
   },
   {
     "feed": "YCombinator",
@@ -262,7 +274,17 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.640700"
+    "timestamp": "2026-02-28T12:15:06.107598"
+  },
+  {
+    "feed": "ZeroHedge",
+    "title": "\"I saw nothing and did nothing wrong... no matter how many photos they show of me\" he really said that.",
+    "link": "https://x.com/zerohedge/status/2027593817705099270",
+    "published": "Sat, 28 Feb 2026 03:56:00 GMT",
+    "matched_keywords": [
+      "ai"
+    ],
+    "timestamp": "2026-02-28T12:15:06.465086"
   },
   {
     "feed": "ZeroHedge",
@@ -272,7 +294,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.970318"
+    "timestamp": "2026-02-28T12:15:06.465196"
   },
   {
     "feed": "ZeroHedge",
@@ -284,7 +306,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.970397"
+    "timestamp": "2026-02-28T12:15:06.465265"
   },
   {
     "feed": "ZeroHedge",
@@ -294,7 +316,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.970430"
+    "timestamp": "2026-02-28T12:15:06.465336"
   },
   {
     "feed": "ZeroHedge",
@@ -305,7 +327,7 @@
       "rescue",
       "china"
     ],
-    "timestamp": "2026-02-28T11:15:05.970461"
+    "timestamp": "2026-02-28T12:15:06.465372"
   },
   {
     "feed": "ZeroHedge",
@@ -315,48 +337,30 @@
     "matched_keywords": [
       "war"
     ],
-    "timestamp": "2026-02-28T11:15:05.970498"
+    "timestamp": "2026-02-28T12:15:06.465416"
   },
   {
-    "feed": "ZeroHedge",
-    "title": "Google Disrupts China-Tied Cyber Campaign That Hacked 42 Countries",
-    "link": "https://x.com/zerohedge/status/2027563184555512007",
-    "published": "Sat, 28 Feb 2026 01:55:00 GMT",
+    "feed": "UnusualWhales",
+    "title": "\"I want to see the truth come out,\" the ex-US secretary of state said. Read more:",
+    "link": "https://x.com/unusual_whales/status/2027587562445947197",
+    "published": "Sat, 28 Feb 2026 03:32:00 GMT",
     "matched_keywords": [
-      "china",
+      "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.970531"
+    "timestamp": "2026-02-28T12:15:06.799399"
   },
   {
-    "feed": "ZeroHedge",
-    "title": "*ANTHROPIC TO CHALLENGE ANY SUPPLY CHAIN DESIGNATION IN COURT",
-    "link": "https://x.com/zerohedge/status/2027561873944551858",
-    "published": "Sat, 28 Feb 2026 01:49:00 GMT",
+    "feed": "UnusualWhales",
+    "title": "OpenAI has said that they have \u201c reached an agreement with the Department of War to deploy our models in their classified network.\u201d",
+    "link": "https://x.com/unusual_whales/status/2027583891348054300",
+    "published": "Sat, 28 Feb 2026 03:17:00 GMT",
     "matched_keywords": [
+      "war",
+      "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:05.970561"
-  },
-  {
-    "feed": "ZeroHedge",
-    "title": "I asked Claude to look up the current situation and write a note to @DarioAmodei Dario, I say this as a friend: you are making a catastrophic strategic error, and the reasoning behind it doesn\u2019t survive contact with reality. Your two red lines \u2014 no mass surveillance of\u2026 pic.",
-    "link": "https://x.com/zerohedge/status/2027561761465856337",
-    "published": "Sat, 28 Feb 2026 01:49:00 GMT",
-    "matched_keywords": [
-      "rate"
-    ],
-    "timestamp": "2026-02-28T11:15:05.970628"
-  },
-  {
-    "feed": "ZeroHedge",
-    "title": "AI Can Now Unmask Anonymous Internet Users, New Study Finds",
-    "link": "https://x.com/zerohedge/status/2027556891744764061",
-    "published": "Sat, 28 Feb 2026 01:30:00 GMT",
-    "matched_keywords": [
-      "ai"
-    ],
-    "timestamp": "2026-02-28T11:15:05.970662"
+    "timestamp": "2026-02-28T12:15:06.799457"
   },
   {
     "feed": "UnusualWhales",
@@ -366,7 +370,7 @@
     "matched_keywords": [
       "unusual"
     ],
-    "timestamp": "2026-02-28T11:15:06.300569"
+    "timestamp": "2026-02-28T12:15:06.799505"
   },
   {
     "feed": "UnusualWhales",
@@ -376,7 +380,7 @@
     "matched_keywords": [
       "unusual"
     ],
-    "timestamp": "2026-02-28T11:15:06.300643"
+    "timestamp": "2026-02-28T12:15:06.799564"
   },
   {
     "feed": "UnusualWhales",
@@ -387,7 +391,7 @@
       "default",
       "unusual"
     ],
-    "timestamp": "2026-02-28T11:15:06.300690"
+    "timestamp": "2026-02-28T12:15:06.799611"
   },
   {
     "feed": "UnusualWhales",
@@ -399,7 +403,7 @@
       "unusual",
       "rate"
     ],
-    "timestamp": "2026-02-28T11:15:06.300769"
+    "timestamp": "2026-02-28T12:15:06.799659"
   },
   {
     "feed": "UnusualWhales",
@@ -410,7 +414,7 @@
       "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:06.300824"
+    "timestamp": "2026-02-28T12:15:06.799705"
   },
   {
     "feed": "UnusualWhales",
@@ -422,7 +426,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:06.300876"
+    "timestamp": "2026-02-28T12:15:06.799752"
   },
   {
     "feed": "UnusualWhales",
@@ -433,7 +437,7 @@
       "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:06.300921"
+    "timestamp": "2026-02-28T12:15:06.799791"
   },
   {
     "feed": "UnusualWhales",
@@ -444,105 +448,111 @@
       "flow",
       "unusual"
     ],
-    "timestamp": "2026-02-28T11:15:06.300971"
+    "timestamp": "2026-02-28T12:15:06.799834"
   },
   {
-    "feed": "UnusualWhales",
-    "title": "Target, $TGT, has said it plans to eliminate certified synthetic dyes from all cereals it carries by May",
-    "link": "https://x.com/unusual_whales/status/2027511813303156764",
-    "published": "Fri, 27 Feb 2026 22:31:00 GMT",
+    "feed": "Financial_Times",
+    "title": "Collapse of UK property lender sends shockwaves through Wall Street",
+    "link": "https://www.ft.com/content/6731dc3d-d43b-487a-a6f2-e6c8b2a7ac92",
+    "published": "Fri, 27 Feb 2026 19:02:14 GMT",
     "matched_keywords": [
-      "unusual",
-      "ai"
+      "collapse"
     ],
-    "timestamp": "2026-02-28T11:15:06.301022"
+    "timestamp": "2026-02-28T12:15:09.219113"
   },
   {
-    "feed": "UnusualWhales",
-    "title": "AI spending is accelerating far faster than revenue, with hyperscalers projected to pour more than $2 trillion into the space, intensifying the concentration of capital around AI, per Morgan Stanley.",
-    "link": "https://x.com/unusual_whales/status/2027502249921155153",
-    "published": "Fri, 27 Feb 2026 21:53:00 GMT",
+    "feed": "Financial_Times",
+    "title": "US bank stocks record biggest slide since April\u2019s market ructions",
+    "link": "https://www.ft.com/content/259d2b95-ca0e-4029-b432-37bc6e2cec57",
+    "published": "Fri, 27 Feb 2026 21:54:37 GMT",
     "matched_keywords": [
-      "revenue",
-      "unusual",
-      "ev",
-      "ai"
-    ],
-    "timestamp": "2026-02-28T11:15:06.301077"
-  },
-  {
-    "feed": "MarketWatch",
-    "title": "My brother is paranoid, alone and has forgotten that he sold his house. How can we help?",
-    "link": "https://www.marketwatch.com/story/my-sister-and-i-are-his-only-family-my-brother-is-paranoid-and-forgot-he-sold-his-house-what-can-i-do-006a8d3a?mod=mw_rss_topstories",
-    "published": "Sat, 28 Feb 2026 00:00:00 GMT",
-    "matched_keywords": [
-      "ai"
-    ],
-    "timestamp": "2026-02-28T11:15:07.785925"
-  },
-  {
-    "feed": "MarketWatch",
-    "title": "Private-credit \u2018cockroaches\u2019 and the AI \u2018scare trade\u2019 hammered stocks in February. Here\u2019s what else has investors shaken up.",
-    "link": "https://www.marketwatch.com/story/private-credit-cockroaches-and-the-ai-scare-trade-hammered-stocks-in-february-heres-what-else-has-investors-shaken-up-98641651?mod=mw_rss_topstories",
-    "published": "Fri, 27 Feb 2026 23:30:00 GMT",
-    "matched_keywords": [
+      "war",
+      "bank",
       "credit",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:07.785974"
+    "timestamp": "2026-02-28T12:15:09.219147"
   },
   {
-    "feed": "MarketWatch",
-    "title": "Trump blacklists Anthropic, opening the door to Elon Musk and xAI",
-    "link": "https://www.marketwatch.com/story/trump-blacklists-anthropic-opening-the-door-to-elon-musk-and-xai-03011fda?mod=mw_rss_topstories",
-    "published": "Fri, 27 Feb 2026 23:02:00 GMT",
+    "feed": "Financial_Times",
+    "title": "Project Warrior: How Paramount beat Netflix in $110bn battle for Warner ",
+    "link": "https://www.ft.com/content/e352b4b3-ecba-4bc2-984f-9e4f3ce8a366",
+    "published": "Fri, 27 Feb 2026 21:30:01 GMT",
     "matched_keywords": [
-      "ai"
-    ],
-    "timestamp": "2026-02-28T11:15:07.785999"
-  },
-  {
-    "feed": "MarketWatch",
-    "title": "After 46 years working, I\u2019m not retiring \u2014 instead, I take a vacation every month. Is that a good life in your 70s?",
-    "link": "https://www.marketwatch.com/story/after-46-years-working-im-not-retiring-instead-i-take-a-vacation-every-month-is-that-a-good-life-in-your-70s-447f7c75?mod=mw_rss_topstories",
-    "published": "Fri, 27 Feb 2026 23:00:00 GMT",
-    "matched_keywords": [
-      "ev"
-    ],
-    "timestamp": "2026-02-28T11:15:07.786024"
-  },
-  {
-    "feed": "MarketWatch",
-    "title": "Will the bank get suspicious if I deposit $150,000 in cash into my checking account?",
-    "link": "https://www.marketwatch.com/story/i-live-in-a-state-with-no-inheritance-tax-is-it-legal-to-deposit-150k-cash-into-my-bank-account-d7987cfe?mod=mw_rss_topstories",
-    "published": "Fri, 27 Feb 2026 22:49:00 GMT",
-    "matched_keywords": [
-      "bank"
-    ],
-    "timestamp": "2026-02-28T11:15:07.786082"
-  },
-  {
-    "feed": "MarketWatch",
-    "title": "Trump warned \u2018sometimes you have to\u2019 use force on Friday. Oil markets now see high odds of a U.S. strike on Iran.",
-    "link": "https://www.marketwatch.com/story/trump-said-sometimes-you-have-to-use-force-on-friday-oil-markets-now-see-high-odds-of-the-u-s-striking-iran-abbaf88c?mod=mw_rss_topstories",
-    "published": "Fri, 27 Feb 2026 22:38:00 GMT",
-    "matched_keywords": [
-      "oil",
       "war",
-      "nuclear",
-      "ai"
+      "battle",
+      "beat"
     ],
-    "timestamp": "2026-02-28T11:15:07.786116"
+    "timestamp": "2026-02-28T12:15:09.219165"
   },
   {
-    "feed": "MarketWatch",
-    "title": "United\u2019s stock had its worst day in months on rising oil prices, market jitters",
-    "link": "https://www.marketwatch.com/story/uniteds-stock-and-other-airline-shares-get-a-reality-check-from-rising-oil-prices-market-jitters-2b6adfd0?mod=mw_rss_topstories",
-    "published": "Fri, 27 Feb 2026 22:35:00 GMT",
+    "feed": "Financial_Times",
+    "title": "Pete Hegseth, Maga\u2019s man at the Pentagon",
+    "link": "https://www.ft.com/content/7c01cb03-1638-44b0-ae60-2adb8572ed6c",
+    "published": "Fri, 27 Feb 2026 18:00:03 GMT",
     "matched_keywords": [
-      "oil",
+      "war",
+      "battle",
       "ai"
     ],
-    "timestamp": "2026-02-28T11:15:07.786144"
+    "timestamp": "2026-02-28T12:15:09.219183"
+  },
+  {
+    "feed": "Financial_Times",
+    "title": "AI has driven investors to hallucinations",
+    "link": "https://www.ft.com/content/a480fa0a-0393-44b0-a098-dbfc5e6bd979",
+    "published": "Fri, 27 Feb 2026 18:00:03 GMT",
+    "matched_keywords": [
+      "ev",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T12:15:09.219196"
+  },
+  {
+    "feed": "Financial_Times",
+    "title": "US and UK pull diplomats from Middle East as Iran war fears rise",
+    "link": "https://www.ft.com/content/001b06e5-16f8-4e1a-9771-98aee680752b",
+    "published": "Fri, 27 Feb 2026 21:54:42 GMT",
+    "matched_keywords": [
+      "war"
+    ],
+    "timestamp": "2026-02-28T12:15:09.219213"
+  },
+  {
+    "feed": "Financial_Times",
+    "title": "Defensive munition shortages to shape any US attack on Iran",
+    "link": "https://www.ft.com/content/c2cfb9e5-9ef7-4448-a5a1-414c996d7093",
+    "published": "Fri, 27 Feb 2026 16:17:56 GMT",
+    "matched_keywords": [
+      "attack",
+      "war",
+      "short",
+      "rate"
+    ],
+    "timestamp": "2026-02-28T12:15:09.219235"
+  },
+  {
+    "feed": "Financial_Times",
+    "title": "Anthropic to sue Trump administration after AI lab is labelled security risk",
+    "link": "https://www.ft.com/content/1aeff07f-6221-4577-b19c-887bb654c585",
+    "published": "Sat, 28 Feb 2026 03:12:16 GMT",
+    "matched_keywords": [
+      "military",
+      "eu",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T12:15:09.219252"
+  },
+  {
+    "feed": "Financial_Times",
+    "title": "OpenAI secures up to $110bn in record funding deal ",
+    "link": "https://www.ft.com/content/33364b58-5123-4c96-b2df-4a4be85d4d0f",
+    "published": "Fri, 27 Feb 2026 14:05:42 GMT",
+    "matched_keywords": [
+      "war",
+      "battle",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T12:15:09.219267"
   }
 ]
