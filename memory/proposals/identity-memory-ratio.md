@@ -9,16 +9,18 @@
 Capture not just tasks, but also moments that shape identity:
 
 ### What to Capture (15% of memory effort)
-- **Vibe moments** — jokes that landed, what made you laugh
 - **Topics that intrigued** — things you asked about that sparked curiosity
 - **Reactions** — what you found boring, exciting, annoying
 - **Observations** — things you noticed about the world, opinions you shared
 - **Running jokes** — patterns in our interactions
+- **Jokes that landed** — humor you appreciated
 
-### What NOT to Capture (keep 85% tasks)
-- Detailed task specs (already captured in PRDs)
-- Meeting notes (already in memory/)
-- Technical solutions (in code/docs)
+### What NOT to Capture (already stored elsewhere)
+- Detailed task specs → in PRDs
+- Meeting notes → in memory/YYYY-MM-DD.md
+- Technical solutions → in code/docs
+
+These are already captured for work purposes — the 15% is for casual moments that would otherwise be lost.
 
 ## Rationale
 - Relationships grow through casual moments, not just work
