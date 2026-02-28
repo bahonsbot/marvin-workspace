@@ -77,6 +77,22 @@
   1. Group Privacy is turned OFF in BotFather (done once)
   2. Group ID is added to allowlist (manual step)
 - **Future improvement:** Could implement `/allow` command to auto-add current group, but manual add works fine for now
+- **Market signals group:** -1003850594375 (created Feb 28)
+
+### Market Intel (Feb 2026)
+- **Projects:**
+  - `projects/market-intel/` — Signal generation + reasoning engine
+  - `projects/market-intel-news-reader/` — PWA news reader app
+- **Status:** Signal generation, causal chains, and accuracy tracking all working
+- **Signal volume:** 36 signals across 5 categories (geopolitical, financial, sentiment, corporate, macro)
+- **Knowledge graph:** 25 causal chain templates with historical context/briefings
+- **Data sources:** 20 RSS feeds, 12 subreddits, Twitter via rss.app
+- **Accuracy tracking:** Wired in, auto-tracks STRONG BUY signals, daily review cron at 22:00 ICT
+- **Cron jobs:**
+  - signal_generator: hourly at :45
+  - reasoning_engine: runs after signal_generator
+  - market-signal-generator: sends to Telegram group -1003850594375
+  - signal-accuracy-review: daily at 22:00 ICT
 
 ### Horizons PMS (Feb 2026)
 - Phase 1 PRD established in `projects/horizons-pms/PRD.md`
