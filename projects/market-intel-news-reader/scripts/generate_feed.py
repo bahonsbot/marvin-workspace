@@ -12,15 +12,53 @@ def load_alerts():
     rss_alerts = []
     reddit_alerts = []
     
+    # Try to load cached RSS data
     if os.path.exists('projects/market-intel/data/rss_alerts.json'):
         with open('projects/market-intel/data/rss_alerts.json', 'r') as f:
             rss_alerts = json.load(f)
+    
+    # Also try fresh from RSS monitor's config
+    if not rss_alerts:
+        # Load directly from RSS config and fetch
+        rss_alerts = fetch_all_rss_feeds()
     
     if os.path.exists('projects/market-intel/data/reddit_alerts.json'):
         with open('projects/market-intel/data/reddit_alerts.json', 'r') as f:
             reddit_alerts = json.load(f)
     
     return rss_alerts, reddit_alerts
+
+def fetch_all_rss_feeds():
+    """Fetch directly from RSS feeds for the news reader"""
+    import urllib.request
+    
+    feeds_config = [
+        ('Business', 'https://rss.app/feeds/J4g3h9IgJtdC9DFI.xml'),
+        ('FinancialJuice', 'https://rss.app/feeds/mZ8QxKASBRr35JlU.xml'),
+        ('ZeroHedge', 'https://rss.app/feeds/2pl8vwqzm5ByJ2Zf.xml'),
+        ('Reuters', 'https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml'),
+    ]
+    
+    alerts = []
+    
+    for name, url in feeds_config:
+        try:
+            with urllib.request.urlopen(url, timeout=5) as response:
+                import xml.etree.ElementTree as ET
+                root = ET.fromstring(response.read())
+                for item in root.findall('.//item')[:10]:
+                    title = item.find('title')
+                    link = item.find('link')
+                    alerts.append({
+                        'title': title.text if title is not None else '',
+                        'link': link.text if link is not None else '',
+                        'feed': name,
+                        'timestamp': datetime.now().isoformat()
+                    })
+        except Exception as e:
+            print(f"  ⚠ {name}: {e}")
+    
+    return alerts
 
 def categorize_alert(alert):
     """Categorize alert based on keywords"""
