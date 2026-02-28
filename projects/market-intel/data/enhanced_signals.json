@@ -1,10 +1,77 @@
 [
   {
     "source": "rss",
+    "feed": "Financial_Times",
+    "title": "US bank stocks record biggest slide since April\u2019s market ructions",
+    "url": "https://www.ft.com/content/259d2b95-ca0e-4029-b432-37bc6e2cec57",
+    "timestamp": "2026-02-28T17:17:36.695569",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 92.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 90.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "high-credibility source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Financial_Times",
+    "title": "Impounded Russia-linked yachts lose \u20ac580mn in value",
+    "url": "https://www.ft.com/content/22984f64-14e9-40c4-b77d-d6b122353314",
+    "timestamp": "2026-02-28T17:17:36.695588",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 92.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 90.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "high-credibility source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
     "feed": "Business",
-    "title": "Russian officials increasingly consider there\u2019s no point to continue US-led peac",
-    "url": "https://x.com/business/status/2027650686867976629",
-    "timestamp": "2026-02-28T17:16:55.566650",
+    "title": "The EU is in peril. Can it survive the Trump years, rising nationalism at home a",
+    "url": "https://x.com/business/status/2027670127890591952",
+    "timestamp": "2026-02-28T17:17:36.695137",
+    "pattern_id": "p002",
     "pattern": "Russia-Ukraine Conflict",
     "category": "geopolitical",
     "confidence": "HIGH",
@@ -12,6 +79,7 @@
     "signal_score": 300,
     "reasoning_score": 86.0,
     "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
     "reasoning_components": {
       "source_credibility": 70.0,
       "pattern_strength": 90.0,
@@ -19,93 +87,611 @@
     },
     "reasoning": "high-credibility source, strong historical pattern match.",
     "predicted_outcomes": [
-      "Defense names strengthen on renewed conflict risk",
-      "Wheat prices firm on Black Sea disruption risk",
-      "European gas risk premium widens"
+      "volatility_spike",
+      "risk_repricing"
     ],
-    "predicted_causal_chains": [
-      {
-        "trigger": "Russia peace talks fail",
-        "chain_name": "Russia peace talks fail",
-        "predictions": [
-          {
-            "outcome": "Defense names strengthen on renewed conflict risk",
-            "asset": "defense_stocks",
-            "direction": "up",
-            "magnitude": "1-4%",
-            "horizon": "1-5d"
-          },
-          {
-            "outcome": "Wheat prices firm on Black Sea disruption risk",
-            "asset": "wheat",
-            "direction": "up",
-            "magnitude": "2-6%",
-            "horizon": "1-10d"
-          },
-          {
-            "outcome": "European gas risk premium widens",
-            "asset": "natural_gas_eu",
-            "direction": "up",
-            "magnitude": "3-8%",
-            "horizon": "intraday-1w"
-          }
-        ]
-      }
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
     ],
     "root_causes": []
   },
   {
     "source": "rss",
-    "feed": "Business",
-    "title": "OPEC+ will consider the option of a larger supply increase when key members meet",
-    "url": "https://x.com/business/status/2027648542349595082",
-    "timestamp": "2026-02-28T17:16:55.566699",
-    "pattern": "Saudi Oil Attacks",
-    "category": "geopolitical",
+    "feed": "FinancialJuice",
+    "title": "US bank deposits rose to $18.778 trln from $18.764 trln in prior week",
+    "url": "https://x.com/financialjuice/status/2027493441517576597",
+    "timestamp": "2026-02-28T17:17:36.695179",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
     "confidence": "HIGH",
     "time_horizon": "intraday",
     "signal_score": 300,
-    "reasoning_score": 86.0,
+    "reasoning_score": 84.5,
     "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
     "reasoning_components": {
-      "source_credibility": 70.0,
+      "source_credibility": 65.0,
       "pattern_strength": 90.0,
       "time_horizon_fit": 100.0
     },
-    "reasoning": "high-credibility source, strong historical pattern match.",
+    "reasoning": "moderate source, strong historical pattern match.",
     "predicted_outcomes": [
-      "Crude oil drifts lower as supply outlook improves",
-      "Energy producers underperform on softer oil",
-      "Airlines and transport catch relief bid"
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
     ],
-    "predicted_causal_chains": [
-      {
-        "trigger": "OPEC+ supply increase",
-        "chain_name": "OPEC+ supply increase",
-        "predictions": [
-          {
-            "outcome": "Crude oil drifts lower as supply outlook improves",
-            "asset": "crude_oil",
-            "direction": "down",
-            "magnitude": "1-4%",
-            "horizon": "intraday-3d"
-          },
-          {
-            "outcome": "Energy producers underperform on softer oil",
-            "asset": "energy_stocks",
-            "direction": "down",
-            "magnitude": "1-3%",
-            "horizon": "1-5d"
-          },
-          {
-            "outcome": "Airlines and transport catch relief bid",
-            "asset": "transport_stocks",
-            "direction": "up",
-            "magnitude": "0.5-2%",
-            "horizon": "1-5d"
-          }
-        ]
-      }
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "ZeroHedge",
+    "title": "All Hell Breaks Loose In Private Credit",
+    "url": "https://x.com/zerohedge/status/2027609231302574222",
+    "timestamp": "2026-02-28T17:17:36.695209",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 81.5,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 55.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "BBC_World",
+    "title": "Drone jammed near French aircraft carrier was Russian, says Sweden",
+    "url": "https://www.bbc.com/news/articles/c1mj3e2nz8ko?at_medium=RSS&at_campaign=rss",
+    "timestamp": "2026-02-28T17:17:36.695234",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_World",
+    "title": "Goldman bucks private credit redemption trend as AI disruption fears mount",
+    "url": "https://www.reuters.com/business/finance/goldman-bucks-private-credit-redemption-trend-ai-disruption-fears-mount-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695257",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_World",
+    "title": "UniCredit says it has dropped EU court case against ECB over Russia",
+    "url": "https://www.reuters.com/business/finance/unicredit-says-it-has-dropped-eu-court-case-against-ecb-over-russia-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695276",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_World",
+    "title": "Blue Owl turmoil adds to strain in $2 trillion US private credit sector",
+    "url": "https://www.reuters.com/business/finance/blue-owl-turmoil-adds-strain-2-trillion-us-private-credit-sector-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695296",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_World",
+    "title": "IMF says essential for Ukraine to push forward with reforms agreed under $8.1 bl",
+    "url": "https://www.reuters.com/business/finance/imf-says-essential-ukraine-push-forward-with-reforms-agreed-under-81-bln-loan-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695318",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_World",
+    "title": "Liquidation order for MBaer Merchant Bank is effective, watchdog says",
+    "url": "https://www.reuters.com/business/finance/swiss-financial-watchdog-says-liquidation-order-mbaer-merchant-bank-ag-is-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695339",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_Business",
+    "title": "Goldman bucks private credit redemption trend as AI disruption fears mount",
+    "url": "https://www.reuters.com/business/finance/goldman-bucks-private-credit-redemption-trend-ai-disruption-fears-mount-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695359",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_Business",
+    "title": "UniCredit says it has dropped EU court case against ECB over Russia",
+    "url": "https://www.reuters.com/business/finance/unicredit-says-it-has-dropped-eu-court-case-against-ecb-over-russia-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695377",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_Business",
+    "title": "Blue Owl turmoil adds to strain in $2 trillion US private credit sector",
+    "url": "https://www.reuters.com/business/finance/blue-owl-turmoil-adds-strain-2-trillion-us-private-credit-sector-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695406",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_Business",
+    "title": "IMF says essential for Ukraine to push forward with reforms agreed under $8.1 bl",
+    "url": "https://www.reuters.com/business/finance/imf-says-essential-ukraine-push-forward-with-reforms-agreed-under-81-bln-loan-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695424",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_Business",
+    "title": "Liquidation order for MBaer Merchant Bank is effective, watchdog says",
+    "url": "https://www.reuters.com/business/finance/swiss-financial-watchdog-says-liquidation-order-mbaer-merchant-bank-ag-is-2026-02-27/",
+    "timestamp": "2026-02-28T17:17:36.695447",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "AP_Top",
+    "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
+    "timestamp": "2026-02-28T17:17:36.695465",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "AP_Top",
+    "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
+    "timestamp": "2026-02-28T17:17:36.695502",
+    "pattern_id": "p004",
+    "pattern": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
+    "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
+    "timestamp": "2026-02-28T17:17:36.695524",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_Business",
+    "title": "Dissatisfaction with life in UK unchanged since Covid, official data shows",
+    "url": "https://www.theguardian.com/business/2026/feb/27/life-dissatisfaction-in-uk-not-improved-since-covid-wellbeing-data-shows",
+    "timestamp": "2026-02-28T17:17:36.695543",
+    "pattern_id": "p004",
+    "pattern": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/investing",
+    "title": "Has the US Federal reserve really printed 400Billion? Trying to understand the H",
+    "url": "https://reddit.com/r/investing/comments/1rfnnyb/has_the_us_federal_reserve_really_printed/",
+    "timestamp": "2026-02-28T17:17:36.695611",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "score": 101,
+    "signal_score": 300,
+    "reasoning_score": 80.0,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "front_end_yield_move",
+      "usd_trend_shift",
+      "growth_value_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Inflation/rates surprise",
+      "Bond market reprices terminal rate",
+      "Equity duration factor moves"
     ],
     "root_causes": []
   },
@@ -114,7 +700,8 @@
     "feed": "Business",
     "title": "The Trump administration is delaying a multi-billion dollars arms sales to Taiwa",
     "url": "https://x.com/business/status/2027652033436672082",
-    "timestamp": "2026-02-28T17:16:55.566727",
+    "timestamp": "2026-02-28T17:17:36.695631",
+    "pattern_id": "p017",
     "pattern": "Tension Taiwan/China",
     "category": "geopolitical",
     "confidence": "MEDIUM_HIGH",
@@ -122,14 +709,126 @@
     "signal_score": 225,
     "reasoning_score": 76.0,
     "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
     "reasoning_components": {
       "source_credibility": 70.0,
       "pattern_strength": 70.0,
       "time_horizon_fit": 100.0
     },
     "reasoning": "high-credibility source, strong historical pattern match.",
-    "predicted_outcomes": [],
-    "predicted_causal_chains": [],
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "MarketWatch",
+    "title": "Trump blacklists Anthropic, opening the door to Elon Musk and xAI",
+    "url": "https://www.marketwatch.com/story/trump-blacklists-anthropic-opening-the-door-to-elon-musk-and-xai-03011fda?mod=mw_rss_topstories",
+    "timestamp": "2026-02-28T17:17:36.695652",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "signal_score": 100,
+    "reasoning_score": 60.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/StockMarket",
+    "title": "Net Income for Mega Cap AI Companies - Updated for Nvidia and with more metrics!",
+    "url": "https://reddit.com/r/StockMarket/comments/1rgun3v/net_income_for_mega_cap_ai_companies_updated_for/",
+    "timestamp": "2026-02-28T17:17:36.695674",
+    "pattern_id": "p003",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "score": 16,
+    "signal_score": 100,
+    "reasoning_score": 58.5,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 45.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/StockMarket",
+    "title": "Nvidia Investors Give Lukewarm Reaction to Upbeat Forecast",
+    "url": "https://reddit.com/r/StockMarket/comments/1rf8x3u/nvidia_investors_give_lukewarm_reaction_to_upbeat/",
+    "timestamp": "2026-02-28T17:17:36.695693",
+    "pattern_id": "p003",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "score": 293,
+    "signal_score": 100,
+    "reasoning_score": 58.5,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 45.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
     "root_causes": []
   }
 ]

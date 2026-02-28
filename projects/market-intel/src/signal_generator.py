@@ -58,13 +58,20 @@ class SignalGenerator:
                 'exclude': ['election', 'political'],
                 'weight': 3
             },
-            'p005': {  # GameStop - meme stocks
-                'keywords': ['gme', 'gamestop', 'wallstreetbets', 'wsb', 'short squeeze', 'meme stock'],
+            'p005': {  # GameStop - meme stocks / social squeeze sentiment
+                'keywords': [
+                    'gme', 'gamestop', 'wallstreetbets', 'wsb', 'short squeeze', 'meme stock',
+                    'gamma squeeze', 'call buying frenzy', 'retail traders pile', 'days to cover'
+                ],
                 'exclude': ['real estate', 'housing'],
                 'weight': 3
             },
-            'p006': {  # SVB - banking
-                'keywords': ['svb', 'silicon valley bank', 'regional bank', 'bank failure', 'bank collapse', 'fdic'],
+            'p006': {  # SVB - banking / credit stress
+                'keywords': [
+                    'svb', 'silicon valley bank', 'regional bank', 'bank failure', 'bank collapse', 'fdic',
+                    'deposit flight', 'liquidity crunch', 'credit event', 'credit spread widening',
+                    'commercial real estate losses', 'bank run fears'
+                ],
                 'exclude': [],
                 'weight': 3
             },
@@ -83,8 +90,12 @@ class SignalGenerator:
                 'exclude': [],
                 'weight': 3
             },
-            'p010': {  # Tesla - tech/auto
-                'keywords': ['tesla', 'tsla', 'stock split', '5-for-1', 'elon'],
+            'p010': {  # Tesla / corporate earnings & M&A pulse
+                'keywords': [
+                    'tesla', 'tsla', 'stock split', '5-for-1', 'elon',
+                    'earnings beat', 'earnings miss', 'revenue guidance', 'profit warning',
+                    'merger talks', 'acquisition offer', 'take-private', 'buyout bid', 'deal talks'
+                ],
                 'exclude': [],
                 'weight': 2
             },
@@ -104,8 +115,12 @@ class SignalGenerator:
                 'exclude': [],
                 'weight': 2
             },
-            'p014': {  # US Credit Downgrade
-                'keywords': ['s&p downgrade', 'credit rating', 'aaa downgrade', 'us debt'],
+            'p014': {  # US Credit Downgrade / macro rates-inflation regime
+                'keywords': [
+                    's&p downgrade', 'credit rating', 'aaa downgrade', 'us debt',
+                    'federal reserve', 'fed minutes', 'fomc', 'cpi', 'core cpi', 'pce inflation',
+                    'rate hike', 'rate cut', 'treasury yield spike', 'yield curve inversion'
+                ],
                 'exclude': [],
                 'weight': 3
             },
@@ -125,7 +140,11 @@ class SignalGenerator:
                 'weight': 3
             },
             'p018': {  # Regional Banking Crisis 2023
-                'keywords': ['signature bank', 'first republic', 'regional banking crisis', 'bank fears'],
+                'keywords': [
+                    'signature bank', 'first republic', 'regional banking crisis', 'bank fears',
+                    'credit crunch', 'interbank stress', 'funding pressure', 'deposit outflows',
+                    'private credit', 'bank deposits', 'bank stocks', 'merchant bank'
+                ],
                 'exclude': [],
                 'weight': 3
             },
@@ -191,7 +210,7 @@ class SignalGenerator:
         """Generate signals from all alerts"""
         signals = []
         
-        for alert in self.rss_alerts[:20]:
+        for alert in self.rss_alerts[:120]:
             matches = self.match_alert_to_patterns(alert)
             if matches:
                 best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight']))
@@ -201,6 +220,7 @@ class SignalGenerator:
                     'title': alert.get('title', '')[:80],
                     'url': alert.get('link', ''),
                     'timestamp': alert.get('timestamp', ''),
+                    'pattern_id': best['pattern_id'],
                     'pattern': best['pattern_name'],
                     'category': best['category'],
                     'confidence': best['confidence'],
@@ -208,7 +228,7 @@ class SignalGenerator:
                     'signal_score': self.confidence_score(best['confidence']) * best['match_weight']
                 })
         
-        for alert in self.reddit_alerts[:20]:
+        for alert in self.reddit_alerts[:120]:
             matches = self.match_alert_to_patterns(alert)
             if matches:
                 best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight']))
@@ -218,6 +238,7 @@ class SignalGenerator:
                     'title': alert.get('title', '')[:80],
                     'url': alert.get('url', ''),
                     'timestamp': alert.get('timestamp', ''),
+                    'pattern_id': best['pattern_id'],
                     'pattern': best['pattern_name'],
                     'category': best['category'],
                     'confidence': best['confidence'],
@@ -227,7 +248,7 @@ class SignalGenerator:
                 })
         
         signals.sort(key=lambda x: x['signal_score'], reverse=True)
-        return signals[:10]
+        return signals[:25]
     
     def confidence_score(self, confidence: str) -> int:
         mapping = {'HIGH': 100, 'MEDIUM_HIGH': 75, 'MEDIUM': 50, 'LOW': 25}

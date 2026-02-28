@@ -47,20 +47,21 @@ sanction,embargo,nuclear,military,battle
 
 # Financial / Credit
 bank,failure,default,collapse,svb,regional,credit,crisis
-bankruptcy,liquidation,rescue
+bankruptcy,liquidation,rescue,deposit,outflow,liquidity
+credit spread,funding stress,fdic,downgrade,commercial real estate
 
 # Corporate
-earnings,revenue,guidance,beat,miss,quarterly,profit
-split,dividend,buyback,ipo,offering
-acquisition,merger,buyout,tender
+earnings,revenue,guidance,beat,miss,quarterly,profit,eps
+split,dividend,buyback,ipo,offering,profit warning
+acquisition,merger,buyout,tender,takeover,deal talks,m&a
 
 # Sentiment / Social
 short,squeeze,gme,reddit,wallstreetbets,meme,gamma
-options,flow,unusual
+options,flow,unusual,days to cover,call buying,retail frenzy
 
 # Macro
-inflation,cpi,fed,rate,hike,interest,treasury
-gdp,growth,recession,unemployment
+inflation,cpi,core cpi,pce,fed,fomc,rate,hike,cut,interest,treasury
+gdp,growth,recession,unemployment,yield curve,terminal rate
 
 # Health
 pandemic,covid,virus,outbreak,health,who
