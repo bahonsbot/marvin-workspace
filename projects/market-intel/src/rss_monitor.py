@@ -12,6 +12,8 @@ from datetime import datetime
 from typing import List, Dict
 from html import unescape
 
+UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+
 class RSSMonitor:
     def __init__(self, config_file: str = "config/rss_feeds.txt"):
         self.config_file = config_file
@@ -46,33 +48,72 @@ class RSSMonitor:
                     })
     
     def fetch_feed(self, url: str) -> Dict:
-        """Fetch and parse an RSS feed using standard library"""
+        """Fetch and parse an RSS/Atom feed using standard library"""
         try:
-            with urllib.request.urlopen(url, timeout=10) as response:
-                content = response.read().decode('utf-8')
-            
+            request = urllib.request.Request(url, headers={'User-Agent': UA})
+            with urllib.request.urlopen(request, timeout=15) as response:
+                content = response.read()
+
             root = ET.fromstring(content)
-            
-            # Get feed title
-            title = root.find('channel/title')
-            title = title.text if title is not None else 'Unknown'
-            
+            ns = {'atom': 'http://www.w3.org/2005/Atom'}
+
+            # Get feed title (RSS then Atom)
+            title_node = root.find('channel/title')
+            if title_node is None:
+                title_node = root.find('atom:title', ns)
+            title = title_node.text if title_node is not None and title_node.text else 'Unknown'
+
             entries = []
-            for item in root.findall('.//item')[:10]:  # Last 10 entries
+            rss_items = root.findall('.//item')
+            atom_items = root.findall('.//atom:entry', ns)
+            items = rss_items if rss_items else atom_items
+
+            for item in items[:10]:  # Last 10 entries
+                # RSS defaults
                 entry_title = item.find('title')
                 entry_link = item.find('link')
                 entry_desc = item.find('description')
                 entry_pub = item.find('pubDate')
-                
+
+                title_text = unescape(entry_title.text) if entry_title is not None and entry_title.text else ''
+                link_text = entry_link.text if entry_link is not None and entry_link.text else ''
+                summary_text = unescape(entry_desc.text) if entry_desc is not None and entry_desc.text else ''
+                pub_text = entry_pub.text if entry_pub is not None and entry_pub.text else ''
+
+                # Atom fallback
+                if not title_text:
+                    atom_title = item.find('atom:title', ns)
+                    if atom_title is not None and atom_title.text:
+                        title_text = unescape(atom_title.text)
+
+                if not link_text:
+                    atom_link = item.find('atom:link', ns)
+                    if atom_link is not None:
+                        link_text = atom_link.get('href', '')
+
+                if not summary_text:
+                    atom_summary = item.find('atom:summary', ns)
+                    if atom_summary is None:
+                        atom_summary = item.find('atom:content', ns)
+                    if atom_summary is not None and atom_summary.text:
+                        summary_text = unescape(atom_summary.text)
+
+                if not pub_text:
+                    atom_pub = item.find('atom:updated', ns)
+                    if atom_pub is None:
+                        atom_pub = item.find('atom:published', ns)
+                    if atom_pub is not None and atom_pub.text:
+                        pub_text = atom_pub.text
+
                 entries.append({
-                    'title': unescape(entry_title.text) if entry_title is not None else '',
-                    'link': entry_link.text if entry_link is not None else '',
-                    'summary': unescape(entry_desc.text) if entry_desc is not None else '',
-                    'published': entry_pub.text if entry_pub is not None else '',
+                    'title': title_text,
+                    'link': link_text,
+                    'summary': summary_text,
+                    'published': pub_text,
                 })
-            
+
             return {'title': title, 'entries': entries}
-            
+
         except Exception as e:
             return {'title': 'Error', 'error': str(e), 'entries': []}
     
@@ -125,9 +166,9 @@ class RSSMonitor:
             with open(output_file, 'r') as f:
                 existing = json.load(f)
         
-        # Add new results (max 50)
+        # Add new results (max 200)
         existing = results + existing
-        existing = existing[:50]
+        existing = existing[:200]
         
         with open(output_file, 'w') as f:
             json.dump(existing, f, indent=2)

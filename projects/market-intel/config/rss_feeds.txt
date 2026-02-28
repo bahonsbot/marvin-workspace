@@ -15,16 +15,23 @@ UnusualWhales,https://rss.app/feeds/vOjbHEjGb1OvmDK3.xml
 # RSS Feeds (Free, Reliable)
 # ============================================
 
+# High-priority macro / geopolitics (news-feeds proven sources)
+BBC_World,https://feeds.bbci.co.uk/news/world/rss.xml
+BBC_Business,https://feeds.bbci.co.uk/news/business/rss.xml
+Reuters_World,https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml
+Reuters_Business,https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml
+AP_Top,https://news.google.com/rss/search?q=site%3Aapnews.com+%22AP+Top+News%22&hl=en-US&gl=US&ceid=US%3Aen
+Guardian_World,https://www.theguardian.com/world/rss
+Guardian_Business,https://www.theguardian.com/uk/business/rss
+DW_Top,https://rss.dw.com/rdf/rss-en-top
+
 # News / Market
 Financial_Times,https://www.ft.com/rss/home
 MarketWatch,https://feeds.marketwatch.com/marketwatch/topstories/
 The_Verge,https://www.theverge.com/rss/index.xml
 TechCrunch,https://techcrunch.com/feed/
 
-# Reuters (via rss.app)
-Reuters,https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml
-
-# Backup (if rate limited)
+# Backup
 Yahoo_Finance_Backup,https://finance.yahoo.com/news/rssindex
 
 # ============================================
