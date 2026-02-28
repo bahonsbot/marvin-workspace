@@ -250,6 +250,8 @@
             <h1>📈 Market Intel News</h1>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀️ Light</button>
         </div>
+        <button class="filter-btn" id="favoritesToggle" style="margin: 8px 0;">⭐ Show Favorites</button>
+        
         <div class="filters" style="margin-bottom: 8px;">
             <button class="source-btn active" data-source="all">All</button>
             <button class="source-btn" data-source="rss">📰 RSS</button>
@@ -258,7 +260,6 @@
         
         <div class="filters" style="margin-bottom: 4px;">
             <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="favorites">⭐</button>
             <button class="filter-btn" data-filter="geopolitical">🌍 Geo</button>
             <button class="filter-btn" data-filter="financial">💰</button>
             <button class="filter-btn" data-filter="macro">📈</button>
@@ -434,6 +435,11 @@
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentFilter = btn.dataset.filter;
+                // Reset favorites toggle button styling
+                const favoritesToggle = document.getElementById('favoritesToggle');
+                favoritesToggle.textContent = '⭐ Show Favorites';
+                favoritesToggle.style.background = '';
+                favoritesToggle.style.color = '';
                 renderFeed();
             });
         });
@@ -442,6 +448,25 @@
         document.getElementById('themeToggle').addEventListener('click', () => {
             const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
             applyTheme(nextTheme);
+        });
+
+        // Favorites toggle button
+        const favoritesToggle = document.getElementById('favoritesToggle');
+        favoritesToggle.addEventListener('click', () => {
+            // Toggle between 'all' and 'favorites'
+            if (currentFilter === 'favorites') {
+                currentFilter = 'all';
+                favoritesToggle.textContent = '⭐ Show Favorites';
+                favoritesToggle.style.background = '';
+                document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+            } else {
+                currentFilter = 'favorites';
+                favoritesToggle.textContent = '★ Viewing Favorites';
+                favoritesToggle.style.background = 'var(--accent)';
+                favoritesToggle.style.color = 'white';
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            }
+            renderFeed();
         });
 
         // Favorites management
