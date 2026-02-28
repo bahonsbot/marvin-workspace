@@ -68,12 +68,17 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **Workspace:** `/data/.openclaw/workspace`
 
 ### Cron Jobs (Active)
-| Job | Time (GMT+7) | Purpose |
-|-----|------------|---------|
-| platform-health-council | 03:00 | Daily system audit |
-| nightly-security-review | 03:30 | Security analysis |
-| self-improvement | 04:00 | Core files review |
-| fixed-heartbeat-30m | Every 30min | Periodic health check |
+| Job | Time (GMT+7) | Purpose | Delivery |
+|-----|------------|---------|----------|
+| platform-health-council | 03:00 | Daily system audit | both |
+| nightly-security-review | 03:30 | Security analysis | none |
+| self-improvement | 04:00 | Core files review | both |
+| rss-feed-monitor | :10 hourly | RSS news scanning | none |
+| reddit-monitor | :40 hourly | Reddit sentiment | none |
+| market-signal-generator | :45 hourly | Signal generation | manual |
+| reasoning-engine | :50 hourly | Signal analysis | none |
+| nightly-memory-extraction | 23:00 | Memory extraction | both |
+| data-manager | Sun 05:00 | Prune old data | none |
 
 ### Installed Skills (Workspace)
 - humanizer
@@ -93,17 +98,19 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **Nexos:** Disabled (provider block removed)
 
 ### Scripts
-- `backup-workspace.sh` — Manual backup (Philippe runs VPS snapshots)
-- `switch_model.sh` / `switch_model_auto.sh` — Model switching
+- `scripts/ralphy.sh` — Autonomous coding agent (reads PRD, iterates on code)
+- `scripts/ralphy-notify.sh` — Telegram notifications for ralphy
 - `scripts/audit-log.sh` — Security action logging
 - `scripts/check-token-age.sh` — Token expiration checker
+- `scripts/nightly-memory-extraction.sh` — Memory extraction cron
+- `switch_model.sh` / `switch_model_auto.sh` — Model switching
 - `skills/google_maps_pro/scripts/get_tour_plan.py` — Route matrix helper
 
 ### Active Projects
 - `projects/horizons-pms/` — PMS system for hotel front-desk (PRD in progress)
 - `projects/market-intel/` — Stock market analysis and research (Phase 1-3 complete)
 - `projects/autonomous-trading-bot/` — Autonomous trading via Alpaca + TradingView webhooks
-- `projects/market-intel-news-reader/` — PWA news reader app for iPhone
+- `projects/market-intel-news-reader/` — PWA news reader app for iPhone (PRD in progress)
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)

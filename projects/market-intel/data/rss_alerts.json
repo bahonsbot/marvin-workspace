@@ -1,6 +1,61 @@
 [
   {
     "feed": "Business",
+    "title": "OpenAI has agreed to deploy its own artificial intelligence models within the Pentagon\u2019s classified network, after President Trump wrote ordered federal agencies to drop rival Anthropic https://www.bloomberg.com/news/articles/2026-02-28/openai-gives-pentagon-access-to-models-after-anthropic-dustup",
+    "link": "https://x.com/business/status/2027605603699273962",
+    "published": "Sat, 28 Feb 2026 04:43:00 GMT",
+    "matched_keywords": [
+      "fed",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T13:15:06.211390"
+  },
+  {
+    "feed": "Business",
+    "title": "OpenAI has agreed to deploy its own artificial intelligence models within the Pentagon\u2019s classified network, after President Trump wrote ordered federal agencies to drop rival Anthropic https://www.bloomberg.com/news/articles/2026-02-28/openai-gives-pentagon-access-to-models-after-anthropic-dustup?taid=69a270c1b050d80001bcf574&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
+    "link": "https://x.com/business/status/2027603742103597378",
+    "published": "Sat, 28 Feb 2026 04:36:00 GMT",
+    "matched_keywords": [
+      "fed",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T13:15:06.211478"
+  },
+  {
+    "feed": "Business",
+    "title": "China\u2019s capital markets rebounded last year, fueled by a surge in equity refinancing and bond issuance, according to the National Bureau of Statistics https://www.bloomberg.com/news/articles/2026-02-28/china-fundraising-jumps-as-refinancing-and-bond-issuance-boom?taid=69a26ba318c5780001101a72&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
+    "link": "https://x.com/business/status/2027598246873358769",
+    "published": "Sat, 28 Feb 2026 04:14:00 GMT",
+    "matched_keywords": [
+      "china",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T13:15:06.211547"
+  },
+  {
+    "feed": "Business",
+    "title": "Thai business conglomerate Charoen Pokphand Group plans to sell a 10% stake in its telecommunications affiliate True Corp., with most of the shares going to UBS Group AG. https://www.bloomberg.com/news/articles/2026-02-28/cp-group-to-sell-10-stake-in-true-corp-with-ubs-as-main-buyer?taid=69a26ae3b050d80001bcf550&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
+    "link": "https://x.com/business/status/2027597440715469010",
+    "published": "Sat, 28 Feb 2026 04:11:00 GMT",
+    "matched_keywords": [
+      "rate",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T13:15:06.211615"
+  },
+  {
+    "feed": "Business",
+    "title": "China\u2019s solar power generation overtook wind for the first time last year as a boom in cheap panels continues to reshape the country\u2019s grid and climate trajectory https://www.bloomberg.com/news/articles/2026-02-28/china-s-solar-power-generation-overtakes-wind-for-first-time?taid=69a26a5818c5780001101a6d&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
+    "link": "https://x.com/business/status/2027596860009877619",
+    "published": "Sat, 28 Feb 2026 04:08:00 GMT",
+    "matched_keywords": [
+      "china",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T13:15:06.211683"
+  },
+  {
+    "feed": "Business",
     "title": "OpenAI said it has reached an agreement with the US Department of War to deploy its models in their classified network https://www.bloomberg.com/news/articles/2026-02-28/openai-reaches-agreement-with-pentagon-to-deploy-ai-models?taid=69a25f1718c5780001101a15&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
     "link": "https://x.com/business/status/2027584773351264658",
     "published": "Sat, 28 Feb 2026 03:20:00 GMT",
@@ -8,7 +63,7 @@
       "war",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:05.467578"
+    "timestamp": "2026-02-28T13:15:06.211745"
   },
   {
     "feed": "Business",
@@ -20,7 +75,7 @@
       "bank",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:05.467673"
+    "timestamp": "2026-02-28T13:15:06.211818"
   },
   {
     "feed": "Business",
@@ -30,7 +85,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:05.467746"
+    "timestamp": "2026-02-28T13:15:06.211904"
   },
   {
     "feed": "Business",
@@ -40,7 +95,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:05.467816"
+    "timestamp": "2026-02-28T13:15:06.211996"
   },
   {
     "feed": "Business",
@@ -50,61 +105,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:05.467891"
-  },
-  {
-    "feed": "Business",
-    "title": "Anthropic said it hasn\u2019t received any direct communication from the Department of War or the White House on the status of negotiations, and will challenge any supply chain risk designation in court. https://www.bloomberg.com/news/articles/2026-02-28/anthropic-to-challenge-any-supply-chain-risk-designation?taid=69a2491b6a41fe0001bdb6b0&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
-    "link": "https://x.com/business/status/2027561169049788836",
-    "published": "Sat, 28 Feb 2026 01:47:00 GMT",
-    "matched_keywords": [
-      "war",
-      "ai"
-    ],
-    "timestamp": "2026-02-28T12:15:05.467960"
-  },
-  {
-    "feed": "Business",
-    "title": "US Health Secretary Robert F. Kennedy Jr. has tapped two new members for an influential vaccine committee that\u2019s responsible for guiding the nation\u2019s immunization policy https://www.bloomberg.com/news/articles/2026-02-28/rfk-jr-adds-two-new-members-to-influential-vaccine-committee?taid=69a24530b050d80001bcf445&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
-    "link": "https://x.com/business/status/2027556960107643194",
-    "published": "Sat, 28 Feb 2026 01:30:00 GMT",
-    "matched_keywords": [
-      "health",
-      "ai"
-    ],
-    "timestamp": "2026-02-28T12:15:05.468027"
-  },
-  {
-    "feed": "Business",
-    "title": "Donald Trump\u2019s Supreme Court setback on tariffs has handed Southeast Asia leaders a conundrum: should they renegotiate their deals? Or just back off? https://www.bloomberg.com/news/newsletters/2026-02-28/trump-tariffs-southeast-asia-faces-deal-uncertainty-after-supreme-court-ruling?taid=69a23ed821ffb6000118c783&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
-    "link": "https://x.com/business/status/2027550151720481170",
-    "published": "Sat, 28 Feb 2026 01:03:00 GMT",
-    "matched_keywords": [
-      "ai"
-    ],
-    "timestamp": "2026-02-28T12:15:05.468112"
-  },
-  {
-    "feed": "Business",
-    "title": "Hong Kong's Leela is worth visiting for some standout dishes, but the high-end Indian restaurant is challenged by its Michelin-starred peers. Read the review. https://www.bloomberg.com/news/articles/2026-02-28/hk-s-leela-challenged-by-michelin-starred-indian-restaurants-chaat-punjab-club?taid=69a23a8fb050d80001bcf3d7&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
-    "link": "https://x.com/business/status/2027545551013585001",
-    "published": "Sat, 28 Feb 2026 00:45:00 GMT",
-    "matched_keywords": [
-      "ev",
-      "ai"
-    ],
-    "timestamp": "2026-02-28T12:15:05.468194"
-  },
-  {
-    "feed": "Business",
-    "title": "Jeffrey Epstein used his ties to Eva Andersson-Dubin and the Mount Sinai Hospital to rehabilitate his image, documents show. https://www.bloomberg.com/news/features/2026-02-28/epstein-emails-show-reliance-on-eva-dubin-mount-sinai-in-doj-files?taid=69a2390218c57800011018d0&utm_campaign=trueanthem&utm_content=business&utm_medium=social&utm_source=twitter",
-    "link": "https://x.com/business/status/2027543885191196792",
-    "published": "Sat, 28 Feb 2026 00:38:00 GMT",
-    "matched_keywords": [
-      "ev",
-      "ai"
-    ],
-    "timestamp": "2026-02-28T12:15:05.468258"
+    "timestamp": "2026-02-28T13:15:06.212085"
   },
   {
     "feed": "FinancialJuice",
@@ -115,7 +116,7 @@
       "oil",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:05.783227"
+    "timestamp": "2026-02-28T13:15:06.545717"
   },
   {
     "feed": "FinancialJuice",
@@ -125,7 +126,7 @@
     "matched_keywords": [
       "oil"
     ],
-    "timestamp": "2026-02-28T12:15:05.783274"
+    "timestamp": "2026-02-28T13:15:06.545765"
   },
   {
     "feed": "FinancialJuice",
@@ -135,7 +136,7 @@
     "matched_keywords": [
       "bank"
     ],
-    "timestamp": "2026-02-28T12:15:05.783390"
+    "timestamp": "2026-02-28T13:15:06.545875"
   },
   {
     "feed": "FinancialJuice",
@@ -145,7 +146,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:05.783436"
+    "timestamp": "2026-02-28T13:15:06.545930"
   },
   {
     "feed": "FinancialJuice",
@@ -156,7 +157,7 @@
       "fed",
       "ev"
     ],
-    "timestamp": "2026-02-28T12:15:05.783592"
+    "timestamp": "2026-02-28T13:15:06.546108"
   },
   {
     "feed": "YCombinator",
@@ -168,7 +169,7 @@
       "who",
       "ev"
     ],
-    "timestamp": "2026-02-28T12:15:06.106957"
+    "timestamp": "2026-02-28T13:15:06.874650"
   },
   {
     "feed": "YCombinator",
@@ -179,7 +180,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.107054"
+    "timestamp": "2026-02-28T13:15:06.874739"
   },
   {
     "feed": "YCombinator",
@@ -190,7 +191,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.107121"
+    "timestamp": "2026-02-28T13:15:06.874806"
   },
   {
     "feed": "YCombinator",
@@ -201,7 +202,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.107186"
+    "timestamp": "2026-02-28T13:15:06.874871"
   },
   {
     "feed": "YCombinator",
@@ -213,7 +214,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.107245"
+    "timestamp": "2026-02-28T13:15:06.874930"
   },
   {
     "feed": "YCombinator",
@@ -225,7 +226,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.107345"
+    "timestamp": "2026-02-28T13:15:06.874994"
   },
   {
     "feed": "YCombinator",
@@ -239,7 +240,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.107416"
+    "timestamp": "2026-02-28T13:15:06.875063"
   },
   {
     "feed": "YCombinator",
@@ -252,7 +253,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.107497"
+    "timestamp": "2026-02-28T13:15:06.875161"
   },
   {
     "feed": "YCombinator",
@@ -262,7 +263,7 @@
     "matched_keywords": [
       "nato"
     ],
-    "timestamp": "2026-02-28T12:15:06.107524"
+    "timestamp": "2026-02-28T13:15:06.875207"
   },
   {
     "feed": "YCombinator",
@@ -274,7 +275,37 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.107598"
+    "timestamp": "2026-02-28T13:15:06.875313"
+  },
+  {
+    "feed": "ZeroHedge",
+    "title": "All Hell Breaks Loose In Private Credit",
+    "link": "https://x.com/zerohedge/status/2027609231302574222",
+    "published": "Sat, 28 Feb 2026 04:58:00 GMT",
+    "matched_keywords": [
+      "credit"
+    ],
+    "timestamp": "2026-02-28T13:15:07.207329"
+  },
+  {
+    "feed": "ZeroHedge",
+    "title": "Pentagon Picks OpenAI To Replace Anthropic",
+    "link": "https://x.com/zerohedge/status/2027607470206521687",
+    "published": "Sat, 28 Feb 2026 04:51:00 GMT",
+    "matched_keywords": [
+      "ai"
+    ],
+    "timestamp": "2026-02-28T13:15:07.207379"
+  },
+  {
+    "feed": "ZeroHedge",
+    "title": "China's Biological Weapons Labs In America",
+    "link": "https://x.com/zerohedge/status/2027600931253002469",
+    "published": "Sat, 28 Feb 2026 04:25:00 GMT",
+    "matched_keywords": [
+      "china"
+    ],
+    "timestamp": "2026-02-28T13:15:07.207417"
   },
   {
     "feed": "ZeroHedge",
@@ -284,7 +315,18 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.465086"
+    "timestamp": "2026-02-28T13:15:07.207514"
+  },
+  {
+    "feed": "ZeroHedge",
+    "title": "RT by @ZeroHedge: Summary of the AI wars:  pic.",
+    "link": "https://x.com/AutismCapital/status/2027586540189471155",
+    "published": "Sat, 28 Feb 2026 03:27:00 GMT",
+    "matched_keywords": [
+      "war",
+      "ai"
+    ],
+    "timestamp": "2026-02-28T13:15:07.207584"
   },
   {
     "feed": "ZeroHedge",
@@ -294,50 +336,29 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.465196"
+    "timestamp": "2026-02-28T13:15:07.207649"
   },
   {
-    "feed": "ZeroHedge",
-    "title": "RT by @ZeroHedge: Tonight, we reached an agreement with the Department of War to deploy our models in their classified network. In all of our interactions, the DoW displayed a deep respect for safety and a desire to partner to achieve the best possible outcome. AI safety and wide distribution of\u2026",
-    "link": "https://x.com/sama/status/2027578652477821175",
-    "published": "Sat, 28 Feb 2026 02:56:00 GMT",
+    "feed": "UnusualWhales",
+    "title": "To get $PZZA stock news, subscribe to Unusual Whales. You can see all stock and options info right on site. See more:",
+    "link": "https://x.com/unusual_whales/status/2027609204727362001",
+    "published": "Sat, 28 Feb 2026 04:58:00 GMT",
     "matched_keywords": [
-      "war",
-      "ev",
-      "ai"
+      "options",
+      "unusual"
     ],
-    "timestamp": "2026-02-28T12:15:06.465265"
+    "timestamp": "2026-02-28T13:15:07.528845"
   },
   {
-    "feed": "ZeroHedge",
-    "title": "*JEFFRIES: ANTHROPIC HAS COURAGEOUSLY PUSHED BACK AGAINST TRUMP",
-    "link": "https://x.com/zerohedge/status/2027578121902264401",
-    "published": "Sat, 28 Feb 2026 02:54:00 GMT",
+    "feed": "UnusualWhales",
+    "title": "The draft plan came to light as part of broader political maneuvering ahead of the 2026 midterms. Read more:",
+    "link": "https://x.com/unusual_whales/status/2027598635232334214",
+    "published": "Sat, 28 Feb 2026 04:16:00 GMT",
     "matched_keywords": [
-      "ai"
+      "unusual",
+      "eu"
     ],
-    "timestamp": "2026-02-28T12:15:06.465336"
-  },
-  {
-    "feed": "ZeroHedge",
-    "title": "Will China Come To Iran's Rescue?",
-    "link": "https://x.com/zerohedge/status/2027575765764644941",
-    "published": "Sat, 28 Feb 2026 02:45:00 GMT",
-    "matched_keywords": [
-      "rescue",
-      "china"
-    ],
-    "timestamp": "2026-02-28T12:15:06.465372"
-  },
-  {
-    "feed": "ZeroHedge",
-    "title": "Israel Launches Wave Of Strikes On Lebanon In Precursor To Potential Iran War",
-    "link": "https://x.com/zerohedge/status/2027569475256451392",
-    "published": "Sat, 28 Feb 2026 02:20:00 GMT",
-    "matched_keywords": [
-      "war"
-    ],
-    "timestamp": "2026-02-28T12:15:06.465416"
+    "timestamp": "2026-02-28T13:15:07.528909"
   },
   {
     "feed": "UnusualWhales",
@@ -348,7 +369,7 @@
       "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.799399"
+    "timestamp": "2026-02-28T13:15:07.528964"
   },
   {
     "feed": "UnusualWhales",
@@ -360,7 +381,7 @@
       "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.799457"
+    "timestamp": "2026-02-28T13:15:07.529004"
   },
   {
     "feed": "UnusualWhales",
@@ -370,7 +391,7 @@
     "matched_keywords": [
       "unusual"
     ],
-    "timestamp": "2026-02-28T12:15:06.799505"
+    "timestamp": "2026-02-28T13:15:07.529047"
   },
   {
     "feed": "UnusualWhales",
@@ -380,7 +401,7 @@
     "matched_keywords": [
       "unusual"
     ],
-    "timestamp": "2026-02-28T12:15:06.799564"
+    "timestamp": "2026-02-28T13:15:07.529104"
   },
   {
     "feed": "UnusualWhales",
@@ -391,7 +412,7 @@
       "default",
       "unusual"
     ],
-    "timestamp": "2026-02-28T12:15:06.799611"
+    "timestamp": "2026-02-28T13:15:07.529168"
   },
   {
     "feed": "UnusualWhales",
@@ -403,7 +424,7 @@
       "unusual",
       "rate"
     ],
-    "timestamp": "2026-02-28T12:15:06.799659"
+    "timestamp": "2026-02-28T13:15:07.529217"
   },
   {
     "feed": "UnusualWhales",
@@ -414,7 +435,7 @@
       "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.799705"
+    "timestamp": "2026-02-28T13:15:07.529263"
   },
   {
     "feed": "UnusualWhales",
@@ -426,29 +447,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:06.799752"
-  },
-  {
-    "feed": "UnusualWhales",
-    "title": "The US government and DoW has now officially designated the AI company Anthropic a supply chain risk per the Verge",
-    "link": "https://x.com/unusual_whales/status/2027522929035252077",
-    "published": "Fri, 27 Feb 2026 23:15:00 GMT",
-    "matched_keywords": [
-      "unusual",
-      "ai"
-    ],
-    "timestamp": "2026-02-28T12:15:06.799791"
-  },
-  {
-    "feed": "UnusualWhales",
-    "title": "To get market updates, you can subscribe to Unusual Whales. See what analysts are saying right on site. See more:",
-    "link": "https://x.com/unusual_whales/status/2027518607853281706",
-    "published": "Fri, 27 Feb 2026 22:58:00 GMT",
-    "matched_keywords": [
-      "flow",
-      "unusual"
-    ],
-    "timestamp": "2026-02-28T12:15:06.799834"
+    "timestamp": "2026-02-28T13:15:07.529338"
   },
   {
     "feed": "Financial_Times",
@@ -458,7 +457,7 @@
     "matched_keywords": [
       "collapse"
     ],
-    "timestamp": "2026-02-28T12:15:09.219113"
+    "timestamp": "2026-02-28T13:15:09.823518"
   },
   {
     "feed": "Financial_Times",
@@ -471,7 +470,7 @@
       "credit",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:09.219147"
+    "timestamp": "2026-02-28T13:15:09.823554"
   },
   {
     "feed": "Financial_Times",
@@ -483,7 +482,7 @@
       "battle",
       "beat"
     ],
-    "timestamp": "2026-02-28T12:15:09.219165"
+    "timestamp": "2026-02-28T13:15:09.823572"
   },
   {
     "feed": "Financial_Times",
@@ -495,7 +494,7 @@
       "battle",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:09.219183"
+    "timestamp": "2026-02-28T13:15:09.823591"
   },
   {
     "feed": "Financial_Times",
@@ -506,7 +505,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:09.219196"
+    "timestamp": "2026-02-28T13:15:09.823609"
   },
   {
     "feed": "Financial_Times",
@@ -516,7 +515,7 @@
     "matched_keywords": [
       "war"
     ],
-    "timestamp": "2026-02-28T12:15:09.219213"
+    "timestamp": "2026-02-28T13:15:09.823635"
   },
   {
     "feed": "Financial_Times",
@@ -529,7 +528,7 @@
       "short",
       "rate"
     ],
-    "timestamp": "2026-02-28T12:15:09.219235"
+    "timestamp": "2026-02-28T13:15:09.823665"
   },
   {
     "feed": "Financial_Times",
@@ -541,7 +540,7 @@
       "eu",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:09.219252"
+    "timestamp": "2026-02-28T13:15:09.823685"
   },
   {
     "feed": "Financial_Times",
@@ -553,6 +552,6 @@
       "battle",
       "ai"
     ],
-    "timestamp": "2026-02-28T12:15:09.219267"
+    "timestamp": "2026-02-28T13:15:09.823704"
   }
 ]

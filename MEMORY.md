@@ -14,6 +14,7 @@
 - **Nexos:** Removed (caused cron job issues, won't use going forward)
 - **Incident note (Feb 24 rollback):** bad provider-key schema edits previously caused invalid config/boot issues; only use CLI/schema-safe edits for model/provider config
 - **Known instability (Feb 25):** Multiple "terminated" errors from MiniMax at 21:36, 22:17, 22:52. Fallback to Codex worked. Provider may have intermittent issues.
+- **Fallback Protocol (Feb 28):** If MiniMax fails with "terminated" error, immediately switch to Codex. Do not retry MiniMax more than once per session.
 - **Switch commands:** /minimax, /codex, "switch to minimax", "switch to codex"
 
 ## How Philippe Works
@@ -131,6 +132,12 @@ These rules prevent common issues in this Docker setup:
    - If new files are created and access is lost, remind Philippe to run:
      `sudo chown -R node:node /data/.openclaw/`
    - This applies to config files, cron jobs, scripts, etc.
+
+4. **"Gateway Crash Recovery" Rule**
+   - If gateway crashes during file editing, corrupted tool-call logs may need cleanup
+   - Symptoms: gateway won't start, file permission errors
+   - Recovery: Philippe removes corrupted log entries from session files
+   - If in doubt, check `/tmp/openclaw/` for crash logs
 
 4. **"Schema-First Config" Rule**
    - Never invent new top-level keys in `openclaw.json` (example mistake: adding `system`)

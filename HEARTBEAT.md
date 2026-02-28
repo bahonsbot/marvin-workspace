@@ -1,5 +1,8 @@
 # HEARTBEAT.md
 
+## Status
+- **Active** — polls every 60 minutes but replies are minimal to avoid Telegram spam
+
 ## Active Hours
 - **Default:** Active between 09:00 - 22:00 Asia/Ho_Chi_Minh (GMT+7) time
 - Outside these hours: stay quiet unless urgent
