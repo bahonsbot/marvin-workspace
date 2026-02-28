@@ -272,6 +272,161 @@ class KnowledgeGraph:
                     {'outcome': 'Safe haven flows to US assets', 'asset': 'us_assets', 'direction': 'up', 'magnitude': 'bid', 'horizon': '1-5d'},
                 ]
             },
+            # REGIONAL / GLOBAL
+            {
+                'name': 'EU recession fears',
+                'keywords': ['eu recession', 'europe recession', 'eurozone recession', 'european economy slows', 'eu economy contracts'],
+                'pattern_names': [],
+                'event': 'EU recession fears',
+                'predictions': [
+                    {'outcome': 'Euro weakens vs dollar', 'asset': 'eurusd', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'European banks underperform', 'asset': 'european_banks', 'direction': 'down', 'magnitude': '2-5%', 'horizon': '1-10d'},
+                    {'outcome': 'German bunds bid on safe haven', 'asset': 'bund_yields', 'direction': 'down', 'magnitude': '10-20bp', 'horizon': '1-5d'},
+                    {'outcome': 'US equities outperform Europe', 'asset': 'us_vs_eu', 'direction': 'up', 'magnitude': 'relative', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'Japan Yen surge',
+                'keywords': ['yen surges', 'yen spikes', 'yen strengthens', 'japan forex', 'boj', 'bank of japan'],
+                'pattern_names': [],
+                'event': 'Japan Yen surge',
+                'predictions': [
+                    {'outcome': 'Yen strengthens vs dollar', 'asset': 'usdjpy', 'direction': 'down', 'magnitude': '2-5%', 'horizon': 'intraday-3d'},
+                    {'outcome': 'Japanese equities drop on export concern', 'asset': 'nikkei', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Carry trade unwinds', 'asset': 'carry_trade', 'direction': 'down', 'magnitude': 'risk_off', 'horizon': '1-5d'},
+                    {'outcome': 'Global risk assets selloff', 'asset': 'global_risk', 'direction': 'down', 'magnitude': '1-2%', 'horizon': 'intraday'},
+                ]
+            },
+            {
+                'name': 'UK economic stress',
+                'keywords': ['uk economy', 'british economy', 'brexit impact', 'uk recession', 'bank of england'],
+                'pattern_names': [],
+                'event': 'UK economic stress',
+                'predictions': [
+                    {'outcome': 'Pound weakens', 'asset': 'gbpusd', 'direction': 'down', 'magnitude': '1-2%', 'horizon': '1-5d'},
+                    {'outcome': 'UK financials pressured', 'asset': 'uk_financials', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Gilts bid on safe haven', 'asset': 'gilt_yields', 'direction': 'down', 'magnitude': '5-15bp', 'horizon': '1-5d'},
+                ]
+            },
+            {
+                'name': 'Emerging market crisis',
+                'keywords': ['emerging market crisis', 'em crisis', 'developing markets crash', 'latin america crisis', 'asia crisis'],
+                'pattern_names': [],
+                'event': 'Emerging market crisis',
+                'predictions': [
+                    {'outcome': 'EM currencies crumble', 'asset': 'em_currencies', 'direction': 'down', 'magnitude': '5-15%', 'horizon': 'intraday-1w'},
+                    {'outcome': 'Capital flight to US dollar', 'asset': 'dxy', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'US Treasuries bid', 'asset': 'treasury_yields', 'direction': 'down', 'magnitude': '10-25bp', 'horizon': '1-5d'},
+                    {'outcome': 'Risk assets globally pressured', 'asset': 'global_risk', 'direction': 'down', 'magnitude': '2-4%', 'horizon': '1-10d'},
+                ]
+            },
+            # SECTORS
+            {
+                'name': 'Semiconductor shortage',
+                'keywords': ['chip shortage', 'semiconductor shortage', 'gpu shortage', 'chip crisis', 'semiconductor crisis'],
+                'pattern_names': ['GPU Shortage'],
+                'allow_pattern_fallback': True,
+                'event': 'Semiconductor shortage',
+                'predictions': [
+                    {'outcome': 'Semiconductor stocks rally on supply shock', 'asset': 'semis', 'direction': 'up', 'magnitude': '3-8%', 'horizon': 'intraday-3d'},
+                    {'outcome': 'Auto producers pressured', 'asset': 'auto_stocks', 'direction': 'down', 'magnitude': '2-5%', 'horizon': '1-10d'},
+                    {'outcome': 'Consumer electronics costs rise', 'asset': 'tech_hardware', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Foundries benefit', 'asset': 'foundries', 'direction': 'up', 'magnitude': '3-6%', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'Retail holiday earnings',
+                'keywords': ['retail earnings', 'holiday sales', 'black friday', 'cyber monday', 'retail season'],
+                'pattern_names': [],
+                'event': 'Retail holiday earnings',
+                'predictions': [
+                    {'outcome': 'Target and Walmart on report', 'asset': 'big_box_retail', 'direction': 'variable', 'magnitude': '3-10%', 'horizon': 'intraday'},
+                    {'outcome': 'Consumer discretionary up on strong results', 'asset': 'consumer_disc', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Amazon and e-commerce rally', 'asset': 'ecommerce', 'direction': 'up', 'magnitude': '2-5%', 'horizon': '1-5d'},
+                    {'outcome': 'Weak results trigger retail selloff', 'asset': 'retail_sector', 'direction': 'down', 'magnitude': '2-6%', 'horizon': 'intraday-3d'},
+                ]
+            },
+            {
+                'name': 'Pharma drug approval',
+                'keywords': ['fda', 'drug approval', 'fda rejects', 'clinical trial', 'biotech breakthrough', 'drug reject'],
+                'pattern_names': [],
+                'event': 'Pharma drug approval',
+                'predictions': [
+                    {'outcome': 'Stock rips on approval', 'asset': 'biotech_stock', 'direction': 'up', 'magnitude': '20-100%', 'horizon': 'intraday'},
+                    {'outcome': 'Sector peers bid', 'asset': 'biotech_sector', 'direction': 'up', 'magnitude': '1-4%', 'horizon': '1-5d'},
+                    {'outcome': 'Rejection sinks stock', 'asset': 'biotech_stock', 'direction': 'down', 'magnitude': '20-50%', 'horizon': 'intraday'},
+                    {'outcome': 'Pipeline concerns spread', 'asset': 'biotech_sector', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                ]
+            },
+            {
+                'name': 'Energy oil spike',
+                'keywords': ['oil spike', 'oil rallies', 'crude surges', 'energy rally', 'oil prices up'],
+                'pattern_names': [],
+                'event': 'Energy oil spike',
+                'predictions': [
+                    {'outcome': 'Crude oil jumps', 'asset': 'crude_oil', 'direction': 'up', 'magnitude': '3-7%', 'horizon': 'intraday'},
+                    {'outcome': 'Energy sector rip', 'asset': 'energy_stocks', 'direction': 'up', 'magnitude': '2-5%', 'horizon': '1-5d'},
+                    {'outcome': 'Airlines pressured', 'asset': 'airlines', 'direction': 'down', 'magnitude': '2-4%', 'horizon': '1-5d'},
+                    {'outcome': 'Inflation expectations rise', 'asset': 'inflation_expectations', 'direction': 'up', 'magnitude': '5-15bp', 'horizon': '1-5d'},
+                ]
+            },
+            {
+                'name': 'Housing market weakness',
+                'keywords': ['housing market', 'home sales', 'housing crash', 'mortgage rates', 'real estate weakness'],
+                'pattern_names': [],
+                'event': 'Housing market weakness',
+                'predictions': [
+                    {'outcome': 'Homebuilders tank', 'asset': 'homebuilders', 'direction': 'down', 'magnitude': '3-8%', 'horizon': 'intraday-3d'},
+                    {'outcome': 'REITs underperform', 'asset': 'reits', 'direction': 'down', 'magnitude': '2-5%', 'horizon': '1-10d'},
+                    {'outcome': 'Mortgage rates fall on safe haven', 'asset': 'mortgage_rates', 'direction': 'down', 'magnitude': '10-25bp', 'horizon': '1-5d'},
+                    {'outcome': 'Consumer confidence dips', 'asset': 'consumer_confidence', 'direction': 'down', 'magnitude': '2-5 pts', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'Utilities rate sensitivity',
+                'keywords': ['utilities', 'utility stocks', 'utility rally', 'rate sensitive sectors'],
+                'pattern_names': [],
+                'event': 'Utilities rate sensitivity',
+                'predictions': [
+                    {'outcome': 'Utilities rally on rate cut', 'asset': 'utilities', 'direction': 'up', 'magnitude': '2-4%', 'horizon': '1-5d'},
+                    {'outcome': 'Utilities pressured on rate hike', 'asset': 'utilities', 'direction': 'down', 'magnitude': '2-5%', 'horizon': '1-5d'},
+                    {'outcome': 'Yield differential drives flows', 'asset': 'utilities_flows', 'direction': 'variable', 'magnitude': 'significant', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'Defense spending increase',
+                'keywords': ['defense spending', 'pentagon budget', 'military budget', 'defense contract', 'defense order'],
+                'pattern_names': [],
+                'event': 'Defense spending increase',
+                'predictions': [
+                    {'outcome': 'Defense contractors rally', 'asset': 'defense_stocks', 'direction': 'up', 'magnitude': '2-5%', 'horizon': '1-5d'},
+                    {'outcome': 'Boeing and Lockheed gain', 'asset': 'defense_primes', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-10d'},
+                    {'outcome': 'Aerospace benefits', 'asset': 'aerospace', 'direction': 'up', 'magnitude': '1-4%', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'Airline industry stress',
+                'keywords': ['airline crisis', 'airline bankruptcy', 'airline losses', 'airline earnings'],
+                'pattern_names': [],
+                'event': 'Airline industry stress',
+                'predictions': [
+                    {'outcome': 'Airlines sell off', 'asset': 'airlines', 'direction': 'down', 'magnitude': '5-15%', 'horizon': 'intraday-3d'},
+                    {'outcome': 'Fuel suppliers pressured', 'asset': 'energy_markets', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Travel sector weakens', 'asset': 'travel_leisure', 'direction': 'down', 'magnitude': '2-4%', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'Bond market stress',
+                'keywords': ['bond vigilantes', 'bond selloff', 'treasury crash', 'bond yields spike', 'fixed income crisis', 'bond market stress'],
+                'pattern_names': [],
+                'event': 'Bond market stress',
+                'predictions': [
+                    {'outcome': 'Treasuries crash', 'asset': 'treasuries', 'direction': 'down', 'magnitude': '3-8%', 'horizon': 'intraday'},
+                    {'outcome': 'Yields spike', 'asset': 'treasury_yields', 'direction': 'up', 'magnitude': '25-50bp', 'horizon': 'intraday-3d'},
+                    {'outcome': 'Equities follow bonds lower', 'asset': 'sp500', 'direction': 'down', 'magnitude': '2-5%', 'horizon': '1-5d'},
+                    {'outcome': 'Credit spreads widen sharply', 'asset': 'credit_spreads', 'direction': 'up', 'magnitude': '50-100bp', 'horizon': 'intraday-3d'},
+                ]
+            },
         ]
 
     def predict_signal_outcomes(self, signal: Dict) -> List[Dict]:
