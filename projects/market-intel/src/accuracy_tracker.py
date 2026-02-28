@@ -99,6 +99,28 @@ class AccuracyTracker:
         else:
             print("  No signals tracked yet.")
     
+    def review_pending(self):
+        """Show pending signals for review"""
+        pending = [s for s in self.tracked if not s.get('verified')]
+        
+        if not pending:
+            print("\nNo pending signals to review.")
+            return
+        
+        print("\n=== Pending Signal Reviews ===")
+        for i, s in enumerate(pending):
+            signal = s.get('signal', {})
+            print(f"\n[{i}] {signal.get('title', 'Unknown')[:60]}")
+            print(f"    Pattern: {signal.get('pattern_name', 'N/A')}")
+            print(f"    Confidence: {signal.get('confidence_level', 'N/A')}")
+            print(f"    Added: {s.get('added_at', 'N/A')[:10]}")
+            if signal.get('predicted_outcomes'):
+                print(f"    Predicted: {' → '.join(signal.get('predicted_outcomes', [])[:2])}")
+        
+        print("\n--- To evaluate a signal, run with --eval INDEX OUTCOME ---")
+        print("    Example: accuracy_tracker.py --eval 0 correct")
+        print("    Outcomes: correct, partial, incorrect")
+    
     def auto_track_top_signals(self):
         """Auto-track HIGH confidence signals"""
         signals_file = self.data_dir / 'enhanced_signals.json'
@@ -124,16 +146,43 @@ class AccuracyTracker:
             if not already_tracked and top.get('confidence_level') in ['STRONG BUY', 'BUY']:
                 self.add_signal(top)
     
-    def run(self, auto_track=False):
+    def run(self, auto_track=False, review=False, eval_args=None):
         print("=== Signal Accuracy Tracker ===")
         
         if auto_track:
             self.auto_track_top_signals()
+        
+        if review:
+            self.review_pending()
+        
+        if eval_args:
+            try:
+                idx = int(eval_args[0])
+                outcome = eval_args[1]
+                if outcome not in ['correct', 'partial', 'incorrect']:
+                    print(f"  Invalid outcome: {outcome}")
+                else:
+                    self.evaluate_signal(idx, outcome)
+            except (ValueError, IndexError) as e:
+                print(f"  Usage: --eval INDEX OUTCOME")
+                print(f"  Example: --eval 0 correct")
         
         self.get_stats()
 
 
 if __name__ == "__main__":
     import sys
+    
     tracker = AccuracyTracker()
-    tracker.run(auto_track='--track' in sys.argv)
+    
+    # Parse arguments
+    auto_track = '--track' in sys.argv
+    review = '--review' in sys.argv
+    
+    eval_args = None
+    if '--eval' in sys.argv:
+        idx = sys.argv.index('--eval')
+        if len(sys.argv) > idx + 2:
+            eval_args = [sys.argv[idx + 1], sys.argv[idx + 2]]
+    
+    tracker.run(auto_track=auto_track, review=review, eval_args=eval_args)

@@ -13,6 +13,9 @@ import sys
 sys.path.insert(0, 'src')
 from knowledge_graph import KnowledgeGraph
 
+# Import accuracy tracker
+from accuracy_tracker import AccuracyTracker
+
 class ReasoningEngine:
     def __init__(self):
         self.patterns = []
@@ -260,6 +263,10 @@ class ReasoningEngine:
         enhanced = self.analyze_signals()
         self.print_analysis(enhanced)
         self.save(enhanced)
+        
+        # Auto-track top HIGH confidence signals
+        tracker = AccuracyTracker()
+        tracker.auto_track_top_signals()
         
         print(f"✓ Saved {len(enhanced)} enhanced signals to data/enhanced_signals.json")
         return enhanced
