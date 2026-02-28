@@ -160,6 +160,118 @@ class KnowledgeGraph:
                     {'outcome': 'European gas risk premium widens', 'asset': 'natural_gas_eu', 'direction': 'up', 'magnitude': '3-8%', 'horizon': 'intraday-1w'},
                 ]
             },
+            # NEW TEMPLATES
+            {
+                'name': 'Fed rate hike',
+                'keywords': ['rate hike', 'rates higher', 'interest rate hike', 'hike rates', 'hiking rates', 'raised rates', 'fed hikes'],
+                'pattern_names': ['US Credit Downgrade'],
+                'allow_pattern_fallback': True,
+                'event': 'Fed rate hike',
+                'predictions': [
+                    {'outcome': 'Treasury yields climb on hawkish policy', 'asset': 'treasury_yields', 'direction': 'up', 'magnitude': '5-15bp', 'horizon': 'intraday'},
+                    {'outcome': 'Rate-sensitive sectors weaken', 'asset': 'rate_sensitive', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Dollar strengthens on rate differential', 'asset': 'dxy', 'direction': 'up', 'magnitude': '0.5-1.5%', 'horizon': '1-5d'},
+                    {'outcome': 'Tech valuations pressure on higher rates', 'asset': 'tech_stocks', 'direction': 'down', 'magnitude': '1-4%', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'Fed rate cut',
+                'keywords': ['rate cut', 'rates lower', 'interest rate cut', 'cut rates', 'cutting rates', 'lowered rates', 'fed cuts', 'fed easing'],
+                'pattern_names': [],
+                'event': 'Fed rate cut',
+                'predictions': [
+                    {'outcome': 'Treasury yields fall on dovish policy', 'asset': 'treasury_yields', 'direction': 'down', 'magnitude': '5-20bp', 'horizon': 'intraday'},
+                    {'outcome': 'Growth stocks rally on cheaper money', 'asset': 'growth_stocks', 'direction': 'up', 'magnitude': '1-4%', 'horizon': '1-5d'},
+                    {'outcome': 'Real estate catches bid', 'asset': 'reits', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Dollar weakens on rate differential', 'asset': 'dxy', 'direction': 'down', 'magnitude': '0.5-1.5%', 'horizon': '1-5d'},
+                ]
+            },
+            {
+                'name': 'CPI inflation surprise (hot)',
+                'keywords': ['inflation hotter', 'inflation rises', 'inflation surprise', 'cpi rises', 'core inflation up', 'inflation spikes'],
+                'pattern_names': [],
+                'event': 'CPI inflation hot',
+                'predictions': [
+                    {'outcome': 'Treasury yields spike on inflation shock', 'asset': 'treasury_yields', 'direction': 'up', 'magnitude': '8-20bp', 'horizon': 'intraday'},
+                    {'outcome': 'Rate cut expectations pushed out', 'asset': 'rate_expectations', 'direction': 'down', 'magnitude': '2-4 cuts', 'horizon': '1-5d'},
+                    {'outcome': 'Real yields climb', 'asset': 'real_yields', 'direction': 'up', 'magnitude': '5-15bp', 'horizon': '1-5d'},
+                    {'outcome': 'TIPS outperform nominal', 'asset': 'tips', 'direction': 'up', 'magnitude': '0.5-2%', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'CPI inflation surprise (cold)',
+                'keywords': ['inflation cools', 'inflation falls', 'inflation slows', 'cpi falls', 'core inflation down', 'disinflation', 'inflation drops'],
+                'pattern_names': [],
+                'event': 'CPI inflation cold',
+                'predictions': [
+                    {'outcome': 'Treasury yields fall on soft data', 'asset': 'treasury_yields', 'direction': 'down', 'magnitude': '8-20bp', 'horizon': 'intraday'},
+                    {'outcome': 'Rate cut expectations accelerate', 'asset': 'rate_expectations', 'direction': 'up', 'magnitude': '2-4 cuts', 'horizon': '1-5d'},
+                    {'outcome': 'Growth stocks rally on easing', 'asset': 'growth_stocks', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Real yields decline', 'asset': 'real_yields', 'direction': 'down', 'magnitude': '5-15bp', 'horizon': '1-5d'},
+                ]
+            },
+            {
+                'name': 'Big bank earnings miss',
+                'keywords': ['jpmorgan', 'goldman', 'morgan stanley', 'citi', 'bank earnings', 'wells fargo', ' earnings miss', 'revenue miss'],
+                'pattern_names': ['Regional Banking Crisis 2023'],
+                'allow_pattern_fallback': True,
+                'event': 'Big bank earnings miss',
+                'predictions': [
+                    {'outcome': 'Regional banks sell off on contagion fear', 'asset': 'regional_banks', 'direction': 'down', 'magnitude': '2-5%', 'horizon': 'intraday-3d'},
+                    {'outcome': 'Credit spreads widen', 'asset': 'credit_spreads', 'direction': 'up', 'magnitude': '10-25bp', 'horizon': '1-5d'},
+                    {'outcome': 'Treasuries bid as safe haven', 'asset': 'treasury_yields', 'direction': 'down', 'magnitude': '3-10bp', 'horizon': '1-3d'},
+                    {'outcome': 'Financial sector weakness spreads', 'asset': 'financials', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                ]
+            },
+            {
+                'name': 'Major M&A deal announced',
+                'keywords': ['merger', 'acquisition', 'takeover', 'buyout', 'deal talks', 'm&a', 'acquire'],
+                'pattern_names': [],
+                'event': 'Major M&A announced',
+                'predictions': [
+                    {'outcome': 'Target stock jumps on premium', 'asset': 'target_stock', 'direction': 'up', 'magnitude': '10-30%', 'horizon': 'intraday'},
+                    {'outcome': 'Acquirer may dip on cash/equity concern', 'asset': 'acquirer_stock', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-3d'},
+                    {'outcome': 'Sector peers bid on deal chatter', 'asset': 'sector_peers', 'direction': 'up', 'magnitude': '1-4%', 'horizon': '1-5d'},
+                    {'outcome': 'M&A activity surges on deal news', 'asset': 'ma_activity', 'direction': 'up', 'magnitude': 'elevated', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'Regional banking stress',
+                'keywords': ['regional bank', 'bank crisis', 'bank fail', 'bank rescue', 'bank deposit', 'silicon valley bank', 'svb', 'first republic'],
+                'pattern_names': ['Regional Banking Crisis 2023'],
+                'allow_pattern_fallback': True,
+                'event': 'Regional banking stress',
+                'predictions': [
+                    {'outcome': 'Regional bank indices crater', 'asset': 'regional_bank_index', 'direction': 'down', 'magnitude': '5-15%', 'horizon': 'intraday'},
+                    {'outcome': 'Large caps outperform regionals', 'asset': 'large_cap_banks', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Credit conditions tighten', 'asset': 'credit_conditions', 'direction': 'down', 'magnitude': 'tightening', 'horizon': '1-10d'},
+                    {'outcome': 'Treasuries rally on flight to safety', 'asset': 'treasury_yields', 'direction': 'down', 'magnitude': '10-25bp', 'horizon': 'intraday-3d'},
+                ]
+            },
+            {
+                'name': 'Tech earnings beat',
+                'keywords': ['nvidia', 'apple', 'microsoft', 'google', 'meta', 'amazon', 'tesla', ' earnings beat', 'earnings blowout', 'revenue beat'],
+                'pattern_names': [],
+                'event': 'Tech earnings beat',
+                'predictions': [
+                    {'outcome': 'Stock rips on beat', 'asset': 'earnings_stock', 'direction': 'up', 'magnitude': '3-10%', 'horizon': 'intraday'},
+                    {'outcome': 'Sector peers follow', 'asset': 'tech_sector', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-3d'},
+                    {'outcome': 'Nasdaq strength', 'asset': 'nasdaq', 'direction': 'up', 'magnitude': '0.5-2%', 'horizon': '1-5d'},
+                    {'outcome': 'AI/momentum names bid', 'asset': 'ai_stocks', 'direction': 'up', 'magnitude': '1-4%', 'horizon': '1-10d'},
+                ]
+            },
+            {
+                'name': 'China slowdown fears',
+                'keywords': ['china', 'chinese', 'beijing', 'chinese economy', 'china slowdown', 'china crisis', 'china property'],
+                'pattern_names': [],
+                'event': 'China slowdown fears',
+                'predictions': [
+                    {'outcome': 'Commodities tank on demand fears', 'asset': 'commodities', 'direction': 'down', 'magnitude': '2-5%', 'horizon': 'intraday-3d'},
+                    {'outcome': 'Emerging markets underperform', 'asset': 'emerging_markets', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
+                    {'outcome': 'Copper and iron ore slide', 'asset': 'industrial_metals', 'direction': 'down', 'magnitude': '2-6%', 'horizon': '1-10d'},
+                    {'outcome': 'Safe haven flows to US assets', 'asset': 'us_assets', 'direction': 'up', 'magnitude': 'bid', 'horizon': '1-5d'},
+                ]
+            },
         ]
 
     def predict_signal_outcomes(self, signal: Dict) -> List[Dict]:
