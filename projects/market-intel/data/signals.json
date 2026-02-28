@@ -264,13 +264,13 @@
     "feed": "r/investing",
     "title": "Has the US Federal reserve really printed 400Billion? Trying to understand the H",
     "url": "https://reddit.com/r/investing/comments/1rfnnyb/has_the_us_federal_reserve_really_printed/",
-    "timestamp": "2026-02-28T17:09:34.082514",
+    "timestamp": "2026-02-28T17:40:08.769914",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "short-term",
-    "score": 101,
+    "score": 100,
     "signal_score": 300
   },
   {
@@ -288,6 +288,32 @@
   },
   {
     "source": "rss",
+    "feed": "Reuters_World",
+    "title": "Healthpeak Properties' Janus Living makes US IPO filing public",
+    "url": "https://www.reuters.com/business/healthpeak-properties-janus-living-makes-us-ipo-filing-public-2026-02-27/",
+    "timestamp": "2026-02-28T17:15:13.829918",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "signal_score": 100
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_Business",
+    "title": "Healthpeak Properties' Janus Living makes US IPO filing public",
+    "url": "https://www.reuters.com/business/healthpeak-properties-janus-living-makes-us-ipo-filing-public-2026-02-27/",
+    "timestamp": "2026-02-28T17:15:13.882626",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "signal_score": 100
+  },
+  {
+    "source": "rss",
     "feed": "MarketWatch",
     "title": "Trump blacklists Anthropic, opening the door to Elon Musk and xAI",
     "url": "https://www.marketwatch.com/story/trump-blacklists-anthropic-opening-the-door-to-elon-musk-and-xai-03011fda?mod=mw_rss_topstories",
@@ -297,34 +323,6 @@
     "category": "corporate",
     "confidence": "MEDIUM",
     "time_horizon": "medium-term",
-    "signal_score": 100
-  },
-  {
-    "source": "reddit",
-    "feed": "r/StockMarket",
-    "title": "Net Income for Mega Cap AI Companies - Updated for Nvidia and with more metrics!",
-    "url": "https://reddit.com/r/StockMarket/comments/1rgun3v/net_income_for_mega_cap_ai_companies_updated_for/",
-    "timestamp": "2026-02-28T17:09:37.316714",
-    "pattern_id": "p003",
-    "pattern": "Reddit GPU/Semis Thread",
-    "category": "sentiment_social",
-    "confidence": "MEDIUM",
-    "time_horizon": "short-term",
-    "score": 16,
-    "signal_score": 100
-  },
-  {
-    "source": "reddit",
-    "feed": "r/StockMarket",
-    "title": "Nvidia Investors Give Lukewarm Reaction to Upbeat Forecast",
-    "url": "https://reddit.com/r/StockMarket/comments/1rf8x3u/nvidia_investors_give_lukewarm_reaction_to_upbeat/",
-    "timestamp": "2026-02-28T17:09:37.316776",
-    "pattern_id": "p003",
-    "pattern": "Reddit GPU/Semis Thread",
-    "category": "sentiment_social",
-    "confidence": "MEDIUM",
-    "time_horizon": "short-term",
-    "score": 293,
     "signal_score": 100
   }
 ]

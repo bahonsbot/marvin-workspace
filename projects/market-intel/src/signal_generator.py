@@ -49,7 +49,9 @@ class SignalGenerator:
                 'weight': 3
             },
             'p003': {  # GPU/Semis
-                'keywords': ['nvidia', 'amd', 'gpu shortage', 'semiconductor shortage', 'chip shortage', 'h100'],
+                'keywords': ['nvidia', 'amd', 'gpu shortage', 'semiconductor shortage', 'chip shortage', 'h100', 
+                            'ai chip', 'micron', 'broadcom', 'intel foundry', 'tsmc', 'asml', 'semiconductor stocks',
+                            'ai semis', 'ai rally', 'tech rally semis'],
                 'exclude': [],
                 'weight': 2
             },
@@ -58,10 +60,13 @@ class SignalGenerator:
                 'exclude': ['election', 'political'],
                 'weight': 3
             },
-            'p005': {  # GameStop - meme stocks / social squeeze sentiment
+            'p005': {  # GameStop - expanded meme/sentiment coverage
                 'keywords': [
                     'gme', 'gamestop', 'wallstreetbets', 'wsb', 'short squeeze', 'meme stock',
-                    'gamma squeeze', 'call buying frenzy', 'retail traders pile', 'days to cover'
+                    'gamma squeeze', 'call buying frenzy', 'retail traders pile', 'days to cover',
+                    'amc', 'bbby', 'bed bath', 'robinhood', 'meme rally', 'reddit rally',
+                    'short interest', 'navy', 'chewy', 'retail investors', 'options call',
+                    'calls surge', 'volume surge', 'trending', 'meme basket'
                 ],
                 'exclude': ['real estate', 'housing'],
                 'weight': 3
@@ -90,11 +95,17 @@ class SignalGenerator:
                 'exclude': [],
                 'weight': 3
             },
-            'p010': {  # Tesla / corporate earnings & M&A pulse
+            'p010': {  # Tesla / corporate earnings & M&A - expanded
                 'keywords': [
-                    'tesla', 'tsla', 'stock split', '5-for-1', 'elon',
+                    'tesla', 'tsla', 'stock split', '5-for-1', 'elon', 'elon musk',
                     'earnings beat', 'earnings miss', 'revenue guidance', 'profit warning',
-                    'merger talks', 'acquisition offer', 'take-private', 'buyout bid', 'deal talks'
+                    'merger talks', 'acquisition offer', 'take-private', 'buyout bid', 'deal talks',
+                    'quarterly results', 'q4 earnings', 'q3 earnings', 'fiscal year', 'annual report',
+                    'sales growth', 'revenue miss', 'eps beat', 'revenue beat', 'outlook raised',
+                    'outlook cut', 'guidance raised', 'guidance cut', 'forward guidance',
+                    'ipo', 'direct listing', 'secondary offering', 'stock offering',
+                    'ceo change', 'leadership change', 'executive resign', 'board change',
+                    'major acquisition', 'strategic review', 'sale of company', 'privatization'
                 ],
                 'exclude': [],
                 'weight': 2
@@ -115,11 +126,18 @@ class SignalGenerator:
                 'exclude': [],
                 'weight': 2
             },
-            'p014': {  # US Credit Downgrade / macro rates-inflation regime
+            'p014': {  # US Credit Downgrade / macro rates-inflation regime - expanded
                 'keywords': [
-                    's&p downgrade', 'credit rating', 'aaa downgrade', 'us debt',
-                    'federal reserve', 'fed minutes', 'fomc', 'cpi', 'core cpi', 'pce inflation',
-                    'rate hike', 'rate cut', 'treasury yield spike', 'yield curve inversion'
+                    's&p downgrade', 'credit rating', 'aaa downgrade', 'us debt', 'us credit',
+                    'federal reserve', 'fed chair', 'jerome powell', 'fed minutes', 'fomc', 
+                    'cpi', 'core cpi', 'pce inflation', 'inflation data', 'consumer price',
+                    'rate hike', 'rate cut', 'rate decision', 'fed Funds rate',
+                    'treasury yield', 'yield spike', 'yield curve', 'yield curve inversion',
+                    '10-year yield', '2-year yield', '30-year mortgage', 'mortgage rates',
+                    'recession fears', 'recession risk', 'recession signal', 'hard landing', 'soft landing',
+                    'gdp growth', 'gdp slowdown', 'economic slowdown', 'economy warning',
+                    'unemployment', 'jobs report', 'nfp', 'nonfarm payroll', 'labor market',
+                    'interest rates', 'monetary policy', 'tightening', 'easing', 'dovish', 'hawkish'
                 ],
                 'exclude': [],
                 'weight': 3
