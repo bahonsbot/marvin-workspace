@@ -258,6 +258,7 @@
         
         <div class="filters" style="margin-bottom: 4px;">
             <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="favorites">⭐</button>
             <button class="filter-btn" data-filter="geopolitical">🌍 Geo</button>
             <button class="filter-btn" data-filter="financial">💰</button>
             <button class="filter-btn" data-filter="macro">📈</button>
@@ -368,7 +369,12 @@
             
             // Filter by category
             if (currentFilter !== 'all') {
-                filtered = filtered.filter(item => item.category.includes(currentFilter));
+                if (currentFilter === 'favorites') {
+                    const favs = getFavorites();
+                    filtered = filtered.filter(item => favs.includes(item.id));
+                } else {
+                    filtered = filtered.filter(item => item.category.includes(currentFilter));
+                }
             }
             
             // Sort by publication date (newest first)
@@ -386,6 +392,7 @@
             feed.innerHTML = filtered.map(item => {
                 const relativeTime = formatRelativeTime(item.published || item.timestamp);
                 const sourceIcon = getSourceIcon(item.type);
+                const isFavorite = getFavorites().includes(item.id);
 
                 return `
                 <div class="news-card">
@@ -394,7 +401,10 @@
                             <span class="source">${sourceIcon} ${item.source}</span>
                             <span class="timestamp">${relativeTime}</span>
                         </div>
-                        <span class="source-badge">${sourceIcon} ${item.type}</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="favorite-btn" data-id="${item.id}" onclick="toggleFavorite('${item.id}')" style="background: none; border: none; cursor: pointer; font-size: 18px; padding: 0;">${isFavorite ? '★' : '☆'}</button>
+                            <span class="source-badge">${item.type}</span>
+                        </div>
                     </div>
                     <div class="card-title">
                         <a href="${item.url}" target="_blank">${item.title}</a>
@@ -433,6 +443,37 @@
             const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
             applyTheme(nextTheme);
         });
+
+        // Favorites management
+        function getFavorites() {
+            try {
+                return JSON.parse(localStorage.getItem('marketIntelFavorites') || '[]');
+            } catch { return []; }
+        }
+
+        function saveFavorites(favs) {
+            localStorage.setItem('marketIntelFavorites', JSON.stringify(favs));
+        }
+
+        function toggleFavorite(id) {
+            const favs = getFavorites();
+            if (favs.includes(id)) {
+                saveFavorites(favs.filter(f => f !== id));
+            } else {
+                saveFavorites(favs.concat(id));
+            }
+            renderFeed();
+            updateFavoriteButtons();
+        }
+
+        function updateFavoriteButtons() {
+            const favs = getFavorites();
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                const id = btn.dataset.id;
+                btn.textContent = favs.includes(id) ? '★' : '☆';
+                btn.style.color = favs.includes(id) ? '#fbbf24' : 'var(--text-dim)';
+            });
+        }
 
         // Apply saved theme (default dark)
         applyTheme(getThemePreference());
