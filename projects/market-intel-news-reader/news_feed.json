@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated": "2026-02-28T14:30:47.716936",
+  "generated": "2026-02-28T14:52:06.973356",
   "categories": [
     "geopolitical",
     "financial",
@@ -10,6 +10,427 @@
     "other"
   ],
   "items": [
+    {
+      "id": "reddit_2026-02-28T144010830149",
+      "title": "Does anyone here sell OTM naked calls of expensive stock taking the chance of being assigned?",
+      "summary": "12 upvotes | 64 comments",
+      "url": "https://reddit.com/r/options/comments/1repkzb/does_anyone_here_sell_otm_naked_calls_of/",
+      "source": "Reddit: r/options",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:10.830149",
+      "timestamp": "2026-02-28T14:40:10.830149",
+      "type": "reddit",
+      "score": 12
+    },
+    {
+      "id": "reddit_2026-02-28T144010830145",
+      "title": "Bought nvda calls",
+      "summary": "0 upvotes | 24 comments",
+      "url": "https://reddit.com/r/options/comments/1rfpmpo/bought_nvda_calls/",
+      "source": "Reddit: r/options",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:10.830145",
+      "timestamp": "2026-02-28T14:40:10.830145",
+      "type": "reddit",
+      "score": 0
+    },
+    {
+      "id": "reddit_2026-02-28T144010830141",
+      "title": "NVDA $NVDA Earnings Trade Vol Crush Setup",
+      "summary": "22 upvotes | 22 comments",
+      "url": "https://reddit.com/r/options/comments/1reoql1/nvda_nvda_earnings_trade_vol_crush_setup/",
+      "source": "Reddit: r/options",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T14:40:10.830141",
+      "timestamp": "2026-02-28T14:40:10.830141",
+      "type": "reddit",
+      "score": 22
+    },
+    {
+      "id": "reddit_2026-02-28T144010830127",
+      "title": "Does H&amp;R Block software import/handle Section 1256 Contract equities",
+      "summary": "5 upvotes | 5 comments",
+      "url": "https://reddit.com/r/options/comments/1rf9vbn/does_hr_block_software_importhandle_section_1256/",
+      "source": "Reddit: r/options",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T14:40:10.830127",
+      "timestamp": "2026-02-28T14:40:10.830127",
+      "type": "reddit",
+      "score": 5
+    },
+    {
+      "id": "reddit_2026-02-28T144010830122",
+      "title": "Etrade sold puts early assignment\u2026",
+      "summary": "0 upvotes | 13 comments",
+      "url": "https://reddit.com/r/options/comments/1rg14af/etrade_sold_puts_early_assignment/",
+      "source": "Reddit: r/options",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:10.830122",
+      "timestamp": "2026-02-28T14:40:10.830122",
+      "type": "reddit",
+      "score": 0
+    },
+    {
+      "id": "reddit_2026-02-28T144010830113",
+      "title": "11470 $3 calls expiring this Friday bought today on $RR Richtech Robotics",
+      "summary": "56 upvotes | 66 comments",
+      "url": "https://reddit.com/r/options/comments/1rezg7g/11470_3_calls_expiring_this_friday_bought_today/",
+      "source": "Reddit: r/options",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:10.830113",
+      "timestamp": "2026-02-28T14:40:10.830113",
+      "type": "reddit",
+      "score": 56
+    },
+    {
+      "id": "reddit_2026-02-28T144010830105",
+      "title": "SYSTERIX - YOLO risk $250k for $23k gain SPX Put Credit Spread (6650p / 6550p PCS due Mar 6, 2026)",
+      "summary": "2 upvotes | 5 comments",
+      "url": "https://reddit.com/r/options/comments/1rfvk9x/systerix_yolo_risk_250k_for_23k_gain_spx_put/",
+      "source": "Reddit: r/options",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T14:40:10.830105",
+      "timestamp": "2026-02-28T14:40:10.830105",
+      "type": "reddit",
+      "score": 2
+    },
+    {
+      "id": "reddit_2026-02-28T144010830091",
+      "title": "RIOT IV seems strangely low 3 days before earnings compared to HV.",
+      "summary": "9 upvotes | 6 comments",
+      "url": "https://reddit.com/r/options/comments/1rfsmv1/riot_iv_seems_strangely_low_3_days_before/",
+      "source": "Reddit: r/options",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T14:40:10.830091",
+      "timestamp": "2026-02-28T14:40:10.830091",
+      "type": "reddit",
+      "score": 9
+    },
+    {
+      "id": "reddit_2026-02-28T144010830078",
+      "title": "Tail Risk Hedging - Looking for Partners!",
+      "summary": "4 upvotes | 21 comments",
+      "url": "https://reddit.com/r/options/comments/1rg5f6y/tail_risk_hedging_looking_for_partners/",
+      "source": "Reddit: r/options",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:10.830078",
+      "timestamp": "2026-02-28T14:40:10.830078",
+      "type": "reddit",
+      "score": 4
+    },
+    {
+      "id": "reddit_2026-02-28T144010830073",
+      "title": "Best bullish strategy to roll if stock price goes against you and you are ITM",
+      "summary": "2 upvotes | 14 comments",
+      "url": "https://reddit.com/r/options/comments/1rgendf/best_bullish_strategy_to_roll_if_stock_price_goes/",
+      "source": "Reddit: r/options",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T14:40:10.830073",
+      "timestamp": "2026-02-28T14:40:10.830073",
+      "type": "reddit",
+      "score": 2
+    },
+    {
+      "id": "reddit_2026-02-28T144010830039",
+      "title": "Iron Condor SPY Strategy ~40% avg gains",
+      "summary": "72 upvotes | 86 comments",
+      "url": "https://reddit.com/r/options/comments/1rgiezk/iron_condor_spy_strategy_40_avg_gains/",
+      "source": "Reddit: r/options",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T14:40:10.830039",
+      "timestamp": "2026-02-28T14:40:10.830039",
+      "type": "reddit",
+      "score": 72
+    },
+    {
+      "id": "reddit_2026-02-28T144009418390",
+      "title": "The $9M Reverse Split Dumpster Fire - A DD on How to Torch Shareholder Value in 12 Easy Steps",
+      "summary": "0 upvotes | 4 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgekjo/the_9m_reverse_split_dumpster_fire_a_dd_on_how_to/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:09.418390",
+      "timestamp": "2026-02-28T14:40:09.418390",
+      "type": "reddit",
+      "score": 0
+    },
+    {
+      "id": "reddit_2026-02-28T144009418371",
+      "title": "Crazy how bad market is treating FLGT earnings call",
+      "summary": "4 upvotes | 2 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg9hiy/crazy_how_bad_market_is_treating_flgt_earnings/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "macro",
+        "corporate"
+      ],
+      "published": "2026-02-28T14:40:09.418371",
+      "timestamp": "2026-02-28T14:40:09.418371",
+      "type": "reddit",
+      "score": 4
+    },
+    {
+      "id": "reddit_2026-02-28T144009418369",
+      "title": "Has the US Federal reserve really printed 400Billion? Trying to understand the H.4.1. documents on the Fed reserve website",
+      "summary": "95 upvotes | 13 comments",
+      "url": "https://reddit.com/r/investing/comments/1rfnnyb/has_the_us_federal_reserve_really_printed/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T14:40:09.418369",
+      "timestamp": "2026-02-28T14:40:09.418369",
+      "type": "reddit",
+      "score": 95
+    },
+    {
+      "id": "reddit_2026-02-28T144009418364",
+      "title": "Question about State and Federal income tax limits",
+      "summary": "0 upvotes | 10 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgsdee/question_about_state_and_federal_income_tax_limits/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T14:40:09.418364",
+      "timestamp": "2026-02-28T14:40:09.418364",
+      "type": "reddit",
+      "score": 0
+    },
+    {
+      "id": "reddit_2026-02-28T144009418354",
+      "title": "Scott\u2019s (SMG) up 6.8% since last earnings report. Can it continue?",
+      "summary": "2 upvotes | 0 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgi0dd/scotts_smg_up_68_since_last_earnings_report_can/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T14:40:09.418354",
+      "timestamp": "2026-02-28T14:40:09.418354",
+      "type": "reddit",
+      "score": 2
+    },
+    {
+      "id": "reddit_2026-02-28T144009418341",
+      "title": "$GASS should really be talked about more. 52w highs daily and still undervalued by most metrics",
+      "summary": "2 upvotes | 3 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgnpxi/gass_should_really_be_talked_about_more_52w_highs/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:09.418341",
+      "timestamp": "2026-02-28T14:40:09.418341",
+      "type": "reddit",
+      "score": 2
+    },
+    {
+      "id": "reddit_2026-02-28T144009418330",
+      "title": "Big Tech doubles down on AI infrastructure while markets debate the \u201cAI bubble\u201d",
+      "summary": "52 upvotes | 43 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg32hc/big_tech_doubles_down_on_ai_infrastructure_while/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "macro"
+      ],
+      "published": "2026-02-28T14:40:09.418330",
+      "timestamp": "2026-02-28T14:40:09.418330",
+      "type": "reddit",
+      "score": 52
+    },
+    {
+      "id": "reddit_2026-02-28T144009418302",
+      "title": "Netherlands Forced to Rethink 36% Tax on Unrealized Gains after Massive Criticism",
+      "summary": "1664 upvotes | 695 comments",
+      "url": "https://reddit.com/r/investing/comments/1rfjjhv/netherlands_forced_to_rethink_36_tax_on/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:09.418302",
+      "timestamp": "2026-02-28T14:40:09.418302",
+      "type": "reddit",
+      "score": 1664
+    },
+    {
+      "id": "reddit_2026-02-28T144009418277",
+      "title": "Private equity enters its 'Darwinian' era as experts warn some funds face extinction",
+      "summary": "69 upvotes | 32 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg66m5/private_equity_enters_its_darwinian_era_as/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T14:40:09.418277",
+      "timestamp": "2026-02-28T14:40:09.418277",
+      "type": "reddit",
+      "score": 69
+    },
+    {
+      "id": "reddit_2026-02-28T144009418272",
+      "title": "The Warning Signs Flashing From the Tech-Heavy Bloat of the S&amp;P 500",
+      "summary": "110 upvotes | 47 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg5von/the_warning_signs_flashing_from_the_techheavy/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T14:40:09.418272",
+      "timestamp": "2026-02-28T14:40:09.418272",
+      "type": "reddit",
+      "score": 110
+    },
+    {
+      "id": "reddit_2026-02-28T144009418262",
+      "title": "CoreWeave reported today. Beat on revenue. Stock tanked 11%. Why?",
+      "summary": "98 upvotes | 79 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgnnjk/coreweave_reported_today_beat_on_revenue_stock/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T14:40:09.418262",
+      "timestamp": "2026-02-28T14:40:09.418262",
+      "type": "reddit",
+      "score": 98
+    },
+    {
+      "id": "reddit_2026-02-28T144009418225",
+      "title": "Daily General Discussion and Advice Thread - February 27, 2026",
+      "summary": "4 upvotes | 11 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg1ofu/daily_general_discussion_and_advice_thread/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:09.418225",
+      "timestamp": "2026-02-28T14:40:09.418225",
+      "type": "reddit",
+      "score": 4
+    },
+    {
+      "id": "reddit_2026-02-28T144007887874",
+      "title": "Netflix declines to raise offer for Warner Bros",
+      "summary": "7512 upvotes | 671 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rfpgdw/netflix_declines_to_raise_offer_for_warner_bros/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T14:40:07.887874",
+      "timestamp": "2026-02-28T14:40:07.887874",
+      "type": "reddit",
+      "score": 7512
+    },
+    {
+      "id": "reddit_2026-02-28T144007887860",
+      "title": "Netflix Drops Warner Bros. Bid",
+      "summary": "5760 upvotes | 307 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rfutxd/netflix_drops_warner_bros_bid/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T14:40:07.887860",
+      "timestamp": "2026-02-28T14:40:07.887860",
+      "type": "reddit",
+      "score": 5760
+    },
+    {
+      "id": "reddit_2026-02-28T144007887849",
+      "title": "My SLV gains and loss posts were so regarded they made the news",
+      "summary": "350 upvotes | 39 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgdphz/my_slv_gains_and_loss_posts_were_so_regarded_they/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:07.887849",
+      "timestamp": "2026-02-28T14:40:07.887849",
+      "type": "reddit",
+      "score": 350
+    },
+    {
+      "id": "reddit_2026-02-28T144007887830",
+      "title": "SpaceX Weighs Confidential IPO Filing as Soon as March",
+      "summary": "314 upvotes | 102 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgi61d/spacex_weighs_confidential_ipo_filing_as_soon_as/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T14:40:07.887830",
+      "timestamp": "2026-02-28T14:40:07.887830",
+      "type": "reddit",
+      "score": 314
+    },
+    {
+      "id": "reddit_2026-02-28T144007887827",
+      "title": "OpenAI Finalizes $110 Billion Funding at $730 Billion Valuation",
+      "summary": "1487 upvotes | 297 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rg8k7a/openai_finalizes_110_billion_funding_at_730/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T14:40:07.887827",
+      "timestamp": "2026-02-28T14:40:07.887827",
+      "type": "reddit",
+      "score": 1487
+    },
+    {
+      "id": "reddit_2026-02-28T144007887776",
+      "title": "Sam Altman: Tonight, we reached an agreement with the Department of War to deploy our models in their classified network.",
+      "summary": "6116 upvotes | 1087 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgri2d/sam_altman_tonight_we_reached_an_agreement_with/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T14:40:07.887776",
+      "timestamp": "2026-02-28T14:40:07.887776",
+      "type": "reddit",
+      "score": 6116
+    },
+    {
+      "id": "reddit_2026-02-28T144007887739",
+      "title": "Weekly Earnings Threads 3/2 - 3/6",
+      "summary": "70 upvotes | 162 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgbpm8/weekly_earnings_threads_32_36/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T14:40:07.887739",
+      "timestamp": "2026-02-28T14:40:07.887739",
+      "type": "reddit",
+      "score": 70
+    },
     {
       "id": "rss_2026-02-28T141515871492",
       "title": "My brother is paranoid, alone and has forgotten that he sold his house. How can we help?",
@@ -270,403 +691,11 @@
       "published": "Sat, 28 Feb 2026 04:58:00 GMT",
       "timestamp": "2026-02-28T14:15:12.915657",
       "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512571497",
-      "title": "RT by @ZeroHedge: Summary of the AI wars:  pic.",
-      "summary": "",
-      "url": "https://x.com/AutismCapital/status/2027586540189471155",
-      "source": "RSS: ZeroHedge",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 03:27:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.571497",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512571427",
-      "title": "\"I saw nothing and did nothing wrong... no matter how many photos they show of me\" he really said that.",
-      "summary": "",
-      "url": "https://x.com/zerohedge/status/2027593817705099270",
-      "source": "RSS: ZeroHedge",
-      "category": [
-        "other"
-      ],
-      "published": "Sat, 28 Feb 2026 03:56:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.571427",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512571329",
-      "title": "China's Biological Weapons Labs In America",
-      "summary": "",
-      "url": "https://x.com/zerohedge/status/2027600931253002469",
-      "source": "RSS: ZeroHedge",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 04:25:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.571329",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512571264",
-      "title": "Pentagon Picks OpenAI To Replace Anthropic",
-      "summary": "",
-      "url": "https://x.com/zerohedge/status/2027607470206521687",
-      "source": "RSS: ZeroHedge",
-      "category": [
-        "other"
-      ],
-      "published": "Sat, 28 Feb 2026 04:51:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.571264",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512571204",
-      "title": "All Hell Breaks Loose In Private Credit",
-      "summary": "",
-      "url": "https://x.com/zerohedge/status/2027609231302574222",
-      "source": "RSS: ZeroHedge",
-      "category": [
-        "financial"
-      ],
-      "published": "Sat, 28 Feb 2026 04:58:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.571204",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235880",
-      "title": ".@poetiq_ai is a new startup that recently achieved a major jump on the ARC-AGI benchmark by layering a recursive self-improvement system on top of ex",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027398329294782483",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 15:00:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235880",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235806",
-      "title": "Tune in:",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027398845211218403",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 15:02:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235806",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235779",
-      "title": "End Close builds automatic reconciliation for payments companies, replacing manual ops work with AI agents that automatically investigate and resolve ",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027413415250296894",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 16:00:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235779",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235698",
-      "title": ".@ArzuleAI builds AI agents that help B2B SaaS companies identify which partnerships will drive revenue, prioritize them, and track ROI so partnership",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027428521157792067",
-      "source": "RSS: YCombinator",
-      "category": [
-        "corporate"
-      ],
-      "published": "Fri, 27 Feb 2026 17:00:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235698",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235629",
-      "title": "Verdex is replacing physical inspections in insurance with real-time satellite imagery audits, allowing insurers to verify and settle claims without e",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027458721518096740",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 19:00:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235629",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235564",
-      "title": "Lexius turns existing security cameras into AI security guards that detect theft, prevent liability, and turns months of video into searchable answers",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027473815429583034",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 20:00:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235564",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235504",
-      "title": "RT by @ycombinator: Crow (  YC W26) lets users control your app through chat. Connect Crow's AI agent to your product, and Crow takes action for your ",
-      "summary": "",
-      "url": "https://x.com/jaixbhatia/status/2027475552685437004",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 20:06:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235504",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235439",
-      "title": "Autostep uncovers repetitive tasks ready for AI. Then builds or finds the agents to solve them. Your team repeats the same work hundreds of times a we",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027496462301757784",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 21:30:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235439",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235371",
-      "title": "RT by @ycombinator: Super excited that YC will be hosting a Bio + AI hackathon in March, organized by two awesome companies @BioRender and @tamarindbi",
-      "summary": "",
-      "url": "https://x.com/agupta/status/2027543518244118544",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Sat, 28 Feb 2026 00:36:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235371",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141512235262",
-      "title": "RT by @ycombinator: We just went from horse-and-carriage to car. The old manuals still have truth in them, but the whole map of effort, speed, and lev",
-      "summary": "",
-      "url": "https://x.com/garrytan/status/2027555272043184344",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Sat, 28 Feb 2026 01:23:00 GMT",
-      "timestamp": "2026-02-28T14:15:12.235262",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511905144",
-      "title": "\ud83d\udd34 Trump: Federal agencies cease use of Anthropic\u2019s technology. Directing every Federal agency to cease Anthropic use",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027486335284453846",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "financial"
-      ],
-      "published": "Fri, 27 Feb 2026 20:49:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.905144",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511904960",
-      "title": "US State Dept: Iranian regime must stop taking hostages and release all Americans unjustly detained in Iran, steps that could end this designation and",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027491948064333929",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Fri, 27 Feb 2026 21:12:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.904960",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511904915",
-      "title": "US bank deposits rose to $18.778 trln from $18.764 trln in prior week",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027493441517576597",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "financial"
-      ],
-      "published": "Fri, 27 Feb 2026 21:18:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.904915",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511904825",
-      "title": "Trump: 360k barrels of Venezuelan oil sitting in tanker.",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027503192833945950",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 21:56:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.904825",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511904779",
-      "title": "Trump: Somehow, I like oil over AI plants to make money.",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027504314357268899",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 22:01:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.904779",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511580127",
-      "title": "OpenAI said it has reached an agreement with the US Department of War to deploy its models in their classified network https://www.bloomberg.com/news/",
-      "summary": "",
-      "url": "https://x.com/business/status/2027584773351264658",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 03:20:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.580127",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511580052",
-      "title": "China\u2019s solar power generation overtook wind for the first time last year as a boom in cheap panels continues to reshape the country\u2019s grid and climat",
-      "summary": "",
-      "url": "https://x.com/business/status/2027596860009877619",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 04:08:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.580052",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511579955",
-      "title": "Thai business conglomerate Charoen Pokphand Group plans to sell a 10% stake in its telecommunications affiliate True Corp., with most of the shares go",
-      "summary": "",
-      "url": "https://x.com/business/status/2027597440715469010",
-      "source": "RSS: Business",
-      "category": [
-        "financial"
-      ],
-      "published": "Sat, 28 Feb 2026 04:11:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.579955",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511579881",
-      "title": "China\u2019s capital markets rebounded last year, fueled by a surge in equity refinancing and bond issuance, according to the National Bureau of Statistics",
-      "summary": "",
-      "url": "https://x.com/business/status/2027598246873358769",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical",
-        "macro"
-      ],
-      "published": "Sat, 28 Feb 2026 04:14:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.579881",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511579807",
-      "title": "OpenAI has agreed to deploy its own artificial intelligence models within the Pentagon\u2019s classified network, after President Trump wrote ordered feder",
-      "summary": "",
-      "url": "https://x.com/business/status/2027603742103597378",
-      "source": "RSS: Business",
-      "category": [
-        "financial"
-      ],
-      "published": "Sat, 28 Feb 2026 04:36:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.579807",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511579735",
-      "title": "OpenAI has agreed to deploy its own artificial intelligence models within the Pentagon\u2019s classified network, after President Trump wrote ordered feder",
-      "summary": "",
-      "url": "https://x.com/business/status/2027605603699273962",
-      "source": "RSS: Business",
-      "category": [
-        "financial"
-      ],
-      "published": "Sat, 28 Feb 2026 04:43:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.579735",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511579665",
-      "title": "Heavy asset, low obsolescence is the coin of the realm in markets slowly being consumed by AI. https://www.bloomberg.com/news/newsletters/2026-02-28/f",
-      "summary": "",
-      "url": "https://x.com/business/status/2027610287566651404",
-      "source": "RSS: Business",
-      "category": [
-        "macro"
-      ],
-      "published": "Sat, 28 Feb 2026 05:02:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.579665",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511579596",
-      "title": "Pakistan and Afghanistan edged closer to all-out war this week, escalating tensions in a region where the world\u2019s economic superpowers are vying for i",
-      "summary": "",
-      "url": "https://x.com/business/status/2027611357730713916",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 05:06:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.579596",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511579526",
-      "title": "Malaysia\u2019s largest pension fund declared a 6.15% dividend for both its conventional and Shariah savings accounts for 2025, a year where unpredictable ",
-      "summary": "",
-      "url": "https://x.com/business/status/2027618344854020208",
-      "source": "RSS: Business",
-      "category": [
-        "macro",
-        "corporate"
-      ],
-      "published": "Sat, 28 Feb 2026 05:34:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.579526",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T141511579424",
-      "title": "Top lithium producer SQM said it sees world demand for the battery metal growing about 25% this year, after reporting record quarterly sales volume as",
-      "summary": "",
-      "url": "https://x.com/business/status/2027618888217731343",
-      "source": "RSS: Business",
-      "category": [
-        "other"
-      ],
-      "published": "Sat, 28 Feb 2026 05:36:00 GMT",
-      "timestamp": "2026-02-28T14:15:11.579424",
-      "type": "rss"
     }
   ],
   "stats": {
     "total": 50,
-    "rss": 50,
-    "reddit": 0
+    "rss": 20,
+    "reddit": 30
   }
 }
