@@ -250,7 +250,7 @@
             <h1>📈 Market Intel News</h1>
             <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀️ Light</button>
         </div>
-        <button class="filter-btn" id="favoritesToggle" style="margin: 8px 0;">⭐ Show Favorites</button>
+        <button type="button" id="favoritesToggle" style="margin: 8px 0; background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 6px 12px; border-radius: 16px; font-size: 12px; cursor: pointer;">⭐ Show Favorites</button>
         
         <div class="filters" style="margin-bottom: 8px;">
             <button class="source-btn active" data-source="all">All</button>
@@ -458,13 +458,15 @@
             if (currentFilter === 'favorites') {
                 currentFilter = 'all';
                 favoritesToggle.textContent = '⭐ Show Favorites';
-                favoritesToggle.style.background = '';
-                favoritesToggle.style.color = '';
+                favoritesToggle.style.background = 'transparent';
+                favoritesToggle.style.border = '1px solid var(--border)';
+                favoritesToggle.style.color = 'var(--text-dim)';
                 document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
             } else {
                 currentFilter = 'favorites';
                 favoritesToggle.textContent = '★ Viewing Favorites';
                 favoritesToggle.style.background = 'var(--accent)';
+                favoritesToggle.style.border = '1px solid var(--accent)';
                 favoritesToggle.style.color = 'white';
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             }
