@@ -1,5 +1,7 @@
 # PRD: Market Intel News Reader App
 
+## Status: ✅ COMPLETE (Feb 28, 2026)
+
 ## 1. Executive Summary
 
 **Problem:** Philippe wants a personalized news reader on iPhone that filters news based on Market Intel patterns (geopolitical, financial, macro, etc.) instead of generic news.

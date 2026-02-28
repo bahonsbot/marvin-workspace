@@ -1,5 +1,7 @@
 # PRD: Event-Driven Market Intelligence Tool
 
+## Status: 🟡 IN PROGRESS - Signal Generation Complete (Feb 28, 2026)
+
 ## 1. Executive Summary
 
 ### Problem
