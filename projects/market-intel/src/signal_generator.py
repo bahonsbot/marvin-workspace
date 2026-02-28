@@ -191,6 +191,17 @@ class SignalGenerator:
                 'keywords': ['dotcom bubble', 'pets.com', 'nasdaq crash', 'tech bubble', 'ipo bubble', 'webvan'],
                 'exclude': [],
                 'weight': 2
+            },
+            'p024': {  # Retail Options Sentiment - NEW
+                'keywords': [
+                    'bought calls', 'bought puts', 'call bought', 'put bought', 'calls bought',
+                    'yolo', 'yolo trade', 'rolling options', 'options strategy', 'iron condor',
+                    'credit spread', 'debit spread', 'call option', 'put option', 'stock options',
+                    'expiring friday', 'itmo', 'otm', 'itm', 'delta', 'gamma', 'vega',
+                    'option chain', 'options volume', 'unusual options', 'unusual activity', 'calls'
+                ],
+                'exclude': [],
+                'weight': 2
             }
         }
         
@@ -266,7 +277,7 @@ class SignalGenerator:
                 })
         
         signals.sort(key=lambda x: x['signal_score'], reverse=True)
-        return signals[:25]
+        return signals[:50]  # Increased from 25 to capture more categories
     
     def confidence_score(self, confidence: str) -> int:
         mapping = {'HIGH': 100, 'MEDIUM_HIGH': 75, 'MEDIUM': 50, 'LOW': 25}

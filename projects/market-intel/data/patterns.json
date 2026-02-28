@@ -643,6 +643,33 @@
         "cash_burn",
         "irrational_exuberance"
       ]
+    },
+    {
+      "id": "p024",
+      "name": "Retail Options Sentiment",
+      "category": "sentiment_social",
+      "date": "2026-02-28",
+      "description": "Retail options activity and trading patterns indicate market sentiment",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 0,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "options_flow",
+        "direction": "sentiment_indicator",
+        "magnitude": "varies"
+      },
+      "early_signals": [
+        "reddit_options_discussion",
+        "unusual_options_activity",
+        "retail_trading_volume"
+      ],
+      "confidence": "MEDIUM",
+      "key_lessons": [
+        "options_flow_predicts_direction",
+        "retail_sentiment_contrarian"
+      ]
     }
   ],
   "metadata": {
