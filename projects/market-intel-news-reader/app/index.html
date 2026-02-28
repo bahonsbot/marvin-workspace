@@ -23,6 +23,16 @@
             --accent-hover: #818cf8;
             --border: #2a2a4a;
         }
+
+        body.light-theme {
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #111827;
+            --text-dim: #6b7280;
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --border: #d1d5db;
+        }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -41,10 +51,31 @@
             border-bottom: 1px solid var(--border);
         }
         
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
         h1 {
             font-size: 20px;
             font-weight: 600;
-            margin-bottom: 12px;
+        }
+
+        .theme-toggle {
+            background: var(--border);
+            border: none;
+            color: var(--text);
+            padding: 8px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
         }
         
         .filters {
@@ -120,6 +151,17 @@
         
         .source {
             font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        .source-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .timestamp {
+            font-size: 11px;
             color: var(--text-dim);
         }
         
@@ -203,7 +245,10 @@
 </head>
 <body>
     <header>
-        <h1>📈 Market Intel News</h1>
+        <div class="header-top">
+            <h1>📈 Market Intel News</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀️ Light</button>
+        </div>
         <div class="filters" style="margin-bottom: 8px;">
             <button class="source-btn active" data-source="all">All</button>
             <button class="source-btn" data-source="rss">📰 RSS</button>
@@ -232,6 +277,44 @@
         let newsData = [];
         let currentFilter = 'all';
         let currentSource = 'all';
+
+        function getThemePreference() {
+            return localStorage.getItem('theme') || 'dark';
+        }
+
+        function applyTheme(theme) {
+            const isLight = theme === 'light';
+            document.body.classList.toggle('light-theme', isLight);
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.textContent = isLight ? '🌙 Dark' : '☀️ Light';
+            localStorage.setItem('theme', theme);
+        }
+
+        function formatRelativeTime(inputTime) {
+            if (!inputTime) return 'Unknown time';
+
+            const date = new Date(inputTime);
+            if (Number.isNaN(date.getTime())) return 'Unknown time';
+
+            const now = new Date();
+            const diffMs = now - date;
+            const diffSeconds = Math.floor(diffMs / 1000);
+            const diffMinutes = Math.floor(diffSeconds / 60);
+            const diffHours = Math.floor(diffMinutes / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            if (diffSeconds < 60) return 'Just now';
+            if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes === 1 ? '' : 's'} ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+
+            return date.toLocaleDateString();
+        }
+
+        function getSourceIcon(type) {
+            return type === 'reddit' ? '👽' : '📰';
+        }
         
         async function loadFeed() {
             const feed = document.getElementById('feed');
@@ -290,11 +373,18 @@
                 return;
             }
             
-            feed.innerHTML = filtered.map(item => `
+            feed.innerHTML = filtered.map(item => {
+                const relativeTime = formatRelativeTime(item.timestamp || item.published);
+                const sourceIcon = getSourceIcon(item.type);
+
+                return `
                 <div class="news-card">
                     <div class="card-header">
-                        <span class="source">${item.source}</span>
-                        <span class="source-badge">${item.type}</span>
+                        <div class="source-meta">
+                            <span class="source">${sourceIcon} ${item.source}</span>
+                            <span class="timestamp">${relativeTime}</span>
+                        </div>
+                        <span class="source-badge">${sourceIcon} ${item.type}</span>
                     </div>
                     <div class="card-title">
                         <a href="${item.url}" target="_blank">${item.title}</a>
@@ -304,7 +394,8 @@
                         ${item.category.map(cat => `<span class="category-tag ${cat}">${cat}</span>`).join('')}
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
         
         // Source buttons (RSS / Reddit)
@@ -327,6 +418,15 @@
             });
         });
         
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+            applyTheme(nextTheme);
+        });
+
+        // Apply saved theme (default dark)
+        applyTheme(getThemePreference());
+
         // Load on start
         loadFeed();
         
