@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "generated": "2026-02-28T19:15:59.602128Z",
+  "generated": "2026-02-28T20:15:39.209921Z",
   "categories": [
     "geopolitical",
     "financial",
@@ -11,47 +11,8 @@
   ],
   "items": [
     {
-      "id": "rss_2026-03-01T031525125852",
-      "title": "Trump Orders US Government to Drop Anthropic After Pentagon Feud - Bloomberg",
-      "summary": "",
-      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNTHFsZlNUcWlTWTladmpsQTRlb0FxekVGSHUyS0prd3hZb3FtblFmZm14LVFTOG5mU0pWV2NlY0ZpVTE2RklwTy1xYmpnTXdWNUNwVTJ1aW4tdnhYWG84WElPa0FNQzV6bWYtV0NwZnBmLXJXd1BnZDRIVlJ1S0d0bHNkeWl0RlVVQXV3SXZiS0UzRGhDalRXTGR5Y21mMklSWUZSbk1RRDBQT3pmSXpoX3EwREZlZw?oc=5",
-      "source": "RSS: Bloomberg_Tech",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 02:17:00 GMT",
-      "timestamp": "2026-03-01T03:15:25.125852",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-03-01T031525125814",
-      "title": "Google Wins Conditional Nod From Seoul Over Map Data Request - Bloomberg",
-      "summary": "",
-      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPbjdUdWU1U0d2SV9QSWVHX0lMa25UNzFSOVpkQ1ZPc1VDaGNNekxLc2dNbmNHbUNUQk9NVGpib3U2b2RaUnpUTUtTeWgyS2o1NmJsVnFDQ0ZjS2hObjExTTgxNXphMEZ1eUVERkxIZ2hFRW1JcnYzX2s1azlGVkF3Nnp5ZldZM1FSbXdNNElDQ1VheTdtYW4zWlRYaDFuOEswcmlvMjVIbG5aVVRWd1BHWA?oc=5",
-      "source": "RSS: Bloomberg_Tech",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 07:12:00 GMT",
-      "timestamp": "2026-03-01T03:15:25.125814",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-03-01T031525125777",
-      "title": "Fintech Plaid Nabs $8 Billion Valuation in Latest Funding Round - Bloomberg",
-      "summary": "",
-      "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPdlhhU2Z6SWI3ZGxIdjI1alNseWFfVEU1WTNSM0VYTHVyMjlsYWwyRVVkMlJvcFZkWHk1UUNkeHptTzk0QTk0SnRhYnhJeWs3aFdDTTR5Y0l5SWlsbTROd0c5MTdYUWVJT1JRTG1hdkxfZTlvaHM4LXItdm5hN0gyMi00UU03anBZQjFyNzdSY3dJWWhKTkVTSXRRMWt4bnZsb0N0U2xrUXZaSVZjMHMxUUptUQ?oc=5",
-      "source": "RSS: Bloomberg_Tech",
-      "category": [
-        "other"
-      ],
-      "published": "Thu, 26 Feb 2026 14:16:10 GMT",
-      "timestamp": "2026-03-01T03:15:25.125777",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-03-01T031525125738",
-      "title": "Jack Dorsey\u2019s Block Slashes Nearly Half Its Staff in AI Bet - Bloomberg",
+      "id": "rss_2026-03-01T041518964545",
+      "title": "Jack Dorsey\u2019s Block Slashes Nearly Half Its Staff in AI Bet - Bloomberg.com",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNaEY4MG42NmZmWXE0dFRybzdFcWNKMHFuYW02dThRQ04yUVA4ekFoLU13OU9TMjNIWlpjZmh3eVh3NmtyQkpEb3VKTDM2OF8tbGp2NUZFR1JQdXh0VS1CUG5lLW5WN0lxSWxVWjNRT0k0SmhobHV1czhsajl0TnlNMzZDb0lQWWswY1o5SThyWVc1VmNxOWZ1WmRkTUdxLUJtQmg3SHdfMUk4aW1OQ0VLMHJYVQ?oc=5",
       "source": "RSS: Bloomberg_Tech",
@@ -59,12 +20,12 @@
         "other"
       ],
       "published": "Thu, 26 Feb 2026 21:06:49 GMT",
-      "timestamp": "2026-03-01T03:15:25.125738",
+      "timestamp": "2026-03-01T04:15:18.964545",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031525125695",
-      "title": "Dell Jumps After Projecting AI Server Sales of $50 Billion - Bloomberg",
+      "id": "rss_2026-03-01T041518964503",
+      "title": "Dell Jumps After Projecting AI Server Sales of $50 Billion - Bloomberg.com",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNcU1MR1VoYlZ3T1hZUkNORzl4YWtyVHBCci0tTFc5YWlQSjJxQ3ZRMVc3RFJRNkkxbE94VFg1VmJFcnFOaUJMcGFTNFBlTVVEdm1oTThyTVg2NzRxSzg4YUJfa0V3Zk1pTkI0alctTnN0VG01WG1LWndlUkJxUDZGTzAwVFZIMVozajZ2YU9hbDVjbWJRY21VODhuVU04SFRyS29wbllNVlFCTXhmTjdqM2liQzc?oc=5",
       "source": "RSS: Bloomberg_Tech",
@@ -72,12 +33,12 @@
         "other"
       ],
       "published": "Fri, 27 Feb 2026 21:14:33 GMT",
-      "timestamp": "2026-03-01T03:15:25.125695",
+      "timestamp": "2026-03-01T04:15:18.964503",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031525125642",
-      "title": "Claude Code and the Great Productivity Panic of 2026 - Bloomberg",
+      "id": "rss_2026-03-01T041518964451",
+      "title": "Claude Code and the Great Productivity Panic of 2026 - Bloomberg.com",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPSnlCOVRfWjQ3ZVFvVXptMElzOEZCN2tMR1pPRnJKOWQwRHpleVBjenppMzhOSlZMb0xJZVNJSEduYWxBMW92RDktLXhpOUtQalhCUlR1T25mUHhBQ1BlZ2xBb1l3eTFHeUlVeWFmRnRfcUhYMmNFTy0zekpfTDgwZGhoRWFfSDQ3Z1o2Sk5uZHVsSURGTGRnM2t2Wmg5MHB3Y3IzMV9kZE94MUJIZHVYOFBHQWFmLU50dE1ZSTg2S0o1Snc?oc=5",
       "source": "RSS: Bloomberg_Tech",
@@ -85,11 +46,37 @@
         "other"
       ],
       "published": "Thu, 26 Feb 2026 11:00:08 GMT",
-      "timestamp": "2026-03-01T03:15:25.125642",
+      "timestamp": "2026-03-01T04:15:18.964451",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522962243",
+      "id": "rss_2026-03-01T041518964397",
+      "title": "OpenAI Reaches Agreement With Pentagon to Deploy AI Models - Bloomberg.com",
+      "summary": "",
+      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNaGRPUVB2aW9lT1F5X243all5U083WmI4enlKeVBJUkJOdkF2N1U3aEpDUU5CRzZxT0F0VG9yeEhhWXpwQlJpQnRKYUZrYlBVTkJqd1JzTEJsVUVhUlpCSHh3RVUyYjJLX2ZiQmFYLWZDbzcxQ09JRkFoRzU2bEU1TS02UUxGSDZfYXdlRUNnamhxSjRZdkF5bWZia0xYZ1lKQjBucUQ1aHMxazFibUE?oc=5",
+      "source": "RSS: Bloomberg_Tech",
+      "category": [
+        "other"
+      ],
+      "published": "Sat, 28 Feb 2026 03:12:00 GMT",
+      "timestamp": "2026-03-01T04:15:18.964397",
+      "type": "rss"
+    },
+    {
+      "id": "rss_2026-03-01T041514387031",
+      "title": "Warrior Met Coal, Inc. (HCC): A\u00a0Bull\u00a0Case Theory",
+      "summary": "",
+      "url": "https://finance.yahoo.com/news/warrior-met-coal-inc-hcc-195223744.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T19:52:23Z",
+      "timestamp": "2026-03-01T04:15:14.387031",
+      "type": "rss"
+    },
+    {
+      "id": "rss_2026-03-01T041514386970",
       "title": "Trump, Israel Launch 'Massive' Attacks On Iran; How Will Dow Jones Futures React?",
       "summary": "",
       "url": "https://www.investors.com/market-trend/stock-market-today/trump-us-israel-massive-attacks-iran-dow-jones-futures-oil-prices/?src=A00220&yptr=yahoo",
@@ -97,25 +84,12 @@
       "category": [
         "geopolitical"
       ],
-      "published": "2026-02-28T18:58:08Z",
-      "timestamp": "2026-03-01T03:15:22.962243",
+      "published": "2026-02-28T19:57:58Z",
+      "timestamp": "2026-03-01T04:15:14.386970",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522477129",
-      "title": "Trump said tariffs could someday 'substantially replace' income taxes. What policy experts say",
-      "summary": "",
-      "url": "https://www.cnbc.com/2026/02/27/trump-tariffs-income-taxes.html",
-      "source": "RSS: CNBC_Top",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Fri, 27 Feb 2026 13:14:41 GMT",
-      "timestamp": "2026-03-01T03:15:22.477129",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-03-01T031522477105",
+      "id": "rss_2026-03-01T041514040127",
       "title": "WBD employees fear coming wave of job losses as Paramount tops Netflix's bid to acquire company",
       "summary": "",
       "url": "https://www.cnbc.com/2026/02/27/warner-bros-employees-paramount.html",
@@ -124,11 +98,24 @@
         "other"
       ],
       "published": "Fri, 27 Feb 2026 22:02:49 GMT",
-      "timestamp": "2026-03-01T03:15:22.477105",
+      "timestamp": "2026-03-01T04:15:14.040127",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522477084",
+      "id": "rss_2026-03-01T041514040080",
+      "title": "Trump said tariffs could someday 'substantially replace' income taxes. What policy experts say",
+      "summary": "",
+      "url": "https://www.cnbc.com/2026/02/27/trump-tariffs-income-taxes.html",
+      "source": "RSS: CNBC_Top",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Fri, 27 Feb 2026 13:14:41 GMT",
+      "timestamp": "2026-03-01T04:15:14.040080",
+      "type": "rss"
+    },
+    {
+      "id": "rss_2026-03-01T041514040050",
       "title": "OpenAI strikes deal with Pentagon, hours after rival Anthropic was blacklisted by Trump",
       "summary": "",
       "url": "https://www.cnbc.com/2026/02/27/openai-strikes-deal-with-pentagon-hours-after-rival-anthropic-was-blacklisted-by-trump.html",
@@ -137,11 +124,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 04:25:34 GMT",
-      "timestamp": "2026-03-01T03:15:22.477084",
+      "timestamp": "2026-03-01T04:15:14.040050",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522477064",
+      "id": "rss_2026-03-01T041514040023",
       "title": "Xiaomi launches flagship smartphone as memory price surge threatens sales",
       "summary": "",
       "url": "https://www.cnbc.com/2026/02/28/xiaomi-17-and-17-ultra-launch-price-specs.html",
@@ -150,11 +137,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 14:32:04 GMT",
-      "timestamp": "2026-03-01T03:15:22.477064",
+      "timestamp": "2026-03-01T04:15:14.040023",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522477043",
+      "id": "rss_2026-03-01T041514039998",
       "title": "Anthropic's Claude hits No. 2 on Apple's top free apps list after Pentagon rejection",
       "summary": "",
       "url": "https://www.cnbc.com/2026/02/28/anthropics-claude-apple-apps.html",
@@ -163,11 +150,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 18:28:44 GMT",
-      "timestamp": "2026-03-01T03:15:22.477043",
+      "timestamp": "2026-03-01T04:15:14.039998",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522477022",
+      "id": "rss_2026-03-01T041514039971",
       "title": "Berkshire CEO Greg Abel vows to keep Buffett's culture of disciplined investing in first annual letter",
       "summary": "",
       "url": "https://www.cnbc.com/2026/02/28/berkshire-ceo-abel-vows-to-keep-buffetts-culture-of-disciplined-investing-in-first-annual-letter.html",
@@ -176,11 +163,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 14:44:01 GMT",
-      "timestamp": "2026-03-01T03:15:22.477022",
+      "timestamp": "2026-03-01T04:15:14.039971",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522477000",
+      "id": "rss_2026-03-01T041514039943",
       "title": "'Bigger ramifications than Venezuela': Markets brace for impact after U.S. strikes Iran\u00a0",
       "summary": "",
       "url": "https://www.cnbc.com/2026/02/28/markets-brace-for-impact-following-us-military-strikes-against-iran.html",
@@ -190,11 +177,11 @@
         "macro"
       ],
       "published": "Sat, 28 Feb 2026 14:47:07 GMT",
-      "timestamp": "2026-03-01T03:15:22.477000",
+      "timestamp": "2026-03-01T04:15:14.039943",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522476956",
+      "id": "rss_2026-03-01T041514039905",
       "title": "Berkshire Hathaway operating earnings fell nearly 30% in Warren Buffett's final quarter as CEO",
       "summary": "",
       "url": "https://www.cnbc.com/2026/02/28/berkshire-hathaway-brka-q4-2025-earnings.html",
@@ -204,24 +191,25 @@
         "corporate"
       ],
       "published": "Sat, 28 Feb 2026 15:04:18 GMT",
-      "timestamp": "2026-03-01T03:15:22.476956",
+      "timestamp": "2026-03-01T04:15:14.039905",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522163250",
-      "title": "My grandpa retired happily at 70 with $750K after working as a missionary. I know where most Americans go wrong.",
+      "id": "rss_2026-03-01T041514039860",
+      "title": "How the attack on Iran could impact the global oil market and economy",
       "summary": "",
-      "url": "https://www.marketwatch.com/story/my-grandpa-retired-happy-at-70-with-750k-and-hes-doing-just-fine-i-know-where-most-americans-go-wrong-c5774943?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
+      "url": "https://www.cnbc.com/2026/02/28/iran-us-attack-oil-market-economy.html",
+      "source": "RSS: CNBC_Top",
       "category": [
-        "other"
+        "geopolitical",
+        "macro"
       ],
-      "published": "Sat, 28 Feb 2026 16:06:00 GMT",
-      "timestamp": "2026-03-01T03:15:22.163250",
+      "published": "Sat, 28 Feb 2026 19:53:52 GMT",
+      "timestamp": "2026-03-01T04:15:14.039860",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522163188",
+      "id": "rss_2026-03-01T041513686844",
       "title": "Is it OK to wear pajamas on your next flight? A viral post sparks debate.",
       "summary": "",
       "url": "https://www.marketwatch.com/story/is-it-ok-to-wear-pajamas-on-your-next-flight-a-viral-post-sparks-debate-29bad4de?mod=mw_rss_topstories",
@@ -230,11 +218,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 16:33:00 GMT",
-      "timestamp": "2026-03-01T03:15:22.163188",
+      "timestamp": "2026-03-01T04:15:13.686844",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522163169",
+      "id": "rss_2026-03-01T041513686819",
       "title": "Mortgage rates fall below 6% for the first time since 2022, giving buyers a glimpse of affordability",
       "summary": "",
       "url": "https://www.marketwatch.com/story/mortgage-rates-fall-below-6-giving-buyers-a-glimpse-of-affordability-67829c50?mod=mw_rss_topstories",
@@ -243,11 +231,11 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 17:53:00 GMT",
-      "timestamp": "2026-03-01T03:15:22.163169",
+      "timestamp": "2026-03-01T04:15:13.686819",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522163142",
+      "id": "rss_2026-03-01T041513686783",
       "title": "U.S. strikes on Iran will likely boost defense stocks. Here\u2019s what will keep the cash flowing even after the conflict ends.",
       "summary": "",
       "url": "https://www.marketwatch.com/story/iran-strikes-will-likely-boost-defense-stocks-but-heres-what-will-keep-the-cash-flowing-long-after-the-conflict-ends-2fa929cf?mod=mw_rss_topstories",
@@ -256,11 +244,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 18:12:00 GMT",
-      "timestamp": "2026-03-01T03:15:22.163142",
+      "timestamp": "2026-03-01T04:15:13.686783",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522163116",
+      "id": "rss_2026-03-01T041513686741",
       "title": "Trump calls for regime change after U.S.-Israel attack on Iran. Markets should brace for more than June\u2019s brief military campaign.",
       "summary": "",
       "url": "https://www.marketwatch.com/story/trump-says-massive-strike-against-iran-underway-bitcoin-plunge-offers-a-glimpse-of-how-markets-could-react-25d9ed1c?mod=mw_rss_topstories",
@@ -271,11 +259,11 @@
         "sentiment"
       ],
       "published": "Sat, 28 Feb 2026 18:42:00 GMT",
-      "timestamp": "2026-03-01T03:15:22.163116",
+      "timestamp": "2026-03-01T04:15:13.686741",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522163085",
+      "id": "rss_2026-03-01T041513686703",
       "title": "How boomers became the richest generation \u2014 and why Gen X, Gen Z and millennials may never catch up",
       "summary": "",
       "url": "https://www.marketwatch.com/story/how-boomers-became-the-richest-generation-and-why-gen-x-gen-z-and-millennials-may-never-catch-up-b3b45bf4?mod=mw_rss_topstories",
@@ -284,11 +272,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 18:54:00 GMT",
-      "timestamp": "2026-03-01T03:15:22.163085",
+      "timestamp": "2026-03-01T04:15:13.686703",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031522163042",
+      "id": "rss_2026-03-01T041513686672",
       "title": "Why more CEOs are taking a page from Elon Musk and chatting directly with customers",
       "summary": "",
       "url": "https://www.marketwatch.com/story/why-more-ceos-are-chatting-directly-with-customers-e9c34f1d?mod=mw_rss_topstories",
@@ -297,24 +285,37 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 19:08:00 GMT",
-      "timestamp": "2026-03-01T03:15:22.163042",
+      "timestamp": "2026-03-01T04:15:13.686672",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225966",
-      "title": "Greg Abel tells Berkshire investors its cash pile is not a retreat from dealmaking",
+      "id": "rss_2026-03-01T041513686607",
+      "title": "Iran conflict raises talk of a return to $100-a-barrel oil",
       "summary": "",
-      "url": "https://www.ft.com/content/3fa7f344-7aa3-43c5-b1ba-56de4459ca1e",
-      "source": "RSS: Financial_Times",
+      "url": "https://www.marketwatch.com/story/iran-conflict-raises-talk-of-a-return-to-100-a-barrel-oil-63bbc1b3?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
       "category": [
-        "other"
+        "geopolitical"
       ],
-      "published": "Sat, 28 Feb 2026 18:14:54 GMT",
-      "timestamp": "2026-03-01T03:15:19.225966",
+      "published": "Sat, 28 Feb 2026 19:39:00 GMT",
+      "timestamp": "2026-03-01T04:15:13.686607",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225923",
+      "id": "rss_2026-03-01T041513686553",
+      "title": "Middle Eastern airports are crossroads of the world. Here\u2019s how the U.S.-Israel attack on Iran will sow chaos on air travel.",
+      "summary": "",
+      "url": "https://www.marketwatch.com/story/middle-eastern-airports-are-crossroads-of-the-world-heres-how-the-u-s-israel-attack-on-iran-will-sow-chaos-on-air-travel-3f34465d?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Sat, 28 Feb 2026 19:50:00 GMT",
+      "timestamp": "2026-03-01T04:15:13.686553",
+      "type": "rss"
+    },
+    {
+      "id": "rss_2026-03-01T041512462953",
       "title": "How will strikes on Iran affect global energy flows?",
       "summary": "",
       "url": "https://www.ft.com/content/baa400cc-359c-4205-b93d-573b5b7c440d",
@@ -323,11 +324,24 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 12:38:44 GMT",
-      "timestamp": "2026-03-01T03:15:19.225923",
+      "timestamp": "2026-03-01T04:15:12.462953",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225907",
+      "id": "rss_2026-03-01T041512462936",
+      "title": "Strike on Iranian primary school kills 108, authorities say",
+      "summary": "",
+      "url": "https://www.ft.com/content/055d7ee1-0002-4d86-931f-18f4687d4f8b",
+      "source": "RSS: Financial_Times",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Sat, 28 Feb 2026 19:49:51 GMT",
+      "timestamp": "2026-03-01T04:15:12.462936",
+      "type": "rss"
+    },
+    {
+      "id": "rss_2026-03-01T041512462891",
       "title": "Why now? Trump\u2019s shifting arguments for striking Iran",
       "summary": "",
       "url": "https://www.ft.com/content/5fd1ae94-a850-4151-9be3-0258ff222ccb",
@@ -336,11 +350,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 15:40:04 GMT",
-      "timestamp": "2026-03-01T03:15:19.225907",
+      "timestamp": "2026-03-01T04:15:12.462891",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225885",
+      "id": "rss_2026-03-01T041512462863",
       "title": "Trump gambles on war to force Iran\u2019s capitulation",
       "summary": "",
       "url": "https://www.ft.com/content/07e38144-0fd4-4f64-825d-35355a74489a",
@@ -349,11 +363,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 10:16:08 GMT",
-      "timestamp": "2026-03-01T03:15:19.225885",
+      "timestamp": "2026-03-01T04:15:12.462863",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225863",
+      "id": "rss_2026-03-01T041512462835",
       "title": "Tehran started its working week. Then came the explosions",
       "summary": "",
       "url": "https://www.ft.com/content/97db4b54-ebd6-4210-8f66-6917f157823a",
@@ -362,11 +376,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 14:53:01 GMT",
-      "timestamp": "2026-03-01T03:15:19.225863",
+      "timestamp": "2026-03-01T04:15:12.462835",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225843",
+      "id": "rss_2026-03-01T041512462809",
       "title": "Military briefing: The US-Israeli strikes and Iran\u2019s retaliation",
       "summary": "",
       "url": "https://www.ft.com/content/be65f1b1-ed37-4821-b024-10ec7a198f25",
@@ -375,11 +389,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 16:25:36 GMT",
-      "timestamp": "2026-03-01T03:15:19.225843",
+      "timestamp": "2026-03-01T04:15:12.462809",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225818",
+      "id": "rss_2026-03-01T041512462777",
       "title": "Trump and Netanyahu go for Iran\u2019s jugular",
       "summary": "",
       "url": "https://www.ft.com/content/1cd2ed35-869c-48c0-8899-b25ad99be066",
@@ -388,11 +402,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 14:30:18 GMT",
-      "timestamp": "2026-03-01T03:15:19.225818",
+      "timestamp": "2026-03-01T04:15:12.462777",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225799",
+      "id": "rss_2026-03-01T041512462723",
       "title": "Insurers to cancel policies and raise prices for ships in Gulf and Strait of Hormuz",
       "summary": "",
       "url": "https://www.ft.com/content/2dc114d0-5bb3-4fae-b538-9a050954549a",
@@ -401,25 +415,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 16:07:08 GMT",
-      "timestamp": "2026-03-01T03:15:19.225799",
+      "timestamp": "2026-03-01T04:15:12.462723",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031519225764",
-      "title": "US and Israel launch \u2018massive\u2019 strikes on Iran as Trump calls for regime change",
-      "summary": "",
-      "url": "https://www.ft.com/content/2fb3447b-7ff7-4f9a-9068-05cfb4bf4138",
-      "source": "RSS: Financial_Times",
-      "category": [
-        "geopolitical",
-        "sentiment"
-      ],
-      "published": "Sat, 28 Feb 2026 13:18:14 GMT",
-      "timestamp": "2026-03-01T03:15:19.225764",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-03-01T031508990139",
+      "id": "rss_2026-03-01T041508117293",
       "title": "It\u2019s been decreed: something must be done about student loans in England",
       "summary": "",
       "url": "https://www.theguardian.com/money/2026/feb/28/its-been-decreed-something-must-be-done-about-student-loans-in-england",
@@ -428,11 +428,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 15:00:14 GMT",
-      "timestamp": "2026-03-01T03:15:08.990139",
+      "timestamp": "2026-03-01T04:15:08.117293",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508990060",
+      "id": "rss_2026-03-01T041508117215",
       "title": "Premium bonds: odds of a win to get worse from April",
       "summary": "",
       "url": "https://www.theguardian.com/money/2026/feb/28/premium-bonds-odds-win-worse-nsi-prizes",
@@ -441,11 +441,11 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 07:00:10 GMT",
-      "timestamp": "2026-03-01T03:15:08.990060",
+      "timestamp": "2026-03-01T04:15:08.117215",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508990004",
+      "id": "rss_2026-03-01T041508117159",
       "title": "Dirty water, death and decline: the inside story of a privatisation scandal",
       "summary": "",
       "url": "https://www.theguardian.com/news/ng-interactive/2026/feb/28/dirty-water-death-and-decline-the-inside-story-of-a-privatisation-scandal",
@@ -454,11 +454,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 10:51:46 GMT",
-      "timestamp": "2026-03-01T03:15:08.990004",
+      "timestamp": "2026-03-01T04:15:08.117159",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508989939",
+      "id": "rss_2026-03-01T041508117094",
       "title": "\u2018A temple of food\u2019: London\u2019s grande dame Simpson\u2019s in the Strand rises again",
       "summary": "",
       "url": "https://www.theguardian.com/uk-news/2026/feb/28/a-temple-of-food-london-grand-dame-simpsons-in-the-strand-rises-again",
@@ -467,11 +467,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 14:00:14 GMT",
-      "timestamp": "2026-03-01T03:15:08.989939",
+      "timestamp": "2026-03-01T04:15:08.117094",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508989822",
+      "id": "rss_2026-03-01T041508116977",
       "title": "Trump administration warns tariff refund process \u2018will take time\u2019",
       "summary": "",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/trump-tariff-refunds",
@@ -480,11 +480,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 05:56:32 GMT",
-      "timestamp": "2026-03-01T03:15:08.989822",
+      "timestamp": "2026-03-01T04:15:08.116977",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508989721",
+      "id": "rss_2026-03-01T041508116876",
       "title": "The real winners of Trump\u2019s global tariff war: law firms, hedge funds and AI",
       "summary": "",
       "url": "https://www.theguardian.com/us-news/2026/feb/28/trump-tariffs-refunds-law-firms",
@@ -493,11 +493,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 12:00:12 GMT",
-      "timestamp": "2026-03-01T03:15:08.989721",
+      "timestamp": "2026-03-01T04:15:08.116876",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508989639",
+      "id": "rss_2026-03-01T041508116790",
       "title": "Harrods faces legal action over \u00a31-a-head dining charge not going to staff",
       "summary": "",
       "url": "https://www.theguardian.com/business/2026/feb/28/harrods-dining-charge-workers-union-legal-action",
@@ -506,11 +506,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 07:00:08 GMT",
-      "timestamp": "2026-03-01T03:15:08.989639",
+      "timestamp": "2026-03-01T04:15:08.116790",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508989555",
+      "id": "rss_2026-03-01T041508116691",
       "title": "Square Mile strikes back: how the City of London is fighting disinformation about crime",
       "summary": "",
       "url": "https://www.theguardian.com/business/2026/feb/28/city-of-london-fighting-disinformation-crime",
@@ -519,11 +519,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 14:00:13 GMT",
-      "timestamp": "2026-03-01T03:15:08.989555",
+      "timestamp": "2026-03-01T04:15:08.116691",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508989436",
+      "id": "rss_2026-03-01T041508116603",
       "title": "Decision to allow UK exports to Armenian firm under review over Russian links",
       "summary": "",
       "url": "https://www.theguardian.com/politics/2026/feb/28/decision-allow-uk-exports-cygnet-texkimp-armenian-firm-review-russian-links",
@@ -532,11 +532,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 13:00:12 GMT",
-      "timestamp": "2026-03-01T03:15:08.989436",
+      "timestamp": "2026-03-01T04:15:08.116603",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508989349",
+      "id": "rss_2026-03-01T041508116515",
       "title": "OpenAI to work with Pentagon after Anthropic dropped by Trump over company\u2019s ethics concerns",
       "summary": "",
       "url": "https://www.theguardian.com/technology/2026/feb/28/openai-us-military-anthropic",
@@ -545,11 +545,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 17:06:56 GMT",
-      "timestamp": "2026-03-01T03:15:08.989349",
+      "timestamp": "2026-03-01T04:15:08.116515",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152893",
+      "id": "rss_2026-03-01T041507281384",
       "title": "\u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws",
       "summary": "",
       "url": "https://www.theguardian.com/world/2026/feb/27/argentina-labor-law-overhaul",
@@ -558,11 +558,11 @@
         "other"
       ],
       "published": "Fri, 27 Feb 2026 09:00:37 GMT",
-      "timestamp": "2026-03-01T03:15:08.152893",
+      "timestamp": "2026-03-01T04:15:07.281384",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152818",
+      "id": "rss_2026-03-01T041507281312",
       "title": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border",
       "summary": "",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/cbp-border-drone-military-democrats",
@@ -571,11 +571,11 @@
         "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 14:37:19 GMT",
-      "timestamp": "2026-03-01T03:15:08.152818",
+      "timestamp": "2026-03-01T04:15:07.281312",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152686",
+      "id": "rss_2026-03-01T041507281182",
       "title": "Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba",
       "summary": "",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/trump-cuba-regime-change",
@@ -585,11 +585,11 @@
         "corporate"
       ],
       "published": "Fri, 27 Feb 2026 23:39:01 GMT",
-      "timestamp": "2026-03-01T03:15:08.152686",
+      "timestamp": "2026-03-01T04:15:07.281182",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152628",
+      "id": "rss_2026-03-01T041507281126",
       "title": "At least 20 killed as cash-laden military cargo plane crashes in Bolivia",
       "summary": "",
       "url": "https://www.theguardian.com/world/2026/feb/28/at-least-15-killed-as-cash-laden-military-cargo-plane-crashes-in-bolivia",
@@ -598,11 +598,11 @@
         "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 03:05:37 GMT",
-      "timestamp": "2026-03-01T03:15:08.152628",
+      "timestamp": "2026-03-01T04:15:07.281126",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152532",
+      "id": "rss_2026-03-01T041507281052",
       "title": "\u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered",
       "summary": "",
       "url": "https://www.theguardian.com/world/2026/feb/28/miami-exiled-cubans-speedboat-shootout",
@@ -611,11 +611,11 @@
         "other"
       ],
       "published": "Sat, 28 Feb 2026 10:00:08 GMT",
-      "timestamp": "2026-03-01T03:15:08.152532",
+      "timestamp": "2026-03-01T04:15:07.281052",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152350",
+      "id": "rss_2026-03-01T041507280926",
       "title": "US accused of \u2018shameless exploitation\u2019 over proposed Zambian health aid deal",
       "summary": "",
       "url": "https://www.theguardian.com/global-development/2026/feb/25/zambia-us-health-aid-deal-exploitation-mining-concessions-data-sharing-targets",
@@ -624,11 +624,11 @@
         "other"
       ],
       "published": "Wed, 25 Feb 2026 13:00:36 GMT",
-      "timestamp": "2026-03-01T03:15:08.152350",
+      "timestamp": "2026-03-01T04:15:07.280926",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152254",
+      "id": "rss_2026-03-01T041507280838",
       "title": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean",
       "summary": "",
       "url": "https://www.theguardian.com/world/2026/feb/26/recent-mediterranean-storms-tragedies-spain-portugal-morocco",
@@ -637,11 +637,11 @@
         "other"
       ],
       "published": "Thu, 26 Feb 2026 05:00:21 GMT",
-      "timestamp": "2026-03-01T03:15:08.152254",
+      "timestamp": "2026-03-01T04:15:07.280838",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152146",
+      "id": "rss_2026-03-01T041507280725",
       "title": "Two women arrested in Uganda for allegedly kissing in public could face life sentence",
       "summary": "",
       "url": "https://www.theguardian.com/global-development/2026/feb/26/women-arrested-uganda-kissing-public-lgbtq-laws",
@@ -650,11 +650,11 @@
         "other"
       ],
       "published": "Thu, 26 Feb 2026 08:00:23 GMT",
-      "timestamp": "2026-03-01T03:15:08.152146",
+      "timestamp": "2026-03-01T04:15:07.280725",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508152076",
+      "id": "rss_2026-03-01T041507280656",
       "title": "Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries",
       "summary": "",
       "url": "https://www.theguardian.com/global-development/2026/feb/27/rising-anger-over-lop-sided-immoral-us-health-funding-pacts-africa-countries",
@@ -663,11 +663,11 @@
         "other"
       ],
       "published": "Fri, 27 Feb 2026 07:00:34 GMT",
-      "timestamp": "2026-03-01T03:15:08.152076",
+      "timestamp": "2026-03-01T04:15:07.280656",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031508151981",
+      "id": "rss_2026-03-01T041507280563",
       "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine",
       "summary": "",
       "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
@@ -676,11 +676,11 @@
         "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 16:42:39 GMT",
-      "timestamp": "2026-03-01T03:15:08.151981",
+      "timestamp": "2026-03-01T04:15:07.280563",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813426",
+      "id": "rss_2026-03-01T041506130336",
       "title": "\u2018See you in court': ACLU files nearly 400 cases versus Trump - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPMkFjSjNTS1pxNDFzWmttSWJGX3Jha2ppOWFOdGNTYnlIbUNoMkdvQlhkaElHTUQ5YlBGZkV0T1BRTEo0SEhUQWJzbUp6RDZQa1FuaWUtQVZxSHYxcExlSks0RXB0bGZaMURfbWhfUEUwUkYwNVBueXJBcGxwVHB5dmo0cmZEOU9QQTA4c1VVYm5hWkpNRkN6U2pGM0swSThzeTN6U1hveHpVTTZVMHlIWA?oc=5",
@@ -689,11 +689,11 @@
         "geopolitical"
       ],
       "published": "Thu, 06 Aug 2020 07:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813426",
+      "timestamp": "2026-03-01T04:15:06.130336",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813385",
+      "id": "rss_2026-03-01T041506130295",
       "title": "AP says it will capitalize Black but not white - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNY3JIRjg1eHZKZ28wV2dkQnZ2NWJkaE1OZlFYOXFuNEVKX0ZFdTBSclU3WnU2clRwMmRqWklvNjg0OEFCYk5iVWxlQlI4OXJkWlV0TC1tdTlPejFxNG1QU1VIcXh5b2lZYUNXendyY0s5YU5qQlBUbnU3ZURBbTlTU3VLcUVfQWtaWHJEaVhzeGpjcEN1QUk2NkYzMERRUFdzNnFqNUhvZ1BENWpGbkptbElGWEJZdXZrSUZ0TDZ3?oc=5",
@@ -702,11 +702,11 @@
         "other"
       ],
       "published": "Mon, 20 Jul 2020 07:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813385",
+      "timestamp": "2026-03-01T04:15:06.130295",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813350",
+      "id": "rss_2026-03-01T041506130260",
       "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
@@ -715,11 +715,11 @@
         "geopolitical"
       ],
       "published": "Sat, 14 Mar 2020 07:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813350",
+      "timestamp": "2026-03-01T04:15:06.130260",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813276",
+      "id": "rss_2026-03-01T041506130186",
       "title": "With \u2018Megxit,\u2019 Harry and Meghan aim to control media image - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQRmhHMUhReGpKclJoNjAzQkp2NnEtMFg0N2xJWXJBbnpXSzJNalRmWVE4U2JkSzZhTi1TeXdzUjJIazAwRWJrckhuRDZlNU9kVmVUdnVsQU4xb1JlSlp5UXdrSnduYS1pT3pxUWYzS25DNUc5aF85TFNzcm44Nkp0cFNlaEd5Tk54UXB6bEViNDQxMXNzMXFlcHZPSWt6c2VWUGtoZ0t1YVJZMERRXzVwU19aLTkwT3ZNdjJLRjVRdnljS3hFN2xGNQ?oc=5",
@@ -728,11 +728,11 @@
         "other"
       ],
       "published": "Thu, 09 Jan 2020 08:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813276",
+      "timestamp": "2026-03-01T04:15:06.130186",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813223",
+      "id": "rss_2026-03-01T041506130132",
       "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
@@ -741,11 +741,11 @@
         "geopolitical"
       ],
       "published": "Mon, 16 Jul 2018 07:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813223",
+      "timestamp": "2026-03-01T04:15:06.130132",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813186",
+      "id": "rss_2026-03-01T041506130095",
       "title": "Belarus poll workers describe fraud in Aug. 9 election - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQbk84R1JJYl9xNS1PcFdQaUMycFZ6YU4yclgtNUk3TU1PemRMMU1kNHk1Y2pfUjV4SzA1bnZhSmQ5cEdIUlFEM0NGU0dEQjJOeER0Qmd1MEYwN1QxZWV5ajVyek5qQ0U1NmlDSXZ5eG1NRjVNRUVzUzVQRmlhbFQzOEVWMnZ3WnJLM2x1SU5wQ1E3SjdXT3RNV1BjYVVQQQ?oc=5",
@@ -754,11 +754,11 @@
         "other"
       ],
       "published": "Mon, 31 Aug 2020 07:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813186",
+      "timestamp": "2026-03-01T04:15:06.130095",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813151",
+      "id": "rss_2026-03-01T041506130061",
       "title": "AP FACT CHECK: Trump taps false stereotypes about immigrants - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPSnI1cHphTEItUllxbWI4TzFNQlUwM1ItbF8tcUQ1WFZ2emhnd2lNbGlrNGxpcnFSSHpvVEpkc1dzd2R4UWJpSUFpZGVzMGtNOGpJamlJa1RzVEV1OGEyd2dEMDBCamJkTXhMZ0xGakVTMkZSVFRmUUdMVlRIU2lLTDBzRlMwbUxBN1VyMERzaGtZdkhfMEM2REVOWUVhQUhpclFRcklCTktZY3U1WUZwT2dRRnEwN3pWanZj?oc=5",
@@ -767,11 +767,11 @@
         "geopolitical"
       ],
       "published": "Fri, 08 Feb 2019 08:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813151",
+      "timestamp": "2026-03-01T04:15:06.130061",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813111",
+      "id": "rss_2026-03-01T041506130020",
       "title": "Roberts, Trump spar in extraordinary scrap over judges - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPTGlZaUo2VlBWdURtWEpDbW9vNjkzRkpPVzRtdXlXWXVwMnZRc2hMUmtieUp2ZjFsU2hOSUZubUw0d1FaMG15LVVGZGFhRTRyYmU1M05KUFpLWlpmeFlpN0lpTGRJVng3SDlJVUdHc2c2cFROUjRTT3c3Rjk1VC03Y3g0MUg0SWU1WG9wZjNWZ1NTUkJ0NFhxbk9uMUZVM2VVOVhhaGR6bUQzeUFaTFF1dHZ4WUJZU216QXc?oc=5",
@@ -780,11 +780,11 @@
         "geopolitical"
       ],
       "published": "Wed, 21 Nov 2018 08:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813111",
+      "timestamp": "2026-03-01T04:15:06.130020",
       "type": "rss"
     },
     {
-      "id": "rss_2026-03-01T031506813053",
+      "id": "rss_2026-03-01T041506129962",
       "title": "Trump took shelter in White House bunker as protests raged - AP News",
       "summary": "",
       "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOUVU1TFNSWng5WkxWNWFCcEFYOVVOOG04d2lDUjZCMUlqTWhZRVgzdXBJNGVEN3BzQTczZnJ0Njk4TGpMTHRBM3g0alJiNWhKQmplYmlNazBobEs4OEV6bjVYOU85bEV6U29UUE9vSkxpdlJBT2NkaTZ6c2EwYUlaN3hZdm80NFZUalhab2xsWUpETjQzLVV6ZTZ2SWRJZFEtaVVlMVZTX0xIdw?oc=5",
@@ -793,11 +793,25 @@
         "geopolitical"
       ],
       "published": "Sun, 31 May 2020 07:00:00 GMT",
-      "timestamp": "2026-03-01T03:15:06.813053",
+      "timestamp": "2026-03-01T04:15:06.129962",
       "type": "rss"
     },
     {
-      "id": "reddit_2026-03-01T024011449741",
+      "id": "reddit_2026-03-01T034041093339",
+      "title": "Net Income for Mega Cap AI Companies - Updated for Nvidia and with more metrics!",
+      "summary": "70 upvotes | 19 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgun3v/net_income_for_mega_cap_ai_companies_updated_for/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "other"
+      ],
+      "published": "2026-03-01T03:40:41.093339",
+      "timestamp": "2026-03-01T03:40:41.093339",
+      "type": "reddit",
+      "score": 70
+    },
+    {
+      "id": "reddit_2026-03-01T034041093334",
       "title": "Week Recap: The Dow completed the worst week of the year after PPI inflation and Nasdaq sell-off due to AI and Nvidia. Feb. 23, 2026 \u2013 Feb. 27, 2026",
       "summary": "12 upvotes | 0 comments",
       "url": "https://reddit.com/r/StockMarket/comments/1rh884c/week_recap_the_dow_completed_the_worst_week_of/",
@@ -805,100 +819,114 @@
       "category": [
         "macro"
       ],
-      "published": "2026-03-01T02:40:11.449741",
-      "timestamp": "2026-03-01T02:40:11.449741",
+      "published": "2026-03-01T03:40:41.093334",
+      "timestamp": "2026-03-01T03:40:41.093334",
       "type": "reddit",
       "score": 12
     },
     {
-      "id": "reddit_2026-03-01T024011449732",
+      "id": "reddit_2026-03-01T034041093325",
+      "title": "Oil Tankers Avoiding Vital Hormuz Strait After US Bombs Iran",
+      "summary": "20 upvotes | 1 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rh4c1k/oil_tankers_avoiding_vital_hormuz_strait_after_us/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-03-01T03:40:41.093325",
+      "timestamp": "2026-03-01T03:40:41.093325",
+      "type": "reddit",
+      "score": 20
+    },
+    {
+      "id": "reddit_2026-03-01T034041093320",
       "title": "Market analysts react to US-Israel strikes on Iran",
-      "summary": "27 upvotes | 6 comments",
+      "summary": "31 upvotes | 7 comments",
       "url": "https://reddit.com/r/StockMarket/comments/1rh45zf/market_analysts_react_to_usisrael_strikes_on_iran/",
       "source": "Reddit: r/StockMarket",
       "category": [
         "geopolitical",
         "macro"
       ],
-      "published": "2026-03-01T02:40:11.449732",
-      "timestamp": "2026-03-01T02:40:11.449732",
+      "published": "2026-03-01T03:40:41.093320",
+      "timestamp": "2026-03-01T03:40:41.093320",
       "type": "reddit",
-      "score": 27
+      "score": 31
     },
     {
-      "id": "reddit_2026-03-01T024011449728",
+      "id": "reddit_2026-03-01T034041093315",
+      "title": "Israel said it launched pre-emptive attack against Iran",
+      "summary": "151 upvotes | 73 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgvl6j/israel_said_it_launched_preemptive_attack_against/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-03-01T03:40:41.093315",
+      "timestamp": "2026-03-01T03:40:41.093315",
+      "type": "reddit",
+      "score": 151
+    },
+    {
+      "id": "reddit_2026-03-01T034041093307",
+      "title": "Trump Will End Government Use of Anthropic\u2019s AI Models",
+      "summary": "1503 upvotes | 200 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgjp80/trump_will_end_government_use_of_anthropics_ai/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-03-01T03:40:41.093307",
+      "timestamp": "2026-03-01T03:40:41.093307",
+      "type": "reddit",
+      "score": 1503
+    },
+    {
+      "id": "reddit_2026-03-01T034041093297",
       "title": "'Bigger ramifications than Venezuela': Markets brace for impact after U.S. strikes Iran",
-      "summary": "14 upvotes | 4 comments",
+      "summary": "92 upvotes | 23 comments",
       "url": "https://reddit.com/r/StockMarket/comments/1rh9vog/bigger_ramifications_than_venezuela_markets_brace/",
       "source": "Reddit: r/StockMarket",
       "category": [
         "geopolitical",
         "macro"
       ],
-      "published": "2026-03-01T02:40:11.449728",
-      "timestamp": "2026-03-01T02:40:11.449728",
+      "published": "2026-03-01T03:40:41.093297",
+      "timestamp": "2026-03-01T03:40:41.093297",
       "type": "reddit",
-      "score": 14
+      "score": 92
     },
     {
-      "id": "reddit_2026-03-01T024011449723",
-      "title": "Israel said it launched pre-emptive attack against Iran",
-      "summary": "148 upvotes | 72 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rgvl6j/israel_said_it_launched_preemptive_attack_against/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "2026-03-01T02:40:11.449723",
-      "timestamp": "2026-03-01T02:40:11.449723",
-      "type": "reddit",
-      "score": 148
-    },
-    {
-      "id": "reddit_2026-03-01T024011449718",
-      "title": "Trump Will End Government Use of Anthropic\u2019s AI Models",
-      "summary": "1488 upvotes | 198 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rgjp80/trump_will_end_government_use_of_anthropics_ai/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "2026-03-01T02:40:11.449718",
-      "timestamp": "2026-03-01T02:40:11.449718",
-      "type": "reddit",
-      "score": 1488
-    },
-    {
-      "id": "reddit_2026-03-01T024011449711",
+      "id": "reddit_2026-03-01T034041093291",
       "title": "Insurers to cancel policies and raise prices for ships in Gulf and Strait of Hormuz",
-      "summary": "119 upvotes | 14 comments",
+      "summary": "153 upvotes | 14 comments",
       "url": "https://reddit.com/r/StockMarket/comments/1rh70m7/insurers_to_cancel_policies_and_raise_prices_for/",
       "source": "Reddit: r/StockMarket",
       "category": [
         "other"
       ],
-      "published": "2026-03-01T02:40:11.449711",
-      "timestamp": "2026-03-01T02:40:11.449711",
+      "published": "2026-03-01T03:40:41.093291",
+      "timestamp": "2026-03-01T03:40:41.093291",
       "type": "reddit",
-      "score": 119
+      "score": 153
     },
     {
-      "id": "reddit_2026-03-01T024011449704",
+      "id": "reddit_2026-03-01T034041093282",
       "title": "OpenAI signs Pentagon AI deal hours after Trump administration bans Anthropic from federal use",
-      "summary": "377 upvotes | 101 comments",
+      "summary": "402 upvotes | 104 comments",
       "url": "https://reddit.com/r/StockMarket/comments/1rh13rs/openai_signs_pentagon_ai_deal_hours_after_trump/",
       "source": "Reddit: r/StockMarket",
       "category": [
         "geopolitical",
         "financial"
       ],
-      "published": "2026-03-01T02:40:11.449704",
-      "timestamp": "2026-03-01T02:40:11.449704",
+      "published": "2026-03-01T03:40:41.093282",
+      "timestamp": "2026-03-01T03:40:41.093282",
       "type": "reddit",
-      "score": 377
+      "score": 402
     },
     {
-      "id": "reddit_2026-03-01T024011449672",
+      "id": "reddit_2026-03-01T034041093246",
       "title": "Daily General Discussion and Advice Thread - February 28, 2026",
       "summary": "3 upvotes | 0 comments",
       "url": "https://reddit.com/r/StockMarket/comments/1rh0w8b/daily_general_discussion_and_advice_thread/",
@@ -906,27 +934,27 @@
       "category": [
         "other"
       ],
-      "published": "2026-03-01T02:40:11.449672",
-      "timestamp": "2026-03-01T02:40:11.449672",
+      "published": "2026-03-01T03:40:41.093246",
+      "timestamp": "2026-03-01T03:40:41.093246",
       "type": "reddit",
       "score": 3
     },
     {
-      "id": "reddit_2026-03-01T024009835185",
+      "id": "reddit_2026-03-01T034039492377",
       "title": "Does H&amp;R Block software import/handle Section 1256 Contract equities",
-      "summary": "3 upvotes | 5 comments",
+      "summary": "4 upvotes | 5 comments",
       "url": "https://reddit.com/r/options/comments/1rf9vbn/does_hr_block_software_importhandle_section_1256/",
       "source": "Reddit: r/options",
       "category": [
         "geopolitical"
       ],
-      "published": "2026-03-01T02:40:09.835185",
-      "timestamp": "2026-03-01T02:40:09.835185",
+      "published": "2026-03-01T03:40:39.492377",
+      "timestamp": "2026-03-01T03:40:39.492377",
       "type": "reddit",
-      "score": 3
+      "score": 4
     },
     {
-      "id": "reddit_2026-03-01T024009835178",
+      "id": "reddit_2026-03-01T034039492372",
       "title": "Etrade sold puts early assignment\u2026",
       "summary": "0 upvotes | 15 comments",
       "url": "https://reddit.com/r/options/comments/1rg14af/etrade_sold_puts_early_assignment/",
@@ -934,41 +962,41 @@
       "category": [
         "other"
       ],
-      "published": "2026-03-01T02:40:09.835178",
-      "timestamp": "2026-03-01T02:40:09.835178",
+      "published": "2026-03-01T03:40:39.492372",
+      "timestamp": "2026-03-01T03:40:39.492372",
       "type": "reddit",
       "score": 0
     },
     {
-      "id": "reddit_2026-03-01T024009835168",
+      "id": "reddit_2026-03-01T034039492367",
       "title": "11470 $3 calls expiring this Friday bought today on $RR Richtech Robotics",
-      "summary": "59 upvotes | 66 comments",
+      "summary": "60 upvotes | 66 comments",
       "url": "https://reddit.com/r/options/comments/1rezg7g/11470_3_calls_expiring_this_friday_bought_today/",
       "source": "Reddit: r/options",
       "category": [
         "sentiment"
       ],
-      "published": "2026-03-01T02:40:09.835168",
-      "timestamp": "2026-03-01T02:40:09.835168",
+      "published": "2026-03-01T03:40:39.492367",
+      "timestamp": "2026-03-01T03:40:39.492367",
       "type": "reddit",
-      "score": 59
+      "score": 60
     },
     {
-      "id": "reddit_2026-03-01T024009835156",
+      "id": "reddit_2026-03-01T034039492359",
       "title": "SYSTERIX - YOLO risk $250k for $23k gain SPX Put Credit Spread (6650p / 6550p PCS due Mar 6, 2026)",
-      "summary": "0 upvotes | 5 comments",
+      "summary": "1 upvotes | 5 comments",
       "url": "https://reddit.com/r/options/comments/1rfvk9x/systerix_yolo_risk_250k_for_23k_gain_spx_put/",
       "source": "Reddit: r/options",
       "category": [
         "financial"
       ],
-      "published": "2026-03-01T02:40:09.835156",
-      "timestamp": "2026-03-01T02:40:09.835156",
+      "published": "2026-03-01T03:40:39.492359",
+      "timestamp": "2026-03-01T03:40:39.492359",
       "type": "reddit",
-      "score": 0
+      "score": 1
     },
     {
-      "id": "reddit_2026-03-01T024009835131",
+      "id": "reddit_2026-03-01T034039492340",
       "title": "RIOT IV seems strangely low 3 days before earnings compared to HV.",
       "summary": "10 upvotes | 6 comments",
       "url": "https://reddit.com/r/options/comments/1rfsmv1/riot_iv_seems_strangely_low_3_days_before/",
@@ -976,108 +1004,80 @@
       "category": [
         "corporate"
       ],
-      "published": "2026-03-01T02:40:09.835131",
-      "timestamp": "2026-03-01T02:40:09.835131",
+      "published": "2026-03-01T03:40:39.492340",
+      "timestamp": "2026-03-01T03:40:39.492340",
       "type": "reddit",
       "score": 10
     },
     {
-      "id": "reddit_2026-03-01T024009835124",
+      "id": "reddit_2026-03-01T034039492335",
       "title": "Tail Risk Hedging - Looking for Partners!",
-      "summary": "3 upvotes | 21 comments",
+      "summary": "4 upvotes | 21 comments",
       "url": "https://reddit.com/r/options/comments/1rg5f6y/tail_risk_hedging_looking_for_partners/",
       "source": "Reddit: r/options",
       "category": [
         "other"
       ],
-      "published": "2026-03-01T02:40:09.835124",
-      "timestamp": "2026-03-01T02:40:09.835124",
+      "published": "2026-03-01T03:40:39.492335",
+      "timestamp": "2026-03-01T03:40:39.492335",
       "type": "reddit",
-      "score": 3
+      "score": 4
     },
     {
-      "id": "reddit_2026-03-01T024009835106",
+      "id": "reddit_2026-03-01T034039492324",
       "title": "Best bullish strategy to roll if stock price goes against you and you are ITM",
-      "summary": "4 upvotes | 18 comments",
+      "summary": "6 upvotes | 18 comments",
       "url": "https://reddit.com/r/options/comments/1rgendf/best_bullish_strategy_to_roll_if_stock_price_goes/",
       "source": "Reddit: r/options",
       "category": [
         "financial"
       ],
-      "published": "2026-03-01T02:40:09.835106",
-      "timestamp": "2026-03-01T02:40:09.835106",
+      "published": "2026-03-01T03:40:39.492324",
+      "timestamp": "2026-03-01T03:40:39.492324",
       "type": "reddit",
-      "score": 4
+      "score": 6
     },
     {
-      "id": "reddit_2026-03-01T024009835089",
+      "id": "reddit_2026-03-01T034039492312",
       "title": "TOS Schwab - wrong OTM % on Puts - watch out.",
-      "summary": "0 upvotes | 3 comments",
+      "summary": "0 upvotes | 4 comments",
       "url": "https://reddit.com/r/options/comments/1rh2ral/tos_schwab_wrong_otm_on_puts_watch_out/",
       "source": "Reddit: r/options",
       "category": [
         "other"
       ],
-      "published": "2026-03-01T02:40:09.835089",
-      "timestamp": "2026-03-01T02:40:09.835089",
+      "published": "2026-03-01T03:40:39.492312",
+      "timestamp": "2026-03-01T03:40:39.492312",
       "type": "reddit",
       "score": 0
     },
     {
-      "id": "reddit_2026-03-01T024009835062",
+      "id": "reddit_2026-03-01T034039492288",
       "title": "Iron Condor SPY Strategy ~40% avg gains",
-      "summary": "101 upvotes | 124 comments",
+      "summary": "107 upvotes | 133 comments",
       "url": "https://reddit.com/r/options/comments/1rgiezk/iron_condor_spy_strategy_40_avg_gains/",
       "source": "Reddit: r/options",
       "category": [
         "financial"
       ],
-      "published": "2026-03-01T02:40:09.835062",
-      "timestamp": "2026-03-01T02:40:09.835062",
+      "published": "2026-03-01T03:40:39.492288",
+      "timestamp": "2026-03-01T03:40:39.492288",
       "type": "reddit",
-      "score": 101
+      "score": 107
     },
     {
-      "id": "reddit_2026-03-01T024008363323",
-      "title": "Question about State and Federal income tax limits",
-      "summary": "0 upvotes | 11 comments",
-      "url": "https://reddit.com/r/investing/comments/1rgsdee/question_about_state_and_federal_income_tax_limits/",
-      "source": "Reddit: r/investing",
-      "category": [
-        "financial"
-      ],
-      "published": "2026-03-01T02:40:08.363323",
-      "timestamp": "2026-03-01T02:40:08.363323",
-      "type": "reddit",
-      "score": 0
-    },
-    {
-      "id": "reddit_2026-03-01T024008363312",
+      "id": "reddit_2026-03-01T034037778550",
       "title": "Has the US Federal reserve really printed 400Billion? Trying to understand the H.4.1. documents on the Fed reserve website",
-      "summary": "97 upvotes | 17 comments",
+      "summary": "99 upvotes | 17 comments",
       "url": "https://reddit.com/r/investing/comments/1rfnnyb/has_the_us_federal_reserve_really_printed/",
       "source": "Reddit: r/investing",
       "category": [
         "financial"
       ],
-      "published": "2026-03-01T02:40:08.363312",
-      "timestamp": "2026-03-01T02:40:08.363312",
+      "published": "2026-03-01T03:40:37.778550",
+      "timestamp": "2026-03-01T03:40:37.778550",
       "type": "reddit",
-      "score": 97
-    },
-    {
-      "id": "reddit_2026-03-01T024008363305",
-      "title": "Scott\u2019s (SMG) up 6.8% since last earnings report. Can it continue?",
-      "summary": "2 upvotes | 0 comments",
-      "url": "https://reddit.com/r/investing/comments/1rgi0dd/scotts_smg_up_68_since_last_earnings_report_can/",
-      "source": "Reddit: r/investing",
-      "category": [
-        "corporate"
-      ],
-      "published": "2026-03-01T02:40:08.363305",
-      "timestamp": "2026-03-01T02:40:08.363305",
-      "type": "reddit",
-      "score": 2
+      "score": 99
     }
   ],
   "stats": {
