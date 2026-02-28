@@ -58,16 +58,16 @@ Reddit             Pipeline              (HTML/JS)
 ## 4. Features
 
 ### MVP (Phase 1)
-- [ ] Generate news_feed.json from RSS/Reddit data
-- [ ] Basic HTML page with news cards
-- [ ] Category filter buttons
-- [ ] iOS home screen installable
-- [ ] Auto-refresh every 30 min
+- [x] Generate news_feed.json from RSS/Reddit data
+- [x] Basic HTML page with news cards
+- [x] Category filter buttons
+- [x] iOS home screen installable
+- [x] Last updated indicator (instead of auto-refresh)
 
 ### Future (Phase 2)
+- [x] Save favorites
+- [x] Dark mode (done Feb 28)
 - [ ] Push notifications (optional)
-- [ ] Save favorites
-- [ ] Dark mode
 - [ ] Multiple language support
 
 ---
