@@ -114,6 +114,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
+- **Note:** VPS runs on Asia/Kuala_Lumpur (GMT+8) — always specify Asia/Ho_Chi_Minh for cron jobs and display
 - **User:** Philippe (Netherlands → Vietnam since Sep 2024)
 - **Partner:** Girlfriend in Vietnam
 
