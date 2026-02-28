@@ -376,7 +376,7 @@
             }
             
             feed.innerHTML = filtered.map(item => {
-                const relativeTime = formatRelativeTime(item.timestamp || item.published);
+                const relativeTime = formatRelativeTime(item.published || item.timestamp);
                 const sourceIcon = getSourceIcon(item.type);
 
                 return `
