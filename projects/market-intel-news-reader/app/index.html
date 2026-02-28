@@ -50,11 +50,11 @@
         .filters {
             display: flex;
             gap: 8px;
-            overflow-x: auto;
             padding-bottom: 4px;
+            overflow-x: auto;
         }
         
-        .filter-btn {
+        .source-btn {
             background: var(--border);
             border: none;
             color: var(--text);
@@ -66,13 +66,30 @@
             transition: all 0.2s;
         }
         
-        .filter-btn.active {
+        .source-btn.active {
             background: var(--accent);
             color: white;
         }
         
-        .filter-btn:active {
+        .source-btn:active {
             transform: scale(0.95);
+        }
+        
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn.active {
+            background: var(--border);
+            color: var(--text);
         }
         
         .feed {
@@ -187,13 +204,19 @@
 <body>
     <header>
         <h1>📈 Market Intel News</h1>
-        <div class="filters">
+        <div class="filters" style="margin-bottom: 8px;">
+            <button class="source-btn active" data-source="all">All</button>
+            <button class="source-btn" data-source="rss">📰 RSS</button>
+            <button class="source-btn" data-source="reddit">💬 Reddit</button>
+        </div>
+        
+        <div class="filters" style="margin-bottom: 4px;">
             <button class="filter-btn active" data-filter="all">All</button>
             <button class="filter-btn" data-filter="geopolitical">🌍 Geo</button>
-            <button class="filter-btn" data-filter="financial">💰 Finance</button>
-            <button class="filter-btn" data-filter="macro">📈 Macro</button>
-            <button class="filter-btn" data-filter="corporate">🏢 Corp</button>
-            <button class="filter-btn" data-filter="sentiment">🔥 Sentiment</button>
+            <button class="filter-btn" data-filter="financial">💰</button>
+            <button class="filter-btn" data-filter="macro">📈</button>
+            <button class="filter-btn" data-filter="corporate">🏢</button>
+            <button class="filter-btn" data-filter="sentiment">🔥</button>
         </div>
     </header>
     
@@ -208,6 +231,7 @@
     <script>
         let newsData = [];
         let currentFilter = 'all';
+        let currentSource = 'all';
         
         async function loadFeed() {
             const feed = document.getElementById('feed');
@@ -249,9 +273,17 @@
         function renderFeed() {
             const feed = document.getElementById('feed');
             
-            const filtered = currentFilter === 'all' 
-                ? newsData 
-                : newsData.filter(item => item.category.includes(currentFilter));
+            let filtered = newsData;
+            
+            // Filter by source
+            if (currentSource !== 'all') {
+                filtered = filtered.filter(item => item.type === currentSource);
+            }
+            
+            // Filter by category
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(item => item.category.includes(currentFilter));
+            }
             
             if (filtered.length === 0) {
                 feed.innerHTML = '<div class="empty-state">No news in this category</div>';
@@ -274,6 +306,16 @@
                 </div>
             `).join('');
         }
+        
+        // Source buttons (RSS / Reddit)
+        document.querySelectorAll('.source-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentSource = btn.dataset.source;
+                renderFeed();
+            });
+        });
         
         // Filter buttons
         document.querySelectorAll('.filter-btn').forEach(btn => {
