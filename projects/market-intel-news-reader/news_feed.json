@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "generated": "2026-02-28T17:15:37.023100",
+  "generated": "2026-02-28T17:40:10.918200",
   "categories": [
     "geopolitical",
     "financial",
@@ -96,7 +96,7 @@
       "url": "https://www.bbc.com/news/articles/cq570d12y9do?at_medium=RSS&at_campaign=rss",
       "source": "RSS: BBC_Business",
       "category": [
-        "other"
+        "macro"
       ],
       "published": "Fri, 27 Feb 2026 00:06:40 GMT",
       "timestamp": "2026-02-28T17:15:13.499560",
@@ -122,7 +122,8 @@
       "url": "https://www.bbc.com/news/articles/c5y6p5ypgmzo?at_medium=RSS&at_campaign=rss",
       "source": "RSS: BBC_Business",
       "category": [
-        "geopolitical"
+        "geopolitical",
+        "corporate"
       ],
       "published": "Fri, 27 Feb 2026 04:32:38 GMT",
       "timestamp": "2026-02-28T17:15:13.499532",
@@ -148,7 +149,7 @@
       "url": "https://www.bbc.com/news/articles/cn48jj3y8ezo?at_medium=RSS&at_campaign=rss",
       "source": "RSS: BBC_Business",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 03:50:05 GMT",
       "timestamp": "2026-02-28T17:15:13.499434",
@@ -174,7 +175,7 @@
       "url": "https://www.bbc.com/news/articles/c9q5wdeg4j8o?at_medium=RSS&at_campaign=rss",
       "source": "RSS: BBC_World",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 12:46:26 GMT",
       "timestamp": "2026-02-28T17:15:13.249782",
@@ -240,7 +241,7 @@
       "url": "https://www.bbc.com/news/articles/cn48jj3y8ezo?at_medium=RSS&at_campaign=rss",
       "source": "RSS: BBC_World",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 03:50:05 GMT",
       "timestamp": "2026-02-28T17:15:13.249684",
@@ -358,7 +359,7 @@
       "url": "https://x.com/unusual_whales/status/2027662431195959590",
       "source": "RSS: UnusualWhales",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 08:29:00 GMT",
       "timestamp": "2026-02-28T17:15:13.223257",
@@ -501,7 +502,7 @@
       "url": "https://x.com/ycombinator/status/2027413415250296894",
       "source": "RSS: YCombinator",
       "category": [
-        "other"
+        "financial"
       ],
       "published": "Fri, 27 Feb 2026 16:00:00 GMT",
       "timestamp": "2026-02-28T17:15:12.584555",
@@ -553,7 +554,7 @@
       "url": "https://x.com/jaixbhatia/status/2027475552685437004",
       "source": "RSS: YCombinator",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 20:06:00 GMT",
       "timestamp": "2026-02-28T17:15:12.578199",
@@ -579,7 +580,7 @@
       "url": "https://x.com/agupta/status/2027543518244118544",
       "source": "RSS: YCombinator",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 00:36:00 GMT",
       "timestamp": "2026-02-28T17:15:12.578042",
@@ -592,7 +593,7 @@
       "url": "https://x.com/garrytan/status/2027555272043184344",
       "source": "RSS: YCombinator",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 01:23:00 GMT",
       "timestamp": "2026-02-28T17:15:12.577941",
@@ -605,6 +606,7 @@
       "url": "https://x.com/financialjuice/status/2027486335284453846",
       "source": "RSS: FinancialJuice",
       "category": [
+        "geopolitical",
         "financial"
       ],
       "published": "Fri, 27 Feb 2026 20:49:00 GMT",
@@ -644,7 +646,7 @@
       "url": "https://x.com/financialjuice/status/2027503192833945950",
       "source": "RSS: FinancialJuice",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 21:56:00 GMT",
       "timestamp": "2026-02-28T17:15:12.208818",
@@ -657,7 +659,7 @@
       "url": "https://x.com/financialjuice/status/2027504314357268899",
       "source": "RSS: FinancialJuice",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 22:01:00 GMT",
       "timestamp": "2026-02-28T17:15:12.208770",
@@ -696,7 +698,7 @@
       "url": "https://x.com/business/status/2027652033436672082",
       "source": "RSS: Business",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "Sat, 28 Feb 2026 07:48:00 GMT",
       "timestamp": "2026-02-28T17:15:11.860699",
@@ -900,7 +902,7 @@
       "url": "https://reddit.com/r/StockMarket/comments/1rgjp80/trump_will_end_government_use_of_anthropics_ai/",
       "source": "Reddit: r/StockMarket",
       "category": [
-        "other"
+        "geopolitical"
       ],
       "published": "2026-02-28T17:09:37.316677",
       "timestamp": "2026-02-28T17:09:37.316677",
@@ -928,7 +930,7 @@
       "url": "https://reddit.com/r/options/comments/1rfpmpo/bought_nvda_calls/",
       "source": "Reddit: r/options",
       "category": [
-        "other"
+        "sentiment"
       ],
       "published": "2026-02-28T17:09:35.739626",
       "timestamp": "2026-02-28T17:09:35.739626",
@@ -984,7 +986,7 @@
       "url": "https://reddit.com/r/options/comments/1rezg7g/11470_3_calls_expiring_this_friday_bought_today/",
       "source": "Reddit: r/options",
       "category": [
-        "other"
+        "sentiment"
       ],
       "published": "2026-02-28T17:09:35.739595",
       "timestamp": "2026-02-28T17:09:35.739595",

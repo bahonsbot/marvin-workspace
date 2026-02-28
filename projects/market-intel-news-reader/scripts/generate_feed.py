@@ -326,11 +326,11 @@ def categorize_alert(alert: Dict) -> List[str]:
     text = f"{alert.get('title', '')} {alert.get('summary', '')}".lower()
 
     categories = {
-        "geopolitical": ["war", "invasion", "russia", "ukraine", "china", "iran", "israel", "sanction", "military", "conflict", "troops"],
-        "financial": ["bank", "svb", "default", "crisis", "credit", "fed", "interest", "rate"],
-        "macro": ["inflation", "cpi", "gdp", "recession", "economy", "market"],
-        "corporate": ["earnings", "revenue", "acquisition", "merger", "ipo", "stock split", "dividend"],
-        "sentiment": ["reddit", "wsb", "wallstreetbets", "meme", "short squeeze", "gme"],
+        "geopolitical": ["war", "invasion", "russia", "ukraine", "china", "iran", "israel", "sanction", "military", "conflict", "troops", "nato", "putin", "biden", "trump"],
+        "financial": ["bank", "svb", "default", "crisis", "credit", "fed", "interest", "rate", "deposit", "liquidity", "spread", "yield", "treasury", "bond"],
+        "macro": ["inflation", "cpi", "pce", "gdp", "recession", "economy", "market", "unemployment", "jobs", "consumer", "retail", "manufacturing"],
+        "corporate": ["earnings", "revenue", "acquisition", "merger", "ipo", "stock split", "dividend", "guidance", "forecast", "buyout", "takeover"],
+        "sentiment": ["reddit", "wsb", "wallstreetbets", "meme", "short squeeze", "gme", "gamestop", "gamma squeeze", "call buying", "retail traders", "days to cover", "short interest", "navy", " AMC", "bed bath", "BBBY", "robinhood", "options activity", "squeeze", "calls", "calls surge", "wallstreetbets"],
     }
 
     matched = []
