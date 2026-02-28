@@ -200,8 +200,15 @@ class ReasoningEngine:
             graph_outcomes = self.kg.predict_outcomes(signal.get('pattern', ''))
             root_causes = self.kg.find_root_causes(signal.get('pattern', ''))
             fallback = self.build_fallback_predictions(signal)
-
+            
+            # Get detailed predictions with briefings
+            kg_predictions = self.kg.predict_signal_outcomes(signal)
             predicted_outcomes = list(dict.fromkeys(graph_outcomes + fallback['outcomes']))[:8]
+            
+            # Extract briefing if available
+            signal_briefing = ''
+            if kg_predictions and kg_predictions[0].get('briefing'):
+                signal_briefing = kg_predictions[0]['briefing']
 
             enhanced = {
                 **signal,
@@ -212,6 +219,7 @@ class ReasoningEngine:
                 'reasoning': reasoning['reasoning'],
                 'predicted_outcomes': predicted_outcomes,
                 'predicted_causal_chain': fallback['causal_chain'],
+                'signal_briefing': signal_briefing,
                 'root_causes': root_causes,
                 'timestamp': datetime.now().isoformat()
             }
@@ -244,6 +252,9 @@ class ReasoningEngine:
             
             if s.get('predicted_outcomes'):
                 print(f"  📈 Predicted: {' → '.join(s['predicted_outcomes'][:3])}")
+            
+            if s.get('signal_briefing'):
+                print(f"  💡 {s['signal_briefing']}")
             
             print()
     

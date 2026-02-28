@@ -131,6 +131,7 @@ class KnowledgeGraph:
                 'keywords': ['israel', 'iran', 'strike', 'strikes', 'retaliation'],
                 'pattern_names': [],
                 'event': 'Israel strikes Iran',
+                'briefing': "Similar to Oct 2023 when Iran attacked Israel — oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
                 'predictions': [
                     {'outcome': 'Crude oil rises 2-5% on risk premium', 'asset': 'crude_oil', 'direction': 'up', 'magnitude': '2-5%', 'horizon': 'intraday'},
                     {'outcome': 'Airline stocks weaken on fuel-cost shock', 'asset': 'airline_stocks', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-3d'},
@@ -142,6 +143,7 @@ class KnowledgeGraph:
                 'keywords': ['opec', 'supply increase', 'output increase', 'production boost'],
                 'pattern_names': ['Saudi Oil Attacks'],
                 'event': 'OPEC+ supply increase',
+                'briefing': 'March 2020 oil price war crashed crude 65% in days. More recently, OPEC+ increases have pushed oil lower. Energy stocks typically underperform 1-3% on supply additions. Airlines get relief.',
                 'predictions': [
                     {'outcome': 'Crude oil drifts lower as supply outlook improves', 'asset': 'crude_oil', 'direction': 'down', 'magnitude': '1-4%', 'horizon': 'intraday-3d'},
                     {'outcome': 'Energy producers underperform on softer oil', 'asset': 'energy_stocks', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
@@ -154,6 +156,7 @@ class KnowledgeGraph:
                 'pattern_names': ['Russia-Ukraine Conflict'],
                 'allow_pattern_fallback': True,
                 'event': 'Russia peace talks fail',
+                'briefing': "Feb 2022 peace talk failures preceded the invasion — markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
                 'predictions': [
                     {'outcome': 'Defense names strengthen on renewed conflict risk', 'asset': 'defense_stocks', 'direction': 'up', 'magnitude': '1-4%', 'horizon': '1-5d'},
                     {'outcome': 'Wheat prices firm on Black Sea disruption risk', 'asset': 'wheat', 'direction': 'up', 'magnitude': '2-6%', 'horizon': '1-10d'},
@@ -167,6 +170,7 @@ class KnowledgeGraph:
                 'pattern_names': ['US Credit Downgrade'],
                 'allow_pattern_fallback': True,
                 'event': 'Fed rate hike',
+                'briefing': "March 2022 rate hikes crushed tech (down 30% that year). Rate hikes typically pressure growth stocks and rate-sensitive sectors. Dollar strengthens on yield differential. Bond yields climb.",
                 'predictions': [
                     {'outcome': 'Treasury yields climb on hawkish policy', 'asset': 'treasury_yields', 'direction': 'up', 'magnitude': '5-15bp', 'horizon': 'intraday'},
                     {'outcome': 'Rate-sensitive sectors weaken', 'asset': 'rate_sensitive', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-5d'},
@@ -179,6 +183,7 @@ class KnowledgeGraph:
                 'keywords': ['rate cut', 'rates lower', 'interest rate cut', 'cut rates', 'cutting rates', 'lowered rates', 'fed cuts', 'fed easing'],
                 'pattern_names': [],
                 'event': 'Fed rate cut',
+                'briefing': "2019 rate cuts fueled a 30% market rally. Rate cuts typically boost growth stocks and REITs. Dollar weakens as yield differential narrows. Bond yields fall.",
                 'predictions': [
                     {'outcome': 'Treasury yields fall on dovish policy', 'asset': 'treasury_yields', 'direction': 'down', 'magnitude': '5-20bp', 'horizon': 'intraday'},
                     {'outcome': 'Growth stocks rally on cheaper money', 'asset': 'growth_stocks', 'direction': 'up', 'magnitude': '1-4%', 'horizon': '1-5d'},
@@ -191,6 +196,7 @@ class KnowledgeGraph:
                 'keywords': ['inflation hotter', 'inflation rises', 'inflation surprise', 'cpi rises', 'core inflation up', 'inflation spikes'],
                 'pattern_names': [],
                 'event': 'CPI inflation hot',
+                'briefing': "Hot CPI in 2022 caused Fed to hike aggressively, crushing markets. Hot readings push out rate cut expectations, spike yields, and pressure growth stocks. TIPS typically outperform.",
                 'predictions': [
                     {'outcome': 'Treasury yields spike on inflation shock', 'asset': 'treasury_yields', 'direction': 'up', 'magnitude': '8-20bp', 'horizon': 'intraday'},
                     {'outcome': 'Rate cut expectations pushed out', 'asset': 'rate_expectations', 'direction': 'down', 'magnitude': '2-4 cuts', 'horizon': '1-5d'},
@@ -203,6 +209,7 @@ class KnowledgeGraph:
                 'keywords': ['inflation cools', 'inflation falls', 'inflation slows', 'cpi falls', 'core inflation down', 'disinflation', 'inflation drops'],
                 'pattern_names': [],
                 'event': 'CPI inflation cold',
+                'briefing': "Cool CPI in late 2023 sparked the rally. Cold readings bring forward rate cuts, drop yields, and boost growth. This is historically bullish for risk assets.",
                 'predictions': [
                     {'outcome': 'Treasury yields fall on soft data', 'asset': 'treasury_yields', 'direction': 'down', 'magnitude': '8-20bp', 'horizon': 'intraday'},
                     {'outcome': 'Rate cut expectations accelerate', 'asset': 'rate_expectations', 'direction': 'up', 'magnitude': '2-4 cuts', 'horizon': '1-5d'},
@@ -216,6 +223,7 @@ class KnowledgeGraph:
                 'pattern_names': ['Regional Banking Crisis 2023'],
                 'allow_pattern_fallback': True,
                 'event': 'Big bank earnings miss',
+                'briefing': "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears — investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
                 'predictions': [
                     {'outcome': 'Regional banks sell off on contagion fear', 'asset': 'regional_banks', 'direction': 'down', 'magnitude': '2-5%', 'horizon': 'intraday-3d'},
                     {'outcome': 'Credit spreads widen', 'asset': 'credit_spreads', 'direction': 'up', 'magnitude': '10-25bp', 'horizon': '1-5d'},
@@ -228,6 +236,7 @@ class KnowledgeGraph:
                 'keywords': ['merger', 'acquisition', 'takeover', 'buyout', 'deal talks', 'm&a', 'acquire'],
                 'pattern_names': [],
                 'event': 'Major M&A announced',
+                'briefing': "M&A activity is a market health indicator. Deals typically spike 20-50% on announcement. Sector rotation follows — peers rally on takeover chatter. Watch for regulatory concerns.",
                 'predictions': [
                     {'outcome': 'Target stock jumps on premium', 'asset': 'target_stock', 'direction': 'up', 'magnitude': '10-30%', 'horizon': 'intraday'},
                     {'outcome': 'Acquirer may dip on cash/equity concern', 'asset': 'acquirer_stock', 'direction': 'down', 'magnitude': '1-3%', 'horizon': '1-3d'},
@@ -241,6 +250,7 @@ class KnowledgeGraph:
                 'pattern_names': ['Regional Banking Crisis 2023'],
                 'allow_pattern_fallback': True,
                 'event': 'Regional banking stress',
+                'briefing': "March 2023 SVB collapse crashed regional banks 20%+ in days. This is a systemic risk signal. Large caps typically outperform. Flight to safety into treasuries. Credit conditions tighten.",
                 'predictions': [
                     {'outcome': 'Regional bank indices crater', 'asset': 'regional_bank_index', 'direction': 'down', 'magnitude': '5-15%', 'horizon': 'intraday'},
                     {'outcome': 'Large caps outperform regionals', 'asset': 'large_cap_banks', 'direction': 'up', 'magnitude': '1-3%', 'horizon': '1-5d'},
@@ -445,6 +455,7 @@ class KnowledgeGraph:
                 matches.append({
                     'trigger': template['event'],
                     'chain_name': template['name'],
+                    'briefing': template.get('briefing', ''),
                     'predictions': template['predictions']
                 })
 
