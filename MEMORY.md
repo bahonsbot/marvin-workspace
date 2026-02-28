@@ -72,6 +72,11 @@
 ### Telegram
 - Bot: Configured and working
 - Paired for direct command delivery
+- **Group allowlist:** New Telegram groups need to be added manually to `channels.telegram.groups` in openclaw.json
+- **Adding new groups:** When Philippe adds the bot to a new group, the bot won't see messages until:
+  1. Group Privacy is turned OFF in BotFather (done once)
+  2. Group ID is added to allowlist (manual step)
+- **Future improvement:** Could implement `/allow` command to auto-add current group, but manual add works fine for now
 
 ### Horizons PMS (Feb 2026)
 - Phase 1 PRD established in `projects/horizons-pms/PRD.md`
