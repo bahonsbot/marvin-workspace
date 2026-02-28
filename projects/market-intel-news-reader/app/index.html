@@ -371,6 +371,13 @@
                 filtered = filtered.filter(item => item.category.includes(currentFilter));
             }
             
+            // Sort by publication date (newest first)
+            filtered.sort((a, b) => {
+                const dateA = new Date(a.published || a.timestamp);
+                const dateB = new Date(b.published || b.timestamp);
+                return dateB - dateA;
+            });
+            
             if (filtered.length === 0) {
                 feed.innerHTML = '<div class="empty-state">No news in this category</div>';
                 return;
