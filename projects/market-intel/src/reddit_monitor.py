@@ -16,7 +16,15 @@ class RedditMonitor:
             'investing', 
             'options',
             'StockMarket',
-            'securityanalysis'
+            'securityanalysis',
+            # NEW
+            'economics',
+            'finance',
+            'trading',
+            'stocks',
+            'ValueInvesting',
+            'Daytrading',
+            'Cryptocurrency',
         ]
         
         # Keywords from patterns

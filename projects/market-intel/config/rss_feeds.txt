@@ -2,7 +2,7 @@
 # Format: name,url
 
 # ============================================
-# X / Twitter Feeds (via rss.app - Basic Plan)
+# X / Twitter Feeds (via rss.app)
 # ============================================
 
 Business,https://rss.app/feeds/J4g3h9IgJtdC9DFI.xml
@@ -15,7 +15,7 @@ UnusualWhales,https://rss.app/feeds/vOjbHEjGb1OvmDK3.xml
 # RSS Feeds (Free, Reliable)
 # ============================================
 
-# High-priority macro / geopolitics (news-feeds proven sources)
+# High-priority macro / geopolitics
 BBC_World,https://feeds.bbci.co.uk/news/world/rss.xml
 BBC_Business,https://feeds.bbci.co.uk/news/business/rss.xml
 Reuters_World,https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml
@@ -25,18 +25,25 @@ Guardian_World,https://www.theguardian.com/world/rss
 Guardian_Business,https://www.theguardian.com/uk/business/rss
 DW_Top,https://rss.dw.com/rdf/rss-en-top
 
-# News / Market
+# News / Market (high-priority)
 Financial_Times,https://www.ft.com/rss/home
 MarketWatch,https://feeds.marketwatch.com/marketwatch/topstories/
-The_Verge,https://www.theverge.com/rss/index.xml
-TechCrunch,https://techcrunch.com/feed/
 
-# Backup
-Yahoo_Finance_Backup,https://finance.yahoo.com/news/rssindex
+# NEW: CNBC (free)
+CNBC_Top,https://www.cnbc.com/id/100003114/device/rss/rss.html
+
+# NEW: Yahoo Finance
+Yahoo_Finance,https://finance.yahoo.com/news/rssindex
+
+# NEW: Nasdaq
+Nasdaq_News,https://www.nasdaq.com/feed/rss/headline
+
+# NEW: Bloomberg (via news.google)
+Bloomberg_Tech,https://news.google.com/rss/search?q=site%3Abloomberg.com+technology&hl=en-US&gl=US&ceid=US%3Aen
+Bloomberg_Markets,https://news.google.com/rss/search?q=site%3Abloomberg.com+markets&hl=en-US&gl=US&ceid=US%3Aen
 
 # ============================================
 # Keywords to Watch
-# Derived from pattern database (patterns.json)
 # ============================================
 
 WATCH_KEYWORDS:
