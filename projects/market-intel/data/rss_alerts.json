@@ -9,7 +9,7 @@
       "battery",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710039"
+    "timestamp": "2026-02-28T14:15:11.579424"
   },
   {
     "feed": "Business",
@@ -20,7 +20,7 @@
       "dividend",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710137"
+    "timestamp": "2026-02-28T14:15:11.579526"
   },
   {
     "feed": "Business",
@@ -31,7 +31,7 @@
       "war",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710206"
+    "timestamp": "2026-02-28T14:15:11.579596"
   },
   {
     "feed": "Business",
@@ -42,7 +42,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710269"
+    "timestamp": "2026-02-28T14:15:11.579665"
   },
   {
     "feed": "Business",
@@ -53,7 +53,7 @@
       "fed",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710346"
+    "timestamp": "2026-02-28T14:15:11.579735"
   },
   {
     "feed": "Business",
@@ -64,7 +64,7 @@
       "fed",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710409"
+    "timestamp": "2026-02-28T14:15:11.579807"
   },
   {
     "feed": "Business",
@@ -75,7 +75,7 @@
       "china",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710474"
+    "timestamp": "2026-02-28T14:15:11.579881"
   },
   {
     "feed": "Business",
@@ -86,7 +86,7 @@
       "rate",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710540"
+    "timestamp": "2026-02-28T14:15:11.579955"
   },
   {
     "feed": "Business",
@@ -97,7 +97,7 @@
       "china",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710610"
+    "timestamp": "2026-02-28T14:15:11.580052"
   },
   {
     "feed": "Business",
@@ -108,7 +108,7 @@
       "war",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:36.710671"
+    "timestamp": "2026-02-28T14:15:11.580127"
   },
   {
     "feed": "FinancialJuice",
@@ -119,7 +119,7 @@
       "oil",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.373458"
+    "timestamp": "2026-02-28T14:15:11.904779"
   },
   {
     "feed": "FinancialJuice",
@@ -129,7 +129,7 @@
     "matched_keywords": [
       "oil"
     ],
-    "timestamp": "2026-02-28T13:47:37.373506"
+    "timestamp": "2026-02-28T14:15:11.904825"
   },
   {
     "feed": "FinancialJuice",
@@ -139,7 +139,7 @@
     "matched_keywords": [
       "bank"
     ],
-    "timestamp": "2026-02-28T13:47:37.373595"
+    "timestamp": "2026-02-28T14:15:11.904915"
   },
   {
     "feed": "FinancialJuice",
@@ -149,7 +149,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.373640"
+    "timestamp": "2026-02-28T14:15:11.904960"
   },
   {
     "feed": "FinancialJuice",
@@ -160,7 +160,7 @@
       "fed",
       "ev"
     ],
-    "timestamp": "2026-02-28T13:47:37.373796"
+    "timestamp": "2026-02-28T14:15:11.905144"
   },
   {
     "feed": "YCombinator",
@@ -172,7 +172,7 @@
       "who",
       "ev"
     ],
-    "timestamp": "2026-02-28T13:47:37.715034"
+    "timestamp": "2026-02-28T14:15:12.235262"
   },
   {
     "feed": "YCombinator",
@@ -183,7 +183,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.715135"
+    "timestamp": "2026-02-28T14:15:12.235371"
   },
   {
     "feed": "YCombinator",
@@ -194,7 +194,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.715203"
+    "timestamp": "2026-02-28T14:15:12.235439"
   },
   {
     "feed": "YCombinator",
@@ -205,7 +205,7 @@
       "nato",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.715268"
+    "timestamp": "2026-02-28T14:15:12.235504"
   },
   {
     "feed": "YCombinator",
@@ -217,7 +217,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.715352"
+    "timestamp": "2026-02-28T14:15:12.235564"
   },
   {
     "feed": "YCombinator",
@@ -229,7 +229,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.715417"
+    "timestamp": "2026-02-28T14:15:12.235629"
   },
   {
     "feed": "YCombinator",
@@ -243,7 +243,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.715487"
+    "timestamp": "2026-02-28T14:15:12.235698"
   },
   {
     "feed": "YCombinator",
@@ -256,7 +256,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.715577"
+    "timestamp": "2026-02-28T14:15:12.235779"
   },
   {
     "feed": "YCombinator",
@@ -266,7 +266,7 @@
     "matched_keywords": [
       "nato"
     ],
-    "timestamp": "2026-02-28T13:47:37.715613"
+    "timestamp": "2026-02-28T14:15:12.235806"
   },
   {
     "feed": "YCombinator",
@@ -278,7 +278,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:37.715699"
+    "timestamp": "2026-02-28T14:15:12.235880"
   },
   {
     "feed": "ZeroHedge",
@@ -288,7 +288,7 @@
     "matched_keywords": [
       "credit"
     ],
-    "timestamp": "2026-02-28T13:47:38.047461"
+    "timestamp": "2026-02-28T14:15:12.571204"
   },
   {
     "feed": "ZeroHedge",
@@ -298,7 +298,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:38.047510"
+    "timestamp": "2026-02-28T14:15:12.571264"
   },
   {
     "feed": "ZeroHedge",
@@ -308,7 +308,7 @@
     "matched_keywords": [
       "china"
     ],
-    "timestamp": "2026-02-28T13:47:38.047547"
+    "timestamp": "2026-02-28T14:15:12.571329"
   },
   {
     "feed": "ZeroHedge",
@@ -318,7 +318,7 @@
     "matched_keywords": [
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:38.047645"
+    "timestamp": "2026-02-28T14:15:12.571427"
   },
   {
     "feed": "ZeroHedge",
@@ -329,17 +329,7 @@
       "war",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:38.047715"
-  },
-  {
-    "feed": "ZeroHedge",
-    "title": "That was fast *OPENAI REACHED AGREEMENT WITH PENTAGON TO DEPLOY AI MODELS",
-    "link": "https://x.com/zerohedge/status/2027580254957588951",
-    "published": "Sat, 28 Feb 2026 03:02:00 GMT",
-    "matched_keywords": [
-      "ai"
-    ],
-    "timestamp": "2026-02-28T13:47:38.047780"
+    "timestamp": "2026-02-28T14:15:12.571497"
   },
   {
     "feed": "UnusualWhales",
@@ -350,7 +340,7 @@
       "options",
       "unusual"
     ],
-    "timestamp": "2026-02-28T13:47:38.379164"
+    "timestamp": "2026-02-28T14:15:12.915657"
   },
   {
     "feed": "UnusualWhales",
@@ -361,7 +351,7 @@
       "unusual",
       "eu"
     ],
-    "timestamp": "2026-02-28T13:47:38.379239"
+    "timestamp": "2026-02-28T14:15:12.915721"
   },
   {
     "feed": "UnusualWhales",
@@ -372,7 +362,7 @@
       "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:38.379320"
+    "timestamp": "2026-02-28T14:15:12.915767"
   },
   {
     "feed": "UnusualWhales",
@@ -384,7 +374,7 @@
       "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:38.379362"
+    "timestamp": "2026-02-28T14:15:12.915806"
   },
   {
     "feed": "UnusualWhales",
@@ -394,7 +384,7 @@
     "matched_keywords": [
       "unusual"
     ],
-    "timestamp": "2026-02-28T13:47:38.379405"
+    "timestamp": "2026-02-28T14:15:12.915847"
   },
   {
     "feed": "UnusualWhales",
@@ -404,7 +394,7 @@
     "matched_keywords": [
       "unusual"
     ],
-    "timestamp": "2026-02-28T13:47:38.379465"
+    "timestamp": "2026-02-28T14:15:12.915905"
   },
   {
     "feed": "UnusualWhales",
@@ -415,7 +405,7 @@
       "default",
       "unusual"
     ],
-    "timestamp": "2026-02-28T13:47:38.379512"
+    "timestamp": "2026-02-28T14:15:12.915950"
   },
   {
     "feed": "UnusualWhales",
@@ -427,7 +417,7 @@
       "unusual",
       "rate"
     ],
-    "timestamp": "2026-02-28T13:47:38.379562"
+    "timestamp": "2026-02-28T14:15:12.916016"
   },
   {
     "feed": "UnusualWhales",
@@ -438,7 +428,7 @@
       "unusual",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:38.379610"
+    "timestamp": "2026-02-28T14:15:12.916063"
   },
   {
     "feed": "UnusualWhales",
@@ -450,7 +440,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:38.379658"
+    "timestamp": "2026-02-28T14:15:12.916109"
   },
   {
     "feed": "Financial_Times",
@@ -460,7 +450,7 @@
     "matched_keywords": [
       "collapse"
     ],
-    "timestamp": "2026-02-28T13:47:40.709964"
+    "timestamp": "2026-02-28T14:15:15.060724"
   },
   {
     "feed": "Financial_Times",
@@ -473,7 +463,7 @@
       "credit",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:40.709997"
+    "timestamp": "2026-02-28T14:15:15.060765"
   },
   {
     "feed": "Financial_Times",
@@ -485,7 +475,7 @@
       "battle",
       "beat"
     ],
-    "timestamp": "2026-02-28T13:47:40.710015"
+    "timestamp": "2026-02-28T14:15:15.060788"
   },
   {
     "feed": "Financial_Times",
@@ -497,7 +487,7 @@
       "battle",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:40.710033"
+    "timestamp": "2026-02-28T14:15:15.060810"
   },
   {
     "feed": "Financial_Times",
@@ -508,7 +498,7 @@
       "ev",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:40.710082"
+    "timestamp": "2026-02-28T14:15:15.060824"
   },
   {
     "feed": "Financial_Times",
@@ -518,7 +508,7 @@
     "matched_keywords": [
       "war"
     ],
-    "timestamp": "2026-02-28T13:47:40.710100"
+    "timestamp": "2026-02-28T14:15:15.060845"
   },
   {
     "feed": "Financial_Times",
@@ -531,7 +521,7 @@
       "short",
       "rate"
     ],
-    "timestamp": "2026-02-28T13:47:40.710122"
+    "timestamp": "2026-02-28T14:15:15.060867"
   },
   {
     "feed": "Financial_Times",
@@ -543,7 +533,7 @@
       "eu",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:40.710139"
+    "timestamp": "2026-02-28T14:15:15.060894"
   },
   {
     "feed": "Financial_Times",
@@ -555,6 +545,16 @@
       "battle",
       "ai"
     ],
-    "timestamp": "2026-02-28T13:47:40.710155"
+    "timestamp": "2026-02-28T14:15:15.060914"
+  },
+  {
+    "feed": "MarketWatch",
+    "title": "My brother is paranoid, alone and has forgotten that he sold his house. How can we help?",
+    "link": "https://www.marketwatch.com/story/my-sister-and-i-are-his-only-family-my-brother-is-paranoid-and-forgot-he-sold-his-house-what-can-i-do-006a8d3a?mod=mw_rss_topstories",
+    "published": "Sat, 28 Feb 2026 00:00:00 GMT",
+    "matched_keywords": [
+      "ai"
+    ],
+    "timestamp": "2026-02-28T14:15:15.871492"
   }
 ]
