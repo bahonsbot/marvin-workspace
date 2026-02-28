@@ -1,171 +1,418 @@
 #!/usr/bin/env python3
 """
-Generate news feed from RSS and Reddit alerts for the Market Intel News Reader
+Generate a combined RSS + Reddit feed for the Market Intel News Reader.
+
+Design goals:
+- Work regardless of current working directory (cron-safe)
+- Prefer cached alerts from projects/market-intel/data
+- Gracefully recover when upstream fetches fail or are rate-limited
+- Keep dependencies to Python standard library only
 """
 import json
 import os
-from datetime import datetime, timedelta
+import random
+import time
+import urllib.error
+import urllib.request
+import xml.etree.ElementTree as ET
+from datetime import datetime
 from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
-def load_alerts():
-    """Load RSS and Reddit alerts"""
-    rss_alerts = []
-    reddit_alerts = []
-    
-    # Try to load cached RSS data
-    if os.path.exists('projects/market-intel/data/rss_alerts.json'):
-        with open('projects/market-intel/data/rss_alerts.json', 'r') as f:
-            rss_alerts = json.load(f)
-    
-    # Also try fresh from RSS monitor's config
-    if not rss_alerts:
-        # Load directly from RSS config and fetch
-        rss_alerts = fetch_all_rss_feeds()
-    
-    if os.path.exists('projects/market-intel/data/reddit_alerts.json'):
-        with open('projects/market-intel/data/reddit_alerts.json', 'r') as f:
-            reddit_alerts = json.load(f)
-    
-    return rss_alerts, reddit_alerts
+USER_AGENT = (
+    "Mozilla/5.0 (X11; Linux x86_64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/123.0.0.0 Safari/537.36 "
+    "MarketIntelNewsReader/1.1"
+)
 
-def fetch_all_rss_feeds():
-    """Fetch directly from RSS feeds for the news reader"""
-    import urllib.request
-    
-    feeds_config = [
-        ('Business', 'https://rss.app/feeds/J4g3h9IgJtdC9DFI.xml'),
-        ('FinancialJuice', 'https://rss.app/feeds/mZ8QxKASBRr35JlU.xml'),
-        ('ZeroHedge', 'https://rss.app/feeds/2pl8vwqzm5ByJ2Zf.xml'),
-        ('Reuters', 'https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml'),
-    ]
-    
-    alerts = []
-    
-    for name, url in feeds_config:
+RSS_FALLBACK_FEEDS = [
+    ("Business", "https://rss.app/feeds/J4g3h9IgJtdC9DFI.xml"),
+    ("FinancialJuice", "https://rss.app/feeds/mZ8QxKASBRr35JlU.xml"),
+    ("ZeroHedge", "https://rss.app/feeds/2pl8vwqzm5ByJ2Zf.xml"),
+    ("Reuters", "https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml"),
+    ("MarketWatch", "https://feeds.marketwatch.com/marketwatch/topstories/"),
+    ("TechCrunch", "https://techcrunch.com/feed/"),
+    ("YahooFinance", "https://finance.yahoo.com/news/rssindex"),
+]
+
+REDDIT_SUBREDDITS = [
+    "wallstreetbets",
+    "investing",
+    "options",
+    "StockMarket",
+    "securityanalysis",
+]
+
+
+def now_iso() -> str:
+    return datetime.now().isoformat()
+
+
+def safe_load_json(path: Path, default):
+    if not path.exists():
+        return default
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return default
+
+
+def extract_text(el: Optional[ET.Element], default: str = "") -> str:
+    if el is None:
+        return default
+    if el.text:
+        return el.text.strip()
+    return default
+
+
+class FeedGenerator:
+    def __init__(self):
+        self.script_path = Path(__file__).resolve()
+        self.project_root = self.script_path.parents[1]  # market-intel-news-reader
+        self.workspace_root = self.script_path.parents[3]  # /data/.openclaw/workspace
+        self.market_intel_root = self.workspace_root / "projects" / "market-intel"
+
+        self.rss_alerts_path = self.market_intel_root / "data" / "rss_alerts.json"
+        self.reddit_alerts_path = self.market_intel_root / "data" / "reddit_alerts.json"
+
+        self.output_file = self.project_root / "news_feed.json"
+        self.cache_dir = self.project_root / "cache"
+        self.cache_file = self.cache_dir / "rss_fetch_cache.json"
+
+    def request_bytes(
+        self,
+        url: str,
+        timeout: int = 12,
+        retries: int = 3,
+        backoff_seconds: float = 1.5,
+    ) -> Optional[bytes]:
+        headers = {
+            "User-Agent": USER_AGENT,
+            "Accept": "application/rss+xml, application/xml, application/json, text/xml, */*",
+            "Accept-Language": "en-US,en;q=0.9",
+        }
+
+        for attempt in range(retries):
+            try:
+                req = urllib.request.Request(url, headers=headers)
+                with urllib.request.urlopen(req, timeout=timeout) as response:
+                    return response.read()
+            except urllib.error.HTTPError as e:
+                if e.code == 429:
+                    wait_time = backoff_seconds * (2 ** attempt) + random.uniform(0.1, 0.5)
+                    print(f"  ⚠ 429 rate-limited: {url} (retry in {wait_time:.1f}s)")
+                    time.sleep(wait_time)
+                    continue
+                if 500 <= e.code <= 599 and attempt < retries - 1:
+                    wait_time = backoff_seconds * (2 ** attempt)
+                    print(f"  ⚠ HTTP {e.code}: {url} (retry in {wait_time:.1f}s)")
+                    time.sleep(wait_time)
+                    continue
+                print(f"  ⚠ HTTP {e.code}: {url}")
+                return None
+            except Exception as e:
+                if attempt < retries - 1:
+                    wait_time = backoff_seconds * (2 ** attempt)
+                    print(f"  ⚠ fetch error: {url} ({e}) retry in {wait_time:.1f}s")
+                    time.sleep(wait_time)
+                else:
+                    print(f"  ⚠ fetch error: {url} ({e})")
+                    return None
+
+        return None
+
+    def parse_feed_xml(self, content: bytes, feed_name: str, max_items: int = 8) -> List[Dict]:
+        alerts: List[Dict] = []
+        root = ET.fromstring(content)
+
+        # RSS format
+        rss_items = root.findall(".//item")
+        if rss_items:
+            for item in rss_items[:max_items]:
+                title = extract_text(item.find("title"))
+                link = extract_text(item.find("link"))
+                summary = extract_text(item.find("description"))
+                published = extract_text(item.find("pubDate"))
+                if not title:
+                    continue
+                alerts.append(
+                    {
+                        "title": title,
+                        "summary": summary,
+                        "link": link,
+                        "feed": feed_name,
+                        "published": published,
+                        "timestamp": now_iso(),
+                    }
+                )
+            return alerts
+
+        # Atom fallback
+        atom_entries = root.findall(".//{http://www.w3.org/2005/Atom}entry")
+        for entry in atom_entries[:max_items]:
+            title = extract_text(entry.find("{http://www.w3.org/2005/Atom}title"))
+            summary = extract_text(entry.find("{http://www.w3.org/2005/Atom}summary"))
+            if not summary:
+                summary = extract_text(entry.find("{http://www.w3.org/2005/Atom}content"))
+            updated = extract_text(entry.find("{http://www.w3.org/2005/Atom}updated"))
+
+            link = ""
+            for link_node in entry.findall("{http://www.w3.org/2005/Atom}link"):
+                href = link_node.attrib.get("href")
+                rel = link_node.attrib.get("rel", "alternate")
+                if href and rel == "alternate":
+                    link = href
+                    break
+                if href and not link:
+                    link = href
+
+            if not title:
+                continue
+
+            alerts.append(
+                {
+                    "title": title,
+                    "summary": summary,
+                    "link": link,
+                    "feed": feed_name,
+                    "published": updated,
+                    "timestamp": now_iso(),
+                }
+            )
+
+        return alerts
+
+    def load_rss_cache(self) -> Dict:
+        return safe_load_json(self.cache_file, {"updated": "", "items": []})
+
+    def save_rss_cache(self, items: List[Dict]):
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        with self.cache_file.open("w", encoding="utf-8") as f:
+            json.dump({"updated": now_iso(), "items": items}, f, indent=2)
+
+    def fetch_all_rss_feeds(self) -> List[Dict]:
+        print("Fetching fallback RSS feeds...")
+
+        alerts: List[Dict] = []
+        for name, url in RSS_FALLBACK_FEEDS:
+            content = self.request_bytes(url)
+            if not content:
+                continue
+            try:
+                alerts.extend(self.parse_feed_xml(content, name))
+            except Exception as e:
+                print(f"  ⚠ parse error ({name}): {e}")
+            time.sleep(0.6)  # gentle pacing for upstream limits
+
+        # Dedupe by (title, link)
+        deduped = {}
+        for item in alerts:
+            key = (item.get("title", ""), item.get("link", ""))
+            deduped[key] = item
+
+        output = list(deduped.values())
+
+        if output:
+            self.save_rss_cache(output)
+            return output
+
+        # Last resort: return cached fallback if available
+        cached = self.load_rss_cache().get("items", [])
+        if cached:
+            print(f"  ⚠ using cached RSS fallback ({len(cached)} items)")
+            return cached
+
+        return []
+
+    def fetch_reddit_json(self, subreddit: str, limit: int = 12) -> List[Dict]:
+        url = f"https://www.reddit.com/r/{subreddit}/hot/.json?limit={limit}&raw_json=1"
+        content = self.request_bytes(url, timeout=10, retries=3)
+        if not content:
+            return []
+
         try:
-            with urllib.request.urlopen(url, timeout=5) as response:
-                import xml.etree.ElementTree as ET
-                root = ET.fromstring(response.read())
-                for item in root.findall('.//item')[:10]:
-                    title = item.find('title')
-                    link = item.find('link')
-                    alerts.append({
-                        'title': title.text if title is not None else '',
-                        'link': link.text if link is not None else '',
-                        'feed': name,
-                        'timestamp': datetime.now().isoformat()
-                    })
+            data = json.loads(content.decode("utf-8"))
         except Exception as e:
-            print(f"  ⚠ {name}: {e}")
-    
-    return alerts
+            print(f"  ⚠ reddit JSON parse ({subreddit}): {e}")
+            return []
 
-def categorize_alert(alert):
-    """Categorize alert based on keywords"""
+        items = []
+        for child in data.get("data", {}).get("children", []):
+            post = child.get("data", {})
+            title = post.get("title", "")
+            permalink = post.get("permalink", "")
+            if not title or not permalink:
+                continue
+            items.append(
+                {
+                    "subreddit": post.get("subreddit", subreddit),
+                    "title": title,
+                    "url": "https://reddit.com" + permalink,
+                    "score": post.get("score", 0),
+                    "comments": post.get("num_comments", 0),
+                    "timestamp": now_iso(),
+                }
+            )
+
+        return items
+
+    def fetch_reddit_rss(self, subreddit: str, limit: int = 8) -> List[Dict]:
+        url = f"https://www.reddit.com/r/{subreddit}/.rss"
+        content = self.request_bytes(url, timeout=12, retries=2)
+        if not content:
+            return []
+
+        try:
+            parsed = self.parse_feed_xml(content, f"r/{subreddit}", max_items=limit)
+        except Exception as e:
+            print(f"  ⚠ reddit RSS parse ({subreddit}): {e}")
+            return []
+
+        items = []
+        for entry in parsed:
+            items.append(
+                {
+                    "subreddit": subreddit,
+                    "title": entry.get("title", ""),
+                    "url": entry.get("link", ""),
+                    "score": 0,
+                    "comments": 0,
+                    "timestamp": now_iso(),
+                }
+            )
+        return items
+
+    def fetch_reddit_alerts(self) -> List[Dict]:
+        print("Fetching Reddit fallback feed...")
+        alerts: List[Dict] = []
+
+        for sub in REDDIT_SUBREDDITS:
+            posts = self.fetch_reddit_json(sub)
+            if not posts:
+                posts = self.fetch_reddit_rss(sub)
+            alerts.extend(posts)
+            time.sleep(0.8)
+
+        # Dedupe by URL
+        deduped = {}
+        for post in alerts:
+            key = post.get("url", "")
+            if key:
+                deduped[key] = post
+
+        return list(deduped.values())
+
+    def load_alerts(self) -> Tuple[List[Dict], List[Dict]]:
+        rss_alerts = safe_load_json(self.rss_alerts_path, [])
+        reddit_alerts = safe_load_json(self.reddit_alerts_path, [])
+
+        # If upstream monitor data is missing/empty, self-heal with fallback fetch.
+        if len(rss_alerts) < 10:
+            fetched_rss = self.fetch_all_rss_feeds()
+            if fetched_rss:
+                rss_alerts = fetched_rss
+
+        if len(reddit_alerts) < 5:
+            fetched_reddit = self.fetch_reddit_alerts()
+            if fetched_reddit:
+                reddit_alerts = fetched_reddit
+
+        return rss_alerts, reddit_alerts
+
+
+def categorize_alert(alert: Dict) -> List[str]:
     text = f"{alert.get('title', '')} {alert.get('summary', '')}".lower()
-    
+
     categories = {
-        'geopolitical': ['war', 'invasion', 'russia', 'ukraine', 'china', 'iran', 'israel', 'sanction', 'military', 'conflict', 'troops'],
-        'financial': ['bank', 'svb', 'default', 'crisis', 'credit', 'fed', 'interest', 'rate'],
-        'macro': ['inflation', 'cpi', 'gdp', 'recession', 'economy', 'market'],
-        'corporate': ['earnings', 'revenue', 'acquisition', 'merger', 'ipo', 'stock split', 'dividend'],
-        'sentiment': ['reddit', 'wsb', 'wallstreetbets', 'meme', 'short squeeze', 'gme']
+        "geopolitical": ["war", "invasion", "russia", "ukraine", "china", "iran", "israel", "sanction", "military", "conflict", "troops"],
+        "financial": ["bank", "svb", "default", "crisis", "credit", "fed", "interest", "rate"],
+        "macro": ["inflation", "cpi", "gdp", "recession", "economy", "market"],
+        "corporate": ["earnings", "revenue", "acquisition", "merger", "ipo", "stock split", "dividend"],
+        "sentiment": ["reddit", "wsb", "wallstreetbets", "meme", "short squeeze", "gme"],
     }
-    
+
     matched = []
     for cat, keywords in categories.items():
-        for kw in keywords:
-            if kw in text:
-                matched.append(cat)
-                break
-    
-    return matched if matched else ['other']
+        if any(kw in text for kw in keywords):
+            matched.append(cat)
 
-def transform_rss_alert(alert):
-    """Transform RSS alert to feed format"""
-    categories = categorize_alert(alert)
-    
+    return matched if matched else ["other"]
+
+
+def transform_rss_alert(alert: Dict) -> Dict:
+    ts = alert.get("timestamp", now_iso())
     return {
-        'id': f"rss_{alert.get('timestamp', '').replace(':', '').replace('.', '')}",
-        'title': alert.get('title', '')[:150],
-        'summary': alert.get('summary', '')[:200] if alert.get('summary') else '',
-        'url': alert.get('link', ''),
-        'source': f"RSS: {alert.get('feed', 'unknown')}",
-        'category': categories,
-        'published': alert.get('published', ''),
-        'timestamp': alert.get('timestamp', ''),
-        'type': 'rss'
+        "id": f"rss_{ts.replace(':', '').replace('.', '')}",
+        "title": alert.get("title", "")[:150],
+        "summary": alert.get("summary", "")[:240],
+        "url": alert.get("link", ""),
+        "source": f"RSS: {alert.get('feed', 'unknown')}",
+        "category": categorize_alert(alert),
+        "published": alert.get("published", ""),
+        "timestamp": ts,
+        "type": "rss",
     }
 
-def transform_reddit_alert(alert):
-    """Transform Reddit alert to feed format"""
-    categories = categorize_alert(alert)
-    
+
+def transform_reddit_alert(alert: Dict) -> Dict:
+    ts = alert.get("timestamp", now_iso())
     return {
-        'id': f"reddit_{alert.get('timestamp', '').replace(':', '').replace('.', '')}",
-        'title': alert.get('title', '')[:150],
-        'summary': f"{alert.get('score', 0)} upvotes | {alert.get('comments', 0)} comments",
-        'url': alert.get('url', ''),
-        'source': f"Reddit: r/{alert.get('subreddit', 'unknown')}",
-        'category': categories,
-        'published': alert.get('timestamp', ''),
-        'timestamp': alert.get('timestamp', ''),
-        'type': 'reddit',
-        'score': alert.get('score', 0)
+        "id": f"reddit_{ts.replace(':', '').replace('.', '')}",
+        "title": alert.get("title", "")[:150],
+        "summary": f"{alert.get('score', 0)} upvotes | {alert.get('comments', 0)} comments",
+        "url": alert.get("url", ""),
+        "source": f"Reddit: r/{alert.get('subreddit', 'unknown')}",
+        "category": categorize_alert(alert),
+        "published": ts,
+        "timestamp": ts,
+        "type": "reddit",
+        "score": alert.get("score", 0),
     }
 
-def generate_feed():
-    """Generate the news feed"""
-    rss_alerts, reddit_alerts = load_alerts()
-    
+
+def generate_feed() -> Dict:
+    generator = FeedGenerator()
+    rss_alerts, reddit_alerts = generator.load_alerts()
+
     feed_items = []
-    
-    # Transform RSS alerts
-    for alert in rss_alerts[:50]:  # Last 50
-        feed_items.append(transform_rss_alert(alert))
-    
-    # Transform Reddit alerts
-    for alert in reddit_alerts[:30]:  # Last 30
-        feed_items.append(transform_reddit_alert(alert))
-    
-    # Sort by timestamp
-    feed_items.sort(key=lambda x: x.get('timestamp', ''), reverse=True)
-    
-    # Take last 50
-    feed_items = feed_items[:50]
-    
-    # Create feed output
-    feed = {
-        'version': '1.0',
-        'generated': datetime.now().isoformat(),
-        'categories': ['geopolitical', 'financial', 'macro', 'corporate', 'sentiment', 'other'],
-        'items': feed_items,
-        'stats': {
-            'total': len(feed_items),
-            'rss': len([x for x in feed_items if x['type'] == 'rss']),
-            'reddit': len([x for x in feed_items if x['type'] == 'reddit'])
-        }
+    feed_items.extend(transform_rss_alert(a) for a in rss_alerts[:60])
+    feed_items.extend(transform_reddit_alert(a) for a in reddit_alerts[:40])
+
+    # Keep valid URL-bearing entries only
+    feed_items = [x for x in feed_items if x.get("title") and x.get("url")]
+    feed_items.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
+    feed_items = feed_items[:80]
+
+    return {
+        "version": "1.1",
+        "generated": now_iso(),
+        "categories": ["geopolitical", "financial", "macro", "corporate", "sentiment", "other"],
+        "items": feed_items,
+        "stats": {
+            "total": len(feed_items),
+            "rss": len([x for x in feed_items if x["type"] == "rss"]),
+            "reddit": len([x for x in feed_items if x["type"] == "reddit"]),
+        },
     }
-    
-    return feed
+
 
 def main():
     print("=== Generating Market Intel News Feed ===")
-    
+
+    generator = FeedGenerator()
     feed = generate_feed()
-    
-    # Save to news reader project
-    output_dir = Path('projects/market-intel-news-reader')
-    output_dir.mkdir(parents=True, exist_ok=True)
-    
-    output_file = output_dir / 'news_feed.json'
-    with open(output_file, 'w') as f:
+
+    generator.project_root.mkdir(parents=True, exist_ok=True)
+    with generator.output_file.open("w", encoding="utf-8") as f:
         json.dump(feed, f, indent=2)
-    
+
     print(f"✓ Generated {feed['stats']['total']} items")
     print(f"  RSS: {feed['stats']['rss']}")
     print(f"  Reddit: {feed['stats']['reddit']}")
-    print(f"  Saved to: {output_file}")
+    print(f"  Saved to: {generator.output_file}")
+
 
 if __name__ == "__main__":
     main()
