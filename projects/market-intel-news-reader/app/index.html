@@ -214,14 +214,32 @@
             const lastUpdated = document.getElementById('lastUpdated');
             feed.classList.add('loading');
             
-            try {
-                const response = await fetch('news_feed.json');
-                const data = await response.json();
+            // Try multiple paths for GitHub Pages compatibility
+            const paths = [
+                'news_feed.json',
+                '../news_feed.json',
+                '../../news_feed.json'
+            ];
+            
+            let data = null;
+            for (const path of paths) {
+                try {
+                    const response = await fetch(path);
+                    if (response.ok) {
+                        data = await response.json();
+                        console.log('Loaded from:', path);
+                        break;
+                    }
+                } catch (e) {
+                    console.log('Failed:', path, e);
+                }
+            }
+            
+            if (data) {
                 newsData = data.items || [];
-                
                 lastUpdated.textContent = `Updated: ${new Date(data.generated).toLocaleString()}`;
                 renderFeed();
-            } catch (error) {
+            } else {
                 feed.innerHTML = '<div class="empty-state">Error loading feed. Pull to refresh.</div>';
             }
             
