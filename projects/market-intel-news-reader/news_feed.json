@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "generated": "2026-02-28T18:15:41.254156",
+  "generated": "2026-02-28T10:42:13.816141Z",
   "categories": [
     "geopolitical",
     "financial",
@@ -10,6 +10,569 @@
     "other"
   ],
   "items": [
+    {
+      "id": "reddit_2026-02-28T184012101040",
+      "title": "The odyssey between DoW and Anthropic is extremely bullish to AI",
+      "summary": "14 upvotes | 28 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgu1fk/the_odyssey_between_dow_and_anthropic_is/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:12.101040",
+      "timestamp": "2026-02-28T18:40:12.101040",
+      "type": "reddit",
+      "score": 14
+    },
+    {
+      "id": "reddit_2026-02-28T184012101036",
+      "title": "SpaceX Weighs Confidential IPO Filing as Soon as March",
+      "summary": "39 upvotes | 9 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgn2ro/spacex_weighs_confidential_ipo_filing_as_soon_as/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T18:40:12.101036",
+      "timestamp": "2026-02-28T18:40:12.101036",
+      "type": "reddit",
+      "score": 39
+    },
+    {
+      "id": "reddit_2026-02-28T184012101029",
+      "title": "Tech stocks today: Anthropic CEO Dario Amodei rejects Defense Department demands over AI guardrails",
+      "summary": "388 upvotes | 14 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rg7gxv/tech_stocks_today_anthropic_ceo_dario_amodei/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:12.101029",
+      "timestamp": "2026-02-28T18:40:12.101029",
+      "type": "reddit",
+      "score": 388
+    },
+    {
+      "id": "reddit_2026-02-28T184012101023",
+      "title": "Net Income for Mega Cap AI Companies - Updated for Nvidia and with more metrics!",
+      "summary": "21 upvotes | 4 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgun3v/net_income_for_mega_cap_ai_companies_updated_for/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:12.101023",
+      "timestamp": "2026-02-28T18:40:12.101023",
+      "type": "reddit",
+      "score": 21
+    },
+    {
+      "id": "reddit_2026-02-28T184012101018",
+      "title": "UBS downgrades the U.S. stock market. Here's what has the investment bank worried",
+      "summary": "400 upvotes | 23 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgb9we/ubs_downgrades_the_us_stock_market_heres_what_has/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "financial",
+        "macro"
+      ],
+      "published": "2026-02-28T18:40:12.101018",
+      "timestamp": "2026-02-28T18:40:12.101018",
+      "type": "reddit",
+      "score": 400
+    },
+    {
+      "id": "reddit_2026-02-28T184012101015",
+      "title": "S&amp;P 500, Nasdaq on track for biggest monthly drop in a year as AI worries bite",
+      "summary": "287 upvotes | 42 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rggb3k/sp_500_nasdaq_on_track_for_biggest_monthly_drop/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:12.101015",
+      "timestamp": "2026-02-28T18:40:12.101015",
+      "type": "reddit",
+      "score": 287
+    },
+    {
+      "id": "reddit_2026-02-28T184012101009",
+      "title": "Israel said it launched pre-emptive attack against Iran",
+      "summary": "91 upvotes | 51 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgvl6j/israel_said_it_launched_preemptive_attack_against/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:12.101009",
+      "timestamp": "2026-02-28T18:40:12.101009",
+      "type": "reddit",
+      "score": 91
+    },
+    {
+      "id": "reddit_2026-02-28T184012101004",
+      "title": "US and Israel launch \"pre-emptive\" attack against Iran",
+      "summary": "187 upvotes | 177 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgw6i5/us_and_israel_launch_preemptive_attack_against/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:12.101004",
+      "timestamp": "2026-02-28T18:40:12.101004",
+      "type": "reddit",
+      "score": 187
+    },
+    {
+      "id": "reddit_2026-02-28T184012100998",
+      "title": "Trump Will End Government Use of Anthropic\u2019s AI Models",
+      "summary": "1324 upvotes | 188 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rgjp80/trump_will_end_government_use_of_anthropics_ai/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:12.100998",
+      "timestamp": "2026-02-28T18:40:12.100998",
+      "type": "reddit",
+      "score": 1324
+    },
+    {
+      "id": "reddit_2026-02-28T184012100970",
+      "title": "Daily General Discussion and Advice Thread - February 27, 2026",
+      "summary": "2 upvotes | 0 comments",
+      "url": "https://reddit.com/r/StockMarket/comments/1rg4tji/daily_general_discussion_and_advice_thread/",
+      "source": "Reddit: r/StockMarket",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:12.100970",
+      "timestamp": "2026-02-28T18:40:12.100970",
+      "type": "reddit",
+      "score": 2
+    },
+    {
+      "id": "reddit_2026-02-28T184010547602",
+      "title": "Bought nvda calls",
+      "summary": "0 upvotes | 24 comments",
+      "url": "https://reddit.com/r/options/comments/1rfpmpo/bought_nvda_calls/",
+      "source": "Reddit: r/options",
+      "category": [
+        "sentiment"
+      ],
+      "published": "2026-02-28T18:40:10.547602",
+      "timestamp": "2026-02-28T18:40:10.547602",
+      "type": "reddit",
+      "score": 0
+    },
+    {
+      "id": "reddit_2026-02-28T184010547599",
+      "title": "NVDA $NVDA Earnings Trade Vol Crush Setup",
+      "summary": "24 upvotes | 22 comments",
+      "url": "https://reddit.com/r/options/comments/1reoql1/nvda_nvda_earnings_trade_vol_crush_setup/",
+      "source": "Reddit: r/options",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T18:40:10.547599",
+      "timestamp": "2026-02-28T18:40:10.547599",
+      "type": "reddit",
+      "score": 24
+    },
+    {
+      "id": "reddit_2026-02-28T184010547585",
+      "title": "Does H&amp;R Block software import/handle Section 1256 Contract equities",
+      "summary": "5 upvotes | 5 comments",
+      "url": "https://reddit.com/r/options/comments/1rf9vbn/does_hr_block_software_importhandle_section_1256/",
+      "source": "Reddit: r/options",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:10.547585",
+      "timestamp": "2026-02-28T18:40:10.547585",
+      "type": "reddit",
+      "score": 5
+    },
+    {
+      "id": "reddit_2026-02-28T184010547580",
+      "title": "Etrade sold puts early assignment\u2026",
+      "summary": "0 upvotes | 14 comments",
+      "url": "https://reddit.com/r/options/comments/1rg14af/etrade_sold_puts_early_assignment/",
+      "source": "Reddit: r/options",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:10.547580",
+      "timestamp": "2026-02-28T18:40:10.547580",
+      "type": "reddit",
+      "score": 0
+    },
+    {
+      "id": "reddit_2026-02-28T184010547571",
+      "title": "11470 $3 calls expiring this Friday bought today on $RR Richtech Robotics",
+      "summary": "58 upvotes | 66 comments",
+      "url": "https://reddit.com/r/options/comments/1rezg7g/11470_3_calls_expiring_this_friday_bought_today/",
+      "source": "Reddit: r/options",
+      "category": [
+        "sentiment"
+      ],
+      "published": "2026-02-28T18:40:10.547571",
+      "timestamp": "2026-02-28T18:40:10.547571",
+      "type": "reddit",
+      "score": 58
+    },
+    {
+      "id": "reddit_2026-02-28T184010547563",
+      "title": "SYSTERIX - YOLO risk $250k for $23k gain SPX Put Credit Spread (6650p / 6550p PCS due Mar 6, 2026)",
+      "summary": "1 upvotes | 5 comments",
+      "url": "https://reddit.com/r/options/comments/1rfvk9x/systerix_yolo_risk_250k_for_23k_gain_spx_put/",
+      "source": "Reddit: r/options",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T18:40:10.547563",
+      "timestamp": "2026-02-28T18:40:10.547563",
+      "type": "reddit",
+      "score": 1
+    },
+    {
+      "id": "reddit_2026-02-28T184010547548",
+      "title": "RIOT IV seems strangely low 3 days before earnings compared to HV.",
+      "summary": "9 upvotes | 6 comments",
+      "url": "https://reddit.com/r/options/comments/1rfsmv1/riot_iv_seems_strangely_low_3_days_before/",
+      "source": "Reddit: r/options",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T18:40:10.547548",
+      "timestamp": "2026-02-28T18:40:10.547548",
+      "type": "reddit",
+      "score": 9
+    },
+    {
+      "id": "reddit_2026-02-28T184010547536",
+      "title": "Tail Risk Hedging - Looking for Partners!",
+      "summary": "6 upvotes | 21 comments",
+      "url": "https://reddit.com/r/options/comments/1rg5f6y/tail_risk_hedging_looking_for_partners/",
+      "source": "Reddit: r/options",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:10.547536",
+      "timestamp": "2026-02-28T18:40:10.547536",
+      "type": "reddit",
+      "score": 6
+    },
+    {
+      "id": "reddit_2026-02-28T184010547531",
+      "title": "Best bullish strategy to roll if stock price goes against you and you are ITM",
+      "summary": "3 upvotes | 16 comments",
+      "url": "https://reddit.com/r/options/comments/1rgendf/best_bullish_strategy_to_roll_if_stock_price_goes/",
+      "source": "Reddit: r/options",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T18:40:10.547531",
+      "timestamp": "2026-02-28T18:40:10.547531",
+      "type": "reddit",
+      "score": 3
+    },
+    {
+      "id": "reddit_2026-02-28T184010547499",
+      "title": "Iron Condor SPY Strategy ~40% avg gains",
+      "summary": "80 upvotes | 92 comments",
+      "url": "https://reddit.com/r/options/comments/1rgiezk/iron_condor_spy_strategy_40_avg_gains/",
+      "source": "Reddit: r/options",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T18:40:10.547499",
+      "timestamp": "2026-02-28T18:40:10.547499",
+      "type": "reddit",
+      "score": 80
+    },
+    {
+      "id": "reddit_2026-02-28T184008965037",
+      "title": "Daily General Discussion and Advice Thread - February 27, 2026",
+      "summary": "5 upvotes | 11 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg1ofu/daily_general_discussion_and_advice_thread/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:08.965037",
+      "timestamp": "2026-02-28T18:40:08.965037",
+      "type": "reddit",
+      "score": 5
+    },
+    {
+      "id": "reddit_2026-02-28T184008965023",
+      "title": "Crazy how bad market is treating FLGT earnings call",
+      "summary": "4 upvotes | 2 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg9hiy/crazy_how_bad_market_is_treating_flgt_earnings/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "macro",
+        "corporate"
+      ],
+      "published": "2026-02-28T18:40:08.965023",
+      "timestamp": "2026-02-28T18:40:08.965023",
+      "type": "reddit",
+      "score": 4
+    },
+    {
+      "id": "reddit_2026-02-28T184008965022",
+      "title": "Has the US Federal reserve really printed 400Billion? Trying to understand the H.4.1. documents on the Fed reserve website",
+      "summary": "100 upvotes | 13 comments",
+      "url": "https://reddit.com/r/investing/comments/1rfnnyb/has_the_us_federal_reserve_really_printed/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T18:40:08.965022",
+      "timestamp": "2026-02-28T18:40:08.965022",
+      "type": "reddit",
+      "score": 100
+    },
+    {
+      "id": "reddit_2026-02-28T184008965002",
+      "title": "Scott\u2019s (SMG) up 6.8% since last earnings report. Can it continue?",
+      "summary": "3 upvotes | 0 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgi0dd/scotts_smg_up_68_since_last_earnings_report_can/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T18:40:08.965002",
+      "timestamp": "2026-02-28T18:40:08.965002",
+      "type": "reddit",
+      "score": 3
+    },
+    {
+      "id": "reddit_2026-02-28T184008964994",
+      "title": "Question about State and Federal income tax limits",
+      "summary": "0 upvotes | 10 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgsdee/question_about_state_and_federal_income_tax_limits/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "financial"
+      ],
+      "published": "2026-02-28T18:40:08.964994",
+      "timestamp": "2026-02-28T18:40:08.964994",
+      "type": "reddit",
+      "score": 0
+    },
+    {
+      "id": "reddit_2026-02-28T184008964990",
+      "title": "$GASS should really be talked about more. 52w highs daily and still undervalued by most metrics",
+      "summary": "2 upvotes | 3 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgnpxi/gass_should_really_be_talked_about_more_52w_highs/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:08.964990",
+      "timestamp": "2026-02-28T18:40:08.964990",
+      "type": "reddit",
+      "score": 2
+    },
+    {
+      "id": "reddit_2026-02-28T184008964979",
+      "title": "Big Tech doubles down on AI infrastructure while markets debate the \u201cAI bubble\u201d",
+      "summary": "56 upvotes | 43 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg32hc/big_tech_doubles_down_on_ai_infrastructure_while/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "macro"
+      ],
+      "published": "2026-02-28T18:40:08.964979",
+      "timestamp": "2026-02-28T18:40:08.964979",
+      "type": "reddit",
+      "score": 56
+    },
+    {
+      "id": "reddit_2026-02-28T184008964950",
+      "title": "Netherlands Forced to Rethink 36% Tax on Unrealized Gains after Massive Criticism",
+      "summary": "1676 upvotes | 697 comments",
+      "url": "https://reddit.com/r/investing/comments/1rfjjhv/netherlands_forced_to_rethink_36_tax_on/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:08.964950",
+      "timestamp": "2026-02-28T18:40:08.964950",
+      "type": "reddit",
+      "score": 1676
+    },
+    {
+      "id": "reddit_2026-02-28T184008964944",
+      "title": "Private equity enters its 'Darwinian' era as experts warn some funds face extinction",
+      "summary": "79 upvotes | 36 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg66m5/private_equity_enters_its_darwinian_era_as/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:08.964944",
+      "timestamp": "2026-02-28T18:40:08.964944",
+      "type": "reddit",
+      "score": 79
+    },
+    {
+      "id": "reddit_2026-02-28T184008964938",
+      "title": "The Warning Signs Flashing From the Tech-Heavy Bloat of the S&amp;P 500",
+      "summary": "121 upvotes | 50 comments",
+      "url": "https://reddit.com/r/investing/comments/1rg5von/the_warning_signs_flashing_from_the_techheavy/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:08.964938",
+      "timestamp": "2026-02-28T18:40:08.964938",
+      "type": "reddit",
+      "score": 121
+    },
+    {
+      "id": "reddit_2026-02-28T184008964929",
+      "title": "CoreWeave reported today. Beat on revenue. Stock tanked 11%. Why?",
+      "summary": "111 upvotes | 84 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgnnjk/coreweave_reported_today_beat_on_revenue_stock/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T18:40:08.964929",
+      "timestamp": "2026-02-28T18:40:08.964929",
+      "type": "reddit",
+      "score": 111
+    },
+    {
+      "id": "reddit_2026-02-28T184008964903",
+      "title": "Daily General Discussion and Advice Thread - February 28, 2026",
+      "summary": "1 upvotes | 0 comments",
+      "url": "https://reddit.com/r/investing/comments/1rgxw27/daily_general_discussion_and_advice_thread/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:08.964903",
+      "timestamp": "2026-02-28T18:40:08.964903",
+      "type": "reddit",
+      "score": 1
+    },
+    {
+      "id": "reddit_2026-02-28T184007436688",
+      "title": "Netflix Drops Warner Bros. Bid",
+      "summary": "5801 upvotes | 308 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rfutxd/netflix_drops_warner_bros_bid/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:07.436688",
+      "timestamp": "2026-02-28T18:40:07.436688",
+      "type": "reddit",
+      "score": 5801
+    },
+    {
+      "id": "reddit_2026-02-28T184007436684",
+      "title": "My SLV gains and loss posts were so regarded they made the news",
+      "summary": "366 upvotes | 39 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgdphz/my_slv_gains_and_loss_posts_were_so_regarded_they/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:07.436684",
+      "timestamp": "2026-02-28T18:40:07.436684",
+      "type": "reddit",
+      "score": 366
+    },
+    {
+      "id": "reddit_2026-02-28T184007436672",
+      "title": "SpaceX Weighs Confidential IPO Filing as Soon as March",
+      "summary": "335 upvotes | 106 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgi61d/spacex_weighs_confidential_ipo_filing_as_soon_as/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T18:40:07.436672",
+      "timestamp": "2026-02-28T18:40:07.436672",
+      "type": "reddit",
+      "score": 335
+    },
+    {
+      "id": "reddit_2026-02-28T184007436662",
+      "title": "OpenAI Finalizes $110 Billion Funding at $730 Billion Valuation",
+      "summary": "1534 upvotes | 303 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rg8k7a/openai_finalizes_110_billion_funding_at_730/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "other"
+      ],
+      "published": "2026-02-28T18:40:07.436662",
+      "timestamp": "2026-02-28T18:40:07.436662",
+      "type": "reddit",
+      "score": 1534
+    },
+    {
+      "id": "reddit_2026-02-28T184007436592",
+      "title": "Israel launches strike against Iran, declares state of emergency across country",
+      "summary": "1445 upvotes | 244 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgvjm9/israel_launches_strike_against_iran_declares/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:07.436592",
+      "timestamp": "2026-02-28T18:40:07.436592",
+      "type": "reddit",
+      "score": 1445
+    },
+    {
+      "id": "reddit_2026-02-28T184007436587",
+      "title": "a War has broken out. Buying CALLS for Monday since the S&amp;P will hit all time High",
+      "summary": "1337 upvotes | 245 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgwgaf/a_war_has_broken_out_buying_calls_for_monday/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "geopolitical",
+        "sentiment"
+      ],
+      "published": "2026-02-28T18:40:07.436587",
+      "timestamp": "2026-02-28T18:40:07.436587",
+      "type": "reddit",
+      "score": 1337
+    },
+    {
+      "id": "reddit_2026-02-28T184007436577",
+      "title": "Sam Altman: Tonight, we reached an agreement with the Department of War to deploy our models in their classified network.",
+      "summary": "8982 upvotes | 1338 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgri2d/sam_altman_tonight_we_reached_an_agreement_with/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "2026-02-28T18:40:07.436577",
+      "timestamp": "2026-02-28T18:40:07.436577",
+      "type": "reddit",
+      "score": 8982
+    },
+    {
+      "id": "reddit_2026-02-28T184007436517",
+      "title": "Weekly Earnings Threads 3/2 - 3/6",
+      "summary": "76 upvotes | 175 comments",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rgbpm8/weekly_earnings_threads_32_36/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "corporate"
+      ],
+      "published": "2026-02-28T18:40:07.436517",
+      "timestamp": "2026-02-28T18:40:07.436517",
+      "type": "reddit",
+      "score": 76
+    },
     {
       "id": "rss_2026-02-28T181521122489",
       "title": "Shares in MPS, Mediobanca slide on strategy day as Italy says to exit Tuscan bank",
@@ -534,554 +1097,11 @@
       "published": "Fri, 27 Feb 2026 17:00:00 GMT",
       "timestamp": "2026-02-28T18:15:19.789377",
       "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519789286",
-      "title": "Verdex is replacing physical inspections in insurance with real-time satellite imagery audits, allowing insurers to verify and settle claims without e",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027458721518096740",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 19:00:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.789286",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519789207",
-      "title": "Lexius turns existing security cameras into AI security guards that detect theft, prevent liability, and turns months of video into searchable answers",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027473815429583034",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 20:00:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.789207",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519789131",
-      "title": "RT by @ycombinator: Crow (  YC W26) lets users control your app through chat. Connect Crow's AI agent to your product, and Crow takes action for your ",
-      "summary": "",
-      "url": "https://x.com/jaixbhatia/status/2027475552685437004",
-      "source": "RSS: YCombinator",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Fri, 27 Feb 2026 20:06:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.789131",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519789025",
-      "title": "Autostep uncovers repetitive tasks ready for AI. Then builds or finds the agents to solve them. Your team repeats the same work hundreds of times a we",
-      "summary": "",
-      "url": "https://x.com/ycombinator/status/2027496462301757784",
-      "source": "RSS: YCombinator",
-      "category": [
-        "other"
-      ],
-      "published": "Fri, 27 Feb 2026 21:30:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.789025",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519788943",
-      "title": "RT by @ycombinator: Super excited that YC will be hosting a Bio + AI hackathon in March, organized by two awesome companies @BioRender and @tamarindbi",
-      "summary": "",
-      "url": "https://x.com/agupta/status/2027543518244118544",
-      "source": "RSS: YCombinator",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 00:36:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.788943",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519788841",
-      "title": "RT by @ycombinator: We just went from horse-and-carriage to car. The old manuals still have truth in them, but the whole map of effort, speed, and lev",
-      "summary": "",
-      "url": "https://x.com/garrytan/status/2027555272043184344",
-      "source": "RSS: YCombinator",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 01:23:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.788841",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519456974",
-      "title": "\ud83d\udd34 Trump: Federal agencies cease use of Anthropic\u2019s technology. Directing every Federal agency to cease Anthropic use",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027486335284453846",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "geopolitical",
-        "financial"
-      ],
-      "published": "Fri, 27 Feb 2026 20:49:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.456974",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519456763",
-      "title": "US State Dept: Iranian regime must stop taking hostages and release all Americans unjustly detained in Iran, steps that could end this designation and",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027491948064333929",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Fri, 27 Feb 2026 21:12:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.456763",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519456708",
-      "title": "US bank deposits rose to $18.778 trln from $18.764 trln in prior week",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027493441517576597",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "financial"
-      ],
-      "published": "Fri, 27 Feb 2026 21:18:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.456708",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519456597",
-      "title": "Trump: 360k barrels of Venezuelan oil sitting in tanker.",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027503192833945950",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Fri, 27 Feb 2026 21:56:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.456597",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519456544",
-      "title": "Trump: Somehow, I like oil over AI plants to make money.",
-      "summary": "",
-      "url": "https://x.com/financialjuice/status/2027504314357268899",
-      "source": "RSS: FinancialJuice",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Fri, 27 Feb 2026 22:01:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.456544",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113992",
-      "title": "Kamau Thugge insists his job running Kenya\u2019s central bank is easy. Investors may be forgiven for doing a double take. https://www.bloomberg.com/news/a",
-      "summary": "",
-      "url": "https://x.com/business/status/2027668360159236204",
-      "source": "RSS: Business",
-      "category": [
-        "financial"
-      ],
-      "published": "Sat, 28 Feb 2026 08:53:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113992",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113912",
-      "title": "The EU is in peril. Can it survive the Trump years, rising nationalism at home and the weight of its own poor decision-making? https://www.bloomberg.c",
-      "summary": "",
-      "url": "https://x.com/business/status/2027670127890591952",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 09:00:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113912",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113848",
-      "title": "Making Sense of the 'Citrini Selloff.' https://www.bloomberg.com/news/articles/2026-02-28/james-van-geelen-on-his-viral-ai-doom-scenario?taid=69a2af43",
-      "summary": "",
-      "url": "https://x.com/business/status/2027670859947651245",
-      "source": "RSS: Business",
-      "category": [
-        "other"
-      ],
-      "published": "Sat, 28 Feb 2026 09:02:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113848",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113786",
-      "title": "US President Donald Trump has followed through on a threat to attack Iran after talks failed to secure a deal to curb the country\u2019s nuclear program. H",
-      "summary": "",
-      "url": "https://x.com/business/status/2027674340506870094",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 09:16:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113786",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113699",
-      "title": "China said US claims that it was carrying out nuclear tests were baseless, accusing Washington of being the main cause of uncertainty over the global ",
-      "summary": "",
-      "url": "https://x.com/business/status/2027675696064082297",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 09:22:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113699",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113613",
-      "title": "Giorgia Meloni stabilized Italy. In her second act, she wants growth \u2014 and a global reality check on AI https://www.bloomberg.com/news/features/2026-0",
-      "summary": "",
-      "url": "https://x.com/business/status/2027678368750002679",
-      "source": "RSS: Business",
-      "category": [
-        "other"
-      ],
-      "published": "Sat, 28 Feb 2026 09:32:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113613",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113535",
-      "title": "China's authorities have overhauled a key micro credit program, shifting focus from poverty alleviation to longer\u2011term income support for still-vulner",
-      "summary": "",
-      "url": "https://x.com/business/status/2027679725041197478",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical",
-        "financial"
-      ],
-      "published": "Sat, 28 Feb 2026 09:38:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113535",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113426",
-      "title": "President Donald Trump made his case for the latest US attack on Iran in an extraordinary eight-minute video posted early Saturday morning on his Trut",
-      "summary": "",
-      "url": "https://x.com/business/status/2027682916608675983",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 09:50:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113426",
-      "type": "rss"
-    },
-    {
-      "id": "rss_2026-02-28T181519113248",
-      "title": "Iran strikes latest: - President Trump says the US has begun major operations against Iran - Airstrikes carried out by Israel and the US Israel report",
-      "summary": "",
-      "url": "https://x.com/business/status/2027685808761610706",
-      "source": "RSS: Business",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Sat, 28 Feb 2026 10:02:00 GMT",
-      "timestamp": "2026-02-28T18:15:19.113248",
-      "type": "rss"
-    },
-    {
-      "id": "reddit_2026-02-28T174012208135",
-      "title": "SpaceX Weighs Confidential IPO Filing as Soon as March",
-      "summary": "35 upvotes | 9 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rgn2ro/spacex_weighs_confidential_ipo_filing_as_soon_as/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "corporate"
-      ],
-      "published": "2026-02-28T17:40:12.208135",
-      "timestamp": "2026-02-28T17:40:12.208135",
-      "type": "reddit",
-      "score": 35
-    },
-    {
-      "id": "reddit_2026-02-28T174012208128",
-      "title": "Net Income for Mega Cap AI Companies - Updated for Nvidia and with more metrics!",
-      "summary": "19 upvotes | 3 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rgun3v/net_income_for_mega_cap_ai_companies_updated_for/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "other"
-      ],
-      "published": "2026-02-28T17:40:12.208128",
-      "timestamp": "2026-02-28T17:40:12.208128",
-      "type": "reddit",
-      "score": 19
-    },
-    {
-      "id": "reddit_2026-02-28T174012208122",
-      "title": "Tech stocks today: Anthropic CEO Dario Amodei rejects Defense Department demands over AI guardrails",
-      "summary": "391 upvotes | 14 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rg7gxv/tech_stocks_today_anthropic_ceo_dario_amodei/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "other"
-      ],
-      "published": "2026-02-28T17:40:12.208122",
-      "timestamp": "2026-02-28T17:40:12.208122",
-      "type": "reddit",
-      "score": 391
-    },
-    {
-      "id": "reddit_2026-02-28T174012208116",
-      "title": "UBS downgrades the U.S. stock market. Here's what has the investment bank worried",
-      "summary": "397 upvotes | 23 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rgb9we/ubs_downgrades_the_us_stock_market_heres_what_has/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "financial",
-        "macro"
-      ],
-      "published": "2026-02-28T17:40:12.208116",
-      "timestamp": "2026-02-28T17:40:12.208116",
-      "type": "reddit",
-      "score": 397
-    },
-    {
-      "id": "reddit_2026-02-28T174012208113",
-      "title": "S&amp;P 500, Nasdaq on track for biggest monthly drop in a year as AI worries bite",
-      "summary": "282 upvotes | 42 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rggb3k/sp_500_nasdaq_on_track_for_biggest_monthly_drop/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "other"
-      ],
-      "published": "2026-02-28T17:40:12.208113",
-      "timestamp": "2026-02-28T17:40:12.208113",
-      "type": "reddit",
-      "score": 282
-    },
-    {
-      "id": "reddit_2026-02-28T174012208107",
-      "title": "Israel said it launched pre-emptive attack against Iran",
-      "summary": "83 upvotes | 39 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rgvl6j/israel_said_it_launched_preemptive_attack_against/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "2026-02-28T17:40:12.208107",
-      "timestamp": "2026-02-28T17:40:12.208107",
-      "type": "reddit",
-      "score": 83
-    },
-    {
-      "id": "reddit_2026-02-28T174012208101",
-      "title": "US and Israel launch \"pre-emptive\" attack against Iran",
-      "summary": "150 upvotes | 160 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rgw6i5/us_and_israel_launch_preemptive_attack_against/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "2026-02-28T17:40:12.208101",
-      "timestamp": "2026-02-28T17:40:12.208101",
-      "type": "reddit",
-      "score": 150
-    },
-    {
-      "id": "reddit_2026-02-28T174012208095",
-      "title": "Trump Will End Government Use of Anthropic\u2019s AI Models",
-      "summary": "1300 upvotes | 187 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rgjp80/trump_will_end_government_use_of_anthropics_ai/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "2026-02-28T17:40:12.208095",
-      "timestamp": "2026-02-28T17:40:12.208095",
-      "type": "reddit",
-      "score": 1300
-    },
-    {
-      "id": "reddit_2026-02-28T174012208068",
-      "title": "Daily General Discussion and Advice Thread - February 27, 2026",
-      "summary": "2 upvotes | 0 comments",
-      "url": "https://reddit.com/r/StockMarket/comments/1rg4tji/daily_general_discussion_and_advice_thread/",
-      "source": "Reddit: r/StockMarket",
-      "category": [
-        "other"
-      ],
-      "published": "2026-02-28T17:40:12.208068",
-      "timestamp": "2026-02-28T17:40:12.208068",
-      "type": "reddit",
-      "score": 2
-    },
-    {
-      "id": "reddit_2026-02-28T174010607077",
-      "title": "Bought nvda calls",
-      "summary": "0 upvotes | 24 comments",
-      "url": "https://reddit.com/r/options/comments/1rfpmpo/bought_nvda_calls/",
-      "source": "Reddit: r/options",
-      "category": [
-        "sentiment"
-      ],
-      "published": "2026-02-28T17:40:10.607077",
-      "timestamp": "2026-02-28T17:40:10.607077",
-      "type": "reddit",
-      "score": 0
-    },
-    {
-      "id": "reddit_2026-02-28T174010607074",
-      "title": "NVDA $NVDA Earnings Trade Vol Crush Setup",
-      "summary": "25 upvotes | 22 comments",
-      "url": "https://reddit.com/r/options/comments/1reoql1/nvda_nvda_earnings_trade_vol_crush_setup/",
-      "source": "Reddit: r/options",
-      "category": [
-        "corporate"
-      ],
-      "published": "2026-02-28T17:40:10.607074",
-      "timestamp": "2026-02-28T17:40:10.607074",
-      "type": "reddit",
-      "score": 25
-    },
-    {
-      "id": "reddit_2026-02-28T174010607059",
-      "title": "Does H&amp;R Block software import/handle Section 1256 Contract equities",
-      "summary": "6 upvotes | 5 comments",
-      "url": "https://reddit.com/r/options/comments/1rf9vbn/does_hr_block_software_importhandle_section_1256/",
-      "source": "Reddit: r/options",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "2026-02-28T17:40:10.607059",
-      "timestamp": "2026-02-28T17:40:10.607059",
-      "type": "reddit",
-      "score": 6
-    },
-    {
-      "id": "reddit_2026-02-28T174010607054",
-      "title": "Etrade sold puts early assignment\u2026",
-      "summary": "0 upvotes | 14 comments",
-      "url": "https://reddit.com/r/options/comments/1rg14af/etrade_sold_puts_early_assignment/",
-      "source": "Reddit: r/options",
-      "category": [
-        "other"
-      ],
-      "published": "2026-02-28T17:40:10.607054",
-      "timestamp": "2026-02-28T17:40:10.607054",
-      "type": "reddit",
-      "score": 0
-    },
-    {
-      "id": "reddit_2026-02-28T174010607046",
-      "title": "11470 $3 calls expiring this Friday bought today on $RR Richtech Robotics",
-      "summary": "57 upvotes | 66 comments",
-      "url": "https://reddit.com/r/options/comments/1rezg7g/11470_3_calls_expiring_this_friday_bought_today/",
-      "source": "Reddit: r/options",
-      "category": [
-        "sentiment"
-      ],
-      "published": "2026-02-28T17:40:10.607046",
-      "timestamp": "2026-02-28T17:40:10.607046",
-      "type": "reddit",
-      "score": 57
-    },
-    {
-      "id": "reddit_2026-02-28T174010607036",
-      "title": "SYSTERIX - YOLO risk $250k for $23k gain SPX Put Credit Spread (6650p / 6550p PCS due Mar 6, 2026)",
-      "summary": "1 upvotes | 5 comments",
-      "url": "https://reddit.com/r/options/comments/1rfvk9x/systerix_yolo_risk_250k_for_23k_gain_spx_put/",
-      "source": "Reddit: r/options",
-      "category": [
-        "financial"
-      ],
-      "published": "2026-02-28T17:40:10.607036",
-      "timestamp": "2026-02-28T17:40:10.607036",
-      "type": "reddit",
-      "score": 1
-    },
-    {
-      "id": "reddit_2026-02-28T174010607021",
-      "title": "RIOT IV seems strangely low 3 days before earnings compared to HV.",
-      "summary": "10 upvotes | 6 comments",
-      "url": "https://reddit.com/r/options/comments/1rfsmv1/riot_iv_seems_strangely_low_3_days_before/",
-      "source": "Reddit: r/options",
-      "category": [
-        "corporate"
-      ],
-      "published": "2026-02-28T17:40:10.607021",
-      "timestamp": "2026-02-28T17:40:10.607021",
-      "type": "reddit",
-      "score": 10
-    },
-    {
-      "id": "reddit_2026-02-28T174010607008",
-      "title": "Tail Risk Hedging - Looking for Partners!",
-      "summary": "4 upvotes | 21 comments",
-      "url": "https://reddit.com/r/options/comments/1rg5f6y/tail_risk_hedging_looking_for_partners/",
-      "source": "Reddit: r/options",
-      "category": [
-        "other"
-      ],
-      "published": "2026-02-28T17:40:10.607008",
-      "timestamp": "2026-02-28T17:40:10.607008",
-      "type": "reddit",
-      "score": 4
-    },
-    {
-      "id": "reddit_2026-02-28T174010607003",
-      "title": "Best bullish strategy to roll if stock price goes against you and you are ITM",
-      "summary": "2 upvotes | 16 comments",
-      "url": "https://reddit.com/r/options/comments/1rgendf/best_bullish_strategy_to_roll_if_stock_price_goes/",
-      "source": "Reddit: r/options",
-      "category": [
-        "financial"
-      ],
-      "published": "2026-02-28T17:40:10.607003",
-      "timestamp": "2026-02-28T17:40:10.607003",
-      "type": "reddit",
-      "score": 2
-    },
-    {
-      "id": "reddit_2026-02-28T174010606971",
-      "title": "Iron Condor SPY Strategy ~40% avg gains",
-      "summary": "76 upvotes | 91 comments",
-      "url": "https://reddit.com/r/options/comments/1rgiezk/iron_condor_spy_strategy_40_avg_gains/",
-      "source": "Reddit: r/options",
-      "category": [
-        "financial"
-      ],
-      "published": "2026-02-28T17:40:10.606971",
-      "timestamp": "2026-02-28T17:40:10.606971",
-      "type": "reddit",
-      "score": 76
-    },
-    {
-      "id": "reddit_2026-02-28T174008769934",
-      "title": "Daily General Discussion and Advice Thread - February 27, 2026",
-      "summary": "5 upvotes | 11 comments",
-      "url": "https://reddit.com/r/investing/comments/1rg1ofu/daily_general_discussion_and_advice_thread/",
-      "source": "Reddit: r/investing",
-      "category": [
-        "other"
-      ],
-      "published": "2026-02-28T17:40:08.769934",
-      "timestamp": "2026-02-28T17:40:08.769934",
-      "type": "reddit",
-      "score": 5
     }
   ],
   "stats": {
     "total": 80,
-    "rss": 60,
-    "reddit": 20
+    "rss": 40,
+    "reddit": 40
   }
 }

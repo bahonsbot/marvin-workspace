@@ -46,7 +46,8 @@ REDDIT_SUBREDDITS = [
 
 
 def now_iso() -> str:
-    return datetime.now().isoformat()
+    from datetime import timezone
+    return datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
 
 
 def safe_load_json(path: Path, default):
