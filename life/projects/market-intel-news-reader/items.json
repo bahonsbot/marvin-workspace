@@ -1,0 +1,15 @@
+[
+  {
+    "id": "minr-001",
+    "fact": "Market Intel News Reader project was initiated with a PRD for an iPhone-friendly PWA news workflow.",
+    "category": "status",
+    "timestamp": "2026-02-27T21:30:00+08:00",
+    "source": "memory/2026-02-27.md",
+    "status": "planned",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  }
+]

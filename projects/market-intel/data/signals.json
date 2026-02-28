@@ -2,75 +2,13 @@
   {
     "source": "rss",
     "feed": "Business",
-    "title": "Did Covid escape from a Chinese lab? World Health Organization chief Tedros Adha",
-    "url": "https://x.com/business/status/2027352273773289906",
-    "timestamp": "2026-02-27T20:15:08.338332",
-    "pattern": "COVID-19 Market Crash",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Business",
-    "title": "Saudi Arabian investors sharply increased their trading in US equities in 2025, ",
-    "url": "https://x.com/business/status/2027350672069312722",
-    "timestamp": "2026-02-27T20:15:08.338486",
-    "pattern": "Saudi Oil Attacks",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "FinancialJuice",
-    "title": "Russia's Novak: We will seek to narrow Russia's Urals oil discount to Brent to $",
-    "url": "https://x.com/financialjuice/status/2027344523588665406",
-    "timestamp": "2026-02-27T20:15:10.012221",
+    "title": "Denmark\u2019s intelligence services warned that foreign powers may seek to interfere",
+    "url": "https://x.com/business/status/2027510096985502101",
+    "timestamp": "2026-02-28T07:15:07.362893",
     "pattern": "Russia-Ukraine Conflict",
     "category": "geopolitical",
     "confidence": "HIGH",
     "time_horizon": "short-term",
     "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Business",
-    "title": "Nvidia\u2019s explosive growth already seems like old hat to investors https://www.bl",
-    "url": "https://x.com/business/status/2027354110727430225",
-    "timestamp": "2026-02-27T20:15:08.337912",
-    "pattern": "Reddit GPU/Semis Thread",
-    "category": "sentiment_social",
-    "confidence": "MEDIUM",
-    "time_horizon": "short-term",
-    "signal_score": 100
-  },
-  {
-    "source": "reddit",
-    "feed": "r/wallstreetbets",
-    "title": "Nvidia earnings be like",
-    "url": "https://reddit.com/r/wallstreetbets/comments/1reruk1/nvidia_earnings_be_like/",
-    "timestamp": "2026-02-27T20:40:15.104119",
-    "pattern": "Reddit GPU/Semis Thread",
-    "category": "sentiment_social",
-    "confidence": "MEDIUM",
-    "time_horizon": "short-term",
-    "score": 25593,
-    "signal_score": 100
-  },
-  {
-    "source": "reddit",
-    "feed": "r/investing",
-    "title": "Nvidia's China revenue is still zero despite Trump's export approval. What that ",
-    "url": "https://reddit.com/r/investing/comments/1reuxnj/nvidias_china_revenue_is_still_zero_despite/",
-    "timestamp": "2026-02-27T20:40:16.480234",
-    "pattern": "Reddit GPU/Semis Thread",
-    "category": "sentiment_social",
-    "confidence": "MEDIUM",
-    "time_horizon": "short-term",
-    "score": 57,
-    "signal_score": 100
   }
 ]

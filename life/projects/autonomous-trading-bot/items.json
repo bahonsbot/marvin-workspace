@@ -1,0 +1,16 @@
+[
+  {
+    "id": "atb-001",
+    "fact": "Autonomous Trading Bot project started with PRD scope built around Alpaca paper trading and TradingView webhook signals in four phases.",
+    "category": "status",
+    "timestamp": "2026-02-27T22:10:00+08:00",
+    "source": "memory/2026-02-27.md",
+    "status": "planned",
+    "relatedEntities": [
+      "projects/market-intel",
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  }
+]

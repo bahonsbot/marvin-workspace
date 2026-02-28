@@ -58,5 +58,30 @@
     ],
     "lastAccessed": "2026-02-26",
     "accessCount": 1
+  },
+  {
+    "id": "mc-006",
+    "fact": "OpenClaw Control UI risky flags deviceAuth and hostHeaderOriginFallback were disabled, and openclaw.json permissions were tightened from 644 to 600.",
+    "category": "status",
+    "timestamp": "2026-02-27T13:20:00+08:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-007",
+    "fact": "Heartbeat automation was first reduced from 30-minute cadence to 60-minute cadence, then disabled later the same day to stop Telegram spam during market-intel runs.",
+    "category": "status",
+    "timestamp": "2026-02-27T21:15:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
   }
 ]

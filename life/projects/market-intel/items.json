@@ -1,0 +1,94 @@
+[
+  {
+    "id": "mi-001",
+    "fact": "New market-intel project was created to detect early market-moving signals before mainstream coverage.",
+    "category": "status",
+    "timestamp": "2026-02-26T21:54:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 2,
+    "source": "memory/2026-02-26.md"
+  },
+  {
+    "id": "mi-002",
+    "fact": "Phase 1 scope decision: run 10 historical case studies using event-study validation before realtime build.",
+    "category": "decision",
+    "timestamp": "2026-02-26T22:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 2,
+    "source": "memory/2026-02-26.md"
+  },
+  {
+    "id": "mi-003",
+    "fact": "Operating constraints were set to manual execution, conservative confidence threshold, and €50/month budget.",
+    "category": "decision",
+    "timestamp": "2026-02-26T23:10:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "areas/people/philippe",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 2,
+    "source": "memory/2026-02-26.md"
+  },
+  {
+    "id": "mi-004",
+    "fact": "Historical research phase expanded from 10 to 23 market-shock patterns and the pattern database was committed at projects/market-intel/data/patterns.json.",
+    "category": "status",
+    "timestamp": "2026-02-27T20:10:00+08:00",
+    "source": "memory/2026-02-27.md",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-005",
+    "fact": "Realtime ingestion pipeline was activated with hourly RSS monitor (:10), Reddit monitor (:40), and market signal generator (:45) jobs.",
+    "category": "status",
+    "timestamp": "2026-02-27T20:20:00+08:00",
+    "source": "memory/2026-02-27.md",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-006",
+    "fact": "Operational decision: market signal alerts remain manual-send to Telegram instead of auto-announce.",
+    "category": "decision",
+    "timestamp": "2026-02-27T20:30:00+08:00",
+    "source": "memory/2026-02-27.md",
+    "status": "active",
+    "relatedEntities": [
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-007",
+    "fact": "Market Intel News Reader was defined as a separate iPhone PWA initiative with a dedicated PRD.",
+    "category": "status",
+    "timestamp": "2026-02-27T21:30:00+08:00",
+    "source": "memory/2026-02-27.md",
+    "status": "planned",
+    "relatedEntities": [
+      "projects/market-intel-news-reader"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  }
+]

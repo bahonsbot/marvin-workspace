@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "id": "sh-001",
+    "fact": "Security remediation batch completed on 2026-02-27: Telegram token rotated, exposed credentials redacted from memory files, and ralphy execution now requires human approval plus PRD ownership validation.",
+    "category": "status",
+    "timestamp": "2026-02-27T13:47:00+08:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/security-review",
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  },
+  {
+    "id": "sh-002",
+    "fact": "Secondary hardening fixes completed on 2026-02-27: nightly-memory-extraction got symlink protection with atomic writes, audit-log input sanitization was added, and model switch scripts now use mktemp.",
+    "category": "status",
+    "timestamp": "2026-02-27T14:30:00+08:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/security-review",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  }
+]

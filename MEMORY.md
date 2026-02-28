@@ -198,3 +198,8 @@ All issues from nightly-security-review addressed. Cron jobs now save reports to
 - switch_model.sh & switch_model_auto.sh: use mktemp instead of predictable temp files
 - analyze_image.py: added ALLOW_THIRD_PARTY_IMAGE_UPLOAD consent gate
 - life/areas/people/philippe/items.json: added retention policy metadata
+
+## Identity Memory (Feb 28, 2026)
+- Proposal implemented: capture identity-forming moments
+- 85% tasks, 15% identity (topics that intrigued, reactions, jokes, observations)
+- See: memory/proposals/identity-memory-ratio.md

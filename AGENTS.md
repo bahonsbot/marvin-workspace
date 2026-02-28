@@ -10,6 +10,8 @@ Before doing anything else:
 4. Read `SUBAGENT-POLICY.md` — for delegation guidelines
 5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
 
+> **Note:** Capture not just tasks, but also moments that shape identity — topics that intrigued, reactions, observations, running jokes. Keep ~85% tasks, ~15% identity. (See identity-memory-ratio proposal)
+
 
 ## Memory System
 
