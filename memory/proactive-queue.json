@@ -1,43 +1,37 @@
 {
   "version": 1,
   "mode": "phase-1-discovery",
-  "updated_at": "2026-03-01T17:45:14+08:00",
+  "updated_at": "2026-03-01T19:03:31+08:00",
   "items": [
     {
-      "id": "mi-queue-001",
-      "title": "Review shadow A/B enrichment metrics and summarize baseline vs enriched deltas",
+      "id": "mi-queue-002",
+      "title": "Analyze signal accuracy trends over last 7 days and identify top 3 best/worst performing causal categories",
       "project": "projects/market-intel",
       "priority": "P1",
-      "status": "completed",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Safe analysis/reporting task using existing artifacts; no risky writes.",
-      "completion_note": "Completed Phase 2 review: summarized baseline vs enriched deltas, wrote notes/ab-enrichment-review-2026-03-01.md, recommendation=Gather more data (keep shadow). 2026-03-01T17:20:55+08:00",
-      "completed_at": "2026-03-01T17:20:55+08:00"
+      "notes": "Completed 2026-03-01: 7-day analysis generated in projects/market-intel/notes/accuracy-trend-7d-2026-03-01.md. Data currently insufficient for valid top-3 best/worst ranking (only 1 verified signal). Next: clear verification backlog (3 geopolitical, 1 macroeconomic pending) then rerun ranking."
     },
     {
-      "id": "minr-queue-001",
-      "title": "Audit News Reader feed output for residual HTML artifacts across top 10 entries",
+      "id": "minr-queue-002",
+      "title": "Implement quick-fix for js_blob artifact class in article excerpt enrichment",
       "project": "projects/market-intel-news-reader",
-      "priority": "P1",
-      "status": "completed",
+      "priority": "P2",
+      "status": "todo",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Validation task after RSS sanitization fix.",
-      "completion_note": "Completed Phase 2 HTML artifact audit for market-intel-news-reader top 10 entries; wrote projects/market-intel-news-reader/notes/html-artifact-audit-2026-03-01.md with pass/fail, artifact classes, root causes, and prioritized fixes. 2026-03-01T17:39:31+08:00",
-      "completed_at": "2026-03-01T17:39:31+08:00"
+      "notes": "Quick win from audit findings; strip obvious JS blob patterns from fetched excerpts."
     },
     {
-      "id": "hpms-queue-001",
-      "title": "Draft TASKS.md from PRD Phase 1 into 10-15 scoped implementation chunks",
+      "id": "hpms-queue-002",
+      "title": "Create database schema draft for Horizons PMS (rooms, bookings, guests, rates tables)",
       "project": "projects/horizons-pms",
-      "priority": "P2",
-      "status": "completed",
+      "priority": "P1",
+      "status": "todo",
       "ready": true,
       "phase2_eligible": false,
-      "notes": "Planning-heavy; keep as discovery-only until approved for execution edits.",
-      "completion_note": "Completed Phase 2 planning task: drafted projects/horizons-pms/TASKS.md from PRD Phase 1 into 12 scoped implementation chunks with priorities and completion criteria. 2026-03-01T17:45:14+08:00",
-      "completed_at": "2026-03-01T17:45:14+08:00"
+      "notes": "From TASKS.md backlog; requires design doc before implementation."
     }
   ]
 }
