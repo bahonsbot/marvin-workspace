@@ -78,9 +78,36 @@ python3 scripts/dry_run.py
 - `scripts/dry_run.py`
   - Sample signal validation and risk evaluation
 
+## Tests
+Run the paper-mode unit tests:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+## Local Webhook Receiver (Paper-Only)
+Start a local endpoint:
+
+```bash
+python3 -m src.webhook_receiver
+```
+
+Send a sample webhook:
+
+```bash
+curl -X POST http://127.0.0.1:8000/webhook \
+  -H "Content-Type: application/json" \
+  -d '{"symbol":"AAPL","side":"buy","qty":1,"timestamp":"2026-03-01T12:00:00Z"}'
+```
+
+Behavior:
+- Validates payload using `src/signal_validator.py`
+- Evaluates risk decision using `src/risk_manager.py`
+- Writes structured events to `logs/webhook_decisions.jsonl`
+- Returns JSON response with `accepted` and `reasons`
+- Never places orders, never calls external APIs
+
 ## Next Steps
-- Add unit tests for validator and risk guard decisions.
-- Add local webhook receiver endpoint and payload logging.
 - Add paper execution simulator (logs intended orders only).
 - Build daily reporting summary from local logs.
 
