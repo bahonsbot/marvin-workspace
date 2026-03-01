@@ -171,6 +171,7 @@ class RSSMonitor:
                 title_text = unescape(entry_title.text) if entry_title is not None and entry_title.text else ""
                 link_text = entry_link.text if entry_link is not None and entry_link.text else ""
                 summary_text = unescape(entry_desc.text) if entry_desc is not None and entry_desc.text else ""
+                summary_text = self.sanitize_html_to_text(summary_text)
                 pub_text = entry_pub.text if entry_pub is not None and entry_pub.text else ""
 
                 if not title_text:
@@ -186,7 +187,7 @@ class RSSMonitor:
                 if not summary_text:
                     atom_summary = item.find("atom:summary", ns) or item.find("atom:content", ns)
                     if atom_summary is not None and atom_summary.text:
-                        summary_text = unescape(atom_summary.text)
+                        summary_text = self.sanitize_html_to_text(unescape(atom_summary.text))
 
                 if not pub_text:
                     atom_pub = item.find("atom:updated", ns) or item.find("atom:published", ns)
