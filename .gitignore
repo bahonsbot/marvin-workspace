@@ -6,6 +6,11 @@ memory/
 node_modules/
 *.bak
 projects/market-intel/data/last_signal_check
+projects/market-intel/data/rss_alerts.json
+projects/market-intel/data/reddit_alerts.json
+projects/market-intel/data/signals.json
+projects/market-intel/data/enhanced_signals.json
+projects/market-intel/data/signal_state.json
 auth.json
 *.json.bak*
 *.json.bak
