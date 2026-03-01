@@ -1,7 +1,7 @@
 {
   "version": 1,
   "mode": "phase-1-discovery",
-  "updated_at": "2026-03-01T11:44:32.182237Z",
+  "updated_at": "2026-03-01T12:16:24Z",
   "items": [
     {
       "id": "mi-queue-002",
@@ -30,10 +30,12 @@
       "title": "Create database schema draft for Horizons PMS (rooms, bookings, guests, rates tables)",
       "project": "projects/horizons-pms",
       "priority": "P1",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
-      "phase2_eligible": false,
-      "notes": "From TASKS.md backlog; requires design doc before implementation."
+      "phase2_eligible": true,
+      "notes": "From TASKS.md backlog; requires design doc before implementation.",
+      "completion_note": "Created Phase 1 schema draft at projects/horizons-pms/db/schema.sql with rooms/bookings/guests/rates (+ room_types lookup), constraints, FKs, overlap prevention, indexes, and design notes in projects/horizons-pms/db/README.md.",
+      "completed_at": "2026-03-01T12:16:24Z"
     }
   ]
 }
