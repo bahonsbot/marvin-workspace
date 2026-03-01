@@ -8,12 +8,22 @@ No external calls and no execution side effects.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+# Load .env from project root (fallback if python-dotenv unavailable)
+_env_path = ROOT / ".env"
+if _env_path.exists():
+    for line in _env_path.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, val = line.split("=", 1)
+            os.environ.setdefault(key.strip(), val.strip())
 
 from src.signal_validator import validate_signal_payload
 from src.risk_manager import AccountState, RiskConfig, evaluate_risk_decision
