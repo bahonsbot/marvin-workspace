@@ -61,7 +61,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - self-improvement (`-1003721620909`)
 
 ### VPS / Infrastructure
-- **Host:** Hostinger VPS (Linux 6.8.0-100-generic)
+- **Host:** Hostinger VPS (Linux 6.8.0-101-generic)
 - **Location:** Hostinger (remote)
 - **SSH:** Access via root user
 - **Container:** Docker running OpenClaw
@@ -72,7 +72,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 |-----|------------|---------|----------|
 | platform-health-council | 03:00 | Daily system audit | both |
 | nightly-security-review | 03:30 | Security analysis | none |
-| self-improvement | 04:00 | Core files review | both |
+| self-improvement | 04:00 *(05:00 server GMT+8)* | Core files review | both |
 | rss-feed-monitor | :10 hourly | RSS news scanning | none |
 | reddit-monitor | :40 hourly | Reddit sentiment | none |
 | market-signal-generator | :45 hourly | Signal generation | manual |
