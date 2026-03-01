@@ -6,6 +6,8 @@ This project is currently a **paper-trading safety foundation**.
 - Paper mode scaffolding only
 - Risk guards implemented (non-execution)
 - Signal schema validation implemented (basic shape checks)
+- Context adapter integrated (local Market Intel + optional News Reader artifacts)
+- Deterministic context fusion rules applied before risk manager
 - Dry-run CLI available for local simulation
 - **No broker integration, no live trading, no external calls**
 
@@ -102,10 +104,40 @@ curl -X POST http://127.0.0.1:8000/webhook \
 
 Behavior:
 - Validates payload using `src/signal_validator.py`
-- Evaluates risk decision using `src/risk_manager.py`
+- Loads local context snapshot using `src/context_adapter.py`
+- Applies deterministic context fusion rules via `src/signal_fusion.py`
+- Adjusts proposed quantity in paper simulation only (`raw_qty` -> `adjusted_qty`)
+- Evaluates risk decision using adjusted proposal in `src/risk_manager.py`
 - Writes structured events to `logs/webhook_decisions.jsonl`
-- Returns JSON response with `accepted` and `reasons`
+- Returns JSON response with `accepted`, `reasons`, `proposal`, and `decision_context`
 - Never places orders, never calls external APIs
+
+## Context Layer (Paper-Only)
+The webhook flow now includes a local context decision layer before risk checks:
+1. Validate webhook payload
+2. Build context snapshot from local artifacts:
+   - `projects/market-intel/data/signals_enriched_shadow.json`
+   - `projects/market-intel/data/tracked_signals.json`
+   - `projects/market-intel/data/signal_ab_comparison.json`
+   - Optional files under `projects/market-intel-news-reader/data/`
+3. Derive context modifiers (`confidence_adjustment`, `size_multiplier`, optional `block_reason`)
+4. Apply modifier to `qty` (paper simulation only)
+5. Pass adjusted proposal into risk manager
+
+Example decision/log fields:
+- `proposal.raw_qty`
+- `proposal.adjusted_qty`
+- `proposal.size_multiplier`
+- `proposal.confidence_adjustment`
+- `decision_context.block_reason`
+- `context.summary.risk_bias`
+- `context.summary.severity`
+
+Current limitations:
+- Context is local-file based only, no freshness SLA yet
+- Fusion rules are intentionally simple and static (rule-based v1)
+- News Reader ingestion is best-effort and optional
+- No symbol-specific macro mapping yet (uses portfolio-level regime hints)
 
 ## Next Steps
 - Add paper execution simulator (logs intended orders only).

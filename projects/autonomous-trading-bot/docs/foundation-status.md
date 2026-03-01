@@ -14,9 +14,38 @@
 - Local paper-only webhook receiver in `src/webhook_receiver.py`:
   - `POST /webhook`
   - validates payload via `signal_validator`
-  - evaluates decision via `risk_manager`
+  - reads local context artifacts via `context_adapter`
+  - applies deterministic fusion modifiers via `signal_fusion`
+  - adjusts proposed `qty` in paper simulation only
+  - evaluates adjusted decision via `risk_manager`
   - logs structured events to `logs/webhook_decisions.jsonl`
-  - returns JSON `accepted/denied` response with reasons
+  - returns JSON `accepted/denied` response with reasons + context modifiers
+- Unit tests for context adapter, fusion rules, and webhook context application
+
+## Context Layer Details (Paper-Only)
+- Context source files:
+  - `projects/market-intel/data/signals_enriched_shadow.json`
+  - `projects/market-intel/data/tracked_signals.json`
+  - `projects/market-intel/data/signal_ab_comparison.json`
+  - Optional `projects/market-intel-news-reader/data/*`
+- Fusion output fields:
+  - `confidence_adjustment`
+  - `size_multiplier`
+  - `block_reason` (when severe conflict)
+- Example log/result fields:
+  - `result.context.summary.risk_bias`
+  - `result.context.summary.severity`
+  - `result.proposal.raw_qty`
+  - `result.proposal.adjusted_qty`
+  - `result.proposal.size_multiplier`
+  - `result.decision_context.confidence_adjustment`
+  - `result.decision_context.block_reason`
+
+### Current Limitations
+- Missing or stale context files degrade to neutral behavior (graceful fallback)
+- Rule set is deterministic and static (no adaptive weighting)
+- News Reader artifact formats are loosely detected, best-effort only
+- Context is portfolio-level and not symbol-sensitive yet
 
 ## Not Implemented (By Design)
 - Live trading execution

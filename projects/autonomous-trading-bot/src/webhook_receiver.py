@@ -18,7 +18,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from src.context_adapter import load_context_snapshot
 from src.risk_manager import AccountState, RiskConfig, evaluate_risk_decision
+from src.signal_fusion import derive_decision_context
 from src.signal_validator import validate_signal_payload
 
 LOG_PATH = ROOT / "logs" / "webhook_decisions.jsonl"
@@ -34,7 +36,7 @@ def process_webhook_payload(
     state: AccountState | None = None,
     config: RiskConfig | None = None,
 ) -> Dict[str, Any]:
-    """Validate signal and run risk checks for a payload."""
+    """Validate signal, derive context modifiers, and run risk checks (paper-only)."""
     validation = validate_signal_payload(payload)
 
     if state is None:
@@ -52,15 +54,42 @@ def process_webhook_payload(
             "accepted": False,
             "reasons": validation["errors"],
             "validation": validation,
+            "context": None,
+            "decision_context": None,
+            "proposal": None,
             "risk": None,
             "paper_only": True,
         }
 
-    risk_decision = evaluate_risk_decision(validation["normalized"], state, config)
+    normalized = dict(validation["normalized"])
+    context_snapshot = load_context_snapshot()
+    decision_context = derive_decision_context(normalized, context_snapshot)
+
+    raw_qty = float(normalized.get("qty", 0.0) or 0.0)
+    adjusted_qty = round(raw_qty * decision_context["size_multiplier"], 6)
+    adjusted_signal = dict(normalized)
+    adjusted_signal["qty"] = adjusted_qty
+
+    risk_decision = evaluate_risk_decision(adjusted_signal, state, config)
+
+    reasons = list(risk_decision["reasons"])
+    if decision_context["block_reason"]:
+        reasons.append(decision_context["block_reason"])
+
+    accepted = risk_decision["allow"] and decision_context["block_reason"] is None
+
     return {
-        "accepted": risk_decision["allow"],
-        "reasons": risk_decision["reasons"],
+        "accepted": accepted,
+        "reasons": reasons,
         "validation": validation,
+        "context": context_snapshot,
+        "decision_context": decision_context,
+        "proposal": {
+            "raw_qty": raw_qty,
+            "adjusted_qty": adjusted_qty,
+            "size_multiplier": decision_context["size_multiplier"],
+            "confidence_adjustment": decision_context["confidence_adjustment"],
+        },
         "risk": risk_decision,
         "paper_only": True,
     }
@@ -117,6 +146,8 @@ class WebhookHandler(BaseHTTPRequestHandler):
         response = {
             "accepted": result["accepted"],
             "reasons": result["reasons"],
+            "proposal": result.get("proposal"),
+            "decision_context": result.get("decision_context"),
             "paper_only": True,
         }
         self._send_json(status, response)
