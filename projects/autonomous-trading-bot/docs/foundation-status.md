@@ -21,6 +21,20 @@
   - logs structured events to `logs/webhook_decisions.jsonl`
   - returns JSON `accepted/denied` response with reasons + context modifiers
 - Unit tests for context adapter, fusion rules, and webhook context application
+- Deterministic paper-only simulation runner in `src/simulation_runner.py` + `scripts/run_simulation.py`
+  - Accepts `JSON` / `JSONL` input signal lists
+  - Replays full paper decision pipeline (`validate -> context fusion -> risk checks`)
+  - Writes artifacts:
+    - `data/simulations/latest_run.json`
+    - `data/simulations/latest_run.csv`
+    - `data/simulations/summary.json`
+- Concise summary generator in `src/simulation_report.py` with:
+  - counts (`total`, `accepted`, `denied`)
+  - denial reason breakdown
+  - average size multiplier
+  - average confidence adjustment
+  - top context warnings encountered
+- Added simulation-specific tests in `tests/test_simulation_runner.py` and `tests/test_simulation_report.py`
 
 ## Context Layer Details (Paper-Only)
 - Context source files:
@@ -60,7 +74,10 @@
   - `python3 -m src.webhook_receiver`
 - Send sample request:
   - `curl -X POST http://127.0.0.1:8000/webhook -H "Content-Type: application/json" -d '{"symbol":"AAPL","side":"buy","qty":1,"timestamp":"2026-03-01T12:00:00Z"}'`
+- Run paper-only simulation replay:
+  - `python3 scripts/run_simulation.py --input data/simulations/sample_signals.jsonl --output-dir data/simulations`
+  - This is non-executing and never places live orders
 
 ## Next Suggested Steps
-1. Add paper execution simulator that writes structured events to logs.
-2. Add a daily summary report from local logs.
+1. Expand sample replay sets to cover edge-case strategy regimes.
+2. Add historical trend comparison across multiple daily `summary.json` artifacts.

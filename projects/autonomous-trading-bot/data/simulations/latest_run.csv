@@ -1,0 +1,7 @@
+index,symbol,side,raw_qty,adjusted_qty,size_multiplier,confidence_adjustment,accepted,reasons,risk_bias,severity,paper_only
+1,AAPL,buy,1.0,0.66,0.66,-0.15,True,,risk_on,high,True
+2,TSLA,sell,1.5,1.1475,0.765,-0.1,True,,risk_on,high,True
+3,NVDA,buy,3.0,1.98,0.66,-0.15,True,,risk_on,high,True
+4,MSFT,buy,1.0,0.66,0.66,-0.15,False,Daily loss cap breached: daily_pnl=-150.00 <= -100.00.,risk_on,high,True
+5,AMZN,buy,1.0,0.66,0.66,-0.15,False,Kill switch is enabled. Trading is blocked.,risk_on,high,True
+6,META,hold,,,,,False,Field 'side' must be 'buy' or 'sell'.,,,True

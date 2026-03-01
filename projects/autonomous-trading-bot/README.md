@@ -9,6 +9,7 @@ This project is currently a **paper-trading safety foundation**.
 - Context adapter integrated (local Market Intel + optional News Reader artifacts)
 - Deterministic context fusion rules applied before risk manager
 - Dry-run CLI available for local simulation
+- Deterministic paper simulation runner with JSON/JSONL replay + summary artifacts
 - **No broker integration, no live trading, no external calls**
 
 ## Safety Rules (Non-Negotiable)
@@ -28,15 +29,23 @@ projects/autonomous-trading-bot/
 ├── .env.example
 ├── config/
 │   └── settings.example.yaml
+├── data/
+│   └── simulations/
+│       └── sample_signals.jsonl
 ├── logs/
 │   └── .gitkeep
 ├── scripts/
-│   └── dry_run.py
+│   ├── dry_run.py
+│   └── run_simulation.py
 └── src/
     ├── __init__.py
     ├── webhook_receiver.py
     ├── signal_validator.py
+    ├── signal_fusion.py
+    ├── context_adapter.py
     ├── risk_manager.py
+    ├── simulation_runner.py
+    ├── simulation_report.py
     ├── order_executor.py
     └── reporter.py
 ```
@@ -58,6 +67,15 @@ cp .env.example .env
 ```bash
 python3 scripts/dry_run.py
 ```
+
+### 4) Run deterministic paper simulation replay (non-executing)
+```bash
+python3 scripts/run_simulation.py \
+  --input data/simulations/sample_signals.jsonl \
+  --output-dir data/simulations
+```
+
+This command is strictly paper-only. It does not place orders, call broker APIs, or execute trades.
 
 ## Dry-Run Runbook
 1. Start with default conservative settings in `scripts/dry_run.py` or `config/settings.example.yaml`.
@@ -139,9 +157,25 @@ Current limitations:
 - News Reader ingestion is best-effort and optional
 - No symbol-specific macro mapping yet (uses portfolio-level regime hints)
 
+## Simulation Outputs (Paper-Only)
+`python3 scripts/run_simulation.py` writes:
+- `data/simulations/latest_run.json`
+  - Full replay payload, per-signal decisions, and embedded summary
+- `data/simulations/latest_run.csv`
+  - Flat table with symbol/side/raw_qty/adjusted_qty/accepted/reasons for quick review
+- `data/simulations/summary.json`
+  - Concise daily report metrics:
+    - counts (`total`, `accepted`, `denied`)
+    - denial reason breakdown
+    - average size multiplier
+    - average confidence adjustment
+    - top context warnings encountered
+
+All outputs are deterministic from the input file and current local context artifacts. This remains strictly non-executing paper simulation.
+
 ## Next Steps
-- Add paper execution simulator (logs intended orders only).
-- Build daily reporting summary from local logs.
+- Extend simulation input fixtures over larger historical windows.
+- Add trend comparison across multiple daily simulation summaries.
 
 ## Explicitly Not Implemented Yet
 - Alpaca integration

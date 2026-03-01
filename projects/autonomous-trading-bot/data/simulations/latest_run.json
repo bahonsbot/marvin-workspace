@@ -1,0 +1,512 @@
+{
+  "paper_only": true,
+  "generated_at": "2026-03-01T12:29:46.137700+00:00",
+  "pipeline": [
+    "validate",
+    "context_fusion",
+    "risk_checks"
+  ],
+  "results": [
+    {
+      "index": 1,
+      "signal": {
+        "symbol": "AAPL",
+        "side": "buy",
+        "qty": 1,
+        "timestamp": "2026-03-01T10:00:00Z"
+      },
+      "state": {
+        "daily_pnl": 10.0,
+        "open_positions": 1
+      },
+      "config": {
+        "kill_switch_enabled": false,
+        "daily_loss_cap": 100.0,
+        "max_position_size": 2.0,
+        "max_open_positions": 3
+      },
+      "accepted": true,
+      "reasons": [],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "normalized": {
+          "symbol": "AAPL",
+          "side": "buy",
+          "qty": 1,
+          "timestamp": "2026-03-01T10:00:00Z"
+        }
+      },
+      "context": {
+        "summary": {
+          "risk_bias": "risk_on",
+          "severity": "high",
+          "high_confidence_signal_count": 43,
+          "geopolitical_count": 5,
+          "tracked_take_ratio": 1.0,
+          "ab_enriched_lift": 34,
+          "news_headline_count": 0,
+          "available_context": true
+        },
+        "sources": {
+          "market_intel": {
+            "signals_enriched_shadow": true,
+            "tracked_signals": true,
+            "signal_ab_comparison": true
+          },
+          "news_reader": {
+            "data_present": false
+          }
+        },
+        "warnings": [],
+        "paper_only": true
+      },
+      "decision_context": {
+        "confidence_adjustment": -0.15,
+        "size_multiplier": 0.66,
+        "block_reason": null,
+        "reasons": [
+          "Risk-on backdrop supports buy signal.",
+          "High-severity macro/news regime reduces long risk appetite."
+        ],
+        "paper_only": true,
+        "ruleset": "context-fusion-v1"
+      },
+      "proposal": {
+        "raw_qty": 1.0,
+        "adjusted_qty": 0.66,
+        "size_multiplier": 0.66,
+        "confidence_adjustment": -0.15
+      },
+      "risk": {
+        "allow": true,
+        "reasons": [],
+        "paper_only": true,
+        "checked_rules": [
+          "kill_switch",
+          "daily_loss_cap",
+          "max_position_size",
+          "max_open_positions"
+        ]
+      },
+      "paper_only": true
+    },
+    {
+      "index": 2,
+      "signal": {
+        "symbol": "TSLA",
+        "side": "sell",
+        "qty": 1.5,
+        "timestamp": "2026-03-01T10:05:00Z"
+      },
+      "state": {
+        "daily_pnl": -20.0,
+        "open_positions": 2
+      },
+      "config": {
+        "kill_switch_enabled": false,
+        "daily_loss_cap": 100.0,
+        "max_position_size": 2.0,
+        "max_open_positions": 3
+      },
+      "accepted": true,
+      "reasons": [],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "normalized": {
+          "symbol": "TSLA",
+          "side": "sell",
+          "qty": 1.5,
+          "timestamp": "2026-03-01T10:05:00Z"
+        }
+      },
+      "context": {
+        "summary": {
+          "risk_bias": "risk_on",
+          "severity": "high",
+          "high_confidence_signal_count": 43,
+          "geopolitical_count": 5,
+          "tracked_take_ratio": 1.0,
+          "ab_enriched_lift": 34,
+          "news_headline_count": 0,
+          "available_context": true
+        },
+        "sources": {
+          "market_intel": {
+            "signals_enriched_shadow": true,
+            "tracked_signals": true,
+            "signal_ab_comparison": true
+          },
+          "news_reader": {
+            "data_present": false
+          }
+        },
+        "warnings": [],
+        "paper_only": true
+      },
+      "decision_context": {
+        "confidence_adjustment": -0.1,
+        "size_multiplier": 0.765,
+        "block_reason": null,
+        "reasons": [
+          "Risk-on backdrop conflicts with sell signal.",
+          "High-severity regime triggers overall de-leveraging."
+        ],
+        "paper_only": true,
+        "ruleset": "context-fusion-v1"
+      },
+      "proposal": {
+        "raw_qty": 1.5,
+        "adjusted_qty": 1.1475,
+        "size_multiplier": 0.765,
+        "confidence_adjustment": -0.1
+      },
+      "risk": {
+        "allow": true,
+        "reasons": [],
+        "paper_only": true,
+        "checked_rules": [
+          "kill_switch",
+          "daily_loss_cap",
+          "max_position_size",
+          "max_open_positions"
+        ]
+      },
+      "paper_only": true
+    },
+    {
+      "index": 3,
+      "signal": {
+        "symbol": "NVDA",
+        "side": "buy",
+        "qty": 3,
+        "timestamp": "2026-03-01T10:10:00Z"
+      },
+      "state": {
+        "daily_pnl": 0.0,
+        "open_positions": 1
+      },
+      "config": {
+        "kill_switch_enabled": false,
+        "daily_loss_cap": 100.0,
+        "max_position_size": 2.0,
+        "max_open_positions": 3
+      },
+      "accepted": true,
+      "reasons": [],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "normalized": {
+          "symbol": "NVDA",
+          "side": "buy",
+          "qty": 3,
+          "timestamp": "2026-03-01T10:10:00Z"
+        }
+      },
+      "context": {
+        "summary": {
+          "risk_bias": "risk_on",
+          "severity": "high",
+          "high_confidence_signal_count": 43,
+          "geopolitical_count": 5,
+          "tracked_take_ratio": 1.0,
+          "ab_enriched_lift": 34,
+          "news_headline_count": 0,
+          "available_context": true
+        },
+        "sources": {
+          "market_intel": {
+            "signals_enriched_shadow": true,
+            "tracked_signals": true,
+            "signal_ab_comparison": true
+          },
+          "news_reader": {
+            "data_present": false
+          }
+        },
+        "warnings": [],
+        "paper_only": true
+      },
+      "decision_context": {
+        "confidence_adjustment": -0.15,
+        "size_multiplier": 0.66,
+        "block_reason": null,
+        "reasons": [
+          "Risk-on backdrop supports buy signal.",
+          "High-severity macro/news regime reduces long risk appetite."
+        ],
+        "paper_only": true,
+        "ruleset": "context-fusion-v1"
+      },
+      "proposal": {
+        "raw_qty": 3.0,
+        "adjusted_qty": 1.98,
+        "size_multiplier": 0.66,
+        "confidence_adjustment": -0.15
+      },
+      "risk": {
+        "allow": true,
+        "reasons": [],
+        "paper_only": true,
+        "checked_rules": [
+          "kill_switch",
+          "daily_loss_cap",
+          "max_position_size",
+          "max_open_positions"
+        ]
+      },
+      "paper_only": true
+    },
+    {
+      "index": 4,
+      "signal": {
+        "symbol": "MSFT",
+        "side": "buy",
+        "qty": 1,
+        "timestamp": "2026-03-01T10:15:00Z"
+      },
+      "state": {
+        "daily_pnl": -150.0,
+        "open_positions": 1
+      },
+      "config": {
+        "kill_switch_enabled": false,
+        "daily_loss_cap": 100.0,
+        "max_position_size": 2.0,
+        "max_open_positions": 3
+      },
+      "accepted": false,
+      "reasons": [
+        "Daily loss cap breached: daily_pnl=-150.00 <= -100.00."
+      ],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "normalized": {
+          "symbol": "MSFT",
+          "side": "buy",
+          "qty": 1,
+          "timestamp": "2026-03-01T10:15:00Z"
+        }
+      },
+      "context": {
+        "summary": {
+          "risk_bias": "risk_on",
+          "severity": "high",
+          "high_confidence_signal_count": 43,
+          "geopolitical_count": 5,
+          "tracked_take_ratio": 1.0,
+          "ab_enriched_lift": 34,
+          "news_headline_count": 0,
+          "available_context": true
+        },
+        "sources": {
+          "market_intel": {
+            "signals_enriched_shadow": true,
+            "tracked_signals": true,
+            "signal_ab_comparison": true
+          },
+          "news_reader": {
+            "data_present": false
+          }
+        },
+        "warnings": [],
+        "paper_only": true
+      },
+      "decision_context": {
+        "confidence_adjustment": -0.15,
+        "size_multiplier": 0.66,
+        "block_reason": null,
+        "reasons": [
+          "Risk-on backdrop supports buy signal.",
+          "High-severity macro/news regime reduces long risk appetite."
+        ],
+        "paper_only": true,
+        "ruleset": "context-fusion-v1"
+      },
+      "proposal": {
+        "raw_qty": 1.0,
+        "adjusted_qty": 0.66,
+        "size_multiplier": 0.66,
+        "confidence_adjustment": -0.15
+      },
+      "risk": {
+        "allow": false,
+        "reasons": [
+          "Daily loss cap breached: daily_pnl=-150.00 <= -100.00."
+        ],
+        "paper_only": true,
+        "checked_rules": [
+          "kill_switch",
+          "daily_loss_cap",
+          "max_position_size",
+          "max_open_positions"
+        ]
+      },
+      "paper_only": true
+    },
+    {
+      "index": 5,
+      "signal": {
+        "symbol": "AMZN",
+        "side": "buy",
+        "qty": 1,
+        "timestamp": "2026-03-01T10:20:00Z"
+      },
+      "state": {
+        "daily_pnl": 0.0,
+        "open_positions": 0
+      },
+      "config": {
+        "kill_switch_enabled": true,
+        "daily_loss_cap": 100.0,
+        "max_position_size": 2.0,
+        "max_open_positions": 3
+      },
+      "accepted": false,
+      "reasons": [
+        "Kill switch is enabled. Trading is blocked."
+      ],
+      "validation": {
+        "ok": true,
+        "errors": [],
+        "normalized": {
+          "symbol": "AMZN",
+          "side": "buy",
+          "qty": 1,
+          "timestamp": "2026-03-01T10:20:00Z"
+        }
+      },
+      "context": {
+        "summary": {
+          "risk_bias": "risk_on",
+          "severity": "high",
+          "high_confidence_signal_count": 43,
+          "geopolitical_count": 5,
+          "tracked_take_ratio": 1.0,
+          "ab_enriched_lift": 34,
+          "news_headline_count": 0,
+          "available_context": true
+        },
+        "sources": {
+          "market_intel": {
+            "signals_enriched_shadow": true,
+            "tracked_signals": true,
+            "signal_ab_comparison": true
+          },
+          "news_reader": {
+            "data_present": false
+          }
+        },
+        "warnings": [],
+        "paper_only": true
+      },
+      "decision_context": {
+        "confidence_adjustment": -0.15,
+        "size_multiplier": 0.66,
+        "block_reason": null,
+        "reasons": [
+          "Risk-on backdrop supports buy signal.",
+          "High-severity macro/news regime reduces long risk appetite."
+        ],
+        "paper_only": true,
+        "ruleset": "context-fusion-v1"
+      },
+      "proposal": {
+        "raw_qty": 1.0,
+        "adjusted_qty": 0.66,
+        "size_multiplier": 0.66,
+        "confidence_adjustment": -0.15
+      },
+      "risk": {
+        "allow": false,
+        "reasons": [
+          "Kill switch is enabled. Trading is blocked."
+        ],
+        "paper_only": true,
+        "checked_rules": [
+          "kill_switch",
+          "daily_loss_cap",
+          "max_position_size",
+          "max_open_positions"
+        ]
+      },
+      "paper_only": true
+    },
+    {
+      "index": 6,
+      "signal": {
+        "symbol": "META",
+        "side": "hold",
+        "qty": 1,
+        "timestamp": "2026-03-01T10:30:00Z"
+      },
+      "state": {
+        "daily_pnl": 0.0,
+        "open_positions": 0
+      },
+      "config": {
+        "kill_switch_enabled": false,
+        "daily_loss_cap": 100.0,
+        "max_position_size": 2.0,
+        "max_open_positions": 3
+      },
+      "accepted": false,
+      "reasons": [
+        "Field 'side' must be 'buy' or 'sell'."
+      ],
+      "validation": {
+        "ok": false,
+        "errors": [
+          "Field 'side' must be 'buy' or 'sell'."
+        ],
+        "normalized": {
+          "symbol": "META",
+          "side": "hold",
+          "qty": 1,
+          "timestamp": "2026-03-01T10:30:00Z"
+        }
+      },
+      "context": null,
+      "decision_context": null,
+      "proposal": null,
+      "risk": null,
+      "paper_only": true
+    }
+  ],
+  "summary": {
+    "paper_only": true,
+    "counts": {
+      "total": 6,
+      "accepted": 3,
+      "denied": 3
+    },
+    "denial_reason_breakdown": {
+      "Daily loss cap breached: daily_pnl=-150.00 <= -100.00.": 1,
+      "Kill switch is enabled. Trading is blocked.": 1,
+      "Field 'side' must be 'buy' or 'sell'.": 1
+    },
+    "avg_size_multiplier": 0.681,
+    "avg_confidence_adjustment": -0.14,
+    "top_context_warnings": [
+      {
+        "warning": "Risk-on backdrop supports buy signal.",
+        "count": 4
+      },
+      {
+        "warning": "High-severity macro/news regime reduces long risk appetite.",
+        "count": 4
+      },
+      {
+        "warning": "Risk-on backdrop conflicts with sell signal.",
+        "count": 1
+      },
+      {
+        "warning": "High-severity regime triggers overall de-leveraging.",
+        "count": 1
+      }
+    ]
+  }
+}

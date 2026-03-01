@@ -1,0 +1,33 @@
+{
+  "paper_only": true,
+  "counts": {
+    "total": 6,
+    "accepted": 3,
+    "denied": 3
+  },
+  "denial_reason_breakdown": {
+    "Daily loss cap breached: daily_pnl=-150.00 <= -100.00.": 1,
+    "Kill switch is enabled. Trading is blocked.": 1,
+    "Field 'side' must be 'buy' or 'sell'.": 1
+  },
+  "avg_size_multiplier": 0.681,
+  "avg_confidence_adjustment": -0.14,
+  "top_context_warnings": [
+    {
+      "warning": "Risk-on backdrop supports buy signal.",
+      "count": 4
+    },
+    {
+      "warning": "High-severity macro/news regime reduces long risk appetite.",
+      "count": 4
+    },
+    {
+      "warning": "Risk-on backdrop conflicts with sell signal.",
+      "count": 1
+    },
+    {
+      "warning": "High-severity regime triggers overall de-leveraging.",
+      "count": 1
+    }
+  ]
+}
