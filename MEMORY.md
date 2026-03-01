@@ -258,6 +258,19 @@ All issues from nightly-security-review addressed. Cron jobs now save reports to
 - platform-health-council → memory/health-council/
 - self-improvement → memory/self-improvement/
 
+### Trading Bot (Mar 2026)
+- **Project:** `projects/autonomous-trading-bot/`
+- **Broker:** Alpaca paper trading (live connected March 1, 2026)
+- **API Endpoint:** `https://paper-api.alpaca.markets`
+- **First order executed:** 2026-03-01, AAPL buy 0.6 shares, Order ID: d64efeee-d135-43dd-b126-dbdf3a69f8f2
+- **Credentials:** Stored in `.env` (gitignored), loaded directly by scripts
+- **Daily report cron:** 08:00 ICT → Telegram group `-1003711398278`
+- **Scripts:**
+  - `scripts/dry_run.py` — validate signal + risk check (no execution)
+  - `scripts/run_simulation.py` — batch simulation over JSONL signals
+  - `scripts/daily_report.py` — daily summary from webhook_decisions.jsonl
+  - `src/webhook_receiver.py` — HTTP endpoint for TradingView webhooks
+
 **High Priority:**
 - Rotated exposed Telegram bot token (Feb 27)
 - Redacted credentials from memory files (memory/2026-02-20.md, memory/security/2026-02-22_22_11_00.md)

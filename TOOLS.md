@@ -60,6 +60,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - platform-health-council (`-1003504843228`)
   - self-improvement (`-1003721620909`)
   - proactive-execution (`-1003742262384`)
+  - autonomous-trading-bot (`-1003711398278`)
 
 ### VPS / Infrastructure
 - **Host:** Hostinger VPS (Linux 6.8.0-101-generic)
