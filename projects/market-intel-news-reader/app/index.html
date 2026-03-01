@@ -410,7 +410,7 @@
                     <div class="card-title">
                         <a href="${item.url}" target="_blank">${item.title}</a>
                     </div>
-                    ${item.summary ? `<p style="font-size: 13px; color: var(--text-dim); margin-bottom: 8px;">${item.summary}</p>` : ''}
+                    ${item.summary ? `<p style="font-size: 13px; color: var(--text-dim); margin-bottom: 8px;">${item.summary.replace(/<[^>]*>/g, '')}</p>` : ''}
                     <div class="card-categories">
                         ${item.category.map(cat => `<span class="category-tag ${cat}">${cat}</span>`).join('')}
                     </div>

@@ -176,6 +176,8 @@ class RedditMonitor:
                     if keyword in text:
                         selftext = post.get("selftext", "")
                         top_comments = post.get("top_comments") or []
+                        # Use the timestamp already in the post from fetch_subreddit (which has created_utc)
+                        post_timestamp = post.get("timestamp", "")
                         results.append(
                             {
                                 "subreddit": post.get("subreddit", ""),
@@ -188,7 +190,8 @@ class RedditMonitor:
                                 "score": post.get("score", 0),
                                 "comments": post.get("num_comments", 0),
                                 "keyword_matched": keyword,
-                                "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                                # Use actual Reddit creation time from fetch, fallback to now only if missing
+                                "timestamp": post_timestamp if post_timestamp else datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                             }
                         )
                         break
