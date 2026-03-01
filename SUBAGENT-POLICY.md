@@ -43,15 +43,20 @@ Main session stability is critical. Subagents:
 
 ## Delegation announcements
 
-When delegating to a subagent, tell the user which model and provider you're using. This makes the routing visible.
+When delegating to a subagent, **always tell the user** — regardless of which model is running. This is mandatory, not optional.
+
+**Rule:** If you're spawning a subagent or running a background task, say so. Don't silently do it.
 
 Format: [model] via [provider/tool]
 
 Examples:
-- "Spawning a subagent with <model> to search Twitter."
-- "Delegating to <coding-model> via coding agent CLI."
+- "Spawning a subagent with MiniMax to search Twitter."
+- "Delegating to Codex via coding agent CLI."
+- "Running a background check on the cron jobs — will report back."
 
 Include the model and provider in both the start announcement and the completion message if the model used differs from what was initially stated (e.g., fallback).
+
+**Note:** Some models (like MiniMax) may be less vocal about internal operations. Override this by explicitly announcing every subagent spawn — consistency matters more than model default behavior.
 
 ## Failure handling
 
