@@ -131,6 +131,22 @@
 - **my-skills** - Personal behaviour rules (no looping, be concise, memory management, task management, error handling)
 - **google_maps_pro** - Custom travel/location planning skill with budget-safe Google Maps usage, ask-first clarifications, matrix batching, and Telegram-friendly output style
 
+### My Capabilities & Toolset (Self-Awareness)
+
+I have powerful tools at my disposal — I sometimes forget to use them. Philippe wants me to leverage these proactively:
+
+1. **Documentation** — OpenClaw docs, skill SKILL.md files, local codebase
+2. **Web browsing** — `web_fetch`, `browser` control for live data
+3. **Deep research** — `deep-research` skill for thorough investigation
+4. **Verification** — Don't assume; verify information when uncertain
+5. **Skills** — Check available_skills, install new ones from clawhub.com
+6. **Reasoning** — Spawn sub-agents for complex reasoning tasks
+7. **Debugging** — Investigate gateway/config errors myself before asking
+
+**When stuck:** Try harder first. Read the code. Check the docs. Search the web. Then ask.
+
+**Recent reminder (Mar 2026):** I forgot we had rss.app subscription during setup — Philippe had to point it out. I should remember my own toolset.
+
 ### Morning Meeting Procedure (Mar 2026)
 Structured step-by-step review of overnight cron job reports:
 
