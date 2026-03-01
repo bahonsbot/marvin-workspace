@@ -1,7 +1,7 @@
 {
   "version": 1,
   "mode": "phase-1-discovery",
-  "updated_at": "2026-03-01T19:03:31+08:00",
+  "updated_at": "2026-03-01T11:44:32.182237Z",
   "items": [
     {
       "id": "mi-queue-002",
@@ -18,10 +18,12 @@
       "title": "Implement quick-fix for js_blob artifact class in article excerpt enrichment",
       "project": "projects/market-intel-news-reader",
       "priority": "P2",
-      "status": "todo",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Quick win from audit findings; strip obvious JS blob patterns from fetched excerpts."
+      "notes": "Quick win from audit findings; strip obvious JS blob patterns from fetched excerpts.",
+      "completion_note": "Implemented js_blob guardrails for article excerpt enrichment in rss_monitor and news-reader feed transform; verified with sample Closure-library blob that excerpt is dropped from output.",
+      "completed_at": "2026-03-01T11:44:32.182237Z"
     },
     {
       "id": "hpms-queue-002",

@@ -362,9 +362,23 @@ def categorize_alert(alert: Dict) -> List[str]:
     return matched if matched else ["other"]
 
 
+def _looks_like_js_blob(text: str) -> bool:
+    lowered = (text or "").lower()
+    markers = [
+        "(function(){",
+        "addeventlistener(",
+        "copyright the closure library",
+        "spdx-license-identifier",
+        "var l=this||self",
+    ]
+    return any(marker in lowered for marker in markers)
+
+
 def transform_rss_alert(alert: Dict) -> Dict:
     ts = alert.get("timestamp", now_iso())
     article_excerpt = (alert.get("article_excerpt") or "")[:280]
+    if _looks_like_js_blob(article_excerpt):
+        article_excerpt = ""
     summary = alert.get("summary", "")[:240]
     if article_excerpt:
         summary = (summary + " | " if summary else "") + f"Excerpt: {article_excerpt}"

@@ -110,6 +110,21 @@ class RSSMonitor:
         text = re.sub(r"\s+", " ", text).strip()
         return text
 
+    @staticmethod
+    def is_suspicious_article_excerpt(text: str) -> bool:
+        lowered = (text or "").lower()
+        if not lowered:
+            return False
+
+        js_blob_markers = [
+            "(function(){",
+            "addeventlistener(",
+            "copyright the closure library",
+            "spdx-license-identifier",
+            "var l=this||self",
+        ]
+        return any(marker in lowered for marker in js_blob_markers)
+
     def load_config(self):
         """Load feeds and keywords from config file"""
         with self.config_file.open("r", encoding="utf-8") as f:
@@ -233,6 +248,8 @@ class RSSMonitor:
                 html_text = raw.decode(charset, errors="ignore")
                 cleaned = self.sanitize_html_to_text(html_text)
                 if len(cleaned) < 180:
+                    return None
+                if self.is_suspicious_article_excerpt(cleaned):
                     return None
                 return cleaned[: self.max_article_chars]
             except Exception:
