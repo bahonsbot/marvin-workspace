@@ -11,6 +11,7 @@ import os
 from datetime import datetime
 from typing import List, Dict
 from html import unescape
+from urllib.parse import urlparse
 
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
 
@@ -20,6 +21,15 @@ class RSSMonitor:
         self.feeds = []
         self.watch_keywords = []
         self.load_config()
+
+    @staticmethod
+    def is_safe_feed_url(url: str) -> bool:
+        """Allow only http/https feed URLs."""
+        try:
+            p = urlparse(url)
+            return p.scheme in ("http", "https") and bool(p.netloc)
+        except Exception:
+            return False
     
     def load_config(self):
         """Load feeds and keywords from config file"""
@@ -41,9 +51,14 @@ class RSSMonitor:
             if line and not line.startswith('#') and not in_keywords:
                 parts = line.split(',')
                 if len(parts) >= 2:
+                    feed_name = parts[0].strip()
+                    feed_url = parts[1].strip()
+                    if not self.is_safe_feed_url(feed_url):
+                        print(f"Skipping unsafe feed URL for {feed_name}: {feed_url}")
+                        continue
                     self.feeds.append({
-                        'name': parts[0].strip(),
-                        'url': parts[1].strip(),
+                        'name': feed_name,
+                        'url': feed_url,
                         'keywords': [k.strip().lower() for k in parts[2:]] if len(parts) > 2 else []
                     })
     

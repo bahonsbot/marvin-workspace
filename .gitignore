@@ -5,6 +5,7 @@ memory/
 .openclaw/
 node_modules/
 *.bak
+projects/market-intel/data/last_signal_check
 auth.json
 *.json.bak*
 *.json.bak

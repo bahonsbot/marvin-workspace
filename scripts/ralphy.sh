@@ -2,7 +2,7 @@
 # Ralph Loop Wrapper - runs coding agent until PRD tasks are complete
 # Usage: ./ralphy.sh --prd PRD.md --model codex --workspace /path/to/project
 
-set -e
+set -euo pipefail
 
 # Defaults
 MODEL="codex"
@@ -64,13 +64,23 @@ if [[ -z "$PRD_FILE" ]]; then
     exit 1
 fi
 
-if [[ ! -f "$WORKSPACE/$PRD_FILE" ]]; then
-    echo "Error: PRD file not found: $WORKSPACE/$PRD_FILE"
+# Resolve and validate PRD path is inside workspace
+WORKSPACE_REAL=$(realpath "$WORKSPACE")
+PRD_PATH=$(realpath -m "$WORKSPACE/$PRD_FILE")
+if [[ "$PRD_PATH" != "$WORKSPACE_REAL"/* ]]; then
+    echo "Error: --prd path escapes workspace boundary"
+    exit 1
+fi
+if [[ ! -f "$PRD_PATH" ]]; then
+    echo "Error: PRD file not found: $PRD_PATH"
     exit 1
 fi
 
+# Normalize PRD_FILE to workspace-relative for downstream logic
+PRD_FILE="${PRD_PATH#$WORKSPACE_REAL/}"
+
 # Verify PRD file ownership (security check)
-PRD_OWNER=$(stat -c '%u' "$WORKSPACE/$PRD_FILE" 2>/dev/null || echo "unknown")
+PRD_OWNER=$(stat -c '%u' "$PRD_PATH" 2>/dev/null || echo "unknown")
 CURRENT_USER=$(id -u)
 if [[ "$PRD_OWNER" != "$CURRENT_USER" && "$PRD_OWNER" != "0" ]]; then
     echo "Warning: PRD file is owned by user ID $PRD_OWNER (running as $CURRENT_USER)"
