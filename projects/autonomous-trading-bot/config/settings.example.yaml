@@ -6,6 +6,7 @@ trading:
   paper: true
   allow_live: false
   dry_run: true
+  paper_execute: false
 
 safety:
   kill_switch_enabled: true

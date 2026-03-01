@@ -2,12 +2,13 @@
 
 Exposes a minimal HTTP endpoint (POST /webhook) for local testing.
 Validates payloads, evaluates risk decision, logs structured results locally,
-and never executes broker actions.
+and can optionally submit to Alpaca PAPER endpoint only.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -18,7 +19,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from src.broker_adapter_alpaca import AlpacaPaperAdapter, PaperOnlyViolationError
 from src.context_adapter import load_context_snapshot
+from src.execution_orchestrator import ExecutionOrchestrator
 from src.risk_manager import AccountState, RiskConfig, evaluate_risk_decision
 from src.signal_fusion import derive_decision_context
 from src.signal_validator import validate_signal_payload
@@ -30,13 +33,21 @@ def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _env_flag(name: str, *, default: bool = False) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 def process_webhook_payload(
     payload: Dict[str, Any],
     *,
     state: AccountState | None = None,
     config: RiskConfig | None = None,
+    paper_execute: bool | None = None,
 ) -> Dict[str, Any]:
-    """Validate signal, derive context modifiers, and run risk checks (paper-only)."""
+    """Validate signal, derive context modifiers, run risk, optionally execute paper order."""
     validation = validate_signal_payload(payload)
 
     if state is None:
@@ -48,6 +59,8 @@ def process_webhook_payload(
             max_position_size=1.0,
             max_open_positions=3,
         )
+    if paper_execute is None:
+        paper_execute = _env_flag("PAPER_EXECUTE", default=False)
 
     if not validation["ok"]:
         return {
@@ -58,6 +71,12 @@ def process_webhook_payload(
             "decision_context": None,
             "proposal": None,
             "risk": None,
+            "execution": {
+                "executed": False,
+                "status": "validation_failed",
+                "paper_execute": paper_execute,
+                "paper_only": True,
+            },
             "paper_only": True,
         }
 
@@ -78,6 +97,34 @@ def process_webhook_payload(
 
     accepted = risk_decision["allow"] and decision_context["block_reason"] is None
 
+    execution: Dict[str, Any] = {
+        "executed": False,
+        "status": "dry_run",
+        "paper_execute": paper_execute,
+        "paper_only": True,
+    }
+
+    if paper_execute:
+        try:
+            adapter = AlpacaPaperAdapter()
+            orchestrator = ExecutionOrchestrator(adapter)
+            execution = orchestrator.execute(
+                signal=adjusted_signal,
+                context=context_snapshot,
+                decision_context=decision_context,
+                risk_decision={"allow": accepted, "reasons": reasons},
+                source="webhook",
+            )
+            execution["paper_execute"] = True
+        except PaperOnlyViolationError as exc:
+            execution = {
+                "executed": False,
+                "status": "paper_guard_blocked",
+                "reason": str(exc),
+                "paper_execute": True,
+                "paper_only": True,
+            }
+
     return {
         "accepted": accepted,
         "reasons": reasons,
@@ -91,6 +138,7 @@ def process_webhook_payload(
             "confidence_adjustment": decision_context["confidence_adjustment"],
         },
         "risk": risk_decision,
+        "execution": execution,
         "paper_only": True,
     }
 
@@ -98,7 +146,7 @@ def process_webhook_payload(
 def _append_log(record: Dict[str, Any], *, log_path: Path = LOG_PATH) -> None:
     log_path.parent.mkdir(parents=True, exist_ok=True)
     with log_path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        f.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
 
 
 class WebhookHandler(BaseHTTPRequestHandler):
@@ -148,6 +196,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
             "reasons": result["reasons"],
             "proposal": result.get("proposal"),
             "decision_context": result.get("decision_context"),
+            "execution": result.get("execution"),
             "paper_only": True,
         }
         self._send_json(status, response)
@@ -161,6 +210,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     """Run the local webhook HTTP server."""
     server = ThreadingHTTPServer((host, port), WebhookHandler)
     print(f"Paper-only webhook receiver listening on http://{host}:{port}/webhook")
+    print(f"PAPER_EXECUTE={'true' if _env_flag('PAPER_EXECUTE', default=False) else 'false'}")
     print(f"Logging decisions to: {LOG_PATH}")
     server.serve_forever()
 

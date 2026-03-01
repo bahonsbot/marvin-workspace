@@ -32,7 +32,13 @@ class TestWebhookReceiver(unittest.TestCase):
         self.assertIn("proposal", result)
         self.assertLess(result["proposal"]["adjusted_qty"], result["proposal"]["raw_qty"])
         self.assertIn("decision_context", result)
+        self.assertEqual(result["execution"]["status"], "dry_run")
         self.assertTrue(result["paper_only"])
+
+    def test_default_mode_remains_dry_run(self):
+        result = process_webhook_payload(self._payload(), state=self._state(), config=self._config(), paper_execute=False)
+        self.assertFalse(result["execution"]["executed"])
+        self.assertEqual(result["execution"]["status"], "dry_run")
 
 
 if __name__ == "__main__":

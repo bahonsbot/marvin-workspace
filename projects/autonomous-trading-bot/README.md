@@ -10,14 +10,16 @@ This project is currently a **paper-trading safety foundation**.
 - Deterministic context fusion rules applied before risk manager
 - Dry-run CLI available for local simulation
 - Deterministic paper simulation runner with JSON/JSONL replay + summary artifacts
-- **No broker integration, no live trading, no external calls**
+- Alpaca **paper-only** adapter added with hard live-mode guards
+- Execution orchestrator added with deterministic idempotency suppression
+- Default mode remains dry-run (execution off unless explicitly enabled)
 
 ## Safety Rules (Non-Negotiable)
 1. **Paper mode only** until long-run validation is complete.
 2. **No API secrets** in repo or `.env.example`.
 3. **Kill switch must be respected** by default.
 4. **Risk guards run before any execution logic**.
-5. **No real order placement code** in this phase.
+5. **Live trading is prohibited**. If execution is enabled, it must use Alpaca paper endpoint only.
 
 ## Project Structure
 
@@ -30,8 +32,10 @@ projects/autonomous-trading-bot/
 ├── config/
 │   └── settings.example.yaml
 ├── data/
-│   └── simulations/
-│       └── sample_signals.jsonl
+│   ├── simulations/
+│   │   └── sample_signals.jsonl
+│   └── state/
+│       └── idempotency.json
 ├── logs/
 │   └── .gitkeep
 ├── scripts/
@@ -44,6 +48,8 @@ projects/autonomous-trading-bot/
     ├── signal_fusion.py
     ├── context_adapter.py
     ├── risk_manager.py
+    ├── broker_adapter_alpaca.py
+    ├── execution_orchestrator.py
     ├── simulation_runner.py
     ├── simulation_report.py
     ├── order_executor.py
@@ -68,7 +74,22 @@ cp .env.example .env
 python3 scripts/dry_run.py
 ```
 
-### 4) Run deterministic paper simulation replay (non-executing)
+### 4) Optional paper execution toggle (still paper-only)
+Default is dry-run. Keep it that way unless you are ready for integration testing.
+
+```bash
+# .env
+PAPER_EXECUTE=false
+```
+
+When preparing integration tests later:
+- set `PAPER_EXECUTE=true`
+- provide `ALPACA_API_KEY` and `ALPACA_API_SECRET` for **paper** account only
+- keep `ALPACA_BASE_URL=https://paper-api.alpaca.markets`
+
+If keys are absent now, no action is needed yet.
+
+### 5) Run deterministic paper simulation replay (non-executing)
 ```bash
 python3 scripts/run_simulation.py \
   --input data/simulations/sample_signals.jsonl \
@@ -126,9 +147,11 @@ Behavior:
 - Applies deterministic context fusion rules via `src/signal_fusion.py`
 - Adjusts proposed quantity in paper simulation only (`raw_qty` -> `adjusted_qty`)
 - Evaluates risk decision using adjusted proposal in `src/risk_manager.py`
+- In default mode (`PAPER_EXECUTE=false`), returns dry-run decision only
+- In execution mode (`PAPER_EXECUTE=true`), uses `src/execution_orchestrator.py` and `src/broker_adapter_alpaca.py`
+- Enforces Alpaca paper endpoint with hard checks that block any live-mode configuration
+- Suppresses duplicate executions using deterministic idempotency keys in `data/state/idempotency.json`
 - Writes structured events to `logs/webhook_decisions.jsonl`
-- Returns JSON response with `accepted`, `reasons`, `proposal`, and `decision_context`
-- Never places orders, never calls external APIs
 
 ## Context Layer (Paper-Only)
 The webhook flow now includes a local context decision layer before risk checks:
@@ -178,7 +201,7 @@ All outputs are deterministic from the input file and current local context arti
 - Add trend comparison across multiple daily simulation summaries.
 
 ## Explicitly Not Implemented Yet
-- Alpaca integration
-- TradingView live webhook endpoint
+- TradingView public internet webhook hardening
 - Telegram notifications
 - Any live order execution path
+- Any broker endpoint other than Alpaca paper

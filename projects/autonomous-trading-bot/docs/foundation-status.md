@@ -18,8 +18,18 @@
   - applies deterministic fusion modifiers via `signal_fusion`
   - adjusts proposed `qty` in paper simulation only
   - evaluates adjusted decision via `risk_manager`
+  - default mode remains dry-run (`PAPER_EXECUTE=false`)
+  - optional execution mode (`PAPER_EXECUTE=true`) routes through orchestrator + Alpaca paper adapter
   - logs structured events to `logs/webhook_decisions.jsonl`
-  - returns JSON `accepted/denied` response with reasons + context modifiers
+  - returns JSON `accepted/denied` response with reasons + context modifiers + execution status
+- Alpaca paper adapter in `src/broker_adapter_alpaca.py`:
+  - methods: `submit_order`, `cancel_order`, `get_order`, `list_positions`
+  - hard-fails on non-paper endpoint and any live mode attempt
+- Execution orchestrator in `src/execution_orchestrator.py`:
+  - accepts validated signal + context + risk decision
+  - denied path logs decision and never executes
+  - accepted path builds deterministic order intent and submits via adapter
+  - deterministic idempotency key suppression using `data/state/idempotency.json`
 - Unit tests for context adapter, fusion rules, and webhook context application
 - Deterministic paper-only simulation runner in `src/simulation_runner.py` + `scripts/run_simulation.py`
   - Accepts `JSON` / `JSONL` input signal lists
@@ -63,13 +73,18 @@
 
 ## Not Implemented (By Design)
 - Live trading execution
-- Broker integrations
-- External API calls
-- API key usage
+- Any broker integrations beyond Alpaca paper
+- External API calls in tests
+- Automatic secret provisioning (env vars required for integration tests)
 
 ## Run/Test Commands
 - Run tests:
   - `python3 -m unittest discover -s tests -v`
+- Optional paper execution integration test prerequisites:
+  - `PAPER_EXECUTE=true`
+  - `ALPACA_API_KEY` and `ALPACA_API_SECRET` set in local environment (paper account only)
+  - `ALPACA_BASE_URL=https://paper-api.alpaca.markets`
+  - If keys are not set yet, no action is needed until integration-test step.
 - Run local webhook server:
   - `python3 -m src.webhook_receiver`
 - Send sample request:
