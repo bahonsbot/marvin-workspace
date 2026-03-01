@@ -1,17 +1,19 @@
 {
   "version": 1,
   "mode": "phase-1-discovery",
-  "updated_at": "2026-03-01T17:12:00+08:00",
+  "updated_at": "2026-03-01T17:20:55+08:00",
   "items": [
     {
       "id": "mi-queue-001",
       "title": "Review shadow A/B enrichment metrics and summarize baseline vs enriched deltas",
       "project": "projects/market-intel",
       "priority": "P1",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Safe analysis/reporting task using existing artifacts; no risky writes."
+      "notes": "Safe analysis/reporting task using existing artifacts; no risky writes.",
+      "completion_note": "Completed Phase 2 review: summarized baseline vs enriched deltas, wrote notes/ab-enrichment-review-2026-03-01.md, recommendation=Gather more data (keep shadow). 2026-03-01T17:20:55+08:00",
+      "completed_at": "2026-03-01T17:20:55+08:00"
     },
     {
       "id": "minr-queue-001",
