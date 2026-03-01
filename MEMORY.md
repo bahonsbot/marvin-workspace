@@ -45,6 +45,7 @@
 - **Memory Decay:** Access tracking implemented - frequently referenced facts stay "hot"
 
 ### Heartbeat
+- Status: Active
 - Fixed at 60-minute intervals (not 30min - reduced to prevent delivery queue backlog)
 
 ### Image Analysis (Feb 2026)
