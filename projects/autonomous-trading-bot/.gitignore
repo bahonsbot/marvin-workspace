@@ -3,3 +3,4 @@ __pycache__/
 .venv/
 logs/*.jsonl
 data/state/idempotency.json
+.env
