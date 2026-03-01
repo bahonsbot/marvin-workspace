@@ -132,6 +132,7 @@
 
 ### Security Setup (Feb 2026)
 - **Nightly Security Review**: Runs at 3:30am Vietnam time, analyzes codebase from 4 perspectives (offensive, defensive, privacy, operational), delivers to Telegram
+- **Accepted risk policy:** `auth.json` plaintext OAuth storage is acceptable when file mode is 600 and file is git-ignored; should be INFO only, not HIGH/CRITICAL
 - **First review found**: Hardcoded API keys in auth.json and analyze_image.py
 - **Fix applied**: Updated .gitignore to protect auth.json and *.bak files from git
 
