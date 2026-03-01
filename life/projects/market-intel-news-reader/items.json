@@ -5,11 +5,24 @@
     "category": "status",
     "timestamp": "2026-02-27T21:30:00+08:00",
     "source": "memory/2026-02-27.md",
-    "status": "planned",
+    "status": "completed",
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-02-27",
+    "lastAccessed": "2026-03-01",
+    "accessCount": 2
+  },
+  {
+    "id": "minr-002",
+    "fact": "Market Intel News Reader MVP reached complete status with UX-critical improvements: dark mode, relative publication timestamps, source badges, favorites persistence, correct newest-first sorting, and UTC timestamp normalization.",
+    "category": "status",
+    "timestamp": "2026-02-28T21:30:00+08:00",
+    "source": "memory/2026-02-28.md",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-01",
     "accessCount": 1
   }
 ]

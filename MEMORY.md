@@ -88,6 +88,7 @@
 - **Signal volume:** 36 signals across 5 categories (geopolitical, financial, sentiment, corporate, macro)
 - **Knowledge graph:** 25 causal chain templates with historical context/briefings
 - **Data sources:** 20 RSS feeds, 12 subreddits, Twitter via rss.app
+- **RSS fix (Mar 1):** Sanitized summary field to strip HTML — Guardian feeds were showing raw HTML tags in subtexts
 - **Accuracy tracking:** Wired in, auto-tracks STRONG BUY signals, daily review cron at 22:00 ICT
 - **Cron jobs:**
   - signal_generator: hourly at :45

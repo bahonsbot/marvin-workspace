@@ -83,5 +83,19 @@
     ],
     "lastAccessed": "2026-02-27",
     "accessCount": 1
+  },
+  {
+    "id": "mc-008",
+    "fact": "Market signal delivery routing was corrected to the dedicated Telegram group market-signals (-1003850594375) after allowlist and target-group misconfiguration.",
+    "category": "status",
+    "timestamp": "2026-02-28T20:30:00+08:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/market-intel",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-01",
+    "accessCount": 1,
+    "source": "memory/2026-02-28.md"
   }
 ]

@@ -62,8 +62,8 @@
     "relatedEntities": [
       "resources/cron-jobs"
     ],
-    "lastAccessed": "2026-02-27",
-    "accessCount": 1
+    "lastAccessed": "2026-03-01",
+    "accessCount": 2
   },
   {
     "id": "mi-006",
@@ -88,7 +88,47 @@
     "relatedEntities": [
       "projects/market-intel-news-reader"
     ],
-    "lastAccessed": "2026-02-27",
+    "lastAccessed": "2026-03-01",
+    "accessCount": 2
+  },
+  {
+    "id": "mi-008",
+    "fact": "Signal reasoning pipeline now outputs causal-chain predictions and increased total signal throughput from 25 to 36 with restored sentiment and corporate coverage.",
+    "category": "status",
+    "timestamp": "2026-02-28T18:00:00+08:00",
+    "source": "memory/2026-02-28.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-01",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-009",
+    "fact": "Knowledge graph was expanded to 25 causal-chain templates covering macro, geopolitical, financial, sector, currency, and M&A scenarios with historical context and predicted asset impacts.",
+    "category": "status",
+    "timestamp": "2026-02-28T18:15:00+08:00",
+    "source": "memory/2026-02-28.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-01",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-010",
+    "fact": "High-confidence signal delivery now includes historical briefings to explain prior analogs, implications, and watch items, addressing Philippe's request for actionable context.",
+    "category": "decision",
+    "timestamp": "2026-02-28T19:00:00+08:00",
+    "source": "memory/2026-02-28.md",
+    "status": "active",
+    "relatedEntities": [
+      "areas/people/philippe",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-01",
     "accessCount": 1
   }
 ]

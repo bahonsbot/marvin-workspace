@@ -6,65 +6,79 @@
     "reviewInterval": "12 months"
   },
   "facts": [
-  {
-    "id": "philippe-001",
-    "fact": "Philippe is from the Netherlands, living in Vietnam since September 2024",
-    "category": "status",
-    "timestamp": "2024-09-01",
-    "source": "initial-setup",
-    "status": "active",
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
-  },
-  {
-    "id": "philippe-002",
-    "fact": "Works on Blender, After Effects, Unreal Engine for creative skills",
-    "category": "interest",
-    "timestamp": "2025-01-01",
-    "source": "initial-setup",
-    "status": "active",
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
-  },
-  {
-    "id": "philippe-003",
-    "fact": "Interested in stock trading as potential career option",
-    "category": "interest",
-    "timestamp": "2025-01-01",
-    "source": "initial-setup",
-    "status": "active",
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
-  },
-  {
-    "id": "philippe-004",
-    "fact": "Has a girlfriend who works in Vietnam",
-    "category": "relationship",
-    "timestamp": "2024-09-01",
-    "source": "initial-setup",
-    "status": "active",
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
-  },
-  {
-    "id": "philippe-005",
-    "fact": "When Philippe says 'handle it', he means make the decision yourself",
-    "category": "preference",
-    "timestamp": "2025-01-01",
-    "source": "observation",
-    "status": "active",
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
-  },
-  {
-    "id": "philippe-006",
-    "fact": "Runs Hostinger VPS with Docker container where Marvin is hosted",
-    "category": "infrastructure",
-    "timestamp": "2025-01-01",
-    "source": "initial-setup",
-    "status": "active",
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
-  }
+    {
+      "id": "philippe-001",
+      "fact": "Philippe is from the Netherlands, living in Vietnam since September 2024",
+      "category": "status",
+      "timestamp": "2024-09-01",
+      "source": "initial-setup",
+      "status": "active",
+      "lastAccessed": "2026-02-25",
+      "accessCount": 1
+    },
+    {
+      "id": "philippe-002",
+      "fact": "Works on Blender, After Effects, Unreal Engine for creative skills",
+      "category": "interest",
+      "timestamp": "2025-01-01",
+      "source": "initial-setup",
+      "status": "active",
+      "lastAccessed": "2026-02-25",
+      "accessCount": 1
+    },
+    {
+      "id": "philippe-003",
+      "fact": "Interested in stock trading as potential career option",
+      "category": "interest",
+      "timestamp": "2025-01-01",
+      "source": "initial-setup",
+      "status": "active",
+      "lastAccessed": "2026-03-01",
+      "accessCount": 2
+    },
+    {
+      "id": "philippe-004",
+      "fact": "Has a girlfriend who works in Vietnam",
+      "category": "relationship",
+      "timestamp": "2024-09-01",
+      "source": "initial-setup",
+      "status": "active",
+      "lastAccessed": "2026-02-25",
+      "accessCount": 1
+    },
+    {
+      "id": "philippe-005",
+      "fact": "When Philippe says 'handle it', he means make the decision yourself",
+      "category": "preference",
+      "timestamp": "2025-01-01",
+      "source": "observation",
+      "status": "active",
+      "lastAccessed": "2026-02-25",
+      "accessCount": 1
+    },
+    {
+      "id": "philippe-006",
+      "fact": "Runs Hostinger VPS with Docker container where Marvin is hosted",
+      "category": "infrastructure",
+      "timestamp": "2025-01-01",
+      "source": "initial-setup",
+      "status": "active",
+      "lastAccessed": "2026-02-25",
+      "accessCount": 1
+    },
+    {
+      "id": "philippe-007",
+      "fact": "Philippe consistently prioritizes actionable signal context and UX precision, explicitly asking for explanation of implications beyond raw alerts.",
+      "category": "preference",
+      "timestamp": "2026-02-28T19:05:00+08:00",
+      "source": "memory/2026-02-28.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/market-intel",
+        "projects/market-intel-news-reader"
+      ],
+      "lastAccessed": "2026-03-01",
+      "accessCount": 1
+    }
   ]
 }

@@ -42,8 +42,8 @@
     "relatedEntities": [
       "projects/security-review"
     ],
-    "lastAccessed": "2026-02-27",
-    "accessCount": 4
+    "lastAccessed": "2026-03-01",
+    "accessCount": 5
   },
   {
     "id": "cron-005",
@@ -68,6 +68,19 @@
       "projects/marvin-config"
     ],
     "lastAccessed": "2026-02-27",
+    "accessCount": 1
+  },
+  {
+    "id": "cron-007",
+    "fact": "Daily signal review cron was added at 22:00 ICT to post pending evaluations and accuracy stats for market signal accountability.",
+    "category": "status",
+    "timestamp": "2026-02-28T22:00:00+07:00",
+    "source": "memory/2026-02-28.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-01",
     "accessCount": 1
   }
 ]

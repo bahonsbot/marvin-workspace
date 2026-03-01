@@ -39,5 +39,163 @@
     "actual_outcome": "correct",
     "notes": "",
     "evaluated_at": "2026-02-28T21:02:54.752743"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "AP_Top",
+      "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
+      "timestamp": "2026-02-28T23:47:29.288790",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 80.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-02-28T23:47:29.291735",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Israel increasingly sure Iran\u2019s Khamenei has been killed after joint strikes wit",
+      "url": "https://www.ft.com/content/2fb3447b-7ff7-4f9a-9068-05cfb4bf4138",
+      "timestamp": "2026-03-01T05:47:28.391234",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-01T05:47:28.393435",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Iran launches retaliatory attack on Israel, Saudi Arabia and UAE",
+      "url": "https://www.ft.com/content/e026b4a7-1115-493a-9b31-c8b0b5965491",
+      "timestamp": "2026-03-01T09:47:30.947326",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-01T09:47:30.949507",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Military briefing: The US-Israeli strikes and Iran\u2019s retaliation",
+      "url": "https://www.ft.com/content/be65f1b1-ed37-4821-b024-10ec7a198f25",
+      "timestamp": "2026-03-01T13:47:28.451788",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-01T13:47:28.454156",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
   }
 ]
