@@ -228,7 +228,8 @@ class FeedGenerator:
         return []
 
     def fetch_reddit_json(self, subreddit: str, limit: int = 12) -> List[Dict]:
-        url = f"https://www.reddit.com/r/{subreddit}/hot/.json?limit={limit}&raw_json=1"
+        # Use /new/ instead of /hot/ to get truly newest posts by creation time
+        url = f"https://www.reddit.com/r/{subreddit}/new/.json?limit={limit}&raw_json=1"
         content = self.request_bytes(url, timeout=10, retries=3)
         if not content:
             return []
@@ -246,6 +247,11 @@ class FeedGenerator:
             permalink = post.get("permalink", "")
             if not title or not permalink:
                 continue
+            
+            # Use Reddit's actual creation time, not fetch time
+            created_utc = post.get("created_utc", 0)
+            post_timestamp = datetime.utcfromtimestamp(created_utc).isoformat() + "Z" if created_utc else now_iso()
+            
             items.append(
                 {
                     "subreddit": post.get("subreddit", subreddit),
@@ -253,7 +259,8 @@ class FeedGenerator:
                     "url": "https://reddit.com" + permalink,
                     "score": post.get("score", 0),
                     "comments": post.get("num_comments", 0),
-                    "timestamp": now_iso(),
+                    "timestamp": post_timestamp,
+                    "published": post_timestamp,  # For relative time display
                 }
             )
 
@@ -273,6 +280,8 @@ class FeedGenerator:
 
         items = []
         for entry in parsed:
+            # Use the entry's published date if available
+            pub_date = entry.get("published", "")
             items.append(
                 {
                     "subreddit": subreddit,
@@ -280,7 +289,8 @@ class FeedGenerator:
                     "url": entry.get("link", ""),
                     "score": 0,
                     "comments": 0,
-                    "timestamp": now_iso(),
+                    "timestamp": pub_date or now_iso(),
+                    "published": pub_date or now_iso(),
                 }
             )
         return items

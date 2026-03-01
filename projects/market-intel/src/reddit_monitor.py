@@ -40,8 +40,9 @@ class RedditMonitor:
         ]
     
     def fetch_subreddit(self, subreddit: str, limit=25) -> List[Dict]:
-        """Fetch hot posts from a subreddit via JSON"""
-        url = f"https://www.reddit.com/r/{subreddit}/hot/.json?limit={limit}"
+        """Fetch newest posts from a subreddit via JSON (sorted by creation time, not hot activity)"""
+        # Use /new/ instead of /hot/ to get posts sorted by creation time
+        url = f"https://www.reddit.com/r/{subreddit}/new/.json?limit={limit}"
         
         try:
             req = urllib.request.Request(url, headers={
@@ -53,12 +54,16 @@ class RedditMonitor:
             posts = []
             for item in data['data']['children']:
                 post = item['data']
+                # Use Reddit's actual creation timestamp
+                created_utc = post.get('created_utc', 0)
+                post_time = datetime.utcfromtimestamp(created_utc).isoformat() + "Z" if created_utc else ""
                 posts.append({
                     'title': post.get('title', ''),
                     'url': 'https://reddit.com' + post.get('permalink', ''),
                     'score': post.get('score', 0),
                     'num_comments': post.get('num_comments', 0),
-                    'subreddit': post.get('subreddit', subreddit)
+                    'subreddit': post.get('subreddit', subreddit),
+                    'timestamp': post_time,
                 })
             return posts
             
