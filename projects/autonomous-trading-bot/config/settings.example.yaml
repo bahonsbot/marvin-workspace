@@ -1,0 +1,25 @@
+app:
+  name: autonomous-trading-bot
+  env: development
+
+trading:
+  paper: true
+  allow_live: false
+  dry_run: true
+
+safety:
+  kill_switch_enabled: true
+  deny_when_kill_switch_on: true
+
+risk:
+  daily_loss_cap: 100.0        # deny new trades if abs(daily_pnl) exceeds this loss threshold
+  max_position_size: 1         # max quantity per signal
+  max_open_positions: 3        # max concurrent open positions
+
+logging:
+  level: INFO
+  directory: logs
+
+notes:
+  - "Foundation phase: no broker calls, no external integrations."
+  - "Paper mode is mandatory."
