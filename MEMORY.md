@@ -131,6 +131,35 @@
 - **my-skills** - Personal behaviour rules (no looping, be concise, memory management, task management, error handling)
 - **google_maps_pro** - Custom travel/location planning skill with budget-safe Google Maps usage, ask-first clarifications, matrix batching, and Telegram-friendly output style
 
+### Morning Meeting Procedure (Mar 2026)
+Structured step-by-step review of overnight cron job reports:
+
+1. **Order of review:**
+   - nightly-security-review
+   - platform-health-council
+   - self-improvement
+   - data-manager (if applicable)
+
+2. **For each report, process in priority order:**
+   - CRITICAL issues first
+   - HIGH issues
+   - MEDIUM/LOW issues
+
+3. **Presentation format per issue:**
+   - Problem (what is the issue)
+   - Why it matters (risk/impact)
+   - Proposed solution (specific fix or accepted risk)
+
+4. **Approval flow:**
+   - Get explicit approval before applying fixes
+   - Safe, non-breaking fixes can be executed by Marvin without separate approval
+   - Log decisions in memory after each item
+
+5. **Post-meeting:**
+   - Commit all changes
+   - Push to remote
+   - Update memory files (daily notes + MEMORY.md)
+
 ### Security Setup (Feb 2026)
 - **Nightly Security Review**: Runs at 3:30am Vietnam time, analyzes codebase from 4 perspectives (offensive, defensive, privacy, operational), delivers to Telegram
 - **Accepted risk policy:** `auth.json` plaintext OAuth storage is acceptable when file mode is 600 and file is git-ignored; should be INFO only, not HIGH/CRITICAL
