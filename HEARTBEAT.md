@@ -21,6 +21,29 @@
 1. Review recent memory/daily notes for updates
 2. Check for pending fixes or documented issues
 3. Run quick system health checks
+4. Proactive Execution Phase 1 (discovery-only, no autonomous file-changing actions)
+
+## Proactive Execution (Phase 1: Discovery Only)
+
+Goal: build proactive rhythm without taking autonomous write actions yet.
+
+Per heartbeat:
+1. Check for candidate work in this order:
+   - `memory/proactive-queue.json` (if present)
+   - `projects/*/TASKS.md`
+   - latest `memory/YYYY-MM-DD.md` open items
+2. Select one best next task and perform readiness checks only:
+   - Is scope clear enough?
+   - Is it safe and non-destructive?
+   - Is required context/access available?
+3. If ready, prepare a one-line proposed action for next execution window.
+4. If blocked, prepare blocker summary with recommendation.
+
+Restrictions in Phase 1:
+- Do not execute autonomous file edits for project tasks.
+- Do not run risky/destructive commands.
+- Do not send routine status pings.
+- Only message user on meaningful blocker or priority conflict.
 
 ## When to Stay Quiet (HEARTBEAT_OK)
 - Outside active hours (22:00-09:00)
