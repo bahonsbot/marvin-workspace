@@ -19,6 +19,15 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+# Load .env from project root
+_env_path = ROOT / ".env"
+if _env_path.exists():
+    for line in _env_path.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, val = line.split("=", 1)
+            os.environ.setdefault(key.strip(), val.strip())
+
 from src.broker_adapter_alpaca import AlpacaPaperAdapter, PaperOnlyViolationError
 from src.context_adapter import load_context_snapshot
 from src.execution_orchestrator import ExecutionOrchestrator
