@@ -72,4 +72,8 @@ Message user when:
 - Blocked and need decision
 - Important risk discovered
 
+Proactive Telegram routing:
+- Send proactive updates to Telegram group `-1003742262384` (`proactive-execution`) when cross-channel messaging is needed.
+- Keep update format concise: completion summary + next action/blocker.
+
 Do not spam incremental percentages.

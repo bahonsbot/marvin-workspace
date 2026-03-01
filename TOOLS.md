@@ -59,6 +59,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - nightly-security-review (`-1003855426803`)
   - platform-health-council (`-1003504843228`)
   - self-improvement (`-1003721620909`)
+  - proactive-execution (`-1003742262384`)
 
 ### VPS / Infrastructure
 - **Host:** Hostinger VPS (Linux 6.8.0-101-generic)
