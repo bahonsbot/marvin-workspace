@@ -160,6 +160,19 @@ A systematic research and detection system that:
   - Source credibility
   - Time since first signal
 
+### 5.5 Enrichment layer (implemented, capped)
+- Reddit ingestion now matches keywords against title + selftext + optional top comments (best effort).
+- RSS ingestion now attempts best-effort article excerpt extraction from safe HTTP/HTTPS links.
+- Safety and runtime guardrails:
+  - strict URL checks and private-network SSRF rejection
+  - timeout/retry with graceful fallback
+  - max enriched articles per run (conservative cap)
+  - max extracted chars per article
+- Output transparency fields:
+  - `enriched_text_source`: `headline_only | summary | article_excerpt`
+  - `article_excerpt` (RSS)
+  - `selftext_snippet` / `top_comment_snippet` (Reddit)
+
 ---
 
 ## 6. Reasoning Phase (Phase 3)

@@ -252,10 +252,14 @@ class FeedGenerator:
             created_utc = post.get("created_utc", 0)
             post_timestamp = datetime.utcfromtimestamp(created_utc).isoformat() + "Z" if created_utc else now_iso()
             
+            selftext = (post.get("selftext") or "").strip()
             items.append(
                 {
                     "subreddit": post.get("subreddit", subreddit),
                     "title": title,
+                    "selftext": selftext,
+                    "selftext_snippet": selftext[:280],
+                    "top_comment_snippet": "",
                     "url": "https://reddit.com" + permalink,
                     "score": post.get("score", 0),
                     "comments": post.get("num_comments", 0),
@@ -286,6 +290,9 @@ class FeedGenerator:
                 {
                     "subreddit": subreddit,
                     "title": entry.get("title", ""),
+                    "selftext": "",
+                    "selftext_snippet": "",
+                    "top_comment_snippet": "",
                     "url": entry.get("link", ""),
                     "score": 0,
                     "comments": 0,
@@ -334,7 +341,10 @@ class FeedGenerator:
 
 
 def categorize_alert(alert: Dict) -> List[str]:
-    text = f"{alert.get('title', '')} {alert.get('summary', '')}".lower()
+    text = (
+        f"{alert.get('title', '')} {alert.get('summary', '')} "
+        f"{alert.get('selftext', '')} {alert.get('selftext_snippet', '')} {alert.get('top_comment_snippet', '')}"
+    ).lower()
 
     categories = {
         "geopolitical": ["war", "invasion", "russia", "ukraine", "china", "iran", "israel", "sanction", "military", "conflict", "troops", "nato", "putin", "biden", "trump"],
@@ -354,25 +364,41 @@ def categorize_alert(alert: Dict) -> List[str]:
 
 def transform_rss_alert(alert: Dict) -> Dict:
     ts = alert.get("timestamp", now_iso())
+    article_excerpt = (alert.get("article_excerpt") or "")[:280]
+    summary = alert.get("summary", "")[:240]
+    if article_excerpt:
+        summary = (summary + " | " if summary else "") + f"Excerpt: {article_excerpt}"
+
     return {
         "id": f"rss_{ts.replace(':', '').replace('.', '')}",
         "title": alert.get("title", "")[:150],
-        "summary": alert.get("summary", "")[:240],
+        "summary": summary[:450],
         "url": alert.get("link", ""),
         "source": f"RSS: {alert.get('feed', 'unknown')}",
         "category": categorize_alert(alert),
         "published": alert.get("published", ""),
         "timestamp": ts,
         "type": "rss",
+        "enriched_text_source": alert.get("enriched_text_source", "headline_only"),
+        "article_excerpt": article_excerpt,
     }
 
 
 def transform_reddit_alert(alert: Dict) -> Dict:
     ts = alert.get("timestamp", now_iso())
+    selftext_snippet = (alert.get("selftext_snippet") or alert.get("selftext") or "")[:280]
+    top_comment_snippet = (alert.get("top_comment_snippet") or "")[:220]
+
+    summary_parts = [f"{alert.get('score', 0)} upvotes", f"{alert.get('comments', 0)} comments"]
+    if selftext_snippet:
+        summary_parts.append(f"Post: {selftext_snippet}")
+    if top_comment_snippet:
+        summary_parts.append(f"Top comment: {top_comment_snippet}")
+
     return {
         "id": f"reddit_{ts.replace(':', '').replace('.', '')}",
         "title": alert.get("title", "")[:150],
-        "summary": f"{alert.get('score', 0)} upvotes | {alert.get('comments', 0)} comments",
+        "summary": " | ".join(summary_parts)[:450],
         "url": alert.get("url", ""),
         "source": f"Reddit: r/{alert.get('subreddit', 'unknown')}",
         "category": categorize_alert(alert),
@@ -380,6 +406,8 @@ def transform_reddit_alert(alert: Dict) -> Dict:
         "timestamp": ts,
         "type": "reddit",
         "score": alert.get("score", 0),
+        "selftext_snippet": selftext_snippet,
+        "top_comment_snippet": top_comment_snippet,
     }
 
 

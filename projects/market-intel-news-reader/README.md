@@ -33,6 +33,19 @@ If these are missing or too small, it self-heals:
 - RSS fallback: fetches multiple feeds with retry/backoff, custom user-agent, and pacing to reduce rate-limit issues
 - Reddit fallback: fetches subreddit JSON endpoints first, then subreddit RSS as backup
 
+## Enriched content fields
+
+When upstream monitors provide enrichment, feed items preserve it:
+
+- RSS items may include:
+  - `enriched_text_source` (`headline_only`, `summary`, `article_excerpt`)
+  - `article_excerpt` (best-effort, capped excerpt)
+- Reddit items may include:
+  - `selftext_snippet`
+  - `top_comment_snippet`
+
+This keeps backward compatibility with older consumers while exposing richer context for ranking and UI.
+
 ## Cron-safe notes
 
 This script now resolves paths from its own file location, so it works whether cron runs from `/`, workspace root, or project directory.

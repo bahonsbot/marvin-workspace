@@ -6,35 +6,59 @@ Generates actionable market signals
 import json
 import os
 from datetime import datetime
+from pathlib import Path
 from typing import List, Dict
 
 class SignalGenerator:
     def __init__(self):
+        self.base_dir = Path(__file__).resolve().parents[1]
         self.patterns = []
         self.rss_alerts = []
         self.reddit_alerts = []
         self.load_data()
+
+    def resolve_path(self, path: str) -> Path:
+        p = Path(path)
+        if p.is_absolute():
+            return p
+        return self.base_dir / p
     
     def load_data(self):
         """Load patterns and alerts"""
-        with open('data/patterns.json', 'r') as f:
+        patterns_path = self.resolve_path('data/patterns.json')
+        with patterns_path.open('r', encoding='utf-8') as f:
             data = json.load(f)
             self.patterns = data['patterns']
-        
-        if os.path.exists('data/rss_alerts.json'):
-            with open('data/rss_alerts.json', 'r') as f:
+
+        rss_path = self.resolve_path('data/rss_alerts.json')
+        if rss_path.exists():
+            with rss_path.open('r', encoding='utf-8') as f:
                 self.rss_alerts = json.load(f)
-        
-        if os.path.exists('data/reddit_alerts.json'):
-            with open('data/reddit_alerts.json', 'r') as f:
+
+        reddit_path = self.resolve_path('data/reddit_alerts.json')
+        if reddit_path.exists():
+            with reddit_path.open('r', encoding='utf-8') as f:
                 self.reddit_alerts = json.load(f)
     
+    def _alert_text_for_matching(self, alert: Dict) -> str:
+        """Build robust text corpus with backward-compatible fallback fields."""
+        parts = [
+            alert.get('title', ''),
+            alert.get('summary', ''),
+            alert.get('selftext', ''),
+            alert.get('selftext_snippet', ''),
+            alert.get('article_excerpt', ''),
+            alert.get('top_comment_snippet', ''),
+        ]
+        top_comments = alert.get('top_comments') or []
+        if isinstance(top_comments, list):
+            parts.append(' '.join(str(x) for x in top_comments if isinstance(x, str)))
+        return ' '.join(p for p in parts if p).lower()
+
     def match_alert_to_patterns(self, alert: Dict) -> List[Dict]:
         """Match an alert to relevant patterns"""
         matches = []
-        title = alert.get('title', '').lower()
-        summary = alert.get('summary', '').lower()
-        text = f"{title} {summary}"
+        text = self._alert_text_for_matching(alert)
         
         # Pattern-specific keywords with scoring - REFINED
         pattern_keywords = {
@@ -284,7 +308,9 @@ class SignalGenerator:
         return mapping.get(confidence, 0)
     
     def save_signals(self, signals: List[Dict], output_file: str = "data/signals.json"):
-        with open(output_file, 'w') as f:
+        output_path = self.resolve_path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with output_path.open('w', encoding='utf-8') as f:
             json.dump(signals, f, indent=2)
     
     def print_summary(self, signals: List[Dict]):

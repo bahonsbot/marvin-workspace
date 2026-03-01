@@ -3,141 +3,248 @@
 Reddit Monitor: Watches subreddits for market-relevant posts
 Uses Reddit's JSON endpoints - Free, no API key needed
 """
-import urllib.request
 import json
 import os
-from datetime import datetime
-from typing import List, Dict
+import random
+import sys
+import time
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Dict, List
+
 
 class RedditMonitor:
-    def __init__(self):
+    def __init__(self, quiet: bool = False):
+        self.base_dir = Path(__file__).resolve().parents[1]
+        self.quiet = quiet
         self.subreddits = [
-            'wallstreetbets',
-            'investing', 
-            'options',
-            'StockMarket',
-            'securityanalysis',
-            # NEW
-            'economics',
-            'finance',
-            'trading',
-            'stocks',
-            'ValueInvesting',
-            'Daytrading',
-            'Cryptocurrency',
+            "wallstreetbets",
+            "investing",
+            "options",
+            "StockMarket",
+            "securityanalysis",
+            "economics",
+            "finance",
+            "trading",
+            "stocks",
+            "ValueInvesting",
+            "Daytrading",
+            "Cryptocurrency",
         ]
-        
-        # Keywords from patterns
+
         self.watch_keywords = [
-            'earnings', 'beat', 'miss', 'revenue', 'guidance', 'split', 'dividend',
-            'buyback', 'IPO', 'offering', 'merger', 'acquisition',
-            'bank', 'default', 'collapse', 'failure', 'crisis', 'bankruptcy',
-            'short squeeze', 'gamma squeeze', 'bull', 'bear',
-            'options flow', 'call', 'put', 'strike',
-            'fed', 'rate hike', 'inflation', 'CPI', 'recession',
-            'war', 'sanction', 'oil', 'energy',
-            'AI', 'semiconductor', 'chip', 'NVDA', 'Tesla'
+            "earnings", "beat", "miss", "revenue", "guidance", "split", "dividend",
+            "buyback", "ipo", "offering", "merger", "acquisition",
+            "bank", "default", "collapse", "failure", "crisis", "bankruptcy",
+            "short squeeze", "gamma squeeze", "bull", "bear",
+            "options flow", "call", "put", "strike",
+            "fed", "rate hike", "inflation", "cpi", "recession",
+            "war", "sanction", "oil", "energy",
+            "ai", "semiconductor", "chip", "nvda", "tesla",
         ]
-    
-    def fetch_subreddit(self, subreddit: str, limit=25) -> List[Dict]:
-        """Fetch newest posts from a subreddit via JSON (sorted by creation time, not hot activity)"""
-        # Use /new/ instead of /hot/ to get posts sorted by creation time
-        url = f"https://www.reddit.com/r/{subreddit}/new/.json?limit={limit}"
-        
-        try:
-            req = urllib.request.Request(url, headers={
-                'User-Agent': 'MarketIntelBot/1.0'
-            })
-            with urllib.request.urlopen(req, timeout=10) as response:
-                data = json.loads(response.read().decode('utf-8'))
-            
-            posts = []
-            for item in data['data']['children']:
-                post = item['data']
-                # Use Reddit's actual creation timestamp
-                created_utc = post.get('created_utc', 0)
-                post_time = datetime.utcfromtimestamp(created_utc).isoformat() + "Z" if created_utc else ""
-                posts.append({
-                    'title': post.get('title', ''),
-                    'url': 'https://reddit.com' + post.get('permalink', ''),
-                    'score': post.get('score', 0),
-                    'num_comments': post.get('num_comments', 0),
-                    'subreddit': post.get('subreddit', subreddit),
-                    'timestamp': post_time,
-                })
-            return posts
-            
-        except Exception as e:
-            print(f"  ⚠ r/{subreddit}: {e}")
+
+        self.reddit_timeout = 10
+        self.max_top_comments = 3
+        self.fetch_top_comments = True
+        self.selftext_snippet_chars = 280
+        self.comment_snippet_chars = 220
+
+    def log(self, msg: str):
+        if not self.quiet:
+            print(msg)
+
+    def resolve_path(self, path: str) -> Path:
+        p = Path(path)
+        if p.is_absolute():
+            return p
+        return self.base_dir / p
+
+    def request_json(self, url: str, timeout: int = 10) -> Dict:
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "MarketIntelBot/1.1",
+                "Accept": "application/json",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            return json.loads(response.read().decode("utf-8"))
+
+    def fetch_post_comments(self, permalink: str) -> List[str]:
+        """Best-effort fetch of top comments for a post."""
+        if not self.fetch_top_comments or self.max_top_comments <= 0:
             return []
-    
+
+        comments_url = (
+            f"https://www.reddit.com{permalink}.json?raw_json=1&limit={self.max_top_comments}&sort=top"
+        )
+
+        try:
+            payload = self.request_json(comments_url, timeout=self.reddit_timeout)
+            if not isinstance(payload, list) or len(payload) < 2:
+                return []
+
+            children = payload[1].get("data", {}).get("children", [])
+            top_comments: List[str] = []
+            for child in children:
+                data = child.get("data", {})
+                body = (data.get("body") or "").strip()
+                if body and body not in ("[removed]", "[deleted]"):
+                    top_comments.append(body)
+                if len(top_comments) >= self.max_top_comments:
+                    break
+
+            return top_comments
+        except Exception:
+            return []
+
+    def fetch_subreddit(self, subreddit: str, limit: int = 25) -> List[Dict]:
+        """Fetch newest posts from subreddit JSON endpoint."""
+        url = f"https://www.reddit.com/r/{subreddit}/new/.json?limit={limit}&raw_json=1"
+
+        try:
+            data = self.request_json(url, timeout=self.reddit_timeout)
+            posts = []
+            for item in data.get("data", {}).get("children", []):
+                post = item.get("data", {})
+                permalink = post.get("permalink", "")
+
+                created_utc = post.get("created_utc", 0)
+                post_time = (
+                    datetime.fromtimestamp(created_utc, tz=timezone.utc).isoformat().replace("+00:00", "Z")
+                    if created_utc
+                    else ""
+                )
+
+                selftext = (post.get("selftext") or "").strip()
+                top_comments = self.fetch_post_comments(permalink) if permalink else []
+
+                posts.append(
+                    {
+                        "title": post.get("title", ""),
+                        "selftext": selftext,
+                        "top_comments": top_comments,
+                        "url": "https://reddit.com" + permalink if permalink else "",
+                        "score": post.get("score", 0),
+                        "num_comments": post.get("num_comments", 0),
+                        "subreddit": post.get("subreddit", subreddit),
+                        "timestamp": post_time,
+                    }
+                )
+
+                # tiny jitter to avoid burst comment fetching against Reddit
+                if self.fetch_top_comments:
+                    time.sleep(random.uniform(0.05, 0.12))
+
+            return posts
+
+        except Exception as e:
+            self.log(f"  ⚠ r/{subreddit}: {e}")
+            return []
+
+    @staticmethod
+    def build_keyword_text(post: Dict) -> str:
+        parts = [post.get("title", ""), post.get("selftext", "")]
+        comments = post.get("top_comments") or []
+        if comments:
+            parts.append(" ".join(comments))
+        return " ".join(p for p in parts if p).lower()
+
     def scan_subreddits(self) -> List[Dict]:
-        """Scan all subreddits for relevant posts"""
-        results = []
-        
-        print(f"Scanning {len(self.subreddits)} subreddits...")
-        
+        """Scan subreddits for keyword matches across title/selftext/comments."""
+        results: List[Dict] = []
+        subreddit_count = len(self.subreddits)
+        self.log(f"Scanning {subreddit_count} subreddits...")
+
+        scanned_posts = 0
+        posts_with_selftext = 0
+        posts_with_comment_snippets = 0
+
         for sub in self.subreddits:
             posts = self.fetch_subreddit(sub)
-            
+
             for post in posts:
-                text = post['title'].lower()
-                
+                scanned_posts += 1
+                if post.get("selftext"):
+                    posts_with_selftext += 1
+                if post.get("top_comments"):
+                    posts_with_comment_snippets += 1
+
+                text = self.build_keyword_text(post)
                 for keyword in self.watch_keywords:
-                    if keyword.lower() in text:
-                        results.append({
-                            'subreddit': post['subreddit'],
-                            'title': post['title'],
-                            'url': post['url'],
-                            'score': post['score'],
-                            'comments': post['num_comments'],
-                            'keyword_matched': keyword,
-                            'timestamp': datetime.now().isoformat()
-                        })
+                    if keyword in text:
+                        selftext = post.get("selftext", "")
+                        top_comments = post.get("top_comments") or []
+                        results.append(
+                            {
+                                "subreddit": post.get("subreddit", ""),
+                                "title": post.get("title", ""),
+                                "selftext": selftext,
+                                "selftext_snippet": selftext[: self.selftext_snippet_chars],
+                                "top_comments": top_comments,
+                                "top_comment_snippet": (top_comments[0] if top_comments else "")[: self.comment_snippet_chars],
+                                "url": post.get("url", ""),
+                                "score": post.get("score", 0),
+                                "comments": post.get("num_comments", 0),
+                                "keyword_matched": keyword,
+                                "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                            }
+                        )
                         break
-        
+
+        self.log(
+            f"Reddit enrichment: posts={scanned_posts}, with_selftext={posts_with_selftext}, "
+            f"with_top_comments={posts_with_comment_snippets}, matches={len(results)}"
+        )
         return results
-    
+
     def save_results(self, results: List[Dict], output_file: str = "data/reddit_alerts.json"):
         """Save results to JSON"""
         if not results:
             return 0
-        
+
+        output_path = self.resolve_path(output_file)
         existing = []
-        if os.path.exists(output_file):
-            with open(output_file, 'r') as f:
+        if output_path.exists():
+            with output_path.open("r", encoding="utf-8") as f:
                 existing = json.load(f)
-        
+
         existing = results + existing
         existing = existing[:50]
-        
-        with open(output_file, 'w') as f:
+
+        os.makedirs(output_path.parent, exist_ok=True)
+        with output_path.open("w", encoding="utf-8") as f:
             json.dump(existing, f, indent=2)
-        
+
         return len(results)
-    
+
     def run(self):
         """Run the monitor"""
-        print("=== Reddit Market Monitor ===")
-        print(f"Watching r/{', r/'.join(self.subreddits)}")
-        print(f"Keywords: {len(self.watch_keywords)}\n")
-        
+        self.log("=== Reddit Market Monitor ===")
+        self.log(f"Watching r/{', r/'.join(self.subreddits)}")
+        self.log(f"Keywords: {len(self.watch_keywords)}")
+        self.log(
+            f"Enrichment: selftext=on, top_comments={'on' if self.fetch_top_comments else 'off'}({self.max_top_comments})\n"
+        )
+
         results = self.scan_subreddits()
-        
+
         if results:
-            print(f"\n✓ Found {len(results)} relevant posts:")
+            self.log(f"\n✓ Found {len(results)} relevant posts:")
             for r in results[:5]:
-                print(f"  [r/{r['subreddit']}] {r['title'][:50]}...")
-                print(f"    Keyword: {r.get('keyword_matched')} | ↑{r['score']}")
-            
+                self.log(f"  [r/{r['subreddit']}] {r['title'][:50]}...")
+                self.log(f"    Keyword: {r.get('keyword_matched')} | ↑{r['score']}")
+
             count = self.save_results(results)
-            print(f"\nSaved {count} posts to data/reddit_alerts.json")
+            self.log(f"\nSaved {count} posts to data/reddit_alerts.json")
         else:
-            print("\nNo matching posts found.")
-        
+            self.log("\nNo matching posts found.")
+
         return results
 
 
 if __name__ == "__main__":
-    monitor = RedditMonitor()
+    quiet = "--quiet" in sys.argv or "-q" in sys.argv
+    monitor = RedditMonitor(quiet=quiet)
     monitor.run()
