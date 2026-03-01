@@ -45,6 +45,11 @@ Restrictions in Phase 1:
 - Do not send routine status pings.
 - Only message user on meaningful blocker or priority conflict.
 
+Sub-agent routing for queue work:
+- Discovery-only checks may run directly in main session.
+- Any execution/investigation/coding/multi-step queue work must spawn a sub-agent per `SUBAGENT-POLICY.md`.
+- Announce every sub-agent spawn and completion to the user.
+
 ## When to Stay Quiet (HEARTBEAT_OK)
 - Outside active hours (22:00-09:00)
 - Human is clearly busy or in an active conversation

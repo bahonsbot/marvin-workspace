@@ -29,10 +29,13 @@ Follow detailed procedure in `references/workflow.md`.
 
 Short version:
 1. Select one eligible task.
-2. Execute one focused chunk.
-3. Verify result.
-4. Log concise outcome.
-5. Decide: continue later, mark blocked, or mark complete.
+2. Decide execution mode:
+   - Discovery-only checks can run directly.
+   - Execution, investigation, coding, or multi-step work must use sub-agents per `SUBAGENT-POLICY.md`.
+3. Announce every sub-agent spawn to the user (mandatory).
+4. Verify result.
+5. Log concise outcome.
+6. Decide: continue later, mark blocked, or mark complete.
 
 ## Logging
 
