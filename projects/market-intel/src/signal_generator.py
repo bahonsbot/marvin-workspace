@@ -7,7 +7,7 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 class SignalGenerator:
     def __init__(self):
@@ -40,8 +40,17 @@ class SignalGenerator:
             with reddit_path.open('r', encoding='utf-8') as f:
                 self.reddit_alerts = json.load(f)
     
-    def _alert_text_for_matching(self, alert: Dict) -> str:
-        """Build robust text corpus with backward-compatible fallback fields."""
+    def _alert_text_baseline(self, alert: Dict) -> str:
+        """Original matching corpus (no enrichment influence)."""
+        source = (alert.get('source') or '').lower()
+        if source == 'reddit' or 'subreddit' in alert:
+            parts = [alert.get('title', '')]
+        else:
+            parts = [alert.get('title', ''), alert.get('summary', '')]
+        return ' '.join(p for p in parts if p).lower()
+
+    def _alert_text_enriched(self, alert: Dict) -> str:
+        """Enriched matching corpus with backward-compatible fallback fields."""
         parts = [
             alert.get('title', ''),
             alert.get('summary', ''),
@@ -55,10 +64,13 @@ class SignalGenerator:
             parts.append(' '.join(str(x) for x in top_comments if isinstance(x, str)))
         return ' '.join(p for p in parts if p).lower()
 
-    def match_alert_to_patterns(self, alert: Dict) -> List[Dict]:
-        """Match an alert to relevant patterns"""
+    def match_alert_to_patterns(self, alert: Dict, use_enriched: bool = False) -> List[Dict]:
+        """Match an alert to relevant patterns.
+
+        use_enriched=False keeps legacy behavior for A/B testing.
+        """
         matches = []
-        text = self._alert_text_for_matching(alert)
+        text = self._alert_text_enriched(alert) if use_enriched else self._alert_text_baseline(alert)
         
         # Pattern-specific keywords with scoring - REFINED
         pattern_keywords = {
@@ -259,12 +271,15 @@ class SignalGenerator:
         
         return matches
     
-    def generate_signals(self) -> List[Dict]:
-        """Generate signals from all alerts"""
+    def generate_signals(self, use_enriched: bool = False) -> List[Dict]:
+        """Generate signals from all alerts.
+
+        use_enriched=False keeps production behavior in testing phase.
+        """
         signals = []
-        
+
         for alert in self.rss_alerts[:120]:
-            matches = self.match_alert_to_patterns(alert)
+            matches = self.match_alert_to_patterns(alert, use_enriched=use_enriched)
             if matches:
                 best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight']))
                 signals.append({
@@ -280,9 +295,9 @@ class SignalGenerator:
                     'time_horizon': best['time_horizon'],
                     'signal_score': self.confidence_score(best['confidence']) * best['match_weight']
                 })
-        
+
         for alert in self.reddit_alerts[:120]:
-            matches = self.match_alert_to_patterns(alert)
+            matches = self.match_alert_to_patterns(alert, use_enriched=use_enriched)
             if matches:
                 best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight']))
                 signals.append({
@@ -299,7 +314,7 @@ class SignalGenerator:
                     'score': alert.get('score', 0),
                     'signal_score': self.confidence_score(best['confidence']) * best['match_weight']
                 })
-        
+
         signals.sort(key=lambda x: x['signal_score'], reverse=True)
         return signals[:50]  # Increased from 25 to capture more categories
     
@@ -312,9 +327,30 @@ class SignalGenerator:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         with output_path.open('w', encoding='utf-8') as f:
             json.dump(signals, f, indent=2)
-    
-    def print_summary(self, signals: List[Dict]):
-        print("=== MARKET INTEL SIGNALS ===\n")
+
+    def compare_signal_sets(self, baseline: List[Dict], enriched: List[Dict]) -> Dict:
+        """Build lightweight A/B comparison metrics."""
+        def key(s: Dict) -> Tuple[str, str, str]:
+            return (s.get('source', ''), s.get('title', ''), s.get('pattern_id', ''))
+
+        bset = {key(s) for s in baseline}
+        eset = {key(s) for s in enriched}
+        overlap = len(bset & eset)
+
+        return {
+            'timestamp': datetime.now().isoformat(),
+            'baseline_count': len(baseline),
+            'enriched_count': len(enriched),
+            'overlap_count': overlap,
+            'baseline_only_count': len(bset - eset),
+            'enriched_only_count': len(eset - bset),
+            'enriched_lift': len(eset - bset),
+            'baseline_top5': [s.get('title', '') for s in baseline[:5]],
+            'enriched_top5': [s.get('title', '') for s in enriched[:5]],
+        }
+
+    def print_summary(self, signals: List[Dict], label: str = "PRODUCTION"):
+        print(f"=== MARKET INTEL SIGNALS ({label}) ===\n")
         
         high = [s for s in signals if s['confidence'] == 'HIGH']
         medium = [s for s in signals if s['confidence'] in ['MEDIUM_HIGH', 'MEDIUM']]
@@ -330,17 +366,47 @@ class SignalGenerator:
 
     def run(self):
         print("=== Generating Market Signals ===\n")
-        
-        signals = self.generate_signals()
-        
-        if signals:
-            self.print_summary(signals)
-            self.save_signals(signals)
-            print(f"✓ Saved {len(signals)} signals to data/signals.json")
-        else:
+
+        mode = os.environ.get('MI_ENRICHMENT_MODE', 'shadow').strip().lower()
+        # Modes:
+        # - shadow (default): production stays baseline; enriched run saved for A/B comparison only
+        # - baseline: baseline only
+        # - enriched: enriched only (explicit opt-in)
+
+        if mode == 'enriched':
+            signals = self.generate_signals(use_enriched=True)
+            if signals:
+                self.print_summary(signals, label='ENRICHED')
+                self.save_signals(signals)
+                print(f"✓ Saved {len(signals)} signals to data/signals.json (enriched mode)")
+            else:
+                print("No signals generated - run RSS and Reddit monitors first.")
+            return signals
+
+        baseline = self.generate_signals(use_enriched=False)
+        if not baseline:
             print("No signals generated - run RSS and Reddit monitors first.")
-        
-        return signals
+            return []
+
+        self.print_summary(baseline, label='BASELINE')
+        self.save_signals(baseline)
+        print(f"✓ Saved {len(baseline)} signals to data/signals.json (baseline production)")
+
+        if mode == 'shadow':
+            enriched = self.generate_signals(use_enriched=True)
+            self.save_signals(enriched, output_file='data/signals_enriched_shadow.json')
+            comparison = self.compare_signal_sets(baseline, enriched)
+            self.save_signals([comparison], output_file='data/signal_ab_comparison.json')
+            print(
+                "✓ Shadow A/B: "
+                f"baseline={comparison['baseline_count']} | "
+                f"enriched={comparison['enriched_count']} | "
+                f"overlap={comparison['overlap_count']} | "
+                f"enriched_only={comparison['enriched_only_count']}"
+            )
+            print("  Saved: data/signals_enriched_shadow.json + data/signal_ab_comparison.json")
+
+        return baseline
 
 
 if __name__ == "__main__":

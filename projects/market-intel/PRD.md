@@ -172,6 +172,13 @@ A systematic research and detection system that:
   - `enriched_text_source`: `headline_only | summary | article_excerpt`
   - `article_excerpt` (RSS)
   - `selftext_snippet` / `top_comment_snippet` (Reddit)
+- A/B testing phase (shadow mode):
+  - Production remains baseline by default.
+  - Enriched matching runs in parallel and is saved for comparison only.
+  - Comparison artifacts:
+    - `data/signals_enriched_shadow.json`
+    - `data/signal_ab_comparison.json`
+  - Runtime mode via `MI_ENRICHMENT_MODE`: `shadow` (default), `baseline`, `enriched`
 
 ---
 
