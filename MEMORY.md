@@ -258,6 +258,9 @@ All issues from nightly-security-review addressed. Cron jobs now save reports to
 - platform-health-council → memory/health-council/
 - self-improvement → memory/self-improvement/
 
+### Accepted Security Risks (Mar 2026)
+- **Control UI flags:** `dangerouslyDisableDeviceAuth=true` and `dangerouslyAllowHostHeaderOriginFallback=true` — Accepted because gateway is local-only (loopback bind), no external exposure. Keep explicit allowedOrigins for localhost. Do not flag in future health council reports.
+
 ### Trading Bot (Mar 2026)
 - **Project:** `projects/autonomous-trading-bot/`
 - **Broker:** Alpaca paper trading (live connected March 1, 2026)
