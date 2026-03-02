@@ -7,16 +7,24 @@ Reads webhook_decisions.jsonl and produces a concise daily summary:
 - denial reasons breakdown
 - top risk warnings
 - ASCII equity curve (P&L over time)
+- current open positions from Alpaca
 """
 
 from __future__ import annotations
 
 import json
+import os
 import sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+# Add parent to path for imports
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from src.broker_adapter_alpaca import AlpacaPaperAdapter
 
 
 def _utc_now_iso() -> str:
@@ -224,7 +232,33 @@ def generate_ascii_equity_curve(pnl_data: list[tuple[datetime, float]], width: i
     return "\n".join(chart_lines)
 
 
-def format_report(stats: dict, pnl_data: list[tuple[datetime, float]] = None) -> str:
+def fetch_open_positions() -> list[dict]:
+    """Fetch current open positions from Alpaca paper API.
+    
+    Returns:
+        List of position dicts with symbol, qty, market_value
+    """
+    try:
+        adapter = AlpacaPaperAdapter()
+        positions = adapter.list_positions()
+        
+        # Simplify position data
+        open_positions = []
+        for pos in positions:
+            open_positions.append({
+                "symbol": pos.get("symbol", ""),
+                "qty": pos.get("qty", "0"),
+                "market_value": pos.get("market_value", "0.00"),
+                "side": pos.get("side", ""),
+                "avg_entry_price": pos.get("avg_entry_price", "0.00"),
+            })
+        return open_positions
+    except Exception as e:
+        print(f"  [Warning: Could not fetch positions: {e}]")
+        return []
+
+
+def format_report(stats: dict, pnl_data: list[tuple[datetime, float]] = None, positions: list[dict] = None) -> str:
     lines = [
         "=" * 50,
         "DAILY TRADING BOT SUMMARY",
@@ -247,6 +281,27 @@ def format_report(stats: dict, pnl_data: list[tuple[datetime, float]] = None) ->
         equity_chart = generate_ascii_equity_curve(pnl_data)
         for chart_line in equity_chart.split("\n"):
             lines.append("  " + chart_line)
+        lines.append("")
+
+    # Add open positions if available
+    if positions:
+        lines.append("Open Positions:")
+        total_value = 0.0
+        for pos in positions:
+            symbol = pos.get("symbol", "")
+            qty = pos.get("qty", "0")
+            market_val = pos.get("market_value", "0.00")
+            side = pos.get("side", "")
+            avg_price = pos.get("avg_entry_price", "0.00")
+            try:
+                total_value += float(market_val)
+            except (ValueError, TypeError):
+                pass
+            lines.append(f"  {symbol}: {qty} shares ({side}) @ ${avg_price} = ${market_val}")
+        lines.append(f"  Total: ${total_value:,.2f}")
+        lines.append("")
+    elif positions is not None:
+        lines.append("Open Positions: None")
         lines.append("")
 
     if stats["symbols"]:
@@ -281,7 +336,8 @@ def main() -> None:
 
     stats = summarize_log(LOG_PATH)
     pnl_data = extract_pnl_data(LOG_PATH)
-    report = format_report(stats, pnl_data)
+    positions = fetch_open_positions()
+    report = format_report(stats, pnl_data, positions)
     print(report)
 
 

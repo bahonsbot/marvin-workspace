@@ -1,47 +1,47 @@
 {
   "version": 1,
   "mode": "phase-2",
-  "updated_at": "2026-03-02T21:27:00+08:00",
+  "updated_at": "2026-03-02T21:40:00+08:00",
   "items": [
     {
-      "id": "trading-queue-003",
-      "title": "Analyze daily report output format - add equity curve visualization",
-      "project": "projects/autonomous-trading-bot",
-      "priority": "P2",
-      "status": "completed",
-      "ready": true,
-      "phase2_eligible": true,
-      "notes": "Enhanced daily_report.py with ASCII equity curve chart from webhook_decisions.jsonl"
-    },
-    {
-      "id": "trading-queue-004",
-      "title": "Document all environment variables needed for trading-bot",
+      "id": "trading-queue-005",
+      "title": "Add position tracking - calculate current open positions from Alpaca",
       "project": "projects/autonomous-trading-bot",
       "priority": "P1",
-      "status": "completed",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Created notes/env-variables.md with full var documentation"
+      "notes": "Query Alpaca API to get current open positions, add to daily report. Returns 401 with placeholder keys - code handles gracefully."
     },
     {
-      "id": "mi-queue-005",
-      "title": "Review and clean up old RSS feeds - remove dead/inactive sources",
-      "project": "projects/market-intel",
+      "id": "trading-queue-006",
+      "title": "Review risk config - ensure defaults are conservative enough",
+      "project": "projects/autonomous-trading-bot",
       "priority": "P2",
-      "status": "completed",
+      "status": "todo",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Audit complete. 2 dead feeds identified (CNBC 403, Nasdaq dead). Created rss-feed-audit-2026-03-02.md"
+      "notes": "Check kill switch, loss cap, position size settings"
     },
     {
-      "id": "mi-queue-006",
-      "title": "Add 2 new high-quality RSS sources to expand coverage",
+      "id": "mi-queue-007",
+      "title": "Verify signal deduplication is working - check sent_signals.json",
       "project": "projects/market-intel",
-      "priority": "P2",
-      "status": "completed",
+      "priority": "P1",
+      "status": "todo",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Added 2 new feeds: WSJ_Markets (https://feeds.a.dj.com/rss/RSSMarketsMain.xml) and SeekingAlpha (https://seekingalpha.com/market_currents.xml) - both tested and working"
+      "notes": "Confirm no duplicate signals sent since fix"
+    },
+    {
+      "id": "mi-queue-008",
+      "title": "Research Reddit API changes - check if alternative needed",
+      "project": "projects/market-intel",
+      "priority": "P2",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Reddit may have changed API - verify monitoring still works"
     }
   ]
 }
