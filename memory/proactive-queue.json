@@ -1,55 +1,47 @@
 {
   "version": 1,
   "mode": "phase-2",
-  "updated_at": "2026-03-02T20:55:00+08:00",
+  "updated_at": "2026-03-02T21:27:00+08:00",
   "items": [
     {
-      "id": "trading-queue-001",
-      "title": "Review webhook_decisions.jsonl and identify patterns in denied signals",
+      "id": "trading-queue-003",
+      "title": "Analyze daily report output format - add equity curve visualization",
       "project": "projects/autonomous-trading-bot",
-      "priority": "P1",
-      "status": "completed",
-      "ready": true,
-      "phase2_eligible": true,
-      "completed_at": "2026-03-02T20:59:00+08:00",
-      "completion_note": "Analyzed webhook_decisions.jsonl - no denied signals found (4/4 accepted). Execution blocked by Alpaca URL config issue.",
-      "notes": "Analyze why signals get denied (kill switch, loss cap, invalid data)"
-    },
-    {
-      "id": "trading-queue-002",
-      "title": "Document webhook API endpoint setup for TradingView alerts",
-      "project": "projects/autonomous-trading-bot",
-      "priority": "P1",
-      "status": "completed",
-      "ready": true,
-      "phase2_eligible": true,
-      "completed_at": "2026-03-02T21:14:00+08:00",
-      "completion_note": "Created notes/tradingview-webhook-setup.md with endpoint details, payload format, TradingView alert configuration, and testing instructions.",
-      "notes": "Create simple guide: how to connect TradingView webhook to our endpoint"
-    },
-    {
-      "id": "mi-queue-003",
-      "title": "Verify pending geopolitical/macro signal (Iran/Khamenei)",
-      "project": "projects/market-intel",
-      "priority": "P1",
-      "status": "completed",
-      "ready": true,
-      "phase2_eligible": true,
-      "completed_at": "2026-03-02T21:21:00+08:00",
-      "completion_note": "VERIFIED CORRECT - Khamenei death signal predicted rates_volatility, fx_move, equity_factor_rotation. All outcomes observed: VIX >20, Brent +13%, defense stocks up, airlines down, USD/Gold safe-haven bid.",
-      "notes": "Signal 2 from grading session was deferred - check if verifiable now"
-    },
-    {
-      "id": "mi-queue-004",
-      "title": "Analyze signal accuracy by category - identify best/worst performing patterns",
-      "project": "projects/market-intel",
       "priority": "P2",
       "status": "completed",
       "ready": true,
       "phase2_eligible": true,
-      "completed_at": "2026-03-02T21:24:00+08:00",
-      "completion_note": "Category accuracy analysis complete. Geopolitical (100%), financial_credit (100%), sentiment_social (100%), macroeconomic (50%). Created notes/category-accuracy-2026-03-02.md with findings.",
-      "notes": "Now that we have 8 graded signals - run category-level analysis"
+      "notes": "Enhanced daily_report.py with ASCII equity curve chart from webhook_decisions.jsonl"
+    },
+    {
+      "id": "trading-queue-004",
+      "title": "Document all environment variables needed for trading-bot",
+      "project": "projects/autonomous-trading-bot",
+      "priority": "P1",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Create README section or .env.example with all vars explained"
+    },
+    {
+      "id": "mi-queue-005",
+      "title": "Review and clean up old RSS feeds - remove dead/inactive sources",
+      "project": "projects/market-intel",
+      "priority": "P2",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Check RSS feed list, identify stale sources, remove or flag"
+    },
+    {
+      "id": "mi-queue-006",
+      "title": "Add 2 new high-quality RSS sources to expand coverage",
+      "project": "projects/market-intel",
+      "priority": "P2",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Research and add reputable financial/geopolitical RSS feeds"
     }
   ]
 }

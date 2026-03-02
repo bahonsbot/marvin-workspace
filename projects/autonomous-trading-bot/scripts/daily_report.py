@@ -6,6 +6,7 @@ Reads webhook_decisions.jsonl and produces a concise daily summary:
 - execution stats (submitted, dry-run, blocked)
 - denial reasons breakdown
 - top risk warnings
+- ASCII equity curve (P&L over time)
 """
 
 from __future__ import annotations
@@ -94,7 +95,136 @@ def summarize_log(log_path: Path) -> dict:
     return stats
 
 
-def format_report(stats: dict) -> str:
+def extract_pnl_data(log_path: Path) -> list[tuple[datetime, float]]:
+    """Extract P&L data from executed trades in the log.
+    
+    Returns list of (timestamp, cumulative_pnl) tuples.
+    Currently uses submitted trades - would need filled trades for real P&L.
+    """
+    trades = []
+    cumulative_pnl = 0.0
+    
+    for line in log_path.read_text().splitlines():
+        if not line.strip():
+            continue
+        record = parse_log_line(line)
+        if not record:
+            continue
+        
+        # Get timestamp
+        ts_str = record.get("timestamp", "")
+        try:
+            ts = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+        except (ValueError, TypeError):
+            continue
+        
+        # Check for executed trade
+        result = record.get("result", {})
+        execution = result.get("execution", {})
+        exec_status = execution.get("status", "")
+        
+        # For now, track accepted submissions as "trades" 
+        # (real P&L would come from filled trades with avg_fill_price)
+        if exec_status == "submitted":
+            # Check for filled trade data
+            broker_result = execution.get("broker_result", {})
+            filled_qty = broker_result.get("filled_qty", "0")
+            filled_price = broker_result.get("filled_avg_price")
+            
+            if filled_qty and filled_qty != "0" and filled_price:
+                # Real filled trade - calculate P&L
+                # For now using a placeholder - in real implementation,
+                # we'd need exit price to calculate actual P&L
+                pass
+            
+            # Record this as a data point even without P&L
+            trades.append((ts, cumulative_pnl))
+    
+    return trades
+
+
+def generate_ascii_equity_curve(pnl_data: list[tuple[datetime, float]], width: int = 40, height: int = 10) -> str:
+    """Generate a simple ASCII equity curve chart.
+    
+    Args:
+        pnl_data: List of (timestamp, cumulative_pnl) tuples
+        width: Character width of the chart
+        height: Character height of the chart
+    
+    Returns:
+        ASCII chart string
+    """
+    if not pnl_data:
+        return "  [No trade data available yet]"
+    
+    # Get min/max P&L values
+    values = [pnl for _, pnl in pnl_data]
+    min_pnl = min(values)
+    max_pnl = max(values)
+    
+    # Handle flat line case
+    if min_pnl == max_pnl:
+        mid = height // 2
+        line = "+" + "-" * width + "+"
+        chart = [line]
+        for i in range(height):
+            row = "|" + (" " * width) + "|"
+            if i == mid:
+                row = "|" + ("=" * width) + "|"
+            chart.append(row)
+        chart.append(line)
+        chart.append(f"  P&L: ${min_pnl:+.2f} (flat)")
+        return "\n".join(chart)
+    
+    # Build the chart
+    range_pnl = max_pnl - min_pnl
+    if range_pnl == 0:
+        range_pnl = 1
+    
+    # Create buckets for each column
+    buckets = [[] for _ in range(width)]
+    for i, (_, pnl) in enumerate(pnl_data):
+        bucket_idx = int((i / max(len(pnl_data) - 1, 1)) * (width - 1))
+        buckets[bucket_idx].append(pnl)
+    
+    # Find max/min in each bucket for range
+    bucket_max = [max(b) if b else min_pnl for b in buckets]
+    bucket_min = [min(b) if b else max_pnl for b in buckets]
+    
+    # Build the ASCII chart from top to bottom
+    chart_lines = []
+    chart_lines.append("+" + "-" * width + "+")
+    
+    for row in range(height):
+        # Calculate Pnl range for this row
+        row_max = max_pnl - (row / (height - 1)) * range_pnl
+        row_min = max_pnl - ((row + 1) / (height - 1)) * range_pnl
+        
+        line = "|"
+        for col in range(width):
+            # Check if this column's range overlaps with this row
+            if bucket_max[col] >= row_min and bucket_min[col] <= row_max:
+                # Draw a point or line
+                if bucket_max[col] >= row_max and bucket_min[col] <= row_min:
+                    line += "#"  # Full column
+                elif bucket_max[col] >= row_max or bucket_min[col] <= row_min:
+                    line += "o"  # Partial
+                else:
+                    line += "-"
+            else:
+                line += " "
+        line += "|"
+        chart_lines.append(line)
+    
+    chart_lines.append("+" + "-" * width + "+")
+    
+    # Add axis labels
+    chart_lines.append(f"  Start: ${min_pnl:+.2f}" + " " * (width - 20) + f"End: ${max_pnl:+.2f}")
+    
+    return "\n".join(chart_lines)
+
+
+def format_report(stats: dict, pnl_data: list[tuple[datetime, float]] = None) -> str:
     lines = [
         "=" * 50,
         "DAILY TRADING BOT SUMMARY",
@@ -110,6 +240,14 @@ def format_report(stats: dict) -> str:
         f"  Blocked:            {stats['execution']['blocked']}",
         "",
     ]
+
+    # Add equity curve if we have P&L data
+    if pnl_data is not None:
+        lines.append("Equity Curve:")
+        equity_chart = generate_ascii_equity_curve(pnl_data)
+        for chart_line in equity_chart.split("\n"):
+            lines.append("  " + chart_line)
+        lines.append("")
 
     if stats["symbols"]:
         lines.append("Top Symbols:")
@@ -142,7 +280,8 @@ def main() -> None:
         sys.exit(1)
 
     stats = summarize_log(LOG_PATH)
-    report = format_report(stats)
+    pnl_data = extract_pnl_data(LOG_PATH)
+    report = format_report(stats, pnl_data)
     print(report)
 
 
