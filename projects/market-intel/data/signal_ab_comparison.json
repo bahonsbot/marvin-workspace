@@ -1,23 +1,23 @@
 [
   {
-    "timestamp": "2026-03-02T20:47:40.190788",
-    "baseline_count": 28,
+    "timestamp": "2026-03-02T21:47:29.121644",
+    "baseline_count": 27,
     "enriched_count": 50,
-    "overlap_count": 15,
+    "overlap_count": 12,
     "baseline_only_count": 7,
-    "enriched_only_count": 33,
-    "enriched_lift": 33,
+    "enriched_only_count": 34,
+    "enriched_lift": 34,
     "baseline_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
       "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western ",
-      "Oil and gas prices soar and stocks slide as Middle East conflict escalates",
+      "Gas prices soar as Iranian attacks shut down Qatari production",
       "\u2018Half of Dubai is booking\u2019: expats drive to Oman and Saudi Arabia to find flight"
     ],
     "enriched_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western ",
-      "Oil and gas prices soar and stocks slide as Middle East conflict escalates",
+      "Gas prices soar as Iranian attacks shut down Qatari production",
       "\u2018Half of Dubai is booking\u2019: expats drive to Oman and Saudi Arabia to find flight",
       "Gasoil is spiking more than crude. What it is and why prices are soaring amid Ir"
     ]

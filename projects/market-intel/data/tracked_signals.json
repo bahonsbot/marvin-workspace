@@ -403,5 +403,44 @@
     "verified": false,
     "actual_outcome": null,
     "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Gas prices soar as Iranian attacks shut down Qatari production",
+      "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
+      "timestamp": "2026-03-02T21:47:29.157219",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-02T21:47:29.159731",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
   }
 ]

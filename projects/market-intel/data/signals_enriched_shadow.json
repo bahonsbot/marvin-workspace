@@ -4,6 +4,84 @@
     "feed": "AP_Top",
     "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
     "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
+    "timestamp": "2026-03-02T13:15:07.548432Z",
+    "pattern_id": "p004",
+    "pattern": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western ",
+    "url": "https://www.theguardian.com/world/2026/feb/26/recent-mediterranean-storms-tragedies-spain-portugal-morocco",
+    "timestamp": "2026-03-02T13:15:14.962188Z",
+    "pattern_id": "p005",
+    "pattern": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Financial_Times",
+    "title": "Gas prices soar as Iranian attacks shut down Qatari production",
+    "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
+    "timestamp": "2026-03-02T13:15:26.715890Z",
+    "pattern_id": "p001",
+    "pattern": "Saudi Oil Attacks",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Financial_Times",
+    "title": "\u2018Half of Dubai is booking\u2019: expats drive to Oman and Saudi Arabia to find flight",
+    "url": "https://www.ft.com/content/7ecea3fe-295d-4592-abf2-206da6f6b8ca",
+    "timestamp": "2026-03-02T13:15:26.716043Z",
+    "pattern_id": "p001",
+    "pattern": "Saudi Oil Attacks",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "MarketWatch",
+    "title": "Gasoil is spiking more than crude. What it is and why prices are soaring amid Ir",
+    "url": "https://www.marketwatch.com/story/gasoil-is-spiking-more-than-crude-what-it-is-and-why-prices-are-soaring-amid-iran-conflict-af45ca50?mod=mw_rss_topstories",
+    "timestamp": "2026-03-02T13:15:27.873239Z",
+    "pattern_id": "p001",
+    "pattern": "Saudi Oil Attacks",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Bloomberg_Markets",
+    "title": "Saudi, Egyptian Markets Slump as US-Iran Conflict Roils Region - Bloomberg",
+    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPMEdYTDVGZFVuZDBDZmpROGtCS29WWnp6Tk5pWXZmWXdua05EYUwydlFqaXBvX3huNVNvdGhhZC1QMV9KaHdVdGJFMFdLQmFJVXNiN1ZFY1QzQ0t3NEFEV19UWFdQam1yMEVVY3VEQnY1ckF6OWpuYmpTUk1KY004eFNRdTVZRkJhVWJmNHhVQkdBWkpnM2lGRVZNYVFxY2xJcGJ6RXNUNFR3WUhXbU0teWdB?oc=5",
+    "timestamp": "2026-03-02T13:15:32.615987Z",
+    "pattern_id": "p001",
+    "pattern": "Saudi Oil Attacks",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "AP_Top",
+    "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
     "timestamp": "2026-03-02T12:12:33.378883Z",
     "pattern_id": "p004",
     "pattern": "COVID-19 Market Crash",
@@ -78,84 +156,6 @@
     "signal_score": 300
   },
   {
-    "source": "rss",
-    "feed": "Yahoo_Finance",
-    "title": "Best high-yield savings interest rates today, March 2, 2026 (Earn up to 4% APY)",
-    "url": "https://finance.yahoo.com/personal-finance/article/best-high-yield-savings-interest-rates-today-monday-march-2-2026-110026831.html",
-    "timestamp": "2026-03-02T12:12:54.253974Z",
-    "pattern_id": "p014",
-    "pattern": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Bloomberg_Markets",
-    "title": "Saudi, Egyptian Markets Slump as US-Iran Conflict Roils Region - Bloomberg",
-    "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPMEdYTDVGZFVuZDBDZmpROGtCS29WWnp6Tk5pWXZmWXdua05EYUwydlFqaXBvX3huNVNvdGhhZC1QMV9KaHdVdGJFMFdLQmFJVXNiN1ZFY1QzQ0t3NEFEV19UWFdQam1yMEVVY3VEQnY1ckF6OWpuYmpTUk1KY004eFNRdTVZRkJhVWJmNHhVQkdBWkpnM2lGRVZNYVFxY2xJcGJ6RXNUNFR3WUhXbU0teWdB?oc=5",
-    "timestamp": "2026-03-02T12:12:58.187899Z",
-    "pattern_id": "p001",
-    "pattern": "Saudi Oil Attacks",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "AP_Top",
-    "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
-    "timestamp": "2026-03-02T10:15:06.936770Z",
-    "pattern_id": "p004",
-    "pattern": "COVID-19 Market Crash",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Guardian_World",
-    "title": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western ",
-    "url": "https://www.theguardian.com/world/2026/feb/26/recent-mediterranean-storms-tragedies-spain-portugal-morocco",
-    "timestamp": "2026-03-02T10:15:14.345722Z",
-    "pattern_id": "p005",
-    "pattern": "GameStop Short Squeeze",
-    "category": "sentiment_social",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Financial_Times",
-    "title": "Retail investors shun private credit funds after Blue Owl gating",
-    "url": "https://www.ft.com/content/ea11d307-73af-4403-840d-b47dffce9cd0",
-    "timestamp": "2026-03-02T10:15:25.882726Z",
-    "pattern_id": "p005",
-    "pattern": "GameStop Short Squeeze",
-    "category": "sentiment_social",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "CNBC_Top",
-    "title": "Iran may 'lash out harder' as Khamenei's death puts Tehran on a war footing, lea",
-    "url": "https://www.cnbc.com/2026/03/01/us-israel-attacks-strikes-iran-retaliate-china-russia-allies.html",
-    "timestamp": "2026-03-02T10:15:26.978314Z",
-    "pattern_id": "p002",
-    "pattern": "Russia-Ukraine Conflict",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
     "source": "reddit",
     "feed": "r/wallstreetbets",
     "title": "Daily Discussion Thread for March 02, 2026",
@@ -166,7 +166,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 55,
+    "score": 127,
     "signal_score": 300
   },
   {
@@ -180,7 +180,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 18,
+    "score": 26,
     "signal_score": 300
   },
   {
@@ -194,7 +194,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 22,
+    "score": 34,
     "signal_score": 300
   },
   {
@@ -208,7 +208,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 993,
+    "score": 1527,
     "signal_score": 300
   },
   {
@@ -222,7 +222,21 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 14,
+    "score": 18,
+    "signal_score": 300
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "Remember...",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rinq9k/remember/",
+    "timestamp": "2026-03-02T08:50:02Z",
+    "pattern_id": "p005",
+    "pattern": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "score": 430,
     "signal_score": 300
   },
   {
@@ -236,7 +250,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 2025,
+    "score": 3085,
     "signal_score": 300
   },
   {
@@ -250,7 +264,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 266,
+    "score": 274,
     "signal_score": 300
   },
   {
@@ -264,7 +278,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 344,
+    "score": 342,
     "signal_score": 300
   },
   {
@@ -278,7 +292,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 10,
+    "score": 11,
     "signal_score": 300
   },
   {
@@ -292,7 +306,7 @@
     "category": "geopolitical",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 1352,
+    "score": 1379,
     "signal_score": 300
   },
   {
@@ -320,7 +334,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 5052,
+    "score": 5118,
     "signal_score": 300
   },
   {
@@ -334,7 +348,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 2650,
+    "score": 2721,
     "signal_score": 300
   },
   {
@@ -348,7 +362,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 6,
+    "score": 9,
     "signal_score": 300
   },
   {
@@ -362,7 +376,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 139,
+    "score": 146,
     "signal_score": 300
   },
   {
@@ -376,7 +390,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 2363,
+    "score": 2404,
     "signal_score": 300
   },
   {
@@ -390,7 +404,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 1787,
+    "score": 1805,
     "signal_score": 300
   },
   {
@@ -404,7 +418,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 56,
+    "score": 58,
     "signal_score": 300
   },
   {
@@ -418,7 +432,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 572,
+    "score": 576,
     "signal_score": 300
   },
   {
@@ -432,7 +446,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 274,
+    "score": 271,
     "signal_score": 300
   },
   {
@@ -446,7 +460,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 733,
+    "score": 738,
     "signal_score": 300
   },
   {
@@ -474,7 +488,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 2791,
+    "score": 2819,
     "signal_score": 300
   },
   {
@@ -488,21 +502,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 17674,
-    "signal_score": 300
-  },
-  {
-    "source": "reddit",
-    "feed": "r/wallstreetbets",
-    "title": "New WallStreetBets Casually Explained Just Dropped",
-    "url": "https://reddit.com/r/wallstreetbets/comments/1rhhylw/new_wallstreetbets_casually_explained_just_dropped/",
-    "timestamp": "2026-02-28T23:52:04Z",
-    "pattern_id": "p005",
-    "pattern": "GameStop Short Squeeze",
-    "category": "sentiment_social",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "score": 992,
+    "score": 17861,
     "signal_score": 300
   },
   {
@@ -530,7 +530,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 3,
+    "score": 5,
     "signal_score": 300
   },
   {
@@ -544,7 +544,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "short-term",
-    "score": 155,
+    "score": 212,
     "signal_score": 300
   },
   {
@@ -558,7 +558,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "short-term",
-    "score": 25,
+    "score": 34,
     "signal_score": 300
   },
   {
@@ -572,7 +572,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "short-term",
-    "score": 2,
+    "score": 0,
     "signal_score": 300
   },
   {
@@ -586,7 +586,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 5,
+    "score": 2,
     "signal_score": 300
   },
   {
@@ -600,7 +600,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "short-term",
-    "score": 20,
+    "score": 22,
     "signal_score": 300
   },
   {
@@ -628,7 +628,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 5,
+    "score": 4,
     "signal_score": 300
   },
   {
@@ -650,7 +650,7 @@
     "feed": "Guardian_World",
     "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
     "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
-    "timestamp": "2026-03-02T12:12:37.437296Z",
+    "timestamp": "2026-03-02T13:15:11.236672Z",
     "pattern_id": "p024",
     "pattern": "Retail Options Sentiment",
     "category": "sentiment_social",
@@ -663,7 +663,7 @@
     "feed": "Guardian_World",
     "title": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border",
     "url": "https://www.theguardian.com/us-news/2026/feb/27/cbp-border-drone-military-democrats",
-    "timestamp": "2026-03-02T12:12:46.903707Z",
+    "timestamp": "2026-03-02T13:15:20.821765Z",
     "pattern_id": "p010",
     "pattern": "Tesla Stock Splits",
     "category": "corporate",
@@ -676,7 +676,7 @@
     "feed": "Guardian_Business",
     "title": "Datacentre developers face calls to disclose effect on UK\u2019s net emissions",
     "url": "https://www.theguardian.com/technology/2026/mar/01/datacentre-developers-energy-greenhouse-gas-emissions",
-    "timestamp": "2026-03-02T12:12:48.924550Z",
+    "timestamp": "2026-03-02T13:15:22.841113Z",
     "pattern_id": "p024",
     "pattern": "Retail Options Sentiment",
     "category": "sentiment_social",

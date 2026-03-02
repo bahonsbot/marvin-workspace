@@ -18,10 +18,10 @@
       "title": "Review risk config - ensure defaults are conservative enough",
       "project": "projects/autonomous-trading-bot",
       "priority": "P2",
-      "status": "todo",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Check kill switch, loss cap, position size settings"
+      "notes": "Kill switch ✓, $100 loss cap ✓, 1-share positions ✓, 3 max positions ✓ - conservative enough for paper trading"
     },
     {
       "id": "mi-queue-007",
