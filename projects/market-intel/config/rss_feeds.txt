@@ -21,14 +21,17 @@ DW_Top,https://rss.dw.com/rdf/rss-en-top
 Financial_Times,https://www.ft.com/rss/home
 MarketWatch,https://feeds.marketwatch.com/marketwatch/topstories/
 
-# NEW: CNBC (free)
-CNBC_Top,https://www.cnbc.com/id/100003114/device/rss/rss.html
+# NEW: CNBC (via rss.app - replaces dead direct feed)
+CNBC_Top,https://rss.app/feeds/i2vW5h6WylDMcjyJ.xml
 
-# NEW: Yahoo Finance
-Yahoo_Finance,https://finance.yahoo.com/news/rssindex
+# NEW: Yahoo Finance (via rss.app - replaces rate-limited direct)
+Yahoo_Finance,https://rss.app/feeds/URY3kUatxUXYQAYt.xml
 
-# NEW: Nasdaq
-Nasdaq_News,https://www.nasdaq.com/feed/rss/headline
+# NEW: Nasdaq (via rss.app - replaces dead direct feed)
+Nasdaq_News,https://rss.app/feeds/IfhY86auDLitzzyf.xml
+
+# NEW: Reuters Breaking Views (via rss.app)
+Reuters_BreakingViews,https://rss.app/feeds/mw189qqCNYXeh8SS.xml
 
 # NEW: Bloomberg (via news.google)
 Bloomberg_Tech,https://news.google.com/rss/search?q=site%3Abloomberg.com+technology&hl=en-US&gl=US&ceid=US%3Aen
