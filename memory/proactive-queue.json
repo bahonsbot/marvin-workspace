@@ -28,10 +28,10 @@
       "title": "Review and clean up old RSS feeds - remove dead/inactive sources",
       "project": "projects/market-intel",
       "priority": "P2",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Check RSS feed list, identify stale sources, remove or flag"
+      "notes": "Audit complete. 2 dead feeds identified (CNBC 403, Nasdaq dead). Created rss-feed-audit-2026-03-02.md"
     },
     {
       "id": "mi-queue-006",
