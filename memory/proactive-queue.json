@@ -20,9 +20,11 @@
       "title": "Document webhook API endpoint setup for TradingView alerts",
       "project": "projects/autonomous-trading-bot",
       "priority": "P1",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
       "phase2_eligible": true,
+      "completed_at": "2026-03-02T21:14:00+08:00",
+      "completion_note": "Created notes/tradingview-webhook-setup.md with endpoint details, payload format, TradingView alert configuration, and testing instructions.",
       "notes": "Create simple guide: how to connect TradingView webhook to our endpoint"
     },
     {
