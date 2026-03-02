@@ -107,6 +107,63 @@ For semantic memory search across all memory layers, use the `qmd` command (e.g.
 
 Follow HEARTBEAT.md. Track checks in memory/heartbeat-state.json. During heartbeats, commit and push uncommitted workspace changes and periodically synthesize daily notes into MEMORY.md.
 
+## Morning Meeting Procedure
+
+Structured step-by-step review of overnight cron job reports:
+
+1. **Order of review:**
+   - nightly-security-review
+   - platform-health-council
+   - self-improvement
+   - data-manager (if applicable)
+
+2. **For each report, process in priority order:**
+   - CRITICAL issues first
+   - HIGH issues
+   - MEDIUM/LOW issues
+
+3. **Presentation format per issue:**
+   - Problem (what is the issue)
+   - Why it matters (risk/impact)
+   - Proposed solution (specific fix or accepted risk)
+
+4. **Approval flow:**
+   - Get explicit approval before applying fixes
+   - Safe, non-breaking fixes can be executed by Marvin without separate approval
+   - Log decisions in memory after each item
+
+## Docker Environment Rules
+
+These rules prevent common issues in this Docker setup:
+
+1. **"Don't Touch the Lock" Rule**
+   - Do NOT modify `gateway.auth` or `gateway.mode` in openclaw.json directly
+   - These are managed by host environment variables
+   - Changing them breaks CLI pairing and loses access to tools
+
+2. **"No Internal Restarts" Rule**
+   - Never run `openclaw gateway stop` or `restart` from inside the container
+   - Killing the gateway process can crash the container or cause boot loops
+   - If restart needed, ask Philippe to do it from the VPS host
+
+3. **"Permission Awareness" Rule**
+   - Always verify file ownership before writing to `/data/.openclaw/` directory
+   - If new files are created and access is lost, remind Philippe to run:
+     `sudo chown -R node:node /data/.openclaw/`
+   - This applies to config files, cron jobs, scripts, etc.
+
+4. **"Gateway Crash Recovery" Rule**
+   - If gateway crashes during file editing, corrupted tool-call logs may need cleanup
+   - Symptoms: gateway won't start, file permission errors
+   - Recovery: Philippe removes corrupted log entries from session files
+   - If in doubt, check `/tmp/openclaw/` for crash logs
+
+5. **"Schema-First Config" Rule**
+   - Never invent new top-level keys in `openclaw.json` (example mistake: adding `system`)
+   - Validate CLI-supported config shape first (via `openclaw ... --help` / `doctor`)
+   - For heartbeat behavior, only use supported config paths or ask Philippe to apply host-side changes
+   - Invalid config keys can crash/break gateway startup in this Docker setup
+
 
 ## Time Display
 
