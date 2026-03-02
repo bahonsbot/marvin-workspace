@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "generated": "2026-03-02T21:15:58.594635Z",
+  "generated": "2026-03-02T22:15:56.519326Z",
   "categories": [
     "geopolitical",
     "financial",
@@ -11,148 +11,40 @@
   ],
   "items": [
     {
-      "id": "rss_2026-03-02T211528100915Z",
-      "title": "Beiersdorf announces share buyback, sees 2026 margin slightly below 2025",
-      "summary": "Nivea-maker Beiersdorf said on Monday it would launch a share \u200bbuyback programme of up to 750 million euros ($877 \u200cmillion) over the next two years, and forecast its 2026 core operating margin, excluding special items, slightly below last y",
-      "url": "https://www.reuters.com/world/china/beiersdorf-announces-share-buyback-sees-2026-margin-slightly-below-2025-2026-03-02/",
+      "id": "rss_2026-03-02T221529533886Z",
+      "title": "PayPay, backer aim to raise roughly $1.1 billion in US IPO",
+      "summary": "PayPay and \u200ba selling \u200cshareholder are \u200baiming \u200bto raise as \u2060much \u200bas $1.1 billion \u200bin an initial public \u200boffering \u200bin the United \u200cStates, \u2060the SoftBank-backed Japanese \u200bpayments \u200bapp \u2060said on \u200bMonday.",
+      "url": "https://www.reuters.com/business/media-telecom/paypay-backer-aim-raise-roughly-11-billion-us-ipo-2026-03-02/",
       "source": "RSS: Nasdaq_News",
-      "category": [
-        "corporate"
-      ],
-      "published": "Mon, 02 Mar 2026 19:59:33 GMT",
-      "timestamp": "2026-03-02T21:15:28.100915Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T211528100864Z",
-      "title": "Investor interest in Greenland's mining has increased since Trump's threats, mining minister says",
-      "summary": "Investor interest in Greenland's mining industry has \u200cincreased since U.S. President Donald Trump made repeated threats to annex the country, a senior Greenlandic official told Reuters on Monday.",
-      "url": "https://www.reuters.com/world/investor-interest-greenlands-mining-has-increased-since-trumps-threats-mining-2026-03-02/",
-      "source": "RSS: Nasdaq_News",
-      "category": [
-        "geopolitical",
-        "financial"
-      ],
-      "published": "Mon, 02 Mar 2026 20:14:24 GMT",
-      "timestamp": "2026-03-02T21:15:28.100864Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T211527774082Z",
-      "title": "BYD stock jumps on 'disruptive tech' teaser, despite 41% sales tumble",
-      "summary": "Chinese EV maker BYD stock jumped on Monday after the company said it would reveal \"disruptive technology\" at an event later this week. This comes after BYD said global sales tumbled in February.",
-      "url": "https://finance.yahoo.com/news/byd-stock-jumps-on-disruptive-tech-teaser-despite-41-sales-tumble-160609328.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "other"
-      ],
-      "published": "Mon, 02 Mar 2026 16:06:09 GMT",
-      "timestamp": "2026-03-02T21:15:27.774082Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T211527774056Z",
-      "title": "Tech stocks today: Nvidia invests $4B in photonics makers, Apple announces low-cost iPhone, OpenAI strikes deal with Pentagon",
-      "summary": "All eyes are on Nvidia's fourth quarter results, due after the closing bell on Wednesday, as AI concerns continue to grip markets.",
-      "url": "https://finance.yahoo.com/news/live/tech-stocks-today-nvidia-invests-4b-in-photonics-makers-apple-announces-low-cost-iphone-openai-strikes-deal-with-pentagon-163709849.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "macro"
-      ],
-      "published": "Mon, 02 Mar 2026 16:37:09 GMT",
-      "timestamp": "2026-03-02T21:15:27.774056Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T211527774030Z",
-      "title": "Gas prices likely to rise 'very quickly' as oil surges amid Iran war",
-      "summary": "Gasoline prices approached $3 per gallon Monday as oil prices spiked amid the Middle East conflict.",
-      "url": "https://finance.yahoo.com/news/gas-prices-likely-to-rise-very-quickly-as-oil-surges-amid-iran-war-174948922.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Mon, 02 Mar 2026 17:49:48 GMT",
-      "timestamp": "2026-03-02T21:15:27.774030Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T211527774011Z",
-      "title": "US tariff lawsuits returned to trade court to determine next steps",
-      "summary": "WILMINGTON, Delaware, March 2 (Reuters) - A U.S appeals court returned on Monday the lawsuits that led to most of President Donald Trump's tariffs being struck down to the U.S.",
-      "url": "https://finance.yahoo.com/news/us-tariff-lawsuits-returned-trade-181859964.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Mon, 02 Mar 2026 18:18:59 GMT",
-      "timestamp": "2026-03-02T21:15:27.774011Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T211527773986Z",
-      "title": "SoftBank\u2019s PayPay delays IPO roadshow launch, sources say, as Iran attack rattles markets",
-      "summary": "SoftBank's PayPay has delayed its highly anticipated IPO roadshow that was scheduled to launch Monday as markets were \u200crattled by this weekend's attack on Iran, according to two people \u200cfamiliar with the matter. The postponement, which has ",
-      "url": "https://finance.yahoo.com/news/exclusive-softbank-paypay-delays-ipo-181400370.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "geopolitical",
-        "financial",
-        "macro",
-        "corporate"
-      ],
-      "published": "Mon, 02 Mar 2026 18:22:41 GMT",
-      "timestamp": "2026-03-02T21:15:27.773986Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T211527773914Z",
-      "title": "Musk\u2019s xAI to buy back $3B of debt early in run-up to IPO",
-      "summary": "The company, which Musk recently combined with his rocket business SpaceX, is set to redeem its $3 billion of high-yield bonds at about 117 cents on the dollar, the people said, a significant premium that reflects the unusual move to pay do",
-      "url": "https://finance.yahoo.com/news/musk-xai-buy-back-3-173531157.html",
-      "source": "RSS: Yahoo_Finance",
       "category": [
         "financial",
         "corporate"
       ],
-      "published": "Mon, 02 Mar 2026 19:14:56 GMT",
-      "timestamp": "2026-03-02T21:15:27.773914Z",
+      "published": "Mon, 02 Mar 2026 21:16:48 GMT",
+      "timestamp": "2026-03-02T22:15:29.533886Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527773870Z",
-      "title": "US gasoline crosses $3 per gallon mark in test of Trump's Iran war",
-      "summary": "NEW YORK, March 2 (Reuters) - Average U. retail gasoline prices crossed $3 a gallon for the first time since November on Monday as the conflict \u200cin the Middle East worsened, setting up a key test of public approval \u200cof President Donald Trum",
-      "url": "https://finance.yahoo.com/news/us-gasoline-crosses-3-per-193816723.html",
-      "source": "RSS: Yahoo_Finance",
+      "id": "rss_2026-03-02T221529533840Z",
+      "title": "Trading Day: Oil, yields, uncertainty surge",
+      "summary": "Oil and gas prices clocked their biggest rise in years, while bonds and most stock markets fell on Monday, after the U.S.-Israeli attack on Iran over the weekend triggered waves of volatility across world markets. The big - and surprising -",
+      "url": "https://www.reuters.com/business/global-markets-trading-day-graphic-2026-03-02/",
+      "source": "RSS: Nasdaq_News",
       "category": [
         "geopolitical",
+        "financial",
         "macro"
       ],
-      "published": "Mon, 02 Mar 2026 19:38:16 GMT",
-      "timestamp": "2026-03-02T21:15:27.773870Z",
+      "published": "Mon, 02 Mar 2026 22:02:59 GMT",
+      "timestamp": "2026-03-02T22:15:29.533840Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527773830Z",
+      "id": "rss_2026-03-02T221529158015Z",
       "title": "No cap: Nearly 70% of Gen Z would consider Chinese cars like BYD and Geely, study finds",
       "summary": "If Chinese automakers eventually break into the US market, younger Gen Z buyers could be first in line.",
       "url": "https://finance.yahoo.com/news/no-cap-nearly-70-of-gen-z-would-consider-chinese-cars-like-byd-and-geely-study-finds-201337126.html",
@@ -161,13 +53,44 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 20:13:37 GMT",
-      "timestamp": "2026-03-02T21:15:27.773830Z",
+      "timestamp": "2026-03-02T22:15:29.158015Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527773771Z",
+      "id": "rss_2026-03-02T221529157993Z",
+      "title": "Trump\u2019s Iran War Adds Potential Shock for US Economy, Voters",
+      "summary": "The biggest domestic effects for Americans would likely arrive via more expensive gasoline, with the US and Israel launching attacks just a few days after Trump boasted about lowering pump prices in his State of the Union address. Economist",
+      "url": "https://finance.yahoo.com/news/trump-iran-war-adds-potential-202107501.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical",
+        "macro"
+      ],
+      "published": "Mon, 02 Mar 2026 20:21:07 GMT",
+      "timestamp": "2026-03-02T22:15:29.157993Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T221529157923Z",
+      "title": "Trump to drop battle against law firms over punitive executive orders",
+      "summary": "The US government is expected to drop its legal effort to enforce punitive executive orders targeting top law firms, abandoning a fight that...",
+      "url": "https://finance.yahoo.com/news/trump-drop-battle-against-law-203317470.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Mon, 02 Mar 2026 20:33:17 GMT",
+      "timestamp": "2026-03-02T22:15:29.157923Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T221529157900Z",
       "title": "Brazil to mobilize nearly $50 billion in sustainable investments under Lula's current term",
       "summary": "BRASILIA, March 2 (Reuters) - Brazil's government expects to mobilize more than 250 billion reais ($48.4 billion) in sustainable investments during President Luiz \u200cInacio Lula da Silva's current four-year term, with 2026 centered on consoli",
       "url": "https://finance.yahoo.com/news/brazil-mobilize-nearly-50-billion-205358499.html",
@@ -176,28 +99,91 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 20:53:58 GMT",
-      "timestamp": "2026-03-02T21:15:27.773771Z",
+      "timestamp": "2026-03-02T22:15:29.157900Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414698Z",
-      "title": "Why India looks especially vulnerable as conflict rages in Middle East",
-      "summary": "As conflict in the Middle East causes surging oil prices and disrupts the aviation sector, India is coming under pressure.",
-      "url": "https://www.cnbc.com/2026/03/02/india-impact-iran-middle-east-conflict-oil-prices-airlines.html",
-      "source": "RSS: CNBC_Top",
+      "id": "rss_2026-03-02T221529157853Z",
+      "title": "Eli Lilly on track to launch oral obesity drug in second quarter, pending US approval",
+      "summary": "March 2 () - Eli Lilly CFO \u200cLucas Montarce said \u200con Monday it is \u200bpreparing to launch its new oral obesity drug, orforglipron, \u200cin \u2060the United States as early as \u2060the second quarter of this \u200byear, \u200bonce \u200bit gets \u200capproval from the Food and ",
+      "url": "https://finance.yahoo.com/news/eli-lilly-track-launch-oral-205845348.html",
+      "source": "RSS: Yahoo_Finance",
       "category": [
-        "geopolitical"
+        "macro"
       ],
-      "published": "Mon, 02 Mar 2026 10:37:27 GMT",
-      "timestamp": "2026-03-02T21:15:27.414698Z",
+      "published": "Mon, 02 Mar 2026 20:58:45 GMT",
+      "timestamp": "2026-03-02T22:15:29.157853Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414677Z",
+      "id": "rss_2026-03-02T221529157801Z",
+      "title": "Ohio-based Civista names the successor to its retiring CEO",
+      "summary": "Charles \"Chuck\" Parcher will replace Dennis Shaffer as president and CEO of the Sandusky, Ohio-based community bank. Shaffer is set to retire in late August.",
+      "url": "https://finance.yahoo.com/news/ohio-based-civista-names-successor-211012911.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "financial"
+      ],
+      "published": "Mon, 02 Mar 2026 21:10:12 GMT",
+      "timestamp": "2026-03-02T22:15:29.157801Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T221529157775Z",
+      "title": "PayPay, backer aim to raise roughly $1.1 billion in US IPO",
+      "summary": "PayPay \u200cand \u200ca selling shareholder \u200bare aiming to raise \u200cas \u2060much as $1.1 billion \u2060in an \u200binitial \u200bpublic \u200boffering in \u200cthe United States, the SoftBank-backed \u200cJapanese \u200bpayments \u200bapp \u200bsaid \u200con Monday.",
+      "url": "https://finance.yahoo.com/news/paypay-backer-aim-raise-roughly-211640742.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "financial",
+        "corporate"
+      ],
+      "published": "Mon, 02 Mar 2026 21:16:40 GMT",
+      "timestamp": "2026-03-02T22:15:29.157775Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T221529157742Z",
+      "title": "How major US stock indexes fared Monday, 3/2/2026",
+      "summary": "Oil prices leaped on worries that war with Iran could clog the flow of crude, while U.S. stocks swung from sharp losses to small gains. The S&P 500 fell as much as 1.2% Monday, and cruise lines and airlines led the way lower on worries abou",
+      "url": "https://finance.yahoo.com/news/major-us-stock-indexes-fared-212155180.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical",
+        "macro"
+      ],
+      "published": "Mon, 02 Mar 2026 21:21:55 GMT",
+      "timestamp": "2026-03-02T22:15:29.157742Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T221529157686Z",
+      "title": "Bitcoin tops $69,000 as analysts point to crypto 'resilience' amid Middle East war",
+      "summary": "Bitcoin jumped to $69,000 on Monday with strategists pointing to the token's 'resilience' amid the Middle East conflict.",
+      "url": "https://finance.yahoo.com/news/bitcoin-tops-69000-as-analysts-point-to-crypto-resilience-amid-middle-east-war-212820505.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical",
+        "financial"
+      ],
+      "published": "Mon, 02 Mar 2026 21:31:19 GMT",
+      "timestamp": "2026-03-02T22:15:29.157686Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T221528815431Z",
       "title": "Global defense stocks jump as U.S., Iran exchange attacks",
       "summary": "The defense sector was a rare bright spot amid a broader market sell-off triggered by fears of a wider regional conflict following U.S. attacks on Iran.",
       "url": "https://www.cnbc.com/2026/03/02/defense-stocks-us-iran-israel-attacks-lockheed-renk-leonardo.html",
@@ -207,13 +193,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 10:58:09 GMT",
-      "timestamp": "2026-03-02T21:15:27.414677Z",
+      "timestamp": "2026-03-02T22:15:28.815431Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414655Z",
+      "id": "rss_2026-03-02T221528815409Z",
       "title": "The Strait of Hormuz crisis explained: What it means for global shipping",
       "summary": "The Middle East conflict has stoked fears of prolonged disruption to global trade via key maritime corridors.",
       "url": "https://www.cnbc.com/2026/03/02/strait-of-hormuz-crisis-us-iran-israel-war-shipping-trade-oil.html",
@@ -223,13 +209,13 @@
         "financial"
       ],
       "published": "Mon, 02 Mar 2026 11:06:21 GMT",
-      "timestamp": "2026-03-02T21:15:27.414655Z",
+      "timestamp": "2026-03-02T22:15:28.815409Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414635Z",
+      "id": "rss_2026-03-02T221528815390Z",
       "title": "Why Iran should not count on allies Russia and China to come to its aid",
       "summary": "Iran's closest allies, Russia and China, have not offered material support to it, exposing the hard limits of its \"strategic\" partnerships.",
       "url": "https://www.cnbc.com/2026/03/02/iran-china-russia-strikes-assistance-alliance-weapons-missiles-geopolitics-oil-prices-ukraine.html",
@@ -239,13 +225,13 @@
         "financial"
       ],
       "published": "Mon, 02 Mar 2026 11:43:48 GMT",
-      "timestamp": "2026-03-02T21:15:27.414635Z",
+      "timestamp": "2026-03-02T22:15:28.815390Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414614Z",
+      "id": "rss_2026-03-02T221528815368Z",
       "title": "Qatar's state-owned energy company halts LNG production after Iran drone attacks",
       "summary": "",
       "url": "https://www.cnbc.com/2026/03/02/qatars-state-owned-energy-company-halts-lng-production-after-iran-drone-attacks.html",
@@ -254,13 +240,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 12:46:53 GMT",
-      "timestamp": "2026-03-02T21:15:27.414614Z",
+      "timestamp": "2026-03-02T22:15:28.815368Z",
       "type": "rss",
       "enriched_text_source": "headline_only",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414601Z",
+      "id": "rss_2026-03-02T221528815355Z",
       "title": "Travel stocks sink after thousands of flights grounded following Iran strikes",
       "summary": "Airlines and some hotel stocks fell after the U.S.-Israeli attacks on Iran and subsequent retaliation strikes.",
       "url": "https://www.cnbc.com/2026/03/02/iran-strikes-flights-travel-stocks.html",
@@ -269,13 +255,28 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 13:15:54 GMT",
-      "timestamp": "2026-03-02T21:15:27.414601Z",
+      "timestamp": "2026-03-02T22:15:28.815355Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414580Z",
+      "id": "rss_2026-03-02T221528815302Z",
+      "title": "Nvidia to invest $4 billion in two photonics companies",
+      "summary": "Coherent and Lumentum will both receive $2 billion each from the chip giant as part of the strategic investment.",
+      "url": "https://www.cnbc.com/2026/03/02/nvidia-investment-coherent-lumentum.html",
+      "source": "RSS: CNBC_Top",
+      "category": [
+        "financial"
+      ],
+      "published": "Mon, 02 Mar 2026 13:36:35 GMT",
+      "timestamp": "2026-03-02T22:15:28.815302Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T221528815282Z",
       "title": "Starlink to partner with Deutsche Telekom to launch satellite mobile service in Europe",
       "summary": "The service will go live in 2028. It comes as Starlink's owner, SpaceX, gears up for an IPO.",
       "url": "https://www.cnbc.com/2026/03/02/starlink-deutsche-telekom-partnership.html",
@@ -284,13 +285,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 14:16:25 GMT",
-      "timestamp": "2026-03-02T21:15:27.414580Z",
+      "timestamp": "2026-03-02T22:15:28.815282Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414560Z",
+      "id": "rss_2026-03-02T221528815257Z",
       "title": "Anthropic's Claude sees 'elevated errors' as it tops Apple's free apps after Pentagon clash",
       "summary": "The app surged to the top free app on Apple's App Store after Anthropic clashed with the Department of Defense over limits for the technology.",
       "url": "https://www.cnbc.com/2026/03/02/anthropic-claude-ai-outage-apple-pentagon.html",
@@ -299,13 +300,13 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 15:25:39 GMT",
-      "timestamp": "2026-03-02T21:15:27.414560Z",
+      "timestamp": "2026-03-02T22:15:28.815257Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414534Z",
+      "id": "rss_2026-03-02T221528815222Z",
       "title": "Apple launches lower cost iPhone 17e and a new iPad Air powered by its M4 chip",
       "summary": "Apple opens week of product launches with refreshed low-cost iPhone and a faster iPad Air, as it begins what looks to be a broader multi-day hardware push.",
       "url": "https://www.cnbc.com/2026/03/02/apple-iphone-17e-ipad-air-m4-chip.html",
@@ -314,13 +315,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 15:40:40 GMT",
-      "timestamp": "2026-03-02T21:15:27.414534Z",
+      "timestamp": "2026-03-02T22:15:28.815222Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527414492Z",
+      "id": "rss_2026-03-02T221528815178Z",
       "title": "Why Novo Nordisk's Ireland expansion is key to fighting off Eli Lilly",
       "summary": "Novo Nordisk is investing in a facility in Ireland as it expands its production capacities of the newly launched Wegovy pill, the Danish drugmaker said Monday.",
       "url": "https://www.cnbc.com/2026/03/02/novo-nordisk-stock-eli-lilly-wegovy-ireland-supply-news.html",
@@ -329,60 +330,59 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 15:57:15 GMT",
-      "timestamp": "2026-03-02T21:15:27.414492Z",
+      "timestamp": "2026-03-02T22:15:28.815178Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527073220Z",
-      "title": "Palantir, Lockheed and these other defense stocks are rising on heels of Iran conflict",
-      "summary": "Defense spending is set to get \u201cmore urgent and less controversial,\u201d an analyst notes, and numerous stocks could benefit.",
-      "url": "https://www.marketwatch.com/story/palantir-lockheed-and-these-other-defense-stocks-are-rising-on-heels-of-iran-conflict-3832f763?mod=mw_rss_topstories",
+      "id": "rss_2026-03-02T221528473929Z",
+      "title": "Will the bank get suspicious if I deposit $150,000 in cash into my checking account?",
+      "summary": "\u201cI live in a state with no inheritance tax. I assume I can make this deposit legally.\u201d",
+      "url": "https://www.marketwatch.com/story/i-live-in-a-state-with-no-inheritance-tax-is-it-legal-to-deposit-150k-cash-into-my-bank-account-d7987cfe?mod=mw_rss_topstories",
       "source": "RSS: MarketWatch",
       "category": [
-        "geopolitical"
+        "financial"
       ],
-      "published": "Mon, 02 Mar 2026 18:17:00 GMT",
-      "timestamp": "2026-03-02T21:15:27.073220Z",
+      "published": "Mon, 02 Mar 2026 21:40:00 GMT",
+      "timestamp": "2026-03-02T22:15:28.473929Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527073194Z",
-      "title": "Trump leaves door open for extended U.S. campaign against Iran. What that could mean for the economy.",
-      "summary": "President Donald Trump said Monday the military operation against Iran could last four to five weeks \u2014 or longer.",
-      "url": "https://www.marketwatch.com/story/trump-leaves-door-open-for-extended-u-s-campaign-against-iran-e2d21f8f?mod=mw_rss_topstories",
+      "id": "rss_2026-03-02T221528473905Z",
+      "title": "The economy looks great on paper \u2014 but this split in consumer mood spells trouble",
+      "summary": "Recession is more likely when consumers are gloomy about the economy and their own finances.",
+      "url": "https://www.marketwatch.com/story/the-economy-looks-great-on-paper-but-this-split-in-consumer-mood-spells-trouble-89ad2a6e?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "macro"
+      ],
+      "published": "Mon, 02 Mar 2026 21:45:00 GMT",
+      "timestamp": "2026-03-02T22:15:28.473905Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T221528473856Z",
+      "title": "As global markets tanked over Iran, U.S. stocks were mostly unscathed. Here\u2019s why.",
+      "summary": "There is an old saying in markets: Buy when the bullets (or bombs or missiles) fly.",
+      "url": "https://www.marketwatch.com/story/as-global-markets-tanked-over-iran-u-s-stocks-were-mostly-unscathed-heres-why-92dc87c5?mod=mw_rss_topstories",
       "source": "RSS: MarketWatch",
       "category": [
         "geopolitical",
         "macro"
       ],
-      "published": "Mon, 02 Mar 2026 18:23:00 GMT",
-      "timestamp": "2026-03-02T21:15:27.073194Z",
+      "published": "Mon, 02 Mar 2026 21:47:00 GMT",
+      "timestamp": "2026-03-02T22:15:28.473856Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527073166Z",
-      "title": "Prediction-market traders betting against Iran\u2019s Khamenei got a messy reminder to always read the fine print",
-      "summary": "As tensions between the U.S. and Iran rose over the past few weeks, traders were using Kalshi and Polymarket to bet on whether Iran\u2019s Supreme Leader Ali Khamenei would remain in power. But when news broke that Khamenei was killed in U.S.-Is",
-      "url": "https://www.marketwatch.com/story/prediction-market-traders-betting-on-irans-khamenei-got-a-messy-reminder-to-always-read-the-fine-print-72a39382?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "geopolitical",
-        "macro"
-      ],
-      "published": "Mon, 02 Mar 2026 18:24:00 GMT",
-      "timestamp": "2026-03-02T21:15:27.073166Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T211527073121Z",
+      "id": "rss_2026-03-02T221528473832Z",
       "title": "How Applied Optoelectronics became the latest viral AI stock",
       "summary": "Shares of the optical-networking provider have nearly tripled so far this year as AI players seek out high-bandwidth, low-latency connectivity products.",
       "url": "https://www.marketwatch.com/story/how-applied-optoelectronics-became-the-latest-viral-ai-stock-f644d345?mod=mw_rss_topstories",
@@ -390,77 +390,74 @@
       "category": [
         "other"
       ],
-      "published": "Mon, 02 Mar 2026 18:38:00 GMT",
-      "timestamp": "2026-03-02T21:15:27.073121Z",
+      "published": "Mon, 02 Mar 2026 21:51:00 GMT",
+      "timestamp": "2026-03-02T22:15:28.473832Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527073069Z",
-      "title": "Why CrowdStrike\u2019s stock just got an upgrade ahead of earnings",
-      "summary": "An analyst sees minimal risk to the company\u2019s guidance and thinks shares have been overly punished by a broad selloff in the software sector.",
-      "url": "https://www.marketwatch.com/story/why-crowdstrikes-stock-just-got-an-upgrade-ahead-of-earnings-1a7450be?mod=mw_rss_topstories",
+      "id": "rss_2026-03-02T221528473808Z",
+      "title": "Coherent and Lumentum shares pop on Nvidia deals. Why optical stocks are so hot these days.",
+      "summary": "Optical technologies are increasingly critical in data centers as they support energy-efficient, ultrahigh-bandwidth connections.",
+      "url": "https://www.marketwatch.com/story/coherent-and-lumentum-shares-pop-on-nvidia-deals-why-optical-stocks-are-so-hot-these-days-806f603d?mod=mw_rss_topstories",
       "source": "RSS: MarketWatch",
       "category": [
-        "geopolitical",
-        "corporate"
+        "other"
       ],
-      "published": "Mon, 02 Mar 2026 19:40:00 GMT",
-      "timestamp": "2026-03-02T21:15:27.073069Z",
+      "published": "Mon, 02 Mar 2026 21:58:00 GMT",
+      "timestamp": "2026-03-02T22:15:28.473808Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527073035Z",
-      "title": "Here is the \u2018worst-case scenario\u2019 for oil and the Strait of Hormuz",
-      "summary": "Oil climbed to its highest price since June on Monday, as conflict in the Middle East brings with it an inherent risk to the world\u2019s available crude supplies.",
-      "url": "https://www.marketwatch.com/story/here-is-the-worst-case-scenario-for-oil-and-the-strait-of-hormuz-d1aada30?mod=mw_rss_topstories",
+      "id": "rss_2026-03-02T221528473782Z",
+      "title": "Palantir, Lockheed and these other defense stocks rise on heels of Iran conflict",
+      "summary": "Defense spending is set to get \u201cmore urgent and less controversial,\u201d an analyst notes, and numerous stocks could benefit.",
+      "url": "https://www.marketwatch.com/story/palantir-lockheed-and-these-other-defense-stocks-are-rising-on-heels-of-iran-conflict-3832f763?mod=mw_rss_topstories",
       "source": "RSS: MarketWatch",
       "category": [
         "geopolitical"
       ],
-      "published": "Mon, 02 Mar 2026 19:58:00 GMT",
-      "timestamp": "2026-03-02T21:15:27.073035Z",
+      "published": "Mon, 02 Mar 2026 22:04:00 GMT",
+      "timestamp": "2026-03-02T22:15:28.473782Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527072981Z",
-      "title": "Iran conflict hits a market that\u2019s more overvalued than during the 1973 oil shock",
-      "summary": "Arab\u2013Israeli war in 1973 and the oil embargo that followed shows that stocks don\u2019t always rebound quickly.",
-      "url": "https://www.marketwatch.com/story/iran-conflict-hits-a-market-thats-more-overvalued-than-during-the-1973-oil-shock-f9035d9d?mod=mw_rss_topstories",
+      "id": "rss_2026-03-02T221528473752Z",
+      "title": "American, Delta stocks fall as Iran conflict sparks worries about fuel costs, travel demand",
+      "summary": "Airline stocks drop as the Iran conflict sparks worries about rising fuel costs.",
+      "url": "https://www.marketwatch.com/story/american-delta-stocks-fall-as-iran-conflict-sparks-worries-about-fuel-costs-travel-demand-c691eb25?mod=mw_rss_topstories",
       "source": "RSS: MarketWatch",
       "category": [
-        "geopolitical",
-        "macro"
+        "geopolitical"
       ],
-      "published": "Mon, 02 Mar 2026 20:43:00 GMT",
-      "timestamp": "2026-03-02T21:15:27.072981Z",
+      "published": "Mon, 02 Mar 2026 22:07:00 GMT",
+      "timestamp": "2026-03-02T22:15:28.473752Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211527072939Z",
-      "title": "Bonds log biggest selloff in 9 months as Iran conflict sparks unusual Treasury moves",
-      "summary": "Mortgage rates and more will be vulnerable to the surge in the 10-year Treasury yield.",
-      "url": "https://www.marketwatch.com/story/bonds-head-for-biggest-selloff-in-nine-months-as-iran-conflict-sparks-unusual-treasury-moves-c40aed49?mod=mw_rss_topstories",
+      "id": "rss_2026-03-02T221528473716Z",
+      "title": "Cruise stocks drop, as there\u2019s more than just the Iran conflict to worry about",
+      "summary": "Norwegian\u2019s sales miss and downbeat booking and profit outlooks spark concern about demand for cruises.",
+      "url": "https://www.marketwatch.com/story/cruise-stocks-drop-as-theres-more-the-just-the-iran-conflict-to-worry-about-808189e4?mod=mw_rss_topstories",
       "source": "RSS: MarketWatch",
       "category": [
-        "geopolitical",
-        "financial"
+        "geopolitical"
       ],
-      "published": "Mon, 02 Mar 2026 21:12:00 GMT",
-      "timestamp": "2026-03-02T21:15:27.072939Z",
+      "published": "Mon, 02 Mar 2026 22:11:00 GMT",
+      "timestamp": "2026-03-02T22:15:28.473716Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211525691626Z",
+      "id": "rss_2026-03-02T221527375279Z",
       "title": "France offers to deploy nuclear deterrent across Europe for first time",
       "summary": "President Emmanuel Macron lays out doctrine of \u2018forward deterrence\u2019",
       "url": "https://www.ft.com/content/45d90eeb-5084-4c22-8d4a-9fdb223759fb",
@@ -469,13 +466,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 18:10:37 GMT",
-      "timestamp": "2026-03-02T21:15:25.691626Z",
+      "timestamp": "2026-03-02T22:15:27.375279Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211525691598Z",
+      "id": "rss_2026-03-02T221527375257Z",
       "title": "Trump to drop battle against law firms over punitive executive orders  ",
       "summary": "Administration to terminate appeals in four cases involving law firms that sued to block measures from taking effect",
       "url": "https://www.ft.com/content/5f711e77-a5eb-4b2c-90a3-6b6a565aa375",
@@ -484,13 +481,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 20:33:17 GMT",
-      "timestamp": "2026-03-02T21:15:25.691598Z",
+      "timestamp": "2026-03-02T22:15:27.375257Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211525691574Z",
+      "id": "rss_2026-03-02T221527375236Z",
       "title": "How western navies can keep the Strait of Hormuz open",
       "summary": "Although the narrow waterway is easy for Iran to block, playing offence could prevent global economic repercussions",
       "url": "https://www.ft.com/content/bd9e1a9d-ae4b-4733-87d3-022d6f2c61eb",
@@ -499,13 +496,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 15:37:05 GMT",
-      "timestamp": "2026-03-02T21:15:25.691574Z",
+      "timestamp": "2026-03-02T22:15:27.375236Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211525691551Z",
+      "id": "rss_2026-03-02T221527375217Z",
       "title": "\u2018Half of Dubai is booking\u2019: expats drive to Oman and Saudi Arabia to find flights out",
       "summary": "Charter operators vie to secure slots in Muscat as airports in UAE and Qatar remain constrained",
       "url": "https://www.ft.com/content/7ecea3fe-295d-4592-abf2-206da6f6b8ca",
@@ -514,13 +511,13 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 16:54:16 GMT",
-      "timestamp": "2026-03-02T21:15:25.691551Z",
+      "timestamp": "2026-03-02T22:15:27.375217Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211525691519Z",
+      "id": "rss_2026-03-02T221527375191Z",
       "title": "Investors turn to gold, not bonds, as haven from war in Iran",
       "summary": "Gold and the US dollar jump but government bonds fall amid fears of an inflation shock",
       "url": "https://www.ft.com/content/b4adbb39-c01e-4136-8df6-538e2242c43a",
@@ -531,13 +528,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 17:47:01 GMT",
-      "timestamp": "2026-03-02T21:15:25.691519Z",
+      "timestamp": "2026-03-02T22:15:27.375191Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211525691480Z",
+      "id": "rss_2026-03-02T221527375159Z",
       "title": "Iran attacks show US haven status is in peril",
       "summary": "In moments of extreme uncertainty investors usually rush to the safety of US government bonds, but not this time",
       "url": "https://www.ft.com/content/a8c8cfbd-b5fa-4c61-b72a-38531b029623",
@@ -547,13 +544,13 @@
         "financial"
       ],
       "published": "Mon, 02 Mar 2026 15:27:29 GMT",
-      "timestamp": "2026-03-02T21:15:25.691480Z",
+      "timestamp": "2026-03-02T22:15:27.375159Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211525691456Z",
+      "id": "rss_2026-03-02T221527375139Z",
       "title": "Gas prices soar as Iranian attacks force shutdown of Qatari production",
       "summary": "Saudi Arabia also closes an oil refinery after attack",
       "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
@@ -562,28 +559,28 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 18:57:38 GMT",
-      "timestamp": "2026-03-02T21:15:25.691456Z",
+      "timestamp": "2026-03-02T22:15:27.375139Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211525691392Z",
+      "id": "rss_2026-03-02T221527375082Z",
       "title": "Trump vows to do \u2018whatever it takes\u2019 in Iran as US sends more troops to Middle East",
-      "summary": "Oil and US dollar rally as conflict intensifies",
+      "summary": "Oil settles more than 6% higher, while S&P 500 ends with slight gain as energy and defence groups advance",
       "url": "https://www.ft.com/content/91cae073-71db-46ea-a950-62b17faf1882",
       "source": "RSS: Financial_Times",
       "category": [
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 16:47:01 GMT",
-      "timestamp": "2026-03-02T21:15:25.691392Z",
+      "timestamp": "2026-03-02T22:15:27.375082Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882928Z",
+      "id": "rss_2026-03-02T221524822645Z",
       "title": "A gas shock \u2013 not an oil shock \u2013 from the Iran war looks more threatening | Nils Pratley",
       "summary": "Europe and Asia will take an economic hit if the supply of Qatari LNG is halted by the closure of the strait of Hormuz Gas prices soar and oil jumps as Iran war pushes down global stock markets The price of oil grabs most of the energy-rela",
       "url": "https://www.theguardian.com/business/nils-pratley-on-finance/2026/mar/02/gas-shock-oil-iran-war-qatari-lng-strait-of-hormuz",
@@ -593,13 +590,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 20:15:23 GMT",
-      "timestamp": "2026-03-02T21:15:22.882928Z",
+      "timestamp": "2026-03-02T22:15:24.822645Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882831Z",
+      "id": "rss_2026-03-02T221524822563Z",
       "title": "Thousands of pollution incidents in England downgraded without site visit, data suggests",
       "summary": "Exclusive: Whistleblower figures show large rise in \u2018serious\u2019 to \u2018minor\u2019 downgrades based on water company evidence Environment Agency (EA) staff have downgraded thousands of serious pollution incidents by water companies in England without",
       "url": "https://www.theguardian.com/environment/2026/mar/01/thousands-pollution-incidents-england-downgraded-without-site-visit-data-suggests",
@@ -608,13 +605,13 @@
         "other"
       ],
       "published": "Sun, 01 Mar 2026 07:00:34 GMT",
-      "timestamp": "2026-03-02T21:15:22.882831Z",
+      "timestamp": "2026-03-02T22:15:24.822563Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882749Z",
+      "id": "rss_2026-03-02T221524822494Z",
       "title": "Most senior council officers in England say building work hit by delays",
       "summary": "Funding uncertainty is main concern, despite Labour\u2019s pledge to revitalise construction, survey shows Business live \u2013 latest updates Almost two-thirds of senior council officers have said they are seeing construction projects delayed, despi",
       "url": "https://www.theguardian.com/society/2026/mar/02/senior-council-officers-building-work-hit-by-delays",
@@ -623,13 +620,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 06:00:02 GMT",
-      "timestamp": "2026-03-02T21:15:22.882749Z",
+      "timestamp": "2026-03-02T22:15:24.822494Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882676Z",
+      "id": "rss_2026-03-02T221524822426Z",
       "title": "Rolls-Royce boss \u2018open\u2019 to Germany joining UK\u2019s fighter jet project",
       "summary": "Tufan Erginbilgi\u00e7 says decision is for the government but German participation remains a possibility Business live \u2013 latest updates The boss of Rolls-Royce has said he would welcome Germany helping to build Britain\u2019s next-generation fighter",
       "url": "https://www.theguardian.com/business/2026/mar/02/rolls-royce-germany-uk-fighter-jet-tufan-erginbilgic",
@@ -638,13 +635,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 05:00:01 GMT",
-      "timestamp": "2026-03-02T21:15:22.882676Z",
+      "timestamp": "2026-03-02T22:15:24.822426Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882603Z",
+      "id": "rss_2026-03-02T221524822363Z",
       "title": "UK competition watchdog investigates hotel groups over alleged data sharing",
       "summary": "Regulator looks into claim Hilton, InterContinental Hotels and Marriott could be sharing \u2018 competitively sensitive\u2019 information via analytics tool Business live \u2013 latest updates The UK competition watchdog has opened an investigation into t",
       "url": "https://www.theguardian.com/business/2026/mar/02/uk-competition-watchdog-investigates-hilton-marriott-intercontinental-hotel-groups-alleged-data-sharing",
@@ -654,13 +651,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 15:33:33 GMT",
-      "timestamp": "2026-03-02T21:15:22.882603Z",
+      "timestamp": "2026-03-02T22:15:24.822363Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882511Z",
+      "id": "rss_2026-03-02T221524822259Z",
       "title": "UK house prices rise in February as chancellor avoids \u2018negative speculation\u2019",
       "summary": "Rachel Reeves\u2019s upcoming spring forecast has not led to slowdown, as property tax rumours did in November Business live \u2013 latest updates UK politics live \u2013 latest updates House prices in the UK increased in February, avoiding a repeat of th",
       "url": "https://www.theguardian.com/business/2026/mar/02/uk-house-prices-rise-february-spring-forecast-rachel-reeves",
@@ -671,13 +668,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 15:17:51 GMT",
-      "timestamp": "2026-03-02T21:15:22.882511Z",
+      "timestamp": "2026-03-02T22:15:24.822259Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882422Z",
+      "id": "rss_2026-03-02T221524822186Z",
       "title": "Paramount+ and HBO Max to become one streaming service, Ellison says",
       "summary": "Billionaire Paramount Skydance chief announces plan days after winning takeover battle for Warner Bros Discovery Sign up for the Breaking News US email to get newsletter alerts in your inbox Paramount Skydance plans to combine HBO Max and P",
       "url": "https://www.theguardian.com/media/2026/mar/02/paramount-hbo-max-streaming-warner-bros",
@@ -688,13 +685,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 19:31:50 GMT",
-      "timestamp": "2026-03-02T21:15:22.882422Z",
+      "timestamp": "2026-03-02T22:15:24.822186Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882302Z",
+      "id": "rss_2026-03-02T221524822117Z",
       "title": "How escalating Iran conflict is driving up oil and gas prices \u2013 a visual guide",
       "summary": "A near-halt to shipping in strait of Hormuz and attacks on Middle East refineries are threatening supplies and stoking inflation Nils Pratley: A gas shock \u2013 not an oil shock \u2013 looks more threatening US-Israel war on Iran \u2013 live updates Iran",
       "url": "https://www.theguardian.com/world/2026/mar/02/iran-strait-of-hormuz-oil-gas-visualized",
@@ -704,13 +701,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 19:13:22 GMT",
-      "timestamp": "2026-03-02T21:15:22.882302Z",
+      "timestamp": "2026-03-02T22:15:24.822117Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882222Z",
+      "id": "rss_2026-03-02T221524822048Z",
       "title": "BrewDog bought by US cannabis and drinks firm for \u00a333m, costing nearly 500 jobs",
       "summary": "Many early-stage crowdfunders left empty-handed as Tilray acquires beer company\u2019s UK and Irish assets Business live \u2013 latest updates The UK and Irish assets of BrewDog, the Scottish self-styled \u201cpunk\u201d brewer, have been sold to the US cannab",
       "url": "https://www.theguardian.com/business/2026/mar/02/brewdog-us-cannabis-drinks-500-jobs",
@@ -720,13 +717,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 17:34:14 GMT",
-      "timestamp": "2026-03-02T21:15:22.882222Z",
+      "timestamp": "2026-03-02T22:15:24.822048Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522882123Z",
+      "id": "rss_2026-03-02T221524821966Z",
       "title": "Gas prices soar and oil jumps as Iran war pushes down global stock markets",
       "summary": "QatarEnergy says it has halted production of liquefied natural gas after attacks on Ras Laffan and Mesaieed sites Nils Pratley: A gas shock \u2013 not an oil shock \u2013 looks more threatening US-Israel war on Iran \u2013 live updates Gas prices surged o",
       "url": "https://www.theguardian.com/world/2026/mar/02/oil-prices-iran-war-strait-of-hormuz-shipping",
@@ -736,13 +733,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 18:09:55 GMT",
-      "timestamp": "2026-03-02T21:15:22.882123Z",
+      "timestamp": "2026-03-02T22:15:24.821966Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211522045637Z",
+      "id": "rss_2026-03-02T221523975221Z",
       "title": "\u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws",
       "summary": "Javier Milei\u2019s boosters say law will revive employment, but critics decry cuts to severance and longer working hours Argentina \u2019s senate is poised to approve a sweeping overhaul of labour laws aimed at weakening trade unions and lowering la | Excerpt: \u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws | Argentina | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous im",
       "url": "https://www.theguardian.com/world/2026/feb/27/argentina-labor-law-overhaul",
@@ -751,13 +748,13 @@
         "macro"
       ],
       "published": "Fri, 27 Feb 2026 09:00:37 GMT",
-      "timestamp": "2026-03-02T21:15:22.045637Z",
+      "timestamp": "2026-03-02T22:15:23.975221Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws | Argentina | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int "
     },
     {
-      "id": "rss_2026-03-02T211520819789Z",
+      "id": "rss_2026-03-02T221522776808Z",
       "title": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border",
       "summary": "Second time in two weeks military used laser to attack what it mistakenly thought was a threat, disrupting air traffic Sign up for the Breaking News US email to get newsletter alerts in your inbox Democratic members of Congress have express | Excerpt: Democrats outraged at US military\u2019s downing of CBP drone near Mexico border | US military | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/cbp-border-drone-military-democrats",
@@ -766,13 +763,13 @@
         "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 14:37:19 GMT",
-      "timestamp": "2026-03-02T21:15:20.819789Z",
+      "timestamp": "2026-03-02T22:15:22.776808Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border | US military | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Internatio"
     },
     {
-      "id": "rss_2026-03-02T211519582624Z",
+      "id": "rss_2026-03-02T221521678015Z",
       "title": "Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba",
       "summary": "As tensions between two countries reach new highs, US president says regime is \u2018talking with us\u2019 Donald Trump has suggested the US could carry out a \u201cfriendly takeover\u201d of Cuba as tensions between Washington and Havana reach a new high afte | Excerpt: Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba | Donald Trump | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/trump-cuba-regime-change",
@@ -782,13 +779,13 @@
         "corporate"
       ],
       "published": "Fri, 27 Feb 2026 23:39:01 GMT",
-      "timestamp": "2026-03-02T21:15:19.582624Z",
+      "timestamp": "2026-03-02T22:15:21.678015Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba | Donald Trump | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition U"
     },
     {
-      "id": "rss_2026-03-02T211518496195Z",
+      "id": "rss_2026-03-02T221520496048Z",
       "title": "At least 20 killed as cash-laden military cargo plane crashes in Bolivia",
       "summary": "Riot police use teargas to disperse people gathering around wreckage of plane loaded with money from central bank At least 20 people have died and dozens have been injured after a military cargo plane carrying banknotes crashed while landin | Excerpt: At least 20 killed as cash-laden military cargo plane crashes in Bolivia | Bolivia | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle captio",
       "url": "https://www.theguardian.com/world/2026/feb/28/at-least-15-killed-as-cash-laden-military-cargo-plane-crashes-in-bolivia",
@@ -798,13 +795,13 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 03:05:37 GMT",
-      "timestamp": "2026-03-02T21:15:18.496195Z",
+      "timestamp": "2026-03-02T22:15:20.496048Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "At least 20 killed as cash-laden military cargo plane crashes in Bolivia | Bolivia | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edi"
     },
     {
-      "id": "rss_2026-03-02T211517444001Z",
+      "id": "rss_2026-03-02T221519233640Z",
       "title": "\u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered",
       "summary": "Few clues as to how 10 heavily armed men intercepted on stolen speedboat came together from across Florida or what they hoped to achieve Foot traffic was slow outside the Bay of Pigs Museum on Calle Ocho in Miami\u2019s Little Havana neighbourho | Excerpt: \u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 5 Next image Previous image",
       "url": "https://www.theguardian.com/world/2026/feb/28/miami-exiled-cubans-speedboat-shootout",
@@ -813,13 +810,13 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 10:00:08 GMT",
-      "timestamp": "2026-03-02T21:15:17.444001Z",
+      "timestamp": "2026-03-02T22:15:19.233640Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 5 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Int"
     },
     {
-      "id": "rss_2026-03-02T211515941120Z",
+      "id": "rss_2026-03-02T221517877167Z",
       "title": "US accused of \u2018shameless exploitation\u2019 over proposed Zambian health aid deal",
       "summary": "Leaked draft of $1bn memorandum of understanding reveals mandatory targets, sharing of data, and reported access to mining concessions The US has been accused of \u201cshameless exploitation\u201d over a health financing agreement with Zambia worth m | Excerpt: US accused of \u2018shameless exploitation\u2019 over proposed Zambian health aid deal | Global health | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Tog",
       "url": "https://www.theguardian.com/global-development/2026/feb/25/zambia-us-health-aid-deal-exploitation-mining-concessions-data-sharing-targets",
@@ -828,13 +825,13 @@
         "geopolitical"
       ],
       "published": "Wed, 25 Feb 2026 13:00:36 GMT",
-      "timestamp": "2026-03-02T21:15:15.941120Z",
+      "timestamp": "2026-03-02T22:15:17.877167Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "US accused of \u2018shameless exploitation\u2019 over proposed Zambian health aid deal | Global health | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Interna"
     },
     {
-      "id": "rss_2026-03-02T211514739075Z",
+      "id": "rss_2026-03-02T221516718630Z",
       "title": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean",
       "summary": "Atmospheric machine-gun has fired storm after deadly storm at the region this year, leaving a trail of widespread destruction For Andr\u00e9s S\u00e1nchez Barea, in Spain, it was the fear that arose when water started to spurt from plug sockets. For  | Excerpt: \u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean | Extreme weather | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image",
       "url": "https://www.theguardian.com/world/2026/feb/26/recent-mediterranean-storms-tragedies-spain-portugal-morocco",
@@ -844,13 +841,13 @@
         "sentiment"
       ],
       "published": "Thu, 26 Feb 2026 05:00:21 GMT",
-      "timestamp": "2026-03-02T21:15:14.739075Z",
+      "timestamp": "2026-03-02T22:15:16.718630Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean | Extreme weather | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs "
     },
     {
-      "id": "rss_2026-03-02T211513433053Z",
+      "id": "rss_2026-03-02T221515356573Z",
       "title": "Two women arrested in Uganda for allegedly kissing in public could face life sentence",
       "summary": "Wendy Faith and Alesi Diana Denise were taken into custody under laws that have outraged LGBTQ+ community and rights activists Two women have been arrested and detained in Uganda after allegedly kissing in public, an act of \u201csame-sex activi | Excerpt: Two women arrested in Uganda for allegedly kissing in public could face life sentence | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Prev",
       "url": "https://www.theguardian.com/global-development/2026/feb/26/women-arrested-uganda-kissing-public-lgbtq-laws",
@@ -859,13 +856,13 @@
         "other"
       ],
       "published": "Thu, 26 Feb 2026 08:00:23 GMT",
-      "timestamp": "2026-03-02T21:15:13.433053Z",
+      "timestamp": "2026-03-02T22:15:15.356573Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Two women arrested in Uganda for allegedly kissing in public could face life sentence | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign "
     },
     {
-      "id": "rss_2026-03-02T211512256923Z",
+      "id": "rss_2026-03-02T221514294564Z",
       "title": "Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries",
       "summary": "Zimbabwe refuses to sign agreement and Kenya faces a court case over data sharing as new aid deals come under scrutiny A series of bilateral health agreements being negotiated between African countries and the administration of President Do | Excerpt: Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image",
       "url": "https://www.theguardian.com/global-development/2026/feb/27/rising-anger-over-lop-sided-immoral-us-health-funding-pacts-africa-countries",
@@ -874,13 +871,13 @@
         "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 07:00:34 GMT",
-      "timestamp": "2026-03-02T21:15:12.256923Z",
+      "timestamp": "2026-03-02T22:15:14.294564Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs "
     },
     {
-      "id": "rss_2026-03-02T211511082175Z",
+      "id": "rss_2026-03-02T221513126486Z",
       "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine",
       "summary": "Foreign minister says 272 Ghanaians are thought to have been drawn into battle since 2022, after he visited Kyiv At least 55 Ghanaians have been killed in Russia\u2019s war with Ukraine after being \u201clured into battle\u201d, Ghana\u2019s foreign minister h | Excerpt: Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine | Ukraine | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image",
       "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
@@ -890,13 +887,13 @@
         "macro"
       ],
       "published": "Fri, 27 Feb 2026 16:42:39 GMT",
-      "timestamp": "2026-03-02T21:15:11.082175Z",
+      "timestamp": "2026-03-02T22:15:13.126486Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine | Ukraine | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Int"
     },
     {
-      "id": "rss_2026-03-02T211508131814Z",
+      "id": "rss_2026-03-02T221509630792Z",
       "title": "AP Explains: What happens when migrants arrive at US border - AP News",
       "summary": "AP Explains: What happens when migrants arrive at US border AP News",
       "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNSk84NHlld1o2TkdTSGxlWkFRUGdMaFVPclI4MjRHREdTQXo5LWg5bDdqREZzdEF5akpIU2lDaERZdzlsampCRjBRU1RFUVZfdDU5amJuRzhmb0FXTVBYOXZ5ZTM1d244T0tHUnBrS19qalZDd25nYWV1RElRc1FjakR3NENXS1l2MEEwWEJDYlhJTHIzc0JXSzVnUmJsSXM4T3ZjNE05LWNZMm51akZNTXIzSUhadmtuUEE?oc=5",
@@ -905,13 +902,13 @@
         "other"
       ],
       "published": "Wed, 26 Jun 2019 07:00:00 GMT",
-      "timestamp": "2026-03-02T21:15:08.131814Z",
+      "timestamp": "2026-03-02T22:15:09.630792Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211507889364Z",
+      "id": "rss_2026-03-02T221509386427Z",
       "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "summary": "Trump disbanded NSC pandemic unit that experts had praised AP News",
       "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
@@ -920,30 +917,62 @@
         "geopolitical"
       ],
       "published": "Sat, 14 Mar 2020 07:00:00 GMT",
-      "timestamp": "2026-03-02T21:15:07.889364Z",
+      "timestamp": "2026-03-02T22:15:09.386427Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T211507349069Z",
-      "title": "With \u2018Megxit,\u2019 Harry and Meghan aim to control media image - AP News",
-      "summary": "With \u2018Megxit,\u2019 Harry and Meghan aim to control media image AP News",
-      "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQRmhHMUhReGpKclJoNjAzQkp2NnEtMFg0N2xJWXJBbnpXSzJNalRmWVE4U2JkSzZhTi1TeXdzUjJIazAwRWJrckhuRDZlNU9kVmVUdnVsQU4xb1JlSlp5UXdrSnduYS1pT3pxUWYzS25DNUc5aF85TFNzcm44Nkp0cFNlaEd5Tk54UXB6bEViNDQxMXNzMXFlcHZPSWt6c2VWUGtoZ0t1YVJZMERRXzVwU19aLTkwT3ZNdjJLRjVRdnljS3hFN2xGNQ?oc=5",
+      "id": "rss_2026-03-02T221508495542Z",
+      "title": "Trump took shelter in White House bunker as protests raged - AP News",
+      "summary": "Trump took shelter in White House bunker as protests raged AP News | Excerpt: Google News window.IJ_values = ['\\/\\/www.google.com\\/advanced_search?hl\\x3den-GB\\x26fg\\x3d1',[null,null,\"\",false,null,null,true,false],'0','www.google.com','https:\\/\\/news.google.com\\/', null ,'boq_dotssplashserver_20260226.11_p0','news.google.com','MY:en', 0.0 , 1.0 , 0.0 , null",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOUVU1TFNSWng5WkxWNWFCcEFYOVVOOG04d2lDUjZCMUlqTWhZRVgzdXBJNGVEN3BzQTczZnJ0Njk4TGpMTHRBM3g0alJiNWhKQmplYmlNazBobEs4OEV6bjVYOU85bEV6U29UUE9vSkxpdlJBT2NkaTZ6c2EwYUlaN3hZdm80NFZUalhab2xsWUpETjQzLVV6ZTZ2SWRJZFEtaVVlMVZTX0xIdw?oc=5",
       "source": "RSS: AP_Top",
       "category": [
-        "other"
+        "geopolitical"
       ],
-      "published": "Thu, 09 Jan 2020 08:00:00 GMT",
-      "timestamp": "2026-03-02T21:15:07.349069Z",
+      "published": "Sun, 31 May 2020 07:00:00 GMT",
+      "timestamp": "2026-03-02T22:15:08.495542Z",
       "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
+      "enriched_text_source": "article_excerpt",
+      "article_excerpt": "Google News window.IJ_values = ['\\/\\/www.google.com\\/advanced_search?hl\\x3den-GB\\x26fg\\x3d1',[null,null,\"\",false,null,null,true,false],'0','www.google.com','https:\\/\\/news.google.com\\/', null ,'boq_dotssplashserver_20260226.11_p0','news.google.com','MY:en', 0.0 , 1.0 , 0.0 , null"
+    },
+    {
+      "id": "reddit_2026-03-02T213527Z",
+      "title": "WSB, the best place to pick up hot reddit chicks",
+      "summary": "26 upvotes | 9 comments | Post: Fullporting NVDA puts at open, this AI shit is cooked. | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 4 years ago\n**Total Comments** | 716 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://dis",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rj60ue/wsb_the_best_place_to_pick_up_hot_reddit_chicks/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "sentiment"
+      ],
+      "published": "2026-03-02T21:35:27Z",
+      "timestamp": "2026-03-02T21:35:27Z",
+      "type": "reddit",
+      "score": 26,
+      "selftext_snippet": "Fullporting NVDA puts at open, this AI shit is cooked.",
+      "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 4 years ago\n**Total Comments** | 716 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://dis"
+    },
+    {
+      "id": "reddit_2026-03-02T205737Z",
+      "title": "What Are Your Moves Tomorrow, March 03, 2026",
+      "summary": "47 upvotes | 843 comments | Post: This post contains content not supported on old Reddit. [Click here to view the full post](https://sh.reddit.com/r/wallstreetbets/comments/1rj4zuy) | Top comment: Bears today after talking shit\n\nhttps://preview.redd.it/gcb7e7kk5pmg1.jpeg?width=759&format=pjpg&auto=webp&s=d610cf84670c8a3ee9699f27f9a9ba7ed0cdde83",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rj4zuy/what_are_your_moves_tomorrow_march_03_2026/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "sentiment"
+      ],
+      "published": "2026-03-02T20:57:37Z",
+      "timestamp": "2026-03-02T20:57:37Z",
+      "type": "reddit",
+      "score": 47,
+      "selftext_snippet": "This post contains content not supported on old Reddit. [Click here to view the full post](https://sh.reddit.com/r/wallstreetbets/comments/1rj4zuy)",
+      "top_comment_snippet": "Bears today after talking shit\n\nhttps://preview.redd.it/gcb7e7kk5pmg1.jpeg?width=759&format=pjpg&auto=webp&s=d610cf84670c8a3ee9699f27f9a9ba7ed0cdde83"
     },
     {
       "id": "reddit_2026-03-02T203820Z",
       "title": "Iran says Strait of Hormuz closed and warns it will attack ships trying to pass",
-      "summary": "2 upvotes | 2 comments | Post: https://www.reuters.com/world/iran-live-israel-strikes-hezbollah-uk-base-hit-cyprus-conflict-widens-2026-03-02/ | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 1 month ago\n**Total Comments** | 1 | **Previous Best DD** | \n**Account Age** | 9 years | | \n\n[**Join WSB Discord**](https://disco",
+      "summary": "2750 upvotes | 435 comments | Post: https://www.reuters.com/world/iran-live-israel-strikes-hezbollah-uk-base-hit-cyprus-conflict-widens-2026-03-02/ | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 1 month ago\n**Total Comments** | 1 | **Previous Best DD** | \n**Account Age** | 9 years | | \n\n[**Join WSB Discord**](https://disco",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rj4gvm/iran_says_strait_of_hormuz_closed_and_warns_it/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -953,14 +982,14 @@
       "published": "2026-03-02T20:38:20Z",
       "timestamp": "2026-03-02T20:38:20Z",
       "type": "reddit",
-      "score": 2,
+      "score": 2750,
       "selftext_snippet": "https://www.reuters.com/world/iran-live-israel-strikes-hezbollah-uk-base-hit-cyprus-conflict-widens-2026-03-02/",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 1 month ago\n**Total Comments** | 1 | **Previous Best DD** | \n**Account Age** | 9 years | | \n\n[**Join WSB Discord**](https://disco"
     },
     {
       "id": "reddit_2026-03-02T203044Z",
       "title": "I just mogged myself \ud83d\ude02",
-      "summary": "0 upvotes | 4 comments | Post: Yeah, so today I sold some credit spreads on SPX as it pumped past 6885 and lost a bunch of money, shit happens.\n\nI ripped a fat line of the special K and decided to buy 606 QQQ 0DTE put options while smoking a ciggie on the balcony based on some crayons i drew earlier.\n\nI set my | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** |",
+      "summary": "2 upvotes | 18 comments | Post: Yeah, so today I sold some credit spreads on SPX as it pumped past 6885 and lost a bunch of money, shit happens.\n\nI ripped a fat line of the special K and decided to buy 606 QQQ 0DTE put options while smoking a ciggie on the balcony based on some crayons i drew earlier.\n\nI set my | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** ",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rj49ez/i_just_mogged_myself/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -970,14 +999,14 @@
       "published": "2026-03-02T20:30:44Z",
       "timestamp": "2026-03-02T20:30:44Z",
       "type": "reddit",
-      "score": 0,
+      "score": 2,
       "selftext_snippet": "Yeah, so today I sold some credit spreads on SPX as it pumped past 6885 and lost a bunch of money, shit happens.\n\nI ripped a fat line of the special K and decided to buy 606 QQQ 0DTE put options while smoking a ciggie on the balcony based on some crayons i drew earlier.\n\nI set my",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 64 | **Previous Best DD** | \n**Account Age** | 9 years | | \n\n[**Join WSB Discord**](https://disc"
     },
     {
       "id": "reddit_2026-03-02T195936Z",
       "title": "\"Is the market literally restarted? $35 Buyout vs $28 Market Price. \ud83d\udcc9\ud83e\udd21\"",
-      "summary": "7 upvotes | 26 comments | Post: Hapag-Lloyd signed the papers. Labor strike is over. The only thing left is a Knesset rubber stamp. The market is pricing in 'War Risk' but ZIM is the only one getting paid 'War Premiums.'\n5% move to hit the strike. 600 contracts. If this gaps up on Wednesday when Dubai reopens,  | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 4 years ago\n**Total Comments** ",
+      "summary": "22 upvotes | 45 comments | Post: Hapag-Lloyd signed the papers. Labor strike is over. The only thing left is a Knesset rubber stamp. The market is pricing in 'War Risk' but ZIM is the only one getting paid 'War Premiums.'\n5% move to hit the strike. 600 contracts. If this gaps up on Wednesday when Dubai reopens,  | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 4 years ago\n**Total Comments**",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rj3er6/is_the_market_literally_restarted_35_buyout_vs_28/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -989,14 +1018,14 @@
       "published": "2026-03-02T19:59:36Z",
       "timestamp": "2026-03-02T19:59:36Z",
       "type": "reddit",
-      "score": 7,
+      "score": 22,
       "selftext_snippet": "Hapag-Lloyd signed the papers. Labor strike is over. The only thing left is a Knesset rubber stamp. The market is pricing in 'War Risk' but ZIM is the only one getting paid 'War Premiums.'\n5% move to hit the strike. 600 contracts. If this gaps up on Wednesday when Dubai reopens, ",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 4 years ago\n**Total Comments** | 9 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://disco"
     },
     {
       "id": "reddit_2026-03-02T195015Z",
       "title": "SNDK goes up tomorrow right?",
-      "summary": "3 upvotes | 8 comments | Post: it\u2019s not enuf, need to make a comeback  and regain my losses. SNDK goes up to 640-650 tomorrow right? | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 152 | **Previous Best DD** | \n**Account Age** | 2 years | | \n\n[**Join WSB Discord**](https://dis",
+      "summary": "5 upvotes | 9 comments | Post: it\u2019s not enuf, need to make a comeback  and regain my losses. SNDK goes up to 640-650 tomorrow right? | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 152 | **Previous Best DD** | \n**Account Age** | 2 years | | \n\n[**Join WSB Discord**](https://dis",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rj35av/sndk_goes_up_tomorrow_right/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1005,14 +1034,14 @@
       "published": "2026-03-02T19:50:15Z",
       "timestamp": "2026-03-02T19:50:15Z",
       "type": "reddit",
-      "score": 3,
+      "score": 5,
       "selftext_snippet": "it\u2019s not enuf, need to make a comeback  and regain my losses. SNDK goes up to 640-650 tomorrow right?",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 152 | **Previous Best DD** | \n**Account Age** | 2 years | | \n\n[**Join WSB Discord**](https://dis"
     },
     {
       "id": "reddit_2026-03-02T193350Z",
       "title": "How, what, and where to buy physical gold?",
-      "summary": "7 upvotes | 39 comments | Post: I've been thinking about adding a small gold allocation to my portfolio, maybe 2-5% as a hedge. I use Robinhood and Fidelity for everything else and the experience is pretty seamless.\n\nBut when I started looking into physical gold (bars, coins), feels unclear where to buy and the | Top comment: Costco.",
+      "summary": "3 upvotes | 64 comments | Post: I've been thinking about adding a small gold allocation to my portfolio, maybe 2-5% as a hedge. I use Robinhood and Fidelity for everything else and the experience is pretty seamless.\n\nBut when I started looking into physical gold (bars, coins), feels unclear where to buy and the | Top comment: Costco.",
       "url": "https://reddit.com/r/investing/comments/1rj2oyb/how_what_and_where_to_buy_physical_gold/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1021,14 +1050,14 @@
       "published": "2026-03-02T19:33:50Z",
       "timestamp": "2026-03-02T19:33:50Z",
       "type": "reddit",
-      "score": 7,
+      "score": 3,
       "selftext_snippet": "I've been thinking about adding a small gold allocation to my portfolio, maybe 2-5% as a hedge. I use Robinhood and Fidelity for everything else and the experience is pretty seamless.\n\nBut when I started looking into physical gold (bars, coins), feels unclear where to buy and the",
       "top_comment_snippet": "Costco."
     },
     {
       "id": "reddit_2026-03-02T193337Z",
       "title": "Americans thinking of moving to Europe? Here's some things you should know about stocks and taxes.",
-      "summary": "0 upvotes | 4 comments | Post: Many people have been thinking about moving to Europe permanently from the US recently according to some news and discussions. I'd figure that I can share some useful information on financial and tax side here for someone that lives in Netherlands.\n\nEU is a mix of socialist/capit | Top comment: Poor Eastern European countries being tax havens. I loled. Most of Eastern Europe in the EU is not poor and is not a tax ha",
+      "summary": "0 upvotes | 6 comments | Post: Many people have been thinking about moving to Europe permanently from the US recently according to some news and discussions. I'd figure that I can share some useful information on financial and tax side here for someone that lives in Netherlands.\n\nEU is a mix of socialist/capit | Top comment: Poor Eastern European countries being tax havens. I loled. Most of Eastern Europe in the EU is not poor and is not a tax ha",
       "url": "https://reddit.com/r/investing/comments/1rj2onw/americans_thinking_of_moving_to_europe_heres_some/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1062,7 +1091,7 @@
     {
       "id": "reddit_2026-03-02T190108Z",
       "title": "The SpaceX IPO means index funds will be legally required to hand Elon Musk your retirement money. Passive investing needs more scrutiny.",
-      "summary": "0 upvotes | 34 comments | Post: SpaceX is targeting up to a 1.75 trillion dollar IPO valuation, larger than 95% of current S&P 500 companies before it's even public, and the moment it lists and hits inclusion criteria it becomes a top-10 S&P constituent by market cap, possibly top-5 depending on opening price a | Top comment: So? I also didn\u2019t want scummy fraudulent carvana when they made the S&P. Don\u2019t like the index? Don\u2019t buy it. Can\u2019t have yo",
+      "summary": "0 upvotes | 37 comments | Post: SpaceX is targeting up to a 1.75 trillion dollar IPO valuation, larger than 95% of current S&P 500 companies before it's even public, and the moment it lists and hits inclusion criteria it becomes a top-10 S&P constituent by market cap, possibly top-5 depending on opening price a | Top comment: So? I also didn\u2019t want scummy fraudulent carvana when they made the S&P. Don\u2019t like the index? Don\u2019t buy it. Can\u2019t have yo",
       "url": "https://reddit.com/r/investing/comments/1rj1s5n/the_spacex_ipo_means_index_funds_will_be_legally/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1081,7 +1110,7 @@
     {
       "id": "reddit_2026-03-02T185550Z",
       "title": "The China Hustle 2.0 - How TikTok's Biggest Influencer Pumped & Dumped His Fans... On The NASDAQ.",
-      "summary": "214 upvotes | 53 comments | Post: ***TLDR (don't blame you): TikTok's biggest influencer by follower count (160m), Khaby Lame likely pumped & dumped his own fans after making that suspicious deal I had talked about in my previous post. No media outlet has bothered to call it out.***\n\n***This post gives the playbo | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 5 years ago\n**Total Comments*",
+      "summary": "299 upvotes | 66 comments | Post: ***TLDR (don't blame you): TikTok's biggest influencer by follower count (160m), Khaby Lame likely pumped & dumped his own fans after making that suspicious deal I had talked about in my previous post. No media outlet has bothered to call it out.***\n\n***This post gives the playbo | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 5 years ago\n**Total Comments*",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rj1mub/the_china_hustle_20_how_tiktoks_biggest/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1094,14 +1123,14 @@
       "published": "2026-03-02T18:55:50Z",
       "timestamp": "2026-03-02T18:55:50Z",
       "type": "reddit",
-      "score": 214,
+      "score": 299,
       "selftext_snippet": "***TLDR (don't blame you): TikTok's biggest influencer by follower count (160m), Khaby Lame likely pumped & dumped his own fans after making that suspicious deal I had talked about in my previous post. No media outlet has bothered to call it out.***\n\n***This post gives the playbo",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 5 years ago\n**Total Comments** | 142 | **Previous Best DD** | \n**Account Age** | 6 years | | \n\n[**Join WSB Discord**](https://dis"
     },
     {
       "id": "reddit_2026-03-02T182300Z",
       "title": "BlackRock's GIP and EQT to buy AES Corp in $33.4 billion deal",
-      "summary": "17 upvotes | 4 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 11 months ago\n**Total Comments** | 153 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://",
+      "summary": "20 upvotes | 8 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 11 months ago\n**Total Comments** | 153 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rj0phc/blackrocks_gip_and_eqt_to_buy_aes_corp_in_334/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1110,14 +1139,14 @@
       "published": "2026-03-02T18:23:00Z",
       "timestamp": "2026-03-02T18:23:00Z",
       "type": "reddit",
-      "score": 17,
+      "score": 20,
       "selftext_snippet": "",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 11 months ago\n**Total Comments** | 153 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://"
     },
     {
       "id": "reddit_2026-03-02T182111Z",
       "title": "My Twenty One Capital (XXI) DD",
-      "summary": "2 upvotes | 9 comments | Post: Made sure to keep the AI used to a minimum for you regards. Here we go. \n\nWhat kind of trader are you? The one who buys into crowed plays? Or a contrarian who has emotional capacity to buy something when it feels gross? Fair warning, if you think BTC is worthless, this one ain\u2019t  | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 7 | **First Seen In WSB** | 2 years ago\n**Total Comments** |",
+      "summary": "3 upvotes | 9 comments | Post: Made sure to keep the AI used to a minimum for you regards. Here we go. \n\nWhat kind of trader are you? The one who buys into crowed plays? Or a contrarian who has emotional capacity to buy something when it feels gross? Fair warning, if you think BTC is worthless, this one ain\u2019t  | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 7 | **First Seen In WSB** | 2 years ago\n**Total Comments** |",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rj0no3/my_twenty_one_capital_xxi_dd/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1130,14 +1159,14 @@
       "published": "2026-03-02T18:21:11Z",
       "timestamp": "2026-03-02T18:21:11Z",
       "type": "reddit",
-      "score": 2,
+      "score": 3,
       "selftext_snippet": "Made sure to keep the AI used to a minimum for you regards. Here we go. \n\nWhat kind of trader are you? The one who buys into crowed plays? Or a contrarian who has emotional capacity to buy something when it feels gross? Fair warning, if you think BTC is worthless, this one ain\u2019t ",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 7 | **First Seen In WSB** | 2 years ago\n**Total Comments** | 69 | **Previous Best DD** | [x](https://i.redd.it/4z7drko6comg1.jpeg) \n**Account Age** | 5 years"
     },
     {
       "id": "reddit_2026-03-02T174356Z",
       "title": "$30,000 SPY Put Yolo \u2b06\ufe0fdate",
-      "summary": "123 upvotes | 31 comments | Post: For all the naysayers on my previous post who remarked that my Puts would be as cooked as the Ayatollah, I raise you a slough of profits on said aforementioned Puts.\n\nWatched late Sunday/early Monday morning as various world markets saw their respective major indices pull back 1- | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 1 year ago\n**Total Comments**",
+      "summary": "146 upvotes | 31 comments | Post: For all the naysayers on my previous post who remarked that my Puts would be as cooked as the Ayatollah, I raise you a slough of profits on said aforementioned Puts.\n\nWatched late Sunday/early Monday morning as various world markets saw their respective major indices pull back 1- | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 1 year ago\n**Total Comments**",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rizlkb/30000_spy_put_yolo_date/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1149,14 +1178,14 @@
       "published": "2026-03-02T17:43:56Z",
       "timestamp": "2026-03-02T17:43:56Z",
       "type": "reddit",
-      "score": 123,
+      "score": 146,
       "selftext_snippet": "For all the naysayers on my previous post who remarked that my Puts would be as cooked as the Ayatollah, I raise you a slough of profits on said aforementioned Puts.\n\nWatched late Sunday/early Monday morning as various world markets saw their respective major indices pull back 1-",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 3 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 42 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://discor"
     },
     {
       "id": "reddit_2026-03-02T170828Z",
       "title": "$SLS Lunch money profits",
-      "summary": "46 upvotes | 26 comments | Post: Not much but it\u2019s honest work! | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 5 years ago\n**Total Comments** | 120 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://dis",
+      "summary": "52 upvotes | 28 comments | Post: Not much but it\u2019s honest work! | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 5 years ago\n**Total Comments** | 120 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://dis",
       "url": "https://reddit.com/r/wallstreetbets/comments/1riyllh/sls_lunch_money_profits/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1165,14 +1194,14 @@
       "published": "2026-03-02T17:08:28Z",
       "timestamp": "2026-03-02T17:08:28Z",
       "type": "reddit",
-      "score": 46,
+      "score": 52,
       "selftext_snippet": "Not much but it\u2019s honest work!",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 5 years ago\n**Total Comments** | 120 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://dis"
     },
     {
       "id": "reddit_2026-03-02T164948Z",
       "title": "Nasdaq Composite and other major U.S. indexes have shown resilience, turning positive in trading",
-      "summary": "49 upvotes | 54 comments | Post: Recovering from significant early-day losses caused by geopolitical tensions in the Middle East. Investors are actively \"buying the dip\", with technology stocks and strength in AI-related infrastructure driving the recovery, despite high volatility.\n\n* **Turnaround:**\u00a0The Nasdaq, | Top comment: I like the \"wtf else can I do with my money?\" theory. Sure, you can go lower-risk and lose money to inflation, what a gre",
+      "summary": "52 upvotes | 57 comments | Post: Recovering from significant early-day losses caused by geopolitical tensions in the Middle East. Investors are actively \"buying the dip\", with technology stocks and strength in AI-related infrastructure driving the recovery, despite high volatility.\n\n* **Turnaround:**\u00a0The Nasdaq, | Top comment: I like the \"wtf else can I do with my money?\" theory. Sure, you can go lower-risk and lose money to inflation, what a gre",
       "url": "https://reddit.com/r/investing/comments/1riy2j1/nasdaq_composite_and_other_major_us_indexes_have/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1182,14 +1211,14 @@
       "published": "2026-03-02T16:49:48Z",
       "timestamp": "2026-03-02T16:49:48Z",
       "type": "reddit",
-      "score": 49,
+      "score": 52,
       "selftext_snippet": "Recovering from significant early-day losses caused by geopolitical tensions in the Middle East. Investors are actively \"buying the dip\", with technology stocks and strength in AI-related infrastructure driving the recovery, despite high volatility.\n\n* **Turnaround:**\u00a0The Nasdaq,",
       "top_comment_snippet": "I like the \"wtf else can I do with my money?\" theory. Sure, you can go lower-risk and lose money to inflation, what a great option."
     },
     {
       "id": "reddit_2026-03-02T164501Z",
       "title": "Was recommended by fidelity 100% of Roth into FDKLX",
-      "summary": "3 upvotes | 20 comments | Post: I\u2019m 24, have 30k in my Roth IRA currently, just switched over to fidelity from thrivent due to the 1% quarterly fees, and they recommended I use this. I\u2019ve seen it\u2019s not as aggressive as should be at this age. Haven\u2019t placed the order yet, will go through tommorow. I think I migh | Top comment: Have you considered FSKAX?",
+      "summary": "2 upvotes | 21 comments | Post: I\u2019m 24, have 30k in my Roth IRA currently, just switched over to fidelity from thrivent due to the 1% quarterly fees, and they recommended I use this. I\u2019ve seen it\u2019s not as aggressive as should be at this age. Haven\u2019t placed the order yet, will go through tommorow. I think I migh | Top comment: Have you considered FSKAX?",
       "url": "https://reddit.com/r/investing/comments/1rixxlo/was_recommended_by_fidelity_100_of_roth_into_fdklx/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1198,7 +1227,7 @@
       "published": "2026-03-02T16:45:01Z",
       "timestamp": "2026-03-02T16:45:01Z",
       "type": "reddit",
-      "score": 3,
+      "score": 2,
       "selftext_snippet": "I\u2019m 24, have 30k in my Roth IRA currently, just switched over to fidelity from thrivent due to the 1% quarterly fees, and they recommended I use this. I\u2019ve seen it\u2019s not as aggressive as should be at this age. Haven\u2019t placed the order yet, will go through tommorow. I think I migh",
       "top_comment_snippet": "Have you considered FSKAX?"
     },
@@ -1222,7 +1251,7 @@
     {
       "id": "reddit_2026-03-02T162038Z",
       "title": "99k loan ATOM yolo",
-      "summary": "93 upvotes | 54 comments | Post: Hello Chuds two novembers ago I took out 85k in personal loans to finance a 20,000 share purchase of Atomera. Let\u2019s chat\n\nI have missed no payments on the loans, my monthly repayment is like $2900, it\u2019s a lot for me, a humble construction worker.\n\nI have been selling calls on the | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 2 months ago\n**Total Comments*",
+      "summary": "99 upvotes | 88 comments | Post: Hello Chuds two novembers ago I took out 85k in personal loans to finance a 20,000 share purchase of Atomera. Let\u2019s chat\n\nI have missed no payments on the loans, my monthly repayment is like $2900, it\u2019s a lot for me, a humble construction worker.\n\nI have been selling calls on the | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 2 months ago\n**Total Comments*",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rix92g/99k_loan_atom_yolo/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1231,14 +1260,14 @@
       "published": "2026-03-02T16:20:38Z",
       "timestamp": "2026-03-02T16:20:38Z",
       "type": "reddit",
-      "score": 93,
+      "score": 99,
       "selftext_snippet": "Hello Chuds two novembers ago I took out 85k in personal loans to finance a 20,000 share purchase of Atomera. Let\u2019s chat\n\nI have missed no payments on the loans, my monthly repayment is like $2900, it\u2019s a lot for me, a humble construction worker.\n\nI have been selling calls on the",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 2 months ago\n**Total Comments** | 12 | **Previous Best DD** | \n**Account Age** | 2 months | | \n\n[**Join WSB Discord**](https://di"
     },
     {
       "id": "reddit_2026-03-02T161333Z",
       "title": "Nasdaq seeks SEC approval for prediction markets options on major stock index",
-      "summary": "443 upvotes | 85 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 41 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://disco",
+      "summary": "467 upvotes | 88 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 41 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://disco",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rix1yc/nasdaq_seeks_sec_approval_for_prediction_markets/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1248,44 +1277,9 @@
       "published": "2026-03-02T16:13:33Z",
       "timestamp": "2026-03-02T16:13:33Z",
       "type": "reddit",
-      "score": 443,
+      "score": 467,
       "selftext_snippet": "",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 41 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://disco"
-    },
-    {
-      "id": "reddit_2026-03-02T152628Z",
-      "title": "Thank you big Yahu \ud83d\ude4f\u270c\ufe0f",
-      "summary": "213 upvotes | 34 comments | Post: Sold my AVAV and KTOS calls, doubled my portfolio!!!!!! Still have some shares of both but probably gonna sell them this week ish | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 2 | **First Seen In WSB** | 4 weeks ago\n**Total Comments** | 30 | **Previous Best DD** | \n**Account Age** | 6 years | | \n\n[**Join WSB Discord**](https://disc",
-      "url": "https://reddit.com/r/wallstreetbets/comments/1rivrs1/thank_you_big_yahu/",
-      "source": "Reddit: r/wallstreetbets",
-      "category": [
-        "sentiment"
-      ],
-      "published": "2026-03-02T15:26:28Z",
-      "timestamp": "2026-03-02T15:26:28Z",
-      "type": "reddit",
-      "score": 213,
-      "selftext_snippet": "Sold my AVAV and KTOS calls, doubled my portfolio!!!!!! Still have some shares of both but probably gonna sell them this week ish",
-      "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 2 | **First Seen In WSB** | 4 weeks ago\n**Total Comments** | 30 | **Previous Best DD** | \n**Account Age** | 6 years | | \n\n[**Join WSB Discord**](https://disc"
-    },
-    {
-      "id": "reddit_2026-03-02T144728Z",
-      "title": "ROOT earnings pop, followed by sharp price drop. Thoughts?",
-      "summary": "1 upvotes | 1 comments | Post: Hi all. I'm looking for thoughtful input on ROOT after Q4/FY25. Stock jumped \\~12% after hours on the earnings beat, then opened down \\~10% and now sitting at the 52-week low. Trying to understand if this is rational repricing or just volatility.\n\n**Tailwinds I see:**\n\n1. Combine | Top comment: They have been trading below multiple EMAs for a while, and a lot of other indicators are showing strength for a lower pric",
-      "url": "https://reddit.com/r/investing/comments/1riuqyt/root_earnings_pop_followed_by_sharp_price_drop/",
-      "source": "Reddit: r/investing",
-      "category": [
-        "geopolitical",
-        "financial",
-        "macro",
-        "corporate"
-      ],
-      "published": "2026-03-02T14:47:28Z",
-      "timestamp": "2026-03-02T14:47:28Z",
-      "type": "reddit",
-      "score": 1,
-      "selftext_snippet": "Hi all. I'm looking for thoughtful input on ROOT after Q4/FY25. Stock jumped \\~12% after hours on the earnings beat, then opened down \\~10% and now sitting at the 52-week low. Trying to understand if this is rational repricing or just volatility.\n\n**Tailwinds I see:**\n\n1. Combine",
-      "top_comment_snippet": "They have been trading below multiple EMAs for a while, and a lot of other indicators are showing strength for a lower price. Short term increase is not in of its self a strong indicator to buy"
     }
   ],
   "stats": {
