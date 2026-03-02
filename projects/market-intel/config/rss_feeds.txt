@@ -34,6 +34,12 @@ Nasdaq_News,https://www.nasdaq.com/feed/rss/headline
 Bloomberg_Tech,https://news.google.com/rss/search?q=site%3Abloomberg.com+technology&hl=en-US&gl=US&ceid=US%3Aen
 Bloomberg_Markets,https://news.google.com/rss/search?q=site%3Abloomberg.com+markets&hl=en-US&gl=US&ceid=US%3Aen
 
+# NEW: WSJ Markets
+WSJ_Markets,https://feeds.a.dj.com/rss/RSSMarketsMain.xml
+
+# NEW: Seeking Alpha (earnings/investor sentiment)
+SeekingAlpha,https://seekingalpha.com/market_currents.xml
+
 # ============================================
 # Keywords to Watch
 # ============================================

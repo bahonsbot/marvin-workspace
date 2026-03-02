@@ -38,10 +38,10 @@
       "title": "Add 2 new high-quality RSS sources to expand coverage",
       "project": "projects/market-intel",
       "priority": "P2",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Research and add reputable financial/geopolitical RSS feeds"
+      "notes": "Added 2 new feeds: WSJ_Markets (https://feeds.a.dj.com/rss/RSSMarketsMain.xml) and SeekingAlpha (https://seekingalpha.com/market_currents.xml) - both tested and working"
     }
   ]
 }
