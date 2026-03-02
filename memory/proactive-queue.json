@@ -1,47 +1,45 @@
 {
   "version": 1,
   "mode": "phase-2",
-  "updated_at": "2026-03-02T21:40:00+08:00",
+  "updated_at": "2026-03-02T22:22:00+08:00",
   "items": [
     {
-      "id": "trading-queue-005",
-      "title": "Add position tracking - calculate current open positions from Alpaca",
+      "id": "trading-queue-007",
+      "title": "Test full webhook flow end-to-end with real signal",
       "project": "projects/autonomous-trading-bot",
       "priority": "P1",
       "status": "done",
-      "ready": true,
-      "phase2_eligible": true,
-      "notes": "Query Alpaca API to get current open positions, add to daily report. Returns 401 with placeholder keys - code handles gracefully."
-    },
-    {
-      "id": "trading-queue-006",
-      "title": "Review risk config - ensure defaults are conservative enough",
-      "project": "projects/autonomous-trading-bot",
-      "priority": "P2",
-      "status": "done",
-      "ready": true,
-      "phase2_eligible": true,
-      "notes": "Kill switch ✓, $100 loss cap ✓, 1-share positions ✓, 3 max positions ✓ - conservative enough for paper trading"
-    },
-    {
-      "id": "mi-queue-007",
-      "title": "Verify signal deduplication is working - check sent_signals.json",
-      "project": "projects/market-intel",
-      "priority": "P1",
-      "status": "done",
-      "ready": true,
-      "phase2_eligible": true,
-      "notes": "Deduplication verified - sent_signals.json tracking working, logic in sent_signals.py functional, no duplicates detected"
+      "notes": "Send real test signal through webhook -> validate -> risk -> execute. ✅ Full flow tested: webhook received at 127.0.0.1:8000, validation passed, risk check passed (size multiplier 0.6 due to high-severity macro), order submitted to Alpaca paper (order_id: cbd3b41a-15ca-4567-ac08-c2ae9cb92f96)"
     },
     {
       "id": "mi-queue-008",
-      "title": "Research Reddit API changes - check if alternative needed",
+      "title": "Test new RSS feeds - verify they're working",
       "project": "projects/market-intel",
-      "priority": "P2",
-      "status": "done",
+      "priority": "P1",
+      "status": "todo",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Reddit monitor using public JSON endpoints - currently working. No API changes affecting operation. Last run March 2 2026 - data collected successfully."
+      "notes": "Run rss_monitor and confirm Yahoo, CNBC, Reuters feeds return data"
+    },
+    {
+      "id": "trading-queue-008",
+      "title": "Add README section for quick start guide",
+      "project": "projects/autonomous-trading-bot",
+      "priority": "P2",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Add quick start section to README"
+    },
+    {
+      "id": "mi-queue-009",
+      "title": "Document pattern matching logic for future reference",
+      "project": "projects/market-intel",
+      "priority": "P2",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Document how signals are matched to patterns"
     }
   ]
 }
