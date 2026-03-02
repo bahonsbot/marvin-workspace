@@ -1,7 +1,7 @@
 {
   "version": 1,
   "mode": "phase-2",
-  "updated_at": "2026-03-02T22:27:00+08:00",
+  "updated_at": "2026-03-02T23:05:00+08:00",
   "items": [
     {
       "id": "trading-queue-007",
@@ -26,20 +26,60 @@
       "title": "Add README section for quick start guide",
       "project": "projects/autonomous-trading-bot",
       "priority": "P2",
-      "status": "todo",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Add quick start section to README"
+      "notes": "Add quick start section to README. ✅ Quick Start added covering: prerequisites, setup, test signal, check execution."
     },
     {
       "id": "mi-queue-009",
       "title": "Document pattern matching logic for future reference",
       "project": "projects/market-intel",
       "priority": "P2",
-      "status": "todo",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Document how signals are matched to patterns"
+      "notes": "Document how signals are matched to patterns. ✅ Created docs/pattern-matching.md with 24 patterns, two-stage matching (keyword + weighted scoring), and examples."
+    },
+    {
+      "id": "trading-queue-009",
+      "title": "Add Telegram alerts for executed trades",
+      "project": "projects/autonomous-trading-bot",
+      "priority": "P1",
+      "status": "done",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Add Telegram notification when orders execute. ✅ Created src/trade_notifier.py, integrated into execution_orchestrator.py"
+    },
+    {
+      "id": "mi-queue-010",
+      "title": "Build a simple accuracy dashboard",
+      "project": "projects/market-intel",
+      "priority": "P2",
+      "status": "done",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Create dashboard to visualize signal accuracy data. ✅ Created dashboard.py — 11 signals tracked, 88.9% accuracy, supports --html output"
+    },
+    {
+      "id": "trading-queue-010",
+      "title": "Add test harness + fixtures for validator and risk guards",
+      "project": "projects/autonomous-trading-bot",
+      "priority": "P2",
+      "status": "done",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Add unit tests for validator and risk guards per P2.4. ✅ Created tests/fixtures.py, test_signal_validator.py (26 tests), test_risk_manager.py (24 tests). All 47 pass."
+    },
+    {
+      "id": "mi-queue-011",
+      "title": "Add Reddit sentiment data source",
+      "project": "projects/market-intel",
+      "priority": "P2",
+      "status": "done",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Integrate Reddit as a sentiment data source. ✅ Already implemented - src/reddit_monitor.py tracks 12 subreddits, integrated into signal_generator.py"
     }
   ]
 }
