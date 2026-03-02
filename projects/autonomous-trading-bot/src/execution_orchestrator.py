@@ -8,18 +8,31 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
+
+from .trade_notifier import TelegramNotifier
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_IDEMPOTENCY_STORE = ROOT / "data" / "state" / "idempotency.json"
 
+logger = logging.getLogger(__name__)
+
 
 class ExecutionOrchestrator:
-    def __init__(self, broker_adapter: Any, *, idempotency_store_path: Path = DEFAULT_IDEMPOTENCY_STORE) -> None:
+    def __init__(
+        self,
+        broker_adapter: Any,
+        *,
+        idempotency_store_path: Path = DEFAULT_IDEMPOTENCY_STORE,
+        notifier: Optional[TelegramNotifier] = None,
+    ) -> None:
         self.broker_adapter = broker_adapter
         self.idempotency_store_path = Path(idempotency_store_path)
+        self.notifier = notifier
+       
 
     def execute(
         self,
@@ -33,6 +46,19 @@ class ExecutionOrchestrator:
         idempotency_key = self.build_idempotency_key(signal=signal, source=source)
 
         if not risk_decision.get("allow", False):
+            # Send Telegram notification for rejected trade
+            if self.notifier:
+                try:
+                    reasons = ", ".join(risk_decision.get("reasons", ["unknown"]))
+                    self.notifier.notify_trade_rejected(
+                        ticker=signal.get("symbol", "UNKNOWN"),
+                        side=signal.get("side", "unknown"),
+                        reason=reasons,
+                        timestamp=signal.get("timestamp"),
+                    )
+                except Exception as e:
+                    logger.warning(f"Failed to send rejection notification: {e}")
+
             return {
                 "executed": False,
                 "status": "denied",
@@ -66,6 +92,22 @@ class ExecutionOrchestrator:
             idempotency_key=idempotency_key,
         )
         broker_result = self.broker_adapter.submit_order(order_intent)
+
+        # Send Telegram notification if notifier is configured
+        if self.notifier:
+            try:
+                order_id = broker_result.get("id", order_intent.get("client_order_id", ""))
+                filled_price = broker_result.get("filled_avg_price") or broker_result.get("filled_price")
+                self.notifier.notify_trade_execution(
+                    ticker=order_intent["symbol"],
+                    side=order_intent["side"],
+                    quantity=order_intent["qty"],
+                    price=float(filled_price) if filled_price else None,
+                    order_id=str(order_id),
+                    timestamp=signal.get("timestamp"),
+                )
+            except Exception as e:
+                logger.warning(f"Failed to send trade notification: {e}")
 
         store[idempotency_key] = {
             "created_at": self._utc_now_iso(),
