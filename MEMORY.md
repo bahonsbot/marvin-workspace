@@ -90,11 +90,7 @@
 - **Data sources:** 20 RSS feeds, 12 subreddits, Twitter via rss.app
 - **RSS fix (Mar 1):** Sanitized summary field to strip HTML — Guardian feeds were showing raw HTML tags in subtexts
 - **Accuracy tracking:** Wired in, auto-tracks STRONG BUY signals, daily review cron at 22:00 ICT
-- **Cron jobs:**
-  - signal_generator: hourly at :45
-  - reasoning_engine: runs after signal_generator
-  - market-signal-generator: sends to Telegram group -1003850594375
-  - signal-accuracy-review: daily at 22:00 ICT
+- **Cron jobs:** See TOOLS.md for current list
 
 ### Horizons PMS (Feb 2026)
 - Phase 1 PRD established in `projects/horizons-pms/PRD.md`
