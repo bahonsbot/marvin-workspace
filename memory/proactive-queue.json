@@ -32,9 +32,11 @@
       "title": "Verify pending geopolitical/macro signal (Iran/Khamenei)",
       "project": "projects/market-intel",
       "priority": "P1",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
       "phase2_eligible": true,
+      "completed_at": "2026-03-02T21:21:00+08:00",
+      "completion_note": "VERIFIED CORRECT - Khamenei death signal predicted rates_volatility, fx_move, equity_factor_rotation. All outcomes observed: VIX >20, Brent +13%, defense stocks up, airlines down, USD/Gold safe-haven bid.",
       "notes": "Signal 2 from grading session was deferred - check if verifiable now"
     },
     {
