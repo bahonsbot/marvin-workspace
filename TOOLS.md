@@ -98,7 +98,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ### Models (Active)
 - **Primary:** minimax/MiniMax-M2.5
 - **Fallback:** openai-codex/gpt-5.3-codex
-- **Nexos:** Disabled (provider block removed)
+- **Nexos:** Removed (caused cron job issues, won't use)
 
 ### Scripts
 - `scripts/ralphy.sh` — Autonomous coding agent (reads PRD, iterates on code)

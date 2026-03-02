@@ -100,6 +100,8 @@ If the user asks a direct question, answer that question first. Do not trigger s
 
 Skills provide your tools. Check each skill's SKILL.md for usage instructions. Keep environment-specific notes (channel IDs, paths, tokens) in TOOLS.md.
 
+For semantic memory search across all memory layers, use the `qmd` command (e.g., `qmd search "query" -c life -n 3`).
+
 
 ## 💓 Heartbeats
 
