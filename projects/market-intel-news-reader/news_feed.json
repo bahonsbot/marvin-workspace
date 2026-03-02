@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "generated": "2026-03-02T16:15:44.184850Z",
+  "generated": "2026-03-02T17:15:46.864334Z",
   "categories": [
     "geopolitical",
     "financial",
@@ -11,53 +11,22 @@
   ],
   "items": [
     {
-      "id": "rss_2026-03-02T161531471033Z",
-      "title": "Amazon\u2019s Extreme AI Spending Sends Stock to Worst Month in Years",
-      "summary": "Shares of the e-commerce and cloud computing giant plunged 12% in February, their worst month since December 2022, as Wall Street takes an increasingly jaundiced view of the company\u2019s aggressive AI spending plans. Not only are the capital e",
-      "url": "https://finance.yahoo.com/news/amazon-extreme-ai-spending-sends-123002260.html",
-      "source": "RSS: Yahoo_Finance",
+      "id": "rss_2026-03-02T171527965120Z",
+      "title": "American fund AIP in talks with Bahrain's Alba to sell Aluminium Dunkerque",
+      "summary": "Bahrain-based industrial group Alba has entered exclusive talks with \u200bU.S. fund AIP to acquire Europe's largest \u200csmelter Aluminium Dunkerque, the companies said on Monday, in what would be one of the Bahrain's \u200bbiggest corporate deals.",
+      "url": "https://www.reuters.com/world/middle-east/american-fund-aip-talks-with-bahrains-alba-sell-aluminium-dunkerque-2026-03-02/",
+      "source": "RSS: Nasdaq_News",
       "category": [
-        "geopolitical",
-        "macro"
+        "financial"
       ],
-      "published": "Mon, 02 Mar 2026 13:35:45 GMT",
-      "timestamp": "2026-03-02T16:15:31.471033Z",
+      "published": "Mon, 02 Mar 2026 17:05:53 GMT",
+      "timestamp": "2026-03-02T17:15:27.965120Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531470976Z",
-      "title": "Triceratops skeleton 'Trey' to hit the auction block as dinosaur market soars",
-      "summary": "A triceratops skeleton that stood in a Wyoming museum for decades will be auctioned off, a rare instance of a museum-exhibited dinosaur going to the auction block just as the market for the prehistoric giants has hit record highs. The fossi",
-      "url": "https://finance.yahoo.com/news/triceratops-skeleton-trey-hit-auction-140247674.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "macro"
-      ],
-      "published": "Mon, 02 Mar 2026 14:02:47 GMT",
-      "timestamp": "2026-03-02T16:15:31.470976Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T161531470907Z",
-      "title": "Tech stocks today: OpenAI strikes deal with Pentagon amid Anthropic feud, Nvidia invests $4B in photonics makers",
-      "summary": "All eyes are on Nvidia's fourth quarter results, due after the closing bell on Wednesday, as AI concerns continue to grip markets.",
-      "url": "https://finance.yahoo.com/news/live/tech-stocks-today-openai-strikes-deal-with-pentagon-amid-anthropic-feud-nvidia-invests-4b-in-photonics-makers-140251218.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "macro"
-      ],
-      "published": "Mon, 02 Mar 2026 14:02:51 GMT",
-      "timestamp": "2026-03-02T16:15:31.470907Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T161531470881Z",
+      "id": "rss_2026-03-02T171527583687Z",
       "title": "Analysis-Hims expansion may not come in time for risky GLP-1 business",
       "summary": "NEW YORK, March 2 (Reuters) - Telehealth company Hims & Hers Health, known for its weight-loss drug business, is promising it can diversify away from its reliance on compounded GLP-1 sales in the U., but that may not happen soon enough for ",
       "url": "https://finance.yahoo.com/news/analysis-hims-expansion-may-not-141431081.html",
@@ -66,13 +35,13 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 14:16:56 GMT",
-      "timestamp": "2026-03-02T16:15:31.470881Z",
+      "timestamp": "2026-03-02T17:15:27.583687Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531470849Z",
+      "id": "rss_2026-03-02T171527583654Z",
       "title": "Paramount CEO says Warner Bros tie-up to carry $79 billion net debt, no cable asset sales planned",
       "summary": "Paramount Skydance CEO David Ellison said on Monday its deal for Warner Bros will leave the combined company with about $79 billion in net debt and that there were no plans to divest or spin off any of \u200cthe cable assets at this time. Elliso",
       "url": "https://finance.yahoo.com/news/paramount-ceo-says-warner-bros-143324342.html",
@@ -82,13 +51,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 14:33:24 GMT",
-      "timestamp": "2026-03-02T16:15:31.470849Z",
+      "timestamp": "2026-03-02T17:15:27.583654Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531470786Z",
+      "id": "rss_2026-03-02T171527583573Z",
       "title": "JPMorgan to Start Debt Deal for $55 Billion EA Buyout Next Week",
       "summary": "The largest US bank is hosting a leveraged finance conference in Miami Beach this week, where Andrew Wilson, Electronic Arts\u2019 chief executive officer, will take meetings with some of the largest speculative-grade debt investors for anchor c",
       "url": "https://finance.yahoo.com/news/jpmorgan-start-debt-deal-55-144527767.html",
@@ -98,13 +67,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 14:45:27 GMT",
-      "timestamp": "2026-03-02T16:15:31.470786Z",
+      "timestamp": "2026-03-02T17:15:27.583573Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531470728Z",
+      "id": "rss_2026-03-02T171527583512Z",
       "title": "China's Minimax reports strong revenue growth, charts broader AI ambitions",
       "summary": "Chinese artificial intelligence startup MiniMax aims to become a global AI platform company, it said on Monday, \u200csetting out plans for faster expansion and a broader product \u200clineup after posting strong 2025 revenue growth. The company repo",
       "url": "https://finance.yahoo.com/news/chinas-minimax-reports-strong-revenue-144558497.html",
@@ -116,13 +85,13 @@
         "sentiment"
       ],
       "published": "Mon, 02 Mar 2026 14:45:58 GMT",
-      "timestamp": "2026-03-02T16:15:31.470728Z",
+      "timestamp": "2026-03-02T17:15:27.583512Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531470670Z",
+      "id": "rss_2026-03-02T171527583441Z",
       "title": "Gold touches $5,400 as demand for safe-haven asset jumps amid Iran conflict",
       "summary": "Gold rises 2% in the aftermath of US-Israel attacks on Iran and retaliatory strikes in the region.",
       "url": "https://finance.yahoo.com/news/gold-touches-5400-as-demand-for-safe-haven-asset-jumps-amid-iran-conflict-102241256.html",
@@ -131,13 +100,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 15:14:41 GMT",
-      "timestamp": "2026-03-02T16:15:31.470670Z",
+      "timestamp": "2026-03-02T17:15:27.583441Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531470633Z",
+      "id": "rss_2026-03-02T171527583417Z",
       "title": "Aluminum jumps as Iran conflict puts Middle East supply at risk",
       "summary": "The Strait of Hormuz \u2014 a trade chokepoint off the coast of Iran \u2014 is used by many of the area\u2019s major aluminum producers to ship out metal and bring in raw materials. Conflict in the Middle East spread over the weekend after the US and Isra",
       "url": "https://finance.yahoo.com/news/aluminum-jumps-iran-conflict-puts-152346983.html",
@@ -147,29 +116,74 @@
         "financial"
       ],
       "published": "Mon, 02 Mar 2026 15:51:52 GMT",
-      "timestamp": "2026-03-02T16:15:31.470633Z",
+      "timestamp": "2026-03-02T17:15:27.583417Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115659Z",
-      "title": "The digital front: Iran\u2019s internet down for second day amid reports of U.S.-Israel cyberattacks",
-      "summary": "Iran is facing widespread internet disruptions following the U.S.-Israeli airstrikes over the weekend.",
-      "url": "https://www.cnbc.com/2026/03/02/irans-internet-down-amid-reports-of-us-israel-cyberattacks.html",
-      "source": "RSS: CNBC_Top",
+      "id": "rss_2026-03-02T171527583363Z",
+      "title": "Apple debuts $599 iPhone 17e, more powerful iPad Airs",
+      "summary": "Apple debuted its new iPhone 17e and iPad Air lineup on Monday, with more products expected this week.",
+      "url": "https://finance.yahoo.com/news/apple-debuts-599-iphone-17e-more-powerful-ipad-airs-155633374.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "other"
+      ],
+      "published": "Mon, 02 Mar 2026 15:56:33 GMT",
+      "timestamp": "2026-03-02T17:15:27.583363Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T171527583339Z",
+      "title": "Analysis-US struggling to de-risk Congo's 'war zone minerals' even after pact, sources say",
+      "summary": "DAKAR/KINSHASA, March 2 (Reuters) - The U. has made progress in its push to prise Congo's strategic minerals from China's orbit, but conflict, contested licences and compliance demands are still slowing Washington's advance into a region it",
+      "url": "https://finance.yahoo.com/news/analysis-us-struggling-risk-congos-155705035.html",
+      "source": "RSS: Yahoo_Finance",
       "category": [
         "geopolitical",
         "financial"
       ],
-      "published": "Mon, 02 Mar 2026 08:23:28 GMT",
-      "timestamp": "2026-03-02T16:15:31.115659Z",
+      "published": "Mon, 02 Mar 2026 15:57:05 GMT",
+      "timestamp": "2026-03-02T17:15:27.583339Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115630Z",
+      "id": "rss_2026-03-02T171527583246Z",
+      "title": "BYD stock jumps on 'disruptive tech' teaser, despite 41% sales tumble",
+      "summary": "Chinese EV maker BYD stock jumped on Monday after the company said it would reveal \"disruptive technology\" at an event later this week. This comes after BYD said global sales tumbled in February.",
+      "url": "https://finance.yahoo.com/news/byd-stock-jumps-on-disruptive-tech-teaser-despite-41-sales-tumble-160609328.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "other"
+      ],
+      "published": "Mon, 02 Mar 2026 16:06:09 GMT",
+      "timestamp": "2026-03-02T17:15:27.583246Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T171527583203Z",
+      "title": "Tech stocks today: Nvidia invests $4B in photonics makers, Apple announces low-cost iPhone, OpenAI strikes deal with Pentagon",
+      "summary": "All eyes are on Nvidia's fourth quarter results, due after the closing bell on Wednesday, as AI concerns continue to grip markets.",
+      "url": "https://finance.yahoo.com/news/live/tech-stocks-today-nvidia-invests-4b-in-photonics-makers-apple-announces-low-cost-iphone-openai-strikes-deal-with-pentagon-163709849.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "macro"
+      ],
+      "published": "Mon, 02 Mar 2026 16:37:09 GMT",
+      "timestamp": "2026-03-02T17:15:27.583203Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T171527245929Z",
       "title": "Khamenei's death raises questions about Trump's China trip",
       "summary": "U.S. President Donald Trump has been scheduled to visit China at the end of March, following tense trade relations with Beijing.",
       "url": "https://www.cnbc.com/2026/03/02/khameneis-death-trump-china-visit-uncertainty-iran-strikes-trade-truce.html",
@@ -178,13 +192,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 09:49:08 GMT",
-      "timestamp": "2026-03-02T16:15:31.115630Z",
+      "timestamp": "2026-03-02T17:15:27.245929Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115610Z",
+      "id": "rss_2026-03-02T171527245909Z",
       "title": "Why India looks especially vulnerable as conflict rages in Middle East",
       "summary": "As conflict in the Middle East causes surging oil prices and disrupts the aviation sector, India is coming under pressure.",
       "url": "https://www.cnbc.com/2026/03/02/india-impact-iran-middle-east-conflict-oil-prices-airlines.html",
@@ -193,13 +207,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 10:37:27 GMT",
-      "timestamp": "2026-03-02T16:15:31.115610Z",
+      "timestamp": "2026-03-02T17:15:27.245909Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115589Z",
+      "id": "rss_2026-03-02T171527245887Z",
       "title": "Global defense stocks jump as U.S., Iran exchange attacks",
       "summary": "The defense sector was a rare bright spot amid a broader market sell-off triggered by fears of a wider regional conflict following U.S. attacks on Iran.",
       "url": "https://www.cnbc.com/2026/03/02/defense-stocks-us-iran-israel-attacks-lockheed-renk-leonardo.html",
@@ -209,13 +223,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 10:58:09 GMT",
-      "timestamp": "2026-03-02T16:15:31.115589Z",
+      "timestamp": "2026-03-02T17:15:27.245887Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115567Z",
+      "id": "rss_2026-03-02T171527245865Z",
       "title": "The Strait of Hormuz crisis explained: What it means for global shipping",
       "summary": "The Middle East conflict has stoked fears of prolonged disruption to global trade via key maritime corridors.",
       "url": "https://www.cnbc.com/2026/03/02/strait-of-hormuz-crisis-us-iran-israel-war-shipping-trade-oil.html",
@@ -225,13 +239,13 @@
         "financial"
       ],
       "published": "Mon, 02 Mar 2026 11:06:21 GMT",
-      "timestamp": "2026-03-02T16:15:31.115567Z",
+      "timestamp": "2026-03-02T17:15:27.245865Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115544Z",
+      "id": "rss_2026-03-02T171527245846Z",
       "title": "Why Iran should not count on allies Russia and China to come to its aid",
       "summary": "Iran's closest allies, Russia and China, have not offered material support to it, exposing the hard limits of its \"strategic\" partnerships.",
       "url": "https://www.cnbc.com/2026/03/02/iran-china-russia-strikes-assistance-alliance-weapons-missiles-geopolitics-oil-prices-ukraine.html",
@@ -241,13 +255,13 @@
         "financial"
       ],
       "published": "Mon, 02 Mar 2026 11:43:48 GMT",
-      "timestamp": "2026-03-02T16:15:31.115544Z",
+      "timestamp": "2026-03-02T17:15:27.245846Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115522Z",
+      "id": "rss_2026-03-02T171527245825Z",
       "title": "Qatar's state-owned energy company halts LNG production after Iran drone attacks",
       "summary": "",
       "url": "https://www.cnbc.com/2026/03/02/qatars-state-owned-energy-company-halts-lng-production-after-iran-drone-attacks.html",
@@ -256,13 +270,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 12:46:53 GMT",
-      "timestamp": "2026-03-02T16:15:31.115522Z",
+      "timestamp": "2026-03-02T17:15:27.245825Z",
       "type": "rss",
       "enriched_text_source": "headline_only",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115509Z",
+      "id": "rss_2026-03-02T171527245812Z",
       "title": "Travel stocks sink after thousands of flights grounded following Iran strikes",
       "summary": "Airlines and some hotel stocks fell after the U.S.-Israeli attacks on Iran and subsequent retaliation strikes.",
       "url": "https://www.cnbc.com/2026/03/02/iran-strikes-flights-travel-stocks.html",
@@ -271,13 +285,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 13:15:54 GMT",
-      "timestamp": "2026-03-02T16:15:31.115509Z",
+      "timestamp": "2026-03-02T17:15:27.245812Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115487Z",
+      "id": "rss_2026-03-02T171527245791Z",
       "title": "Starlink to partner with Deutsche Telekom to launch satellite mobile service in Europe",
       "summary": "The service will go live in 2028. It comes as Starlink's owner, SpaceX, gears up for an IPO.",
       "url": "https://www.cnbc.com/2026/03/02/starlink-deutsche-telekom-partnership.html",
@@ -286,13 +300,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 14:16:25 GMT",
-      "timestamp": "2026-03-02T16:15:31.115487Z",
+      "timestamp": "2026-03-02T17:15:27.245791Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161531115451Z",
+      "id": "rss_2026-03-02T171527245770Z",
       "title": "Anthropic's Claude sees 'elevated errors' as it tops Apple's free apps after Pentagon clash",
       "summary": "The app surged to the top free app on Apple's App Store after Anthropic clashed with the Department of Defense over limits for the technology.",
       "url": "https://www.cnbc.com/2026/03/02/anthropic-claude-ai-outage-apple-pentagon.html",
@@ -301,103 +315,28 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 15:25:39 GMT",
-      "timestamp": "2026-03-02T16:15:31.115451Z",
+      "timestamp": "2026-03-02T17:15:27.245770Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161530790929Z",
-      "title": "My friend was laid off from our company, but I wasn\u2019t. How should I console her?",
-      "summary": "You can empathize with your friend without demonizing your own position or potentially patronizing her about how everything will be OK.",
-      "url": "https://www.marketwatch.com/story/my-friend-was-laid-off-from-our-company-but-i-wasnt-how-should-i-console-her-5070c21c?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "other"
-      ],
-      "published": "Mon, 02 Mar 2026 14:22:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.790929Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T161530787042Z",
-      "title": "American\u2019s, Delta\u2019s stocks fall as Iran conflict sparks worries about fuel costs, travel demand",
-      "summary": "Airline stocks drop as the Iran conflict sparks worries about rising fuel costs.",
-      "url": "https://www.marketwatch.com/story/american-delta-stocks-fall-as-iran-conflict-sparks-worries-about-fuel-costs-travel-demand-c691eb25?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
+      "id": "rss_2026-03-02T171527245730Z",
+      "title": "Apple launches lower cost iPhone 17e and a new iPad Air powered by its M4 chip",
+      "summary": "Apple opens week of product launches with refreshed low-cost iPhone and a faster iPad Air, as it begins what looks to be a broader multi-day hardware push.",
+      "url": "https://www.cnbc.com/2026/03/02/apple-iphone-17e-ipad-air-m4-chip.html",
+      "source": "RSS: CNBC_Top",
       "category": [
         "geopolitical"
       ],
-      "published": "Mon, 02 Mar 2026 14:24:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.787042Z",
+      "published": "Mon, 02 Mar 2026 15:40:40 GMT",
+      "timestamp": "2026-03-02T17:15:27.245730Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161530787003Z",
-      "title": "Here\u2019s how far oil is away from dragging stocks into a bear market, according to Morgan Stanley",
-      "summary": "History shows market can recover quite quickly from geopolitical shocks",
-      "url": "https://www.marketwatch.com/story/heres-how-far-oil-is-away-from-dragging-stocks-into-a-bear-market-according-to-morgan-stanley-b8e1932b?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "macro"
-      ],
-      "published": "Mon, 02 Mar 2026 14:33:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.787003Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T161530786970Z",
-      "title": "Palantir, Lockheed and these other defense stocks are rising on heels of Iran conflict",
-      "summary": "Defense spending is set to get \u201cmore urgent and less controversial,\u201d an analyst notes, and numerous stocks could benefit.",
-      "url": "https://www.marketwatch.com/story/palantir-lockheed-and-these-other-defense-stocks-are-rising-on-heels-of-iran-conflict-3832f763?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Mon, 02 Mar 2026 14:49:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.786970Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T161530786936Z",
-      "title": "Anthropic\u2019s Claude suffers an outage, following \u2018unprecedented\u2019 demand surge",
-      "summary": "Claude had been gaining more respect with users following ChatGPT backlash and the introduction of new coding tools, though an outage might erode some of that goodwill.",
-      "url": "https://www.marketwatch.com/story/anthropics-claude-suffers-an-outage-heres-what-to-know-df8ada64?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "other"
-      ],
-      "published": "Mon, 02 Mar 2026 14:54:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.786936Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T161530786907Z",
-      "title": "U.S. manufacturers grow for second straight month, but \u2018tariff instability still exists\u2019",
-      "summary": "American manufacturers grew in February for the second month in a row for the first time in a year, but rising metal prices tied to U.S. tariffs are weighing on business and sapping customer demand.",
-      "url": "https://www.marketwatch.com/story/u-s-manufacturers-grow-for-second-straight-month-but-tariff-instability-still-exists-44ff359f?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "other"
-      ],
-      "published": "Mon, 02 Mar 2026 15:04:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.786907Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T161530786874Z",
+      "id": "rss_2026-03-02T171526820573Z",
       "title": "Coherent and Lumentum shares pop on Nvidia deals. Why optical stocks are so hot these days.",
       "summary": "Optical technologies are increasingly critical in data centers as they support energy-efficient, ultrahigh-bandwidth connections.",
       "url": "https://www.marketwatch.com/story/coherent-and-lumentum-shares-pop-on-nvidia-deals-why-optical-stocks-are-so-hot-these-days-806f603d?mod=mw_rss_topstories",
@@ -406,13 +345,13 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 15:25:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.786874Z",
+      "timestamp": "2026-03-02T17:15:26.820573Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161530786849Z",
+      "id": "rss_2026-03-02T171526820549Z",
       "title": "Gas oil is spiking more than crude: What it is and why prices are soaring amid Operation Epic Fury",
       "summary": "The workhorse of the fuel world was climbing on Monday following a drone strike on a major Saudi refinery.",
       "url": "https://www.marketwatch.com/story/gasoil-is-spiking-more-than-crude-what-it-is-and-why-prices-are-soaring-amid-iran-conflict-af45ca50?mod=mw_rss_topstories",
@@ -421,13 +360,13 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 15:29:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.786849Z",
+      "timestamp": "2026-03-02T17:15:26.820549Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161530786826Z",
+      "id": "rss_2026-03-02T171526820529Z",
       "title": "Why Big Tech\u2019s slide is the best thing to happen to your portfolio",
       "summary": "Megacap tech stocks are becoming more realistically valued and still offer solid growth.",
       "url": "https://www.marketwatch.com/story/why-big-techs-slide-is-the-best-thing-to-happen-to-your-portfolio-17a33766?mod=mw_rss_topstories",
@@ -436,13 +375,13 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 15:55:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.786826Z",
+      "timestamp": "2026-03-02T17:15:26.820529Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161530786781Z",
+      "id": "rss_2026-03-02T171526820507Z",
       "title": "Nvidia\u2019s stock is Morgan Stanley\u2019s new top chip pick \u2014 replacing Micron",
       "summary": "An analyst sees a \u201csurprisingly good entry point\u201d for Nvidia investors given the stock\u2019s recent sluggish performance.",
       "url": "https://www.marketwatch.com/story/nvidias-stock-is-morgan-stanleys-new-top-chip-pick-replacing-micron-2dfffd2b?mod=mw_rss_topstories",
@@ -451,13 +390,75 @@
         "other"
       ],
       "published": "Mon, 02 Mar 2026 15:57:00 GMT",
-      "timestamp": "2026-03-02T16:15:30.786781Z",
+      "timestamp": "2026-03-02T17:15:26.820507Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529614045Z",
+      "id": "rss_2026-03-02T171526820482Z",
+      "title": "Anthropic\u2019s Claude recovers from outage following \u2018unprecedented\u2019 demand surge",
+      "summary": "Claude has been gaining more respect with users following ChatGPT backlash and the introduction of new coding tools.",
+      "url": "https://www.marketwatch.com/story/anthropics-claude-suffers-an-outage-heres-what-to-know-df8ada64?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "other"
+      ],
+      "published": "Mon, 02 Mar 2026 16:34:00 GMT",
+      "timestamp": "2026-03-02T17:15:26.820482Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T171526820407Z",
+      "title": "Boeing\u2019s stock stands out in this screen of aerospace and defense investments",
+      "summary": "Several of the largest defense contractors trade at low price/sales ratios when compared with that of the S&P 500, and Boeing has a high projected sales growth rate.",
+      "url": "https://www.marketwatch.com/story/boeings-stock-stands-out-in-this-screen-of-aerospace-and-defense-investments-aba58bd3?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "financial"
+      ],
+      "published": "Mon, 02 Mar 2026 16:53:00 GMT",
+      "timestamp": "2026-03-02T17:15:26.820407Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T171526820365Z",
+      "title": "Why your fertilizer could cost more because of the Iran conflict",
+      "summary": "Fertilizer stocks are rising, as the Iran conflict could disrupt market supply and lead to higher prices.",
+      "url": "https://www.marketwatch.com/story/why-your-fertilizer-could-cost-more-because-of-the-iran-conflict-3634c764?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "geopolitical",
+        "macro"
+      ],
+      "published": "Mon, 02 Mar 2026 17:03:00 GMT",
+      "timestamp": "2026-03-02T17:15:26.820365Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T171526820283Z",
+      "title": "Chevron\u2019s stock surges toward a record as U.S.-Israeli attacks on Iran spark an oil rally",
+      "summary": "Investors leaned onto U.S. energy stocks on Monday, with the widening conflict in the Middle East boosting shares of major U.S. exploration and production and integrated-energy companies, in particular Chevron, whose stock zoomed toward a r",
+      "url": "https://www.marketwatch.com/story/chevrons-stock-surges-toward-a-record-as-u-s-israeli-attacks-on-iran-spark-an-oil-rally-c6283fd5?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "geopolitical",
+        "financial"
+      ],
+      "published": "Mon, 02 Mar 2026 17:11:00 GMT",
+      "timestamp": "2026-03-02T17:15:26.820283Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T171525654086Z",
       "title": "France offers to station nuclear weapons across Europe for the first time",
       "summary": "President Emmanuel Macron lays out nuclear doctrine of \u2018forward deterrence\u2019",
       "url": "https://www.ft.com/content/45d90eeb-5084-4c22-8d4a-9fdb223759fb",
@@ -466,28 +467,28 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 16:02:17 GMT",
-      "timestamp": "2026-03-02T16:15:29.614045Z",
+      "timestamp": "2026-03-02T17:15:25.654086Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529614023Z",
-      "title": "Lebanon plunged back into war as Israel targets Iran-backed Hizbollah",
-      "summary": "Shia militant group strikes northern Israel for first time since 2024, triggering retaliatory offensive",
-      "url": "https://www.ft.com/content/480ac5f5-ac70-40bd-81a6-f5d3bbabe3a8",
+      "id": "rss_2026-03-02T171525654064Z",
+      "title": "Elliott amassed \u00a3200mn exposure to collapsed mortgage provider MFS",
+      "summary": "Insolvency of UK property lender is the latest failure to raise questions about credit quality and diligence",
+      "url": "https://www.ft.com/content/266c8a95-be19-4e0b-9443-6237e0068569",
       "source": "RSS: Financial_Times",
       "category": [
-        "geopolitical"
+        "financial"
       ],
-      "published": "Mon, 02 Mar 2026 15:25:02 GMT",
-      "timestamp": "2026-03-02T16:15:29.614023Z",
+      "published": "Mon, 02 Mar 2026 16:44:30 GMT",
+      "timestamp": "2026-03-02T17:15:25.654064Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529614004Z",
+      "id": "rss_2026-03-02T171525654043Z",
       "title": "How western navies can keep the Strait of Hormuz open",
       "summary": "Although the narrow waterway is easy for Iran to block, playing offence could prevent global economic repercussions",
       "url": "https://www.ft.com/content/bd9e1a9d-ae4b-4733-87d3-022d6f2c61eb",
@@ -496,28 +497,28 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 15:37:05 GMT",
-      "timestamp": "2026-03-02T16:15:29.614004Z",
+      "timestamp": "2026-03-02T17:15:25.654043Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529613985Z",
+      "id": "rss_2026-03-02T171525654024Z",
       "title": "\u2018Half of Dubai is booking\u2019: expats drive to Oman and Saudi Arabia to find flights out",
-      "summary": "Charter operators vie to secure slots in Muscat as airports in UAE and Qatar remain closed",
+      "summary": "Charter operators vie to secure slots in Muscat as airports in UAE and Qatar remain constrained",
       "url": "https://www.ft.com/content/7ecea3fe-295d-4592-abf2-206da6f6b8ca",
       "source": "RSS: Financial_Times",
       "category": [
         "other"
       ],
-      "published": "Mon, 02 Mar 2026 11:09:35 GMT",
-      "timestamp": "2026-03-02T16:15:29.613985Z",
+      "published": "Mon, 02 Mar 2026 16:54:16 GMT",
+      "timestamp": "2026-03-02T17:15:25.654024Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529613962Z",
+      "id": "rss_2026-03-02T171525653998Z",
       "title": "In charts: how Donald Trump became a military interventionist",
       "summary": "US president\u2019s Pentagon has been busier during the past 12 months than nearly his entire first presidency",
       "url": "https://www.ft.com/content/e9905f8d-27d1-446a-90aa-fc296495eb49",
@@ -526,14 +527,14 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 05:00:08 GMT",
-      "timestamp": "2026-03-02T16:15:29.613962Z",
+      "timestamp": "2026-03-02T17:15:25.653998Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529613937Z",
-      "title": "Iran attacks show perils of US haven status",
+      "id": "rss_2026-03-02T171525653969Z",
+      "title": "Iran attacks show US haven status is in peril",
       "summary": "In moments of extreme uncertainty investors usually rush to the safety of US government bonds, but not this time",
       "url": "https://www.ft.com/content/a8c8cfbd-b5fa-4c61-b72a-38531b029623",
       "source": "RSS: Financial_Times",
@@ -542,44 +543,45 @@
         "financial"
       ],
       "published": "Mon, 02 Mar 2026 15:27:29 GMT",
-      "timestamp": "2026-03-02T16:15:29.613937Z",
+      "timestamp": "2026-03-02T17:15:25.653969Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529613919Z",
-      "title": "Military briefing: Iran\u2019s new retaliation strategy",
-      "summary": "Islamic republic launches \u2018drizzle\u2019 of missiles and drones against Israel while firing barrages at targets around the Gulf",
-      "url": "https://www.ft.com/content/f2eae858-a5a4-4c49-9526-e1757a2d55e2",
+      "id": "rss_2026-03-02T171525653951Z",
+      "title": "Investors turn to gold, not bonds, as haven from war in Iran",
+      "summary": "Gold and the US dollar jump but government bonds fall amid fears of an inflation shock",
+      "url": "https://www.ft.com/content/b4adbb39-c01e-4136-8df6-538e2242c43a",
       "source": "RSS: Financial_Times",
       "category": [
         "geopolitical",
-        "financial"
+        "financial",
+        "macro"
       ],
-      "published": "Sun, 01 Mar 2026 16:41:46 GMT",
-      "timestamp": "2026-03-02T16:15:29.613919Z",
+      "published": "Mon, 02 Mar 2026 16:11:58 GMT",
+      "timestamp": "2026-03-02T17:15:25.653951Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529613893Z",
-      "title": "Hegseth says Iran war will not be \u2018endless\u2019 after three US jets downed in Kuwait",
+      "id": "rss_2026-03-02T171525653934Z",
+      "title": "Hegseth says more US troops on their way to Iran",
       "summary": "Oil price surges and stocks fall as conflict intensifies",
       "url": "https://www.ft.com/content/91cae073-71db-46ea-a950-62b17faf1882",
       "source": "RSS: Financial_Times",
       "category": [
         "geopolitical"
       ],
-      "published": "Sun, 01 Mar 2026 23:05:12 GMT",
-      "timestamp": "2026-03-02T16:15:29.613893Z",
+      "published": "Mon, 02 Mar 2026 16:47:01 GMT",
+      "timestamp": "2026-03-02T17:15:25.653934Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161529613855Z",
+      "id": "rss_2026-03-02T171525653906Z",
       "title": "Gas prices soar as Iranian attacks force shutdown of Qatari production",
       "summary": "Saudi Arabia also closes an oil refinery after strike",
       "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
@@ -587,14 +589,14 @@
       "category": [
         "geopolitical"
       ],
-      "published": "Mon, 02 Mar 2026 13:39:25 GMT",
-      "timestamp": "2026-03-02T16:15:29.613855Z",
+      "published": "Mon, 02 Mar 2026 16:12:41 GMT",
+      "timestamp": "2026-03-02T17:15:25.653906Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525819089Z",
+      "id": "rss_2026-03-02T171522633589Z",
       "title": "Middle East crisis pushes up oil prices \u2013 and could drive inflation rises too",
       "summary": "Effects of extended conflict between US and Iran could also lead to higher interest rates and hit economic growth Business live \u2013 latest updates US-Israel war on Iran \u2013 live updates The impact of the deadly and unpredictable conflict in the",
       "url": "https://www.theguardian.com/business/2026/mar/02/middle-east-crisis-oil-prices-inflation-us-iran-interest-rates-growth",
@@ -605,13 +607,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 13:02:32 GMT",
-      "timestamp": "2026-03-02T16:15:25.819089Z",
+      "timestamp": "2026-03-02T17:15:22.633589Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525819020Z",
+      "id": "rss_2026-03-02T171522633508Z",
       "title": "Thousands of pollution incidents in England downgraded without site visit, data suggests",
       "summary": "Exclusive: Whistleblower figures show large rise in \u2018serious\u2019 to \u2018minor\u2019 downgrades based on water company evidence Environment Agency (EA) staff have downgraded thousands of serious pollution incidents by water companies in England without",
       "url": "https://www.theguardian.com/environment/2026/mar/01/thousands-pollution-incidents-england-downgraded-without-site-visit-data-suggests",
@@ -620,13 +622,13 @@
         "other"
       ],
       "published": "Sun, 01 Mar 2026 07:00:34 GMT",
-      "timestamp": "2026-03-02T16:15:25.819020Z",
+      "timestamp": "2026-03-02T17:15:22.633508Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525818937Z",
+      "id": "rss_2026-03-02T171522633425Z",
       "title": "Square Mile strikes back: how the City of London is fighting disinformation about crime",
       "summary": "Panic about antisocial behaviour and theft has broken through from social media to boardrooms and diplomatic circles \u201cJust visit London and you\u2019ll see that it\u2019s filled with crime,\u201d the tech billionaire Elon Musk said as he was beamed into T",
       "url": "https://www.theguardian.com/business/2026/feb/28/city-of-london-fighting-disinformation-crime",
@@ -636,13 +638,13 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 14:00:13 GMT",
-      "timestamp": "2026-03-02T16:15:25.818937Z",
+      "timestamp": "2026-03-02T17:15:22.633425Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525818853Z",
+      "id": "rss_2026-03-02T171522633342Z",
       "title": "Datacentre developers face calls to disclose effect on UK\u2019s net emissions",
       "summary": "Campaign groups write to technology secretary amid concerns that sites could double overall electricity demand Datacentre developers are facing pressure to reveal whether their projects will increase the UK\u2019s net greenhouse gas emissions, a",
       "url": "https://www.theguardian.com/technology/2026/mar/01/datacentre-developers-energy-greenhouse-gas-emissions",
@@ -652,13 +654,13 @@
         "sentiment"
       ],
       "published": "Sun, 01 Mar 2026 16:00:44 GMT",
-      "timestamp": "2026-03-02T16:15:25.818853Z",
+      "timestamp": "2026-03-02T17:15:22.633342Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525818787Z",
+      "id": "rss_2026-03-02T171522633246Z",
       "title": "Most senior council officers in England say building work hit by delays",
       "summary": "Funding uncertainty is main concern, despite Labour\u2019s pledge to revitalise construction, survey shows Business live \u2013 latest updates Almost two-thirds of senior council officers have said they are seeing construction projects delayed, despi",
       "url": "https://www.theguardian.com/society/2026/mar/02/senior-council-officers-building-work-hit-by-delays",
@@ -667,13 +669,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 06:00:02 GMT",
-      "timestamp": "2026-03-02T16:15:25.818787Z",
+      "timestamp": "2026-03-02T17:15:22.633246Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525818725Z",
+      "id": "rss_2026-03-02T171522633172Z",
       "title": "Rolls-Royce boss \u2018open\u2019 to Germany joining UK\u2019s fighter jet project",
       "summary": "Tufan Erginbilgi\u00e7 says decision is for the government but German participation remains a possibility Business live \u2013 latest updates The boss of Rolls-Royce has said he would welcome Germany helping to build Britain\u2019s next-generation fighter",
       "url": "https://www.theguardian.com/business/2026/mar/02/rolls-royce-germany-uk-fighter-jet-tufan-erginbilgic",
@@ -682,28 +684,13 @@
         "geopolitical"
       ],
       "published": "Mon, 02 Mar 2026 05:00:01 GMT",
-      "timestamp": "2026-03-02T16:15:25.818725Z",
+      "timestamp": "2026-03-02T17:15:22.633172Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525818662Z",
-      "title": "OBR a backseat driver with out-of-date maps, thinktanks tell Rachel Reeves",
-      "summary": "Chancellor urged to reform Office for Budget Responsibility to open way to more public investment Rachel Reeves must reform the Office for Budget Responsibility (OBR) to open the way to more public investment, an alliance of thinktanks has ",
-      "url": "https://www.theguardian.com/business/2026/mar/01/obr-office-for-budget-responsibility-thinktanks-rachel-reeves",
-      "source": "RSS: Guardian_Business",
-      "category": [
-        "corporate"
-      ],
-      "published": "Sun, 01 Mar 2026 20:00:49 GMT",
-      "timestamp": "2026-03-02T16:15:25.818662Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-02T161525818604Z",
+      "id": "rss_2026-03-02T171522633098Z",
       "title": "UK house prices rise in February as chancellor avoids \u2018negative speculation\u2019",
       "summary": "Rachel Reeves\u2019s upcoming spring forecast has not led to slowdown, as property tax rumours did in November Business live \u2013 latest updates UK politics live \u2013 latest updates House prices in the UK increased in February, avoiding a repeat of th",
       "url": "https://www.theguardian.com/business/2026/mar/02/uk-house-prices-rise-february-spring-forecast-rachel-reeves",
@@ -714,13 +701,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 15:17:51 GMT",
-      "timestamp": "2026-03-02T16:15:25.818604Z",
+      "timestamp": "2026-03-02T17:15:22.633098Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525818529Z",
+      "id": "rss_2026-03-02T171522633013Z",
       "title": "UK competition watchdog investigates hotel groups over alleged data sharing",
       "summary": "Regulator looks into claim Hilton, InterContinental Hotels and Marriott could be sharing \u2018 competitively sensitive\u2019 information via analytics tool Business live \u2013 latest updates The UK competition watchdog has opened an investigation into t",
       "url": "https://www.theguardian.com/business/2026/mar/02/uk-competition-watchdog-investigates-hilton-marriott-intercontinental-hotel-groups-alleged-data-sharing",
@@ -730,13 +717,29 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 15:33:33 GMT",
-      "timestamp": "2026-03-02T16:15:25.818529Z",
+      "timestamp": "2026-03-02T17:15:22.633013Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161525818420Z",
+      "id": "rss_2026-03-02T171522632923Z",
+      "title": "BrewDog bought by US cannabis and drinks firm for \u00a333m, costing nearly 500 jobs",
+      "summary": "Many early stage crowdfunders left empty-handed as Tilray acquires beer company\u2019s UK and Irish assets Business live \u2013 latest updates The UK and Irish assets of BrewDog, the Scottish self-styled \u201cpunk\u201d brewer, have been sold to the US cannab",
+      "url": "https://www.theguardian.com/business/2026/mar/02/brewdog-us-cannabis-drinks-500-jobs",
+      "source": "RSS: Guardian_Business",
+      "category": [
+        "financial",
+        "macro"
+      ],
+      "published": "Mon, 02 Mar 2026 16:28:52 GMT",
+      "timestamp": "2026-03-02T17:15:22.632923Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-02T171522632824Z",
       "title": "Wall Street joins global sell-off as Iran war drives up oil and gas prices \u2013 business live",
       "summary": "US-Israel war with Iran hits shares in travel companies, and the pound, although oil producers and weapons makers are rallying Oil prices rise as Iran war threatens shipping through strait of Hormuz Over in New Delhi, India and Canada have ",
       "url": "https://www.theguardian.com/business/live/2026/mar/02/oil-price-us-israel-iran-war-100-dollars-a-barrel-stock-markets-drop-travel-news-updates",
@@ -744,14 +747,14 @@
       "category": [
         "geopolitical"
       ],
-      "published": "Mon, 02 Mar 2026 15:59:46 GMT",
-      "timestamp": "2026-03-02T16:15:25.818420Z",
+      "published": "Mon, 02 Mar 2026 16:48:37 GMT",
+      "timestamp": "2026-03-02T17:15:22.632824Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161524973404Z",
+      "id": "rss_2026-03-02T171521811845Z",
       "title": "\u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws",
       "summary": "Javier Milei\u2019s boosters say law will revive employment, but critics decry cuts to severance and longer working hours Argentina \u2019s senate is poised to approve a sweeping overhaul of labour laws aimed at weakening trade unions and lowering la | Excerpt: \u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws | Argentina | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous im",
       "url": "https://www.theguardian.com/world/2026/feb/27/argentina-labor-law-overhaul",
@@ -760,13 +763,13 @@
         "macro"
       ],
       "published": "Fri, 27 Feb 2026 09:00:37 GMT",
-      "timestamp": "2026-03-02T16:15:24.973404Z",
+      "timestamp": "2026-03-02T17:15:21.811845Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws | Argentina | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int "
     },
     {
-      "id": "rss_2026-03-02T161523798579Z",
+      "id": "rss_2026-03-02T171520657762Z",
       "title": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border",
       "summary": "Second time in two weeks military used laser to attack what it mistakenly thought was a threat, disrupting air traffic Sign up for the Breaking News US email to get newsletter alerts in your inbox Democratic members of Congress have express | Excerpt: Democrats outraged at US military\u2019s downing of CBP drone near Mexico border | US military | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/cbp-border-drone-military-democrats",
@@ -775,13 +778,13 @@
         "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 14:37:19 GMT",
-      "timestamp": "2026-03-02T16:15:23.798579Z",
+      "timestamp": "2026-03-02T17:15:20.657762Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border | US military | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Internatio"
     },
     {
-      "id": "rss_2026-03-02T161522613570Z",
+      "id": "rss_2026-03-02T171519473556Z",
       "title": "Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba",
       "summary": "As tensions between two countries reach new highs, US president says regime is \u2018talking with us\u2019 Donald Trump has suggested the US could carry out a \u201cfriendly takeover\u201d of Cuba as tensions between Washington and Havana reach a new high afte | Excerpt: Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba | Donald Trump | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/trump-cuba-regime-change",
@@ -791,13 +794,13 @@
         "corporate"
       ],
       "published": "Fri, 27 Feb 2026 23:39:01 GMT",
-      "timestamp": "2026-03-02T16:15:22.613570Z",
+      "timestamp": "2026-03-02T17:15:19.473556Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba | Donald Trump | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition U"
     },
     {
-      "id": "rss_2026-03-02T161521415724Z",
+      "id": "rss_2026-03-02T171518352658Z",
       "title": "At least 20 killed as cash-laden military cargo plane crashes in Bolivia",
       "summary": "Riot police use teargas to disperse people gathering around wreckage of plane loaded with money from central bank At least 20 people have died and dozens have been injured after a military cargo plane carrying banknotes crashed while landin | Excerpt: At least 20 killed as cash-laden military cargo plane crashes in Bolivia | Bolivia | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle captio",
       "url": "https://www.theguardian.com/world/2026/feb/28/at-least-15-killed-as-cash-laden-military-cargo-plane-crashes-in-bolivia",
@@ -807,13 +810,13 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 03:05:37 GMT",
-      "timestamp": "2026-03-02T16:15:21.415724Z",
+      "timestamp": "2026-03-02T17:15:18.352658Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "At least 20 killed as cash-laden military cargo plane crashes in Bolivia | Bolivia | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edi"
     },
     {
-      "id": "rss_2026-03-02T161520255886Z",
+      "id": "rss_2026-03-02T171517191673Z",
       "title": "\u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered",
       "summary": "Few clues as to how 10 heavily armed men intercepted on stolen speedboat came together from across Florida or what they hoped to achieve Foot traffic was slow outside the Bay of Pigs Museum on Calle Ocho in Miami\u2019s Little Havana neighbourho | Excerpt: \u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 5 Next image Previous image",
       "url": "https://www.theguardian.com/world/2026/feb/28/miami-exiled-cubans-speedboat-shootout",
@@ -822,13 +825,13 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 10:00:08 GMT",
-      "timestamp": "2026-03-02T16:15:20.255886Z",
+      "timestamp": "2026-03-02T17:15:17.191673Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 5 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Int"
     },
     {
-      "id": "rss_2026-03-02T161518903680Z",
+      "id": "rss_2026-03-02T171516068122Z",
       "title": "US accused of \u2018shameless exploitation\u2019 over proposed Zambian health aid deal",
       "summary": "Leaked draft of $1bn memorandum of understanding reveals mandatory targets, sharing of data, and reported access to mining concessions The US has been accused of \u201cshameless exploitation\u201d over a health financing agreement with Zambia worth m | Excerpt: US accused of \u2018shameless exploitation\u2019 over proposed Zambian health aid deal | Global health | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Tog",
       "url": "https://www.theguardian.com/global-development/2026/feb/25/zambia-us-health-aid-deal-exploitation-mining-concessions-data-sharing-targets",
@@ -837,13 +840,13 @@
         "geopolitical"
       ],
       "published": "Wed, 25 Feb 2026 13:00:36 GMT",
-      "timestamp": "2026-03-02T16:15:18.903680Z",
+      "timestamp": "2026-03-02T17:15:16.068122Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "US accused of \u2018shameless exploitation\u2019 over proposed Zambian health aid deal | Global health | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Interna"
     },
     {
-      "id": "rss_2026-03-02T161517692309Z",
+      "id": "rss_2026-03-02T171514828811Z",
       "title": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean",
       "summary": "Atmospheric machine-gun has fired storm after deadly storm at the region this year, leaving a trail of widespread destruction For Andr\u00e9s S\u00e1nchez Barea, in Spain, it was the fear that arose when water started to spurt from plug sockets. For  | Excerpt: \u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean | Extreme weather | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image",
       "url": "https://www.theguardian.com/world/2026/feb/26/recent-mediterranean-storms-tragedies-spain-portugal-morocco",
@@ -853,13 +856,13 @@
         "sentiment"
       ],
       "published": "Thu, 26 Feb 2026 05:00:21 GMT",
-      "timestamp": "2026-03-02T16:15:17.692309Z",
+      "timestamp": "2026-03-02T17:15:14.828811Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean | Extreme weather | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs "
     },
     {
-      "id": "rss_2026-03-02T161516279036Z",
+      "id": "rss_2026-03-02T171513295607Z",
       "title": "Two women arrested in Uganda for allegedly kissing in public could face life sentence",
       "summary": "Wendy Faith and Alesi Diana Denise were taken into custody under laws that have outraged LGBTQ+ community and rights activists Two women have been arrested and detained in Uganda after allegedly kissing in public, an act of \u201csame-sex activi | Excerpt: Two women arrested in Uganda for allegedly kissing in public could face life sentence | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Prev",
       "url": "https://www.theguardian.com/global-development/2026/feb/26/women-arrested-uganda-kissing-public-lgbtq-laws",
@@ -868,13 +871,13 @@
         "other"
       ],
       "published": "Thu, 26 Feb 2026 08:00:23 GMT",
-      "timestamp": "2026-03-02T16:15:16.279036Z",
+      "timestamp": "2026-03-02T17:15:13.295607Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Two women arrested in Uganda for allegedly kissing in public could face life sentence | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign "
     },
     {
-      "id": "rss_2026-03-02T161515145540Z",
+      "id": "rss_2026-03-02T171512211114Z",
       "title": "Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries",
       "summary": "Zimbabwe refuses to sign agreement and Kenya faces a court case over data sharing as new aid deals come under scrutiny A series of bilateral health agreements being negotiated between African countries and the administration of President Do | Excerpt: Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image",
       "url": "https://www.theguardian.com/global-development/2026/feb/27/rising-anger-over-lop-sided-immoral-us-health-funding-pacts-africa-countries",
@@ -883,13 +886,13 @@
         "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 07:00:34 GMT",
-      "timestamp": "2026-03-02T16:15:15.145540Z",
+      "timestamp": "2026-03-02T17:15:12.211114Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs "
     },
     {
-      "id": "rss_2026-03-02T161513979351Z",
+      "id": "rss_2026-03-02T171511085078Z",
       "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine",
       "summary": "Foreign minister says 272 Ghanaians are thought to have been drawn into battle since 2022, after he visited Kyiv At least 55 Ghanaians have been killed in Russia\u2019s war with Ukraine after being \u201clured into battle\u201d, Ghana\u2019s foreign minister h | Excerpt: Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine | Ukraine | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image",
       "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
@@ -899,13 +902,13 @@
         "macro"
       ],
       "published": "Fri, 27 Feb 2026 16:42:39 GMT",
-      "timestamp": "2026-03-02T16:15:13.979351Z",
+      "timestamp": "2026-03-02T17:15:11.085078Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine | Ukraine | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Int"
     },
     {
-      "id": "rss_2026-03-02T161510697035Z",
+      "id": "rss_2026-03-02T171507953185Z",
       "title": "AP Explains: What happens when migrants arrive at US border - AP News",
       "summary": "AP Explains: What happens when migrants arrive at US border AP News",
       "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNSk84NHlld1o2TkdTSGxlWkFRUGdMaFVPclI4MjRHREdTQXo5LWg5bDdqREZzdEF5akpIU2lDaERZdzlsampCRjBRU1RFUVZfdDU5amJuRzhmb0FXTVBYOXZ5ZTM1d244T0tHUnBrS19qalZDd25nYWV1RElRc1FjakR3NENXS1l2MEEwWEJDYlhJTHIzc0JXSzVnUmJsSXM4T3ZjNE05LWNZMm51akZNTXIzSUhadmtuUEE?oc=5",
@@ -914,13 +917,13 @@
         "other"
       ],
       "published": "Wed, 26 Jun 2019 07:00:00 GMT",
-      "timestamp": "2026-03-02T16:15:10.697035Z",
+      "timestamp": "2026-03-02T17:15:07.953185Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-02T161510401944Z",
+      "id": "rss_2026-03-02T171507648497Z",
       "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "summary": "Trump disbanded NSC pandemic unit that experts had praised AP News",
       "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
@@ -929,32 +932,82 @@
         "geopolitical"
       ],
       "published": "Sat, 14 Mar 2020 07:00:00 GMT",
-      "timestamp": "2026-03-02T16:15:10.401944Z",
+      "timestamp": "2026-03-02T17:15:07.648497Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "reddit_2026-03-02T153140Z",
-      "title": "Sold because of Fear of WAR",
-      "summary": "0 upvotes | 17 comments | Post: Again I sold my CRWD to early left 5000+ on the table. I saw Green i took juat to be safe and safe my capital. | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 8 | **First Seen In WSB** | 3 years ago\n**Total Comments** | 141 | **Previous Best DD** | \n**Account Age** | 4 years | | \n\n[**Join WSB Discord**](https://dis",
-      "url": "https://reddit.com/r/wallstreetbets/comments/1rivwt9/sold_because_of_fear_of_war/",
-      "source": "Reddit: r/wallstreetbets",
+      "id": "reddit_2026-03-02T163753Z",
+      "title": "More low- and middle-income Americans are investing, report finds.",
+      "summary": "1 upvotes | 0 comments | Post: The new research follows a\u00a0[survey](https://buildcommonwealth.org/news-item/the-blackrock-foundation-and-commonwealth-research-reveals-majority-of-low-and-moderate-income-americans-now-invest-in-capital-markets)\u00a0conducted in January 2025 by the BlackRock Foundation and Commonweal",
+      "url": "https://reddit.com/r/investing/comments/1rixqja/more_low_and_middleincome_americans_are_investing/",
+      "source": "Reddit: r/investing",
       "category": [
-        "geopolitical",
-        "sentiment"
+        "financial",
+        "macro"
       ],
-      "published": "2026-03-02T15:31:40Z",
-      "timestamp": "2026-03-02T15:31:40Z",
+      "published": "2026-03-02T16:37:53Z",
+      "timestamp": "2026-03-02T16:37:53Z",
+      "type": "reddit",
+      "score": 1,
+      "selftext_snippet": "The new research follows a\u00a0[survey](https://buildcommonwealth.org/news-item/the-blackrock-foundation-and-commonwealth-research-reveals-majority-of-low-and-moderate-income-americans-now-invest-in-capital-markets)\u00a0conducted in January 2025 by the BlackRock Foundation and Commonweal",
+      "top_comment_snippet": ""
+    },
+    {
+      "id": "reddit_2026-03-02T162044Z",
+      "title": "Just getting into investments - Started with Paper trading/Paper investing",
+      "summary": "0 upvotes | 6 comments | Post: As the title suggests, I have made some paper investments on investopedia simulator a couple months back and haven't seen any progress. Though the value fluctuates up and down, over the long run it has stayed around the same amount. I wanted to know what I was doing wrong, what i | Top comment: What\u2019s the case for this over just buying broad index funds?",
+      "url": "https://reddit.com/r/investing/comments/1rix96b/just_getting_into_investments_started_with_paper/",
+      "source": "Reddit: r/investing",
+      "category": [
+        "financial",
+        "macro"
+      ],
+      "published": "2026-03-02T16:20:44Z",
+      "timestamp": "2026-03-02T16:20:44Z",
       "type": "reddit",
       "score": 0,
-      "selftext_snippet": "Again I sold my CRWD to early left 5000+ on the table. I saw Green i took juat to be safe and safe my capital.",
-      "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 8 | **First Seen In WSB** | 3 years ago\n**Total Comments** | 141 | **Previous Best DD** | \n**Account Age** | 4 years | | \n\n[**Join WSB Discord**](https://dis"
+      "selftext_snippet": "As the title suggests, I have made some paper investments on investopedia simulator a couple months back and haven't seen any progress. Though the value fluctuates up and down, over the long run it has stayed around the same amount. I wanted to know what I was doing wrong, what i",
+      "top_comment_snippet": "What\u2019s the case for this over just buying broad index funds?"
+    },
+    {
+      "id": "reddit_2026-03-02T162038Z",
+      "title": "99k loan ATOM yolo",
+      "summary": "12 upvotes | 21 comments | Post: Hello Chuds two novembers ago I took out 85k in personal loans to finance a 20,000 share purchase of Atomera. Let\u2019s chat\n\nI have missed no payments on the loans, my monthly repayment is like $2900, it\u2019s a lot for me, a humble construction worker.\n\nI have been selling calls on the | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 2 months ago\n**Total Comments*",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rix92g/99k_loan_atom_yolo/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "sentiment"
+      ],
+      "published": "2026-03-02T16:20:38Z",
+      "timestamp": "2026-03-02T16:20:38Z",
+      "type": "reddit",
+      "score": 12,
+      "selftext_snippet": "Hello Chuds two novembers ago I took out 85k in personal loans to finance a 20,000 share purchase of Atomera. Let\u2019s chat\n\nI have missed no payments on the loans, my monthly repayment is like $2900, it\u2019s a lot for me, a humble construction worker.\n\nI have been selling calls on the",
+      "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 2 months ago\n**Total Comments** | 12 | **Previous Best DD** | \n**Account Age** | 2 months | | \n\n[**Join WSB Discord**](https://di"
+    },
+    {
+      "id": "reddit_2026-03-02T161333Z",
+      "title": "Nasdaq seeks SEC approval for prediction markets options on major stock index",
+      "summary": "65 upvotes | 23 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 41 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://disco",
+      "url": "https://reddit.com/r/wallstreetbets/comments/1rix1yc/nasdaq_seeks_sec_approval_for_prediction_markets/",
+      "source": "Reddit: r/wallstreetbets",
+      "category": [
+        "macro",
+        "sentiment"
+      ],
+      "published": "2026-03-02T16:13:33Z",
+      "timestamp": "2026-03-02T16:13:33Z",
+      "type": "reddit",
+      "score": 65,
+      "selftext_snippet": "",
+      "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 41 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://disco"
     },
     {
       "id": "reddit_2026-03-02T152628Z",
       "title": "Thank you big Yahu \ud83d\ude4f\u270c\ufe0f",
-      "summary": "25 upvotes | 6 comments | Post: Sold my AVAV and KTOS calls, doubled my portfolio!!!!!! Still have some shares of both but probably gonna sell them this week ish | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 2 | **First Seen In WSB** | 4 weeks ago\n**Total Comments** | 30 | **Previous Best DD** | \n**Account Age** | 6 years | | \n\n[**Join WSB Discord**](https://disc",
+      "summary": "98 upvotes | 15 comments | Post: Sold my AVAV and KTOS calls, doubled my portfolio!!!!!! Still have some shares of both but probably gonna sell them this week ish | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 2 | **First Seen In WSB** | 4 weeks ago\n**Total Comments** | 30 | **Previous Best DD** | \n**Account Age** | 6 years | | \n\n[**Join WSB Discord**](https://disc",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rivrs1/thank_you_big_yahu/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -963,14 +1016,14 @@
       "published": "2026-03-02T15:26:28Z",
       "timestamp": "2026-03-02T15:26:28Z",
       "type": "reddit",
-      "score": 25,
+      "score": 98,
       "selftext_snippet": "Sold my AVAV and KTOS calls, doubled my portfolio!!!!!! Still have some shares of both but probably gonna sell them this week ish",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 2 | **First Seen In WSB** | 4 weeks ago\n**Total Comments** | 30 | **Previous Best DD** | \n**Account Age** | 6 years | | \n\n[**Join WSB Discord**](https://disc"
     },
     {
       "id": "reddit_2026-03-02T144728Z",
       "title": "ROOT earnings pop, followed by sharp price drop. Thoughts?",
-      "summary": "2 upvotes | 0 comments | Post: Hi all. I'm looking for thoughtful input on ROOT after Q4/FY25. Stock jumped \\~12% after hours on the earnings beat, then opened down \\~10% and now sitting at the 52-week low. Trying to understand if this is rational repricing or just volatility.\n\n**Tailwinds I see:**\n\n1. Combine",
+      "summary": "0 upvotes | 1 comments | Post: Hi all. I'm looking for thoughtful input on ROOT after Q4/FY25. Stock jumped \\~12% after hours on the earnings beat, then opened down \\~10% and now sitting at the 52-week low. Trying to understand if this is rational repricing or just volatility.\n\n**Tailwinds I see:**\n\n1. Combine | Top comment: They have been trading below multiple EMAs for a while, and a lot of other indicators are showing strength for a lower pric",
       "url": "https://reddit.com/r/investing/comments/1riuqyt/root_earnings_pop_followed_by_sharp_price_drop/",
       "source": "Reddit: r/investing",
       "category": [
@@ -982,14 +1035,14 @@
       "published": "2026-03-02T14:47:28Z",
       "timestamp": "2026-03-02T14:47:28Z",
       "type": "reddit",
-      "score": 2,
+      "score": 0,
       "selftext_snippet": "Hi all. I'm looking for thoughtful input on ROOT after Q4/FY25. Stock jumped \\~12% after hours on the earnings beat, then opened down \\~10% and now sitting at the 52-week low. Trying to understand if this is rational repricing or just volatility.\n\n**Tailwinds I see:**\n\n1. Combine",
-      "top_comment_snippet": ""
+      "top_comment_snippet": "They have been trading below multiple EMAs for a while, and a lot of other indicators are showing strength for a lower price. Short term increase is not in of its self a strong indicator to buy"
     },
     {
       "id": "reddit_2026-03-02T143353Z",
       "title": "$30k in ASTS stock",
-      "summary": "53 upvotes | 22 comments | Post: Fuck it. Let\u2019s ride this puppy out and sell calls in the meantime | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 5 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 892 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://disco",
+      "summary": "80 upvotes | 25 comments | Post: Fuck it. Let\u2019s ride this puppy out and sell calls in the meantime | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 5 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 892 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://disco",
       "url": "https://reddit.com/r/wallstreetbets/comments/1riueor/30k_in_asts_stock/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -998,27 +1051,9 @@
       "published": "2026-03-02T14:33:53Z",
       "timestamp": "2026-03-02T14:33:53Z",
       "type": "reddit",
-      "score": 53,
+      "score": 80,
       "selftext_snippet": "Fuck it. Let\u2019s ride this puppy out and sell calls in the meantime",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 5 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 892 | **Previous Best DD** | \n**Account Age** | 1 year | | \n\n[**Join WSB Discord**](https://disco"
-    },
-    {
-      "id": "reddit_2026-03-02T142016Z",
-      "title": "Oil, Gold & Stocks All React to US-Iran War. What It Means for Your Portfolio",
-      "summary": "6 upvotes | 11 comments | Post: Global markets are clearly in **risk-off mode** as conflict between the US, Israel, and Iran escalates. Brent crude briefly spiked above **$80+ per barrel** on Sunday and Monday as fears of supply disruptions  especially around the **Strait of Hormuz**  dominated trading. Gold ha | Top comment: I've been like 50% gold and 30% oil, precious metal mining and defense stocks for a while.  \n\nI don't even know who I am a",
-      "url": "https://reddit.com/r/investing/comments/1riu2pc/oil_gold_stocks_all_react_to_usiran_war_what_it/",
-      "source": "Reddit: r/investing",
-      "category": [
-        "geopolitical",
-        "financial",
-        "macro"
-      ],
-      "published": "2026-03-02T14:20:16Z",
-      "timestamp": "2026-03-02T14:20:16Z",
-      "type": "reddit",
-      "score": 6,
-      "selftext_snippet": "Global markets are clearly in **risk-off mode** as conflict between the US, Israel, and Iran escalates. Brent crude briefly spiked above **$80+ per barrel** on Sunday and Monday as fears of supply disruptions  especially around the **Strait of Hormuz**  dominated trading. Gold ha",
-      "top_comment_snippet": "I've been like 50% gold and 30% oil, precious metal mining and defense stocks for a while.  \n\nI don't even know who I am anymore, I'm making too much money."
     },
     {
       "id": "reddit_2026-03-02T141656Z",
@@ -1040,7 +1075,7 @@
     {
       "id": "reddit_2026-03-02T120210Z",
       "title": "Daily Discussion Thread for March 02, 2026",
-      "summary": "221 upvotes | 5477 comments | Post: This post contains content not supported on old Reddit. [Click here to view the full post](https://sh.reddit.com/r/wallstreetbets/comments/1riqzu9) | Top comment: Sorry about the state of the subreddit. \n\nWar is a great time... to make money trading. That's what WallStreetBets is for.\n\nThe entire internet is full of smooth brained purely political comments right now, but WSB doesn",
+      "summary": "238 upvotes | 6992 comments | Post: This post contains content not supported on old Reddit. [Click here to view the full post](https://sh.reddit.com/r/wallstreetbets/comments/1riqzu9) | Top comment: Sorry about the state of the subreddit. \n\nWar is a great time... to make money trading. That's what WallStreetBets is for.\n\nThe entire internet is full of smooth brained purely political comments right now, but WSB doesn",
       "url": "https://reddit.com/r/wallstreetbets/comments/1riqzu9/daily_discussion_thread_for_march_02_2026/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1050,14 +1085,14 @@
       "published": "2026-03-02T12:02:10Z",
       "timestamp": "2026-03-02T12:02:10Z",
       "type": "reddit",
-      "score": 221,
+      "score": 238,
       "selftext_snippet": "This post contains content not supported on old Reddit. [Click here to view the full post](https://sh.reddit.com/r/wallstreetbets/comments/1riqzu9)",
       "top_comment_snippet": "Sorry about the state of the subreddit. \n\nWar is a great time... to make money trading. That's what WallStreetBets is for.\n\nThe entire internet is full of smooth brained purely political comments right now, but WSB doesn"
     },
     {
       "id": "reddit_2026-03-02T113000Z",
       "title": "O regards of WSB, give me your wisdom",
-      "summary": "55 upvotes | 20 comments | Post: First shot at options (first ones always free), what's the play here? Sell the calls into the pop at open or hold for a while longer to see if the war drags on? \n\nGot roughly two weeks left on the GDX calls but not sure if I should roll them to longer dated as I'll get antsy with | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 4 months ago\n**Total Comments*",
+      "summary": "57 upvotes | 24 comments | Post: First shot at options (first ones always free), what's the play here? Sell the calls into the pop at open or hold for a while longer to see if the war drags on? \n\nGot roughly two weeks left on the GDX calls but not sure if I should roll them to longer dated as I'll get antsy with | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 4 months ago\n**Total Comments*",
       "url": "https://reddit.com/r/wallstreetbets/comments/1riqe7u/o_regards_of_wsb_give_me_your_wisdom/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1067,7 +1102,7 @@
       "published": "2026-03-02T11:30:00Z",
       "timestamp": "2026-03-02T11:30:00Z",
       "type": "reddit",
-      "score": 55,
+      "score": 57,
       "selftext_snippet": "First shot at options (first ones always free), what's the play here? Sell the calls into the pop at open or hold for a while longer to see if the war drags on? \n\nGot roughly two weeks left on the GDX calls but not sure if I should roll them to longer dated as I'll get antsy with",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | 4 months ago\n**Total Comments** | 3 | **Previous Best DD** | \n**Account Age** | 6 years | | \n\n[**Join WSB Discord**](https://disc"
     },
@@ -1091,7 +1126,7 @@
     {
       "id": "reddit_2026-03-02T104434Z",
       "title": "They said \"Pick your War Poison\",  I went for a \"160k War Cocktail (OXY, STNG, QQQ, SPX)",
-      "summary": "75 upvotes | 42 comments | Post: Positions since Friday closure. Will 100% close QQQ puts on open:\n\n**STNG 300 x 90C exp March 20th**\n\nhttps://preview.redd.it/zff10osu1mmg1.jpg?width=602&format=pjpg&auto=webp&s=09b79901b6b334c8b44b2927aec4314e9d1efcd7\n\n**OXY 300 x 55C exp March 06th**\n\nhttps://preview.redd.it/hp | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 2 years ago\n**Total Comments*",
+      "summary": "81 upvotes | 46 comments | Post: Positions since Friday closure. Will 100% close QQQ puts on open:\n\n**STNG 300 x 90C exp March 20th**\n\nhttps://preview.redd.it/zff10osu1mmg1.jpg?width=602&format=pjpg&auto=webp&s=09b79901b6b334c8b44b2927aec4314e9d1efcd7\n\n**OXY 300 x 55C exp March 06th**\n\nhttps://preview.redd.it/hp | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 2 years ago\n**Total Comments*",
       "url": "https://reddit.com/r/wallstreetbets/comments/1ripl1u/they_said_pick_your_war_poison_i_went_for_a_160k/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1101,14 +1136,14 @@
       "published": "2026-03-02T10:44:34Z",
       "timestamp": "2026-03-02T10:44:34Z",
       "type": "reddit",
-      "score": 75,
+      "score": 81,
       "selftext_snippet": "Positions since Friday closure. Will 100% close QQQ puts on open:\n\n**STNG 300 x 90C exp March 20th**\n\nhttps://preview.redd.it/zff10osu1mmg1.jpg?width=602&format=pjpg&auto=webp&s=09b79901b6b334c8b44b2927aec4314e9d1efcd7\n\n**OXY 300 x 55C exp March 06th**\n\nhttps://preview.redd.it/hp",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 2 years ago\n**Total Comments** | 604 | **Previous Best DD** | \n**Account Age** | 5 years | | \n\n[**Join WSB Discord**](https://di"
     },
     {
       "id": "reddit_2026-03-02T103304Z",
       "title": "Put me back on the right track?",
-      "summary": "11 upvotes | 17 comments | Post: For the last few years I've been very consistent and doing all rhe good stuff... But the last maybe 6 months I haven't been investing regularly, mainly because I just feel like the market is high/overpriced. \n\nAnyone else slowed their investing? Or are you just closing your eyes  | Top comment: I dont agree with your \"closing your eyes and continuing\". In fact, I think who contribute regularly is the ones keeping ",
+      "summary": "12 upvotes | 21 comments | Post: For the last few years I've been very consistent and doing all rhe good stuff... But the last maybe 6 months I haven't been investing regularly, mainly because I just feel like the market is high/overpriced. \n\nAnyone else slowed their investing? Or are you just closing your eyes  | Top comment: I dont agree with your \"closing your eyes and continuing\". In fact, I think who contribute regularly is the ones keeping ",
       "url": "https://reddit.com/r/investing/comments/1ripeb4/put_me_back_on_the_right_track/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1117,14 +1152,14 @@
       "published": "2026-03-02T10:33:04Z",
       "timestamp": "2026-03-02T10:33:04Z",
       "type": "reddit",
-      "score": 11,
+      "score": 12,
       "selftext_snippet": "For the last few years I've been very consistent and doing all rhe good stuff... But the last maybe 6 months I haven't been investing regularly, mainly because I just feel like the market is high/overpriced. \n\nAnyone else slowed their investing? Or are you just closing your eyes ",
       "top_comment_snippet": "I dont agree with your \"closing your eyes and continuing\". In fact, I think who contribute regularly is the ones keeping their eyes open. By stopping your investments, you are ignoring key historical data.\n\nThe current m"
     },
     {
       "id": "reddit_2026-03-02T101255Z",
       "title": "so many people will be obliterated by close",
-      "summary": "2455 upvotes | 202 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 169 | **Previous Best DD** | \n**Account Age** | 3 years | | \n\n[**Join WSB Discord**](https://dis",
+      "summary": "2846 upvotes | 211 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 169 | **Previous Best DD** | \n**Account Age** | 3 years | | \n\n[**Join WSB Discord**](https://dis",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rip2ap/so_many_people_will_be_obliterated_by_close/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1134,14 +1169,14 @@
       "published": "2026-03-02T10:12:55Z",
       "timestamp": "2026-03-02T10:12:55Z",
       "type": "reddit",
-      "score": 2455,
+      "score": 2846,
       "selftext_snippet": "",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 169 | **Previous Best DD** | \n**Account Age** | 3 years | | \n\n[**Join WSB Discord**](https://dis"
     },
     {
       "id": "reddit_2026-03-02T091201Z",
       "title": "T212 safety concerns: Iran conflict and Cyprus HQ \u2013 Should I move my funds?",
-      "summary": "2 upvotes | 5 comments | Post: Hi everyone,\nI\u2019ve been using Trading 212 for my long-term investments, but the recent escalation in Iran has me seriously worried about the safety of my portfolio.\nSpecifically, I\u2019m concerned about the fact that Trading 212 Markets Ltd is registered and headquartered in Cyprus. G | Top comment: They don't have their HQ in Cyprus, their HQ is on London. Cyprus is just one of their branches (UK, Germany, Australia, Cy",
+      "summary": "3 upvotes | 5 comments | Post: Hi everyone,\nI\u2019ve been using Trading 212 for my long-term investments, but the recent escalation in Iran has me seriously worried about the safety of my portfolio.\nSpecifically, I\u2019m concerned about the fact that Trading 212 Markets Ltd is registered and headquartered in Cyprus. G | Top comment: They don't have their HQ in Cyprus, their HQ is on London. Cyprus is just one of their branches (UK, Germany, Australia, Cy",
       "url": "https://reddit.com/r/investing/comments/1rio2zi/t212_safety_concerns_iran_conflict_and_cyprus_hq/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1152,14 +1187,14 @@
       "published": "2026-03-02T09:12:01Z",
       "timestamp": "2026-03-02T09:12:01Z",
       "type": "reddit",
-      "score": 2,
+      "score": 3,
       "selftext_snippet": "Hi everyone,\nI\u2019ve been using Trading 212 for my long-term investments, but the recent escalation in Iran has me seriously worried about the safety of my portfolio.\nSpecifically, I\u2019m concerned about the fact that Trading 212 Markets Ltd is registered and headquartered in Cyprus. G",
       "top_comment_snippet": "They don't have their HQ in Cyprus, their HQ is on London. Cyprus is just one of their branches (UK, Germany, Australia, Cyprus, Ireland). Regardless, I don't think there should any concern. If it was based in near the P"
     },
     {
       "id": "reddit_2026-03-02T090042Z",
       "title": "Daily General Discussion and Advice Thread - March 02, 2026",
-      "summary": "5 upvotes | 7 comments | Post: Have a general question? Want to offer some commentary on markets? Maybe you would just like to throw out a neat fact that doesn't warrant a self post? Feel free to post here!\n\nPlease consider consulting our FAQ first -\u00a0[https://www.reddit.com/r/investing/wiki/faq](https://www.re | Top comment: Since this is the advice thread - anyone know if those meal prep delivery services are actually worth it or just overpriced",
+      "summary": "5 upvotes | 8 comments | Post: Have a general question? Want to offer some commentary on markets? Maybe you would just like to throw out a neat fact that doesn't warrant a self post? Feel free to post here!\n\nPlease consider consulting our FAQ first -\u00a0[https://www.reddit.com/r/investing/wiki/faq](https://www.re | Top comment: Since this is the advice thread - anyone know if those meal prep delivery services are actually worth it or just overpriced",
       "url": "https://reddit.com/r/investing/comments/1rinwf2/daily_general_discussion_and_advice_thread_march/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1178,7 +1213,7 @@
     {
       "id": "reddit_2026-03-02T085548Z",
       "title": "Waiting for Market Open With Oil Calls Loaded Up :salute:",
-      "summary": "27 upvotes | 9 comments | Post: US open takes too long over the weekend. | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | just now\n**Total Comments** | 0 | **Previous Best DD** | \n**Account Age** | 2 years | | \n\n[**Join WSB Discord**](https://discord.",
+      "summary": "35 upvotes | 9 comments | Post: US open takes too long over the weekend. | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | just now\n**Total Comments** | 0 | **Previous Best DD** | \n**Account Age** | 2 years | | \n\n[**Join WSB Discord**](https://discord.",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rintl1/waiting_for_market_open_with_oil_calls_loaded_up/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1188,14 +1223,14 @@
       "published": "2026-03-02T08:55:48Z",
       "timestamp": "2026-03-02T08:55:48Z",
       "type": "reddit",
-      "score": 27,
+      "score": 35,
       "selftext_snippet": "US open takes too long over the weekend.",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | just now\n**Total Comments** | 0 | **Previous Best DD** | \n**Account Age** | 2 years | | \n\n[**Join WSB Discord**](https://discord."
     },
     {
       "id": "reddit_2026-03-02T085157Z",
       "title": "Should I do a Roth or traditional 401k?",
-      "summary": "0 upvotes | 21 comments | Post: I am 23 and I graduate in May and will be making 120-130k in Texas depending on bonus size. As of now I have about 31k in a ROTH IRA and 4.2k in a taxable brokerage account. However, of course when I start my job I my tax bracket will increase drastically. I plan on 100% maxing o | Top comment: If you think you\u2019ll move into the 32% bracket within 5-10 years. You probably want to do Roth now, and switch to trad when",
+      "summary": "0 upvotes | 24 comments | Post: I am 23 and I graduate in May and will be making 120-130k in Texas depending on bonus size. As of now I have about 31k in a ROTH IRA and 4.2k in a taxable brokerage account. However, of course when I start my job I my tax bracket will increase drastically. I plan on 100% maxing o | Top comment: If you think you\u2019ll move into the 32% bracket within 5-10 years. You probably want to do Roth now, and switch to trad when",
       "url": "https://reddit.com/r/investing/comments/1rinrfd/should_i_do_a_roth_or_traditional_401k/",
       "source": "Reddit: r/investing",
       "category": [
@@ -1211,7 +1246,7 @@
     {
       "id": "reddit_2026-03-02T085002Z",
       "title": "Remember...",
-      "summary": "748 upvotes | 13 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 1080 | **Previous Best DD** | \n**Account Age** | 9 years | | \n\n[**Join WSB Discord**](https://di",
+      "summary": "849 upvotes | 15 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 1080 | **Previous Best DD** | \n**Account Age** | 9 years | | \n\n[**Join WSB Discord**](https://di",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rinq9k/remember/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1220,14 +1255,14 @@
       "published": "2026-03-02T08:50:02Z",
       "timestamp": "2026-03-02T08:50:02Z",
       "type": "reddit",
-      "score": 748,
+      "score": 849,
       "selftext_snippet": "",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 10 | **First Seen In WSB** | 1 year ago\n**Total Comments** | 1080 | **Previous Best DD** | \n**Account Age** | 9 years | | \n\n[**Join WSB Discord**](https://di"
     },
     {
       "id": "reddit_2026-03-02T081328Z",
       "title": "The mf who bought gold and crude oil x3 ETF on Friday",
-      "summary": "5178 upvotes | 193 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | just now\n**Total Comments** | 0 | **Previous Best DD** | \n**Account Age** | 2 weeks | | \n\n[**Join WSB Discord**](https://discord.",
+      "summary": "6038 upvotes | 223 comments | Top comment: **User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | just now\n**Total Comments** | 0 | **Previous Best DD** | \n**Account Age** | 2 weeks | | \n\n[**Join WSB Discord**](https://discord.",
       "url": "https://reddit.com/r/wallstreetbets/comments/1rin5l8/the_mf_who_bought_gold_and_crude_oil_x3_etf_on/",
       "source": "Reddit: r/wallstreetbets",
       "category": [
@@ -1236,42 +1271,9 @@
       "published": "2026-03-02T08:13:28Z",
       "timestamp": "2026-03-02T08:13:28Z",
       "type": "reddit",
-      "score": 5178,
+      "score": 6038,
       "selftext_snippet": "",
       "top_comment_snippet": "**User Report**| | | |\n:--|:--|:--|:--\n**Total Submissions** | 1 | **First Seen In WSB** | just now\n**Total Comments** | 0 | **Previous Best DD** | \n**Account Age** | 2 weeks | | \n\n[**Join WSB Discord**](https://discord."
-    },
-    {
-      "id": "reddit_2026-03-02T071554Z",
-      "title": "Dead Internet Theory - Long Term Opportunities",
-      "summary": "352 upvotes | 115 comments | Post: Hi guys,\n\nI was thinking about the dead internet theory and the investment opportunities it creates. In the last couple of decades a lot of business models have shrunken or died because the internet offers a superior experience; online shopping, video rental, etc... but also more | Top comment: People are trashing your idea but I personally find an outside-the-box post like this (and not one related to PayPal, A",
-      "url": "https://reddit.com/r/investing/comments/1rim8e6/dead_internet_theory_long_term_opportunities/",
-      "source": "Reddit: r/investing",
-      "category": [
-        "other"
-      ],
-      "published": "2026-03-02T07:15:54Z",
-      "timestamp": "2026-03-02T07:15:54Z",
-      "type": "reddit",
-      "score": 352,
-      "selftext_snippet": "Hi guys,\n\nI was thinking about the dead internet theory and the investment opportunities it creates. In the last couple of decades a lot of business models have shrunken or died because the internet offers a superior experience; online shopping, video rental, etc... but also more",
-      "top_comment_snippet": "People are trashing your idea but I personally find an outside-the-box post like this (and not one related to PayPal, Adobe or Novo) refreshing."
-    },
-    {
-      "id": "reddit_2026-03-02T061232Z",
-      "title": "Made some money, not sure what to do with it.",
-      "summary": "43 upvotes | 38 comments | Post: Hi everyone, on an anonymous account since I didn\u2019t want people to know my current situation for those who know me.\n\nTo put it quick, I\u2019m in a situation where I\u2019m \n\nvery lucky but I\u2019m not sure what to do, or where to learn.\n\nI\u2019m 25y/o making 93k a year in my job, I\u2019ve recently re | Top comment: Are you making quarterly estimated tax payments?  If not, I would hire a CPA and get your accounting and taxes in order b",
-      "url": "https://reddit.com/r/investing/comments/1ril57t/made_some_money_not_sure_what_to_do_with_it/",
-      "source": "Reddit: r/investing",
-      "category": [
-        "financial",
-        "macro"
-      ],
-      "published": "2026-03-02T06:12:32Z",
-      "timestamp": "2026-03-02T06:12:32Z",
-      "type": "reddit",
-      "score": 43,
-      "selftext_snippet": "Hi everyone, on an anonymous account since I didn\u2019t want people to know my current situation for those who know me.\n\nTo put it quick, I\u2019m in a situation where I\u2019m \n\nvery lucky but I\u2019m not sure what to do, or where to learn.\n\nI\u2019m 25y/o making 93k a year in my job, I\u2019ve recently re",
-      "top_comment_snippet": "Are you making quarterly estimated tax payments?  If not, I would hire a CPA and get your accounting and taxes in order before you start investing."
     }
   ],
   "stats": {
