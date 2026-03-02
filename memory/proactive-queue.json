@@ -28,10 +28,10 @@
       "title": "Verify signal deduplication is working - check sent_signals.json",
       "project": "projects/market-intel",
       "priority": "P1",
-      "status": "todo",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Confirm no duplicate signals sent since fix"
+      "notes": "Deduplication verified - sent_signals.json tracking working, logic in sent_signals.py functional, no duplicates detected"
     },
     {
       "id": "mi-queue-008",
