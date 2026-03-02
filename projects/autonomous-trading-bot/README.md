@@ -2,6 +2,51 @@
 
 This project is currently a **paper-trading safety foundation**.
 
+## Quick Start
+
+### 1. Prerequisites
+- Python 3.9+
+- Alpaca paper trading account (free) — get API keys at [alpaca.markets](https://alpaca.markets/)
+
+### 2. Setup
+```bash
+# Clone and enter project
+cd projects/autonomous-trading-bot
+
+# Create virtualenv
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt  # if exists, otherwise skip
+
+# Copy env template
+cp .env.example .env
+```
+
+### 3. Run a Test Signal
+```bash
+# Dry-run simulation (no execution)
+python3 scripts/dry_run.py
+```
+
+Or use the local webhook receiver:
+```bash
+# Start receiver
+python3 -m src.webhook_receiver &
+
+# Send test signal
+curl -X POST http://127.0.0.1:8000/webhook \
+  -H "Content-Type: application/json" \
+  -d '{"symbol":"AAPL","side":"buy","qty":1,"timestamp":"2026-03-01T12:00:00Z"}'
+```
+
+### 4. Check Execution
+- Logs: `logs/webhook_decisions.jsonl`
+- Simulation results: `data/simulations/latest_run.json`
+
+---
+
 ## Current Status
 - Paper mode scaffolding only
 - Risk guards implemented (non-execution)
