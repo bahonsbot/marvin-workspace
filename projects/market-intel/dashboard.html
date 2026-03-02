@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Signal Accuracy Dashboard</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #eee; margin: 0; padding: 20px; }
+        h1, h2 { color: #fff; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .card { background: #16213e; border-radius: 12px; padding: 20px; }
+        .card h3 { margin: 0 0 10px 0; color: #aaa; font-size: 14px; text-transform: uppercase; }
+        .card .value { font-size: 36px; font-weight: bold; color: #4ade80; }
+        .card .value.warning { color: #fbbf24; }
+        .card .value.error { color: #f87171; }
+        .section { background: #16213e; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #2a2a4a; }
+        th { color: #aaa; font-weight: 600; font-size: 12px; text-transform: uppercase; }
+        .progress { background: #2a2a4a; border-radius: 4px; height: 20px; width: 150px; }
+        .bar { background: linear-gradient(90deg, #4ade80, #22c55e); border-radius: 4px; height: 100%; text-align: center; font-size: 12px; color: #000; font-weight: bold; }
+        .timestamp { color: #666; font-size: 12px; text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Signal Accuracy Dashboard</h1>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Total Tracked</h3>
+                <div class="value">11</div>
+            </div>
+            <div class="card">
+                <h3>Verified</h3>
+                <div class="value">9</div>
+            </div>
+            <div class="card">
+                <h3>Pending</h3>
+                <div class="value warning">2</div>
+            </div>
+            <div class="card">
+                <h3>Accuracy</h3>
+                <div class="value">88.9%</div>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Correct</h3>
+                <div class="value" style="color: #4ade80;">8</div>
+            </div>
+            <div class="card">
+                <h3>Partial</h3>
+                <div class="value warning">1</div>
+            </div>
+            <div class="card">
+                <h3>Incorrect</h3>
+                <div class="value error">0</div>
+            </div>
+            <div class="card">
+                <h3>Last Updated</h3>
+                <div class="value" style="font-size: 18px;">2026-03-02</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📁 By Category</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Correct</th>
+                        <th>Partial</th>
+                        <th>Incorrect</th>
+                        <th>Total</th>
+                        <th>Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td>geopolitical</td>
+            <td>5</td>
+            <td>0</td>
+            <td>0</td>
+            <td>5</td>
+            <td><strong>100.0%</strong></td>
+        </tr>
+        <tr>
+            <td>macroeconomic</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>2</td>
+            <td><strong>50.0%</strong></td>
+        </tr>
+        <tr>
+            <td>financial_credit</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td><strong>100.0%</strong></td>
+        </tr>
+        <tr>
+            <td>sentiment_social</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td><strong>100.0%</strong></td>
+        </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>📈 Accuracy Over Time</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Verified</th>
+                        <th>Correct</th>
+                        <th>Running Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td>2026-02-28</td>
+            <td>1</td>
+            <td>1</td>
+            <td>
+                <div class="progress">
+                    <div class="bar" style="width: 100.0%">100.0%</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>2026-03-02</td>
+            <td>9</td>
+            <td>8</td>
+            <td>
+                <div class="progress">
+                    <div class="bar" style="width: 88.9%">88.9%</div>
+                </div>
+            </td>
+        </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>📋 Recent Signals</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Added</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td>⏳</td>
+            <td>Gas prices soar as Iranian attacks shut down Qatar...</td>
+            <td>geopolitical</td>
+            <td>2026-03-02</td>
+        </tr>
+        <tr>
+            <td>⏳</td>
+            <td>Oil and gas prices soar and stocks slide as Middle...</td>
+            <td>geopolitical</td>
+            <td>2026-03-02</td>
+        </tr>
+        <tr>
+            <td>✅</td>
+            <td>Retail investors shun private credit funds after B...</td>
+            <td>sentiment_social</td>
+            <td>2026-03-02</td>
+        </tr>
+        <tr>
+            <td>✅</td>
+            <td>Oil prices forecast to jump despite Opec+ pledge t...</td>
+            <td>geopolitical</td>
+            <td>2026-03-02</td>
+        </tr>
+        <tr>
+            <td>✅</td>
+            <td>Opec+ to raise oil output in bid to calm markets a...</td>
+            <td>geopolitical</td>
+            <td>2026-03-01</td>
+        </tr>
+        <tr>
+            <td>⚠️</td>
+            <td>Trump disbanded NSC pandemic unit that experts had...</td>
+            <td>macroeconomic</td>
+            <td>2026-03-01</td>
+        </tr>
+        <tr>
+            <td>✅</td>
+            <td>Military briefing: The US-Israeli strikes and Iran...</td>
+            <td>geopolitical</td>
+            <td>2026-03-01</td>
+        </tr>
+        <tr>
+            <td>✅</td>
+            <td>Iran launches retaliatory attack on Israel, Saudi ...</td>
+            <td>geopolitical</td>
+            <td>2026-03-01</td>
+        </tr>
+        <tr>
+            <td>✅</td>
+            <td>Israel increasingly sure Iran’s Khamenei has been ...</td>
+            <td>macroeconomic</td>
+            <td>2026-03-01</td>
+        </tr>
+        <tr>
+            <td>✅</td>
+            <td>Trump embraces longtime US foe Putin, doubting own...</td>
+            <td>geopolitical</td>
+            <td>2026-02-28</td>
+        </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="timestamp">
+            Generated: 2026-03-02 23:13:54
+        </div>
+    </div>
+</body>
+</html>
