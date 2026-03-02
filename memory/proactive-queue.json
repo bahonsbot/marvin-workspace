@@ -44,9 +44,11 @@
       "title": "Analyze signal accuracy by category - identify best/worst performing patterns",
       "project": "projects/market-intel",
       "priority": "P2",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
       "phase2_eligible": true,
+      "completed_at": "2026-03-02T21:24:00+08:00",
+      "completion_note": "Category accuracy analysis complete. Geopolitical (100%), financial_credit (100%), sentiment_social (100%), macroeconomic (50%). Created notes/category-accuracy-2026-03-02.md with findings.",
       "notes": "Now that we have 8 graded signals - run category-level analysis"
     }
   ]
