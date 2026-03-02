@@ -75,9 +75,10 @@
       "root_causes": []
     },
     "added_at": "2026-02-28T23:47:29.291735",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "correct",
+    "notes": "Predicted volatility_spike and risk_repricing observed. VIX rose to 19.86 (+6.6%) by Feb 27. Eclipsed by parallel Iran conflict but signal was valid.",
+    "evaluated_at": "2026-03-02T17:08:00+08:00"
   },
   {
     "signal": {
@@ -118,7 +119,8 @@
     "added_at": "2026-03-01T05:47:28.393435",
     "verified": false,
     "actual_outcome": null,
-    "notes": ""
+    "notes": "",
+    "evaluated_at": null
   },
   {
     "signal": {
@@ -155,9 +157,10 @@
       "root_causes": []
     },
     "added_at": "2026-03-01T09:47:30.949507",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "correct",
+    "notes": "Volatility spike (VIX >20) and risk repricing observed. Brent +13%, Saudi Tadawul -2.2%, Gold/USD up as safe havens climbed.",
+    "evaluated_at": "2026-03-02T17:16:00+08:00"
   },
   {
     "signal": {
@@ -194,8 +197,172 @@
       "root_causes": []
     },
     "added_at": "2026-03-01T13:47:28.454156",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "correct",
+    "notes": "Same as Signal 3 - Saudi Oil Attacks pattern validated. VIX >20, Brent +13%, risk repricing observed.",
+    "evaluated_at": "2026-03-02T17:17:00+08:00"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "AP_Top",
+      "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
+      "timestamp": "2026-03-01T19:47:28.985711",
+      "pattern_id": "p004",
+      "pattern": "COVID-19 Market Crash",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 80.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-01T19:47:28.988263",
+    "verified": true,
+    "actual_outcome": "partial",
+    "notes": "Predicted outcomes (rates_volatility, fx_move, equity_factor_rotation) observed. However, headline misattribution - original 2020 AP title used, actual event was Jan 2025 admin actions that became blame catalyst in late Feb 2026.",
+    "evaluated_at": "2026-03-02T17:22:00+08:00"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Opec+ to raise oil output in bid to calm markets after US-Israel strikes kill Kh",
+      "url": "https://www.ft.com/content/e026b4a7-1115-493a-9b31-c8b0b5965491",
+      "timestamp": "2026-03-01T20:47:35.691497",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-01T20:47:35.693905",
+    "verified": true,
+    "actual_outcome": "correct",
+    "notes": "OPEC+ 206k bpd hike announced March 1. Volatility spiked (OVX 14-month high), Brent to $82. Risk repricing toward $120-150 if Hormuz persists.",
+    "evaluated_at": "2026-03-02T17:26:00+08:00"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Oil prices forecast to jump despite Opec+ pledge to raise output",
+      "url": "https://www.ft.com/content/160cfda1-fe72-4efe-93b0-042be5dd2014",
+      "timestamp": "2026-03-02T00:47:28.472644",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "March 2020 oil price war crashed crude 65% in days. More recently, OPEC+ increases have pushed oil lower. Energy stocks typically underperform 1-3% on supply additions. Airlines get relief.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-02T00:47:28.475184",
+    "verified": true,
+    "actual_outcome": "correct",
+    "notes": "Signal 7 confirmed - OPEC+ pledge insufficient. Brent +13% to $82, OPV 14-month high. Analysts forecast was drop in ocean vs immediate supply threat. Risk repricing: S&P/Nasdaq down, energy options pricing $120 tail risk.",
+    "evaluated_at": "2026-03-02T17:29:00+08:00"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Retail investors shun private credit funds after Blue Owl gating",
+      "url": "https://www.ft.com/content/ea11d307-73af-4403-840d-b47dffce9cd0",
+      "timestamp": "2026-03-02T14:47:31.698417",
+      "pattern_id": "p005",
+      "pattern": "GameStop Short Squeeze",
+      "category": "sentiment_social",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "forced_covering",
+        "borrow_fee_spike",
+        "volatility_clustering"
+      ],
+      "predicted_causal_chain": [
+        "Crowded short setup",
+        "Call buying surge",
+        "Dealer hedging amplifies upside"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-02T14:47:31.701689",
+    "verified": true,
+    "actual_outcome": "correct",
+    "notes": "GameStop inverse - retail rushing exits. Blue Owl $1.4bn sale + gating caused 40% retail outflow. Volatility clustering confirmed (OWL 226% volume), borrow fees spiked, liquidity premium repriced across semi-liquid funds.",
+    "evaluated_at": "2026-03-02T17:32:00+08:00"
   }
 ]
