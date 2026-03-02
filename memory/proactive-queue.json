@@ -38,10 +38,10 @@
       "title": "Research Reddit API changes - check if alternative needed",
       "project": "projects/market-intel",
       "priority": "P2",
-      "status": "todo",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Reddit may have changed API - verify monitoring still works"
+      "notes": "Reddit monitor using public JSON endpoints - currently working. No API changes affecting operation. Last run March 2 2026 - data collected successfully."
     }
   ]
 }
