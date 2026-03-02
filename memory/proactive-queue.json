@@ -1,7 +1,7 @@
 {
   "version": 1,
   "mode": "phase-2",
-  "updated_at": "2026-03-02T22:22:00+08:00",
+  "updated_at": "2026-03-02T22:27:00+08:00",
   "items": [
     {
       "id": "trading-queue-007",
@@ -16,10 +16,10 @@
       "title": "Test new RSS feeds - verify they're working",
       "project": "projects/market-intel",
       "priority": "P1",
-      "status": "todo",
+      "status": "done",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Run rss_monitor and confirm Yahoo, CNBC, Reuters feeds return data"
+      "notes": "Run rss_monitor and confirm Yahoo, CNBC, Reuters feeds return data. ✅ Results: 20 feeds scanned, 10 success (50% hit rate). Working feeds: Yahoo_Finance ✓, CNBC_Top ✓, Reuters_BreakingViews ✓. Failed: Reuters_Finance (URL control chars), Business_Bloomberg, FinancialJuice, YCombinator, ZeroHedge, UnusualWhales. 98 matching entries found."
     },
     {
       "id": "trading-queue-008",
