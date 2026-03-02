@@ -6,6 +6,7 @@
 ## Active Hours
 - **Default:** Active between 09:00 - 22:00 Asia/Ho_Chi_Minh (GMT+7) time
 - Outside these hours: stay quiet unless urgent
+- **Note:** Heartbeat runs 24/7 for project work, only messages during active hours
 
 ## Model
 - **Default model:** MiniMax-M2.5 (minimax/MiniMax-M2.5)
