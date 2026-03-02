@@ -22,34 +22,33 @@
 1. Review recent memory/daily notes for updates
 2. Check for pending fixes or documented issues
 3. Run quick system health checks
-4. Proactive Execution Phase 1 (discovery-only, no autonomous file-changing actions)
+4. Proactive Execution (active - Phase 2)
 
-## Proactive Execution (Phase 1: Discovery Only)
+## Proactive Execution (Phase 2)
 
-Goal: build proactive rhythm without taking autonomous write actions yet.
+Goal: make steady progress on project tasks between prompts.
 
 Per heartbeat:
 1. Check for candidate work in this order:
    - `memory/proactive-queue.json` (if present)
    - `projects/*/TASKS.md`
    - latest `memory/YYYY-MM-DD.md` open items
-2. Select one best next task and perform readiness checks only:
-   - Is scope clear enough?
-   - Is it safe and non-destructive?
-   - Is required context/access available?
-3. If ready, prepare a one-line proposed action for next execution window.
-4. If blocked, prepare blocker summary with recommendation.
+2. Select one eligible task (priority, ready=true, phase2_eligible=true)
+3. Execute one focused chunk (10-20 min):
+   - Safe, bounded work
+   - Verify result before marking done
+4. Log outcome to queue file + daily memory
+5. If milestone/blocker, message user
 
-Restrictions in Phase 1:
-- Do not execute autonomous file edits for project tasks.
-- Do not run risky/destructive commands.
-- Do not send routine status pings.
-- Only message user on meaningful blocker or priority conflict.
+Restrictions:
+- No external/public actions
+- No destructive operations without approval
+- Stay quiet on routine progress
 
-Sub-agent routing for queue work:
-- Discovery-only checks may run directly in main session.
-- Any execution/investigation/coding/multi-step queue work must spawn a sub-agent per `SUBAGENT-POLICY.md`.
-- Announce every sub-agent spawn and completion to the user.
+Sub-agent routing:
+- Use Codex for coding tasks
+- Use MiniMax for research/data tasks
+- Announce every spawn + completion
 
 ## When to Stay Quiet (HEARTBEAT_OK)
 - Outside active hours (22:00-09:00)

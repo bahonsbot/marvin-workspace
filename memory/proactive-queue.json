@@ -1,41 +1,57 @@
 {
   "version": 1,
-  "mode": "phase-1-discovery",
-  "updated_at": "2026-03-01T12:16:24Z",
+  "mode": "phase-2",
+  "updated_at": "2026-03-02T20:47:00+08:00",
   "items": [
     {
-      "id": "mi-queue-002",
-      "title": "Analyze signal accuracy trends over last 7 days and identify top 3 best/worst performing causal categories",
-      "project": "projects/market-intel",
-      "priority": "P1",
-      "status": "done",
-      "ready": true,
-      "phase2_eligible": true,
-      "notes": "Completed 2026-03-01: 7-day analysis generated in projects/market-intel/notes/accuracy-trend-7d-2026-03-01.md. Data currently insufficient for valid top-3 best/worst ranking (only 1 verified signal). Next: clear verification backlog (3 geopolitical, 1 macroeconomic pending) then rerun ranking."
-    },
-    {
-      "id": "minr-queue-002",
-      "title": "Implement quick-fix for js_blob artifact class in article excerpt enrichment",
-      "project": "projects/market-intel-news-reader",
-      "priority": "P2",
-      "status": "done",
-      "ready": true,
-      "phase2_eligible": true,
-      "notes": "Quick win from audit findings; strip obvious JS blob patterns from fetched excerpts.",
-      "completion_note": "Implemented js_blob guardrails for article excerpt enrichment in rss_monitor and news-reader feed transform; verified with sample Closure-library blob that excerpt is dropped from output.",
-      "completed_at": "2026-03-01T11:44:32.182237Z"
-    },
-    {
-      "id": "hpms-queue-002",
-      "title": "Create database schema draft for Horizons PMS (rooms, bookings, guests, rates tables)",
+      "id": "hpms-queue-003",
+      "title": "Implement core database schema for Horizons PMS",
       "project": "projects/horizons-pms",
       "priority": "P1",
-      "status": "completed",
+      "status": "todo",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "From TASKS.md backlog; requires design doc before implementation.",
-      "completion_note": "Created Phase 1 schema draft at projects/horizons-pms/db/schema.sql with rooms/bookings/guests/rates (+ room_types lookup), constraints, FKs, overlap prevention, indexes, and design notes in projects/horizons-pms/db/README.md.",
-      "completed_at": "2026-03-01T12:16:24Z"
+      "notes": "From TASKS.md - create rooms, bookings, guests, rates tables in Supabase"
+    },
+    {
+      "id": "hpms-queue-004",
+      "title": "Seed initial operational data (4 room types + 76 units)",
+      "project": "projects/horizons-pms",
+      "priority": "P1",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "From TASKS.md - populate initial hotel data"
+    },
+    {
+      "id": "trading-queue-001",
+      "title": "Review webhook_decisions.jsonl and identify patterns in denied signals",
+      "project": "projects/autonomous-trading-bot",
+      "priority": "P1",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Analyze why signals get denied (kill switch, loss cap, invalid data)"
+    },
+    {
+      "id": "trading-queue-002",
+      "title": "Add test cases for risk_manager guard functions",
+      "project": "projects/autonomous-trading-bot",
+      "priority": "P2",
+      "status": "todo",
+      "ready": false,
+      "phase2_eligible": false,
+      "notes": "Need pytest installed first - blocked"
+    },
+    {
+      "id": "mi-queue-003",
+      "title": "Verify pending geopolitical/macro signals from grading session",
+      "project": "projects/market-intel",
+      "priority": "P1",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": false,
+      "notes": "Signal 2 (Iran/Khamenei) was deferred - check if verifiable now"
     }
   ]
 }
