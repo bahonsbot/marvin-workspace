@@ -18,10 +18,10 @@
       "title": "Document all environment variables needed for trading-bot",
       "project": "projects/autonomous-trading-bot",
       "priority": "P1",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
       "phase2_eligible": true,
-      "notes": "Create README section or .env.example with all vars explained"
+      "notes": "Created notes/env-variables.md with full var documentation"
     },
     {
       "id": "mi-queue-005",
