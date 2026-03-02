@@ -1,57 +1,49 @@
 {
   "version": 1,
   "mode": "phase-2",
-  "updated_at": "2026-03-02T20:47:00+08:00",
+  "updated_at": "2026-03-02T20:55:00+08:00",
   "items": [
-    {
-      "id": "hpms-queue-003",
-      "title": "Implement core database schema for Horizons PMS",
-      "project": "projects/horizons-pms",
-      "priority": "P1",
-      "status": "todo",
-      "ready": true,
-      "phase2_eligible": true,
-      "notes": "From TASKS.md - create rooms, bookings, guests, rates tables in Supabase"
-    },
-    {
-      "id": "hpms-queue-004",
-      "title": "Seed initial operational data (4 room types + 76 units)",
-      "project": "projects/horizons-pms",
-      "priority": "P1",
-      "status": "todo",
-      "ready": true,
-      "phase2_eligible": true,
-      "notes": "From TASKS.md - populate initial hotel data"
-    },
     {
       "id": "trading-queue-001",
       "title": "Review webhook_decisions.jsonl and identify patterns in denied signals",
       "project": "projects/autonomous-trading-bot",
       "priority": "P1",
-      "status": "todo",
+      "status": "completed",
       "ready": true,
       "phase2_eligible": true,
+      "completed_at": "2026-03-02T20:59:00+08:00",
+      "completion_note": "Analyzed webhook_decisions.jsonl - no denied signals found (4/4 accepted). Execution blocked by Alpaca URL config issue.",
       "notes": "Analyze why signals get denied (kill switch, loss cap, invalid data)"
     },
     {
       "id": "trading-queue-002",
-      "title": "Add test cases for risk_manager guard functions",
+      "title": "Document webhook API endpoint setup for TradingView alerts",
       "project": "projects/autonomous-trading-bot",
-      "priority": "P2",
+      "priority": "P1",
       "status": "todo",
-      "ready": false,
-      "phase2_eligible": false,
-      "notes": "Need pytest installed first - blocked"
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Create simple guide: how to connect TradingView webhook to our endpoint"
     },
     {
       "id": "mi-queue-003",
-      "title": "Verify pending geopolitical/macro signals from grading session",
+      "title": "Verify pending geopolitical/macro signal (Iran/Khamenei)",
       "project": "projects/market-intel",
       "priority": "P1",
       "status": "todo",
       "ready": true,
-      "phase2_eligible": false,
-      "notes": "Signal 2 (Iran/Khamenei) was deferred - check if verifiable now"
+      "phase2_eligible": true,
+      "notes": "Signal 2 from grading session was deferred - check if verifiable now"
+    },
+    {
+      "id": "mi-queue-004",
+      "title": "Analyze signal accuracy by category - identify best/worst performing patterns",
+      "project": "projects/market-intel",
+      "priority": "P2",
+      "status": "todo",
+      "ready": true,
+      "phase2_eligible": true,
+      "notes": "Now that we have 8 graded signals - run category-level analysis"
     }
   ]
 }

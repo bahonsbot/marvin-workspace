@@ -364,5 +364,44 @@
     "actual_outcome": "correct",
     "notes": "GameStop inverse - retail rushing exits. Blue Owl $1.4bn sale + gating caused 40% retail outflow. Volatility clustering confirmed (OWL 226% volume), borrow fees spiked, liquidity premium repriced across semi-liquid funds.",
     "evaluated_at": "2026-03-02T17:32:00+08:00"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Oil and gas prices soar and stocks slide as Middle East conflict escalates",
+      "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
+      "timestamp": "2026-03-02T20:47:43.963112",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-02T20:47:43.965939",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
   }
 ]

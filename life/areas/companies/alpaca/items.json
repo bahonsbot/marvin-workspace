@@ -1,0 +1,15 @@
+[
+  {
+    "id": "alpaca-001",
+    "fact": "Alpaca is the broker integration selected for Autonomous Trading Bot paper-trading execution via endpoint https://paper-api.alpaca.markets.",
+    "category": "status",
+    "timestamp": "2026-03-01T23:00:00+08:00",
+    "source": "memory/2026-03-01.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-01",
+    "accessCount": 1
+  }
+]

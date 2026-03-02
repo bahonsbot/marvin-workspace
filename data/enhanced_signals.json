@@ -1,0 +1,43 @@
+=== MARKET INTEL: REASONING ANALYSIS ===
+
+📊 Total: 29
+   🟢 STRONG BUY: 17
+   🟢 BUY: 8
+   🟡 HOLD: 4
+
+🎯 TOP SIGNALS WITH REASONING:
+
+[STRONG BUY] 80/100
+  Trump disbanded NSC pandemic unit that experts had praised -...
+  Source: AP_Top
+  Reasoning: moderate source, strong historical pattern match.
+  📈 Predicted: rates_volatility → fx_move → equity_factor_rotation
+
+[STRONG BUY] 80/100
+  Ghana says at least 55 of its people killed after Russia 'lu...
+  Source: Guardian_World
+  Reasoning: moderate source, strong historical pattern match.
+  📈 Predicted: volatility_spike → risk_repricing
+  💡 Feb 2022 peace talk failures preceded the invasion — markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.
+
+[STRONG BUY] 80/100
+  'A devastating force': how recent storms turned to tragedies...
+  Source: Guardian_World
+  Reasoning: moderate source, strong historical pattern match.
+  📈 Predicted: forced_covering → borrow_fee_spike → volatility_clustering
+
+[STRONG BUY] 80/100
+  Oil price expected to surge after Iran strikes and strait of...
+  Source: Guardian_Business
+  Reasoning: moderate source, strong historical pattern match.
+  📈 Predicted: volatility_spike → risk_repricing
+  💡 Similar to Oct 2023 when Iran attacked Israel — oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.
+
+[STRONG BUY] 80/100
+  Stocks face Iran jitters and a crucial jobs report in the we...
+  Source: MarketWatch
+  Reasoning: moderate source, strong historical pattern match.
+  📈 Predicted: rates_volatility → fx_move → equity_factor_rotation
+  💡 Similar to Oct 2023 when Iran attacked Israel — oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.
+
+✓ Saved 29 enhanced signals to data/enhanced_signals.json
