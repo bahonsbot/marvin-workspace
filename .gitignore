@@ -20,3 +20,4 @@ auth.json
 !SUBAGENT-POLICY.md
 *.py
 blender-test/
+.env
