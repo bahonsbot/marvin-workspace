@@ -66,6 +66,12 @@ curl -X POST http://127.0.0.1:8000/webhook \
 4. **Risk guards run before any execution logic**.
 5. **Live trading is prohibited**. If execution is enabled, it must use Alpaca paper endpoint only.
 
+## Secret Hygiene (.env)
+- `.env` is local-only and must never be committed.
+- Never print environment variable values in logs or chat outputs.
+- Keep only placeholders in `.env.example`.
+- If a secret is exposed, rotate it immediately.
+
 ## Project Structure
 
 ```text
