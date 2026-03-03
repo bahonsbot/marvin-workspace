@@ -86,6 +86,8 @@
   - `projects/market-intel/` — Signal generation + reasoning engine
   - `projects/market-intel-news-reader/` — PWA news reader app
 - **Evaluation preference (Mar 2026):** During manual signal reviews, keep Philippe's full evidence/context notes and feed them back into reasoning improvements, not just outcome labels.
+- **Model-learning upgrade (Mar 3, 2026):** Added structured `evidence_pack` workflow + `model_feedback.json` so reasoning scores can be nudged by validated historical outcomes (with legacy outcome compatibility).
+- **Current tracker state (Mar 3, 2026):** 14/14 verified, 0 pending, weighted accuracy 96.4%, evidence coverage 100%.
 - **Status:** Signal generation, causal chains, and accuracy tracking all working
 - **Signal volume:** 36 signals across 5 categories (geopolitical, financial, sentiment, corporate, macro)
 - **Knowledge graph:** 25 causal chain templates with historical context/briefings
@@ -191,7 +193,7 @@ I have powerful tools at my disposal — I sometimes forget to use them. Philipp
 ### Docker + Cron Access (Feb 2026)
 - Cron jobs configured in `/data/.openclaw/cron/jobs.json`
 - Can edit cron delivery mode: "none" (silent), "telegram" (external), "both" (internal + external)
-- Platform-health-council and self-improvement set to "both" so reports save to workspace AND Telegram
+- Platform-health-council and self-improvement are set to internal cron delivery (`mode: none`) with in-task Telegram sends to avoid announce-channel failures
 - Workspace access includes: workspace/, cron/, skills/, ~/.codex/
 - Core config (openclaw.json): edit with caution - past bad edits caused boot issues
 
