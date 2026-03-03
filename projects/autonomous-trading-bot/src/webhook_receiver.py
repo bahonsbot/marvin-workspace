@@ -217,9 +217,17 @@ class WebhookHandler(BaseHTTPRequestHandler):
 
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     """Run the local webhook HTTP server."""
+    allow_non_local = _env_flag("ALLOW_NON_LOCALHOST_BIND", default=False)
+    if host not in {"127.0.0.1", "localhost", "::1"} and not allow_non_local:
+        raise ValueError(
+            f"Refusing to bind webhook receiver to non-local host '{host}'. "
+            "Set ALLOW_NON_LOCALHOST_BIND=true only for explicit dev/testing use."
+        )
+
     server = ThreadingHTTPServer((host, port), WebhookHandler)
     print(f"Paper-only webhook receiver listening on http://{host}:{port}/webhook")
     print(f"PAPER_EXECUTE={'true' if _env_flag('PAPER_EXECUTE', default=False) else 'false'}")
+    print(f"ALLOW_NON_LOCALHOST_BIND={'true' if allow_non_local else 'false'}")
     print(f"Logging decisions to: {LOG_PATH}")
     server.serve_forever()
 
