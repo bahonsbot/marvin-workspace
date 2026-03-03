@@ -442,9 +442,29 @@
     },
     "added_at": "2026-03-02T00:47:28.475184",
     "verified": true,
-    "actual_outcome": "correct",
-    "notes": "Signal 7 confirmed - OPEC+ pledge insufficient. Brent +13% to $82, OPV 14-month high. Analysts forecast was drop in ocean vs immediate supply threat. Risk repricing: S&P/Nasdaq down, energy options pricing $120 tail risk.",
-    "evaluated_at": "2026-03-02T17:29:00+08:00"
+    "actual_outcome": "STRONG BUY",
+    "notes": "Strongly validated: market ignored near-term OPEC+ calming narrative and repriced immediately on physical supply/transit disruption risk. Forecasted jump despite output pledge played out as predicted.",
+    "evaluated_at": "2026-03-02T17:29:00+08:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Supply pledge was treated as delayed/insufficient; real-time disruption risk dominated price discovery and cross-asset repricing.",
+      "drivers": [
+        "Hormuz transit closure risk",
+        "Ras Tanura disruption shock",
+        "OPEC+ +206k bpd seen as lagged and too small versus immediate risk"
+      ],
+      "metrics": [
+        "Brent gap-up ~13% to ~82",
+        "OVX and energy options tail-risk pricing elevated",
+        "Tanker war-risk/charter premiums jumped sharply (reported 30-50%)"
+      ],
+      "sector_impact": [
+        "Indices opened risk-off (S&P/Nasdaq pressure)",
+        "Energy complex strong; inflation-sensitive sectors repriced",
+        "Electricity/compute-cost sensitivity concern for render-heavy businesses"
+      ],
+      "confidence": "HIGH"
+    }
   },
   {
     "signal": {
