@@ -199,9 +199,31 @@
     },
     "added_at": "2026-03-01T09:47:30.949507",
     "verified": true,
-    "actual_outcome": "correct",
-    "notes": "Volatility spike (VIX >20) and risk repricing observed. Brent +13%, Saudi Tadawul -2.2%, Gold/USD up as safe havens climbed.",
-    "evaluated_at": "2026-03-02T17:16:00+08:00"
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated in real time: Saudi Oil Attacks pattern materialized with direct refinery-impact headlines and broad cross-asset risk repricing. Predicted volatility spike and risk repricing both confirmed.",
+    "evaluated_at": "2026-03-02T17:16:00+08:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Retaliatory strike sequence hit energy infrastructure and triggered textbook volatility/risk repricing.",
+      "drivers": [
+        "Iranian retaliatory multi-front strike cycle",
+        "Ras Tanura refinery disruption risk",
+        "Hormuz blockade escalation risk"
+      ],
+      "metrics": [
+        "VIX breached 20",
+        "Brent surged ~13% to ~82 intraday zone",
+        "Nikkei ~-1.5% close after deeper intraday drawdown",
+        "Tadawul ~-2.2%",
+        "Oil ETF implied vol at multi-month highs"
+      ],
+      "sector_impact": [
+        "Energy outperformed sharply",
+        "Tech/risk assets de-rated",
+        "Safe havens (gold, USD) bid"
+      ],
+      "confidence": "HIGH"
+    }
   },
   {
     "signal": {
