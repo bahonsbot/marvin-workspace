@@ -20,6 +20,7 @@ class ReasoningEngine:
     def __init__(self):
         self.patterns = []
         self.signals = []
+        self.feedback = {}
         self.kg = KnowledgeGraph()  # Initialize knowledge graph
         self.minimum_actionable_score = 50.0
         self.load_data()
@@ -32,6 +33,10 @@ class ReasoningEngine:
         if os.path.exists('data/signals.json'):
             with open('data/signals.json', 'r') as f:
                 self.signals = json.load(f)
+
+        if os.path.exists('data/model_feedback.json'):
+            with open('data/model_feedback.json', 'r') as f:
+                self.feedback = json.load(f)
     
     def calculate_source_credibility(self, source: str) -> float:
         """Calculate source credibility score (0-1)"""
@@ -75,6 +80,31 @@ class ReasoningEngine:
                 return 1.0 if expected_horizon else 0.7
         return 0.5
     
+    def get_feedback_bias(self, signal: Dict) -> Dict:
+        """Return bias points learned from validated historical outcomes."""
+        if not self.feedback:
+            return {
+                'category_bias_points': 0.0,
+                'pattern_bias_points': 0.0,
+                'total_bias_points': 0.0,
+                'feedback_sample_size': 0,
+            }
+
+        category = (signal.get('category') or '').lower()
+        pattern = signal.get('pattern') or signal.get('pattern_id') or ''
+
+        category_bias = self.feedback.get('by_category', {}).get(category, {}).get('bias_points', 0.0)
+        pattern_bias = self.feedback.get('by_pattern', {}).get(pattern, {}).get('bias_points', 0.0)
+
+        # keep small and stable so learned feedback nudges, not dominates
+        total = max(-7.5, min(7.5, category_bias + (0.7 * pattern_bias)))
+        return {
+            'category_bias_points': round(category_bias, 2),
+            'pattern_bias_points': round(pattern_bias, 2),
+            'total_bias_points': round(total, 2),
+            'feedback_sample_size': self.feedback.get('sample_size', 0),
+        }
+
     def calculate_reasoning_score(self, signal: Dict) -> Dict:
         """Calculate overall reasoning score for a signal"""
         source = signal.get('feed', '')
@@ -92,17 +122,23 @@ class ReasoningEngine:
         pattern_strength = self.calculate_pattern_strength(matched_pattern['id']) if matched_pattern else 0.5
         horizon_score = self.calculate_time_horizon_score(signal)
 
-        # Weighted final score
+        # Weighted base score
         # Source credibility: 30%, Pattern strength: 50%, Time horizon: 20%
         final_score = (source_cred * 0.30) + (pattern_strength * 0.50) + (horizon_score * 0.20)
-        score_100 = round(final_score * 100, 1)
+        base_score_100 = round(final_score * 100, 1)
+
+        feedback_bias = self.get_feedback_bias(signal)
+        score_100 = round(max(0.0, min(100.0, base_score_100 + feedback_bias['total_bias_points'])), 1)
 
         return {
             'reasoning_score': score_100,
             'components': {
                 'source_credibility': round(source_cred * 100, 1),
                 'pattern_strength': round(pattern_strength * 100, 1),
-                'time_horizon_fit': round(horizon_score * 100, 1)
+                'time_horizon_fit': round(horizon_score * 100, 1),
+                'base_score': base_score_100,
+                'feedback_bias_points': feedback_bias['total_bias_points'],
+                'feedback_sample_size': feedback_bias['feedback_sample_size']
             },
             'confidence_level': self.get_confidence_label(score_100),
             'recommendation': 'TAKE' if score_100 >= self.minimum_actionable_score else 'SKIP',

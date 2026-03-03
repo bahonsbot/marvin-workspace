@@ -1,7 +1,10 @@
 {
-  "total_verified": 1,
-  "correct": 1,
-  "partial": 0,
-  "accuracy_rate": 100.0,
-  "last_updated": "2026-02-28T21:02:54.753240"
+  "total_verified": 13,
+  "strong_buy": 4,
+  "buy": 0,
+  "hold": 1,
+  "miss": 0,
+  "weighted_accuracy": 96.2,
+  "evidence_coverage": 92.3,
+  "last_updated": "2026-03-03T13:41:03.370808"
 }

@@ -6,19 +6,50 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
+from typing import Any, Dict, List
 
 class AccuracyTracker:
+    OUTCOME_SCORE = {
+        'strong buy': 1.0,
+        'buy': 0.75,
+        'hold': 0.5,
+        'miss': 0.0,
+        'incorrect': 0.0,
+        'partial': 0.5,
+        'correct': 1.0,
+    }
+
     def __init__(self):
         self.data_dir = Path('data')
         self.tracked_file = self.data_dir / 'tracked_signals.json'
         self.history_file = self.data_dir / 'signal_accuracy_history.json'
+        self.feedback_file = self.data_dir / 'model_feedback.json'
         
         # Load tracked signals
-        self.tracked = []
+        self.tracked: List[Dict[str, Any]] = []
         if self.tracked_file.exists():
             with open(self.tracked_file, 'r') as f:
                 self.tracked = json.load(f)
     
+    def _normalize_outcome(self, outcome: str) -> str:
+        return (outcome or '').strip().lower()
+
+    def _outcome_score(self, outcome: str) -> float:
+        return self.OUTCOME_SCORE.get(self._normalize_outcome(outcome), 0.0)
+
+    def _extract_evidence_pack(self, notes: str = '', evidence_pack: Dict[str, Any] | None = None) -> Dict[str, Any]:
+        if evidence_pack:
+            return evidence_pack
+
+        # Backward-compatible fallback: keep raw notes in a structured container
+        return {
+            'summary': notes.strip() if notes else '',
+            'drivers': [],
+            'metrics': [],
+            'sector_impact': [],
+            'confidence': 'MEDIUM' if notes else 'LOW'
+        }
+
     def add_signal(self, signal: dict):
         """Add a signal to track for accuracy"""
         entry = {
@@ -39,47 +70,104 @@ class AccuracyTracker:
         
         print(f"  ✓ Added signal to track: {signal.get('title', '')[:40]}...")
     
-    def evaluate_signal(self, index: int, actual_outcome: str, notes: str = ''):
-        """Manually evaluate a tracked signal"""
+    def evaluate_signal(
+        self,
+        index: int,
+        actual_outcome: str,
+        notes: str = '',
+        evidence_pack: Dict[str, Any] | None = None,
+    ):
+        """Manually evaluate a tracked signal."""
         if index >= len(self.tracked):
             print(f"  ✗ Invalid index {index}")
             return
-        
+
+        normalized_outcome = actual_outcome.strip().upper()
         self.tracked[index]['verified'] = True
-        self.tracked[index]['actual_outcome'] = actual_outcome
+        self.tracked[index]['actual_outcome'] = normalized_outcome
         self.tracked[index]['evaluated_at'] = datetime.now().isoformat()
         self.tracked[index]['notes'] = notes
-        
+        self.tracked[index]['evidence_pack'] = self._extract_evidence_pack(notes, evidence_pack)
+
         with open(self.tracked_file, 'w') as f:
             json.dump(self.tracked, f, indent=2)
-        
-        print(f"  ✓ Evaluated signal {index}: {actual_outcome}")
+
+        print(f"  ✓ Evaluated signal {index}: {normalized_outcome}")
         self.update_accuracy_history()
     
     def update_accuracy_history(self):
-        """Update accuracy statistics"""
+        """Update accuracy statistics and learning feedback."""
         verified = [s for s in self.tracked if s.get('verified')]
-        
+
         if not verified:
             return
-        
-        # Simple accuracy calculation
-        correct = sum(1 for s in verified if s.get('actual_outcome') == 'correct')
-        partial = sum(1 for s in verified if s.get('actual_outcome') == 'partial')
-        
+
+        strong_buy = sum(1 for s in verified if self._normalize_outcome(s.get('actual_outcome', '')) == 'strong buy')
+        buy = sum(1 for s in verified if self._normalize_outcome(s.get('actual_outcome', '')) == 'buy')
+        hold = sum(1 for s in verified if self._normalize_outcome(s.get('actual_outcome', '')) in {'hold', 'partial'})
+        miss = sum(1 for s in verified if self._normalize_outcome(s.get('actual_outcome', '')) in {'miss', 'incorrect'})
+
+        weighted_score = sum(self._outcome_score(s.get('actual_outcome', '')) for s in verified)
+        weighted_accuracy = round((weighted_score / len(verified)) * 100, 1)
+
+        evidence_coverage = round(
+            100 * sum(1 for s in verified if s.get('evidence_pack', {}).get('summary') or s.get('notes')) / len(verified),
+            1,
+        )
+
         stats = {
             'total_verified': len(verified),
-            'correct': correct,
-            'partial': partial,
-            'accuracy_rate': round(correct / len(verified) * 100, 1) if verified else 0,
+            'strong_buy': strong_buy,
+            'buy': buy,
+            'hold': hold,
+            'miss': miss,
+            'weighted_accuracy': weighted_accuracy,
+            'evidence_coverage': evidence_coverage,
             'last_updated': datetime.now().isoformat()
         }
-        
+
         with open(self.history_file, 'w') as f:
             json.dump(stats, f, indent=2)
-        
-        print(f"  ✓ Accuracy: {stats['accuracy_rate']}% ({correct}/{len(verified)})")
+
+        self.update_model_feedback(verified)
+        print(f"  ✓ Weighted accuracy: {weighted_accuracy}% across {len(verified)} verified signals")
     
+    def update_model_feedback(self, verified: List[Dict[str, Any]]):
+        """Build lightweight learning feedback for reasoning engine."""
+        by_category: Dict[str, List[float]] = {}
+        by_pattern: Dict[str, List[float]] = {}
+
+        for row in verified:
+            signal = row.get('signal', {})
+            score = self._outcome_score(row.get('actual_outcome', ''))
+            category = (signal.get('category') or 'unknown').lower()
+            pattern = signal.get('pattern') or signal.get('pattern_id') or 'unknown'
+            by_category.setdefault(category, []).append(score)
+            by_pattern.setdefault(pattern, []).append(score)
+
+        def summarize(bucket: Dict[str, List[float]]) -> Dict[str, Dict[str, float]]:
+            output: Dict[str, Dict[str, float]] = {}
+            for key, vals in bucket.items():
+                avg = sum(vals) / len(vals)
+                # Convert score into bounded bias points for reasoning engine.
+                bias = round((avg - 0.5) * 10, 2)  # range approx -5..+5
+                output[key] = {
+                    'count': len(vals),
+                    'avg_outcome_score': round(avg, 3),
+                    'bias_points': max(-5.0, min(5.0, bias)),
+                }
+            return output
+
+        feedback = {
+            'generated_at': datetime.now().isoformat(),
+            'sample_size': len(verified),
+            'by_category': summarize(by_category),
+            'by_pattern': summarize(by_pattern),
+        }
+
+        with open(self.feedback_file, 'w') as f:
+            json.dump(feedback, f, indent=2)
+
     def get_stats(self):
         """Show current tracking stats"""
         print("\n=== Signal Accuracy Tracker ===")
@@ -95,7 +183,8 @@ class AccuracyTracker:
             if self.history_file.exists():
                 with open(self.history_file, 'r') as f:
                     stats = json.load(f)
-                print(f"\n  Accuracy: {stats.get('accuracy_rate', 0)}%")
+                print(f"\n  Weighted accuracy: {stats.get('weighted_accuracy', 0)}%")
+                print(f"  Evidence coverage: {stats.get('evidence_coverage', 0)}%")
         else:
             print("  No signals tracked yet.")
     
