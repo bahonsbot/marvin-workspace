@@ -85,6 +85,7 @@
 - **Projects:**
   - `projects/market-intel/` — Signal generation + reasoning engine
   - `projects/market-intel-news-reader/` — PWA news reader app
+- **Evaluation preference (Mar 2026):** During manual signal reviews, keep Philippe's full evidence/context notes and feed them back into reasoning improvements, not just outcome labels.
 - **Status:** Signal generation, causal chains, and accuracy tracking all working
 - **Signal volume:** 36 signals across 5 categories (geopolitical, financial, sentiment, corporate, macro)
 - **Knowledge graph:** 25 causal chain templates with historical context/briefings

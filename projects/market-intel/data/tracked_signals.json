@@ -400,9 +400,10 @@
       "root_causes": []
     },
     "added_at": "2026-03-02T20:47:43.965939",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated (Market Shock) - March 2, 2026\nEnergy Markets: Gas Oil +19%, Brent +8%, EU Natural Gas +50%\nEquity Markets: S&P opened -1.2%, airlines/cruises down 4%, global markets fell 2%+\nSafe Havens: Gold touched $5,419/oz, USD rose\nVerdict: Energy/Defense longs winners, travel/logistics shorts winners",
+    "evaluated_at": "2026-03-03T12:46:00+07:00"
   },
   {
     "signal": {
@@ -439,6 +440,128 @@
       "root_causes": []
     },
     "added_at": "2026-03-02T21:47:29.159731",
+    "verified": true,
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated (Market Shock) - March 2, 2026\nQatari Production: Halted at Ras Laffan and Mesaieed (20% global LNG supply)\nEuropean Gas (TTF): +52% (sharpest since Russia-Ukraine war)\nAsian LNG (JKM): +39%\nUK Gas: +43%\nTrade: Long Nat Gas (UNG) or Energy producers were high-performers",
+    "evaluated_at": "2026-03-03T12:48:00+07:00"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Blackstone flagship private credit fund hit with wave of redemptions ",
+      "url": "https://www.ft.com/content/7dadc5b5-d5d2-40d6-9ee0-abcb03e0a598",
+      "timestamp": "2026-03-03T07:47:29.573856",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-03T07:47:29.576872",
+    "verified": true,
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated (Systemic Credit Signal) - March 3, 2026\nRedemption Rate: 7.9% (exceeded 5% cap)\nNet Flow: -$1.7B first major net outflow of 2026\nBlackstone Response: Increased cap to 7%, injected $400M of own capital\nIndustry Impact: Apollo/Ares shares dropped ~8% in sympathy\nTrade: Private credit liquidity squeeze captured correctly",
+    "evaluated_at": "2026-03-03T13:25:00+07:00"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Rubio says US launched strikes on Iran because Israel planned to attack",
+      "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
+      "timestamp": "2026-03-03T11:47:37.469695",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-03T11:47:37.472484",
+    "verified": true,
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated (Geopolitical Trigger Event) - Mar 2-3, 2026\nRubio confirmed US preemptive strike logic tied to expected Israeli unilateral action and automatic Iranian retaliation risk.\nMarket impact: safe-haven bid persisted (gold highs), defense/cyber defense stocks outperformed, conflict-duration premium rose.\nPolitical impact: diplomatic friction and renewed War Powers debate in Congress.\nSignal quality: accurately identified the causal catalyst narrative driving escalation and volatility repricing.",
+    "evaluated_at": "2026-03-03T13:29:00+08:00"
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "\u2018Half of Dubai is booking\u2019: expatriates drive to Oman and Saudi Arabia to find f",
+      "url": "https://www.ft.com/content/7ecea3fe-295d-4592-abf2-206da6f6b8ca",
+      "timestamp": "2026-03-03T12:47:32.445349",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 92.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-03T12:47:32.448023",
     "verified": false,
     "actual_outcome": null,
     "notes": ""
