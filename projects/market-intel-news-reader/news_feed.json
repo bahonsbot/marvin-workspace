@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "generated": "2026-03-03T15:15:53.664788Z",
+  "generated": "2026-03-03T16:15:48.574377Z",
   "categories": [
     "geopolitical",
     "financial",
@@ -11,100 +11,7 @@
   ],
   "items": [
     {
-      "id": "rss_2026-03-03T151542251164Z",
-      "title": "Average price for a gallon of gas rises 11 cents overnight to about $3.11 in US, AAA says",
-      "summary": "The average price for a gallon of gasoline jumped 11 cents overnight to about $3.11 in the U.S., according to motor club AAA. Gas prices were already rising before the U.S. launched strikes on Iran as refiners switch over to summer blends o",
-      "url": "https://finance.yahoo.com/news/average-price-gallon-gas-rises-135037000.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Tue, 03 Mar 2026 13:50:37 GMT",
-      "timestamp": "2026-03-03T15:15:42.251164Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151542251113Z",
-      "title": "Nvidia-backed Ayar Labs raises $500 million at $3.75 billion valuation",
-      "summary": "Nvidia-backed Ayar Labs, which develops chips that transmit data using light, said \u200con Tuesday it has raised $500 million in \u200ca series E round at a valuation of $3.75 billion. The latest \u200bround, which brings its total funding to $870 millio",
-      "url": "https://finance.yahoo.com/news/nvidia-backed-ayar-labs-raises-135141429.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "geopolitical"
-      ],
-      "published": "Tue, 03 Mar 2026 13:51:41 GMT",
-      "timestamp": "2026-03-03T15:15:42.251113Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151542251046Z",
-      "title": "Aspen Pharmacare aims for Canada entry with Ozempic generic by third quarter",
-      "summary": "JOHANNESBURG, March 3 () - Aspen Pharmacare's unbranded version \u200cof Novo Nordisk's popular \u200cdiabetes drug Ozempic could be \u200bregistered in Canada in the second or third quarter of this year, the \u200cSouth African \u2060pharmacueticals group's CEO sa",
-      "url": "https://finance.yahoo.com/news/aspen-pharmacare-aims-canada-entry-135419535.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "other"
-      ],
-      "published": "Tue, 03 Mar 2026 13:54:19 GMT",
-      "timestamp": "2026-03-03T15:15:42.251046Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151542251005Z",
-      "title": "US Has No Immediate Plan to Tap Oil Reserve on Iran Concerns",
-      "summary": "A decision to tap the Energy Department\u2019s Strategic Petroleum Reserve could help stanch prices spikes, at least temporarily. \u201cThe Trump Administration\u2019s policies have led to the highest production of U.S. oil ever with even more oil from ou",
-      "url": "https://finance.yahoo.com/news/us-no-immediate-plan-tap-135518263.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "geopolitical",
-        "financial",
-        "macro"
-      ],
-      "published": "Tue, 03 Mar 2026 13:55:18 GMT",
-      "timestamp": "2026-03-03T15:15:42.251005Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151542250952Z",
-      "title": "Diagnostics startup Droplet Biosciences partners with Nvidia to speed cancer test results",
-      "summary": "March 3 () - Diagnostics firm Droplet Biosciences said on Tuesday it is collaborating with Nvidia to use \u200cthe chipmaker's AI infrastructure to speed up post-surgery cancer \u200ctest results. The company has been using Nvidia Parabricks, a GPU-a",
-      "url": "https://finance.yahoo.com/news/diagnostics-startup-droplet-biosciences-partners-140310497.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "geopolitical",
-        "financial"
-      ],
-      "published": "Tue, 03 Mar 2026 14:03:10 GMT",
-      "timestamp": "2026-03-03T15:15:42.250952Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151542250907Z",
-      "title": "Amazon launches Amazon Now service in Brazil to deliver groceries in 15 minutes",
-      "summary": "Amazon launched \u200con Tuesday its \u200cAmazon Now service in \u200bBrazil, in which the company seeks to deliver products \u200csuch as \u2060essentials and groceries in 15 \u2060minutes, Fernanda Grumach, director at shopping experience \u200bat Amazon \u200bBrasil \u200bsaid. Th",
-      "url": "https://finance.yahoo.com/news/amazon-launches-amazon-now-brazil-140854101.html",
-      "source": "RSS: Yahoo_Finance",
-      "category": [
-        "other"
-      ],
-      "published": "Tue, 03 Mar 2026 14:08:54 GMT",
-      "timestamp": "2026-03-03T15:15:42.250907Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151542250855Z",
+      "id": "rss_2026-03-03T161527336174Z",
       "title": "MongoDB downgraded, Block upgraded: Wall Street's top analyst calls",
       "summary": "MongoDB downgraded, Block upgraded: Wall Street's top analyst calls",
       "url": "https://finance.yahoo.com/news/mongodb-downgraded-block-upgraded-wall-143311526.html",
@@ -113,13 +20,13 @@
         "sentiment"
       ],
       "published": "Tue, 03 Mar 2026 14:33:11 GMT",
-      "timestamp": "2026-03-03T15:15:42.250855Z",
+      "timestamp": "2026-03-03T16:15:27.336174Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151542250820Z",
+      "id": "rss_2026-03-03T161527336158Z",
       "title": "US CFTC ships prediction markets rule proposal to Trump budget office",
       "summary": "NEW YORK, March 3 (Reuters) - The U. Commodity Futures \u200cTrading Commission has sent a \u200crulemaking plan for prediction markets to the \u200bPresident's Office of Management and Budget, kicking off the process to write new rules for the controvers",
       "url": "https://finance.yahoo.com/news/us-cftc-ships-prediction-markets-143630497.html",
@@ -129,43 +36,124 @@
         "macro"
       ],
       "published": "Tue, 03 Mar 2026 14:36:30 GMT",
-      "timestamp": "2026-03-03T15:15:42.250820Z",
+      "timestamp": "2026-03-03T16:15:27.336158Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541864309Z",
-      "title": "Amazon says drone strikes damaged 3 facilities in UAE and Bahrain",
-      "summary": "",
-      "url": "https://www.cnbc.com/2026/03/02/amazon-says-drone-strikes-damaged-3-facilities-in-uae-and-bahrain.html",
-      "source": "RSS: CNBC_Top",
+      "id": "rss_2026-03-03T161527336120Z",
+      "title": "Fed's Williams says rate cuts still possible, does not address Iran war",
+      "summary": "NEW YORK, March 3 (Reuters) - New York Federal Reserve President John Williams said on Tuesday the U. central bank is on track for more interest rate cuts if \u200cinflation pressures moderate as he expects, but he did not address the impact of ",
+      "url": "https://finance.yahoo.com/news/feds-williams-says-rate-cuts-150001336.html",
+      "source": "RSS: Yahoo_Finance",
       "category": [
-        "other"
+        "geopolitical",
+        "financial",
+        "macro"
       ],
-      "published": "Tue, 03 Mar 2026 01:44:21 GMT",
-      "timestamp": "2026-03-03T15:15:41.864309Z",
-      "type": "rss",
-      "enriched_text_source": "headline_only",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151541864293Z",
-      "title": "OpenAI's Sam Altman admits \u2018rushed\u2019 deal with Defense Department after backlash",
-      "summary": "Sam Altman says that OpenAI \"shouldn't have rushed\" its deal with the Defense Department and was making \"some additions.\"",
-      "url": "https://www.cnbc.com/2026/03/03/openai-sam-altman-pentagon-deal-amended-surveillance-limits.html",
-      "source": "RSS: CNBC_Top",
-      "category": [
-        "other"
-      ],
-      "published": "Tue, 03 Mar 2026 02:50:16 GMT",
-      "timestamp": "2026-03-03T15:15:41.864293Z",
+      "published": "Tue, 03 Mar 2026 15:00:01 GMT",
+      "timestamp": "2026-03-03T16:15:27.336120Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541864235Z",
+      "id": "rss_2026-03-03T161527336082Z",
+      "title": "Oil prices surge as analysts say Iran conflict 'may be different' from previous flare-ups",
+      "summary": "Unlike past flare-ups, the current escalation of conflict in the Middle East has already triggered concrete disruptions in shipping and insurance markets, tightening flows even before any confirmed physical damage to major oil infrastructur",
+      "url": "https://finance.yahoo.com/news/oil-prices-surge-as-analysts-say-iran-conflict-may-be-different-from-previous-flare-ups-150024247.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical",
+        "macro"
+      ],
+      "published": "Tue, 03 Mar 2026 15:01:30 GMT",
+      "timestamp": "2026-03-03T16:15:27.336082Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161527336050Z",
+      "title": "New York Fed's Williams: US businesses and consumers have paid for tariffs, pushing up inflation",
+      "summary": "New York Federal Reserve president John Williams said Tuesday that President Trump's tariffs have been overwhelmingly borne by US consumers and businesses.",
+      "url": "https://finance.yahoo.com/news/new-york-feds-williams-us-businesses-and-consumers-have-paid-for-tariffs-pushing-up-inflation-151538285.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical",
+        "financial",
+        "macro"
+      ],
+      "published": "Tue, 03 Mar 2026 15:15:38 GMT",
+      "timestamp": "2026-03-03T16:15:27.336050Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161527336024Z",
+      "title": "Gas prices jump over 10 cents in a day, set to rise 'very quickly' as oil surges amid Iran war",
+      "summary": "Gasoline prices jumped by $0.10 per gallon over the past 24 hours as oil prices continued to spike amid the Middle East conflict.",
+      "url": "https://finance.yahoo.com/news/gas-prices-jump-over-10-cents-in-a-day-set-to-rise-very-quickly-as-oil-surges-amid-iran-war-174948319.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Tue, 03 Mar 2026 15:19:28 GMT",
+      "timestamp": "2026-03-03T16:15:27.336024Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161527336000Z",
+      "title": "Apple launches new MacBook Air and MacBook Pro with new M5 chips",
+      "summary": "Apple debuted its new MacBook Airs and MacBook Pros as well as more powerful M5 Pro and M5 Max chips Tuesday.",
+      "url": "https://finance.yahoo.com/news/apple-launches-new-macbook-air-and-macbook-pro-with-new-m5-chips-153026231.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "other"
+      ],
+      "published": "Tue, 03 Mar 2026 15:30:26 GMT",
+      "timestamp": "2026-03-03T16:15:27.336000Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161527335978Z",
+      "title": "Veon expects customers using Starlink in Ukraine to reach 12 million this year",
+      "summary": "The number of people in Ukraine connecting to the internet \u200cusing SpaceX's Starlink will probably reach around \u200c12 million by the end of this year from the current \u200b5 million users, the CEO of telecoms group Veon said on Tuesday. Last year,",
+      "url": "https://finance.yahoo.com/news/veon-expects-customers-using-starlink-153240499.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Tue, 03 Mar 2026 15:32:40 GMT",
+      "timestamp": "2026-03-03T16:15:27.335978Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161527335903Z",
+      "title": "EU firms coping well with US tariffs, face obstacles within bloc, EIB survey shows",
+      "summary": "LUXEMBOURG, March 3 () - European Union companies are coping well with higher U. tariffs on EU goods, but report problems with \u200cselling their products within the bloc itself due to fragmented rules \u200cand regulations, a European Investment Ba",
+      "url": "https://finance.yahoo.com/news/eu-firms-coping-well-us-153905820.html",
+      "source": "RSS: Yahoo_Finance",
+      "category": [
+        "financial",
+        "sentiment"
+      ],
+      "published": "Tue, 03 Mar 2026 15:39:05 GMT",
+      "timestamp": "2026-03-03T16:15:27.335903Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161526976179Z",
       "title": "Commit fully to the role you\u2019re in now, and your career may thank you later: Novartis CEO Vas Narasimhan",
       "summary": "Guided by immigrant roots, public\u2011health purpose and a belief in \u201cstaying in the ring,\u201d Novartis CEO Vas Narasimhan reflects on the unlikely decisions that took him from the \u201csteel town\u201d of Pittsburgh, Pennsylvania to the helm of a global d",
       "url": "https://www.cnbc.com/video/2026/03/03/novartis-ceo-vas-narasimhan-executive-decisions-with-steve-sedgwick.html",
@@ -174,13 +162,13 @@
         "other"
       ],
       "published": "Tue, 03 Mar 2026 05:00:01 GMT",
-      "timestamp": "2026-03-03T15:15:41.864235Z",
+      "timestamp": "2026-03-03T16:15:26.976179Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541864145Z",
+      "id": "rss_2026-03-03T161526976142Z",
       "title": "Target is set to report quarterly earnings, share turnaround plan. Here's what to expect",
       "summary": "The big-box retailer Target will host an investor meeting at its Minneapolis headquarters.",
       "url": "https://www.cnbc.com/2026/03/03/target-tgt-q4-2025-earnings.html",
@@ -190,13 +178,13 @@
         "corporate"
       ],
       "published": "Tue, 03 Mar 2026 05:01:01 GMT",
-      "timestamp": "2026-03-03T15:15:41.864145Z",
+      "timestamp": "2026-03-03T16:15:26.976142Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541864098Z",
+      "id": "rss_2026-03-03T161526976121Z",
       "title": "The Strait of Hormuz is facing a blockade. These countries will be most impacted",
       "summary": "A closure of the Strait of Hormuz would send shockwaves through global energy markets, but the pain would be felt most acutely in Asia.",
       "url": "https://www.cnbc.com/2026/03/03/strait-of-hormuz-closure-which-countries-will-be-hit-the-most.html",
@@ -205,13 +193,13 @@
         "macro"
       ],
       "published": "Tue, 03 Mar 2026 05:35:11 GMT",
-      "timestamp": "2026-03-03T15:15:41.864098Z",
+      "timestamp": "2026-03-03T16:15:26.976121Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541864026Z",
+      "id": "rss_2026-03-03T161526976100Z",
       "title": "European markets set to slide at the open as geopolitical risks rise",
       "summary": "European stocks are expected to open firmly in negative territory Tuesday as the geopolitical crisis in the Middle East continues to weigh on market sentiment.",
       "url": "https://www.cnbc.com/2026/03/03/european-markets-stoxx-600-ftse-dax-cac-iran-latest-spring-statement-uk.html",
@@ -221,13 +209,13 @@
         "macro"
       ],
       "published": "Tue, 03 Mar 2026 06:19:53 GMT",
-      "timestamp": "2026-03-03T15:15:41.864026Z",
+      "timestamp": "2026-03-03T16:15:26.976100Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541863986Z",
+      "id": "rss_2026-03-03T161526976076Z",
       "title": "What to expect from the UK's budget update, the Spring Statement",
       "summary": "Economists don't expect any major policy announcements as the government prioritizes its \"Autumn Budget\" as the main fiscal event of the year.",
       "url": "https://www.cnbc.com/2026/03/03/uk-spring-statement-rachel-reeves-uk-economy-uk-budget.html",
@@ -236,13 +224,13 @@
         "other"
       ],
       "published": "Tue, 03 Mar 2026 07:09:42 GMT",
-      "timestamp": "2026-03-03T15:15:41.863986Z",
+      "timestamp": "2026-03-03T16:15:26.976076Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541863941Z",
+      "id": "rss_2026-03-03T161526976055Z",
       "title": "Swiss sneaker maker posts record sales, but guidance falls short of expectations",
       "summary": "On is entering thee third and final year of its strategy to double sales by 2026 in a quest to \"be the most premium global sportswear brand.\"",
       "url": "https://www.cnbc.com/2026/03/03/on-onon-stock-q4-earnings-record-sales-guidance.html",
@@ -252,13 +240,13 @@
         "corporate"
       ],
       "published": "Tue, 03 Mar 2026 10:00:01 GMT",
-      "timestamp": "2026-03-03T15:15:41.863941Z",
+      "timestamp": "2026-03-03T16:15:26.976055Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541863870Z",
+      "id": "rss_2026-03-03T161526976032Z",
       "title": "Oil supertanker rates hit all-time high as insurers drop war risk protection in the Middle East",
       "summary": "The cost of hauling crude oil from the Middle East to China rose more than 94% to hit a record high of $423,736 per day on Monday.",
       "url": "https://www.cnbc.com/2026/03/03/middle-east-crisis-iran-us-shipping-oil-tankers-strait-of-hormuz.html",
@@ -268,13 +256,13 @@
         "financial"
       ],
       "published": "Tue, 03 Mar 2026 10:20:24 GMT",
-      "timestamp": "2026-03-03T15:15:41.863870Z",
+      "timestamp": "2026-03-03T16:15:26.976032Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541863796Z",
+      "id": "rss_2026-03-03T161526976007Z",
       "title": "Europe struggles to be heard as the war on Iran escalates",
       "summary": "Europe appears to have been on the sidelines as the U.S. and Israel pursue Iran, and crisis engulfs the Middle East.",
       "url": "https://www.cnbc.com/2026/03/03/europe-iran-trump-us-israel-strikes-eu-merz-starmer.html",
@@ -284,122 +272,44 @@
         "financial"
       ],
       "published": "Tue, 03 Mar 2026 10:53:32 GMT",
-      "timestamp": "2026-03-03T15:15:41.863796Z",
+      "timestamp": "2026-03-03T16:15:26.976007Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541508682Z",
-      "title": "The smartest money moves to make as the Iran conflict rattles markets",
-      "summary": "You may have opportunities to optimize for short-term volatility, financial planners told MarketWatch.",
-      "url": "https://www.marketwatch.com/story/the-smartest-money-moves-to-make-as-the-iran-conflict-rattles-markets-d8e57ef3?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "geopolitical",
-        "macro"
-      ],
-      "published": "Tue, 03 Mar 2026 14:32:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508682Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151541508661Z",
-      "title": "The global economy is facing untold damage even if the Iran conflict ends tomorrow, warns this energy-industry expert",
-      "summary": "Investors are failing to grasp the enormity of the fallout from U.S. and Israel attacks on Iran, says this energy expert.",
-      "url": "https://www.marketwatch.com/story/the-global-economy-is-facing-untold-damages-even-if-the-iran-war-ends-tomorrow-warns-this-energy-expert-2b16270b?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "geopolitical",
-        "macro"
-      ],
-      "published": "Tue, 03 Mar 2026 14:39:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508661Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151541508631Z",
-      "title": "How the Iran conflict could ultimately unlock a generational Middle East peace dividend",
-      "summary": "America\u2019s attack supports the case for U.S. assets. It\u2019s also bullish for Iran.",
-      "url": "https://www.marketwatch.com/story/forget-the-oil-spike-the-iran-conflict-could-unlock-a-generational-middle-east-peace-dividend-16fe67e4?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "geopolitical",
-        "corporate"
-      ],
-      "published": "Tue, 03 Mar 2026 14:40:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508631Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151541508599Z",
-      "title": "I made a big mistake with my Roth IRA. Here\u2019s how I fixed it.",
-      "summary": "Tips for investing in a Roth IRA if your earnings break the income cap, plus a bet on Polymarket that isn\u2019t entirely what it seems.",
-      "url": "https://www.marketwatch.com/story/i-made-a-big-mistake-with-my-roth-ira-heres-how-i-fixed-it-f7213d47?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "macro",
-        "corporate"
-      ],
-      "published": "Tue, 03 Mar 2026 14:41:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508599Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151541508575Z",
-      "title": "Facing backlash, OpenAI\u2019s Sam Altman says he made a \u2018sloppy\u2019 mistake in Pentagon deal",
-      "summary": "The OpenAI CEO admits he came off as \u201copportunistic\u201d in how he announced the company\u2019s new government deal and says he will amend the language to emphasize restrictions",
-      "url": "https://www.marketwatch.com/story/facing-backlash-openais-sam-altman-says-he-made-a-sloppy-mistake-in-pentagon-deal-cf8f3ad9?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
-      "category": [
-        "other"
-      ],
-      "published": "Tue, 03 Mar 2026 14:46:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508575Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151541508546Z",
-      "title": "Palantir\u2019s stock could surge almost 40% as Iran conflict dispels a big concern, analyst says",
-      "summary": "Palantir should be able to prove its growing value to the military and quell fears that it\u2019s merely an AI \u201cwrapper,\u201d according to a Rosenblatt analyst.",
-      "url": "https://www.marketwatch.com/story/palantirs-stock-could-surge-almost-40-as-iran-conflict-dispels-a-big-concern-analyst-says-5ff1af36?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
+      "id": "rss_2026-03-03T161526975986Z",
+      "title": "Middle East war sends natural gas prices soaring, raising growth shock risk for Europe and Asia",
+      "summary": "Disruption to LNG supplies could dent European growth and harm reindustrialization ambitions.",
+      "url": "https://www.cnbc.com/2026/03/03/middle-east-war-gas-energy-lng-drone-qatar-strait-hormuz-price-shock.html",
+      "source": "RSS: CNBC_Top",
       "category": [
         "geopolitical"
       ],
-      "published": "Tue, 03 Mar 2026 14:54:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508546Z",
+      "published": "Tue, 03 Mar 2026 13:59:59 GMT",
+      "timestamp": "2026-03-03T16:15:26.975986Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541508517Z",
-      "title": "Will the bank get suspicious if I deposit $150,000 in cash into my checking account?",
-      "summary": "\u201cI live in a state with no inheritance tax. I assume I can make this deposit legally.\u201d",
-      "url": "https://www.marketwatch.com/story/i-live-in-a-state-with-no-inheritance-tax-is-it-legal-to-deposit-150k-cash-into-my-bank-account-d7987cfe?mod=mw_rss_topstories",
-      "source": "RSS: MarketWatch",
+      "id": "rss_2026-03-03T161526975948Z",
+      "title": "FCC chief tells CNBC WBD-Paramount merger deal is \u2018cleaner\u2019 than Netflix's, will be approved 'quickly'",
+      "summary": "FCC Chairman Brendan Carr told CNBC on Tuesday that Netflix's previous Warner Bros. Discovery offer \"raised a lot of competition concerns.\"",
+      "url": "https://www.cnbc.com/2026/03/03/fcc-chair-brendan-carr-wbd-paramount-merger-deal-netflix.html",
+      "source": "RSS: CNBC_Top",
       "category": [
-        "financial"
+        "geopolitical",
+        "corporate"
       ],
-      "published": "Tue, 03 Mar 2026 15:00:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508517Z",
+      "published": "Tue, 03 Mar 2026 14:38:45 GMT",
+      "timestamp": "2026-03-03T16:15:26.975948Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541508494Z",
+      "id": "rss_2026-03-03T161526531671Z",
       "title": "Why Best Buy\u2019s stock is surging, even as sales and full-year outlook disappoint",
       "summary": "Best Buy\u2019s earnings beat was enough to please investors, who had low expectations ahead of the retailer\u2019s quarterly results.",
       "url": "https://www.marketwatch.com/story/why-best-buys-stock-is-soaring-even-as-sales-and-full-year-outlook-disappoint-bb68b2e4?mod=mw_rss_topstories",
@@ -409,13 +319,13 @@
         "corporate"
       ],
       "published": "Tue, 03 Mar 2026 15:03:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508494Z",
+      "timestamp": "2026-03-03T16:15:26.531671Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541508466Z",
+      "id": "rss_2026-03-03T161526531646Z",
       "title": "Why Treasurys are failing their biggest test in decades \u2014 and what you should own instead",
       "summary": "U.S. government bonds began losing their safe-haven status long before the attack on Iran.",
       "url": "https://www.marketwatch.com/story/why-treasurys-are-failing-their-biggest-test-in-decades-and-what-you-should-own-instead-28176f9b?mod=mw_rss_topstories",
@@ -425,13 +335,13 @@
         "financial"
       ],
       "published": "Tue, 03 Mar 2026 15:06:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508466Z",
+      "timestamp": "2026-03-03T16:15:26.531646Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151541508427Z",
+      "id": "rss_2026-03-03T161526531622Z",
       "title": "Trump has less than 30 days to end the Iran conflict or he\u2019ll lose his inflation battle",
       "summary": "Markets expect a \u201cVenezuela II\u201d scenario in which the bad guy falls, order returns and oil drifts lower.",
       "url": "https://www.marketwatch.com/story/trump-has-less-than-30-days-to-end-the-iran-conflict-or-hell-lose-his-inflation-battle-7fed86f9?mod=mw_rss_topstories",
@@ -441,28 +351,118 @@
         "macro"
       ],
       "published": "Tue, 03 Mar 2026 15:09:00 GMT",
-      "timestamp": "2026-03-03T15:15:41.508427Z",
+      "timestamp": "2026-03-03T16:15:26.531622Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277915Z",
-      "title": "Blackstone flagship private credit fund hit with redemptions ",
-      "summary": "Investors pull net $1.7bn out of vehicle over first quarter as industry strains intensify",
-      "url": "https://www.ft.com/content/7dadc5b5-d5d2-40d6-9ee0-abcb03e0a598",
-      "source": "RSS: Financial_Times",
+      "id": "rss_2026-03-03T161526531598Z",
+      "title": "My rude, ungrateful relative gave her lawyer power of attorney \u2014 and has lived to regret it. Should I get involved?",
+      "summary": "\u201cA person who is used to controlling others does not like being controlled.\u201d",
+      "url": "https://www.marketwatch.com/story/my-rude-ungrateful-relative-gave-her-lawyer-power-of-attorney-and-has-lived-to-regret-it-should-i-get-involved-5db8088d?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
       "category": [
         "financial"
       ],
-      "published": "Mon, 02 Mar 2026 23:49:02 GMT",
-      "timestamp": "2026-03-03T15:15:40.277915Z",
+      "published": "Tue, 03 Mar 2026 15:15:00 GMT",
+      "timestamp": "2026-03-03T16:15:26.531598Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277899Z",
+      "id": "rss_2026-03-03T161526531573Z",
+      "title": "\u2018No toilets\u2019? Civil trial over renovation work at Kanye West\u2019s stripped-down Tadao Ando beach house in Malibu plays out in L.A.",
+      "summary": "A worker is seeking more than $1 million in damages from Kanye West over the renovation work of a Malibu home and has made some bizarre allegations.",
+      "url": "https://www.marketwatch.com/story/no-toilets-civil-trial-over-renovation-work-plays-out-in-l-a-over-kanye-wests-stripped-malibu-beach-house-b7d885a6?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "other"
+      ],
+      "published": "Tue, 03 Mar 2026 15:30:00 GMT",
+      "timestamp": "2026-03-03T16:15:26.531573Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161526531541Z",
+      "title": "These S&P 500 stocks are falling the hardest on Tuesday",
+      "summary": "Stocks of gold miners and computer-memory makers were hit especially hard, while Best Buy led the S&P 500 with a gain after its earnings report.",
+      "url": "https://www.marketwatch.com/story/these-s-p-500-stocks-are-falling-the-hardest-on-tuesday-bedc2c07?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "corporate"
+      ],
+      "published": "Tue, 03 Mar 2026 15:41:00 GMT",
+      "timestamp": "2026-03-03T16:15:26.531541Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161526531511Z",
+      "title": "Her accountant went to prison. Now the IRS is coming after her for $328,000.",
+      "summary": "She didn\u2019t intend to evade taxes when she hired the accountant in 1993, but she\u2019s still on the hook for his actions.",
+      "url": "https://www.marketwatch.com/story/her-accountant-went-to-prison-now-the-irs-is-coming-after-her-for-328-000-56e9ba11?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "other"
+      ],
+      "published": "Tue, 03 Mar 2026 15:50:00 GMT",
+      "timestamp": "2026-03-03T16:15:26.531511Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161526531448Z",
+      "title": "How this under-the-radar U.S. natural-gas exporter could capitalize on a potential shortage in Europe",
+      "summary": "The U.S. is the world\u2019s largest exporter of liquefied natural gas, and one relatively obscure U.S. company seems ready to reap the benefits of a surge in global natural-gas prices following the U.S. and Israel\u2019s attacks on Iran and the wide",
+      "url": "https://www.marketwatch.com/story/how-this-under-the-radar-u-s-natural-gas-exporter-could-capitalize-on-a-potential-shortage-in-europe-c6938bab?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Tue, 03 Mar 2026 16:02:00 GMT",
+      "timestamp": "2026-03-03T16:15:26.531448Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161526531377Z",
+      "title": "Investors are now learning a painful lesson: Buying a dip driven by geopolitics isn\u2019t a slam dunk.",
+      "summary": "Investors rushed to buy U.S. stocks on Monday after the U.S. and Israeli bombardment of Iran helped inspire a global selloff. That may have been short-sighted.",
+      "url": "https://www.marketwatch.com/story/investors-are-now-learning-a-painful-lesson-buying-a-dip-driven-by-geopolitics-isnt-a-slam-dunk-219d6bbe?mod=mw_rss_topstories",
+      "source": "RSS: MarketWatch",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Tue, 03 Mar 2026 16:04:00 GMT",
+      "timestamp": "2026-03-03T16:15:26.531377Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161525140925Z",
+      "title": "Why has oil not hit $100 a barrel?",
+      "summary": "Crude has surged as flows through Strait of Hormuz dry up, but so far reaction is muted compared with past oil shocks",
+      "url": "https://www.ft.com/content/1ca535f4-d4a6-480b-b2da-f5b05ad8dd5d",
+      "source": "RSS: Financial_Times",
+      "category": [
+        "other"
+      ],
+      "published": "Tue, 03 Mar 2026 15:33:39 GMT",
+      "timestamp": "2026-03-03T16:15:25.140925Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161525140904Z",
       "title": "Trump struggles to explain why he launched another Middle Eastern war",
       "summary": "Reason for conflict that has already killed hundreds of Iranians and six US soldiers remains unclear",
       "url": "https://www.ft.com/content/fd31c6ad-39f0-4fae-851c-fadf44f006eb",
@@ -471,13 +471,13 @@
         "geopolitical"
       ],
       "published": "Tue, 03 Mar 2026 02:14:19 GMT",
-      "timestamp": "2026-03-03T15:15:40.277899Z",
+      "timestamp": "2026-03-03T16:15:25.140904Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277881Z",
+      "id": "rss_2026-03-03T161525140880Z",
       "title": "Middle Eastern airlines start to fly stranded passengers out of Gulf ",
       "summary": "UK and French governments prepare to repatriate vulnerable nationals",
       "url": "https://www.ft.com/content/a6fe19e2-fe2c-4a9b-ab35-24d129ea9bf2",
@@ -486,13 +486,13 @@
         "other"
       ],
       "published": "Tue, 03 Mar 2026 15:06:53 GMT",
-      "timestamp": "2026-03-03T15:15:40.277881Z",
+      "timestamp": "2026-03-03T16:15:25.140880Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277864Z",
+      "id": "rss_2026-03-03T161525140859Z",
       "title": "Polymarket users won big with unusual bets on US attack on Iran ",
       "summary": "FT analysis identifies 12 accounts on platform that made large well-timed wagers just ahead of start of conflict",
       "url": "https://www.ft.com/content/2883d3d4-aea2-4984-b994-4640593eed55",
@@ -502,13 +502,13 @@
         "macro"
       ],
       "published": "Tue, 03 Mar 2026 10:29:24 GMT",
-      "timestamp": "2026-03-03T15:15:40.277864Z",
+      "timestamp": "2026-03-03T16:15:25.140859Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277845Z",
+      "id": "rss_2026-03-03T161525140836Z",
       "title": "Laura Loomer and the far-right ultra-hawks cheering on Trump in Iran ",
       "summary": "Maga figures drown out opponents of conflict with loud support for the president",
       "url": "https://www.ft.com/content/31ed94d6-2455-4606-a85d-a715a071ea86",
@@ -517,13 +517,13 @@
         "geopolitical"
       ],
       "published": "Tue, 03 Mar 2026 05:00:26 GMT",
-      "timestamp": "2026-03-03T15:15:40.277845Z",
+      "timestamp": "2026-03-03T16:15:25.140836Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277828Z",
+      "id": "rss_2026-03-03T161525140813Z",
       "title": "Donald Trump\u2019s dangerous \u2018war of whim\u2019",
       "summary": "Anyone who claims to know where this conflict will go is bluffing",
       "url": "https://www.ft.com/content/611e8f6f-18c7-4886-a733-9e8aac2fceda",
@@ -532,13 +532,13 @@
         "geopolitical"
       ],
       "published": "Tue, 03 Mar 2026 11:59:04 GMT",
-      "timestamp": "2026-03-03T15:15:40.277828Z",
+      "timestamp": "2026-03-03T16:15:25.140813Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277810Z",
+      "id": "rss_2026-03-03T161525140791Z",
       "title": "Iran executes Khamenei\u2019s plan to spread regional war",
       "summary": "Strikes on energy facilities and targets across Middle East form strategy devised to sow chaos in retaliation for US and Israeli attack",
       "url": "https://www.ft.com/content/02eb660a-3c80-4d6b-9e58-e7411278b0f1",
@@ -548,13 +548,13 @@
         "financial"
       ],
       "published": "Tue, 03 Mar 2026 00:00:00 GMT",
-      "timestamp": "2026-03-03T15:15:40.277810Z",
+      "timestamp": "2026-03-03T16:15:25.140791Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277779Z",
+      "id": "rss_2026-03-03T161525140752Z",
       "title": "In charts: How serious is the Middle East gas price shock?",
       "summary": "Qatar LNG shutdown threatens bigger supply hit than the Ukraine war",
       "url": "https://www.ft.com/content/78fb84bb-0884-412b-b317-1ac3dbcb060a",
@@ -563,13 +563,13 @@
         "geopolitical"
       ],
       "published": "Tue, 03 Mar 2026 05:00:15 GMT",
-      "timestamp": "2026-03-03T15:15:40.277779Z",
+      "timestamp": "2026-03-03T16:15:25.140752Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277755Z",
+      "id": "rss_2026-03-03T161525140732Z",
       "title": "Stocks and bonds tumble as widening Middle East war rattles markets",
       "summary": "Oil surges above $85 a barrel and European natural gas prices almost double this week as conflict escalates across region",
       "url": "https://www.ft.com/content/48a11039-eca6-4af4-89bd-c79b4203aee8",
@@ -579,15 +579,15 @@
         "financial",
         "macro"
       ],
-      "published": "Tue, 03 Mar 2026 14:52:15 GMT",
-      "timestamp": "2026-03-03T15:15:40.277755Z",
+      "published": "Tue, 03 Mar 2026 15:28:34 GMT",
+      "timestamp": "2026-03-03T16:15:25.140732Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151540277718Z",
-      "title": "US embassy in Saudi Arabia warns of imminent attack on oil city of Dhahran",
+      "id": "rss_2026-03-03T161525140688Z",
+      "title": "US embassy in Saudi Arabia warns of attack on oil city of Dhahran",
       "summary": "Israel resumes strikes on Iran and targets Lebanon as US embassy in Riyadh struck by drones",
       "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
       "source": "RSS: Financial_Times",
@@ -595,30 +595,13 @@
         "geopolitical"
       ],
       "published": "Tue, 03 Mar 2026 13:54:49 GMT",
-      "timestamp": "2026-03-03T15:15:40.277718Z",
+      "timestamp": "2026-03-03T16:15:25.140688Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537753533Z",
-      "title": "Middle East crisis pushes up oil prices \u2013 and could drive inflation rises too",
-      "summary": "Effects of extended conflict between US and Iran could also lead to higher interest rates and hit economic growth US-Israel war on Iran \u2013 live updates The impact of the deadly and unpredictable conflict in the Middle East on the global econ",
-      "url": "https://www.theguardian.com/business/2026/mar/02/middle-east-crisis-oil-prices-inflation-us-iran-interest-rates-growth",
-      "source": "RSS: Guardian_Business",
-      "category": [
-        "geopolitical",
-        "financial",
-        "macro"
-      ],
-      "published": "Mon, 02 Mar 2026 13:02:32 GMT",
-      "timestamp": "2026-03-03T15:15:37.753533Z",
-      "type": "rss",
-      "enriched_text_source": "summary",
-      "article_excerpt": ""
-    },
-    {
-      "id": "rss_2026-03-03T151537753474Z",
+      "id": "rss_2026-03-03T161521930107Z",
       "title": "A gas shock \u2013 not an oil shock \u2013 from the Iran war looks more threatening | Nils Pratley",
       "summary": "Europe and Asia will take an economic hit if the supply of Qatari LNG is halted by the closure of the strait of Hormuz Gas prices soar and oil jumps as Iran war pushes down global stock markets The price of oil grabs most of the energy-rela",
       "url": "https://www.theguardian.com/business/nils-pratley-on-finance/2026/mar/02/gas-shock-oil-iran-war-qatari-lng-strait-of-hormuz",
@@ -628,13 +611,30 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 20:15:23 GMT",
-      "timestamp": "2026-03-03T15:15:37.753474Z",
+      "timestamp": "2026-03-03T16:15:21.930107Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537753386Z",
+      "id": "rss_2026-03-03T161521930026Z",
+      "title": "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil",
+      "summary": "Attempt to project calm in spring forecast may be short-lived if living costs and unemployment keep climbing Reeves insists Labour has \u2018right economic plan\u2019 Business live \u2013 latest updates \u201cThis government has restored economic stability,\u201d R",
+      "url": "https://www.theguardian.com/uk-news/2026/mar/03/rachel-reeves-iran-war-spring-forecast-unemployment",
+      "source": "RSS: Guardian_Business",
+      "category": [
+        "geopolitical",
+        "macro",
+        "corporate"
+      ],
+      "published": "Tue, 03 Mar 2026 15:55:03 GMT",
+      "timestamp": "2026-03-03T16:15:21.930026Z",
+      "type": "rss",
+      "enriched_text_source": "summary",
+      "article_excerpt": ""
+    },
+    {
+      "id": "rss_2026-03-03T161521929972Z",
       "title": "Airlines in Middle East rule out services resuming before Thursday",
       "summary": "Some repatriation flights depart as governments around the world work to extract their citizens from the conflict-hit region US-Israel war on Iran \u2013 live updates The biggest Middle East carriers have ruled out resuming scheduled flights unt",
       "url": "https://www.theguardian.com/world/2026/mar/03/flights-depart-middle-east-travel-chaos",
@@ -644,13 +644,13 @@
         "financial"
       ],
       "published": "Tue, 03 Mar 2026 14:14:01 GMT",
-      "timestamp": "2026-03-03T15:15:37.753386Z",
+      "timestamp": "2026-03-03T16:15:21.929972Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537753297Z",
+      "id": "rss_2026-03-03T161521929907Z",
       "title": "Paramount+ and HBO Max to become one streaming service, Ellison says",
       "summary": "Billionaire Paramount Skydance chief announces plan days after winning takeover battle for Warner Bros Discovery Sign up for the Breaking News US email to get newsletter alerts in your inbox Paramount Skydance plans to combine HBO Max and P",
       "url": "https://www.theguardian.com/media/2026/mar/02/paramount-hbo-max-streaming-warner-bros",
@@ -661,13 +661,13 @@
         "corporate"
       ],
       "published": "Mon, 02 Mar 2026 19:31:50 GMT",
-      "timestamp": "2026-03-03T15:15:37.753297Z",
+      "timestamp": "2026-03-03T16:15:21.929907Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537753228Z",
+      "id": "rss_2026-03-03T161521929839Z",
       "title": "BrewDog bought by US cannabis and drinks firm for \u00a333m, costing nearly 500 jobs",
       "summary": "Many early-stage crowdfunders left empty-handed as Tilray acquires beer company\u2019s UK and Irish assets Business live \u2013 latest updates The UK and Irish assets of BrewDog, the Scottish self-styled \u201cpunk\u201d brewer, have been sold to the US cannab",
       "url": "https://www.theguardian.com/business/2026/mar/02/brewdog-us-cannabis-drinks-500-jobs",
@@ -677,13 +677,13 @@
         "macro"
       ],
       "published": "Mon, 02 Mar 2026 17:34:14 GMT",
-      "timestamp": "2026-03-03T15:15:37.753228Z",
+      "timestamp": "2026-03-03T16:15:21.929839Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537753160Z",
+      "id": "rss_2026-03-03T161521929771Z",
       "title": "\u2018Peak Greggs\u2019? Bakery chain\u2019s profits slump and sales slow",
       "summary": "Retailer known for its sausage rolls and steak bakes says it has been resilient in a challenging market Business live \u2013 latest updates Greggs has reported a slump in profits as it bemoaned \u201cchallenging\u201d market conditions hitting consumer co",
       "url": "https://www.theguardian.com/business/2026/mar/03/greggs-bakery-chain-profits-sales-high-street-sausage-rolls",
@@ -692,13 +692,13 @@
         "macro"
       ],
       "published": "Tue, 03 Mar 2026 09:20:30 GMT",
-      "timestamp": "2026-03-03T15:15:37.753160Z",
+      "timestamp": "2026-03-03T16:15:21.929771Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537753096Z",
+      "id": "rss_2026-03-03T161521929711Z",
       "title": "Stock markets slump amid Iran war as gas prices jump 30% to three-year high",
       "summary": "FTSE 100 on track for its worst day in 11 months, while Japan\u2019s Nikkei and South Korea\u2019s Kospi also fall Business live \u2013 latest updates Middle East crisis \u2013 live updates The war in the Middle East has plunged financial markets into turmoil ",
       "url": "https://www.theguardian.com/business/2026/mar/03/global-stock-markets-iran-war-gas-oil-prices-ftse-100",
@@ -706,17 +706,16 @@
       "category": [
         "geopolitical",
         "financial",
-        "macro",
-        "corporate"
+        "macro"
       ],
       "published": "Tue, 03 Mar 2026 12:57:49 GMT",
-      "timestamp": "2026-03-03T15:15:37.753096Z",
+      "timestamp": "2026-03-03T16:15:21.929711Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537753023Z",
+      "id": "rss_2026-03-03T161521929653Z",
       "title": "Surprise jump in UK grocery inflation makes interest rate cut less probable",
       "summary": "ECB says Middle East war could cause higher inflationary pressure and warns of potential \u2018sharp drop in output\u2019 Business live \u2013 latest updates Shoppers faced a surprise jump in grocery inflation last month, as experts warned there was worse",
       "url": "https://www.theguardian.com/business/2026/mar/03/uk-grocery-inflation-middle-east-war-eurozone-uk-ecb-worldpanel",
@@ -727,13 +726,13 @@
         "macro"
       ],
       "published": "Tue, 03 Mar 2026 12:45:11 GMT",
-      "timestamp": "2026-03-03T15:15:37.753023Z",
+      "timestamp": "2026-03-03T16:15:21.929653Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537752958Z",
+      "id": "rss_2026-03-03T161521929589Z",
       "title": "OpenAI amends Pentagon deal as Sam Altman admits it looks \u2018sloppy\u2019",
       "summary": "ChatGPT owner\u2019s CEO says it will bar its technology being used for mass surveillance or by intelligence services Business live \u2013 latest updates OpenAI is amending its hastily arranged deal to supply artificial intelligence to the US Departm",
       "url": "https://www.theguardian.com/technology/2026/mar/03/openai-pentagon-ceo-sam-altman-chatgpt",
@@ -742,15 +741,15 @@
         "geopolitical"
       ],
       "published": "Tue, 03 Mar 2026 11:35:34 GMT",
-      "timestamp": "2026-03-03T15:15:37.752958Z",
+      "timestamp": "2026-03-03T16:15:21.929589Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151537752871Z",
+      "id": "rss_2026-03-03T161521929501Z",
       "title": "Iran conflict could have \u2018very significant\u2019 impact on UK economy, OBR warns in spring forecast \u2013 live updates",
-      "summary": "Chancellor\u2019s statement comes amid backdrop of economic and geopolitical turmoil, including gas prices at three-year high Rachel Reeves\u2019s plans could be hit by Middle East conflict, say economists UK grocery price inflation has risen, showin",
+      "summary": "Chancellor\u2019s statement comes amid backdrop of economic and geopolitical turmoil, including gas prices at three-year high Spring forecast: Reeves insists Labour has \u2018right economic plan\u2019 as 2026 growth downgraded UK grocery price inflation h",
       "url": "https://www.theguardian.com/business/live/2026/mar/03/spring-forecast-rachel-reeves-statement-economic-plan-obr-oil-gas-stock-markets-live-updates",
       "source": "RSS: Guardian_Business",
       "category": [
@@ -759,14 +758,14 @@
         "macro",
         "corporate"
       ],
-      "published": "Tue, 03 Mar 2026 15:06:15 GMT",
-      "timestamp": "2026-03-03T15:15:37.752871Z",
+      "published": "Tue, 03 Mar 2026 15:53:12 GMT",
+      "timestamp": "2026-03-03T16:15:21.929501Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151536921392Z",
+      "id": "rss_2026-03-03T161521073712Z",
       "title": "\u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws",
       "summary": "Javier Milei\u2019s boosters say law will revive employment, but critics decry cuts to severance and longer working hours Argentina \u2019s senate is poised to approve a sweeping overhaul of labour laws aimed at weakening trade unions and lowering la | Excerpt: \u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws | Argentina | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous im",
       "url": "https://www.theguardian.com/world/2026/feb/27/argentina-labor-law-overhaul",
@@ -775,13 +774,13 @@
         "macro"
       ],
       "published": "Fri, 27 Feb 2026 09:00:37 GMT",
-      "timestamp": "2026-03-03T15:15:36.921392Z",
+      "timestamp": "2026-03-03T16:15:21.073712Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018More exploitation, fewer rights\u2019: Argentina braces for sweeping overhaul of labor laws | Argentina | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int "
     },
     {
-      "id": "rss_2026-03-03T151535816367Z",
+      "id": "rss_2026-03-03T161520000734Z",
       "title": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border",
       "summary": "Second time in two weeks military used laser to attack what it mistakenly thought was a threat, disrupting air traffic Sign up for the Breaking News US email to get newsletter alerts in your inbox Democratic members of Congress have express | Excerpt: Democrats outraged at US military\u2019s downing of CBP drone near Mexico border | US military | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/cbp-border-drone-military-democrats",
@@ -790,13 +789,13 @@
         "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 14:37:19 GMT",
-      "timestamp": "2026-03-03T15:15:35.816367Z",
+      "timestamp": "2026-03-03T16:15:20.000734Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border | US military | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Internatio"
     },
     {
-      "id": "rss_2026-03-03T151534648009Z",
+      "id": "rss_2026-03-03T161518917464Z",
       "title": "Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba",
       "summary": "As tensions between two countries reach new highs, US president says regime is \u2018talking with us\u2019 Donald Trump has suggested the US could carry out a \u201cfriendly takeover\u201d of Cuba as tensions between Washington and Havana reach a new high afte | Excerpt: Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba | Donald Trump | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip",
       "url": "https://www.theguardian.com/us-news/2026/feb/27/trump-cuba-regime-change",
@@ -806,13 +805,13 @@
         "corporate"
       ],
       "published": "Fri, 27 Feb 2026 23:39:01 GMT",
-      "timestamp": "2026-03-03T15:15:34.648009Z",
+      "timestamp": "2026-03-03T16:15:18.917464Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Trump suggests US could carry out \u2018friendly takeover\u2019 of Cuba | Donald Trump | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition U"
     },
     {
-      "id": "rss_2026-03-03T151533478363Z",
+      "id": "rss_2026-03-03T161517869244Z",
       "title": "At least 20 killed as cash-laden military cargo plane crashes in Bolivia",
       "summary": "Riot police use teargas to disperse people gathering around wreckage of plane loaded with money from central bank At least 20 people have died and dozens have been injured after a military cargo plane carrying banknotes crashed while landin | Excerpt: At least 20 killed as cash-laden military cargo plane crashes in Bolivia | Bolivia | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle captio",
       "url": "https://www.theguardian.com/world/2026/feb/28/at-least-15-killed-as-cash-laden-military-cargo-plane-crashes-in-bolivia",
@@ -822,13 +821,13 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 03:05:37 GMT",
-      "timestamp": "2026-03-03T15:15:33.478363Z",
+      "timestamp": "2026-03-03T16:15:17.869244Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "At least 20 killed as cash-laden military cargo plane crashes in Bolivia | Bolivia | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edi"
     },
     {
-      "id": "rss_2026-03-03T151532354601Z",
+      "id": "rss_2026-03-03T161516669941Z",
       "title": "\u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered",
       "summary": "Few clues as to how 10 heavily armed men intercepted on stolen speedboat came together from across Florida or what they hoped to achieve Foot traffic was slow outside the Bay of Pigs Museum on Calle Ocho in Miami\u2019s Little Havana neighbourho | Excerpt: \u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 5 Next image Previous image",
       "url": "https://www.theguardian.com/world/2026/feb/28/miami-exiled-cubans-speedboat-shootout",
@@ -837,29 +836,13 @@
         "financial"
       ],
       "published": "Sat, 28 Feb 2026 10:00:08 GMT",
-      "timestamp": "2026-03-03T15:15:32.354601Z",
+      "timestamp": "2026-03-03T16:15:16.669941Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018Adventurism has had its day\u2019: speedboat shootout leaves Miami\u2019s exiled Cubans bewildered | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 5 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Int"
     },
     {
-      "id": "rss_2026-03-03T151530977603Z",
-      "title": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean",
-      "summary": "Atmospheric machine-gun has fired storm after deadly storm at the region this year, leaving a trail of widespread destruction For Andr\u00e9s S\u00e1nchez Barea, in Spain, it was the fear that arose when water started to spurt from plug sockets. For  | Excerpt: \u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean | Extreme weather | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image",
-      "url": "https://www.theguardian.com/world/2026/feb/26/recent-mediterranean-storms-tragedies-spain-portugal-morocco",
-      "source": "RSS: Guardian_World",
-      "category": [
-        "financial",
-        "sentiment"
-      ],
-      "published": "Thu, 26 Feb 2026 05:00:21 GMT",
-      "timestamp": "2026-03-03T15:15:30.977603Z",
-      "type": "rss",
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western Mediterranean | Extreme weather | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs "
-    },
-    {
-      "id": "rss_2026-03-03T151529660815Z",
+      "id": "rss_2026-03-03T161515267847Z",
       "title": "Two women arrested in Uganda for allegedly kissing in public could face life sentence",
       "summary": "Wendy Faith and Alesi Diana Denise were taken into custody under laws that have outraged LGBTQ+ community and rights activists Two women have been arrested and detained in Uganda after allegedly kissing in public, an act of \u201csame-sex activi | Excerpt: Two women arrested in Uganda for allegedly kissing in public could face life sentence | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Prev",
       "url": "https://www.theguardian.com/global-development/2026/feb/26/women-arrested-uganda-kissing-public-lgbtq-laws",
@@ -868,13 +851,13 @@
         "other"
       ],
       "published": "Thu, 26 Feb 2026 08:00:23 GMT",
-      "timestamp": "2026-03-03T15:15:29.660815Z",
+      "timestamp": "2026-03-03T16:15:15.267847Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Two women arrested in Uganda for allegedly kissing in public could face life sentence | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign "
     },
     {
-      "id": "rss_2026-03-03T151528496041Z",
+      "id": "rss_2026-03-03T161514103810Z",
       "title": "Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries",
       "summary": "Zimbabwe refuses to sign agreement and Kenya faces a court case over data sharing as new aid deals come under scrutiny A series of bilateral health agreements being negotiated between African countries and the administration of President Do | Excerpt: Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image",
       "url": "https://www.theguardian.com/global-development/2026/feb/27/rising-anger-over-lop-sided-immoral-us-health-funding-pacts-africa-countries",
@@ -883,13 +866,13 @@
         "geopolitical"
       ],
       "published": "Fri, 27 Feb 2026 07:00:34 GMT",
-      "timestamp": "2026-03-03T15:15:28.496041Z",
+      "timestamp": "2026-03-03T16:15:14.103810Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Rising anger over \u2018lop-sided\u2019 and \u2018immoral\u2019 US health funding pacts with African countries | Global development | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs "
     },
     {
-      "id": "rss_2026-03-03T151527254150Z",
+      "id": "rss_2026-03-03T161513015250Z",
       "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine",
       "summary": "Foreign minister says 272 Ghanaians are thought to have been drawn into battle since 2022, after he visited Kyiv At least 55 Ghanaians have been killed in Russia\u2019s war with Ukraine after being \u201clured into battle\u201d, Ghana\u2019s foreign minister h | Excerpt: Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine | Ukraine | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image",
       "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
@@ -899,13 +882,13 @@
         "macro"
       ],
       "published": "Fri, 27 Feb 2026 16:42:39 GMT",
-      "timestamp": "2026-03-03T15:15:27.254150Z",
+      "timestamp": "2026-03-03T16:15:13.015250Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight Ukraine | Ukraine | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Int"
     },
     {
-      "id": "rss_2026-03-03T151525858881Z",
+      "id": "rss_2026-03-03T161511654267Z",
       "title": "\u2018Imperialist undertones\u2019: global south condemns US-Israeli war with Iran",
       "summary": "China calls it unacceptable to \u2018kill leader of sovereign state\u2019, while South Africa questions \u2018pre-emptive\u2019 justification Middle East crisis \u2013 live updates The US-Israeli war on Iran has been condemned as illegal across much of the global s | Excerpt: \u2018Imperialist undertones\u2019: global south condemns US-Israeli war with Iran | US-Israel war on Iran | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image",
       "url": "https://www.theguardian.com/world/2026/mar/03/global-south-condemns-us-israeli-war-with-iran",
@@ -916,13 +899,28 @@
         "sentiment"
       ],
       "published": "Tue, 03 Mar 2026 13:11:17 GMT",
-      "timestamp": "2026-03-03T15:15:25.858881Z",
+      "timestamp": "2026-03-03T16:15:11.654267Z",
       "type": "rss",
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "\u2018Imperialist undertones\u2019: global south condemns US-Israeli war with Iran | US-Israel war on Iran | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int Int"
     },
     {
-      "id": "rss_2026-03-03T151522478378Z",
+      "id": "rss_2026-03-03T161510292897Z",
+      "title": "South Sudan risks return to full-blown civil war as violence escalates",
+      "summary": "At least 169 killed in raid near Sudan border as clashes between government and opposition forces intensify South Sudan is reeling from an escalating conflict between the government-aligned army and opposition forces and allied groups that  | Excerpt: South Sudan risks return to full-blown civil war as violence escalates | South Sudan | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image Previous image Toggle capt",
+      "url": "https://www.theguardian.com/world/2026/mar/03/south-sudan-risks-return-civil-war-violence-escalates",
+      "source": "RSS: Guardian_World",
+      "category": [
+        "geopolitical"
+      ],
+      "published": "Tue, 03 Mar 2026 15:49:36 GMT",
+      "timestamp": "2026-03-03T16:15:10.292897Z",
+      "type": "rss",
+      "enriched_text_source": "article_excerpt",
+      "article_excerpt": "South Sudan risks return to full-blown civil war as violence escalates | South Sudan | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International e"
+    },
+    {
+      "id": "rss_2026-03-03T161506804434Z",
       "title": "AP Explains: What happens when migrants arrive at US border - AP News",
       "summary": "AP Explains: What happens when migrants arrive at US border AP News",
       "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNSk84NHlld1o2TkdTSGxlWkFRUGdMaFVPclI4MjRHREdTQXo5LWg5bDdqREZzdEF5akpIU2lDaERZdzlsampCRjBRU1RFUVZfdDU5amJuRzhmb0FXTVBYOXZ5ZTM1d244T0tHUnBrS19qalZDd25nYWV1RElRc1FjakR3NENXS1l2MEEwWEJDYlhJTHIzc0JXSzVnUmJsSXM4T3ZjNE05LWNZMm51akZNTXIzSUhadmtuUEE?oc=5",
@@ -931,13 +929,13 @@
         "other"
       ],
       "published": "Wed, 26 Jun 2019 07:00:00 GMT",
-      "timestamp": "2026-03-03T15:15:22.478378Z",
+      "timestamp": "2026-03-03T16:15:06.804434Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
     },
     {
-      "id": "rss_2026-03-03T151522249102Z",
+      "id": "rss_2026-03-03T161506530540Z",
       "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "summary": "Trump disbanded NSC pandemic unit that experts had praised AP News",
       "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
@@ -946,7 +944,7 @@
         "geopolitical"
       ],
       "published": "Sat, 14 Mar 2020 07:00:00 GMT",
-      "timestamp": "2026-03-03T15:15:22.249102Z",
+      "timestamp": "2026-03-03T16:15:06.530540Z",
       "type": "rss",
       "enriched_text_source": "summary",
       "article_excerpt": ""
