@@ -383,9 +383,28 @@
     },
     "added_at": "2026-03-01T20:47:35.693905",
     "verified": true,
-    "actual_outcome": "correct",
-    "notes": "OPEC+ 206k bpd hike announced March 1. Volatility spiked (OVX 14-month high), Brent to $82. Risk repricing toward $120-150 if Hormuz persists.",
-    "evaluated_at": "2026-03-02T17:26:00+08:00"
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated: OPEC+ April hike headline confirmed and market response matched predicted volatility spike + risk repricing. Attempted calming signal was interpreted as insufficient versus conflict-related supply/transit risks.",
+    "evaluated_at": "2026-03-02T17:26:00+08:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "OPEC+ supply increase headline failed to suppress panic premium; tape repriced on transit/security risk.",
+      "drivers": [
+        "OPEC+ V8 announced +206k bpd for April",
+        "Hormuz blockade risk dominated marginal supply adjustment",
+        "Market skepticism around deliverability/spare capacity in conflict context"
+      ],
+      "metrics": [
+        "Brent moved into ~80-82 range post-announcement",
+        "Oil vol (OVX) at multi-month highs",
+        "Street stress scenarios repriced toward higher oil tails (120-150 in persistent blockade case)"
+      ],
+      "sector_impact": [
+        "Broad risk assets pressured by energy shock risk",
+        "Energy complex stayed bid on geopolitical premium"
+      ],
+      "confidence": "HIGH"
+    }
   },
   {
     "signal": {
