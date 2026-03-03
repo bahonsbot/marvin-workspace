@@ -503,9 +503,29 @@
     },
     "added_at": "2026-03-02T14:47:31.701689",
     "verified": true,
-    "actual_outcome": "correct",
-    "notes": "GameStop inverse - retail rushing exits. Blue Owl $1.4bn sale + gating caused 40% retail outflow. Volatility clustering confirmed (OWL 226% volume), borrow fees spiked, liquidity premium repriced across semi-liquid funds.",
-    "evaluated_at": "2026-03-02T17:32:00+08:00"
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated (crisis-event variant): retail-flow/liquidity squeeze dynamics played out in private credit after Blue Owl gating + loan-sale actions. Signal worked as a sentiment-contagion analog to squeeze mechanics (in reverse direction).",
+    "evaluated_at": "2026-03-02T17:32:00+08:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Retail withdrawal pressure and gating shock triggered liquidity-premium repricing and volatility clustering across private-credit-linked names.",
+      "drivers": [
+        "Blue Owl ~1.4-1.5bn loan sale to institutions",
+        "OBDC II redemption gating/permanent restriction signal",
+        "Retail confidence shock across semi-liquid private credit products"
+      ],
+      "metrics": [
+        "Sector fundraising down ~40% over late-Feb window",
+        "OWL volume spike (~226% vs avg) with sharp swings",
+        "Borrow costs rose for related public vehicles/managers"
+      ],
+      "sector_impact": [
+        "Alt-asset managers and listed private-credit proxies volatile",
+        "Liquidity-premium repricing across retail private-credit complex"
+      ],
+      "confidence": "HIGH",
+      "pattern_interpretation": "GAMESTOP_DARK_MIRROR"
+    }
   },
   {
     "signal": {
