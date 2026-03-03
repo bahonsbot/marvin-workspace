@@ -76,9 +76,30 @@
     },
     "added_at": "2026-02-28T23:47:29.291735",
     "verified": true,
-    "actual_outcome": "correct",
-    "notes": "Predicted volatility_spike and risk_repricing observed. VIX rose to 19.86 (+6.6%) by Feb 27. Eclipsed by parallel Iran conflict but signal was valid.",
-    "evaluated_at": "2026-03-02T17:08:00+08:00"
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated: predicted volatility spike and risk repricing both observed. VIX rose to 19.86 (+6.6%) and pushed >20 into Mar 2 risk window; equities gapped lower at open; safe-haven flows into gold and defensive FX confirmed deleveraging/risk-off positioning. Russia-Ukraine narrative was partially eclipsed by concurrent Middle East escalation, but predicted market behavior still materialized.",
+    "evaluated_at": "2026-03-02T17:08:00+08:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Signal validated on volatility/risk repricing with cross-asset confirmation despite overlap with Middle East force multiplier.",
+      "drivers": [
+        "Trump-Putin realignment headline catalyst",
+        "Two-front geopolitical uncertainty",
+        "Positioning deleveraging from risk-on into havens/commodities"
+      ],
+      "metrics": [
+        "VIX 19.86 (+6.6%) then >20",
+        "S&P futures ~-1.0% / Nasdaq ~-1.2% at risk-off open",
+        "Gold approached ~$5,350/oz",
+        "Brent +13% in broader geopolitics window"
+      ],
+      "sector_impact": [
+        "Risk-on tech under pressure",
+        "Safe havens (gold/defensive FX) bid",
+        "Defense sector mixed/weak on peace-concession interpretation"
+      ],
+      "confidence": "HIGH"
+    }
   },
   {
     "signal": {
