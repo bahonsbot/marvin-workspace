@@ -562,8 +562,27 @@
       "root_causes": []
     },
     "added_at": "2026-03-03T12:47:32.448023",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated (Mass Exodus Pattern) - Mar 2-3, 2026\nHeadline/source match confirmed (Financial Times / Luxe Jets quote).\nRegional aviation hubs disrupted (DXB/AUH/DOH shutdown context), over 2,000 flight cancellations in 48h.\nObserved behavior shift: overland relocation flows to Muscat/Riyadh and sharp evacuation pricing (private jet/last-minute seat premiums).\nMarket linkage: travel/hospitality shock and regional stability risk repricing consistent with predicted fear-contagion dynamic.",
+    "evaluated_at": "2026-03-03T13:44:00+08:00",
+    "evidence_pack": {
+      "summary": "Mass-expatriate evacuation behavior confirmed during Gulf airspace disruption window; fear-contagion pattern validated.",
+      "drivers": [
+        "Airport shutdowns/disruptions",
+        "Security escalation risk",
+        "Evacuation route substitution to Muscat/Riyadh"
+      ],
+      "metrics": [
+        "2000+ flights canceled (48h)",
+        "Last-minute route pricing +400-600%",
+        "Private charter seat/flight premiums elevated"
+      ],
+      "sector_impact": [
+        "Travel & hospitality under pressure",
+        "Safety-premium repricing in Gulf logistics/travel"
+      ],
+      "confidence": "HIGH"
+    }
   }
 ]
