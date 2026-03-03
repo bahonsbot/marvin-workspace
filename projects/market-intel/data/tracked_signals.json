@@ -36,9 +36,25 @@
     },
     "added_at": "2026-02-28T21:02:33.356582",
     "verified": true,
-    "actual_outcome": "correct",
-    "notes": "",
-    "evaluated_at": "2026-02-28T21:02:54.752743"
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated: weekly deposit increase signaled stabilization in funding stress narrative and matched expected financial-credit volatility/risk repricing behavior.",
+    "evaluated_at": "2026-02-28T21:02:54.752743",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Deposit growth print aligned with easing immediate bank-run pressure while keeping credit sensitivity elevated.",
+      "drivers": [
+        "Weekly US deposit data uptick",
+        "Funding-stress narrative recalibration",
+        "Credit-risk positioning in financials"
+      ],
+      "metrics": [
+        "US deposits: 18.778T vs 18.764T prior week (+14B)"
+      ],
+      "sector_impact": [
+        "Financials/credit-sensitive assets repriced on funding-stability signal"
+      ],
+      "confidence": "MEDIUM_HIGH"
+    }
   },
   {
     "signal": {
