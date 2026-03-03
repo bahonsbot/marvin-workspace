@@ -139,9 +139,29 @@
     },
     "added_at": "2026-03-01T05:47:28.393435",
     "verified": true,
-    "actual_outcome": "correct",
-    "notes": "Khamenei death confirmed market impact: VIX >20, Brent +13%, equity rotation (defense +/airlines -), USD/Gold safe-haven bid. Signal preceded the retaliation attacks which validated geopolitical escalation thesis.",
-    "evaluated_at": "2026-03-02T13:21:00+08:00"
+    "actual_outcome": "BUY",
+    "notes": "Partially validated with correction: geopolitical catalyst (Khamenei death/confirmation and escalation) was accurate and produced predicted market effects, but the attached pattern label (US Credit Rating Downgrade) was temporally incorrect for this date. Predicted outcomes were realized via conflict escalation rather than sovereign downgrade mechanics.",
+    "evaluated_at": "2026-03-02T13:21:00+08:00",
+    "legacy_outcome": "partial",
+    "evidence_pack": {
+      "summary": "Predicted outcomes hit (rates vol, FX move, equity rotation), but causal label should be geopolitical escalation, not US downgrade.",
+      "drivers": [
+        "Khamenei assassination reports and confirmation",
+        "Operation Epic Fury escalation and retaliation risk",
+        "Global flight-to-safety behavior"
+      ],
+      "metrics": [
+        "10Y Treasury yield saw sharp risk-off drop window",
+        "USD safe-haven bid strengthened (DXY up)",
+        "Growth/Tech underperformed while Energy/Defensives outperformed"
+      ],
+      "sector_impact": [
+        "Rotation from growth into value/defensives",
+        "Energy and defense leadership in risk-off tape"
+      ],
+      "confidence": "HIGH",
+      "label_quality": "MIXED_CAUSAL_TAG"
+    }
   },
   {
     "signal": {

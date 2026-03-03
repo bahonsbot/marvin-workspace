@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-03T13:52:39.432787",
+  "generated_at": "2026-03-03T13:57:07.580407",
   "sample_size": 14,
   "by_category": {
     "financial_credit": {
@@ -14,8 +14,8 @@
     },
     "macroeconomic": {
       "count": 2,
-      "avg_outcome_score": 0.75,
-      "bias_points": 2.5
+      "avg_outcome_score": 0.625,
+      "bias_points": 1.25
     },
     "sentiment_social": {
       "count": 1,
@@ -36,8 +36,8 @@
     },
     "US Credit Rating Downgrade": {
       "count": 1,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+      "avg_outcome_score": 0.75,
+      "bias_points": 2.5
     },
     "Saudi Oil Attacks": {
       "count": 8,
