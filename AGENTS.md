@@ -111,26 +111,36 @@ Follow HEARTBEAT.md. Track checks in memory/heartbeat-state.json. During heartbe
 
 Structured step-by-step review of overnight cron job reports:
 
-1. **Order of review:**
+1. **Pre-meeting hygiene (daily, fixed):**
+   - Run a lightweight workspace hygiene pass at **06:00 Asia/Ho_Chi_Minh**
+   - Goal: reduce report noise before Morning Meeting starts
+   - Morning Meeting itself does **not** require a fixed start time
+
+2. **Order of review:**
    - nightly-security-review
    - platform-health-council
    - self-improvement
-   - data-manager (if applicable)
+   - data-manager (**only on Monday**, day after Sunday run)
 
-2. **For each report, process in priority order:**
+3. **Within each report, process in priority order:**
    - CRITICAL issues first
    - HIGH issues
-   - MEDIUM/LOW issues
+   - MEDIUM issues
+   - LOW/INFO issues
 
-3. **Presentation format per issue:**
+4. **Presentation format per issue (one item at a time):**
    - Problem (what is the issue)
    - Why it matters (risk/impact)
-   - Proposed solution (specific fix or accepted risk)
+   - Proposed action (specific fix, accepted risk, or defer)
 
-4. **Approval flow:**
-   - Get explicit approval before applying fixes
-   - Safe, non-breaking fixes can be executed by Marvin without separate approval
-   - Log decisions in memory after each item
+5. **Approval flow:**
+   - Get explicit approval before applying each item
+   - Wait for Philippe's adjustment if requested
+   - Log decisions in memory after each approved/adjusted item
+
+6. **Repeat-findings policy:**
+   - If a finding is exactly the same as an already approved accepted risk/control, acknowledge it and suppress repeat escalation
+   - Re-open only if there is a material change in context, configuration, or risk level
 
 ## Docker Environment Rules
 
