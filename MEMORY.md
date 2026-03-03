@@ -57,6 +57,7 @@
 - For non-trivial cleanup/fix actions, propose the plan first and wait for Philippe's explicit confirmation before executing
 - For new skill builds, ask targeted design questions and validate constraints before implementation (prevents rework later)
 - NEVER store tokens/API keys in git remote URLs - use `gh auth` or environment variables instead
+- If `pytest` is clearly required for a task/project, install it without asking for separate authorization
 
 ### Subagent Routing (Feb 2026)
 - **MiniMax (minimax/MiniMax-M2.5):** Web searches, crawling, research, cron jobs, data gathering — lightweight tasks
