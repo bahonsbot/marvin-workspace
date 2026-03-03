@@ -564,8 +564,30 @@
     "added_at": "2026-03-02T20:47:43.965939",
     "verified": true,
     "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Market Shock) - March 2, 2026\nEnergy Markets: Gas Oil +19%, Brent +8%, EU Natural Gas +50%\nEquity Markets: S&P opened -1.2%, airlines/cruises down 4%, global markets fell 2%+\nSafe Havens: Gold touched $5,419/oz, USD rose\nVerdict: Energy/Defense longs winners, travel/logistics shorts winners",
-    "evaluated_at": "2026-03-03T12:46:00+07:00"
+    "notes": "Validated (Market Shock): core call hit exactly. Energy complex exploded higher with initial broad risk-off equity response, then index-level rebound while sector dispersion remained extreme.",
+    "evaluated_at": "2026-03-03T12:46:00+07:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Energy spike + initial panic validated; late index rebound did not negate sector-level risk repricing.",
+      "drivers": [
+        "Operation Epic Fury escalation",
+        "Iranian retaliation on regional energy hubs",
+        "Risk-off positioning then intraday fog-of-war reversal"
+      ],
+      "metrics": [
+        "Gas oil +19%",
+        "Brent +7-8% (intraday touch ~82)",
+        "EU Nat Gas +50%",
+        "S&P open ~-1.2% then near-flat close",
+        "DAX -2.6%, Hang Seng -2.1%",
+        "Gold near 5,419 and DXY stronger"
+      ],
+      "sector_impact": [
+        "Energy/defense outperformed",
+        "Airlines/cruises underperformed on fuel shock"
+      ],
+      "confidence": "HIGH"
+    }
   },
   {
     "signal": {
@@ -604,8 +626,27 @@
     "added_at": "2026-03-02T21:47:29.159731",
     "verified": true,
     "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Market Shock) - March 2, 2026\nQatari Production: Halted at Ras Laffan and Mesaieed (20% global LNG supply)\nEuropean Gas (TTF): +52% (sharpest since Russia-Ukraine war)\nAsian LNG (JKM): +39%\nUK Gas: +43%\nTrade: Long Nat Gas (UNG) or Energy producers were high-performers",
-    "evaluated_at": "2026-03-03T12:48:00+07:00"
+    "notes": "Validated (Market Shock): Qatari production disruption produced immediate and outsized global gas repricing.",
+    "evaluated_at": "2026-03-03T12:48:00+07:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Physical LNG disruption plus Hormuz transit risk created a textbook vertical gas-price shock.",
+      "drivers": [
+        "Ras Laffan and Mesaieed disruption",
+        "Qatar LNG supply significance (~20% global)",
+        "Maritime/transit threat premium"
+      ],
+      "metrics": [
+        "TTF +52% (intraday up to ~59%)",
+        "UK gas +43%",
+        "JKM +39%"
+      ],
+      "sector_impact": [
+        "Energy producers and gas-linked exposures bid strongly",
+        "Import-dependent regions repriced energy cost risk"
+      ],
+      "confidence": "HIGH"
+    }
   },
   {
     "signal": {
@@ -646,8 +687,28 @@
     "added_at": "2026-03-03T07:47:29.576872",
     "verified": true,
     "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Systemic Credit Signal) - March 3, 2026\nRedemption Rate: 7.9% (exceeded 5% cap)\nNet Flow: -$1.7B first major net outflow of 2026\nBlackstone Response: Increased cap to 7%, injected $400M of own capital\nIndustry Impact: Apollo/Ares shares dropped ~8% in sympathy\nTrade: Private credit liquidity squeeze captured correctly",
-    "evaluated_at": "2026-03-03T13:25:00+07:00"
+    "notes": "Validated (Systemic Credit Signal): BCRED redemption wave and sponsor intervention confirmed private-credit liquidity stress and sector contagion.",
+    "evaluated_at": "2026-03-03T13:25:00+07:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Retail private-credit liquidity anxiety escalated from Blue Owl into Blackstone bellwether stress.",
+      "drivers": [
+        "BCRED redemption requests above gate",
+        "Net outflow pressure",
+        "Sponsor confidence intervention (cap upsize + capital injection)"
+      ],
+      "metrics": [
+        "Redemption requests 7.9% vs 5% cap",
+        "Flows: +2.0B in vs 3.7B out => -1.7B net",
+        "Blackstone/employee injection 400M",
+        "Peer listed names (Apollo/Ares) ~8% down sympathy move"
+      ],
+      "sector_impact": [
+        "Alt-credit managers repriced on liquidity-premium risk",
+        "Contagion concern across semi-liquid private-credit products"
+      ],
+      "confidence": "HIGH"
+    }
   },
   {
     "signal": {
@@ -686,8 +747,27 @@
     "added_at": "2026-03-03T11:47:37.472484",
     "verified": true,
     "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Geopolitical Trigger Event) - Mar 2-3, 2026\nRubio confirmed US preemptive strike logic tied to expected Israeli unilateral action and automatic Iranian retaliation risk.\nMarket impact: safe-haven bid persisted (gold highs), defense/cyber defense stocks outperformed, conflict-duration premium rose.\nPolitical impact: diplomatic friction and renewed War Powers debate in Congress.\nSignal quality: accurately identified the causal catalyst narrative driving escalation and volatility repricing.",
-    "evaluated_at": "2026-03-03T13:29:00+08:00"
+    "notes": "Validated (Geopolitical Trigger Event): Rubio's explanation became the catalyst narrative for repricing conflict duration, policy friction, and defense-risk premium.",
+    "evaluated_at": "2026-03-03T13:29:00+08:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "US preemptive-strike rationale tied to Israeli trigger intelligence became dominant escalation narrative.",
+      "drivers": [
+        "Rubio disclosure on preemptive logic",
+        "Expected automatic retaliation framework",
+        "Shift from localized skirmish to broader campaign expectations"
+      ],
+      "metrics": [
+        "Gold at/near fresh highs (~5,419)",
+        "Defense/cyber-defense leadership (e.g. PLTR strength)",
+        "Conflict duration premium repriced toward multi-week scenario"
+      ],
+      "sector_impact": [
+        "Defense/cyber outperformance",
+        "Broader risk premium and policy-friction uncertainty increased"
+      ],
+      "confidence": "HIGH"
+    }
   },
   {
     "signal": {
