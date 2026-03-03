@@ -201,6 +201,7 @@ Behavior:
 - In default mode (`PAPER_EXECUTE=false`), returns dry-run decision only
 - In execution mode (`PAPER_EXECUTE=true`), uses `src/execution_orchestrator.py` and `src/broker_adapter_alpaca.py`
 - Enforces Alpaca paper endpoint with hard checks that block any live-mode configuration
+- Applies per-IP rate limiting by default (`120 req / 60s`) to reduce accidental endpoint spam
 - Suppresses duplicate executions using deterministic idempotency keys in `data/state/idempotency.json`
 - Writes structured events to `logs/webhook_decisions.jsonl`
 

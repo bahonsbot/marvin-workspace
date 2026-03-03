@@ -13,6 +13,8 @@ import sys
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from threading import Lock
+from time import time
 from typing import Any, Dict
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,6 +39,9 @@ from src.signal_validator import validate_signal_payload
 
 LOG_PATH = ROOT / "logs" / "webhook_decisions.jsonl"
 
+_RATE_LIMIT_BUCKETS: Dict[str, list[float]] = {}
+_RATE_LIMIT_LOCK = Lock()
+
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -47,6 +52,39 @@ def _env_flag(name: str, *, default: bool = False) -> bool:
     if value is None:
         return default
     return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _env_int(name: str, *, default: int) -> int:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return default
+    return parsed if parsed > 0 else default
+
+
+def _rate_limit_allowed(client_ip: str) -> bool:
+    enabled = _env_flag("WEBHOOK_RATE_LIMIT_ENABLED", default=True)
+    if not enabled:
+        return True
+
+    max_requests = _env_int("WEBHOOK_RATE_LIMIT_MAX_REQUESTS", default=120)
+    window_seconds = _env_int("WEBHOOK_RATE_LIMIT_WINDOW_SECONDS", default=60)
+    now = time()
+
+    with _RATE_LIMIT_LOCK:
+        bucket = _RATE_LIMIT_BUCKETS.setdefault(client_ip, [])
+        cutoff = now - window_seconds
+        while bucket and bucket[0] < cutoff:
+            bucket.pop(0)
+
+        if len(bucket) >= max_requests:
+            return False
+
+        bucket.append(now)
+        return True
 
 
 def process_webhook_payload(
@@ -174,6 +212,11 @@ class WebhookHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802 (BaseHTTPRequestHandler naming)
         if self.path != "/webhook":
             self._send_json(404, {"error": "Not found", "paper_only": True})
+            return
+
+        client_ip = self.client_address[0] if self.client_address else "unknown"
+        if not _rate_limit_allowed(client_ip):
+            self._send_json(429, {"error": "Rate limit exceeded", "paper_only": True})
             return
 
         content_length = self.headers.get("Content-Length")
