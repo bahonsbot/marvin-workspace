@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-03T14:01:56.674687",
+  "generated_at": "2026-03-03T14:04:11.127597",
   "sample_size": 14,
   "by_category": {
     "financial_credit": {
@@ -14,8 +14,8 @@
     },
     "macroeconomic": {
       "count": 2,
-      "avg_outcome_score": 0.625,
-      "bias_points": 1.25
+      "avg_outcome_score": 0.75,
+      "bias_points": 2.5
     },
     "sentiment_social": {
       "count": 1,
@@ -46,8 +46,8 @@
     },
     "COVID-19 Market Crash": {
       "count": 1,
-      "avg_outcome_score": 0.5,
-      "bias_points": 0.0
+      "avg_outcome_score": 0.75,
+      "bias_points": 2.5
     },
     "GameStop Short Squeeze": {
       "count": 1,

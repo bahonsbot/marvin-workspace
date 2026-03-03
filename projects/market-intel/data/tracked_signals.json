@@ -261,9 +261,29 @@
     },
     "added_at": "2026-03-01T13:47:28.454156",
     "verified": true,
-    "actual_outcome": "correct",
-    "notes": "Same as Signal 3 - Saudi Oil Attacks pattern validated. VIX >20, Brent +13%, risk repricing observed.",
-    "evaluated_at": "2026-03-02T17:17:00+08:00"
+    "actual_outcome": "STRONG BUY",
+    "notes": "Validated via overlap with Signal #3: same escalation window and same Saudi-oil-attack style risk transmission. Treated as duplicate/companion signal in same event cluster.",
+    "evaluated_at": "2026-03-02T17:17:00+08:00",
+    "legacy_outcome": "correct",
+    "evidence_pack": {
+      "summary": "Companion signal to #3 in same geopolitical escalation cluster; outcomes matched volatility spike + risk repricing.",
+      "drivers": [
+        "Same retaliatory strike cycle as Signal #3",
+        "Energy infrastructure threat premium",
+        "Cross-asset de-risking"
+      ],
+      "metrics": [
+        "VIX > 20",
+        "Brent spike regime",
+        "Regional equity drawdown and haven bid"
+      ],
+      "sector_impact": [
+        "Energy/defense relative strength",
+        "Travel/risk assets weak"
+      ],
+      "confidence": "HIGH",
+      "dedupe_reference": "signal_3"
+    }
   },
   {
     "signal": {
@@ -303,9 +323,29 @@
     },
     "added_at": "2026-03-01T19:47:28.988263",
     "verified": true,
-    "actual_outcome": "partial",
-    "notes": "Predicted outcomes (rates_volatility, fx_move, equity_factor_rotation) observed. However, headline misattribution - original 2020 AP title used, actual event was Jan 2025 admin actions that became blame catalyst in late Feb 2026.",
-    "evaluated_at": "2026-03-02T17:22:00+08:00"
+    "actual_outcome": "BUY",
+    "notes": "Partially validated as historical-echo pattern. Headline itself was legacy (2020) but 2025 policy repetition + 2026 H5N1 risk narrative reactivated the same preparedness-gap theme. Predicted outcomes appeared, though co-driven by concurrent Middle East war shock.",
+    "evaluated_at": "2026-03-02T17:22:00+08:00",
+    "legacy_outcome": "partial",
+    "evidence_pack": {
+      "summary": "Preparedness-policy echo plus H5N1 scare aligned with predicted macro outcomes, but attribution was mixed with wartime risk-off flows.",
+      "drivers": [
+        "2025 rollback of pandemic preparedness office",
+        "Late-Feb 2026 H5N1 fear narrative",
+        "Concurrent geopolitical conflict amplified volatility"
+      ],
+      "metrics": [
+        "Rates remained in risk-off suppression regime",
+        "USD safe-haven strength persisted",
+        "Equity factor rotation into defensive/stay-at-home style exposures"
+      ],
+      "sector_impact": [
+        "Travel/hospitality/retail pressure",
+        "Healthcare and defensive growth relative support"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "label_quality": "HISTORICAL_ECHO"
+    }
   },
   {
     "signal": {
