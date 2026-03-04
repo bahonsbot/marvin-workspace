@@ -306,4 +306,9 @@ def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
 
 
 if __name__ == "__main__":
-    run_server()
+    host = os.getenv("WEBHOOK_HOST", "127.0.0.1")
+    try:
+        port = int(os.getenv("WEBHOOK_PORT", "8000"))
+    except ValueError:
+        port = 8000
+    run_server(host=host, port=port)
