@@ -82,7 +82,7 @@ def analyze_image(image_path, prompt="Describe this image in detail."):
     }
     
     print("Sending request to MiniMax API...")
-    response = requests.post(url, headers=headers, json=payload)
+    response = requests.post(url, headers=headers, json=payload, timeout=(5, 30))
     
     if response.status_code != 200:
         print(f"Error: {response.status_code}")
