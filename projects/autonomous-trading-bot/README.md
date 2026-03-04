@@ -311,3 +311,5 @@ Activation conditions (from context snapshot):
 - severity is high/critical, and
 - geopolitical count >= `AUTO_FAST_GEO_THRESHOLD` OR
 - high confidence signal count >= `AUTO_FAST_HIGH_CONF_THRESHOLD`
+
+- Telegram mode indicator: sends a digest when dispatch mode switches (CONSERVATIVE ↔ FAST).

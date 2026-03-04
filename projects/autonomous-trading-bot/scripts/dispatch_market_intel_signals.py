@@ -101,10 +101,11 @@ def _write_json(path: Path, payload: Any) -> None:
 
 
 def _load_state() -> dict[str, Any]:
-    st = _read_json(STATE_PATH, {"sent": {}, "updated_at": None})
+    st = _read_json(STATE_PATH, {"sent": {}, "updated_at": None, "last_mode": None})
     if not isinstance(st, dict):
-        st = {"sent": {}, "updated_at": None}
+        st = {"sent": {}, "updated_at": None, "last_mode": None}
     st.setdefault("sent", {})
+    st.setdefault("last_mode", None)
     return st
 
 
@@ -247,18 +248,25 @@ def main() -> int:
             blocked += 1
             lines.append(f"⚠️ blocked status={status} | {str(sig.get('title',''))[:70]}")
 
-    state["updated_at"] = now.isoformat()
-    _write_json(STATE_PATH, state)
-
+    mode_name = 'FAST' if fast_mode else 'CONSERVATIVE'
     mode_line = (
-        f"mode={'FAST' if fast_mode else 'CONSERVATIVE'} "
+        f"mode={mode_name} "
         f"min_score={min_reasoning_score} qty_mult={qty_multiplier}"
     )
+
+    # Notify mode changes even when nothing dispatched (without spamming every cycle)
+    mode_changed = state.get("last_mode") != mode_name
+    if mode_changed:
+        _send_digest([f"🔁 mode switched: {state.get('last_mode')} → {mode_name}", mode_line])
 
     if dispatched or blocked:
         _send_digest([mode_line, f"dispatched={dispatched} blocked={blocked}"] + lines[:8])
 
-    print(f"dispatch complete: {mode_line} dispatched={dispatched} blocked={blocked}")
+    state["last_mode"] = mode_name
+    state["updated_at"] = now.isoformat()
+    _write_json(STATE_PATH, state)
+
+    print(f"dispatch complete: {mode_line} dispatched={dispatched} blocked={blocked} mode_changed={mode_changed}")
     return 0
 
 
