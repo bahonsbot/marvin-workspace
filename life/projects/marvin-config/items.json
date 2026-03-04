@@ -135,7 +135,7 @@
       "projects/autonomous-trading-bot"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 1,
+    "accessCount": 2,
     "source": "memory/2026-03-04.md"
   },
   {
@@ -151,5 +151,92 @@
     "lastAccessed": "2026-03-04",
     "accessCount": 1,
     "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "mc-013",
+    "fact": "Nightly memory extraction has failed for 3+ consecutive nights due to path resolution error \u2014 cron uses ~/.openclaw/workspace/ but actual path is /data/.openclaw/workspace/.",
+    "category": "status",
+    "timestamp": "2026-03-04T12:15:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 2,
+    "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "mc-014",
+    "fact": "Health Council and Self-Improvement reports incorrectly flag cron jobs as 'error' when delivery mode is 'none' \u2014 jobs actually succeed and deliver to Telegram via announce, but lastDeliveryStatus shows 'not-delivered'.",
+    "category": "status",
+    "timestamp": "2026-03-04T12:07:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "mc-015",
+    "fact": "Morning Meeting protocol standardized: report order security\u2192health\u2192self-improvement, severity ladder, one-item approval loop.",
+    "category": "decision",
+    "timestamp": "2026-03-03T04:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "AGENTS.md"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-016",
+    "fact": "Cron delivery reliability fix: platform-health-council and self-improvement changed to mode:none with extended timeout.",
+    "category": "decision",
+    "timestamp": "2026-03-03T12:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "cron/jobs.json"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-017",
+    "fact": "Evidence-pack implementation: market-intel now stores structured verification context and produces model_feedback.json.",
+    "category": "decision",
+    "timestamp": "2026-03-03T14:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-018",
+    "fact": "Nightly security review ran: found webhook security issues, accepted control flags as INFO.",
+    "category": "status",
+    "timestamp": "2026-03-02T03:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "memory/security"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-019",
+    "fact": "Trading bot daily report started: 4 signals received, 1 submitted to paper trading.",
+    "category": "status",
+    "timestamp": "2026-03-02T08:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 1
   }
 ]

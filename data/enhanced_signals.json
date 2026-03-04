@@ -1,43 +1,1104 @@
-=== MARKET INTEL: REASONING ANALYSIS ===
-
-📊 Total: 29
-   🟢 STRONG BUY: 17
-   🟢 BUY: 8
-   🟡 HOLD: 4
-
-🎯 TOP SIGNALS WITH REASONING:
-
-[STRONG BUY] 80/100
-  Trump disbanded NSC pandemic unit that experts had praised -...
-  Source: AP_Top
-  Reasoning: moderate source, strong historical pattern match.
-  📈 Predicted: rates_volatility → fx_move → equity_factor_rotation
-
-[STRONG BUY] 80/100
-  Ghana says at least 55 of its people killed after Russia 'lu...
-  Source: Guardian_World
-  Reasoning: moderate source, strong historical pattern match.
-  📈 Predicted: volatility_spike → risk_repricing
-  💡 Feb 2022 peace talk failures preceded the invasion — markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.
-
-[STRONG BUY] 80/100
-  'A devastating force': how recent storms turned to tragedies...
-  Source: Guardian_World
-  Reasoning: moderate source, strong historical pattern match.
-  📈 Predicted: forced_covering → borrow_fee_spike → volatility_clustering
-
-[STRONG BUY] 80/100
-  Oil price expected to surge after Iran strikes and strait of...
-  Source: Guardian_Business
-  Reasoning: moderate source, strong historical pattern match.
-  📈 Predicted: volatility_spike → risk_repricing
-  💡 Similar to Oct 2023 when Iran attacked Israel — oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.
-
-[STRONG BUY] 80/100
-  Stocks face Iran jitters and a crucial jobs report in the we...
-  Source: MarketWatch
-  Reasoning: moderate source, strong historical pattern match.
-  📈 Predicted: rates_volatility → fx_move → equity_factor_rotation
-  💡 Similar to Oct 2023 when Iran attacked Israel — oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.
-
-✓ Saved 29 enhanced signals to data/enhanced_signals.json
+[
+  {
+    "source": "rss",
+    "feed": "Financial_Times",
+    "title": "Blackstone flagship private credit fund hit with redemptions ",
+    "url": "https://www.ft.com/content/7dadc5b5-d5d2-40d6-9ee0-abcb03e0a598",
+    "timestamp": "2026-03-03T21:50:07.142811",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 99.5,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 90.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 92.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "high-credibility source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "financials_volatility",
+      "treasury_bid",
+      "credit_tightening"
+    ],
+    "predicted_causal_chain": [
+      "Funding stress",
+      "Credit spreads widen",
+      "Bank equities underperform",
+      "Policy support expectations rise"
+    ],
+    "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
+    "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
+    "timestamp": "2026-03-03T21:50:07.142633",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 87.5,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western ",
+    "url": "https://www.theguardian.com/world/2026/feb/26/recent-mediterranean-storms-tragedies-spain-portugal-morocco",
+    "timestamp": "2026-03-03T21:50:07.142697",
+    "pattern_id": "p005",
+    "pattern": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 87.5,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "forced_covering",
+      "borrow_fee_spike",
+      "volatility_clustering"
+    ],
+    "predicted_causal_chain": [
+      "Crowded short setup",
+      "Call buying surge",
+      "Dealer hedging amplifies upside"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
+    "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
+    "timestamp": "2026-03-03T21:50:07.143135",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 87.5,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western ",
+    "url": "https://www.theguardian.com/world/2026/feb/26/recent-mediterranean-storms-tragedies-spain-portugal-morocco",
+    "timestamp": "2026-03-03T21:50:07.143193",
+    "pattern_id": "p005",
+    "pattern": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 87.5,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "forced_covering",
+      "borrow_fee_spike",
+      "volatility_clustering"
+    ],
+    "predicted_causal_chain": [
+      "Crowded short setup",
+      "Call buying surge",
+      "Dealer hedging amplifies upside"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/investing",
+    "title": "Margin Investing Robinhood App",
+    "url": "https://reddit.com/r/investing/comments/1rjduqy/margin_investing_robinhood_app/",
+    "timestamp": "2026-03-03T21:50:07.143237",
+    "pattern_id": "p005",
+    "pattern": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "score": 0,
+    "signal_score": 300,
+    "reasoning_score": 87.5,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "forced_covering",
+      "borrow_fee_spike",
+      "volatility_clustering"
+    ],
+    "predicted_causal_chain": [
+      "Crowded short setup",
+      "Call buying surge",
+      "Dealer hedging amplifies upside"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "AP_Top",
+    "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
+    "timestamp": "2026-03-03T21:50:07.142548",
+    "pattern_id": "p004",
+    "pattern": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 84.2,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 4.25,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_Business",
+    "title": "Surprise jump in UK grocery inflation makes interest rate cut less probable",
+    "url": "https://www.theguardian.com/business/2026/mar/03/uk-grocery-inflation-middle-east-war-eurozone-uk-ecb-worldpanel",
+    "timestamp": "2026-03-03T21:50:07.142753",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 84.2,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 4.25,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "front_end_yield_move",
+      "usd_trend_shift",
+      "growth_value_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Inflation/rates surprise",
+      "Bond market reprices terminal rate",
+      "Equity duration factor moves"
+    ],
+    "signal_briefing": "2019 rate cuts fueled a 30% market rally. Rate cuts typically boost growth stocks and REITs. Dollar weakens as yield differential narrows. Bond yields fall.",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "MarketWatch",
+    "title": "Treasury yields rise as oil prices spike",
+    "url": "https://www.marketwatch.com/story/treasury-yields-rise-as-oil-prices-spike-54a4b9ff?mod=mw_rss_topstories",
+    "timestamp": "2026-03-03T21:50:07.142862",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 84.2,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 4.25,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Yahoo_Finance",
+    "title": "Stablecoin use could weaken ECB's hand, hamper lenders, ECB paper finds",
+    "url": "https://finance.yahoo.com/news/stablecoin-could-weaken-ecbs-hand-113516918.html",
+    "timestamp": "2026-03-03T21:50:07.142912",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 84.2,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 4.25,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Nasdaq_News",
+    "title": "Bond markets gripped by oil-driven inflation fear, traders slash bets on rate cu",
+    "url": "https://www.reuters.com/world/europe/bond-markets-gripped-by-oil-driven-inflation-fear-traders-slash-bets-rate-cuts-2026-03-03/",
+    "timestamp": "2026-03-03T21:50:07.142972",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 84.2,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 4.25,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "front_end_yield_move",
+      "usd_trend_shift",
+      "growth_value_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Inflation/rates surprise",
+      "Bond market reprices terminal rate",
+      "Equity duration factor moves"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_BreakingViews",
+    "title": "Why Japan\u2019s revitalisation can overcome high debt: podcast",
+    "url": "https://www.reuters.com/podcasts/the-big-view/why-japans-revitalisation-can-overcome-high-debt-podcast-2026-02-24/",
+    "timestamp": "2026-03-03T21:50:07.143027",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300,
+    "reasoning_score": 84.2,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 4.25,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "AP_Top",
+    "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
+    "timestamp": "2026-03-03T21:50:07.143076",
+    "pattern_id": "p004",
+    "pattern": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300,
+    "reasoning_score": 84.2,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 4.25,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/investing",
+    "title": "Mortgage rates jump sharply higher after Iran strikes, reversing last week\u2019s dec",
+    "url": "https://reddit.com/r/investing/comments/1rj8c27/mortgage_rates_jump_sharply_higher_after_iran/",
+    "timestamp": "2026-03-03T21:50:07.143294",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "score": 355,
+    "signal_score": 300,
+    "reasoning_score": 84.2,
+    "confidence_level": "STRONG BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 4.25,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, strong historical pattern match.",
+    "predicted_outcomes": [
+      "front_end_yield_move",
+      "usd_trend_shift",
+      "growth_value_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Inflation/rates surprise",
+      "Bond market reprices terminal rate",
+      "Equity duration factor moves"
+    ],
+    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "WSJ_Markets",
+    "title": "Stocks Sink in Broad AI Rout Sparked by China's DeepSeek",
+    "url": "https://www.wsj.com/articles/nikkei-may-rise-as-weak-yen-raises-earnings-hopes-776a8056?mod=rss_markets_main",
+    "timestamp": "2026-03-03T21:50:07.143581",
+    "pattern_id": "p003",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "signal_score": 100,
+    "reasoning_score": 65.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "WSJ_Markets",
+    "title": "DeepSeek Won't Sink U.S. AI Titans",
+    "url": "https://www.wsj.com/articles/deepseek-us-ai-stocks-nvidia-broadcom-6cdfae81?mod=rss_markets_main",
+    "timestamp": "2026-03-03T21:50:07.143625",
+    "pattern_id": "p003",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "signal_score": 100,
+    "reasoning_score": 65.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border",
+    "url": "https://www.theguardian.com/us-news/2026/feb/27/cbp-border-drone-military-democrats",
+    "timestamp": "2026-03-03T21:50:07.143370",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "signal_score": 100,
+    "reasoning_score": 60.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_Business",
+    "title": "\u2018Peak Greggs\u2019? Bakery chain\u2019s profits slump and sales slow",
+    "url": "https://www.theguardian.com/business/2026/mar/03/greggs-bakery-chain-profits-sales-high-street-sausage-rolls",
+    "timestamp": "2026-03-03T21:50:07.143423",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "signal_score": 100,
+    "reasoning_score": 60.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "MarketWatch",
+    "title": "SpaceX\u2019s stock could trade like Tesla \u2018on steroids\u2019 after its IPO, analyst says",
+    "url": "https://www.marketwatch.com/story/spacexs-stock-could-trade-like-tesla-on-steroids-after-ipo-analyst-says-6916bd55?mod=mw_rss_topstories",
+    "timestamp": "2026-03-03T21:50:07.143482",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "signal_score": 100,
+    "reasoning_score": 60.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "MarketWatch",
+    "title": "Target expects sales to rebound this year, as the retailer tries to rally invest",
+    "url": "https://www.marketwatch.com/story/target-expects-sales-to-rebound-this-year-as-the-retailer-tries-to-rally-investors-around-its-new-ceo-a7d434ef?mod=mw_rss_topstories",
+    "timestamp": "2026-03-03T21:50:07.143532",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "signal_score": 100,
+    "reasoning_score": 60.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border",
+    "url": "https://www.theguardian.com/us-news/2026/feb/27/cbp-border-drone-military-democrats",
+    "timestamp": "2026-03-03T21:50:07.143677",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "signal_score": 100,
+    "reasoning_score": 60.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/investing",
+    "title": "The SpaceX IPO means index funds will be legally required to hand Elon Musk your",
+    "url": "https://reddit.com/r/investing/comments/1rj1s5n/the_spacex_ipo_means_index_funds_will_be_legally/",
+    "timestamp": "2026-03-03T21:50:07.144167",
+    "pattern_id": "p010",
+    "pattern": "Tesla Stock Splits",
+    "category": "corporate",
+    "confidence": "MEDIUM",
+    "time_horizon": "medium-term",
+    "score": 0,
+    "signal_score": 100,
+    "reasoning_score": 60.0,
+    "confidence_level": "BUY",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "moderate source, moderate pattern match.",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "106k in spy puts, as jesus died for our sins i will die for your calls",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rjnz6o/106k_in_spy_puts_as_jesus_died_for_our_sins_i/",
+    "timestamp": "2026-03-03T21:50:07.143731",
+    "pattern_id": "p024",
+    "pattern": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "intraday",
+    "score": 86,
+    "signal_score": 100,
+    "reasoning_score": 59.0,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "S&p 500 customer Put Delta position",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rjmnn9/sp_500_customer_put_delta_position/",
+    "timestamp": "2026-03-03T21:50:07.143804",
+    "pattern_id": "p024",
+    "pattern": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "intraday",
+    "score": 46,
+    "signal_score": 100,
+    "reasoning_score": 59.0,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "$72000 Oil Calls 6DTE YOLO",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rjipj7/72000_oil_calls_6dte_yolo/",
+    "timestamp": "2026-03-03T21:50:07.143881",
+    "pattern_id": "p024",
+    "pattern": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "intraday",
+    "score": 14,
+    "signal_score": 100,
+    "reasoning_score": 59.0,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "70x 685/687 call credit spreads expiring tomorrow. Great joy at the AH dump happ",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rjgty2/70x_685687_call_credit_spreads_expiring_tomorrow/",
+    "timestamp": "2026-03-03T21:50:07.143960",
+    "pattern_id": "p024",
+    "pattern": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "intraday",
+    "score": 15,
+    "signal_score": 100,
+    "reasoning_score": 59.0,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "480k MU YOLO (240k in margin)",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rjdoyx/480k_mu_yolo_240k_in_margin/",
+    "timestamp": "2026-03-03T21:50:07.144009",
+    "pattern_id": "p024",
+    "pattern": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "intraday",
+    "score": 427,
+    "signal_score": 100,
+    "reasoning_score": 59.0,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "$30,000 SPY Put Yolo \u2b06\ufe0fdate",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rizlkb/30000_spy_put_yolo_date/",
+    "timestamp": "2026-03-03T21:50:07.144069",
+    "pattern_id": "p024",
+    "pattern": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "intraday",
+    "score": 268,
+    "signal_score": 100,
+    "reasoning_score": 59.0,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "99k loan ATOM yolo",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rix92g/99k_loan_atom_yolo/",
+    "timestamp": "2026-03-03T21:50:07.144116",
+    "pattern_id": "p024",
+    "pattern": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "intraday",
+    "score": 139,
+    "signal_score": 100,
+    "reasoning_score": 59.0,
+    "confidence_level": "HOLD",
+    "recommendation": "TAKE",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 14
+    },
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "signal_briefing": "",
+    "root_causes": []
+  }
+]

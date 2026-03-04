@@ -101,6 +101,7 @@ PREV_TASK_COUNT=0
 
 # Setup
 mkdir -p "$LOG_DIR"
+chmod 700 "$LOG_DIR"
 cd "$WORKSPACE"
 
 log() {
@@ -169,8 +170,24 @@ notify() {
 log "Starting Ralph Loop for $PRD_FILE in $WORKSPACE"
 log "Model: $MODEL, Max iterations: $MAX_ITERATIONS"
 
+# Security: Scan PRD for dangerous patterns
+if ! is_unsafe_allowed; then
+    if ! scan_prd_for_dangers "$PRD_FILE"; then
+        log "SECURITY BLOCK: Dangerous patterns detected in PRD"
+        read -p "PRD contains dangerous commands. Continue anyway? (y/n) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            log "Aborted due to security concerns"
+            exit 1
+        fi
+        log "User acknowledged security warning, continuing..."
+    fi
+fi
+
 # Human approval gate - prevent automated execution without review
-if [[ -t 0 ]]; then
+if is_unsafe_allowed; then
+    log "BYPASS: RALPHY_ALLOW_UNSAFE=1 set, skipping approval gate"
+elif [[ -t 0 ]]; then
     echo "========================================"
     echo "About to execute PRD: $PRD_FILE"
     echo "Workspace: $WORKSPACE"
@@ -183,7 +200,10 @@ if [[ -t 0 ]]; then
         exit 0
     fi
 else
-    log "WARNING: Running in non-interactive mode - skipping approval gate"
+    log "ERROR: Non-interactive mode requires RALPHY_ALLOW_UNSAFE=1"
+    echo "ERROR: Running in non-interactive mode without approval bypass"
+    echo "Set RALPHY_ALLOW_UNSAFE=1 to bypass (use with caution)"
+    exit 1
 fi
 
 while [[ $ITERATION -lt $MAX_ITERATIONS ]]; do
@@ -236,3 +256,23 @@ done
 log "ERROR: Max iterations reached ($MAX_ITERATIONS)"
 notify "Ralph loop maxed out: $PRD_FILE reached $MAX_ITERATIONS iterations" "error"
 exit 1
+
+# ========== SECURITY: PRD Content Scanner ==========
+# Scans PRD for dangerous patterns before execution
+
+scan_prd_for_dangers() {
+    local prd_file="$1"
+    local dangerous_patterns="curl.*\|wget.*\|ssh.*\|scp.*\|rm -rf\|mkfs\|dd.*of=\|:(){:|:&}:\|eval|exec.*bash\|chmod 777\|chown.*root\|sudo|sudoers|/etc/passwd|/etc/shadow"
+    
+    if grep -qiE "$dangerous_patterns" "$prd_file" 2>/dev/null; then
+        echo "[SECURITY] WARNING: Potentially dangerous patterns detected in PRD"
+        grep -iE "$dangerous_patterns" "$prd_file" | head -5
+        return 1
+    fi
+    return 0
+}
+
+# Check if unsafe operations are allowed
+is_unsafe_allowed() {
+    [[ "$RALPHY_ALLOW_UNSAFE" == "1" ]]
+}

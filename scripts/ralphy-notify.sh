@@ -74,17 +74,17 @@ payload = json.dumps({
 req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json'})
 try:
     with urllib.request.urlopen(req, timeout=15) as r:
-        print(r.read().decode('utf-8', errors='replace'))
+        print("sent")
 except Exception as e:
-    print(json.dumps({"ok": False, "error": str(e)}))
+    print("failed")
 PY
 )
 
-    if echo "$response" | grep -q '"ok":true'; then
+    if echo "$response" | grep -q "sent"; then
         echo "[OK] Notification sent: $message"
         return 0
     else
-        echo "[ERROR] Telegram API error: $response"
+        echo "[ERROR] Telegram API failed"
         return 1
     fi
 }

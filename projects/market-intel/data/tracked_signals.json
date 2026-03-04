@@ -842,5 +842,260 @@
       ],
       "confidence": "HIGH"
     }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Israel and Hizbollah exchange fire as Middle East war expands",
+      "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
+      "timestamp": "2026-03-03T14:47:30.006524",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-03T14:47:30.009452",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Guardian_World",
+      "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
+      "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
+      "timestamp": "2026-03-03T18:47:28.969375",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-03T18:47:28.971891",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "US embassy in Saudi Arabia warns of imminent attack on oil city of Dhahran",
+      "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
+      "timestamp": "2026-03-03T23:47:31.397089",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-03T23:47:31.400667",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Blue Owl slides below listing price as private credit worries mount",
+      "url": "https://www.ft.com/content/5e1404da-af6c-4f8a-a095-3e16827cadc9",
+      "timestamp": "2026-03-04T02:47:29.050877",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-04T02:47:29.054888",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Trump says US Navy prepared to escort oil tankers in Gulf",
+      "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
+      "timestamp": "2026-03-04T04:47:37.581351",
+      "pattern_id": "p005",
+      "pattern": "GameStop Short Squeeze",
+      "category": "sentiment_social",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "forced_covering",
+        "borrow_fee_spike",
+        "volatility_clustering"
+      ],
+      "predicted_causal_chain": [
+        "Crowded short setup",
+        "Call buying surge",
+        "Dealer hedging amplifies upside"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-04T04:47:37.585162",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "China to lean on Russian oil as Iran crisis chokes supply",
+      "url": "https://www.ft.com/content/114997aa-7d7c-4d85-b696-bc5123ade6cb",
+      "timestamp": "2026-03-04T12:47:28.024586",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-04T12:47:28.028236",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
   }
 ]

@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-02T21:47:29.121644",
-    "baseline_count": 27,
+    "timestamp": "2026-03-04T12:47:27.987867",
+    "baseline_count": 34,
     "enriched_count": 50,
-    "overlap_count": 12,
-    "baseline_only_count": 7,
-    "enriched_only_count": 34,
-    "enriched_lift": 34,
+    "overlap_count": 17,
+    "baseline_only_count": 14,
+    "enriched_only_count": 32,
+    "enriched_lift": 32,
     "baseline_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
-      "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western ",
-      "Gas prices soar as Iranian attacks shut down Qatari production",
-      "\u2018Half of Dubai is booking\u2019: expats drive to Oman and Saudi Arabia to find flight"
+      "Unemployment set to hit 5.3% this year amid \u2018worrying\u2019 rise in young jobless",
+      "Surprise jump in UK grocery inflation makes interest rate cut less probable",
+      "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil"
     ],
     "enriched_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "\u2018A devastating force\u2019: how recent storms turned to tragedies across the western ",
-      "Gas prices soar as Iranian attacks shut down Qatari production",
-      "\u2018Half of Dubai is booking\u2019: expats drive to Oman and Saudi Arabia to find flight",
-      "Gasoil is spiking more than crude. What it is and why prices are soaring amid Ir"
+      "Unemployment set to hit 5.3% this year amid \u2018worrying\u2019 rise in young jobless",
+      "Surprise jump in UK grocery inflation makes interest rate cut less probable",
+      "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil",
+      "China to lean on Russian oil as Iran crisis chokes supply"
     ]
   }
 ]

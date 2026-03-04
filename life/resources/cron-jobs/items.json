@@ -18,8 +18,8 @@
     "source": "2026-02-25",
     "status": "active",
     "relatedEntities": [],
-    "lastAccessed": "2026-02-25",
-    "accessCount": 1
+    "lastAccessed": "2026-03-04",
+    "accessCount": 2
   },
   {
     "id": "cron-003",
@@ -29,8 +29,8 @@
     "source": "initial-setup",
     "status": "active",
     "relatedEntities": [],
-    "lastAccessed": "2026-02-26",
-    "accessCount": 2
+    "lastAccessed": "2026-03-04",
+    "accessCount": 3
   },
   {
     "id": "cron-004",
@@ -42,8 +42,8 @@
     "relatedEntities": [
       "projects/security-review"
     ],
-    "lastAccessed": "2026-03-01",
-    "accessCount": 5
+    "lastAccessed": "2026-03-04",
+    "accessCount": 6
   },
   {
     "id": "cron-005",
@@ -53,8 +53,8 @@
     "source": "2026-02-24",
     "status": "active",
     "relatedEntities": [],
-    "lastAccessed": "2026-02-26",
-    "accessCount": 2
+    "lastAccessed": "2026-03-04",
+    "accessCount": 3
   },
   {
     "id": "cron-006",
@@ -80,7 +80,20 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-01",
+    "lastAccessed": "2026-03-04",
+    "accessCount": 2
+  },
+  {
+    "id": "cron-008",
+    "fact": "trading-daily-report cron was switched to minimax/MiniMax-M2.5 model to reduce Codex quota usage.",
+    "category": "decision",
+    "timestamp": "2026-03-04T11:57:00+07:00",
+    "source": "memory/2026-03-04.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-04",
     "accessCount": 1
   }
 ]
