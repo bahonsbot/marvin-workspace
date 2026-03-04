@@ -16,6 +16,7 @@ if not API_KEY:
     raise EnvironmentError("MINIMAX_API_KEY environment variable is not set. Aborting.")
 
 # Expected directory for images (prevent path traversal)
+MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 ALLOWED_DIR = "/data/.openclaw/media/inbound"
 
 # Image file
@@ -23,9 +24,21 @@ IMAGE_PATH = "/data/.openclaw/media/inbound/file_4---7b40a873-1c93-490e-9648-0ab
 
 def validate_path(path):
     """Validate path is within allowed directory and exists."""
+    # Check file size first
+    if os.path.exists(path):
+        size = os.path.getsize(path)
+        if size > MAX_FILE_SIZE:
+            raise ValueError(f"File too large: {size} bytes (max {MAX_FILE_SIZE})")
+        if size == 0:
+            raise ValueError("File is empty")
+    
+    # Security: prevent path traversal
+    if ".." in path or path.startswith("/"):
+        raise ValueError("Invalid path")
+    
     real_path = os.path.realpath(path)
     real_allowed = os.path.realpath(ALLOWED_DIR)
-    # Use commonpath to prevent sibling path bypass (e.g., /data/../data/media/evil/)
+    # Use commonpath to prevent sibling path bypass
     if os.path.commonpath([real_path, real_allowed]) != real_allowed:
         raise ValueError(f"Path traversal detected: {path} is not within {ALLOWED_DIR}")
     if not os.path.isfile(path):
