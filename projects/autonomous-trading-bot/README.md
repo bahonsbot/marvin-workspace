@@ -257,3 +257,26 @@ All outputs are deterministic from the input file and current local context arti
 - Telegram notifications
 - Any live order execution path
 - Any broker endpoint other than Alpaca paper
+
+## 24/7 Webhook Operation (Paper Mode)
+
+- Start receiver:
+  - `scripts/run_webhook_receiver.sh`
+- Ensure receiver is up (idempotent):
+  - `scripts/ensure_webhook_receiver.sh`
+- Health check:
+  - `GET /health`
+
+### Webhook Authentication
+Set `WEBHOOK_SHARED_SECRET` in `.env` and include the secret in webhook payload:
+```json
+{
+  "symbol": "AAPL",
+  "side": "buy",
+  "qty": 1,
+  "timestamp": "2026-03-04T09:00:00Z",
+  "secret": "<WEBHOOK_SHARED_SECRET>"
+}
+```
+
+> TradingView cannot send custom headers, so payload-based secret is supported.

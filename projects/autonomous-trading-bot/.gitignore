@@ -2,5 +2,7 @@ __pycache__/
 *.pyc
 .venv/
 logs/*.jsonl
+logs/webhook_receiver*.log
+logs/webhook_receiver.pid
 data/state/idempotency.json
 .env

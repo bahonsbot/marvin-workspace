@@ -87,6 +87,26 @@ def _rate_limit_allowed(client_ip: str) -> bool:
         return True
 
 
+def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None) -> bool:
+    """Optional shared-secret auth for incoming webhooks.
+
+    Accepts either:
+    - Header: X-Webhook-Secret
+    - JSON payload field: secret
+    (TradingView cannot set custom headers, so payload secret is supported.)
+    """
+    secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
+    if not secret:
+        return True
+
+    header_secret = headers.get("X-Webhook-Secret", "")
+    payload_secret = ""
+    if payload and isinstance(payload, dict):
+        payload_secret = str(payload.get("secret", ""))
+
+    return header_secret == secret or payload_secret == secret
+
+
 def process_webhook_payload(
     payload: Dict[str, Any],
     *,
@@ -231,6 +251,10 @@ class WebhookHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "Invalid JSON payload", "paper_only": True})
             return
 
+        if not _auth_allowed(dict(self.headers), payload):
+            self._send_json(401, {"error": "Unauthorized webhook", "paper_only": True})
+            return
+
         result = process_webhook_payload(payload)
         status = 200 if result["accepted"] else 422
 
@@ -252,6 +276,12 @@ class WebhookHandler(BaseHTTPRequestHandler):
             "paper_only": True,
         }
         self._send_json(status, response)
+
+    def do_GET(self) -> None:  # noqa: N802
+        if self.path == "/health":
+            self._send_json(200, {"ok": True, "paper_only": True})
+            return
+        self._send_json(404, {"error": "Not found", "paper_only": True})
 
     def log_message(self, format: str, *args: Any) -> None:
         # Keep console output quiet by default. Structured events are written to logs.
