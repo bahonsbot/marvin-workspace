@@ -4,7 +4,7 @@
     "feed": "AP_Top",
     "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
     "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
-    "timestamp": "2026-03-04T05:15:10.791204Z",
+    "timestamp": "2026-03-04T06:15:09.483694Z",
     "pattern_id": "p004",
     "pattern": "COVID-19 Market Crash",
     "category": "macroeconomic",
@@ -17,7 +17,7 @@
     "feed": "Guardian_Business",
     "title": "Unemployment set to hit 5.3% this year amid \u2018worrying\u2019 rise in young jobless",
     "url": "https://www.theguardian.com/society/2026/mar/03/obr-raises-uk-unemployment-estimates-amid-worrying-increase-in-young-people-out-of-work",
-    "timestamp": "2026-03-04T05:15:25.214652Z",
+    "timestamp": "2026-03-04T06:15:24.130093Z",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
@@ -30,7 +30,7 @@
     "feed": "Guardian_Business",
     "title": "Surprise jump in UK grocery inflation makes interest rate cut less probable",
     "url": "https://www.theguardian.com/business/2026/mar/03/uk-grocery-inflation-middle-east-war-eurozone-uk-ecb-worldpanel",
-    "timestamp": "2026-03-04T05:15:25.214943Z",
+    "timestamp": "2026-03-04T06:15:24.130471Z",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
@@ -43,7 +43,7 @@
     "feed": "Guardian_Business",
     "title": "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil",
     "url": "https://www.theguardian.com/uk-news/2026/mar/03/rachel-reeves-iran-war-spring-forecast-unemployment",
-    "timestamp": "2026-03-04T05:15:25.215198Z",
+    "timestamp": "2026-03-04T06:15:24.130777Z",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
@@ -56,7 +56,7 @@
     "feed": "Financial_Times",
     "title": "China to lean on Russian oil as Iran crisis chokes supply",
     "url": "https://www.ft.com/content/114997aa-7d7c-4d85-b696-bc5123ade6cb",
-    "timestamp": "2026-03-04T05:15:27.922223Z",
+    "timestamp": "2026-03-04T06:15:26.938518Z",
     "pattern_id": "p002",
     "pattern": "Russia-Ukraine Conflict",
     "category": "geopolitical",
@@ -66,23 +66,10 @@
   },
   {
     "source": "rss",
-    "feed": "Financial_Times",
-    "title": "Blue Owl slides below listing price as private credit worries mount",
-    "url": "https://www.ft.com/content/5e1404da-af6c-4f8a-a095-3e16827cadc9",
-    "timestamp": "2026-03-04T05:15:27.922294Z",
-    "pattern_id": "p018",
-    "pattern": "Regional Banking Crisis 2023",
-    "category": "financial_credit",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
     "feed": "CNBC_Top",
     "title": "Blackstone\u2019s Gray: Market \u2018noise\u2019 fueled record redemptions from world\u2019s largest",
     "url": "https://www.cnbc.com/2026/03/03/blackstone-private-credit-fund.html",
-    "timestamp": "2026-03-04T05:15:29.088159Z",
+    "timestamp": "2026-03-04T06:15:28.599886Z",
     "pattern_id": "p018",
     "pattern": "Regional Banking Crisis 2023",
     "category": "financial_credit",
@@ -95,7 +82,7 @@
     "feed": "Reuters_BreakingViews",
     "title": "Private credit pioneers see downside of redemption",
     "url": "https://www.reuters.com/commentary/breakingviews/private-credit-pioneers-see-downside-redemption-2026-03-03/",
-    "timestamp": "2026-03-04T05:15:30.056434Z",
+    "timestamp": "2026-03-04T06:15:29.610111Z",
     "pattern_id": "p018",
     "pattern": "Regional Banking Crisis 2023",
     "category": "financial_credit",
@@ -108,7 +95,7 @@
     "feed": "Bloomberg_Markets",
     "title": "Blackstone Senior Staff Opened Wallets With Flagship Private Credit Fund Under P",
     "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQX2czTHRtNUk2OGtybUtCLU9oWXh2SE8tMWVOd0hnY0lRaERINHhxNUlHX0lvRkd0V0lxZVBuZHZfUXBzVjJya1RNYnJkVVVvaGl3clk0Zk1UOHlMYTZpNHFyR1VwRzI5WHJLZlFLNDNqc1NMVWlzalNlUjB4bXR4VmFoZjJfa3AtWmVTYU1oZElKU0EtdU10bGJvUUhLNHUyTFJXeU9UaFdFYmYxYVlpd2Y4cHRTdw?oc=5",
-    "timestamp": "2026-03-04T05:15:31.152896Z",
+    "timestamp": "2026-03-04T06:15:31.386767Z",
     "pattern_id": "p018",
     "pattern": "Regional Banking Crisis 2023",
     "category": "financial_credit",
@@ -118,28 +105,29 @@
   },
   {
     "source": "rss",
-    "feed": "Bloomberg_Markets",
-    "title": "Fed\u2019s Williams Says More Rate Cuts Hinge on Inflation Progress - Bloomberg.com",
-    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNSHRXYXZ2b08wOWVKeWZjOW5BUFN3elBOTkt1WkVZbjR3VHdoR1Q2TVV3blIxTERhNFZ1bnh3Njk0U2xIUU1sRDM5UUxNRWI0UlN0SkJodEZQazRWUE9Pb2pEMDc4eTlMcWhVX2NpTEVEZHozQW9ENUlsZDFCN2dFaER4cnlQNTJicXFQZzBYZ1BzSTZ3WFFtcWtSbG1aSFRmRWRnTWhZYUhUbHUwaWkyUjVFUQ?oc=5",
-    "timestamp": "2026-03-04T05:15:31.152940Z",
-    "pattern_id": "p014",
-    "pattern": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
     "feed": "AP_Top",
     "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
     "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
-    "timestamp": "2026-03-04T04:40:08.669311Z",
+    "timestamp": "2026-03-04T05:15:10.791204Z",
     "pattern_id": "p004",
     "pattern": "COVID-19 Market Crash",
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "reddit",
+    "feed": "r/wallstreetbets",
+    "title": "Dubai stock market crashes 4.6% at open.",
+    "url": "https://reddit.com/r/wallstreetbets/comments/1rke6hz/dubai_stock_market_crashes_46_at_open/",
+    "timestamp": "2026-03-04T06:32:54Z",
+    "pattern_id": "p005",
+    "pattern": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "score": 26,
     "signal_score": 300
   },
   {
@@ -153,7 +141,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 4,
+    "score": 6,
     "signal_score": 300
   },
   {
@@ -167,7 +155,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 49,
+    "score": 124,
     "signal_score": 300
   },
   {
@@ -181,7 +169,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 954,
+    "score": 1161,
     "signal_score": 300
   },
   {
@@ -195,7 +183,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 1592,
+    "score": 1889,
     "signal_score": 300
   },
   {
@@ -209,7 +197,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 21,
+    "score": 20,
     "signal_score": 300
   },
   {
@@ -223,7 +211,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 603,
+    "score": 654,
     "signal_score": 300
   },
   {
@@ -237,7 +225,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 635,
+    "score": 658,
     "signal_score": 300
   },
   {
@@ -251,7 +239,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 118,
+    "score": 126,
     "signal_score": 300
   },
   {
@@ -265,7 +253,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 134,
+    "score": 136,
     "signal_score": 300
   },
   {
@@ -279,7 +267,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 196,
+    "score": 204,
     "signal_score": 300
   },
   {
@@ -293,7 +281,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 83,
+    "score": 94,
     "signal_score": 300
   },
   {
@@ -321,7 +309,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 564,
+    "score": 573,
     "signal_score": 300
   },
   {
@@ -335,7 +323,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 94,
+    "score": 99,
     "signal_score": 300
   },
   {
@@ -349,7 +337,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 23,
+    "score": 27,
     "signal_score": 300
   },
   {
@@ -363,7 +351,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 303,
+    "score": 307,
     "signal_score": 300
   },
   {
@@ -377,7 +365,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 93,
+    "score": 95,
     "signal_score": 300
   },
   {
@@ -391,7 +379,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 2543,
+    "score": 2634,
     "signal_score": 300
   },
   {
@@ -405,7 +393,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 41,
+    "score": 38,
     "signal_score": 300
   },
   {
@@ -419,7 +407,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 915,
+    "score": 932,
     "signal_score": 300
   },
   {
@@ -433,7 +421,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 1455,
+    "score": 1492,
     "signal_score": 300
   },
   {
@@ -447,7 +435,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 643,
+    "score": 648,
     "signal_score": 300
   },
   {
@@ -461,7 +449,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 9889,
+    "score": 9969,
     "signal_score": 300
   },
   {
@@ -475,21 +463,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 294,
-    "signal_score": 300
-  },
-  {
-    "source": "reddit",
-    "feed": "r/wallstreetbets",
-    "title": "The mf who bought GDX/GDXU Gold Miners on Friday",
-    "url": "https://reddit.com/r/wallstreetbets/comments/1rjn8am/the_mf_who_bought_gdxgdxu_gold_miners_on_friday/",
-    "timestamp": "2026-03-03T11:46:59Z",
-    "pattern_id": "p005",
-    "pattern": "GameStop Short Squeeze",
-    "category": "sentiment_social",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "score": 1990,
+    "score": 288,
     "signal_score": 300
   },
   {
@@ -503,7 +477,7 @@
     "category": "geopolitical",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 3,
+    "score": 4,
     "signal_score": 300
   },
   {
@@ -523,20 +497,6 @@
   {
     "source": "reddit",
     "feed": "r/investing",
-    "title": "Curious how everyone feels about the KOSPI (SK index) after it dropped nearly 14",
-    "url": "https://reddit.com/r/investing/comments/1rk5xm6/curious_how_everyone_feels_about_the_kospi_sk/",
-    "timestamp": "2026-03-03T23:58:55Z",
-    "pattern_id": "p004",
-    "pattern": "COVID-19 Market Crash",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "score": 13,
-    "signal_score": 300
-  },
-  {
-    "source": "reddit",
-    "feed": "r/investing",
     "title": "Map of Oil Tankers Waiting for Passage Through the Straits of Hormuz",
     "url": "https://reddit.com/r/investing/comments/1rk5kq4/map_of_oil_tankers_waiting_for_passage_through/",
     "timestamp": "2026-03-03T23:43:41Z",
@@ -545,7 +505,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "short-term",
-    "score": 124,
+    "score": 140,
     "signal_score": 300
   },
   {
@@ -559,7 +519,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 1,
+    "score": 0,
     "signal_score": 300
   },
   {
@@ -620,10 +580,23 @@
   },
   {
     "source": "rss",
+    "feed": "Yahoo_Finance",
+    "title": "Global Funds Unwind Hottest AI Trades as Oil Supply Fears Mount",
+    "url": "https://finance.yahoo.com/news/global-funds-unwind-hottest-ai-035007199.html",
+    "timestamp": "2026-03-04T06:15:28.928921Z",
+    "pattern_id": "p017",
+    "pattern": "Tension Taiwan/China",
+    "category": "geopolitical",
+    "confidence": "MEDIUM_HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 225
+  },
+  {
+    "source": "rss",
     "feed": "Guardian_Business",
     "title": "Stock markets slump amid Iran war as gas prices jump 30% to three-year high",
     "url": "https://www.theguardian.com/business/2026/mar/03/global-stock-markets-iran-war-gas-oil-prices-ftse-100",
-    "timestamp": "2026-03-04T05:15:25.214880Z",
+    "timestamp": "2026-03-04T06:15:24.130398Z",
     "pattern_id": "p012",
     "pattern": "Japan Lost Decade",
     "category": "macroeconomic",
@@ -636,7 +609,7 @@
     "feed": "Guardian_World",
     "title": "\u2018Imperialist undertones\u2019: global south condemns US-Israeli war with Iran",
     "url": "https://www.theguardian.com/world/2026/mar/03/global-south-condemns-us-israeli-war-with-iran",
-    "timestamp": "2026-03-04T05:15:15.034017Z",
+    "timestamp": "2026-03-04T06:15:13.719601Z",
     "pattern_id": "p024",
     "pattern": "Retail Options Sentiment",
     "category": "sentiment_social",
@@ -649,7 +622,7 @@
     "feed": "Guardian_World",
     "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
     "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
-    "timestamp": "2026-03-04T05:15:16.119706Z",
+    "timestamp": "2026-03-04T06:15:15.074597Z",
     "pattern_id": "p024",
     "pattern": "Retail Options Sentiment",
     "category": "sentiment_social",
@@ -662,7 +635,7 @@
     "feed": "Guardian_World",
     "title": "Democrats outraged at US military\u2019s downing of CBP drone near Mexico border",
     "url": "https://www.theguardian.com/us-news/2026/feb/27/cbp-border-drone-military-democrats",
-    "timestamp": "2026-03-04T05:15:24.392818Z",
+    "timestamp": "2026-03-04T06:15:23.294753Z",
     "pattern_id": "p010",
     "pattern": "Tesla Stock Splits",
     "category": "corporate",
@@ -675,12 +648,38 @@
     "feed": "Guardian_Business",
     "title": "China calls for vessels in strait of Hormuz to be protected amid soaring shippin",
     "url": "https://www.theguardian.com/business/2026/mar/03/china-calls-protection-vessels-strait-hormuz-amid-soaring-shipping-costs",
-    "timestamp": "2026-03-04T05:15:25.214737Z",
+    "timestamp": "2026-03-04T06:15:24.130203Z",
     "pattern_id": "p024",
     "pattern": "Retail Options Sentiment",
     "category": "sentiment_social",
     "confidence": "MEDIUM",
     "time_horizon": "intraday",
+    "signal_score": 100
+  },
+  {
+    "source": "rss",
+    "feed": "MarketWatch",
+    "title": "How Nvidia turned a steal of a deal into its secret weapon",
+    "url": "https://www.marketwatch.com/story/how-nvidia-turned-a-steal-of-a-deal-into-its-secret-weapon-17c2027a?mod=mw_rss_topstories",
+    "timestamp": "2026-03-04T06:15:28.251013Z",
+    "pattern_id": "p003",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
+    "signal_score": 100
+  },
+  {
+    "source": "rss",
+    "feed": "CNBC_Top",
+    "title": "Nvidia, Amazon temporarily close Dubai offices, Google employees stranded amid U",
+    "url": "https://www.cnbc.com/2026/03/03/nvidia-amazon-offices-google-dubai-iran-war.html",
+    "timestamp": "2026-03-04T06:15:28.599754Z",
+    "pattern_id": "p003",
+    "pattern": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "confidence": "MEDIUM",
+    "time_horizon": "short-term",
     "signal_score": 100
   }
 ]

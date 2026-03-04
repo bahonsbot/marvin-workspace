@@ -1,10 +1,10 @@
 {
   "total_verified": 14,
-  "strong_buy": 12,
-  "buy": 2,
-  "hold": 0,
+  "strong_buy": 8,
+  "buy": 0,
+  "hold": 1,
   "miss": 0,
   "weighted_accuracy": 96.4,
-  "evidence_coverage": 100.0,
-  "last_updated": "2026-03-03T14:17:51.467594"
+  "evidence_coverage": 57.1,
+  "last_updated": "2026-03-04T14:44:54.533494"
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-03T14:17:51.467812",
+  "generated_at": "2026-03-04T14:44:54.533646",
   "sample_size": 14,
   "by_category": {
     "financial_credit": {
@@ -9,13 +9,13 @@
     },
     "geopolitical": {
       "count": 9,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+      "avg_outcome_score": 0.944,
+      "bias_points": 4.44
     },
     "macroeconomic": {
       "count": 2,
-      "avg_outcome_score": 0.75,
-      "bias_points": 2.5
+      "avg_outcome_score": 1.0,
+      "bias_points": 5.0
     },
     "sentiment_social": {
       "count": 1,
@@ -36,18 +36,18 @@
     },
     "US Credit Rating Downgrade": {
       "count": 1,
-      "avg_outcome_score": 0.75,
-      "bias_points": 2.5
-    },
-    "Saudi Oil Attacks": {
-      "count": 8,
       "avg_outcome_score": 1.0,
       "bias_points": 5.0
     },
+    "Saudi Oil Attacks": {
+      "count": 8,
+      "avg_outcome_score": 0.938,
+      "bias_points": 4.38
+    },
     "COVID-19 Market Crash": {
       "count": 1,
-      "avg_outcome_score": 0.75,
-      "bias_points": 2.5
+      "avg_outcome_score": 1.0,
+      "bias_points": 5.0
     },
     "GameStop Short Squeeze": {
       "count": 1,

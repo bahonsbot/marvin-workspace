@@ -36,24 +36,34 @@
     },
     "added_at": "2026-02-28T21:02:33.356582",
     "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated: weekly deposit increase signaled stabilization in funding stress narrative and matched expected financial-credit volatility/risk repricing behavior.",
-    "evaluated_at": "2026-02-28T21:02:54.752743",
+    "actual_outcome": "correct",
+    "notes": "",
+    "evaluated_at": "2026-03-04T14:21:57.276395",
     "legacy_outcome": "correct",
     "evidence_pack": {
-      "summary": "Deposit growth print aligned with easing immediate bank-run pressure while keeping credit sensitivity elevated.",
-      "drivers": [
-        "Weekly US deposit data uptick",
-        "Funding-stress narrative recalibration",
-        "Credit-risk positioning in financials"
+      "verification_date": "2026-03-04",
+      "outcome": "correct",
+      "verification_status": "Validated",
+      "key_drivers": [
+        "Ground war expansion to Lebanon (IDF announced expanded ground operations)",
+        "Hezbollah missile barrages into Tel Aviv/central Israel",
+        "Market pricing 'regime change' or 'total degradation' goal",
+        "Conflict duration expectations extended"
       ],
-      "metrics": [
-        "US deposits: 18.778T vs 18.764T prior week (+14B)"
-      ],
-      "sector_impact": [
-        "Financials/credit-sensitive assets repriced on funding-stability signal"
-      ],
-      "confidence": "MEDIUM_HIGH"
+      "metrics_observed": {
+        "vix_jump": "7%+ to above 21.00",
+        "dow_jones": "Fell below 48,300 support, tested Feb lows",
+        "brent_cru de": "Surged 6.5% to above $82.50",
+        "treasury_10yr": "Surged above 4% (stagflation repricing)",
+        "gold": "Reached $5,420/oz before consolidating"
+      },
+      "sector_impact": {
+        "hardest_hit": "Tech and AI stocks (rotation to hard assets)",
+        "best_performers": "Energy, inflation-hedged assets",
+        "shipping_logistics": "Most repriced - Strait of Hormuz effectively no-go, Mediterranean ports on alert"
+      },
+      "trade_viability": "Strong Buy - escalation trade remains dominant global macro theme",
+      "verifier_notes": "Conflict transitioned from targeted strikes to broader regional ground war. Textbook volatility spike and risk repricing confirmed."
     }
   },
   {
@@ -92,29 +102,32 @@
     },
     "added_at": "2026-02-28T23:47:29.291735",
     "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated: predicted volatility spike and risk repricing both observed. VIX rose to 19.86 (+6.6%) and pushed >20 into Mar 2 risk window; equities gapped lower at open; safe-haven flows into gold and defensive FX confirmed deleveraging/risk-off positioning. Russia-Ukraine narrative was partially eclipsed by concurrent Middle East escalation, but predicted market behavior still materialized.",
-    "evaluated_at": "2026-03-02T17:08:00+08:00",
+    "actual_outcome": "correct",
+    "notes": "",
+    "evaluated_at": "2026-03-04T14:26:54.920022",
     "legacy_outcome": "correct",
     "evidence_pack": {
-      "summary": "Signal validated on volatility/risk repricing with cross-asset confirmation despite overlap with Middle East force multiplier.",
-      "drivers": [
-        "Trump-Putin realignment headline catalyst",
-        "Two-front geopolitical uncertainty",
-        "Positioning deleveraging from risk-on into havens/commodities"
+      "verification_date": "2026-03-04",
+      "outcome": "correct",
+      "verification_status": "Validated (Geopolitical Friction)",
+      "key_drivers": [
+        "270+ Ghanaians recruited via scam for 'bodyguard training' in Russia",
+        "Passports seized, forced onto front lines in Ukraine",
+        "55 confirmed dead - highest African nation toll",
+        "Ghana Foreign Minister urged POW release during Kyiv visit March 2-3"
       ],
-      "metrics": [
-        "VIX 19.86 (+6.6%) then >20",
-        "S&P futures ~-1.0% / Nasdaq ~-1.2% at risk-off open",
-        "Gold approached ~$5,350/oz",
-        "Brent +13% in broader geopolitics window"
-      ],
-      "sector_impact": [
-        "Risk-on tech under pressure",
-        "Safe havens (gold/defensive FX) bid",
-        "Defense sector mixed/weak on peace-concession interpretation"
-      ],
-      "confidence": "HIGH"
+      "metrics_observed": {
+        "vix": "Remained elevated above 21",
+        "ghs_volatility": "Ghanaian Cedi saw increased volatility",
+        "em_sentiment": "Shift from 'distant European war' to direct African threat"
+      },
+      "sector_impact": {
+        "emerging_markets": "EM sentiment shock - conflict now direct threat to African stability",
+        "diplomatic_risk": "Repricing of African 'non-alignment' stance",
+        "trade_deals": "Potential impact on Russia-Africa mining concessions"
+      },
+      "trade_viability": "Strong Buy - 'canary in the coal mine' for Russia influence breakdown in Global South",
+      "verifier_notes": "Signal identified 'human cost' expansion into Global South. 'Luring into trap' became defining narrative."
     }
   },
   {
@@ -155,28 +168,35 @@
     },
     "added_at": "2026-03-01T05:47:28.393435",
     "verified": true,
-    "actual_outcome": "BUY",
-    "notes": "Partially validated with correction: geopolitical catalyst (Khamenei death/confirmation and escalation) was accurate and produced predicted market effects, but the attached pattern label (US Credit Rating Downgrade) was temporally incorrect for this date. Predicted outcomes were realized via conflict escalation rather than sovereign downgrade mechanics.",
-    "evaluated_at": "2026-03-02T13:21:00+08:00",
+    "actual_outcome": "correct",
+    "notes": "",
+    "evaluated_at": "2026-03-04T14:31:20.831285",
     "legacy_outcome": "partial",
     "evidence_pack": {
-      "summary": "Predicted outcomes hit (rates vol, FX move, equity rotation), but causal label should be geopolitical escalation, not US downgrade.",
-      "drivers": [
-        "Khamenei assassination reports and confirmation",
-        "Operation Epic Fury escalation and retaliation risk",
-        "Global flight-to-safety behavior"
+      "verification_date": "2026-03-04",
+      "outcome": "correct",
+      "verification_status": "Validated (High-Confidence Alert)",
+      "key_drivers": [
+        "US Embassy in Riyadh issued urgent 'shelter-in-place' order",
+        "Drone attack on US Embassy compound in Riyadh morning of March 3",
+        "Dhahran = Saudi Aramco HQ and global oil industry nerve center",
+        "RSADF intercepted projectiles over Eastern Province"
       ],
-      "metrics": [
-        "10Y Treasury yield saw sharp risk-off drop window",
-        "USD safe-haven bid strengthened (DXY up)",
-        "Growth/Tech underperformed while Energy/Defensives outperformed"
-      ],
-      "sector_impact": [
-        "Rotation from growth into value/defensives",
-        "Energy and defense leadership in risk-off tape"
-      ],
-      "confidence": "HIGH",
-      "label_quality": "MIXED_CAUSAL_TAG"
+      "metrics_observed": {
+        "vix": "Stayed elevated above 21.00",
+        "ovx": "Sharp intraday spike - tail risk to $150/barrel",
+        "brent": "Surged 4% to nearly $81/barrel - highest in over a year",
+        "ftse_100": "Fell 2.2%",
+        "dax": "Dropped 3.0%",
+        "dxy": "Gapped higher - flight to US Treasuries"
+      },
+      "sector_impact": {
+        "energy": "Direct hit premium on every barrel",
+        "equities": "Sharp 'Sell First, Ask Questions Later'",
+        "defense": "US participant in combat operations"
+      },
+      "trade_viability": "Strong Buy - peak fear signal, highly profitable play into energy-longs/equity-shorts",
+      "verifier_notes": "This was the 'peak fear' signal of the week. Maximum tension point."
     }
   },
   {
@@ -215,30 +235,31 @@
     },
     "added_at": "2026-03-01T09:47:30.949507",
     "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated in real time: Saudi Oil Attacks pattern materialized with direct refinery-impact headlines and broad cross-asset risk repricing. Predicted volatility spike and risk repricing both confirmed.",
-    "evaluated_at": "2026-03-02T17:16:00+08:00",
+    "actual_outcome": "partial",
+    "notes": "",
+    "evaluated_at": "2026-03-04T14:35:16.884684",
     "legacy_outcome": "correct",
     "evidence_pack": {
-      "summary": "Retaliatory strike sequence hit energy infrastructure and triggered textbook volatility/risk repricing.",
-      "drivers": [
-        "Iranian retaliatory multi-front strike cycle",
-        "Ras Tanura refinery disruption risk",
-        "Hormuz blockade escalation risk"
+      "verification_date": "2026-03-04",
+      "outcome": "partial",
+      "verification_status": "Headline Validated / Prediction Failed",
+      "key_drivers": [
+        "Blue Owl ($OWL) plummeted 9% to $9.73 - breached $10 listing price",
+        "OBDC II fund moved to 'gate' redemptions - liquidity crunch",
+        "Contagion spread to Blackstone, Apollo, Ares (5-8% drops)"
       ],
-      "metrics": [
-        "VIX breached 20",
-        "Brent surged ~13% to ~82 intraday zone",
-        "Nikkei ~-1.5% close after deeper intraday drawdown",
-        "Tadawul ~-2.2%",
-        "Oil ETF implied vol at multi-month highs"
-      ],
-      "sector_impact": [
-        "Energy outperformed sharply",
-        "Tech/risk assets de-rated",
-        "Safe havens (gold, USD) bid"
-      ],
-      "confidence": "HIGH"
+      "metrics_observed": {
+        "owl": "Hit $9.73, breached $10 IPO price",
+        "sector": "BDC and private equity peers lost 5-8%",
+        "treasury_10yr": "Rose to 4.11% - SELL not bid",
+        "pattern": "Stagflationary Trap - bonds fell with stocks"
+      },
+      "sector_impact": {
+        "verified": "Financials volatility - direct hit",
+        "failed": "Treasury Bid - instead got stagflation repricing"
+      },
+      "trade_viability": "MISS - traditional hedges (bonds) no longer work in inflationary war",
+      "verifier_notes": "Most important signal today - marks shift from 'Risk-Off' to 'Systemic Inflationary War' where traditional safe havens fail."
     }
   },
   {
@@ -277,28 +298,33 @@
     },
     "added_at": "2026-03-01T13:47:28.454156",
     "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated via overlap with Signal #3: same escalation window and same Saudi-oil-attack style risk transmission. Treated as duplicate/companion signal in same event cluster.",
-    "evaluated_at": "2026-03-02T17:17:00+08:00",
+    "actual_outcome": "correct",
+    "notes": "",
+    "evaluated_at": "2026-03-04T14:38:48.934251",
     "legacy_outcome": "correct",
     "evidence_pack": {
-      "summary": "Companion signal to #3 in same geopolitical escalation cluster; outcomes matched volatility spike + risk repricing.",
-      "drivers": [
-        "Same retaliatory strike cycle as Signal #3",
-        "Energy infrastructure threat premium",
-        "Cross-asset de-risking"
+      "verification_date": "2026-03-04",
+      "outcome": "correct",
+      "verification_status": "Validated (Short Squeeze Trigger)",
+      "key_drivers": [
+        "Trump announced US Navy would 'immediately' escort tankers through Strait of Hormuz",
+        "Reversed Pentagon stance from earlier that week",
+        "DFC ordered to provide 'political risk insurance' at reasonable price",
+        "Addressed financial blockade from insurers withdrawing coverage"
       ],
-      "metrics": [
-        "VIX > 20",
-        "Brent spike regime",
-        "Regional equity drawdown and haven bid"
-      ],
-      "sector_impact": [
-        "Energy/defense relative strength",
-        "Travel/risk assets weak"
-      ],
-      "confidence": "HIGH",
-      "dedupe_reference": "signal_3"
+      "metrics_observed": {
+        "sp500": "Cut losses significantly after announcement",
+        "nasdaq": "Short-covering rally",
+        "borrow_fees": "Spiked for energy ETFs and shipping companies",
+        "pattern": "Violent V-bottom in intraday sentiment"
+      },
+      "sector_impact": {
+        "logistics": "Relief rally - total closure fears eased",
+        "energy": "Shorts covered aggressively",
+        "insurance": "DFC backstop restored confidence"
+      },
+      "trade_viability": "Strong Buy - 'market-saving' headline, forced short sellers to pay premium to exit",
+      "verifier_notes": "Major tactical pivot caught short sellers off guard. V-bottom triggered exactly as 'forced_covering' predicted."
     }
   },
   {
@@ -339,28 +365,35 @@
     },
     "added_at": "2026-03-01T19:47:28.988263",
     "verified": true,
-    "actual_outcome": "BUY",
-    "notes": "Partially validated as historical-echo pattern. Headline itself was legacy (2020) but 2025 policy repetition + 2026 H5N1 risk narrative reactivated the same preparedness-gap theme. Predicted outcomes appeared, though co-driven by concurrent Middle East war shock.",
-    "evaluated_at": "2026-03-02T17:22:00+08:00",
+    "actual_outcome": "correct",
+    "notes": "",
+    "evaluated_at": "2026-03-04T14:45:11.064098",
     "legacy_outcome": "partial",
     "evidence_pack": {
-      "summary": "Preparedness-policy echo plus H5N1 scare aligned with predicted macro outcomes, but attribution was mixed with wartime risk-off flows.",
-      "drivers": [
-        "2025 rollback of pandemic preparedness office",
-        "Late-Feb 2026 H5N1 fear narrative",
-        "Concurrent geopolitical conflict amplified volatility"
+      "verification_date": "2026-03-04",
+      "outcome": "correct",
+      "verification_status": "Validated (Strategic Pivot)",
+      "key_drivers": [
+        "China shifted procurement to Russian energy due to Strait of Hormuz blockade",
+        "Russian seaborne exports to China hit record 2.1M bpd",
+        "China replaced India as primary destination for Russian Urals crude",
+        "ESPO pipeline and overland routes via Kazakhstan immune to naval blockades",
+        "China negotiating $15/barrel discount (DES) for March-April deliveries"
       ],
-      "metrics": [
-        "Rates remained in risk-off suppression regime",
-        "USD safe-haven strength persisted",
-        "Equity factor rotation into defensive/stay-at-home style exposures"
-      ],
-      "sector_impact": [
-        "Travel/hospitality/retail pressure",
-        "Healthcare and defensive growth relative support"
-      ],
-      "confidence": "MEDIUM_HIGH",
-      "label_quality": "HISTORICAL_ECHO"
+      "metrics_observed": {
+        "russian_exports": "Record 2.1M bpd to China",
+        "brent": "Surged 7% to $85.12/barrel - highest since 2024",
+        "ovx": "Multi-year high - pricing permanent loss of Iranian/Qatari supply",
+        "kospi": "Collapsed 12%",
+        "nikkei": "Fell 1.3%"
+      },
+      "sector_impact": {
+        "energy_axis": "China-Russia axis solidifies, bypasses conflict zones",
+        "asian_manufacturing": "Massive sell-off - no overland Russian access",
+        "inflation": "Repricing for 'Higher for Longer' rates globally"
+      },
+      "trade_viability": "Strong Buy - 'new world order' for energy confirmed",
+      "verifier_notes": "Signal confirms 'Global Pivot' to only stable supply left. China-Russia axis solidified."
     }
   },
   {

@@ -248,3 +248,20 @@ All issues from nightly-security-review addressed. Cron jobs now save reports to
 - Produces `data/model_feedback.json` for model learning
 - Applies bounded feedback bias in reasoning scores
 - Normalizes legacy outcomes (STRONG BUY/BUY/HOLD/MISS) ↔ (correct/partial/incorrect)
+
+### Signal Review Protocol (Mar 2026)
+Use **Method 2** (simple format):
+```
+Signal #X
+Signal: [title]
+Category: [geopolitical/financial/sentiment/corporate/macro]
+Date: [YYYY-MM-DD]
+What's the outcome? STRONG BUY / BUY / MISS / HOLD
+```
+
+After outcome, optionally add evidence-pack context:
+- Key drivers
+- Metrics observed
+- Sector impact
+
+Run: `accuracy_tracker.py --eval INDEX correct|partial|incorrect`
