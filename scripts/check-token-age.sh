@@ -97,6 +97,11 @@ for i in $(jq '.tokens | keys | .[]' "$MANIFEST_PATH" 2>/dev/null | tr -d '"'); 
             echo -e "${YELLOW}[WARNING]${NC} $TOKEN_NAME - expires in ${DAYS_UNTIL_EXPIRY} days ($EXPIRES)"
             WARNING_COUNT=$((WARNING_COUNT + 1))
             continue
+        else
+            # Expires date is OK (>14 days), skip created date check
+            echo -e "${GREEN}[OK]${NC} $TOKEN_NAME - expires in ${DAYS_UNTIL_EXPIRY} days"
+            OK_COUNT=$((OK_COUNT + 1))
+            continue
         fi
     fi
     
