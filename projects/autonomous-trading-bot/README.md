@@ -313,3 +313,18 @@ Activation conditions (from context snapshot):
 - high confidence signal count >= `AUTO_FAST_HIGH_CONF_THRESHOLD`
 
 - Telegram mode indicator: sends a digest when dispatch mode switches (CONSERVATIVE ↔ FAST).
+
+## Troubleshooting
+
+### Webhook receiver stopped (status=0 errors in dispatch)
+```bash
+cd /data/.openclaw/workspace/projects/autonomous-trading-bot
+scripts/run_webhook_receiver.sh
+curl http://127.0.0.1:8000/health
+```
+
+### .env sourcing errors (e.g., "BUY: command not found")
+Values with spaces must be quoted:
+```
+AUTO_MIN_CONFIDENCE="STRONG BUY"
+```
