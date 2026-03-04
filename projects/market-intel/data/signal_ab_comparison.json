@@ -1,12 +1,12 @@
 [
   {
-    "timestamp": "2026-03-04T12:47:27.987867",
-    "baseline_count": 34,
+    "timestamp": "2026-03-04T13:47:32.926853",
+    "baseline_count": 32,
     "enriched_count": 50,
-    "overlap_count": 17,
+    "overlap_count": 15,
     "baseline_only_count": 14,
-    "enriched_only_count": 32,
-    "enriched_lift": 32,
+    "enriched_only_count": 34,
+    "enriched_lift": 34,
     "baseline_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
