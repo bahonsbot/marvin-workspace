@@ -93,7 +93,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - google_maps_pro
 - security-review
 - creative-prompts
-- coding-agent
+- coding-agent (built-in OpenClaw skill)
 
 ### Models (Active)
 - **Primary:** minimax/MiniMax-M2.5
