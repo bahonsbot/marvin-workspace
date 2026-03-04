@@ -94,6 +94,14 @@ fi
 
 # Derived values
 SESSION_NAME="ralphy-$(date +%s)"
+PID_FILE="$LOG_DIR/ralphy.pid"
+
+# Cleanup PID file on exit
+trap 'rm -f "$PID_FILE"' EXIT
+
+# Write PID file
+echo $$ > "$PID_FILE"
+log "PID file created: $PID_FILE"
 LOG_DIR="$WORKSPACE/.ralphy-logs"
 ITERATION=0
 STALL_COUNT=0

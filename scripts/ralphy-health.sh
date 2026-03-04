@@ -68,6 +68,11 @@ check_processes() {
 # Main
 log "Running Ralph health check..."
 
+# Check PID first (if available)
+if check_pid; then
+    pid_status="ok"
+fi
+
 # Check for workspace
 if [[ ! -d "$WORKSPACE" ]]; then
     log "ERROR: Workspace not found: $WORKSPACE"
@@ -88,3 +93,42 @@ else
 fi
 
 exit $exit_code
+
+# PID-based health check
+check_pid() {
+    local pid_file="$WORKSPACE/.ralphy-logs/ralphy.pid"
+    
+    if [[ -f "$pid_file" ]]; then
+        local pid=$(cat "$pid_file")
+        
+        if [[ -n "$pid" && "$pid" =~ ^[0-9]+$ ]]; then
+            # Check if process exists
+            if kill -0 "$pid" 2>/dev/null; then
+                # Verify it's a ralph process
+                local cmdline=$(cat /proc/$pid/cmdline 2>/dev/null | tr '\0' ' ')
+                if echo "$cmdline" | grep -q "ralphy"; then
+                    log "PID check OK: $pid is running"
+                    return 0
+                else
+                    log "PID $pid exists but is not a ralph process: $cmdline"
+                    return 1
+                fi
+            else
+                log "PID $pid from file is not running (stale PID file)"
+                return 1
+            fi
+        else
+            log "Invalid PID in file: $pid"
+            return 1
+        fi
+    fi
+    
+    # No PID file - check if ralph is running anyway
+    local ralph_pids=$(pgrep -f "ralphy.sh" 2>/dev/null || true)
+    if [[ -n "$ralph_pids" ]]; then
+        log "Ralph running (no PID file): $ralph_pids"
+        return 0
+    fi
+    
+    return 1
+}
