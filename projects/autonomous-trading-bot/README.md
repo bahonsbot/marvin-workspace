@@ -328,3 +328,10 @@ Values with spaces must be quoted:
 ```
 AUTO_MIN_CONFIDENCE="STRONG BUY"
 ```
+
+### Webhook Watchdog (auto-restart)
+Lightweight background process that restarts receiver if it dies:
+```bash
+./scripts/webhook_watchdog.sh &
+```
+Runs in background, checks every 60s, minimal overhead (no cron).
