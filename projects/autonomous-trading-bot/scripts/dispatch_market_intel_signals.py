@@ -21,6 +21,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.context_adapter import load_context_snapshot
+from src.symbol_mapper import map_signal_to_symbol
 from src.trade_notifier import TelegramNotifier
 MI_DATA = ROOT.parent / "market-intel" / "data"
 STATE_PATH = ROOT / "data" / "state" / "auto_signal_dispatch.json"
@@ -218,9 +219,17 @@ def main() -> int:
         if key in sent:
             continue
 
+        # Intelligent symbol mapping
+        symbol_decision = map_signal_to_symbol(sig)
+        if not symbol_decision.symbol:
+            # Skip signals without valid ticker mapping
+            blocked += 1
+            lines.append(f"⚠️ skipped (no ticker) | {str(sig.get('title',''))[:70]}")
+            continue
+
         qty = min(cfg.qty * qty_multiplier, cfg.max_qty)
         body = {
-            "symbol": sig.get("symbol") or "AAPL",
+            "symbol": symbol_decision.symbol,
             "side": _normalize_side(sig),
             "qty": qty,
             "timestamp": now.isoformat(),
@@ -228,6 +237,9 @@ def main() -> int:
             "secret": cfg.webhook_secret,
             "source_title": sig.get("title", ""),
             "source_url": sig.get("url", ""),
+            "symbol_reasoning": symbol_decision.reasoning,
+            "symbol_category": symbol_decision.category,
+            "symbol_confidence": symbol_decision.confidence,
         }
 
         status, resp = _post_webhook(cfg.webhook_url, body)
@@ -243,10 +255,11 @@ def main() -> int:
 
         if accepted:
             dispatched += 1
-            lines.append(f"✅ {sig.get('symbol','AAPL')} {body['side']} qty={qty} | {str(sig.get('title',''))[:70]}")
+            sym_info = f"{body['symbol']} ({symbol_decision.category})"
+            lines.append(f"✅ {sym_info} {body['side']} qty={qty} | {str(sig.get('title',''))[:60]}")
         else:
             blocked += 1
-            lines.append(f"⚠️ blocked status={status} | {str(sig.get('title',''))[:70]}")
+            lines.append(f"⚠️ blocked status={status} | {str(sig.get('title',''))[:60]}")
 
     mode_name = 'FAST' if fast_mode else 'CONSERVATIVE'
     mode_line = (

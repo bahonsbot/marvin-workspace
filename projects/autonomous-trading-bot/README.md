@@ -335,3 +335,21 @@ Lightweight background process that restarts receiver if it dies:
 ./scripts/webhook_watchdog.sh &
 ```
 Runs in background, checks every 60s, minimal overhead (no cron).
+
+## Symbol Mapping (Intelligent Ticker Selection)
+
+The dispatch script now uses intelligent symbol mapping instead of defaulting to AAPL:
+
+| Signal Type | Example | Mapped To | Confidence Cap |
+|-------------|---------|-----------|----------------|
+| Company-specific | "Apple beats earnings" | AAPL | 0.95 |
+| Sector | "Oil prices surge" | USO (sector ETF) | 0.85 |
+| Macro/Geopolitical | "Fed signals rate cut" | TLT (theme ETF) | 0.80 |
+| Broad macro (no theme) | "Market volatility" | SPY (market beta) | 0.70 |
+
+**Mappings:**
+- 50+ sector/industry ETFs (XLK, XLE, XLF, XLU, etc.)
+- 30+ macro/geopolitical ETFs (SPY, QQQ, TLT, USO, GLD, VIXY, etc.)
+- 60+ company tickers (mega-cap + frequently mentioned)
+
+**Fallback:** Signals without valid ticker mapping are skipped (no blind AAPL trades).
