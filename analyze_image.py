@@ -98,8 +98,7 @@ def analyze_image(image_path, prompt="Describe this image in detail."):
     response = requests.post(url, headers=headers, json=payload, timeout=(5, 30))
     
     if response.status_code != 200:
-        print(f"Error: {response.status_code}")
-        print(response.text)
+        print(f"Error: API returned status {response.status_code}")
         return None
     
     result = response.json()
@@ -108,7 +107,7 @@ def analyze_image(image_path, prompt="Describe this image in detail."):
     if "choices" in result and len(result["choices"]) > 0:
         return result["choices"][0]["message"]["content"]
     else:
-        print(f"Unexpected response: {result}")
+        print("Warning: Unexpected response format from API")
         return None
 
 if __name__ == "__main__":
