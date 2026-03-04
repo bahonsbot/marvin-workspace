@@ -142,5 +142,6 @@ else
             line="⚠️ $line"
         fi
         send_notification "$line"
+        sleep 0.5
     done
 fi
