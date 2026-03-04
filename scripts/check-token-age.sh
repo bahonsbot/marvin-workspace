@@ -31,7 +31,7 @@ echo ""
 
 # Check if manifest exists
 if [[ ! -f "$MANIFEST_PATH" ]]; then
-    echo -e "${RED}Error: Token manifest not found at ${MANIFEST_PATH}${NC}"
+    echo -e "${RED}Error: Token manifest not found${NC}"
     echo "Please set TOKEN_MANIFEST_PATH or create the manifest file."
     exit 1
 fi
