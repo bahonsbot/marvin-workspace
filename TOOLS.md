@@ -73,14 +73,14 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ### Cron Jobs (Active)
 | Job | Time (GMT+7) | Purpose | Delivery |
 |-----|------------|---------|----------|
-| platform-health-council | 03:00 | Daily system audit | both |
+| platform-health-council | 03:00 | Daily system audit | none |
 | nightly-security-review | 03:30 | Security analysis | none |
-| self-improvement | 04:00 *(05:00 server GMT+8)* | Core files review | both |
+| self-improvement | 04:00 *(05:00 server GMT+8)* | Core files review | none |
 | rss-feed-monitor | :10 hourly | RSS news scanning | none |
 | reddit-monitor | :40 hourly | Reddit sentiment | none |
 | market-signal-generator | :45 hourly | Signal generation | manual |
 | reasoning-engine | :50 hourly | Signal analysis | none |
-| nightly-memory-extraction | 23:00 | Memory extraction | both |
+| nightly-memory-extraction | 23:00 | Memory extraction | none |
 | data-manager | Sun 05:00 | Prune old data | none |
 
 ### Installed Skills (Workspace)
