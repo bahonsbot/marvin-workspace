@@ -97,5 +97,59 @@
     "lastAccessed": "2026-03-01",
     "accessCount": 1,
     "source": "memory/2026-02-28.md"
+  },
+  {
+    "id": "mc-009",
+    "fact": "CRITICAL: Config file /data/.openclaw/openclaw.json is owned by root:root with permissions 600, preventing gateway from reading configuration.",
+    "category": "status",
+    "timestamp": "2026-03-03T04:00:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-03",
+    "accessCount": 1,
+    "source": "memory/health-council/2026-03-03.md"
+  },
+  {
+    "id": "mc-010",
+    "fact": "pytest is not installed in the container, preventing test execution for autonomous-trading-bot.",
+    "category": "status",
+    "timestamp": "2026-03-03T04:00:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-03",
+    "accessCount": 1,
+    "source": "memory/health-council/2026-03-03.md"
+  },
+  {
+    "id": "mc-011",
+    "fact": "Philippe noticed Codex weekly quota dropped significantly. Investigation revealed trading-daily-report cron was still using Codex (default) instead of MiniMax.",
+    "category": "status",
+    "timestamp": "2026-03-04T11:53:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "mc-012",
+    "fact": "Trading-daily-report cron job was switched from default (Codex) to minimax/MiniMax-M2.5 to reduce Codex quota usage.",
+    "category": "decision",
+    "timestamp": "2026-03-04T11:57:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-04",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
   }
 ]
