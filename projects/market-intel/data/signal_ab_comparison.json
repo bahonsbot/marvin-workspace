@@ -1,7 +1,7 @@
 [
   {
-    "timestamp": "2026-03-04T14:47:32.783703",
-    "baseline_count": 29,
+    "timestamp": "2026-03-04T16:47:30.640147",
+    "baseline_count": 30,
     "enriched_count": 50,
     "overlap_count": 16,
     "baseline_only_count": 11,
@@ -11,15 +11,15 @@
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
       "Unemployment set to hit 5.3% this year amid \u2018worrying\u2019 rise in young jobless",
-      "Surprise jump in UK grocery inflation makes interest rate cut less probable",
-      "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil"
+      "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil",
+      "China to lean on Russian oil as Iran crisis chokes supply"
     ],
     "enriched_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Unemployment set to hit 5.3% this year amid \u2018worrying\u2019 rise in young jobless",
-      "Surprise jump in UK grocery inflation makes interest rate cut less probable",
       "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil",
-      "China to lean on Russian oil as Iran crisis chokes supply"
+      "China to lean on Russian oil as Iran crisis chokes supply",
+      "Investors ditch private credit funds on rising worries over bad loans"
     ]
   }
 ]

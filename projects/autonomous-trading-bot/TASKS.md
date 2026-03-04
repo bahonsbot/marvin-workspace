@@ -16,9 +16,9 @@ Scope in this backlog is **paper trading only**. No live broker execution, no AP
   - max open positions
 
 **Completion criteria**
-- [ ] README states paper-only restriction and non-live policy.
-- [ ] Config has `paper: true` and kill switch defaults.
-- [ ] No secrets committed.
+- [x] README states paper-only restriction and non-live policy.
+- [x] Config has `paper: true` and kill switch defaults.
+- [x] No secrets committed.
 
 ### P1.2 Python package skeleton for core components
 - Create `src/` package and placeholders:
@@ -29,8 +29,8 @@ Scope in this backlog is **paper trading only**. No live broker execution, no AP
   - `reporter.py`
 
 **Completion criteria**
-- [ ] All listed modules exist with docstrings/TODO stubs.
-- [ ] `src/__init__.py` exists.
+- [x] All listed modules exist with docstrings/TODO stubs.
+- [x] `src/__init__.py` exists.
 
 ### P1.3 Risk guard engine (non-execution)
 - Implement guards only, no broker calls:
@@ -41,9 +41,9 @@ Scope in this backlog is **paper trading only**. No live broker execution, no AP
 - Add decision function returning `allow/deny` and reasons.
 
 **Completion criteria**
-- [ ] Guard decision returns deterministic structured result.
-- [ ] Deny reasons are explicit and human-readable.
-- [ ] No external/network dependencies.
+- [x] Guard decision returns deterministic structured result.
+- [x] Deny reasons are explicit and human-readable.
+- [x] No external/network dependencies.
 
 ### P1.4 Minimal webhook payload validation
 - Validate basic signal shape:
@@ -53,8 +53,8 @@ Scope in this backlog is **paper trading only**. No live broker execution, no AP
   - positive quantity
 
 **Completion criteria**
-- [ ] Validator returns `ok/errors`.
-- [ ] Invalid payloads are rejected before risk checks.
+- [x] Validator returns `ok/errors`.
+- [x] Invalid payloads are rejected before risk checks.
 
 ### P1.5 Dry-run CLI for end-to-end paper simulation
 - Add local CLI script that:
@@ -64,8 +64,8 @@ Scope in this backlog is **paper trading only**. No live broker execution, no AP
   4) prints allow/deny decision and reasons
 
 **Completion criteria**
-- [ ] Single command runs locally with no external services.
-- [ ] Output clearly shows paper mode and non-execution behavior.
+- [x] Single command runs locally with no external services.
+- [x] Output clearly shows paper mode and non-execution behavior.
 
 ## P2 - Next After Foundation
 
@@ -75,30 +75,30 @@ Scope in this backlog is **paper trading only**. No live broker execution, no AP
 - Log decisions only.
 
 **Completion criteria**
-- [ ] Receives payloads locally.
-- [ ] Never places real orders.
+- [x] Receives payloads locally.
+- [x] Never places real orders.
 
 ### P2.2 Paper order simulation layer
 - Build paper executor that records intended orders to local logs.
 
 **Completion criteria**
-- [ ] Generates simulated order IDs.
-- [ ] Persists order events with timestamp and reason.
+- [x] Generates simulated order IDs.
+- [x] Persists order events with timestamp and reason.
 
 ### P2.3 Reporting baseline
 - Daily summary from local logs (signals received, allowed, denied, reasons).
 
 **Completion criteria**
-- [ ] Report generated from log data.
-- [ ] No external messaging dependency required.
+- [x] Report generated from log data.
+- [x] No external messaging dependency required.
 
 ### P2.4 Test harness and fixtures
 - Add unit tests for validator and risk guards.
 - Add sample payload fixtures (valid/invalid/edge cases).
 
 **Completion criteria**
-- [ ] Tests cover all guard deny paths.
-- [ ] Regression checks for schema validation.
+- [x] Tests cover all guard deny paths.
+- [x] Regression checks for schema validation.
 
 ### P2.5 Live-readiness gate (future, still disabled)
 - Define objective checklist before any live mode discussion.
