@@ -31,7 +31,11 @@ PY
 )
             if [[ -n "${config_token:-}" ]]; then
                 TELEGRAM_BOT_TOKEN="$config_token"
+            else
+                echo "[WARN] Telegram botToken not found in $cfg_path" >&2
             fi
+        else
+            echo "[WARN] OpenClaw config not found at $cfg_path" >&2
         fi
     fi
 
