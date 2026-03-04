@@ -142,6 +142,18 @@ Structured step-by-step review of overnight cron job reports:
    - If a finding is exactly the same as an already approved accepted risk/control, acknowledge it and suppress repeat escalation
    - Re-open only if there is a material change in context, configuration, or risk level
 
+### Morning Meeting Quick-Ref Card
+
+| Step | Action |
+|------|--------|
+| 1 | Check reports in memory/ (security/, health-council/, self-improvement/) |
+| 2 | Sort by severity: CRITICAL → HIGH → MEDIUM → LOW |
+| 3 | For each item: explain problem → risk → proposed fix |
+| 4 | Wait for approval: "Approve fix", "Adjust", "Accept risk", "Defer" |
+| 5 | Log decision to daily memory |
+
+**Report order:** security → health-council → self-improvement → data-manager (Mon only)
+
 ## Docker Environment Rules
 
 These rules prevent common issues in this Docker setup:
