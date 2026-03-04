@@ -280,3 +280,24 @@ Set `WEBHOOK_SHARED_SECRET` in `.env` and include the secret in webhook payload:
 ```
 
 > TradingView cannot send custom headers, so payload-based secret is supported.
+
+## Market Intel Auto-Dispatch (Paper)
+
+Dispatch qualifying Market Intel signals to the local webhook:
+
+```bash
+cd /data/.openclaw/workspace/projects/autonomous-trading-bot
+./scripts/dispatch_market_intel_signals.py
+```
+
+Default conservative rules (via `.env`):
+- `AUTO_MIN_CONFIDENCE=STRONG BUY`
+- `AUTO_MIN_REASONING_SCORE=80`
+- `AUTO_BASE_QTY=1`
+- `AUTO_MAX_QTY=1`
+- `AUTO_MARKET_HOURS_ONLY=true` (US market session gate)
+
+State/idempotency file:
+- `data/state/auto_signal_dispatch.json`
+
+This avoids duplicate dispatches for the same signal key.
