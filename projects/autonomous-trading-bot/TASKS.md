@@ -106,7 +106,7 @@ Scope in this backlog is **paper trading only**. No live broker execution, no AP
 **Completion criteria**
 - [ ] 30-day paper run evidence.
 - [ ] Loss cap not breached.
-- [ ] Manual approval step documented.
+- [x] Manual approval step documented.
 
 ## Out of Scope Right Now
 - Live broker credentials

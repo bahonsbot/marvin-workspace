@@ -96,3 +96,9 @@
 ## Next Suggested Steps
 1. Expand sample replay sets to cover edge-case strategy regimes.
 2. Add historical trend comparison across multiple daily `summary.json` artifacts.
+
+## Manual Approval Flow (Current Implementation)
+- The system operates in **dry-run mode by default** (`PAPER_EXECUTE=false`)
+- To enable execution, `PAPER_EXECUTE=true` must be explicitly set
+- Each execution request is logged with full decision context
+- No automatic trade execution without explicit configuration change
