@@ -265,3 +265,4 @@ After outcome, optionally add evidence-pack context:
 - Sector impact
 
 Run: `accuracy_tracker.py --eval INDEX correct|partial|incorrect`
+- **TradingView webhook plan:** keep optional due to cost; ask again in future before enabling paid TradingView plan.

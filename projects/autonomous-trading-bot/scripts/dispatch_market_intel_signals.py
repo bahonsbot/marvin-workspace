@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from src.context_adapter import load_context_snapshot
 from src.trade_notifier import TelegramNotifier
 MI_DATA = ROOT.parent / "market-intel" / "data"
 STATE_PATH = ROOT / "data" / "state" / "auto_signal_dispatch.json"
@@ -46,6 +47,11 @@ class Config:
     qty: float
     max_qty: float
     market_hours_only: bool
+    fast_regime_enabled: bool
+    fast_min_reasoning_score: float
+    fast_qty_multiplier: float
+    fast_geo_threshold: int
+    fast_high_conf_threshold: int
 
 
 def _cfg() -> Config:
@@ -57,6 +63,11 @@ def _cfg() -> Config:
         qty=float(os.getenv("AUTO_BASE_QTY", "1")),
         max_qty=float(os.getenv("AUTO_MAX_QTY", "1")),
         market_hours_only=os.getenv("AUTO_MARKET_HOURS_ONLY", "true").lower() in {"1", "true", "yes", "on"},
+        fast_regime_enabled=os.getenv("AUTO_FAST_REGIME_ENABLED", "true").lower() in {"1", "true", "yes", "on"},
+        fast_min_reasoning_score=float(os.getenv("AUTO_FAST_MIN_REASONING_SCORE", "75")),
+        fast_qty_multiplier=float(os.getenv("AUTO_FAST_QTY_MULTIPLIER", "1.25")),
+        fast_geo_threshold=int(os.getenv("AUTO_FAST_GEO_THRESHOLD", "3")),
+        fast_high_conf_threshold=int(os.getenv("AUTO_FAST_HIGH_CONF_THRESHOLD", "30")),
     )
 
 
@@ -144,6 +155,22 @@ def _send_digest(lines: list[str]) -> None:
         pass
 
 
+def _fast_regime_active(cfg: Config, context_summary: dict[str, Any]) -> bool:
+    if not cfg.fast_regime_enabled:
+        return False
+    severity = str(context_summary.get("severity", "")).lower()
+    geo = int(context_summary.get("geopolitical_count", 0) or 0)
+    high_conf = int(context_summary.get("high_confidence_signal_count", 0) or 0)
+
+    return (
+        severity in {"high", "critical"}
+        and (
+            geo >= cfg.fast_geo_threshold
+            or high_conf >= cfg.fast_high_conf_threshold
+        )
+    )
+
+
 def main() -> int:
     _load_env()
     cfg = _cfg()
@@ -162,6 +189,12 @@ def main() -> int:
         print("enhanced_signals.json invalid format")
         return 1
 
+    context_snapshot = load_context_snapshot()
+    context_summary = context_snapshot.get("summary", {}) if isinstance(context_snapshot, dict) else {}
+    fast_mode = _fast_regime_active(cfg, context_summary)
+    min_reasoning_score = cfg.fast_min_reasoning_score if fast_mode else cfg.min_reasoning_score
+    qty_multiplier = cfg.fast_qty_multiplier if fast_mode else 1.0
+
     state = _load_state()
     sent = state["sent"]
 
@@ -177,14 +210,14 @@ def main() -> int:
         reasoning = float(sig.get("reasoning_score", 0) or 0)
         if conf != cfg.confidence:
             continue
-        if reasoning < cfg.min_reasoning_score:
+        if reasoning < min_reasoning_score:
             continue
 
         key = _signal_key(sig)
         if key in sent:
             continue
 
-        qty = min(cfg.qty, cfg.max_qty)
+        qty = min(cfg.qty * qty_multiplier, cfg.max_qty)
         body = {
             "symbol": sig.get("symbol") or "AAPL",
             "side": _normalize_side(sig),
@@ -217,10 +250,15 @@ def main() -> int:
     state["updated_at"] = now.isoformat()
     _write_json(STATE_PATH, state)
 
-    if dispatched or blocked:
-        _send_digest([f"dispatched={dispatched} blocked={blocked}"] + lines[:8])
+    mode_line = (
+        f"mode={'FAST' if fast_mode else 'CONSERVATIVE'} "
+        f"min_score={min_reasoning_score} qty_mult={qty_multiplier}"
+    )
 
-    print(f"dispatch complete: dispatched={dispatched} blocked={blocked}")
+    if dispatched or blocked:
+        _send_digest([mode_line, f"dispatched={dispatched} blocked={blocked}"] + lines[:8])
+
+    print(f"dispatch complete: {mode_line} dispatched={dispatched} blocked={blocked}")
     return 0
 
 

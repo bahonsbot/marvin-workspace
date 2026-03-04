@@ -301,3 +301,13 @@ State/idempotency file:
 - `data/state/auto_signal_dispatch.json`
 
 This avoids duplicate dispatches for the same signal key.
+
+### Fast Regime Mode (optional, enabled by default)
+When macro stress is high, dispatch can switch to FAST mode:
+- lower reasoning threshold (`AUTO_FAST_MIN_REASONING_SCORE`)
+- modest size boost (`AUTO_FAST_QTY_MULTIPLIER`, still clamped by `AUTO_MAX_QTY`)
+
+Activation conditions (from context snapshot):
+- severity is high/critical, and
+- geopolitical count >= `AUTO_FAST_GEO_THRESHOLD` OR
+- high confidence signal count >= `AUTO_FAST_HIGH_CONF_THRESHOLD`
