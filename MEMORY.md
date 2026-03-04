@@ -204,7 +204,9 @@ All issues from nightly-security-review addressed. Cron jobs now save reports to
 - self-improvement → memory/self-improvement/
 
 ### Accepted Security Risks (Mar 2026)
-- **Control UI flags:** `dangerouslyDisableDeviceAuth=true` and `dangerouslyAllowHostHeaderOriginFallback=true` — Accepted because gateway is local-only (loopback bind), no external exposure. Keep explicit allowedOrigins for localhost. Do not flag in future health council reports.
+- **Control UI flags:** `dangerouslyDisableDeviceAuth=true` and `dangerouslyAllowHostHeaderOriginFallback=true` — Accepted because gateway is local-only (loopback bind), no external exposure. Keep explicit allowedOrigins for localhost.
+- **Webhook security:** localhost-only bind by default + rate limiting (120/60s per IP) — accepted for trading bot use
+- **auth.json plaintext:** file mode 600 + gitignored — accepted risk for OAuth token storage
 
 ### Trading Bot (Mar 2026)
 - **Project:** `projects/autonomous-trading-bot/`
@@ -240,3 +242,9 @@ All issues from nightly-security-review addressed. Cron jobs now save reports to
 - Proposal implemented: capture identity-forming moments
 - 85% tasks, 15% identity (topics that intrigued, reactions, jokes, observations)
 - See: memory/proposals/identity-memory-ratio.md
+
+### Market Intel Evidence-Pack Workflow (Mar 2026)
+- Structured verification context stored per signal: summary, drivers, metrics, sector_impact, confidence
+- Produces `data/model_feedback.json` for model learning
+- Applies bounded feedback bias in reasoning scores
+- Normalizes legacy outcomes (STRONG BUY/BUY/HOLD/MISS) ↔ (correct/partial/incorrect)
