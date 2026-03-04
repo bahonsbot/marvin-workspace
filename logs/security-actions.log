@@ -1,8 +1,10 @@
 2026-02-23T19:12:01+0800 | actor=marvin | action=test_action | details=smoke_test=true
-2026-02-23T19:12:01+0800 | actor=marvin | action=backup_run | details=script=backup-workspace.sh backup_dir=/data/.openclaw/workspace/backup timestamp=20260223_191201
 2026-02-23T19:12:01+0800 | actor=marvin | action=security_review_start | details=script=security-review.sh timestamp=2026-02-23 19:12:01
 2026-02-23T19:12:01+0800 | actor=marvin | action=security_review_prepared | details=script=security-review.sh report=/data/.openclaw/workspace/memory/security/latest_review.md
-2026-02-24T14:17:17+0800 | actor=marvin | action=backup_run | details=script=backup-workspace.sh backup_dir=/data/.openclaw/workspace/backup timestamp=20260224_141717
 2026-02-24T14:17:17+0800 | actor=marvin | action=security_review_start | details=script=security-review.sh timestamp=2026-02-24 14:17:17
 2026-02-24T14:17:18+0800 | actor=marvin | action=security_review_prepared | details=script=security-review.sh report=/data/.openclaw/workspace/memory/security/latest_review.md
 2026-02-24T20:27:53+0800 | actor=marvin | action=security_review | details=script=cron:nightly-security-review report=memory/security/2026-02-24-security-review.md findings=29 critical=5 high=7
+
+# NOTE: Backup is handled via VPS snapshots (external), not via backup-workspace.sh
+# VPS snapshots provide off-host backup coverage
+# Last manual snapshot: configured via Hostinger control panel

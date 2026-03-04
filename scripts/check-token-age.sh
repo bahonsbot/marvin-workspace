@@ -68,9 +68,36 @@ echo "----------------------------------------"
 for i in $(jq '.tokens | keys | .[]' "$MANIFEST_PATH" 2>/dev/null | tr -d '"'); do
     TOKEN_NAME=$(jq -r ".tokens[$i].name // empty" "$MANIFEST_PATH")
     CREATED=$(jq -r ".tokens[$i].created // empty" "$MANIFEST_PATH")
+    EXPIRES=$(jq -r ".tokens[$i].expires // empty" "$MANIFEST_PATH")
     
     if [[ -z "$TOKEN_NAME" ]]; then
         continue
+    fi
+    
+    # Check expires date first
+    if [[ -n "$EXPIRES" && "$EXPIRES" != "null" ]]; then
+        EXPIRES_EPOCH=$(date -d "$EXPIRES" +%s 2>/dev/null) || {
+            echo -e "${RED}[ERROR]${NC} Invalid expires date for '$TOKEN_NAME': $EXPIRES"
+            continue
+        }
+        
+        # Calculate days until expiry
+        SECONDS_UNTIL_EXPIRY=$((EXPIRES_EPOCH - CURRENT_EPOCH))
+        DAYS_UNTIL_EXPIRY=$((SECONDS_UNTIL_EXPIRY / 86400))
+        
+        if [[ $SECONDS_UNTIL_EXPIRY -lt 0 ]]; then
+            echo -e "${RED}[EXPIRED]${NC} $TOKEN_NAME - expired on $EXPIRES"
+            EXPIRED_COUNT=$((EXPIRED_COUNT + 1))
+            continue
+        elif [[ $DAYS_UNTIL_EXPIRY -le 7 ]]; then
+            echo -e "${RED}[CRITICAL]${NC} $TOKEN_NAME - expires in ${DAYS_UNTIL_EXPIRY} days ($EXPIRES)"
+            EXPIRED_COUNT=$((EXPIRED_COUNT + 1))
+            continue
+        elif [[ $DAYS_UNTIL_EXPIRY -le 14 ]]; then
+            echo -e "${YELLOW}[WARNING]${NC} $TOKEN_NAME - expires in ${DAYS_UNTIL_EXPIRY} days ($EXPIRES)"
+            WARNING_COUNT=$((WARNING_COUNT + 1))
+            continue
+        fi
     fi
     
     if [[ -z "$CREATED" ]]; then
