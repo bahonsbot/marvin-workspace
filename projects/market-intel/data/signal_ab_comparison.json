@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-05T13:47:31.832047",
-    "baseline_count": 36,
+    "timestamp": "2026-03-05T21:47:32.076233",
+    "baseline_count": 34,
     "enriched_count": 50,
-    "overlap_count": 16,
-    "baseline_only_count": 15,
-    "enriched_only_count": 31,
-    "enriched_lift": 31,
+    "overlap_count": 18,
+    "baseline_only_count": 11,
+    "enriched_only_count": 29,
+    "enriched_lift": 29,
     "baseline_top5": [
       "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
       "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "Pentagon eyes Ukrainian interceptor drones to counter Iran"
+      "Slower UK interest rate cuts likely as some mortgage providers hike rates; oil a"
     ],
     "enriched_top5": [
       "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "Pentagon eyes Ukrainian interceptor drones to counter Iran",
-      "China warns of \u2018challenges\u2019 as it sets lowest GDP growth target in decades"
+      "Slower UK interest rate cuts likely as some mortgage providers hike rates; oil a",
+      "Cost of living Q&A: money expert Hilary Osborne answers your questions \u2013 live"
     ]
   }
 ]
