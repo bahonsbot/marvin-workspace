@@ -209,8 +209,7 @@ def main() -> int:
 
     if cfg.market_hours_only and not _in_us_market_hours(now):
         print("Outside US market hours, skipping dispatch")
-        # Send "all quiet" notification so user knows dispatcher is working
-        _send_digest(["⏸️ Outside US market hours — dispatch paused", f"Next check: 9:30 AM ET"])
+        # Silent skip - no notification needed every 5 minutes
         return 0
 
     # Check webhook health before attempting dispatch
