@@ -264,5 +264,137 @@
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
     "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "mc-022",
+    "fact": "Security hardening session (Mar 5, 2026 Morning Meeting): Fixed 15 security findings (6 HIGH, 9 MEDIUM) across webhook receiver, Ralph scripts, execution orchestrator, Reddit monitor, and cron scripts. All changes committed (af19edc, 30c364f) and pushed.",
+    "category": "status",
+    "timestamp": "2026-03-05T12:12:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/security-hardening",
+      "projects/autonomous-trading-bot",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-023",
+    "fact": "Webhook receiver hardened: fail-closed auth (reject if no secret), secret redaction before logging, 1MB payload limit, constant-time secret comparison with secrets.compare_digest().",
+    "category": "decision",
+    "timestamp": "2026-03-05T11:48:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-024",
+    "fact": "Execution orchestrator race condition fixed: added fcntl file-based locking on idempotency store to prevent duplicate trades on concurrent webhooks.",
+    "category": "decision",
+    "timestamp": "2026-03-05T11:53:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-025",
+    "fact": "Ralph scripts hardened: audit logging for bypass activations (~/.ralphy-logs/bypass_audit.log), startup banner warning for UNSAFE_MODE, fixed startup ordering (LOG_DIR/log() before use), fixed unset env crash with default expansion.",
+    "category": "decision",
+    "timestamp": "2026-03-05T11:46:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/ralphy"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-026",
+    "fact": "Reddit monitor PII scrubber implemented: redacts email addresses, phone numbers, and Reddit usernames before storing posts/comments.",
+    "category": "decision",
+    "timestamp": "2026-03-05T12:02:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-027",
+    "fact": "Log rotation utility created (src/log_utils.py): auto-rotates logs >10MB, keeps last 5 rotated files. Applied to webhook receiver startup script.",
+    "category": "decision",
+    "timestamp": "2026-03-05T12:02:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-028",
+    "fact": "Token age checker enhanced: sends Telegram alerts when tokens are expired or expiring within 7 days.",
+    "category": "decision",
+    "timestamp": "2026-03-05T12:02:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-029",
+    "fact": "Dispatch script timezone handling: changed from fail-open to fail-closed with Telegram alert on failure (prevents missed trading opportunities due to silent failures).",
+    "category": "decision",
+    "timestamp": "2026-03-05T11:58:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-030",
+    "fact": "Accepted security risks documented: personal data in plaintext (single-user workspace), trade metadata to Telegram (already trusted channel).",
+    "category": "decision",
+    "timestamp": "2026-03-05T12:09:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-031",
+    "fact": "pytest installed (v9.0.2) to enable test suite for autonomous-trading-bot project.",
+    "category": "status",
+    "timestamp": "2026-03-05T12:11:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
   }
 ]
