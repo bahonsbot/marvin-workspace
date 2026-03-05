@@ -1,12 +1,12 @@
 [
   {
-    "timestamp": "2026-03-05T21:47:32.076233",
-    "baseline_count": 34,
+    "timestamp": "2026-03-05T22:47:34.105298",
+    "baseline_count": 39,
     "enriched_count": 50,
-    "overlap_count": 18,
-    "baseline_only_count": 11,
-    "enriched_only_count": 29,
-    "enriched_lift": 29,
+    "overlap_count": 22,
+    "baseline_only_count": 12,
+    "enriched_only_count": 25,
+    "enriched_lift": 25,
     "baseline_top5": [
       "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",

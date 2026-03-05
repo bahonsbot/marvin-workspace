@@ -4,6 +4,279 @@
     "feed": "AP_Top",
     "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
     "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
+    "timestamp": "2026-03-05T14:15:10.862653Z",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "AP_Top",
+    "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
+    "timestamp": "2026-03-05T14:15:11.423441Z",
+    "pattern_id": "p004",
+    "pattern": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_World",
+    "title": "Blackout in Cuba leaves millions without power amid US oil chokehold",
+    "url": "https://www.theguardian.com/world/2026/mar/04/blackout-cuba-us-oil",
+    "timestamp": "2026-03-05T14:15:22.115408Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_Business",
+    "title": "Slower UK interest rate cuts likely as some mortgage providers hike rates; oil a",
+    "url": "https://www.theguardian.com/business/live/2026/mar/05/wizz-air-profits-warning-iran-travel-middle-east-crisis-airlines-china-diesel-gasoline-exports-news-updates",
+    "timestamp": "2026-03-05T14:15:26.513606Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Guardian_Business",
+    "title": "Cost of living Q&A: money expert Hilary Osborne answers your questions \u2013 live",
+    "url": "https://www.theguardian.com/money/2026/mar/05/cost-of-living-qa-post-your-questions-for-money-expert-hilary-osborne-now",
+    "timestamp": "2026-03-05T14:15:26.513922Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Financial_Times",
+    "title": "Pentagon eyes Ukrainian interceptor drones to counter Iran",
+    "url": "https://www.ft.com/content/d077e9c6-1573-46dc-8658-3db3aaf7cdfb",
+    "timestamp": "2026-03-05T14:15:31.836738Z",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "MarketWatch",
+    "title": "Jobless claims and Challenger Gray point to declining layoffs. What about hiring",
+    "url": "https://www.marketwatch.com/story/jobless-claims-and-challenger-gray-point-to-declining-layoffs-what-about-hiring-plans-ce1b7215?mod=mw_rss_topstories",
+    "timestamp": "2026-03-05T14:15:33.369658Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "CNBC_Top",
+    "title": "Why Iran war oil price shock won't stop Fed pick Kevin Warsh from cutting intere",
+    "url": "https://www.cnbc.com/2026/03/05/iran-oil-fed-kevin-warsh.html",
+    "timestamp": "2026-03-05T14:15:33.985192Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "CNBC_Top",
+    "title": "Investors poured billions into private credit. Now many want their money back",
+    "url": "https://www.cnbc.com/2026/03/05/private-credit-blackstone-blue-owl-kkr-carlyle-retail-wealth-investors-liquid.html",
+    "timestamp": "2026-03-05T14:15:33.985278Z",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Yahoo_Finance",
+    "title": "Tech stocks today: Nvidia stops H200 chip production, Anthropic restarts talks w",
+    "url": "https://finance.yahoo.com/news/live/tech-stocks-today-nvidia-stops-h200-chip-production-anthropic-restarts-talks-with-pentagon-135928945.html",
+    "timestamp": "2026-03-05T14:15:34.327260Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Yahoo_Finance",
+    "title": "US weekly jobless claims unchanged; layoffs decline 55% in February",
+    "url": "https://finance.yahoo.com/news/us-weekly-jobless-claims-unchanged-134153805.html",
+    "timestamp": "2026-03-05T14:15:34.327403Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Yahoo_Finance",
+    "title": "Crypto exchange OKX valuation hits $25 billion after NYSE parent invests",
+    "url": "https://finance.yahoo.com/news/crypto-exchange-okx-valuation-hits-130329321.html",
+    "timestamp": "2026-03-05T14:15:34.327478Z",
+    "pattern_id": "p005",
+    "pattern": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Yahoo_Finance",
+    "title": "What to expect in Friday\u2019s jobs report",
+    "url": "https://finance.yahoo.com/news/expect-friday-jobs-report-123405009.html",
+    "timestamp": "2026-03-05T14:15:34.327665Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Nasdaq_News",
+    "title": "Brazil central banker urges serenity in assessing impact of higher oil prices",
+    "url": "https://www.reuters.com/world/americas/brazil-central-banker-urges-serenity-assessing-impact-higher-oil-prices-2026-03-05/",
+    "timestamp": "2026-03-05T14:15:34.669505Z",
+    "pattern_id": "p014",
+    "pattern": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_BreakingViews",
+    "title": "Private credit meets \u2018show-me-the-money\u2019 moment",
+    "url": "https://www.reuters.com/commentary/breakingviews/private-credit-meets-show-me-the-money-moment-2026-03-05/",
+    "timestamp": "2026-03-05T14:15:35.041635Z",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_BreakingViews",
+    "title": "Hormuz reopening is not solely in Trump\u2019s gift",
+    "url": "https://www.reuters.com/commentary/breakingviews/hormuz-reopening-is-not-solely-trumps-gift-2026-03-04/",
+    "timestamp": "2026-03-05T14:15:35.041707Z",
+    "pattern_id": "p005",
+    "pattern": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Reuters_BreakingViews",
+    "title": "Private credit pioneers see downside of redemption",
+    "url": "https://www.reuters.com/commentary/breakingviews/private-credit-pioneers-see-downside-redemption-2026-03-03/",
+    "timestamp": "2026-03-05T14:15:35.041813Z",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Bloomberg_Tech",
+    "title": "Ukraine Battlefield Tech Firm UFORCE Nears $1 Billion Valuation - Bloomberg",
+    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQbjhPTmg2MnR3VU5KR2JtLWNheW1IbjdicnIyWWtDZUZvOHQ2dmF5S2tuVWxLR2hZNFRrWHZ3Xzc0czNTdVFJOGZLRFBoeHkwX2kyVE5uWm1VX3BobzhfTV8xbTlUTWhMYXd1ZFBVa2RMRjBlNlNsQTdRbFo0dFBzU3R5MjhOTTFmeXVGMHRHMVROWTdEeHFpTHY3ZmpUczgzSGhkMzNkX1lWWExEOXBCSlgxWQ?oc=5",
+    "timestamp": "2026-03-05T14:15:35.581962Z",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Bloomberg_Markets",
+    "title": "Bets Against Blue Owl Hit All-Time High on Private Credit Fears - Bloomberg",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPdmtSMGtCMmEzS2JWbVJjeS1peVZZeTlGNVpNcGZldzNTMWllZFVOeGlRakVmbUtXazZlWmtBQlV0aUJyNEhIeEJORDM5ckI0X25aQl9pZEcydU1CTXdfV3REQ3JUSGZ2bVZIMTNwMlY3T3hkaWVqNElKVGo2S0pmREZ1SVlicmZ4Y1ZqZnEyX2RhWVkyRDY3V1dNTHpSRFVpMnZNSS0xMnJaa2NxcjZ5WXk4Y1JKdw?oc=5",
+    "timestamp": "2026-03-05T14:15:36.186547Z",
+    "pattern_id": "p018",
+    "pattern": "Regional Banking Crisis 2023",
+    "category": "financial_credit",
+    "confidence": "HIGH",
+    "time_horizon": "intraday",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Bloomberg_Markets",
+    "title": "Putin Says Russia to Weigh Redirecting Gas Supplies Away From EU - Bloomberg",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOWEdIcDAwMTR3TXVTWXlRVmpJR2VHSmRvVlp1enNwSmZSTkRvZFBlLWZhcGRpZXFTNDd2RWctX18wSldzQzdsY1dGb2VMVUlBa2Y1QmNNRy1FcU5kY2QwNVV1MkZnM182VGNuaFpQSWVxSk9qd2plazAzQjdNQkltNWNMczRxQnk3SFYyQ3JXX3lXcVc0QnpNVEVLaXdpVG9kR0NsMDd4U1lEQmFMUTF1R1ZSb19Edw?oc=5",
+    "timestamp": "2026-03-05T14:15:36.186591Z",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "Bloomberg_Markets",
+    "title": "Traders Look to Ukraine Conflict to Map Out Market Risks From Iran - Bloomberg",
+    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNRGFZZnhlXzVKQTA3WXAzTlVib1ZRNElzeDlLZTB2UDFabG14LWtvb1lYb19KZjFYUU5FS21saXNpT3pwQVdkdXN2aHU0TnFNRjVRUW5kcjdWb19haU0zV1FkclNWWVlmYUV6SVQ5Rk9HVEZhYUkxVmo0STNLME5peHlpbUNaY0I4R0xrNGl6c3NmU3lZZktHenkxc0xJbFZXTkFsLTM4cUduTkVvRzRMNElGMms?oc=5",
+    "timestamp": "2026-03-05T14:15:36.186608Z",
+    "pattern_id": "p002",
+    "pattern": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "confidence": "HIGH",
+    "time_horizon": "short-term",
+    "signal_score": 300
+  },
+  {
+    "source": "rss",
+    "feed": "AP_Top",
+    "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
+    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
     "timestamp": "2026-03-05T13:15:08.571116Z",
     "pattern_id": "p002",
     "pattern": "Russia-Ukraine Conflict",
@@ -39,214 +312,6 @@
     "signal_score": 300
   },
   {
-    "source": "rss",
-    "feed": "Guardian_Business",
-    "title": "Slower UK interest rate cuts likely as some mortgage providers hike rates; oil a",
-    "url": "https://www.theguardian.com/business/live/2026/mar/05/wizz-air-profits-warning-iran-travel-middle-east-crisis-airlines-china-diesel-gasoline-exports-news-updates",
-    "timestamp": "2026-03-05T13:15:23.723930Z",
-    "pattern_id": "p014",
-    "pattern": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Guardian_Business",
-    "title": "Cost of living Q&A: money expert Hilary Osborne answers your questions \u2013 live",
-    "url": "https://www.theguardian.com/money/2026/mar/05/cost-of-living-qa-post-your-questions-for-money-expert-hilary-osborne-now",
-    "timestamp": "2026-03-05T13:15:23.724157Z",
-    "pattern_id": "p014",
-    "pattern": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Financial_Times",
-    "title": "Pentagon eyes Ukrainian interceptor drones to counter Iran",
-    "url": "https://www.ft.com/content/d077e9c6-1573-46dc-8658-3db3aaf7cdfb",
-    "timestamp": "2026-03-05T13:15:26.637099Z",
-    "pattern_id": "p002",
-    "pattern": "Russia-Ukraine Conflict",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "CNBC_Top",
-    "title": "Why Iran war oil price shock won't stop Fed pick Kevin Warsh from cutting intere",
-    "url": "https://www.cnbc.com/2026/03/05/iran-oil-fed-kevin-warsh.html",
-    "timestamp": "2026-03-05T13:15:29.399973Z",
-    "pattern_id": "p014",
-    "pattern": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "CNBC_Top",
-    "title": "Investors poured billions into private credit. Now many want their money back",
-    "url": "https://www.cnbc.com/2026/03/05/private-credit-blackstone-blue-owl-kkr-carlyle-retail-wealth-investors-liquid.html",
-    "timestamp": "2026-03-05T13:15:29.400095Z",
-    "pattern_id": "p018",
-    "pattern": "Regional Banking Crisis 2023",
-    "category": "financial_credit",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Yahoo_Finance",
-    "title": "Saudi Arabia Races to Reroute Oil as Gulf Storage Fills Up Fast",
-    "url": "https://finance.yahoo.com/news/saudi-arabia-races-reroute-oil-114024205.html",
-    "timestamp": "2026-03-05T13:15:29.720691Z",
-    "pattern_id": "p001",
-    "pattern": "Saudi Oil Attacks",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Reuters_BreakingViews",
-    "title": "Private credit meets \u2018show-me-the-money\u2019 moment",
-    "url": "https://www.reuters.com/commentary/breakingviews/private-credit-meets-show-me-the-money-moment-2026-03-05/",
-    "timestamp": "2026-03-05T13:15:30.405280Z",
-    "pattern_id": "p018",
-    "pattern": "Regional Banking Crisis 2023",
-    "category": "financial_credit",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Reuters_BreakingViews",
-    "title": "Hormuz reopening is not solely in Trump\u2019s gift",
-    "url": "https://www.reuters.com/commentary/breakingviews/hormuz-reopening-is-not-solely-trumps-gift-2026-03-04/",
-    "timestamp": "2026-03-05T13:15:30.405370Z",
-    "pattern_id": "p005",
-    "pattern": "GameStop Short Squeeze",
-    "category": "sentiment_social",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Reuters_BreakingViews",
-    "title": "Private credit pioneers see downside of redemption",
-    "url": "https://www.reuters.com/commentary/breakingviews/private-credit-pioneers-see-downside-redemption-2026-03-03/",
-    "timestamp": "2026-03-05T13:15:30.405501Z",
-    "pattern_id": "p018",
-    "pattern": "Regional Banking Crisis 2023",
-    "category": "financial_credit",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Bloomberg_Tech",
-    "title": "Ukraine Battlefield Tech Firm UFORCE Nears $1 Billion Valuation - Bloomberg.com",
-    "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQbjhPTmg2MnR3VU5KR2JtLWNheW1IbjdicnIyWWtDZUZvOHQ2dmF5S2tuVWxLR2hZNFRrWHZ3Xzc0czNTdVFJOGZLRFBoeHkwX2kyVE5uWm1VX3BobzhfTV8xbTlUTWhMYXd1ZFBVa2RMRjBlNlNsQTdRbFo0dFBzU3R5MjhOTTFmeXVGMHRHMVROWTdEeHFpTHY3ZmpUczgzSGhkMzNkX1lWWExEOXBCSlgxWQ?oc=5",
-    "timestamp": "2026-03-05T13:15:30.968450Z",
-    "pattern_id": "p002",
-    "pattern": "Russia-Ukraine Conflict",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Bloomberg_Markets",
-    "title": "Bets Against Blue Owl Hit All-Time High on Private Credit Fears - Bloomberg.com",
-    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPdmtSMGtCMmEzS2JWbVJjeS1peVZZeTlGNVpNcGZldzNTMWllZFVOeGlRakVmbUtXazZlWmtBQlV0aUJyNEhIeEJORDM5ckI0X25aQl9pZEcydU1CTXdfV3REQ3JUSGZ2bVZIMTNwMlY3T3hkaWVqNElKVGo2S0pmREZ1SVlicmZ4Y1ZqZnEyX2RhWVkyRDY3V1dNTHpSRFVpMnZNSS0xMnJaa2NxcjZ5WXk4Y1JKdw?oc=5",
-    "timestamp": "2026-03-05T13:15:31.560002Z",
-    "pattern_id": "p018",
-    "pattern": "Regional Banking Crisis 2023",
-    "category": "financial_credit",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Bloomberg_Markets",
-    "title": "Putin Says Russia to Weigh Redirecting Gas Supplies Away From EU - Bloomberg.com",
-    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOWEdIcDAwMTR3TXVTWXlRVmpJR2VHSmRvVlp1enNwSmZSTkRvZFBlLWZhcGRpZXFTNDd2RWctX18wSldzQzdsY1dGb2VMVUlBa2Y1QmNNRy1FcU5kY2QwNVV1MkZnM182VGNuaFpQSWVxSk9qd2plazAzQjdNQkltNWNMczRxQnk3SFYyQ3JXX3lXcVc0QnpNVEVLaXdpVG9kR0NsMDd4U1lEQmFMUTF1R1ZSb19Edw?oc=5",
-    "timestamp": "2026-03-05T13:15:31.560111Z",
-    "pattern_id": "p002",
-    "pattern": "Russia-Ukraine Conflict",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Bloomberg_Markets",
-    "title": "Traders Look to Ukraine Conflict to Map Out Market Risks From Iran - Bloomberg.c",
-    "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNRGFZZnhlXzVKQTA3WXAzTlVib1ZRNElzeDlLZTB2UDFabG14LWtvb1lYb19KZjFYUU5FS21saXNpT3pwQVdkdXN2aHU0TnFNRjVRUW5kcjdWb19haU0zV1FkclNWWVlmYUV6SVQ5Rk9HVEZhYUkxVmo0STNLME5peHlpbUNaY0I4R0xrNGl6c3NmU3lZZktHenkxc0xJbFZXTkFsLTM4cUduTkVvRzRMNElGMms?oc=5",
-    "timestamp": "2026-03-05T13:15:31.560139Z",
-    "pattern_id": "p002",
-    "pattern": "Russia-Ukraine Conflict",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "AP_Top",
-    "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
-    "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
-    "timestamp": "2026-03-05T12:15:09.228681Z",
-    "pattern_id": "p002",
-    "pattern": "Russia-Ukraine Conflict",
-    "category": "geopolitical",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "AP_Top",
-    "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-    "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
-    "timestamp": "2026-03-05T12:15:09.802001Z",
-    "pattern_id": "p004",
-    "pattern": "COVID-19 Market Crash",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "signal_score": 300
-  },
-  {
-    "source": "rss",
-    "feed": "Guardian_World",
-    "title": "Blackout in Cuba leaves millions without power amid US oil chokehold",
-    "url": "https://www.theguardian.com/world/2026/mar/04/blackout-cuba-us-oil",
-    "timestamp": "2026-03-05T12:15:19.113547Z",
-    "pattern_id": "p014",
-    "pattern": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "signal_score": 300
-  },
-  {
     "source": "reddit",
     "feed": "r/wallstreetbets",
     "title": "Daily Discussion Thread for March 05, 2026",
@@ -257,7 +322,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 92,
+    "score": 139,
     "signal_score": 300
   },
   {
@@ -271,7 +336,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 392,
+    "score": 554,
     "signal_score": 300
   },
   {
@@ -285,7 +350,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 130,
+    "score": 151,
     "signal_score": 300
   },
   {
@@ -299,7 +364,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 229,
+    "score": 244,
     "signal_score": 300
   },
   {
@@ -313,7 +378,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 33449,
+    "score": 34579,
     "signal_score": 300
   },
   {
@@ -327,7 +392,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 910,
+    "score": 948,
     "signal_score": 300
   },
   {
@@ -341,7 +406,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 197,
+    "score": 213,
     "signal_score": 300
   },
   {
@@ -355,7 +420,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 85,
+    "score": 89,
     "signal_score": 300
   },
   {
@@ -383,7 +448,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 2508,
+    "score": 2572,
     "signal_score": 300
   },
   {
@@ -397,7 +462,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 153,
+    "score": 157,
     "signal_score": 300
   },
   {
@@ -425,7 +490,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 1632,
+    "score": 1656,
     "signal_score": 300
   },
   {
@@ -439,7 +504,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 801,
+    "score": 812,
     "signal_score": 300
   },
   {
@@ -453,7 +518,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 249,
+    "score": 246,
     "signal_score": 300
   },
   {
@@ -467,7 +532,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 19216,
+    "score": 19257,
     "signal_score": 300
   },
   {
@@ -481,7 +546,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 25,
+    "score": 26,
     "signal_score": 300
   },
   {
@@ -495,7 +560,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 542,
+    "score": 551,
     "signal_score": 300
   },
   {
@@ -509,7 +574,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 2261,
+    "score": 2271,
     "signal_score": 300
   },
   {
@@ -523,7 +588,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 4570,
+    "score": 4622,
     "signal_score": 300
   },
   {
@@ -537,7 +602,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 30,
+    "score": 26,
     "signal_score": 300
   },
   {
@@ -565,7 +630,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 1048,
+    "score": 1056,
     "signal_score": 300
   },
   {
@@ -579,7 +644,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 270,
+    "score": 275,
     "signal_score": 300
   },
   {
@@ -593,7 +658,7 @@
     "category": "crypto_credit",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 3,
+    "score": 14,
     "signal_score": 300
   },
   {
@@ -607,77 +672,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 529,
-    "signal_score": 300
-  },
-  {
-    "source": "reddit",
-    "feed": "r/investing",
-    "title": "UiPath - a contrarian play",
-    "url": "https://reddit.com/r/investing/comments/1rl1smz/uipath_a_contrarian_play/",
-    "timestamp": "2026-03-04T23:49:56Z",
-    "pattern_id": "p005",
-    "pattern": "GameStop Short Squeeze",
-    "category": "sentiment_social",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "score": 8,
-    "signal_score": 300
-  },
-  {
-    "source": "reddit",
-    "feed": "r/investing",
-    "title": "Long Term or Short Term Capital Gain?",
-    "url": "https://reddit.com/r/investing/comments/1rkz271/long_term_or_short_term_capital_gain/",
-    "timestamp": "2026-03-04T22:02:17Z",
-    "pattern_id": "p005",
-    "pattern": "GameStop Short Squeeze",
-    "category": "sentiment_social",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "score": 4,
-    "signal_score": 300
-  },
-  {
-    "source": "reddit",
-    "feed": "r/investing",
-    "title": "Private Credit Bubble and Why It Won't Matter",
-    "url": "https://reddit.com/r/investing/comments/1rkw1e7/private_credit_bubble_and_why_it_wont_matter/",
-    "timestamp": "2026-03-04T20:08:17Z",
-    "pattern_id": "p018",
-    "pattern": "Regional Banking Crisis 2023",
-    "category": "financial_credit",
-    "confidence": "HIGH",
-    "time_horizon": "intraday",
-    "score": 1,
-    "signal_score": 300
-  },
-  {
-    "source": "reddit",
-    "feed": "r/investing",
-    "title": "NRC Approval for TerraPower\u2019s Natrium Reactor Signals Major Breakthrough for Adv",
-    "url": "https://reddit.com/r/investing/comments/1rkrxft/nrc_approval_for_terrapowers_natrium_reactor/",
-    "timestamp": "2026-03-04T17:38:57Z",
-    "pattern_id": "p014",
-    "pattern": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "score": 24,
-    "signal_score": 300
-  },
-  {
-    "source": "reddit",
-    "feed": "r/investing",
-    "title": "3PM ET Today: Trump to Meet Microsoft, Amazon, Google, Meta & OpenAI on AI Energ",
-    "url": "https://reddit.com/r/investing/comments/1rkp4gh/3pm_et_today_trump_to_meet_microsoft_amazon/",
-    "timestamp": "2026-03-04T15:56:18Z",
-    "pattern_id": "p014",
-    "pattern": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "confidence": "HIGH",
-    "time_horizon": "short-term",
-    "score": 265,
+    "score": 549,
     "signal_score": 300
   }
 ]
