@@ -1,0 +1,26 @@
+broker:
+  provider: tradovate
+  base_url: https://demo.tradovateapi.com
+  paper_mode: true
+
+safety:
+  kill_switch: true
+  daily_loss_cap: 500.0
+  max_contracts_per_signal: 1
+  max_open_positions: 3
+  margin_warning_threshold: 0.30
+  margin_hard_cap: 0.50
+
+market_hours:
+  enabled: true
+  allow_overnight: false
+  timezone: America/New_York
+
+webhook:
+  host: 127.0.0.1
+  port: 8001
+  require_secret: true
+
+dispatch:
+  min_confidence: STRONG BUY
+  min_reasoning_score: 85
