@@ -2,139 +2,6 @@
   {
     "signal": {
       "source": "rss",
-      "feed": "AP_Top",
-      "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
-      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
-      "timestamp": "2026-02-28T23:47:29.288790",
-      "pattern_id": "p002",
-      "pattern": "Russia-Ukraine Conflict",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 80.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
-      "root_causes": []
-    },
-    "added_at": "2026-02-28T23:47:29.291735",
-    "verified": true,
-    "actual_outcome": "correct",
-    "notes": "",
-    "evaluated_at": "2026-03-04T14:26:54.920022",
-    "legacy_outcome": "correct",
-    "evidence_pack": {
-      "verification_date": "2026-03-04",
-      "outcome": "correct",
-      "verification_status": "Validated (Geopolitical Friction)",
-      "key_drivers": [
-        "270+ Ghanaians recruited via scam for 'bodyguard training' in Russia",
-        "Passports seized, forced onto front lines in Ukraine",
-        "55 confirmed dead - highest African nation toll",
-        "Ghana Foreign Minister urged POW release during Kyiv visit March 2-3"
-      ],
-      "metrics_observed": {
-        "vix": "Remained elevated above 21",
-        "ghs_volatility": "Ghanaian Cedi saw increased volatility",
-        "em_sentiment": "Shift from 'distant European war' to direct African threat"
-      },
-      "sector_impact": {
-        "emerging_markets": "EM sentiment shock - conflict now direct threat to African stability",
-        "diplomatic_risk": "Repricing of African 'non-alignment' stance",
-        "trade_deals": "Potential impact on Russia-Africa mining concessions"
-      },
-      "trade_viability": "Strong Buy - 'canary in the coal mine' for Russia influence breakdown in Global South",
-      "verifier_notes": "Signal identified 'human cost' expansion into Global South. 'Luring into trap' became defining narrative."
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Israel increasingly sure Iran\u2019s Khamenei has been killed after joint strikes wit",
-      "url": "https://www.ft.com/content/2fb3447b-7ff7-4f9a-9068-05cfb4bf4138",
-      "timestamp": "2026-03-01T05:47:28.391234",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-01T05:47:28.393435",
-    "verified": true,
-    "actual_outcome": "correct",
-    "notes": "",
-    "evaluated_at": "2026-03-04T14:31:20.831285",
-    "legacy_outcome": "partial",
-    "evidence_pack": {
-      "verification_date": "2026-03-04",
-      "outcome": "correct",
-      "verification_status": "Validated (High-Confidence Alert)",
-      "key_drivers": [
-        "US Embassy in Riyadh issued urgent 'shelter-in-place' order",
-        "Drone attack on US Embassy compound in Riyadh morning of March 3",
-        "Dhahran = Saudi Aramco HQ and global oil industry nerve center",
-        "RSADF intercepted projectiles over Eastern Province"
-      ],
-      "metrics_observed": {
-        "vix": "Stayed elevated above 21.00",
-        "ovx": "Sharp intraday spike - tail risk to $150/barrel",
-        "brent": "Surged 4% to nearly $81/barrel - highest in over a year",
-        "ftse_100": "Fell 2.2%",
-        "dax": "Dropped 3.0%",
-        "dxy": "Gapped higher - flight to US Treasuries"
-      },
-      "sector_impact": {
-        "energy": "Direct hit premium on every barrel",
-        "equities": "Sharp 'Sell First, Ask Questions Later'",
-        "defense": "US participant in combat operations"
-      },
-      "trade_viability": "Strong Buy - peak fear signal, highly profitable play into energy-longs/equity-shorts",
-      "verifier_notes": "This was the 'peak fear' signal of the week. Maximum tension point."
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
       "feed": "Financial_Times",
       "title": "Iran launches retaliatory attack on Israel, Saudi Arabia and UAE",
       "url": "https://www.ft.com/content/e026b4a7-1115-493a-9b31-c8b0b5965491",
@@ -1102,6 +969,94 @@
       "root_causes": []
     },
     "added_at": "2026-03-04T17:47:36.995995",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Dubai evacuation costs rise as high as $250,000 as more families flee",
+      "url": "https://www.ft.com/content/23e04747-a1fc-4137-8ea2-235981e013d8",
+      "timestamp": "2026-03-05T02:47:30.446798",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-05T02:47:30.450109",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "China sets lowest GDP growth target in decades",
+      "url": "https://www.ft.com/content/bda74d59-3d65-4ad0-a001-b9af585bcd4f",
+      "timestamp": "2026-03-05T10:47:29.973644",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-05T10:47:29.977284",
     "verified": false,
     "actual_outcome": null,
     "notes": ""

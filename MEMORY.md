@@ -207,6 +207,8 @@ All issues from nightly-security-review addressed. Cron jobs now save reports to
 - **Control UI flags:** `dangerouslyDisableDeviceAuth=true` and `dangerouslyAllowHostHeaderOriginFallback=true` — Accepted because gateway is local-only (loopback bind), no external exposure. Keep explicit allowedOrigins for localhost.
 - **Webhook security:** localhost-only bind by default + rate limiting (120/60s per IP) — accepted for trading bot use
 - **auth.json plaintext:** file mode 600 + gitignored — accepted risk for OAuth token storage
+- **Personal data in plaintext:** `life/areas/people/philippe/items.json` — Accepted because single-user workspace, encryption adds complexity with minimal gain.
+- **Trade metadata to Telegram:** Trade notifications (ticker, qty, side) sent via Telegram — Accepted because Telegram already trusted for cron alerts/security reports, trade metadata isn't sensitive.
 
 ### Trading Bot (Mar 2026)
 - **Project:** `projects/autonomous-trading-bot/`

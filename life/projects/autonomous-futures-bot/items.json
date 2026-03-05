@@ -1,0 +1,16 @@
+[
+  {
+    "id": "afb-001",
+    "fact": "Autonomous Futures Bot project created with separate PRD from equity trading bot. Uses Tradovate broker (futures-focused API) instead of Alpaca. Initial contracts: /ES, /NQ, /CL, /GC, /SI, /ZN.",
+    "category": "status",
+    "timestamp": "2026-03-04T23:16:00+07:00",
+    "status": "planned",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
+  }
+]

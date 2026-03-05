@@ -5,13 +5,13 @@
     "category": "status",
     "timestamp": "2026-02-27T22:10:00+08:00",
     "source": "memory/2026-02-27.md",
-    "status": "planned",
+    "status": "active",
     "relatedEntities": [
       "projects/market-intel",
       "areas/people/philippe"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 3
+    "lastAccessed": "2026-03-05",
+    "accessCount": 4
   },
   {
     "id": "atb-002",
@@ -22,8 +22,34 @@
     "relatedEntities": [
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2,
+    "lastAccessed": "2026-03-05",
+    "accessCount": 3,
     "source": "memory/security/2026-03-03-security-review.md"
+  },
+  {
+    "id": "atb-003",
+    "fact": "Webhook receiver process crashed due to .env parse error (unquoted AUTO_MIN_CONFIDENCE=STRONG BUY). Root cause was shell parse error on restart. Fixed with quoted value and added webhook watchdog script.",
+    "category": "status",
+    "timestamp": "2026-03-04T22:50:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "atb-004",
+    "fact": "Intelligent symbol mapping implemented (symbol_mapper.py) to avoid blind AAPL trades on geopolitical signals. Maps company signals to specific tickers, sector signals to sector ETFs (XLK, XLE, USO), and macro signals to theme ETFs (TLT, TIP, SPY).",
+    "category": "status",
+    "timestamp": "2026-03-04T23:05:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
   }
 ]

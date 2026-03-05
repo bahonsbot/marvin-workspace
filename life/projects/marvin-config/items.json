@@ -134,8 +134,8 @@
       "resources/cron-jobs",
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2,
+    "lastAccessed": "2026-03-05",
+    "accessCount": 3,
     "source": "memory/2026-03-04.md"
   },
   {
@@ -148,8 +148,8 @@
       "resources/cron-jobs",
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-05",
+    "accessCount": 2,
     "source": "memory/2026-03-04.md"
   },
   {
@@ -162,8 +162,8 @@
       "resources/cron-jobs",
       "projects/marvin-config"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2,
+    "lastAccessed": "2026-03-05",
+    "accessCount": 3,
     "source": "memory/2026-03-04.md"
   },
   {
@@ -238,5 +238,31 @@
     ],
     "lastAccessed": "2026-03-04",
     "accessCount": 1
+  },
+  {
+    "id": "mc-020",
+    "fact": "Bailian provider successfully configured, giving access to MiniMax-M2.5, Qwen family (qwen3.5-plus, qwen3-max, qwen3-coder-next/plus), Zhipu GLM (glm-5, glm-4.7), and Kimi (kimi-k2.5). Multi-provider setup complete.",
+    "category": "status",
+    "timestamp": "2026-03-04T22:48:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "mc-021",
+    "fact": "MiniMax direct subscription ends 2026-03-22. Must migrate cron jobs from direct MiniMax to Bailian-hosted MiniMax-M2.5 before expiration.",
+    "category": "decision",
+    "timestamp": "2026-03-04T22:48:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
   }
 ]

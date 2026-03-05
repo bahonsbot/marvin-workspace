@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-04T18:47:33.632512",
-    "baseline_count": 34,
+    "timestamp": "2026-03-05T11:47:29.681908",
+    "baseline_count": 37,
     "enriched_count": 50,
-    "overlap_count": 16,
-    "baseline_only_count": 14,
-    "enriched_only_count": 30,
-    "enriched_lift": 30,
+    "overlap_count": 15,
+    "baseline_only_count": 17,
+    "enriched_only_count": 32,
+    "enriched_lift": 32,
     "baseline_top5": [
+      "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
-      "Unemployment set to hit 5.3% this year amid \u2018worrying\u2019 rise in young jobless",
-      "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil",
-      "S\u00e1nchez calls US-Israeli war in Iran a \u2018disaster\u2019 amid spat with Trump"
+      "Blackout in Cuba leaves millions without power amid US oil chokehold",
+      "China sets lowest GDP growth target in decades"
     ],
     "enriched_top5": [
+      "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "Unemployment set to hit 5.3% this year amid \u2018worrying\u2019 rise in young jobless",
-      "Reeves\u2019s talk of stability may be misplaced amid Iran war turmoil",
-      "S\u00e1nchez calls US-Israeli war in Iran a \u2018disaster\u2019 amid spat with Trump",
-      "Dubai evacuation costs rise as high as $250,000 as more families flee"
+      "Blackout in Cuba leaves millions without power amid US oil chokehold",
+      "China sets lowest GDP growth target in decades",
+      "Bitcoin Holds Firm Above $70,000 as Global Assets Recover"
     ]
   }
 ]

@@ -92,9 +92,40 @@ if [[ "$PRD_OWNER" != "$CURRENT_USER" && "$PRD_OWNER" != "0" ]]; then
     fi
 fi
 
-# Derived values
+# Initialize logging directory FIRST (before any log() calls)
+LOG_DIR="$WORKSPACE/.ralphy-logs"
+AUDIT_LOG="$HOME/.ralphy-logs/bypass_audit.log"
+
+# Setup log directory
+mkdir -p "$LOG_DIR"
+chmod 700 "$LOG_DIR"
+cd "$WORKSPACE"
+
+# Logging functions (defined before first use)
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
+}
+
+verbose() {
+    if [[ $VERBOSE -eq 1 ]]; then
+        log "VERBOSE: $*"
+    fi
+}
+
+# Audit logging for bypass activation
+log_bypass_audit() {
+    local reason="$1"
+    mkdir -p "$(dirname "$AUDIT_LOG")"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] USER=$(whoami) PID=$$ REASON=$reason CMD=$0 $*" >> "$AUDIT_LOG"
+    chmod 600 "$AUDIT_LOG" 2>/dev/null || true
+}
+
+# Derived values (after LOG_DIR is set)
 SESSION_NAME="ralphy-$(date +%s)"
 PID_FILE="$LOG_DIR/ralphy.pid"
+ITERATION=0
+STALL_COUNT=0
+PREV_TASK_COUNT=0
 
 # Cleanup PID file on exit
 trap 'rm -f "$PID_FILE"' EXIT
@@ -102,19 +133,6 @@ trap 'rm -f "$PID_FILE"' EXIT
 # Write PID file
 echo $$ > "$PID_FILE"
 log "PID file created: $PID_FILE"
-LOG_DIR="$WORKSPACE/.ralphy-logs"
-ITERATION=0
-STALL_COUNT=0
-PREV_TASK_COUNT=0
-
-# Setup
-mkdir -p "$LOG_DIR"
-chmod 700 "$LOG_DIR"
-cd "$WORKSPACE"
-
-log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
-}
 
 verbose() {
     if [[ $VERBOSE -eq 1 ]]; then
@@ -194,6 +212,19 @@ fi
 
 # Human approval gate - prevent automated execution without review
 if is_unsafe_allowed; then
+    # Audit log the bypass activation
+    log_bypass_audit "RALPHY_ALLOW_UNSAFE=1" "$@"
+    
+    # Startup banner - clear warning that unsafe mode is active
+    echo ""
+    echo "========================================"
+    echo "⚠️  UNSAFE MODE ACTIVE"
+    echo "========================================"
+    echo "All approval gates are BYPASSED"
+    echo "Autonomous coding will proceed without confirmation"
+    echo "Audit log: $AUDIT_LOG"
+    echo "========================================"
+    echo ""
     log "BYPASS: RALPHY_ALLOW_UNSAFE=1 set, skipping approval gate"
 elif [[ -t 0 ]]; then
     echo "========================================"
@@ -282,5 +313,5 @@ scan_prd_for_dangers() {
 
 # Check if unsafe operations are allowed
 is_unsafe_allowed() {
-    [[ "$RALPHY_ALLOW_UNSAFE" == "1" ]]
+    [[ "${RALPHY_ALLOW_UNSAFE:-0}" == "1" ]]
 }

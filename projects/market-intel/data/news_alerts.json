@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-04T18:15:56.721112",
+  "generated_at": "2026-03-05T11:15:49.040053",
   "total_alerts": 250,
   "rss_count": 200,
   "reddit_count": 50,
@@ -15,7 +15,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:09.421502Z",
+      "timestamp": "2026-03-05T03:15:08.638777Z",
       "source_type": "rss"
     },
     {
@@ -29,996 +29,1505 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:09.504771Z",
+      "timestamp": "2026-03-05T02:15:09.296603Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Stock market today: Dow, S&P 500, Nasdaq futures inch up after Wall Street's bounce back",
+      "summary": "Wall Street is in a holding pattern after days of volatility. Markets have been buffeted by developments in the conflict in Iran, now entering it's sixth day.",
+      "link": "https://finance.yahoo.com/news/live/stock-market-today-dow-sp-500-nasdaq-futures-inch-up-after-wall-streets-bounce-back-235517099.html",
+      "published": "Wed, 04 Mar 2026 23:55:17 GMT",
+      "matched_keywords": [
+        "conflict",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.505609Z",
       "source_type": "rss"
     },
     {
       "feed": "MarketWatch",
-      "title": "Selloff descends into a rout in South Korea with biggest one-day drop since 2008",
-      "summary": "The KOSPI has shed 20% in two trading sessions as excess leverage triggers margins calls and forced liquidation of positions by retail investors",
-      "link": "https://www.marketwatch.com/story/selloff-descends-into-a-rout-in-south-korea-with-biggest-one-day-drop-since-2008-911de87c?mod=mw_rss_topstories",
-      "published": "Wed, 04 Mar 2026 10:12:00 GMT",
+      "title": "Tesla\u2019s self-driving effort could be worth more than double its EV division",
+      "summary": "Tesla has made autonomous vehicles a priority, investing heavily in robotaxis and driving-assistance software.",
+      "link": "https://www.marketwatch.com/story/teslas-self-driving-effort-could-be-worth-more-than-double-its-ev-division-b4a4a6f2?mod=mw_rss_topstories",
+      "published": "Wed, 04 Mar 2026 23:50:00 GMT",
       "matched_keywords": [
-        "liquidation",
-        "ev",
+        "war",
+        "tesla",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:27.828341Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "Tesla\u2019s self-driving effort could be worth more than double its EV division",
+      "summary": "Tesla has made autonomous vehicles a priority, investing heavily in robotaxis and driving-assistance software.",
+      "link": "https://www.marketwatch.com/story/teslas-self-driving-effort-could-be-worth-more-than-double-its-ev-division-b4a4a6f2?mod=mw_rss_topstories",
+      "published": "Wed, 04 Mar 2026 23:50:00 GMT",
+      "matched_keywords": [
+        "war",
+        "tesla",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:28.770786Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "Apple\u2019s new $599 MacBook Neo borrows iPhone chip to make play for budget-laptop market share",
+      "summary": "Apple wraps up three days of product launches with its cheapest laptop yet.",
+      "link": "https://www.marketwatch.com/story/apple-expands-into-market-for-budget-laptops-with-599-macbook-neo-20574faf?mod=mw_rss_topstories",
+      "published": "Wed, 04 Mar 2026 23:49:00 GMT",
+      "matched_keywords": [
+        "chip"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:27.828364Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "Apple\u2019s new $599 MacBook Neo borrows iPhone chip to make play for budget-laptop market share",
+      "summary": "Apple wraps up three days of product launches with its cheapest laptop yet.",
+      "link": "https://www.marketwatch.com/story/apple-expands-into-market-for-budget-laptops-with-599-macbook-neo-20574faf?mod=mw_rss_topstories",
+      "published": "Wed, 04 Mar 2026 23:49:00 GMT",
+      "matched_keywords": [
+        "chip"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:28.770834Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Asia markets set to rebound after steep selloff; investors watch China\u2019s \u2018Two Sessions\u2019",
+      "summary": "Asia-Pacific markets were set to open higher on Thursday, rebounding after several days of steep losses.",
+      "link": "https://www.cnbc.com/2026/03/05/asia-pacific-markets-kospi-hang-seng-index-nikkei-225-china-two-sessions.html",
+      "published": "Wed, 04 Mar 2026 23:47:17 GMT",
+      "matched_keywords": [
+        "china",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.165913Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Asia markets set to rebound after steep selloff; investors watch China\u2019s \u2018Two Sessions\u2019",
+      "summary": "Asia-Pacific markets were set to open higher on Thursday, rebounding after several days of steep losses.",
+      "link": "https://www.cnbc.com/2026/03/05/asia-pacific-markets-kospi-hang-seng-index-nikkei-225-china-two-sessions.html",
+      "published": "Wed, 04 Mar 2026 23:47:17 GMT",
+      "matched_keywords": [
+        "china",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.184725Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Tech",
+      "title": "China\u2019s $600 Billion Tech Stock Rout Risks Deepening on AI Costs - Bloomberg.com",
+      "summary": "China\u2019s $600 Billion Tech Stock Rout Risks Deepening on AI Costs Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPaFRmWGdmbkRQR3dFa2x0aEZIaHRxYzdzNkN5TTNjTnk5MWNXM2c1Y01vVjNLRXFvWVQtcjU3eXhDM0dsZWllN2V0bEc4VG44XzJrdVhNX2pGaUtuS1A4VUVuZEQ0LVlOZTNWSlVWbV9BeVZ0UzgwZnFHYzVDdjhFeEluQldxV25OTXU4dnZUaGxJR0l1cWpDSWtoQ0xLWGNBV0xpUEVMbTFSNW1CcTF6RGJtM3g?oc=5",
+      "published": "Wed, 04 Mar 2026 23:40:10 GMT",
+      "matched_keywords": [
+        "china",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:27.781372Z",
+      "timestamp": "2026-03-05T03:15:29.694232Z",
       "source_type": "rss"
     },
     {
-      "feed": "Nasdaq_News",
-      "title": "S. Africa first-quarter business confidence climbs but risk from Middle East conflict looms",
-      "summary": "South African business confidence climbed 3 points in the first quarter, helped by a stable government, supportive interest \u200brate environment and foreign exchange rate tailwinds, a \u200csurvey published on Wednesday showed, while warning that the Middle East conflict could pose a risk.",
-      "link": "https://www.reuters.com/world/africa/s-africa-first-quarter-business-confidence-climbs-risk-middle-east-conflict-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 10:05:22 GMT",
+      "feed": "Bloomberg_Tech",
+      "title": "China\u2019s $600 Billion Tech Stock Rout Risks Deepening on AI Costs - Bloomberg.com",
+      "summary": "China\u2019s $600 Billion Tech Stock Rout Risks Deepening on AI Costs Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPaFRmWGdmbkRQR3dFa2x0aEZIaHRxYzdzNkN5TTNjTnk5MWNXM2c1Y01vVjNLRXFvWVQtcjU3eXhDM0dsZWllN2V0bEc4VG44XzJrdVhNX2pGaUtuS1A4VUVuZEQ0LVlOZTNWSlVWbV9BeVZ0UzgwZnFHYzVDdjhFeEluQldxV25OTXU4dnZUaGxJR0l1cWpDSWtoQ0xLWGNBV0xpUEVMbTFSNW1CcTF6RGJtM3g?oc=5",
+      "published": "Wed, 04 Mar 2026 23:40:10 GMT",
+      "matched_keywords": [
+        "china",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.232785Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Musk battles Twitter market manipulation case in court appearance",
+      "summary": "Billionaire says tweet that sparked lawsuit \u2018may not have been my wisest\u2019",
+      "link": "https://www.ft.com/content/c75ec647-4fc9-44d0-9396-256dac8142cc",
+      "published": "Wed, 04 Mar 2026 23:36:55 GMT",
+      "matched_keywords": [
+        "battle",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:26.256092Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "\u2018My mother refuses to turn on the heat\u2019: Will America\u2019s war with Iran really push up our utility bills?",
+      "summary": "\u201cShe is reading alarmist headlines about Iran in the newspapers.\u201d",
+      "link": "https://www.marketwatch.com/story/my-mother-refuses-to-turn-on-the-heat-will-americas-war-with-iran-really-push-up-our-utility-bills-df746548?mod=mw_rss_topstories",
+      "published": "Wed, 04 Mar 2026 23:30:00 GMT",
+      "matched_keywords": [
+        "war"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:27.828440Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "\u2018My mother refuses to turn on the heat\u2019: Will America\u2019s war with Iran really push up our utility bills?",
+      "summary": "\u201cShe is reading alarmist headlines about Iran in the newspapers.\u201d",
+      "link": "https://www.marketwatch.com/story/my-mother-refuses-to-turn-on-the-heat-will-americas-war-with-iran-really-push-up-our-utility-bills-df746548?mod=mw_rss_topstories",
+      "published": "Wed, 04 Mar 2026 23:30:00 GMT",
+      "matched_keywords": [
+        "war"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:28.770906Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Traders Look to Ukraine Conflict to Map Out Market Risks From Iran - Bloomberg.com",
+      "summary": "Traders Look to Ukraine Conflict to Map Out Market Risks From Iran Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNRGFZZnhlXzVKQTA3WXAzTlVib1ZRNElzeDlLZTB2UDFabG14LWtvb1lYb19KZjFYUU5FS21saXNpT3pwQVdkdXN2aHU0TnFNRjVRUW5kcjdWb19haU0zV1FkclNWWVlmYUV6SVQ5Rk9HVEZhYUkxVmo0STNLME5peHlpbUNaY0I4R0xrNGl6c3NmU3lZZktHenkxc0xJbFZXTkFsLTM4cUduTkVvRzRMNElGMms?oc=5",
+      "published": "Wed, 04 Mar 2026 23:20:50 GMT",
+      "matched_keywords": [
+        "ukraine",
+        "conflict",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:30.372262Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Traders Look to Ukraine Conflict to Map Out Market Risks From Iran - Bloomberg.com",
+      "summary": "Traders Look to Ukraine Conflict to Map Out Market Risks From Iran Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNRGFZZnhlXzVKQTA3WXAzTlVib1ZRNElzeDlLZTB2UDFabG14LWtvb1lYb19KZjFYUU5FS21saXNpT3pwQVdkdXN2aHU0TnFNRjVRUW5kcjdWb19haU0zV1FkclNWWVlmYUV6SVQ5Rk9HVEZhYUkxVmo0STNLME5peHlpbUNaY0I4R0xrNGl6c3NmU3lZZktHenkxc0xJbFZXTkFsLTM4cUduTkVvRzRMNElGMms?oc=5",
+      "published": "Wed, 04 Mar 2026 23:20:50 GMT",
+      "matched_keywords": [
+        "ukraine",
+        "conflict",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.725988Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "The U.S. insists the Iran conflict won't be a 'forever war.' Experts beg to differ",
+      "summary": "President Trump and his officials say the war won't be protracted. Experts say it could go on longer than the White House expects.",
+      "link": "https://www.cnbc.com/2026/03/05/iran-conflict-duration-middle-east-regional-war-experts.html",
+      "published": "Wed, 04 Mar 2026 23:17:13 GMT",
       "matched_keywords": [
         "war",
         "conflict",
-        "rate",
-        "interest",
-        "ai"
+        "ev"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749113Z",
+      "timestamp": "2026-03-05T03:15:28.165936Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "The U.S. insists the Iran conflict won't be a 'forever war.' Experts beg to differ",
+      "summary": "President Trump and his officials say the war won't be protracted. Experts say it could go on longer than the White House expects.",
+      "link": "https://www.cnbc.com/2026/03/05/iran-conflict-duration-middle-east-regional-war-experts.html",
+      "published": "Wed, 04 Mar 2026 23:17:13 GMT",
+      "matched_keywords": [
+        "war",
+        "conflict",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.184753Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "Blue Owl\u2019s private-credit stumble revives fears of another Bear Stearns moment",
+      "summary": "This is not yet a repeat of 2008. But dismissing it as a nonevent would be a mistake.",
+      "link": "https://www.marketwatch.com/story/why-blue-owls-private-credit-shocker-has-investors-seeing-shadows-of-bear-stearns-45506299?mod=mw_rss_topstories",
+      "published": "Wed, 04 Mar 2026 23:15:00 GMT",
+      "matched_keywords": [
+        "credit",
+        "miss",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:27.828485Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "Blue Owl\u2019s private-credit stumble revives fears of another Bear Stearns moment",
+      "summary": "This is not yet a repeat of 2008. But dismissing it as a nonevent would be a mistake.",
+      "link": "https://www.marketwatch.com/story/why-blue-owls-private-credit-shocker-has-investors-seeing-shadows-of-bear-stearns-45506299?mod=mw_rss_topstories",
+      "published": "Wed, 04 Mar 2026 23:15:00 GMT",
+      "matched_keywords": [
+        "credit",
+        "miss",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:28.770951Z",
       "source_type": "rss"
     },
     {
       "feed": "Nasdaq_News",
-      "title": "AI may be creating instead of destroying jobs for now, ECB blog argues",
-      "summary": "The increasing use of artificial intelligence by firms may be creating some jobs in the euro zone \u200brather than destroying them as many fear, a \u200cEuropean Central Bank blog post argued on Wednesday.",
-      "link": "https://www.reuters.com/business/ai-may-be-creating-instead-destroying-jobs-now-ecb-blog-argues-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 10:02:34 GMT",
+      "title": "Johnson & Johnson launches website for direct-to-consumer sales",
+      "summary": "Johnson & Johnson has launched a website to sell some of its drugs directly \u200bto U.S. patients who either don't have \u200cinsurance or pay for their drugs out of pocket.",
+      "link": "https://www.reuters.com/business/healthcare-pharmaceuticals/johnson-johnson-launches-website-direct-to-consumer-sales-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 23:07:58 GMT",
       "matched_keywords": [
-        "bank",
+        "who"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.812104Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Johnson & Johnson launches website for direct-to-consumer sales",
+      "summary": "Johnson & Johnson has launched a website to sell some of its drugs directly \u200bto U.S. patients who either don't have \u200cinsurance or pay for their drugs out of pocket.",
+      "link": "https://www.reuters.com/business/healthcare-pharmaceuticals/johnson-johnson-launches-website-direct-to-consumer-sales-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 23:07:58 GMT",
+      "matched_keywords": [
+        "who"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:30.349602Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Johnson & Johnson launches website for direct-to-consumer sales",
+      "summary": "March 4 () - Johnson & Johnson has launched a website to sell some of its \u200cdrugs directly to U. patients who either \u200cdon't have insurance or pay for their drugs out of \u200bpocket.",
+      "link": "https://finance.yahoo.com/news/johnson-johnson-launches-website-direct-230749742.html",
+      "published": "Wed, 04 Mar 2026 23:07:49 GMT",
+      "matched_keywords": [
+        "who"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.505636Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Amazon's Bahrain data center targeted by Iran for support of U.S. military, state media says",
+      "summary": "Amazon said the Bahrain facility was damaged due to a nearby drone strike, and two data centers in the UAE were directly hit by drones.",
+      "link": "https://www.cnbc.com/2026/03/04/amazon-bahrain-data-centers-targeted-iran-drone-strike.html",
+      "published": "Wed, 04 Mar 2026 22:07:07 GMT",
+      "matched_keywords": [
+        "drone",
+        "military",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.165958Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Amazon's Bahrain data center targeted by Iran for support of U.S. military, state media says",
+      "summary": "Amazon said the Bahrain facility was damaged due to a nearby drone strike, and two data centers in the UAE were directly hit by drones.",
+      "link": "https://www.cnbc.com/2026/03/04/amazon-bahrain-data-centers-targeted-iran-drone-strike.html",
+      "published": "Wed, 04 Mar 2026 22:07:07 GMT",
+      "matched_keywords": [
+        "drone",
+        "military",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.184777Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "SeekingAlpha",
+      "title": "Okta outlines 9% revenue growth target for FY 2027 as AI agent security drives new product momentum",
+      "summary": "",
+      "link": "https://seekingalpha.com/news/4561055-okta-outlines-9-percent-revenue-growth-target-for-fy-2027-as-ai-agent-security-drives-new?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Wed, 04 Mar 2026 22:03:04 -0500",
+      "matched_keywords": [
+        "revenue",
+        "growth",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:31.431206Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "TRADING DAY Respite, but for how long?",
+      "summary": "U.S. and European stock markets registered solid gains on Wednesday, on hopes that conflict in the Middle East might soon cool, while stabilization in oil and energy markets also helped lay the ground for a rebound in other beaten-down assets.",
+      "link": "https://www.reuters.com/world/middle-east/global-markets-trading-day-graphic-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 22:02:26 GMT",
+      "matched_keywords": [
+        "oil",
+        "energy",
+        "conflict",
+        "beat",
         "european",
         "eu",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749160Z",
+      "timestamp": "2026-03-05T03:15:28.812133Z",
       "source_type": "rss"
     },
     {
-      "feed": "Guardian_Business",
-      "title": "War in Middle East threatens UK living standards growth, as markets brace for energy shock \u2013 business live",
-      "summary": "Rolling coverage of the latest economic and financial news Reeves\u2019s spring statement? The economy is great, don\u2019t worry about the Middle East Global stock markets tumble as Trump bid to avert oil crisis in strait of Hormuz fails to reassure The market turmoil hasn\u2019t prevented a UK autonomous vehicle software company winning new funding. Oxa, based in Oxford, has raised $103m (\u00a377m) \u2013 including $50m (\u00a337m) from the UK\u2019s National Wealth Fund. \u201cOxa is a great example of UK excellence in digital technologies that are transforming the global automotive sector, and this investment will boost productivity and improve freight efficiency at home and abroad. With advanced manufacturing and digital technologies being central to our Modern Industrial Strategy, we\u2019re supporting firms like Oxa to strengthen the UK\u2019s position as a global leader in connected and automated mobility.\u201d Until there is a pause in this conflict and free flowing oil around the world, it is hard to see how markets can stage a meaningful recovery. We expect stocks and bonds to remain nervous and driven by headline risk. The dollar has been king during this crisis, however, it is pulling back slightly today, and G10 currencies are clawing back some recent losses. This is likely to be temporary, especially if the oil price remains to the upside. Continue reading...",
-      "link": "https://www.theguardian.com/business/live/2026/mar/04/war-middle-east-uk-living-standards-growth-markets-energy-shock-live-news-updates",
-      "published": "Wed, 04 Mar 2026 09:59:03 GMT",
+      "feed": "Nasdaq_News",
+      "title": "TRADING DAY Respite, but for how long?",
+      "summary": "U.S. and European stock markets registered solid gains on Wednesday, on hopes that conflict in the Middle East might soon cool, while stabilization in oil and energy markets also helped lay the ground for a rebound in other beaten-down assets.",
+      "link": "https://www.reuters.com/world/middle-east/global-markets-trading-day-graphic-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 22:02:26 GMT",
       "matched_keywords": [
         "oil",
         "energy",
-        "war",
         "conflict",
-        "crisis",
-        "flow",
-        "rate",
-        "growth",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:24.213056Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "Oil could hit $100 if volumes from this key passageway don\u2019t ramp soon, says Goldman Sachs",
-      "summary": "The banking giant upgraded short-term Brent crude prices by $10 a barrel to $76.",
-      "link": "https://www.marketwatch.com/story/oil-could-hit-100-if-volumes-from-this-key-passageway-dont-ramp-soon-says-goldman-sachs-7a9d17ab?mod=mw_rss_topstories",
-      "published": "Wed, 04 Mar 2026 09:59:00 GMT",
-      "matched_keywords": [
-        "oil",
-        "bank",
-        "short"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:27.781446Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "A Blackstone executive made a revealing comment about the state of private credit",
-      "summary": "A Blackstone executive made a revealing comment about the state of private credit. Analysts are now reverse engineering its implications.",
-      "link": "https://www.marketwatch.com/story/a-blackstone-executive-made-a-revealing-comment-about-the-state-of-private-credit-86dd510f?mod=mw_rss_topstories",
-      "published": "Wed, 04 Mar 2026 09:52:00 GMT",
-      "matched_keywords": [
-        "credit",
-        "cut",
-        "ev"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:27.781472Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "S\u00e1nchez calls US-Israeli war in Iran a \u2018disaster\u2019 amid spat with Trump",
-      "summary": "Spanish prime minister likens conflict to Russia\u2019s invasion of Ukraine and Israel\u2019s assault on Gaza",
-      "link": "https://www.ft.com/content/69e598d5-793d-413b-ae44-c2f4c1dbfb2f",
-      "published": "Wed, 04 Mar 2026 09:51:42 GMT",
-      "matched_keywords": [
-        "war",
-        "invasion",
-        "ukraine",
-        "russia",
-        "conflict",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:26.546890Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "UK supermarket chain Iceland drops trademark dispute with Iceland",
-      "summary": "Company promises \u2018rapprochement discount\u2019 with shoppers from country after decade-long action in EU court The UK supermarket chain Iceland has reportedly abandoned its decade-long trademark battle with Iceland and instead promised a \u201crapprochement discount\u201d for shoppers in the country. After the budget grocery chain suffered its third legal loss last year, its executive chair, Richard Walker, said on Wednesday that it would draw a line under the dispute. Continue reading...",
-      "link": "https://www.theguardian.com/business/2026/mar/04/uk-supermarket-chain-iceland-drops-trademark-dispute-with-iceland",
-      "published": "Wed, 04 Mar 2026 09:50:12 GMT",
-      "matched_keywords": [
-        "battle",
-        "cut",
+        "beat",
+        "european",
         "eu",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:24.213133Z",
+      "timestamp": "2026-03-05T02:15:30.349632Z",
       "source_type": "rss"
     },
     {
-      "feed": "CNBC_Top",
-      "title": "Goldman's David Solomon surprised by \u2018benign\u2019 market reaction to Iran war",
-      "summary": "\"I think it's going to take a couple of weeks for markets to really digest the implications of what's happened,\" Goldman chief David Solomon said.",
-      "link": "https://www.cnbc.com/2026/03/04/goldman-david-solomon-iran-war-market-reaction-stocks.html",
-      "published": "Wed, 04 Mar 2026 09:48:04 GMT",
+      "feed": "Bloomberg_Tech",
+      "title": "Meta Plans to Develop Custom Chips to Train Its AI Models - Bloomberg.com",
+      "summary": "Meta Plans to Develop Custom Chips to Train Its AI Models Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPUVRaZnczQWJ0dlh6dDNyVW9TalNkWDBZelljMkkySW5NWl9UaU5FbEtmaHlUcDhoVW9kbFJQWVV1dHAwelozSW9qSE1pWTlOa1hudE9TUFFvZjlZUVF3dWM0eFVrSll2R25tWFBucUV1ZUh4bHk3SHlnenJSVUptSzZIa2VGVjNXaU45b21GeHdwVDZ3X3hzUmFwTGlqS0xSUTc2RzZLQkVIV2hs?oc=5",
+      "published": "Wed, 04 Mar 2026 21:57:32 GMT",
       "matched_keywords": [
-        "war",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.116424Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Gold and silver flows disrupted as Iran war grounds flights",
-      "summary": "Global flows of gold and silver are suffering major disruption as war in the Middle East halts most air traffic into and out of Dubai, in a move...",
-      "link": "https://finance.yahoo.com/news/gold-silver-flows-disrupted-iran-050023861.html",
-      "published": "Wed, 04 Mar 2026 09:43:48 GMT",
-      "matched_keywords": [
-        "war",
-        "flow",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430341Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "Why one of the year\u2019s surprising hot trades has quickly gone off the rails",
-      "summary": "Investors are habituated to buying into weakness caused by geopolitical tumult but JPMorgan warns it may be a bit early to jump back on board Europe.",
-      "link": "https://www.marketwatch.com/story/why-one-of-the-years-surprising-hot-trades-has-quickly-gone-off-the-rails-6aa35859?mod=mw_rss_topstories",
-      "published": "Wed, 04 Mar 2026 09:32:00 GMT",
-      "matched_keywords": [
-        "war",
-        "eu",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:27.781500Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Drugmaker Aspen targets Mounjaro approval in sub-Saharan Africa this year",
-      "summary": "JOHANNESBURG, March 4 (Reuters) - Aspen Pharmacare aims to secure sub\u2011Saharan African approval for Eli Lilly's blockbuster weight\u2011loss drug Mounjaro \u200cas early as this year, its CEO said on Wednesday, capitalising \u200con soaring regional demand for obesity treatments. South Africa-based Aspen\u2019s push to register Mounjaro across the \u200bregion signals its bid to become a key manufacturing and distribution partner for global drugmakers eyeing one of the last major untapped markets for GLP\u20111 weight\u2011loss t",
-      "link": "https://finance.yahoo.com/news/drugmaker-aspen-targets-mounjaro-approval-093037968.html",
-      "published": "Wed, 04 Mar 2026 09:30:37 GMT",
-      "matched_keywords": [
-        "regional",
-        "eu",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430414Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Dubai evacuation costs rise as high as $250,000 as more families flee",
-      "summary": "Increasing numbers of expats and employees are deciding to leave the city as regional conflict escalates",
-      "link": "https://www.ft.com/content/23e04747-a1fc-4137-8ea2-235981e013d8",
-      "published": "Wed, 04 Mar 2026 09:28:32 GMT",
-      "matched_keywords": [
-        "conflict",
-        "regional",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:26.546929Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "S\u00e1nchez calls US-Israeli war in Iran a \u2018disaster\u2019 amid spat with Trump",
-      "summary": "Spanish Prime Minister likened conflict to Russia\u2019s invasion of Ukraine and Israel\u2019s assault on Gaza",
-      "link": "https://www.ft.com/content/69e598d5-793d-413b-ae44-c2f4c1dbfb2f",
-      "published": "Wed, 04 Mar 2026 09:01:30 GMT",
-      "matched_keywords": [
-        "war",
-        "invasion",
-        "ukraine",
-        "russia",
-        "conflict",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:25.836780Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "German services sector growth hits four-month high in February, PMI shows",
-      "summary": "Germany's services sector saw business activity growth accelerate to a four-month high in February, driven by stronger demand and \u200ba rise in new business, according to a survey by \u200cS&P Global compiled before the U.S. and Israel launched attacks on Iran.",
-      "link": "https://www.reuters.com/business/german-services-sector-growth-hits-four-month-high-february-pmi-shows-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 09:00:41 GMT",
-      "matched_keywords": [
-        "attack",
-        "rate",
-        "growth"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749198Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "German services sector growth hits four-month high in February, PMI shows",
-      "summary": "Germany's services sector saw business activity growth accelerate to a four-month high in February, driven by stronger demand and \u200ba rise in new business, according to a survey by \u200cS&P Global compiled before the U.S. and Israel launched attacks on Iran.",
-      "link": "https://www.reuters.com/business/german-services-sector-growth-hits-four-month-high-february-pmi-shows-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 09:00:41 GMT",
-      "matched_keywords": [
-        "attack",
-        "rate",
-        "growth"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.054883Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "French services sector remains in contraction in February, PMI shows",
-      "summary": "France's services sector remained in contraction territory for the second consecutive month in February, as demand \u200bweakened and exports fell sharply, a survey by \u200cS&P Global showed on Wednesday.",
-      "link": "https://www.reuters.com/business/french-services-sector-remains-contraction-february-pmi-shows-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 08:56:04 GMT",
-      "matched_keywords": [
-        "cut",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749229Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "French services sector remains in contraction in February, PMI shows",
-      "summary": "France's services sector remained in contraction territory for the second consecutive month in February, as demand \u200bweakened and exports fell sharply, a survey by \u200cS&P Global showed on Wednesday.",
-      "link": "https://www.reuters.com/business/french-services-sector-remains-contraction-february-pmi-shows-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 08:56:04 GMT",
-      "matched_keywords": [
-        "cut",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.054927Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "CNBC's UK Exchange newsletter: FTSE 100's defensive slant comes into its own",
-      "summary": "While the leading U.K. index is often seen as overwhelmingly defensive, those perceived weaknesses have proved to be a strength in times of crisis.",
-      "link": "https://www.cnbc.com/2026/03/04/uk-exchange-newsletter-ftse-100-uk-stocks-ftse-250.html",
-      "published": "Wed, 04 Mar 2026 08:54:23 GMT",
-      "matched_keywords": [
-        "crisis"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.116466Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "CNBC's UK Exchange newsletter: FTSE 100's defensive slant comes into its own",
-      "summary": "While the leading U.K. index is often seen as overwhelmingly defensive, those perceived weaknesses have proved to be a strength in times of crisis.",
-      "link": "https://www.cnbc.com/2026/03/04/uk-exchange-newsletter-ftse-100-uk-stocks-ftse-250.html",
-      "published": "Wed, 04 Mar 2026 08:54:23 GMT",
-      "matched_keywords": [
-        "crisis"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.397458Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Trump\u2019s Hormuz Assurances Only a Partial Fix, Shippers Say",
-      "summary": "US and Israeli strikes on Iran over the weekend have triggered a spiraling regional conflict and multiple attacks on vessels have now effectively closed off the Strait of Hormuz. Without transit through the critical waterway, seaborne trade between some of the world\u2019s biggest oil and gas producers and the rest of the world is all but cut off. \u201cNothing is sure and we need immediate clarity,\u201d said Khalid Hashim, managing director of Precious Shipping Pcl, a Thai firm that owns bulk carriers.",
-      "link": "https://finance.yahoo.com/news/trump-hormuz-assurances-only-partial-084958490.html",
-      "published": "Wed, 04 Mar 2026 08:49:58 GMT",
-      "matched_keywords": [
-        "oil",
-        "attack",
-        "conflict",
-        "regional",
-        "cut",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430469Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "War in Middle East threatens UK living standards growth, as markets brace for energy shock \u2013 business live",
-      "summary": "Rolling coverage of the latest economic and financial news Reeves\u2019s spring statement? The economy is great, don\u2019t worry about the Middle East Global stock markets tumble as Trump bid to avert oil crisis in strait of Hormuz fails to reassure The FTSE 100 couldn\u2019t sustain its early rise. The UK\u2019s blue-chip share index is now down 22 points, or 0.2%, at 10,461 points, with airlines, banks and housebuilders among the fallers. Until there is a pause in this conflict and free flowing oil around the world, it is hard to see how markets can stage a meaningful recovery. We expect stocks and bonds to remain nervous and driven by headline risk. The dollar has been king during this crisis, however, it is pulling back slightly today, and G10 currencies are clawing back some recent losses. This is likely to be temporary, especially if the oil price remains to the upside. Continue reading...",
-      "link": "https://www.theguardian.com/business/live/2026/mar/04/war-middle-east-uk-living-standards-growth-markets-energy-shock-live-news-updates",
-      "published": "Wed, 04 Mar 2026 08:42:09 GMT",
-      "matched_keywords": [
-        "oil",
-        "energy",
-        "war",
-        "conflict",
-        "bank",
-        "crisis",
-        "flow",
-        "growth",
         "ev",
         "chip",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:23.331872Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Asian Stocks Set to Slip After Oil Extends Rally: Markets Wrap - Bloomberg",
-      "summary": "Asian Stocks Set to Slip After Oil Extends Rally: Markets Wrap Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPb0JTWF90ZlIyZ0d6OEdnUFBGRDNKcVJEMkpLZ2YwZXdHeWhPSjMxem1IQ0ZUZmIyMGV2ejg1WVNYTEFxQ1MzVV9QbDlJOUZxcEFfQmVzdHBvYkRUNHVab2gyQmx3VEwwY191Y2FTRmdMdHc2YjM0bkU1eGdKTHlSRS1JQTNWNjdsQ2E0MXYzcW1uT1o1eGc?oc=5",
-      "published": "Wed, 04 Mar 2026 08:36:13 GMT",
-      "matched_keywords": [
-        "oil"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:30.275075Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "South Korean stocks hit hardest by Iran war as market plunges 12%",
-      "summary": "Kospi index suffers worst one-day drop as conflict rocks Asian markets",
-      "link": "https://www.ft.com/content/bab415ba-59d4-4b31-bcd4-2fb448fa3fd6",
-      "published": "Wed, 04 Mar 2026 08:25:54 GMT",
-      "matched_keywords": [
-        "war",
-        "conflict"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:26.546801Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "South Korean stocks hit hardest by Iran war as market plunges 12%",
-      "summary": "High-flying Kospi index suffers worst-ever one-day drop as conflict rocks Asian markets",
-      "link": "https://www.ft.com/content/bab415ba-59d4-4b31-bcd4-2fb448fa3fd6",
-      "published": "Wed, 04 Mar 2026 08:25:54 GMT",
-      "matched_keywords": [
-        "war",
-        "conflict",
-        "ev"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:25.836689Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Wall Street Strategists Warn Not to Bet on Trump Rescuing Stocks Rattled by Iran War",
-      "summary": "\u201cIt goes back to the classic phrase about war, which is it has a momentum of its own once it starts,\u201d said Bob Elliott, chief investment officer at New York-based investment firm Unlimited. \u201cThe ability to influence and respond to pain that exists in the markets isn\u2019t necessarily as easy as it was during Liberation Day, where basically President Trump had full control over what the policy choices were.\u201d The US-Israeli attack on Iran has destabilized the Middle East and threatens to deliver a new inflationary shock to the US economy by pushing up oil prices.",
-      "link": "https://finance.yahoo.com/news/wall-street-strategists-warn-not-081801981.html",
-      "published": "Wed, 04 Mar 2026 08:18:01 GMT",
-      "matched_keywords": [
-        "oil",
-        "attack",
-        "war",
-        "inflation",
-        "rate",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430530Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Wall Street Strategists Warn Not to Bet on Trump Rescuing Stocks Rattled by Iran War - Bloomberg",
-      "summary": "Wall Street Strategists Warn Not to Bet on Trump Rescuing Stocks Rattled by Iran War Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQWjk4S3l3ZTduZkc1LWJYX04xanNrLXNYV1BqUHhIaVhUYmYzMm1Yd2dBa2lnU0ZwTTdKVmlZQzhMMUhTclJrNEpSd2ZiY2l6Uld3VUFIQ1ZhcjJERDRyaGJ0Ni1CVW1oVzR1eHhqc1V2RmsyWWIxWmFOSVVCcG5MUExIWjFSSmhtYnVpcUxHQzFiM3ozcWpkaWV1Z1Fiano3aUt4QzRXVmhpb05kQlNyMA?oc=5",
-      "published": "Wed, 04 Mar 2026 08:18:01 GMT",
-      "matched_keywords": [
-        "war",
-        "rate"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:30.275180Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Wall Street Strategists Warn Not to Bet on Trump Rescuing Stocks Rattled by Iran War",
-      "summary": "\u201cIt goes back to the classic phrase about war, which is it has a momentum of its own once it starts,\u201d said Bob Elliott, chief investment officer at New York-based investment firm Unlimited. \u201cThe ability to influence and respond to pain that exists in the markets isn\u2019t necessarily as easy as it was during Liberation Day, where basically President Trump had full control over what the policy choices were.\u201d The US-Israeli attack on Iran has destabilized the Middle East and threatens to deliver a new inflationary shock to the US economy by pushing up oil prices.",
-      "link": "https://finance.yahoo.com/news/wall-street-strategists-warn-not-081801981.html",
-      "published": "Wed, 04 Mar 2026 08:18:01 GMT",
-      "matched_keywords": [
-        "oil",
-        "attack",
-        "war",
-        "inflation",
-        "rate",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726184Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "CNBC Daily Open: Markets take a beating despite Trump's reassurances",
-      "summary": "Asian and U.S. markets saw losses across the board as Iran conflict enters its fifth day.",
-      "link": "https://www.cnbc.com/2026/03/04/cnbc-daily-open-markets-take-a-beating-despite-trumps-reassurances.html",
-      "published": "Wed, 04 Mar 2026 08:08:39 GMT",
-      "matched_keywords": [
-        "conflict",
-        "beat",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.116487Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "CNBC Daily Open: Markets take a beating despite Trump's reassurances",
-      "summary": "Asian and U.S. markets saw losses across the board as Iran conflict enters its fifth day.",
-      "link": "https://www.cnbc.com/2026/03/04/cnbc-daily-open-markets-take-a-beating-despite-trumps-reassurances.html",
-      "published": "Wed, 04 Mar 2026 08:08:39 GMT",
-      "matched_keywords": [
-        "conflict",
-        "beat",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.397499Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Volvo Cars December-February sales volumes drop 10%",
-      "summary": "Sweden-based Volvo Cars said \u200con Wednesday it sold 156,965 cars in the three months through \u200bFebruary, down 10% from \u200bthe same period a year \u2060earlier, but sales of fully \u200belectric cars increased 18%.",
-      "link": "https://www.reuters.com/world/china/volvo-cars-december-february-sales-volumes-drop-10-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 08:05:34 GMT",
-      "matched_keywords": [
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749257Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Volvo Cars December-February sales volumes drop 10%",
-      "summary": "Sweden-based Volvo Cars said \u200con Wednesday it sold 156,965 cars in the three months through \u200bFebruary, down 10% from \u200bthe same period a year \u2060earlier, but sales of fully \u200belectric cars increased 18%.",
-      "link": "https://www.reuters.com/world/china/volvo-cars-december-february-sales-volumes-drop-10-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 08:05:34 GMT",
-      "matched_keywords": [
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.054957Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Fallout from Iran strikes could limit room for Czech rate easing, central banker Frait says",
-      "summary": "Development over past week after U.S. and Israeli strikes \u200bon Iran may limit room for \u200cpotential minor Czech interest rate easing if it discourages major central banks from \u200beasing policy on inflation fears, \u200bcentral bank Vice-Governor Jan Frait told \u2060news website www.seznamzpravy.cz.",
-      "link": "https://www.reuters.com/business/fallout-iran-strikes-could-limit-room-czech-rate-easing-central-banker-frait-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 08:05:10 GMT",
-      "matched_keywords": [
-        "bank",
-        "inflation",
-        "rate",
-        "interest",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749297Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Fallout from Iran strikes could limit room for Czech rate easing, central banker Frait says",
-      "summary": "Development over past week after U.S. and Israeli strikes \u200bon Iran may limit room for \u200cpotential minor Czech interest rate easing if it discourages major central banks from \u200beasing policy on inflation fears, \u200bcentral bank Vice-Governor Jan Frait told \u2060news website www.seznamzpravy.cz.",
-      "link": "https://www.reuters.com/business/fallout-iran-strikes-could-limit-room-czech-rate-easing-central-banker-frait-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 08:05:10 GMT",
-      "matched_keywords": [
-        "bank",
-        "inflation",
-        "rate",
-        "interest",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.054997Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Panic Sweeps Korean Stocks in Biggest One-Day Crash on Record",
-      "summary": "The Kospi Index plunged 12% \u2014 following a 7.2% drop on Tuesday \u2014 as heavyweights Samsung Electronics Co., SK Hynix Inc. and Hyundai Motor Co. tumbled. The rout triggered a 20-minute trading halt early in the Wednesday session. While the conflict has dragged down equities worldwide on concern that higher oil prices will stoke inflation, Korea\u2019s losses have been exacerbated by a record build-up of margin debt.",
-      "link": "https://finance.yahoo.com/news/panic-sweeps-korean-stocks-biggest-075144038.html",
-      "published": "Wed, 04 Mar 2026 07:51:44 GMT",
-      "matched_keywords": [
-        "oil",
-        "conflict",
-        "eps",
-        "inflation",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430576Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Panic Sweeps Korean Stocks in Biggest Two-Day Crash Since 2008 - Bloomberg",
-      "summary": "Panic Sweeps Korean Stocks in Biggest Two-Day Crash Since 2008 Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPNGN2SWx2US1FdlRQMjQ3X0lfMXU5NTZ6dWZNS2N1LWR6ZGdITG1iR3Y1ZGtwZTdCVXdZSHhwR1RDd3F2b3QxY0tZUFVwTk5xeU9sdUhZNnNmakY4RWhwR2xocndLN2wxbi0xTGNFOEZJMnU0RFZJb0szV2lXU090NUY5QVZDYnRRaE5aVVRfVW04b2N1bGU4Yjd1THRuUnV0LW13OTJ5SzE3MTU1eXFWaQ?oc=5",
-      "published": "Wed, 04 Mar 2026 07:51:00 GMT",
-      "matched_keywords": [
-        "eps"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:30.275024Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Thailand\u2019s Stock Index Drops 8% to Trigger Trading Halt - Bloomberg",
-      "summary": "Thailand\u2019s Stock Index Drops 8% to Trigger Trading Halt Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNQXZNaHZmcmpXaEFuXzdBUFl0aGVkLU5SeWpSaVA3bjlYcENNSTdqRVR5WGpONGpoTUpYYXZxWXF2Z3ZNXzJvWnRfOHJ3ZjI0NVIzbTRVNkZKV1VGSDZIaVduMWlFaUxOdkxHTEVZRVhraHFrel91Tm4zZi1PQ0R4aWtDSEp5VDNNdkJIN2pLMHVtZ1BlR2lWOV9PMGYyT0dlOUdmTDh4REVKLWJMUmFQNDNlN0k?oc=5",
-      "published": "Wed, 04 Mar 2026 07:48:00 GMT",
-      "matched_keywords": [
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:30.275103Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Monte dei Paschi not expected to renew CEO Lovaglio",
-      "summary": "Monte dei Paschi di Siena is \u200bexpected to finalise later \u200con Wednesday a slate of nominees to appoint a \u200bnew board that \u200bdoesn't include current Chief Executive \u2060Luigi Lovaglio, a \u200bperson close to the \u200bmatter said.",
-      "link": "https://www.reuters.com/business/finance/monte-dei-paschi-not-expected-renew-ceo-lovaglio-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 07:09:55 GMT",
-      "matched_keywords": [
-        "cut",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749329Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Monte dei Paschi not expected to renew CEO Lovaglio",
-      "summary": "Monte dei Paschi di Siena is \u200bexpected to finalise later \u200con Wednesday a slate of nominees to appoint a \u200bnew board that \u200bdoesn't include current Chief Executive \u2060Luigi Lovaglio, a \u200bperson close to the \u200bmatter said.",
-      "link": "https://www.reuters.com/business/finance/monte-dei-paschi-not-expected-renew-ceo-lovaglio-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 07:09:55 GMT",
-      "matched_keywords": [
-        "cut",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.055061Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Gold flubs its lines amid Middle East mayhem",
-      "summary": "The most peculiar market move in an alarming week of Middle East conflict was how the most obvious \"safe haven\" - gold - flubbed its lines. Instead of piling into gold, investors seemed to sprint for dollar cash, offloading \u200banything that caught a speculative head of steam before last weekend's attacks.",
-      "link": "https://www.reuters.com/world/china/gold-flubs-its-lines-amid-middle-east-mayhem-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 07:07:02 GMT",
-      "matched_keywords": [
-        "attack",
-        "conflict"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749367Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Gold flubs its lines amid Middle East mayhem",
-      "summary": "The most peculiar market move in an alarming week of Middle East conflict was how the most obvious \"safe haven\" - gold - flubbed its lines. Instead of piling into gold, investors seemed to sprint for dollar cash, offloading \u200banything that caught a speculative head of steam before last weekend's attacks.",
-      "link": "https://www.reuters.com/world/china/gold-flubs-its-lines-amid-middle-east-mayhem-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 07:07:02 GMT",
-      "matched_keywords": [
-        "attack",
-        "conflict"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.055104Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Iran War Spurs Emerging Markets Rout, Threatens Investment Case - Bloomberg",
-      "summary": "Iran War Spurs Emerging Markets Rout, Threatens Investment Case Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPUm1kalR2dzRCem9acGNTSjV3X29uVEQwNXFCLTVYTkU3eHZacFEtdE5xV1lMaUp5Y0VVOWcyQlc4MG1jSE9OUWs5UE5TMWN5RnhNd1o1YzJSUFhNY2dndzd2cldmMHZ6b0NsRXBCeVk2aDg4VGFFd0U0ZFRSazV4YnBYYUlaczZKZmduTTNhTzR3V1NQME54RmJXOFk5ZzZOdzhSVWRUNUhqWUdyS1F5VFQtVQ?oc=5",
-      "published": "Wed, 04 Mar 2026 07:03:00 GMT",
-      "matched_keywords": [
-        "war"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:30.274950Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack",
-      "summary": "Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/04/cuba-charges-six-exiles-terrorism-speedboat-attack",
-      "published": "Wed, 04 Mar 2026 07:01:11 GMT",
-      "matched_keywords": [
-        "attack",
-        "war",
-        "ukraine",
-        "military",
-        "crisis",
-        "cut",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP View image in fullscreen Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP Cuba Cuba charges six exiles with terrorism in wake of deadly speedboat attack Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Guardian staff and agencies Wed 4 Mar 2026 07.01 GMT Last modified on Wed 4 Mar 2026 07.13 GMT Share Prefer the Guardian on Google Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. The coast gu",
-      "timestamp": "2026-03-04T10:15:18.381758Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack",
-      "summary": "Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/04/cuba-charges-six-exiles-terrorism-speedboat-attack",
-      "published": "Wed, 04 Mar 2026 07:01:11 GMT",
-      "matched_keywords": [
-        "attack",
-        "war",
-        "ukraine",
-        "military",
-        "crisis",
-        "cut",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP View image in fullscreen Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP Cuba Cuba charges six exiles with terrorism in wake of deadly speedboat attack Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Guardian staff and agencies Wed 4 Mar 2026 07.01 GMT Last modified on Wed 4 Mar 2026 07.13 GMT Share Prefer the Guardian on Google Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. The coast gu",
-      "timestamp": "2026-03-04T09:15:17.970942Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "UAE bourses slide as markets reopen after two-day halt following Iran attacks",
-      "summary": "Dubai and Abu Dhabi stocks tumbled on Wednesday as they reopened after \u200ba two-day halt following Iran's unprecedented wave \u200cof missile and drone attacks on the Gulf nation on Sunday.",
-      "link": "https://www.reuters.com/world/middle-east/uae-bourses-slide-markets-reopen-after-two-day-halt-following-iran-attacks-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 06:51:55 GMT",
-      "matched_keywords": [
-        "attack",
-        "drone",
-        "missile",
-        "miss",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749398Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "UAE bourses slide as markets reopen after two-day halt following Iran attacks",
-      "summary": "Dubai and Abu Dhabi stocks tumbled on Wednesday as they reopened after \u200ba two-day halt following Iran's unprecedented wave \u200cof missile and drone attacks on the Gulf nation on Sunday.",
-      "link": "https://www.reuters.com/world/middle-east/uae-bourses-slide-markets-reopen-after-two-day-halt-following-iran-attacks-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 06:51:55 GMT",
-      "matched_keywords": [
-        "attack",
-        "drone",
-        "missile",
-        "miss",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.055135Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Italy's Fineco says will use AI to boost new client growth under plan to 2029",
-      "summary": "Italian digital bank and money \u200cmanager Fineco said \u200con Wednesday it would use artificial \u200bintelligence to expand its client base and cut costs under a strategy through \u200c2029, aiming \u2060to sharply grow the pace at which it \u2060gathers new money. Fineco said it targeted an average \u200blow double-digit \u200byearly \u200bincrease in net \u200cinflows and new clients between 2025 and 2029, compared with a 6% rise in the 2021-2025 period. The target \u200cdoes not include \u200bany potential \u200bbenefits from \u200bplans to expand \u200cits brokerage services \u200boutside Italy \u200bby early 2027 through the launch of a \u200bpan-European \u200cinvestment platform, Fineco said.",
-      "link": "https://finance.yahoo.com/news/italys-fineco-says-ai-boost-064824629.html",
-      "published": "Wed, 04 Mar 2026 06:48:24 GMT",
-      "matched_keywords": [
-        "bank",
-        "flow",
-        "rate",
-        "cut",
-        "growth",
-        "european",
-        "eu",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430639Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Italy's Fineco says will use AI to boost new client growth under plan to 2029",
-      "summary": "Italian digital bank and money \u200cmanager Fineco said \u200con Wednesday it would use artificial \u200bintelligence to expand its client base and cut costs under a strategy through \u200c2029, aiming \u2060to sharply grow the pace at which it \u2060gathers new money. Fineco said it targeted an average \u200blow double-digit \u200byearly \u200bincrease in net \u200cinflows and new clients between 2025 and 2029, compared with a 6% rise in the 2021-2025 period. The target \u200cdoes not include \u200bany potential \u200bbenefits from \u200bplans to expand \u200cits brokerage services \u200boutside Italy \u200bby early 2027 through the launch of a \u200bpan-European \u200cinvestment platform, Fineco said.",
-      "link": "https://finance.yahoo.com/news/italys-fineco-says-ai-boost-064824629.html",
-      "published": "Wed, 04 Mar 2026 06:48:24 GMT",
-      "matched_keywords": [
-        "bank",
-        "flow",
-        "rate",
-        "cut",
-        "growth",
-        "european",
-        "eu",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726276Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "South Korea's Kospi share index drops more than 12% as Iran war fears spur global sell-offs",
-      "summary": "South Korea's Kospi share index drops more than 12% as Iran war fears spur global sell-offs.",
-      "link": "https://finance.yahoo.com/news/south-koreas-kospi-share-index-064350675.html",
-      "published": "Wed, 04 Mar 2026 06:43:50 GMT",
-      "matched_keywords": [
-        "war"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430661Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "South Korea's Kospi share index drops more than 12% as Iran war fears spur global sell-offs",
-      "summary": "South Korea's Kospi share index drops more than 12% as Iran war fears spur global sell-offs.",
-      "link": "https://finance.yahoo.com/news/south-koreas-kospi-share-index-064350675.html",
-      "published": "Wed, 04 Mar 2026 06:43:50 GMT",
-      "matched_keywords": [
-        "war"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726303Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Exclusive: Walmart-backed PhonePe targets up to $10.5 billion valuation in India IPO, sources say",
-      "summary": "Walmart-backed Indian fintech firm PhonePe , the country's most used payments \u200bplatform, is aiming to list at a valuation of between $9 billion and $10.5 billion, two people with direct \u200cknowledge of the matter said.",
-      "link": "https://www.reuters.com/world/india/walmart-backed-phonepe-targets-up-105-billion-valuation-india-ipo-sources-say-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 06:40:26 GMT",
-      "matched_keywords": [
-        "ipo",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.749434Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Exclusive: Walmart-backed PhonePe targets up to $10.5 billion valuation in India IPO, sources say",
-      "summary": "Walmart-backed Indian fintech firm PhonePe , the country's most used payments \u200bplatform, is aiming to list at a valuation of between $9 billion and $10.5 billion, two people with direct \u200cknowledge of the matter said.",
-      "link": "https://www.reuters.com/world/india/walmart-backed-phonepe-targets-up-105-billion-valuation-india-ipo-sources-say-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 06:40:26 GMT",
-      "matched_keywords": [
-        "ipo",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.055169Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Exclusive-Walmart-backed PhonePe targets up to $10.5 billion valuation in India IPO, sources say",
-      "summary": "Walmart-backed Indian fintech firm PhonePe, the country's most used payments platform, is aiming to list at a valuation of between $9 billion and $10.5 billion, two people with direct knowledge \u200cof the matter said. That suggests the IPO will raise about $900 million to $1.05 billion. Walmart will trim \u200bits stake in PhonePe by about 12% in the firm's initial public offering, while Tiger Global and Microsoft plan to exit their stakes, according to the firm's IPO filing.",
-      "link": "https://finance.yahoo.com/news/exclusive-walmart-backed-phonepe-targets-064007482.html",
-      "published": "Wed, 04 Mar 2026 06:40:07 GMT",
-      "matched_keywords": [
-        "ipo",
-        "offering",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430723Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Exclusive-Walmart-backed PhonePe targets up to $10.5 billion valuation in India IPO, sources say",
-      "summary": "Walmart-backed Indian fintech firm PhonePe, the country's most used payments platform, is aiming to list at a valuation of between $9 billion and $10.5 billion, two people with direct knowledge \u200cof the matter said. That suggests the IPO will raise about $900 million to $1.05 billion. Walmart will trim \u200bits stake in PhonePe by about 12% in the firm's initial public offering, while Tiger Global and Microsoft plan to exit their stakes, according to the firm's IPO filing.",
-      "link": "https://finance.yahoo.com/news/exclusive-walmart-backed-phonepe-targets-064007482.html",
-      "published": "Wed, 04 Mar 2026 06:40:07 GMT",
-      "matched_keywords": [
-        "ipo",
-        "offering",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726365Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Gold Advances as Dip-Buyers Enter Market Despite Dollar Strength",
-      "summary": "Bullion climbed as much as 2%, clawing back ground after a four-day winning streak ended Tuesday. Traders are balancing gold\u2019s risk premium against a stronger dollar, with a gauge of the US currency rallying 1.5% this week. The gold market is experiencing a standard \u201cportfolio risk-reduction move,\u201d said Peter Kinsella, global head of forex strategy at Union Bancaire Privee, UBP SA. \u201cIt\u2019s entirely consistent with what we have seen in previous conflicts.\u201d",
-      "link": "https://finance.yahoo.com/news/gold-advances-dip-buyers-enter-063220331.html",
-      "published": "Wed, 04 Mar 2026 06:32:20 GMT",
-      "matched_keywords": [
-        "conflict",
-        "rate",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430774Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Gold Advances as Dip-Buyers Enter Market Despite Dollar Strength",
-      "summary": "Bullion climbed as much as 2%, clawing back ground after a four-day winning streak ended Tuesday. Traders are balancing gold\u2019s risk premium against a stronger dollar, with a gauge of the US currency rallying 1.5% this week. The gold market is experiencing a standard \u201cportfolio risk-reduction move,\u201d said Peter Kinsella, global head of forex strategy at Union Bancaire Privee, UBP SA. \u201cIt\u2019s entirely consistent with what we have seen in previous conflicts.\u201d",
-      "link": "https://finance.yahoo.com/news/gold-advances-dip-buyers-enter-063220331.html",
-      "published": "Wed, 04 Mar 2026 06:32:20 GMT",
-      "matched_keywords": [
-        "conflict",
-        "rate",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726427Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Spain's PLD Space raises $209 million in latest funding round",
-      "summary": "MADRID, March 4 (Reuters) - Aerospace engineering firm PLD Space said on Wednesday it had closed a 180 million euro ($209 million) equity funding round, which included Mitsubishi Electric, as it seeks",
-      "link": "https://finance.yahoo.com/news/spains-pld-space-raises-209-060644767.html",
-      "published": "Wed, 04 Mar 2026 06:31:16 GMT",
-      "matched_keywords": [
-        "eu",
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.430801Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Spain's PLD Space raises $209 million in latest funding round",
-      "summary": "MADRID, March 4 (Reuters) - Aerospace engineering firm PLD Space said on Wednesday it had closed a 180 million euro ($209 million) equity funding round, which included Mitsubishi Electric, as it seeks",
-      "link": "https://finance.yahoo.com/news/spains-pld-space-raises-209-060644767.html",
-      "published": "Wed, 04 Mar 2026 06:31:16 GMT",
-      "matched_keywords": [
-        "eu",
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726462Z",
+      "timestamp": "2026-03-05T03:15:29.694162Z",
       "source_type": "rss"
     },
     {
       "feed": "Bloomberg_Tech",
-      "title": "Alibaba Qwen Head Who Warned of OpenAI Gap Steps Down - Bloomberg",
-      "summary": "Alibaba Qwen Head Who Warned of OpenAI Gap Steps Down Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQN0VGb0hjRHgtLXBjb3BQeDc3T0MxWGlnRS1aQjlWZzM1TXhDeWdSd1RlSC1vNk03anVIaUZoV1hWSlNRSjN1cVJDTXdlYjJ3WXo0a2tLejlmNXJscXozbWttenBaLXp0NFhMNnZtVm92SktmTFlYUERYLXRfbzZmMHVGODNwaHNCS1NDSUJ3UkdRME10OXlhRVNtejU2S09MWjlsMF9hQQ?oc=5",
-      "published": "Wed, 04 Mar 2026 06:27:00 GMT",
+      "title": "Meta Plans to Develop Custom Chips to Train Its AI Models - Bloomberg.com",
+      "summary": "Meta Plans to Develop Custom Chips to Train Its AI Models Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPUVRaZnczQWJ0dlh6dDNyVW9TalNkWDBZelljMkkySW5NWl9UaU5FbEtmaHlUcDhoVW9kbFJQWVV1dHAwelozSW9qSE1pWTlOa1hudE9TUFFvZjlZUVF3dWM0eFVrSll2R25tWFBucUV1ZUh4bHk3SHlnenJSVUptSzZIa2VGVjNXaU45b21GeHdwVDZ3X3hzUmFwTGlqS0xSUTc2RzZLQkVIV2hs?oc=5",
+      "published": "Wed, 04 Mar 2026 21:57:32 GMT",
       "matched_keywords": [
-        "war",
-        "eps",
-        "who",
+        "ev",
+        "chip",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:29.675147Z",
+      "timestamp": "2026-03-05T02:15:31.232696Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "US FDA puts partial clinical hold on PepGen's muscle disease drug trial",
+      "summary": "March 4 () - PepGen said on Wednesday that the U. Food and Drug Administration has placed \u200ca partial clinical hold on its mid\u2011stage trial of \u200ca rare muscle disease drug, sending its shares plunging over 25% \u200bin extended trading.",
+      "link": "https://finance.yahoo.com/news/us-fda-puts-partial-clinical-215622834.html",
+      "published": "Wed, 04 Mar 2026 21:56:22 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.505669Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Rate of Iranian ballistic missile launches is declining, western officials say",
+      "summary": "Drop-off in firing of weapons may be a result of US and Israeli attacks on launchers and stockpiles",
+      "link": "https://www.ft.com/content/bc7b386f-23e9-4b97-8613-9f7abe985be1",
+      "published": "Wed, 04 Mar 2026 21:46:29 GMT",
+      "matched_keywords": [
+        "attack",
+        "missile",
+        "miss",
+        "rate"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:26.255898Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Rate of Iranian ballistic missile launches is declining, western officials say",
+      "summary": "Drop-off in firing of weapons may be a result of US and Israeli attacks on launchers and stockpiles",
+      "link": "https://www.ft.com/content/bc7b386f-23e9-4b97-8613-9f7abe985be1",
+      "published": "Wed, 04 Mar 2026 21:46:29 GMT",
+      "matched_keywords": [
+        "attack",
+        "missile",
+        "miss",
+        "rate"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:27.037300Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "SeekingAlpha",
+      "title": "TriplePoint Venture Growth outlines $25M\u2013$50M quarterly fundings target amid AI portfolio shift in 2026",
+      "summary": "",
+      "link": "https://seekingalpha.com/news/4561054-triplepoint-venture-growth-outlines-25m-50m-quarterly-fundings-target-amid-ai-portfolio-shift?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Wed, 04 Mar 2026 21:22:53 -0500",
+      "matched_keywords": [
+        "quarterly",
+        "growth",
+        "ai"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:31.431241Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "SeekingAlpha",
+      "title": "Magnachip outlines 2026 product launches with new generation products to comprise 10% of revenue",
+      "summary": "",
+      "link": "https://seekingalpha.com/news/4561053-magnachip-outlines-2026-product-launches-with-new-generation-products-to-comprise-10-percent?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Wed, 04 Mar 2026 21:22:46 -0500",
+      "matched_keywords": [
+        "revenue",
+        "ev",
+        "chip"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:31.431256Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Broadcom forecasts second-quarter revenue above estimates",
+      "summary": "Chip designer Broadcom forecast second-quarter revenue \u200babove Wall Street estimates on Wednesday, a \u200csign of strong demand for advanced chips used in data centers powering artificial intelligence applications.",
+      "link": "https://www.reuters.com/technology/broadcom-forecasts-second-quarter-revenue-above-estimates-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 21:18:29 GMT",
+      "matched_keywords": [
+        "revenue",
+        "ev",
+        "chip"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.812165Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Broadcom forecasts second-quarter revenue above estimates",
+      "summary": "Chip designer Broadcom forecast second-quarter revenue \u200babove Wall Street estimates on Wednesday, a \u200csign of strong demand for advanced chips used in data centers powering artificial intelligence applications.",
+      "link": "https://www.reuters.com/technology/broadcom-forecasts-second-quarter-revenue-above-estimates-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 21:18:29 GMT",
+      "matched_keywords": [
+        "revenue",
+        "ev",
+        "chip"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:30.349664Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Stock Futures Erase Gains as Bessent Signals Tariffs Coming - Bloomberg.com",
+      "summary": "Stock Futures Erase Gains as Bessent Signals Tariffs Coming Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNMWg3dC0zQ19iQUJpWkFVVHJaSmgxdlNmd1QtMWRYd0JGWXNmSEVOTmtQTHBqSzZTS1N0S1NVSzJZYWdmWHNPN1Iwc2VNR2FaaFR4WVp6NFEyZ3dJR2s1bXVyYVRneWhxMXltSGhEYnM1V1hmVlUtdV9yeW1oU0VXbEFQOVVCTFI3MDVzUElTLWE3VGRwM19XS0g5NERFY1JGbkZmOF9nLXBYRjBTbFJz?oc=5",
+      "published": "Wed, 04 Mar 2026 21:12:38 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.726008Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "China parliament to approve growth, policy plans amid growing US rivalry",
+      "summary": "China\u2019s annual parliament meeting opens on Thursday, with Beijing expected to unveil ambitions to upgrade its industrial base, close the technology gap with the \u200bU.S. and renew its pledge to shore up consumer demand.",
+      "link": "https://www.reuters.com/world/china/china-parliament-approve-growth-policy-plans-amid-growing-us-rivalry-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 21:03:20 GMT",
+      "matched_keywords": [
+        "growth",
+        "china"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.812197Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "China parliament to approve growth, policy plans amid growing US rivalry",
+      "summary": "China\u2019s annual parliament meeting opens on Thursday, with Beijing expected to unveil ambitions to upgrade its industrial base, close the technology gap with the \u200bU.S. and renew its pledge to shore up consumer demand.",
+      "link": "https://www.reuters.com/world/china/china-parliament-approve-growth-policy-plans-amid-growing-us-rivalry-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 21:03:20 GMT",
+      "matched_keywords": [
+        "growth",
+        "china"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:30.349697Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Citi lifts aluminium 0\u20133 month target to $3,600 per metric ton",
+      "summary": "Citi has raised its LME aluminium 0\u20133 month price \u200btarget to $3,600 a metric ton, up from $3,400/t, and said prices could climb to $4,000/t \u200cin a bull-case scenario, citing supply disruptions and force majeure declarations after war broke out in Iran.",
+      "link": "https://www.reuters.com/world/asia-pacific/citi-lifts-aluminium-03-month-target-3600-per-metric-ton-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 21:00:54 GMT",
+      "matched_keywords": [
+        "war",
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:30.349732Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Tech industry group expresses 'concern' to Pete Hegseth over supply chain risk label",
+      "summary": "The Information Technology Industry Council's letter doesn't name Anthropic, but lands days after the AI company was designated a supply chain risk.",
+      "link": "https://www.cnbc.com/2026/03/04/big-tech-industry-group-.html",
+      "published": "Wed, 04 Mar 2026 20:49:17 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.165982Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Tech industry group expresses 'concern' to Pete Hegseth over supply chain risk label",
+      "summary": "The Information Technology Industry Council's letter doesn't name Anthropic, but lands days after the AI company was designated a supply chain risk.",
+      "link": "https://www.cnbc.com/2026/03/04/big-tech-industry-group-.html",
+      "published": "Wed, 04 Mar 2026 20:49:17 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.184800Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Epstein files: House committee subpoenas Attorney General Pam Bondi",
+      "summary": "",
+      "link": "https://www.cnbc.com/2026/03/04/epstein-files-nancy-mace-pam-bondi-subpoena-doj.html",
+      "published": "Wed, 04 Mar 2026 20:46:54 GMT",
+      "matched_keywords": [
+        "eps"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.165993Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Epstein files: House committee subpoenas Attorney General Pam Bondi",
+      "summary": "",
+      "link": "https://www.cnbc.com/2026/03/04/epstein-files-nancy-mace-pam-bondi-subpoena-doj.html",
+      "published": "Wed, 04 Mar 2026 20:46:54 GMT",
+      "matched_keywords": [
+        "eps"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.184828Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "US in talks with Iranian Kurdish militants over anti-regime operations",
+      "summary": "Iraq-based groups have asked Trump administration for intelligence, weapons and training support",
+      "link": "https://www.ft.com/content/fe0d828d-ef51-4568-b2d7-1c286d464723",
+      "published": "Wed, 04 Mar 2026 20:08:25 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:26.255986Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "US in talks with Iranian Kurdish militants over anti-regime operations",
+      "summary": "Iraq-based groups have asked Trump administration for intelligence, weapons and training support",
+      "link": "https://www.ft.com/content/fe0d828d-ef51-4568-b2d7-1c286d464723",
+      "published": "Wed, 04 Mar 2026 20:08:25 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:27.037410Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "SeekingAlpha",
+      "title": "Alto Ingredients outlines $15M 45Z tax credit target for 2026 amid expanded CO2 operations and cost reductions",
+      "summary": "",
+      "link": "https://seekingalpha.com/news/4561050-alto-ingredients-outlines-15m-45z-tax-credit-target-for-2026-amid-expanded-co2-operations-and?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Wed, 04 Mar 2026 20:02:44 -0500",
+      "matched_keywords": [
+        "credit"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:31.431271Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Bets Against Blue Owl Hit All-Time High on Private Credit Fears - Bloomberg.com",
+      "summary": "Bets Against Blue Owl Hit All-Time High on Private Credit Fears Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPdmtSMGtCMmEzS2JWbVJjeS1peVZZeTlGNVpNcGZldzNTMWllZFVOeGlRakVmbUtXazZlWmtBQlV0aUJyNEhIeEJORDM5ckI0X25aQl9pZEcydU1CTXdfV3REQ3JUSGZ2bVZIMTNwMlY3T3hkaWVqNElKVGo2S0pmREZ1SVlicmZ4Y1ZqZnEyX2RhWVkyRDY3V1dNTHpSRFVpMnZNSS0xMnJaa2NxcjZ5WXk4Y1JKdw?oc=5",
+      "published": "Wed, 04 Mar 2026 20:02:43 GMT",
+      "matched_keywords": [
+        "credit",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:30.372214Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Bets Against Blue Owl Hit All-Time High on Private Credit Fears - Bloomberg.com",
+      "summary": "Bets Against Blue Owl Hit All-Time High on Private Credit Fears Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPdmtSMGtCMmEzS2JWbVJjeS1peVZZeTlGNVpNcGZldzNTMWllZFVOeGlRakVmbUtXazZlWmtBQlV0aUJyNEhIeEJORDM5ckI0X25aQl9pZEcydU1CTXdfV3REQ3JUSGZ2bVZIMTNwMlY3T3hkaWVqNElKVGo2S0pmREZ1SVlicmZ4Y1ZqZnEyX2RhWVkyRDY3V1dNTHpSRFVpMnZNSS0xMnJaa2NxcjZ5WXk4Y1JKdw?oc=5",
+      "published": "Wed, 04 Mar 2026 20:02:43 GMT",
+      "matched_keywords": [
+        "credit",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.725951Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "SeekingAlpha",
+      "title": "Surging U.S. diesel futures indicate energy bull move far from over, analyst says",
+      "summary": "",
+      "link": "https://seekingalpha.com/news/4561044-surging-us-diesel-futures-indicate-energy-bull-move-far-from-over-analyst-says?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Wed, 04 Mar 2026 19:47:06 -0500",
+      "matched_keywords": [
+        "energy"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:31.431283Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_World",
+      "title": "Blackout in Cuba leaves millions without power amid US oil chokehold",
+      "summary": "Latest outage darkens island facing dwindling oil reserves and increasing pressure from Washington A blackout hit the western half of Cuba on Wednesday, leaving millions of people in Havana and beyond without power in the latest outage to affect an island struggling with dwindling oil reserves and a crumbling electricity grid. The government\u2019s Electric Union confirmed the outage on social platform X, saying it affected people from the eastern town of Pinar del Rio to the central town of Camaguey. Continue reading...",
+      "link": "https://www.theguardian.com/world/2026/mar/04/blackout-cuba-us-oil",
+      "published": "Wed, 04 Mar 2026 19:42:57 GMT",
+      "matched_keywords": [
+        "oil",
+        "ukraine",
+        "crisis",
+        "health",
+        "eu",
+        "ev",
+        "electric",
+        "ai"
+      ],
+      "enriched_text_source": "article_excerpt",
+      "article_excerpt": "Blackout in Cuba leaves millions without power amid US oil chokehold | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Malena Borrell waits for clients in her shop during a mass blackout across most of Cuba, in Havana on 4 March. Photograph: Norlys Perez/Reuters View image in fullscreen Malena Borrell waits for clients in her shop during a mass blackout across most of Cuba, in Havana on 4 March. Photograph: Norlys Perez/Reuters Cuba Blackout in Cuba leaves millions without power amid US oil chokehold Latest outage darkens island facing dwindling oil reserves and increasing pressure from Washington Associated Press Wed 4 Mar 2026 19.42 GMT Last modified on Wed 4 Mar 2026 21.27 GMT Share Prefer the Guardian on Google A blackout hit the western half of Cuba on Wednesday, leaving millions of people in Havana and beyond without power in the latest outage to affect an island struggling with dwindling oil reserves and a crumbling electricity grid. The government\u2019s Electric Union confirmed the outage on social platform X, saying it affected people from the eastern town of Pinar del Rio to the central town of Camaguey. The agency said crews were ",
+      "timestamp": "2026-03-05T03:15:17.496015Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_World",
+      "title": "Blackout in Cuba leaves millions without power amid US oil chokehold",
+      "summary": "Latest outage darkens island facing dwindling oil reserves and increasing pressure from Washington A blackout hit the western half of Cuba on Wednesday, leaving millions of people in Havana and beyond without power in the latest outage to affect an island struggling with dwindling oil reserves and a crumbling electricity grid. The government\u2019s Electric Union confirmed the outage on social platform X, saying it affected people from the eastern town of Pinar del Rio to the central town of Camaguey. Continue reading...",
+      "link": "https://www.theguardian.com/world/2026/mar/04/blackout-cuba-us-oil",
+      "published": "Wed, 04 Mar 2026 19:42:57 GMT",
+      "matched_keywords": [
+        "oil",
+        "ukraine",
+        "crisis",
+        "health",
+        "eu",
+        "ev",
+        "electric",
+        "ai"
+      ],
+      "enriched_text_source": "article_excerpt",
+      "article_excerpt": "Blackout in Cuba leaves millions without power amid US oil chokehold | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Malena Borrell waits for clients in her shop during a mass blackout across most of Cuba, in Havana on 4 March. Photograph: Norlys Perez/Reuters View image in fullscreen Malena Borrell waits for clients in her shop during a mass blackout across most of Cuba, in Havana on 4 March. Photograph: Norlys Perez/Reuters Cuba Blackout in Cuba leaves millions without power amid US oil chokehold Latest outage darkens island facing dwindling oil reserves and increasing pressure from Washington Associated Press Wed 4 Mar 2026 19.42 GMT Last modified on Wed 4 Mar 2026 21.27 GMT Share Prefer the Guardian on Google A blackout hit the western half of Cuba on Wednesday, leaving millions of people in Havana and beyond without power in the latest outage to affect an island struggling with dwindling oil reserves and a crumbling electricity grid. The government\u2019s Electric Union confirmed the outage on social platform X, saying it affected people from the eastern town of Pinar del Rio to the central town of Camaguey. The agency said crews were ",
+      "timestamp": "2026-03-05T02:15:18.279243Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "SeekingAlpha",
+      "title": "Niagen Bioscience targets 10\u201315% revenue growth for 2026 while expanding injectable product line",
+      "summary": "",
+      "link": "https://seekingalpha.com/news/4561049-niagen-bioscience-targets-10-15-percent-revenue-growth-for-2026-while-expanding-injectable?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Wed, 04 Mar 2026 19:12:50 -0500",
+      "matched_keywords": [
+        "revenue",
+        "growth",
+        "ev"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:31.431309Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Broadcom earnings are out after market close. What top analysts are expecting",
+      "summary": "Analysts from firms including Morgan Stanley, UBS and JPMorgan are notably bullish on Broadcom's TPU business.",
+      "link": "https://www.cnbc.com/2026/03/04/broadcom-earnings-are-out-after-market-close-what-top-analysts-are-expecting.html",
+      "published": "Wed, 04 Mar 2026 18:59:41 GMT",
+      "matched_keywords": [
+        "earnings"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.166050Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Broadcom earnings are out after market close. What top analysts are expecting",
+      "summary": "Analysts from firms including Morgan Stanley, UBS and JPMorgan are notably bullish on Broadcom's TPU business.",
+      "link": "https://www.cnbc.com/2026/03/04/broadcom-earnings-are-out-after-market-close-what-top-analysts-are-expecting.html",
+      "published": "Wed, 04 Mar 2026 18:59:41 GMT",
+      "matched_keywords": [
+        "earnings"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.184864Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Nvidia CEO Huang says $30 billion OpenAI investment 'might be the last'",
+      "summary": "",
+      "link": "https://www.cnbc.com/2026/03/04/nvidia-huang-openai-investment.html",
+      "published": "Wed, 04 Mar 2026 18:42:35 GMT",
+      "matched_keywords": [
+        "nvidia",
+        "ai"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:28.166061Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Nvidia CEO Huang says $30 billion OpenAI investment 'might be the last'",
+      "summary": "",
+      "link": "https://www.cnbc.com/2026/03/04/nvidia-huang-openai-investment.html",
+      "published": "Wed, 04 Mar 2026 18:42:35 GMT",
+      "matched_keywords": [
+        "nvidia",
+        "ai"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:29.184875Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Rachel Reeves should scrap the North Sea windfall tax now",
+      "summary": "The UK should optimise North Sea oil and gas production while it transfers to renewables and nuclear developments The chancellor\u2019s failure to reform or remove the energy profits levy (EPL) \u2013 AKA the North Sea windfall tax \u2013 in her spring forecast was a case of \u201cpolitical expediency and more to do with putting one byelection result before the economic needs of the country\u201d. Who said that? Some Tory or Reform politician being opportunist as war in Iran puts the UK\u2019s energy import dependency in the spotlight? Actually, no, it was the general secretary of the GMB union, Gary Smith, on Wednesday, demonstrating once again that views on the North Sea oil and gas do not fit neatly into a left-right divide. He has been making the principled case for an orderly transition in energy for ages, warning that decarbonising via deindustrialising costs jobs and will end up pushing voters rightwards. Continue reading...",
+      "link": "https://www.theguardian.com/business/nils-pratley-on-finance/2026/mar/04/reeves-should-scrap-the-north-sea-windfall-tax-now",
+      "published": "Wed, 04 Mar 2026 18:33:11 GMT",
+      "matched_keywords": [
+        "oil",
+        "energy",
+        "war",
+        "nuclear",
+        "failure",
+        "profit",
+        "who",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.106141Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Rachel Reeves should scrap the North Sea windfall tax now",
+      "summary": "The UK should optimise North Sea oil and gas production while it transfers to renewables and nuclear developments The chancellor\u2019s failure to reform or remove the energy profits levy (EPL) \u2013 AKA the North Sea windfall tax \u2013 in her spring forecast was a case of \u201cpolitical expediency and more to do with putting one byelection result before the economic needs of the country\u201d. Who said that? Some Tory or Reform politician being opportunist as war in Iran puts the UK\u2019s energy import dependency in the spotlight? Actually, no, it was the general secretary of the GMB union, Gary Smith, on Wednesday, demonstrating once again that views on the North Sea oil and gas do not fit neatly into a left-right divide. He has been making the principled case for an orderly transition in energy for ages, warning that decarbonising via deindustrialising costs jobs and will end up pushing voters rightwards. Continue reading...",
+      "link": "https://www.theguardian.com/business/nils-pratley-on-finance/2026/mar/04/reeves-should-scrap-the-north-sea-windfall-tax-now",
+      "published": "Wed, 04 Mar 2026 18:33:11 GMT",
+      "matched_keywords": [
+        "oil",
+        "energy",
+        "war",
+        "nuclear",
+        "failure",
+        "profit",
+        "who",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.585550Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Putin Says Russia to Weigh Redirecting Gas Supplies Away From EU - Bloomberg.com",
+      "summary": "Putin Says Russia to Weigh Redirecting Gas Supplies Away From EU Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOWEdIcDAwMTR3TXVTWXlRVmpJR2VHSmRvVlp1enNwSmZSTkRvZFBlLWZhcGRpZXFTNDd2RWctX18wSldzQzdsY1dGb2VMVUlBa2Y1QmNNRy1FcU5kY2QwNVV1MkZnM182VGNuaFpQSWVxSk9qd2plazAzQjdNQkltNWNMczRxQnk3SFYyQ3JXX3lXcVc0QnpNVEVLaXdpVG9kR0NsMDd4U1lEQmFMUTF1R1ZSb19Edw?oc=5",
+      "published": "Wed, 04 Mar 2026 18:28:01 GMT",
+      "matched_keywords": [
+        "russia",
+        "putin",
+        "eu"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.726050Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Israel expects weeks-long war against Iran",
+      "summary": "Officials and analysts say joint operation with US seeks to destroy key capabilities of Islamic regime",
+      "link": "https://www.ft.com/content/dd070ee7-7021-4f90-86ec-690fe6aa34e6",
+      "published": "Wed, 04 Mar 2026 18:04:10 GMT",
+      "matched_keywords": [
+        "war",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:26.255854Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Israel expects weeks-long war against Iran",
+      "summary": "Officials and analysts say joint operation with US seeks to destroy key capabilities of Islamic regime",
+      "link": "https://www.ft.com/content/dd070ee7-7021-4f90-86ec-690fe6aa34e6",
+      "published": "Wed, 04 Mar 2026 18:04:10 GMT",
+      "matched_keywords": [
+        "war",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:27.037265Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "European Commission proposes \u2018Buy EU\u2019 plan to compete against China",
+      "summary": "Plan, which aims to preserve jobs in clean tech and low-carbon sectors, could include UK if there is reciprocal market access The European Commission has proposed a \u201cBuy EU\u201d plan to boost domestic low-carbon industries and help the continent compete against China. The commission published a draft regulation \u2013 called the Industrial Accelerator Act \u2013 on Wednesday, setting demands for EU-made and low-carbon content on bodies spending public money. The rules mark a big shift in economic thinking from Brussels, long a bastion of open markets. Continue reading...",
+      "link": "https://www.theguardian.com/world/2026/mar/04/european-commission-proposes-buy-eu-plan-to-compete-against-china",
+      "published": "Wed, 04 Mar 2026 17:18:43 GMT",
+      "matched_keywords": [
+        "miss",
+        "european",
+        "eu",
+        "china",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.105623Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "European Commission proposes \u2018Buy EU\u2019 plan to compete against China",
+      "summary": "Plan, which aims to preserve jobs in clean tech and low-carbon sectors, could include UK if there is reciprocal market access The European Commission has proposed a \u201cBuy EU\u201d plan to boost domestic low-carbon industries and help the continent compete against China. The commission published a draft regulation \u2013 called the Industrial Accelerator Act \u2013 on Wednesday, setting demands for EU-made and low-carbon content on bodies spending public money. The rules mark a big shift in economic thinking from Brussels, long a bastion of open markets. Continue reading...",
+      "link": "https://www.theguardian.com/world/2026/mar/04/european-commission-proposes-buy-eu-plan-to-compete-against-china",
+      "published": "Wed, 04 Mar 2026 17:18:43 GMT",
+      "matched_keywords": [
+        "miss",
+        "european",
+        "eu",
+        "china",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.585069Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "US submarine sinks Iranian warship in Indian Ocean",
+      "summary": "Attack on frigate off southern coast of Sri Lanka fuels fears Iran war extending beyond Middle East",
+      "link": "https://www.ft.com/content/d9d578d8-7daa-412b-bf2f-bcfe1fd4c6e2",
+      "published": "Wed, 04 Mar 2026 17:09:56 GMT",
+      "matched_keywords": [
+        "attack",
+        "war"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:26.255917Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "US submarine sinks Iranian warship in Indian Ocean",
+      "summary": "Attack on frigate off southern coast of Sri Lanka fuels fears Iran war extending beyond Middle East",
+      "link": "https://www.ft.com/content/d9d578d8-7daa-412b-bf2f-bcfe1fd4c6e2",
+      "published": "Wed, 04 Mar 2026 17:09:56 GMT",
+      "matched_keywords": [
+        "attack",
+        "war"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:27.037320Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Tech",
+      "title": "Bill Gates-Backed TerraPower Wins US Approval For Advanced Nuclear Reactor - Bloomberg.com",
+      "summary": "Bill Gates-Backed TerraPower Wins US Approval For Advanced Nuclear Reactor Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQR0U1aTFnSG5KZE96TE54ckE0WVNQWVR4QnBqOFpHMTBMTWZOcU5zTTNEbHlzcFk3dU1FSGI5aE5hOE51VFNKRG81WlVTdXZVMFA2Umx5Ulp0cDB3SVFodzRjeHQ5c1J2UUp1ZWlQcDFJeXNjWVFWWkpFeUY2ckZJa1ZEdXVSSVlybVJ3VFMxZzFmaFNSVmNRR3FYU3k5bFZIQkxkWmdKMXFJX3BvR2Z3Q0VnYXlrOE1ON2lSUzRTOHhoZw?oc=5",
+      "published": "Wed, 04 Mar 2026 17:08:08 GMT",
+      "matched_keywords": [
+        "nuclear"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:29.694252Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Tech",
+      "title": "Bill Gates-Backed TerraPower Wins US Approval For Advanced Nuclear Reactor - Bloomberg.com",
+      "summary": "Bill Gates-Backed TerraPower Wins US Approval For Advanced Nuclear Reactor Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQR0U1aTFnSG5KZE96TE54ckE0WVNQWVR4QnBqOFpHMTBMTWZOcU5zTTNEbHlzcFk3dU1FSGI5aE5hOE51VFNKRG81WlVTdXZVMFA2Umx5Ulp0cDB3SVFodzRjeHQ5c1J2UUp1ZWlQcDFJeXNjWVFWWkpFeUY2ckZJa1ZEdXVSSVlybVJ3VFMxZzFmaFNSVmNRR3FYU3k5bFZIQkxkWmdKMXFJX3BvR2Z3Q0VnYXlrOE1ON2lSUzRTOHhoZw?oc=5",
+      "published": "Wed, 04 Mar 2026 17:08:08 GMT",
+      "matched_keywords": [
+        "nuclear"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.232761Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Union tries to seize control of works council at Tesla\u2019s German factory",
+      "summary": "Lawsuits and slander claims fly in IG Metall\u2019s battle with Elon Musk over employment rights and conditions Business live \u2013 latest updates Europe\u2019s largest trade union is trying to gain control of the works council at Elon Musk\u2019s Tesla gigafactory near Berlin, in an industrial relations showdown marked by lawsuits and mutual accusations of slander. The works council, an elected body of employees that negotiates everything from working hours to pay deals with a company\u2019s management, is considered an entrenched aspect of the German corporate world, particularly in the car industry. Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/union-tries-seize-control-works-council-tesla-german-factory",
+      "published": "Wed, 04 Mar 2026 16:18:02 GMT",
+      "matched_keywords": [
+        "battle",
+        "rate",
+        "eu",
+        "tesla",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.105994Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Union tries to seize control of works council at Tesla\u2019s German factory",
+      "summary": "Lawsuits and slander claims fly in IG Metall\u2019s battle with Elon Musk over employment rights and conditions Business live \u2013 latest updates Europe\u2019s largest trade union is trying to gain control of the works council at Elon Musk\u2019s Tesla gigafactory near Berlin, in an industrial relations showdown marked by lawsuits and mutual accusations of slander. The works council, an elected body of employees that negotiates everything from working hours to pay deals with a company\u2019s management, is considered an entrenched aspect of the German corporate world, particularly in the car industry. Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/union-tries-seize-control-works-council-tesla-german-factory",
+      "published": "Wed, 04 Mar 2026 16:18:02 GMT",
+      "matched_keywords": [
+        "battle",
+        "rate",
+        "eu",
+        "tesla",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.585416Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "South West Water admits criminal offence over Devon parasite outbreak",
+      "summary": "Firm admits supplying water unfit for human consumption after nearly 150 people fell ill A major utility company has admitted supplying water unfit for human consumption after a parasite outbreak in Devon made almost 150 people sick. South West Water (SWW) pleaded guilty to the criminal offence relating to the cryptosporidiosis outbreak in Brixham, Devon, which affected 2,500 homes. Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/south-west-water-admits-criminal-offence-over-devon-parasite-outbreak",
+      "published": "Wed, 04 Mar 2026 16:12:00 GMT",
+      "matched_keywords": [
+        "outbreak",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.105932Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "South West Water admits criminal offence over Devon parasite outbreak",
+      "summary": "Firm admits supplying water unfit for human consumption after nearly 150 people fell ill A major utility company has admitted supplying water unfit for human consumption after a parasite outbreak in Devon made almost 150 people sick. South West Water (SWW) pleaded guilty to the criminal offence relating to the cryptosporidiosis outbreak in Brixham, Devon, which affected 2,500 homes. Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/south-west-water-admits-criminal-offence-over-devon-parasite-outbreak",
+      "published": "Wed, 04 Mar 2026 16:12:00 GMT",
+      "matched_keywords": [
+        "outbreak",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.585354Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "War in Middle East \u2018could wipe out growth in UK living standards\u2019",
+      "summary": "Rising oil and gas prices may affect increase of \u00a3300 a year for typical working-age households, says leading thinktank The Middle East crisis could trigger an energy price shock that more than wipes out the \u00a3300 rise in living standards a typical working-age household could otherwise expect this year, a leading thinktank has warned. The Resolution Foundation said a \u201cdecent\u201d one-off increase in average living standards in 2026 and a bumper rise for lower-income households could be reversed by rising oil and gas prices as the Iran conflict disrupts supplies . Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/war-in-middle-east-could-wipe-out-growth-in-uk-living-standards",
+      "published": "Wed, 04 Mar 2026 15:55:10 GMT",
+      "matched_keywords": [
+        "oil",
+        "energy",
+        "war",
+        "conflict",
+        "crisis",
+        "growth",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.105547Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "War in Middle East \u2018could wipe out growth in UK living standards\u2019",
+      "summary": "Rising oil and gas prices may affect increase of \u00a3300 a year for typical working-age households, says leading thinktank The Middle East crisis could trigger an energy price shock that more than wipes out the \u00a3300 rise in living standards a typical working-age household could otherwise expect this year, a leading thinktank has warned. The Resolution Foundation said a \u201cdecent\u201d one-off increase in average living standards in 2026 and a bumper rise for lower-income households could be reversed by rising oil and gas prices as the Iran conflict disrupts supplies . Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/war-in-middle-east-could-wipe-out-growth-in-uk-living-standards",
+      "published": "Wed, 04 Mar 2026 15:55:10 GMT",
+      "matched_keywords": [
+        "oil",
+        "energy",
+        "war",
+        "conflict",
+        "crisis",
+        "growth",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.584979Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Europe\u2019s next-generation fighter jet project may collapse if row continues, says warplane maker",
+      "summary": "Dassault Aviation says \u20ac100bn project may soon be \u2018dead\u2019 if Airbus will not agree on how to share workload France and Germany\u2019s next-generation fighter jet project could soon be \u201cdead\u201d, one of the two companies tasked with delivering it has warned, amid a worsening corporate rift over who gets to build the aircraft. Dassault Aviation, France\u2019s leading warplane maker, said Airbus\u2019s defence arm \u2013 which represents Germany and Spain \u2013 needed to cooperate on the \u20ac100bn programme otherwise it would collapse. Continue reading...",
+      "link": "https://www.theguardian.com/technology/2026/mar/04/europe-fighter-jet-collapse-france-germany-airbus-dassault-aviation",
+      "published": "Wed, 04 Mar 2026 14:54:27 GMT",
+      "matched_keywords": [
+        "war",
+        "collapse",
+        "rate",
+        "who",
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.105742Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Europe\u2019s next-generation fighter jet project may collapse if row continues, says warplane maker",
+      "summary": "Dassault Aviation says \u20ac100bn project may soon be \u2018dead\u2019 if Airbus will not agree on how to share workload France and Germany\u2019s next-generation fighter jet project could soon be \u201cdead\u201d, one of the two companies tasked with delivering it has warned, amid a worsening corporate rift over who gets to build the aircraft. Dassault Aviation, France\u2019s leading warplane maker, said Airbus\u2019s defence arm \u2013 which represents Germany and Spain \u2013 needed to cooperate on the \u20ac100bn programme otherwise it would collapse. Continue reading...",
+      "link": "https://www.theguardian.com/technology/2026/mar/04/europe-fighter-jet-collapse-france-germany-airbus-dassault-aviation",
+      "published": "Wed, 04 Mar 2026 14:54:27 GMT",
+      "matched_keywords": [
+        "war",
+        "collapse",
+        "rate",
+        "who",
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.585187Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Small investors turn on James Watt after BrewDog co-founder admits \u2018many mistakes\u2019",
+      "summary": "Watt apologises to 200,000-plus \u2018equity punks\u2019 who joined crowdfunding rounds but were left empty-handed after cut-price sale The co-founder of BrewDog, James Watt, met with short shrift from small investors who have been left empty-handed by the company\u2019s sale for just \u00a333m , after he admitted to \u201cmany mistakes\u201d. Watt issued a mea culpa via the professional social networking site LinkedIn, a platform he has regularly used to espouse political views, including complaints about the level of tax he is asked to pay. Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/small-investors-turn-on-james-watt-after-brewdog-founder-admits-many-mistakes",
+      "published": "Wed, 04 Mar 2026 14:35:20 GMT",
+      "matched_keywords": [
+        "short",
+        "cut",
+        "who",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.105683Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Small investors turn on James Watt after BrewDog co-founder admits \u2018many mistakes\u2019",
+      "summary": "Watt apologises to 200,000-plus \u2018equity punks\u2019 who joined crowdfunding rounds but were left empty-handed after cut-price sale The co-founder of BrewDog, James Watt, met with short shrift from small investors who have been left empty-handed by the company\u2019s sale for just \u00a333m , after he admitted to \u201cmany mistakes\u201d. Watt issued a mea culpa via the professional social networking site LinkedIn, a platform he has regularly used to espouse political views, including complaints about the level of tax he is asked to pay. Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/small-investors-turn-on-james-watt-after-brewdog-founder-admits-many-mistakes",
+      "published": "Wed, 04 Mar 2026 14:35:20 GMT",
+      "matched_keywords": [
+        "short",
+        "cut",
+        "who",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.585128Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "UK oil firm fined \u00a313m for repeatedly publishing inaccurate financial results",
+      "summary": "Wood Group\u2019s \u2018desire to maintain previously stated financial results\u2019 influenced inaccurate reporting, says regulator John Wood Group has been fined nearly \u00a313m for repeatedly publishing inaccurate financial results. The FTSE-listed oil and has engineering company, which is soon to be bought by a Dubai-based rival, has previously admitted that \u201ccultural failings\u201d led to information being kept from auditors. Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/uk-oil-firm-wood-group-fined-13m-repeatedly-publishing-inaccurate-financial-results",
+      "published": "Wed, 04 Mar 2026 13:29:10 GMT",
+      "matched_keywords": [
+        "oil",
+        "rate",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.106058Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "UK oil firm fined \u00a313m for repeatedly publishing inaccurate financial results",
+      "summary": "Wood Group\u2019s \u2018desire to maintain previously stated financial results\u2019 influenced inaccurate reporting, says regulator John Wood Group has been fined nearly \u00a313m for repeatedly publishing inaccurate financial results. The FTSE-listed oil and has engineering company, which is soon to be bought by a Dubai-based rival, has previously admitted that \u201ccultural failings\u201d led to information being kept from auditors. Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/04/uk-oil-firm-wood-group-fined-13m-repeatedly-publishing-inaccurate-financial-results",
+      "published": "Wed, 04 Mar 2026 13:29:10 GMT",
+      "matched_keywords": [
+        "oil",
+        "rate",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.585467Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Iran\u2019s $7.8 Billion Crypto Market Draws Fresh Attention in War - Bloomberg.com",
+      "summary": "Iran\u2019s $7.8 Billion Crypto Market Draws Fresh Attention in War Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNN2ZJckFfRDhSRDczMkN1WWQ5RXRTSlB2cngzc0dpNnRoTk9XNFRoaUVXQm9FcHpjckVXMWxxM0tmcVdLaFl5dUJyNFhTWDU5NTdOZ181ck1jM3VaZ09lb003OVFKMTNMS1FDd2Z5bEpxemdGdmJJNEZHZ28tS0JBWjctT2pfQmszaFlMaVlnNFNfQzN1R0ZfWDQwTHhscldzMXBkcVBjYnNPaXRCRjRvdk1B?oc=5",
+      "published": "Wed, 04 Mar 2026 13:00:40 GMT",
+      "matched_keywords": [
+        "war"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.726080Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Goldman Sachs Strategists Say Buy the Stock Dip From Iran and AI - Bloomberg.com",
+      "summary": "Goldman Sachs Strategists Say Buy the Stock Dip From Iran and AI Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPMS1tcHBxcDBhbzhjM3B5c2k4cWlpYjdodkxOTUNtR3VGZlNaeUNnLUFiU2hMM1czeDlRX0NwR3BqeC0zZU16bDExWDN3OUpHbTRSdFp1Tk4zc3Byc3V1TFJxN1FMdkJ6MUFWVlNUUVFKNTFPREFhWWxqUXlkMmNubmJHeFg4eWFta2tkb0sydWJ2Nm5Tb01UY3djNndOdy1qdkx6WVQ0UDFaZmtoNmhSSUZ1SjNqdw?oc=5",
+      "published": "Wed, 04 Mar 2026 12:43:52 GMT",
+      "matched_keywords": [
+        "rate",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:30.372385Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Stock Crash Wipes Out Leveraged Bets in Korea, Sowing Panic - Bloomberg.com",
+      "summary": "Stock Crash Wipes Out Leveraged Bets in Korea, Sowing Panic Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQMVJoY3djSUU0VTlEbGo4ZFMzWWdBdmJ5Q05mY05BS0N3SzI2dy1SejlqdFJOUXlCRm9URnFybFhyRmxUbkMtVDFXN3hOVmdsTVJ1dE9OUnRMNkZONjV6YzdhQnVmOU1NbHVMbVpiOUlrd2ItMkdJQzRMSVRGVTJjbFJ6TVRoMk5VbHFGcWFGN0lHOGZ0aTA3M0lYMHdCTHI1YUlzQk9JbW1tWU5QWkE?oc=5",
+      "published": "Wed, 04 Mar 2026 12:42:53 GMT",
+      "matched_keywords": [
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:30.372330Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Nvidia and UK Wealth Fund invest in British autonomous driving startup Oxa",
+      "summary": "Oxford-based firm has raised $103m for commercial development of software for self-driving industrial vehicles Nvidia is investing in the British autonomous driving startup Oxa , alongside backing from the UK\u2019s National Wealth Fund, in a boost to the country\u2019s technology sector. The Oxford-based company, which has developed software for self-driving industrial vehicles, said it had raised $103m (\u00a377m) from investors to focus on commercial solutions for that software, as well as its physical AI and robotics technology, and to push on with its global expansion plans. Continue reading...",
+      "link": "https://www.theguardian.com/technology/2026/mar/04/nvidia-uk-wealth-fund-invest-british-autonomous-driving-startup-oxa",
+      "published": "Wed, 04 Mar 2026 12:37:26 GMT",
+      "matched_keywords": [
+        "war",
+        "ev",
+        "nvidia",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:23.105888Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Nvidia and UK Wealth Fund invest in British autonomous driving startup Oxa",
+      "summary": "Oxford-based firm has raised $103m for commercial development of software for self-driving industrial vehicles Nvidia is investing in the British autonomous driving startup Oxa , alongside backing from the UK\u2019s National Wealth Fund, in a boost to the country\u2019s technology sector. The Oxford-based company, which has developed software for self-driving industrial vehicles, said it had raised $103m (\u00a377m) from investors to focus on commercial solutions for that software, as well as its physical AI and robotics technology, and to push on with its global expansion plans. Continue reading...",
+      "link": "https://www.theguardian.com/technology/2026/mar/04/nvidia-uk-wealth-fund-invest-british-autonomous-driving-startup-oxa",
+      "published": "Wed, 04 Mar 2026 12:37:26 GMT",
+      "matched_keywords": [
+        "war",
+        "ev",
+        "nvidia",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:23.585310Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Chart Watchers See Risks of S&P 500 Correction Amid War Jitters - Bloomberg.com",
+      "summary": "Chart Watchers See Risks of S&P 500 Correction Amid War Jitters Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQWjJWRHptWWkyUnphLTA5b1E0cUJwOFAxdC1VdllZbW40SGp2SWZtdW5HRVdMNFBvLUxXeHo3VlYzUWluUkg0NVRES241NlhJQlNVaERRR21FVGczdl9rSHAzSVoyZ0J1bzNVRnU1aVVWdHlXSHNjS1d1a1ZWbzNFUGhXaUpjQWJ6bVVhOVFhNXBaOTc2TEpUNmlrbUgwOVJRX25aclJkZGNTdGpxNVhlVmJlcTE?oc=5",
+      "published": "Wed, 04 Mar 2026 11:46:22 GMT",
+      "matched_keywords": [
+        "war"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:30.372299Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Chart Watchers See Risks of S&P 500 Correction Amid War Jitters - Bloomberg.com",
+      "summary": "Chart Watchers See Risks of S&P 500 Correction Amid War Jitters Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQWjJWRHptWWkyUnphLTA5b1E0cUJwOFAxdC1VdllZbW40SGp2SWZtdW5HRVdMNFBvLUxXeHo3VlYzUWluUkg0NVRES241NlhJQlNVaERRR21FVGczdl9rSHAzSVoyZ0J1bzNVRnU1aVVWdHlXSHNjS1d1a1ZWbzNFUGhXaUpjQWJ6bVVhOVFhNXBaOTc2TEpUNmlrbUgwOVJRX25aclJkZGNTdGpxNVhlVmJlcTE?oc=5",
+      "published": "Wed, 04 Mar 2026 11:46:22 GMT",
+      "matched_keywords": [
+        "war"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.726099Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Reuters_BreakingViews",
+      "title": "Hormuz reopening is not solely in Trump\u2019s gift",
+      "summary": "The US president thinks \u200ctanker insurance and Navy escorts will restart Strait flows. But his fleets are targets, escorts lack ships, \u200band precedent suggests shipping volumes don\u2019t \u200binstantly recover from these sorts of shocks. \u2060Unless hostilities end soon, $100 oil looks likely.",
+      "link": "https://www.reuters.com/commentary/breakingviews/hormuz-reopening-is-not-solely-trumps-gift-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 11:14:02 GMT",
+      "matched_keywords": [
+        "oil",
+        "flow",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:29.145205Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Reuters_BreakingViews",
+      "title": "Hormuz reopening is not solely in Trump\u2019s gift",
+      "summary": "The US president thinks \u200ctanker insurance and Navy escorts will restart Strait flows. But his fleets are targets, escorts lack ships, \u200band precedent suggests shipping volumes don\u2019t \u200binstantly recover from these sorts of shocks. \u2060Unless hostilities end soon, $100 oil looks likely.",
+      "link": "https://www.reuters.com/commentary/breakingviews/hormuz-reopening-is-not-solely-trumps-gift-2026-03-04/",
+      "published": "Wed, 04 Mar 2026 11:14:02 GMT",
+      "matched_keywords": [
+        "oil",
+        "flow",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:30.687938Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Tech",
+      "title": "Jack Dorsey Is Wrong: Pro-Worker AI Is Possible - Bloomberg.com",
+      "summary": "Jack Dorsey Is Wrong: Pro-Worker AI Is Possible Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOaDNyRlh5cTVBZmNpdGZkcEZteVVKNFlvSFhTNnhLSXBvNG5BMUNZaTlwSU5KQ1BhSHJubExRVm9rcVVFUnVPQ2JxeUtBQ3NYY2c1RVNYXzFhY1AyNXd2cXJ6VUxqZDEtLWxhYURuNndnb0JCSmJCdTVpMTFfdkFocTNGWmlfSUJMTjJIbnF3ZW9uWXh6bVB5QjNEQ0xGOTRtT184cjdCb09pSUU5ZExHb08tazhKOWMzNkRR?oc=5",
+      "published": "Wed, 04 Mar 2026 10:30:15 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.232800Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Tech",
+      "title": "AI Use Hasn\u2019t Cost Jobs at European Firms Yet, ECB Blog Says - Bloomberg.com",
+      "summary": "AI Use Hasn\u2019t Cost Jobs at European Firms Yet, ECB Blog Says Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQZ3I1MWZBaUN2c1J4ZUt2WkFGNFVvMzJQNlNieC1BYjdtRlNzckRRaTdmYV9LV1R5dUJUcDdqcFRzRnVWcXR3Y1R0eE8zd2JGQm1BTkxseEZ2UzMzbG5pSUY4bFpQOHh1Y19jNGpOd29PVU4xNm9TQllLQnNNbHRYSEhPUEFZZUU2UU5xYXRyNnRxWGtCLTVlSlB6a2pvSjN4clJDX1R3WDk2a2YwdGxn?oc=5",
+      "published": "Wed, 04 Mar 2026 10:01:46 GMT",
+      "matched_keywords": [
+        "european",
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T03:15:29.694272Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Tech",
+      "title": "AI Use Hasn\u2019t Cost Jobs at European Firms Yet, ECB Blog Says - Bloomberg.com",
+      "summary": "AI Use Hasn\u2019t Cost Jobs at European Firms Yet, ECB Blog Says Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQZ3I1MWZBaUN2c1J4ZUt2WkFGNFVvMzJQNlNieC1BYjdtRlNzckRRaTdmYV9LV1R5dUJUcDdqcFRzRnVWcXR3Y1R0eE8zd2JGQm1BTkxseEZ2UzMzbG5pSUY4bFpQOHh1Y19jNGpOd29PVU4xNm9TQllLQnNNbHRYSEhPUEFZZUU2UU5xYXRyNnRxWGtCLTVlSlB6a2pvSjN4clJDX1R3WDk2a2YwdGxn?oc=5",
+      "published": "Wed, 04 Mar 2026 10:01:46 GMT",
+      "matched_keywords": [
+        "european",
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-05T02:15:31.232828Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_World",
+      "title": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack",
+      "summary": "Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. Continue reading...",
+      "link": "https://www.theguardian.com/world/2026/mar/04/cuba-charges-six-exiles-terrorism-speedboat-attack",
+      "published": "Wed, 04 Mar 2026 07:01:11 GMT",
+      "matched_keywords": [
+        "attack",
+        "war",
+        "ukraine",
+        "military",
+        "crisis",
+        "cut",
+        "health",
+        "eu",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "article_excerpt",
+      "article_excerpt": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP View image in fullscreen Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP Cuba Cuba charges six exiles with terrorism in wake of deadly speedboat attack Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Guardian staff and agencies Wed 4 Mar 2026 07.01 GMT Last modified on Thu 5 Mar 2026 02.30 GMT Share Prefer the Guardian on Google Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. The coast gu",
+      "timestamp": "2026-03-05T03:15:18.630738Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_World",
+      "title": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack",
+      "summary": "Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. Continue reading...",
+      "link": "https://www.theguardian.com/world/2026/mar/04/cuba-charges-six-exiles-terrorism-speedboat-attack",
+      "published": "Wed, 04 Mar 2026 07:01:11 GMT",
+      "matched_keywords": [
+        "attack",
+        "war",
+        "ukraine",
+        "military",
+        "crisis",
+        "cut",
+        "health",
+        "eu",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "article_excerpt",
+      "article_excerpt": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP View image in fullscreen Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP Cuba Cuba charges six exiles with terrorism in wake of deadly speedboat attack Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Guardian staff and agencies Wed 4 Mar 2026 07.01 GMT Last modified on Wed 4 Mar 2026 19.58 GMT Share Prefer the Guardian on Google Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. The coast gu",
+      "timestamp": "2026-03-05T02:15:19.467023Z",
       "source_type": "rss"
     },
     {
@@ -1035,176 +1544,72 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.970611Z",
+      "timestamp": "2026-03-05T03:15:29.694208Z",
       "source_type": "rss"
     },
     {
-      "feed": "Yahoo_Finance",
-      "title": "Australian state plans to give employees legal right to work from home",
-      "summary": "SYDNEY, March 4 (Reuters) - The Australian state of Victoria \u200csaid on Wednesday it will \u200claunch legislation to give employees the legal \u200bright to work from home two days per week. The laws, that are due to come into effect on \u200cSeptember 1, \u2060will allow anyone with the ability to work from home \u2060to do so, regardless of the size of their workplace.",
-      "link": "https://finance.yahoo.com/news/australian-state-plans-employees-legal-061720599.html",
-      "published": "Wed, 04 Mar 2026 06:17:20 GMT",
+      "feed": "Bloomberg_Tech",
+      "title": "Alibaba Qwen Head Who Warned of OpenAI Gap Steps Down - Bloomberg.com",
+      "summary": "Alibaba Qwen Head Who Warned of OpenAI Gap Steps Down Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQN0VGb0hjRHgtLXBjb3BQeDc3T0MxWGlnRS1aQjlWZzM1TXhDeWdSd1RlSC1vNk03anVIaUZoV1hWSlNRSjN1cVJDTXdlYjJ3WXo0a2tLejlmNXJscXozbWttenBaLXp0NFhMNnZtVm92SktmTFlYUERYLXRfbzZmMHVGODNwaHNCS1NDSUJ3UkdRME10OXlhRVNtejU2S09MWjlsMF9hQQ?oc=5",
+      "published": "Wed, 04 Mar 2026 06:27:00 GMT",
       "matched_keywords": [
-        "eu",
+        "war",
+        "eps",
+        "who",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726516Z",
+      "timestamp": "2026-03-05T02:15:31.232741Z",
       "source_type": "rss"
     },
     {
-      "feed": "Yahoo_Finance",
-      "title": "German union aims for breakthrough at Tesla Berlin plant",
-      "summary": "BERLIN, March 4 (Reuters) - Germany's top industrial union is fighting for more influence at Tesla's gigafactory outside \u200cBerlin, where staff are voting for a new works \u200ccouncil after a campaign marked by mud-slinging and legal challenges. Voting began on Monday \u200bat Tesla's Gruenheide plant, the U.",
-      "link": "https://finance.yahoo.com/news/german-union-aims-breakthrough-tesla-060852052.html",
-      "published": "Wed, 04 Mar 2026 06:08:52 GMT",
-      "matched_keywords": [
-        "eu",
-        "tesla",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726562Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "European markets set for mixed open as traders track Middle East turmoil",
-      "summary": "European stocks are expected to open in mixed territory on Wednesday as markets continue to track developments in the Middle East.",
-      "link": "https://www.cnbc.com/2026/03/04/european-markets-stoxx-600-ftse-dax-oil-prices-middle-east-latest.html",
-      "published": "Wed, 04 Mar 2026 06:07:30 GMT",
+      "feed": "Guardian_Business",
+      "title": "Middle East conflict offers economic lifeline to Russia\u2019s flagging war machine",
+      "summary": "With much of the world\u2019s oil supplies out of action, Russia could step in to meet demand in China and India A prolonged energy crisis triggered by the widening war in the Middle East could offer an economic lifeline to Russia\u2019s war machine at a moment when it was beginning to show signs of strain. The sharp weakening and possible collapse of the regime in Iran would deprive the Kremlin of one of its closest regional partners. But that setback could be outweighed by an economic windfall if disruption pushes buyers toward Russian energy, alongside a possible slowdown in western arms supplies to Ukraine. Continue reading...",
+      "link": "https://www.theguardian.com/world/2026/mar/04/middle-east-conflict-offers-economic-lifeline-to-russias-flagging-war-machine",
+      "published": "Wed, 04 Mar 2026 06:00:42 GMT",
       "matched_keywords": [
         "oil",
-        "european",
-        "eu",
-        "ev"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.116509Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "European markets set for mixed open as traders track Middle East turmoil",
-      "summary": "European stocks are expected to open in mixed territory on Wednesday as markets continue to track developments in the Middle East.",
-      "link": "https://www.cnbc.com/2026/03/04/european-markets-stoxx-600-ftse-dax-oil-prices-middle-east-latest.html",
-      "published": "Wed, 04 Mar 2026 06:07:30 GMT",
-      "matched_keywords": [
-        "oil",
-        "european",
-        "eu",
-        "ev"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.397523Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "Spain's PLD Space raises $209 million in latest funding round",
-      "summary": "Aerospace engineering firm PLD Space said on Wednesday it had closed a 180 million euro ($209 million) \u200bequity funding round, which included Mitsubishi Electric , as \u200cit seeks to boost its capacity to launch rockets into space.",
-      "link": "https://www.reuters.com/business/aerospace-defense/spains-pld-space-raises-209-million-latest-funding-round-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 06:06:53 GMT",
-      "matched_keywords": [
-        "eu",
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.055201Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Nasdaq_News",
-      "title": "EU to lay out local content rules to strengthen manufacturing, cut China reliance",
-      "summary": "The European Commission will unveil plans on Wednesday to boost the competitiveness of the \u200cEU's manufacturing sector during its drive to decarbonise and avoid reliance on cheap Chinese goods by setting local content requirements.",
-      "link": "https://www.reuters.com/world/china/eu-lay-out-local-content-rules-strengthen-manufacturing-cut-china-reliance-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 06:04:33 GMT",
-      "matched_keywords": [
-        "miss",
-        "cut",
-        "european",
-        "eu",
-        "china"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.055236Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "Middle East conflict poses fresh test to central banks as oil shock fuels inflation",
-      "summary": "Middle East conflict has posed a fresh test to central banks, with fears of an oil shock and renewed inflation risks changing their bid to shore up growth.",
-      "link": "https://www.cnbc.com/2026/03/04/iran-israel-us-war-middle-east-conflict-oil-gas-lng-surge-central-banks-inflation-risk.html",
-      "published": "Wed, 04 Mar 2026 05:08:18 GMT",
-      "matched_keywords": [
-        "oil",
+        "energy",
+        "war",
+        "ukraine",
+        "russia",
         "conflict",
-        "bank",
-        "inflation",
-        "growth"
+        "collapse",
+        "regional",
+        "crisis",
+        "china",
+        "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.116533Z",
+      "timestamp": "2026-03-05T03:15:23.105805Z",
       "source_type": "rss"
     },
     {
-      "feed": "CNBC_Top",
-      "title": "Middle East conflict poses fresh test to central banks as oil shock fuels inflation",
-      "summary": "Middle East conflict has posed a fresh test to central banks, with fears of an oil shock and renewed inflation risks changing their bid to shore up growth.",
-      "link": "https://www.cnbc.com/2026/03/04/iran-israel-us-war-middle-east-conflict-oil-gas-lng-surge-central-banks-inflation-risk.html",
-      "published": "Wed, 04 Mar 2026 05:08:18 GMT",
+      "feed": "Guardian_Business",
+      "title": "Middle East conflict offers economic lifeline to Russia\u2019s flagging war machine",
+      "summary": "With much of the world\u2019s oil supplies out of action, Russia could step in to meet demand in China and India A prolonged energy crisis triggered by the widening war in the Middle East could offer an economic lifeline to Russia\u2019s war machine at a moment when it was beginning to show signs of strain. The sharp weakening and possible collapse of the regime in Iran would deprive the Kremlin of one of its closest regional partners. But that setback could be outweighed by an economic windfall if disruption pushes buyers toward Russian energy, alongside a possible slowdown in western arms supplies to Ukraine. Continue reading...",
+      "link": "https://www.theguardian.com/world/2026/mar/04/middle-east-conflict-offers-economic-lifeline-to-russias-flagging-war-machine",
+      "published": "Wed, 04 Mar 2026 06:00:42 GMT",
       "matched_keywords": [
         "oil",
+        "energy",
+        "war",
+        "ukraine",
+        "russia",
         "conflict",
-        "bank",
-        "inflation",
-        "growth"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.397547Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "SeekingAlpha",
-      "title": "Billionaire Tesla whale buys 1M Nvidia shares to support \u201cnervous market\u201d",
-      "summary": "",
-      "link": "https://seekingalpha.com/news/4560566-billionaire-tesla-whale-buys-1m-nvidia-shares-to-support-nervous-market?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Wed, 04 Mar 2026 05:05:32 -0500",
-      "matched_keywords": [
-        "tesla",
-        "nvidia",
-        "ai"
-      ],
-      "enriched_text_source": "headline_only",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:31.126864Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Yahoo_Finance",
-      "title": "Malaysia anti-graft agency probing government deal with chip firm Arm Holdings",
-      "summary": "Malaysia's \u200canti-graft agency said \u200con Wednesday that \u200bit is investigating corruption and fraud allegations involving a \u200c1.1 \u2060billion ringgit ($279 million) deal between \u2060the Malaysian government and British \u200bchip \u200bfirm \u200bArm Holdings. Authorities \u200cwere also looking into a proposed takeover of IJM Corp by local \u200cconglomerate Sunway, \u200bMalaysian \u200bAnti-Corruption Commission \u200bchief Azam \u200cBaki said at a \u200bpress \u200bconference. ($1 = 3.9470 ringgit)",
-      "link": "https://finance.yahoo.com/news/malaysia-anti-graft-agency-probing-050434543.html",
-      "published": "Wed, 04 Mar 2026 05:04:34 GMT",
-      "matched_keywords": [
-        "miss",
-        "takeover",
-        "rate",
-        "chip",
+        "collapse",
+        "regional",
+        "crisis",
+        "china",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.726622Z",
+      "timestamp": "2026-03-05T02:15:23.585250Z",
       "source_type": "rss"
     },
     {
@@ -1225,452 +1630,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:29.093768Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Reuters_BreakingViews",
-      "title": "Kevin Warsh has a point on AI and inflation",
-      "summary": "It's convenient for the \u2060nominee for Fed \u200bchair to argue \u200bthat artificial intelligence will permit lower interest \u200brates. But it \u200bechoes how productivity grew \u200cafter \u2060the 1990s tech boom while inflation stayed low. Letting \u200beconomic \u200borthodoxy \u2060constrain genuine growth would \u200bbe a mistake.",
-      "link": "https://www.reuters.com/commentary/breakingviews/kevin-warsh-has-point-ai-inflation-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 05:00:47 GMT",
-      "matched_keywords": [
-        "war",
-        "inflation",
-        "fed",
-        "rate",
-        "interest",
-        "growth",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.383789Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Gold and silver flows disrupted as Iran war grounds flights",
-      "summary": "Dubai is key shipping hub for precious metals from Africa and Europe to Asia",
-      "link": "https://www.ft.com/content/96b41e64-5a34-477f-ab03-d2da7a3a443e",
-      "published": "Wed, 04 Mar 2026 05:00:23 GMT",
-      "matched_keywords": [
-        "war",
-        "flow",
-        "eu",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:26.546908Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Gold and silver flows disrupted as Iran war grounds flights",
-      "summary": "Dubai is key shipping hub for precious metals from Africa and Europe to Asia",
-      "link": "https://www.ft.com/content/96b41e64-5a34-477f-ab03-d2da7a3a443e",
-      "published": "Wed, 04 Mar 2026 05:00:23 GMT",
-      "matched_keywords": [
-        "war",
-        "flow",
-        "eu",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:25.836796Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Is this Hizbollah\u2019s last stand?",
-      "summary": "The Lebanese militant group has been battered by two years of conflict. Now it has entered an \u2018existential\u2019 war",
-      "link": "https://www.ft.com/content/a65dbdf6-98c1-4cbf-8e87-8e98d918a707",
-      "published": "Wed, 04 Mar 2026 05:00:23 GMT",
-      "matched_keywords": [
-        "war",
-        "conflict"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:25.836853Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Military briefing: how Iran could wage a new \u2018tanker war\u2019",
-      "summary": "Attacks in the Strait of Hormuz echo the 1980s conflict. Here are the weapons Tehran can use against commercial shipping",
-      "link": "https://www.ft.com/content/e0066ca6-81ac-443f-93c0-f3bc3a2cf4f1",
-      "published": "Wed, 04 Mar 2026 05:00:14 GMT",
-      "matched_keywords": [
-        "attack",
-        "war",
-        "conflict",
-        "military",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:26.546827Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Military briefing: how Iran could wage a new \u2018tanker war\u2019",
-      "summary": "Attacks in the Strait of Hormuz echo the 1980s conflict. Here are the weapons Tehran can use against commercial shipping",
-      "link": "https://www.ft.com/content/e0066ca6-81ac-443f-93c0-f3bc3a2cf4f1",
-      "published": "Wed, 04 Mar 2026 05:00:14 GMT",
-      "matched_keywords": [
-        "attack",
-        "war",
-        "conflict",
-        "military",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:25.836718Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Private Market Titans Warn of Pain as Credit Cracks Widen - Bloomberg",
-      "summary": "Private Market Titans Warn of Pain as Credit Cracks Widen Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNNk1pTGx4MWxKemdRWkNFWEUzRTllSExUQ2ZsZm1BUjJBdGQ0cDVWN21HVkVUdDBOU2hPWjFIMkZnbGtodVpMQVZCT2k2alZ1bjBfeE5hUVR2SkUyRWZQZS1mWU56b01wdnBjNWdlQXhhdkVVcjRPWmVZMDN3bERtNVJnR0pTRlBkNEI4N3Boa09MUmd4M3lPQjBLak5EVWwwUEFFdVQzV3J0MXZ3d2lrdnQwTTlKUQ?oc=5",
-      "published": "Wed, 04 Mar 2026 04:47:00 GMT",
-      "matched_keywords": [
-        "war",
-        "credit",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:30.275153Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "SeekingAlpha",
-      "title": "OpenAI eyeing contract with NATO, defends Pentagon deal: report",
-      "summary": "",
-      "link": "https://seekingalpha.com/news/4560561-openai-eyeing-contract-with-nato-defends-pentagon-deal?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Wed, 04 Mar 2026 04:44:10 -0500",
-      "matched_keywords": [
-        "nato",
-        "ai"
-      ],
-      "enriched_text_source": "headline_only",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:31.126916Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "SeekingAlpha",
-      "title": "U.S. Senate set to vote on Trump\u2019s Iran war decision amid widening conflict",
-      "summary": "",
-      "link": "https://seekingalpha.com/news/4560558-us-senate-set-to-vote-on-trumps-iran-war-decision-amid-widening-conflict?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Wed, 04 Mar 2026 04:36:28 -0500",
-      "matched_keywords": [
-        "war",
-        "conflict"
-      ],
-      "enriched_text_source": "headline_only",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:31.126942Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Goldman\u2019s Solomon Says Market Reaction to War Is \u2018Benign\u2019 So Far - Bloomberg",
-      "summary": "Goldman\u2019s Solomon Says Market Reaction to War Is \u2018Benign\u2019 So Far Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOR2tZVkg1ZU5Va1RCR0hwazAzMW9JMUlLaGhmaFNRUjlVUlRORmVCS193bmtJQXMzWHpHSXJ2SDk0NzJDc3VXYnkxZUFKYkZKUWN6LVV1TlVUdVpBSTNLclgySEwxdWpNR1BmZ1VObEFuTG96VnUydDRNclZiTVpfbHR3ODZESXNuTFp1THBRM0pJYlNPQU5SYTBEZE4ySDRiOFFoZTlZS1V2QURBQ0VHVEkzNA?oc=5",
-      "published": "Wed, 04 Mar 2026 04:22:00 GMT",
-      "matched_keywords": [
-        "war"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:30.274998Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "SeekingAlpha",
-      "title": "Eurozone growth quickens in February as demand picks up",
-      "summary": "",
-      "link": "https://seekingalpha.com/news/4560556-eurozone-growth-quickens-in-february-as-demand-picks-up?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
-      "published": "Wed, 04 Mar 2026 04:09:15 -0500",
-      "matched_keywords": [
-        "growth",
-        "eu"
-      ],
-      "enriched_text_source": "headline_only",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:31.126954Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "US military launches operation in Ecuador to combat drug trafficking",
-      "summary": "US Southern Command said joint mission with Ecuadorian forces involves \u2018decisive action\u2019 against narco-terrorists US and Ecuadorian forces have launched joint operations to combat drug trafficking, the US Southern Command said on Tuesday, but neither side gave more details. Southern Command, which encompasses 31 countries through South and Central America and the Caribbean, said in a statement on X that the \u201cdecisive action\u201d was aimed at combating illicit drug trafficking. Continue reading...",
-      "link": "https://www.theguardian.com/us-news/2026/mar/04/us-military-action-operation-ecuador",
-      "published": "Wed, 04 Mar 2026 04:06:48 GMT",
-      "matched_keywords": [
-        "ukraine",
-        "military",
-        "crisis",
-        "miss",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "US military launches operation in Ecuador to combat drug trafficking | US news | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Ecuador\u2019s defense ministry said details of the offensive operations were classified. The US Southern Command released a brief video of the operation which involved helicopters. Photograph: U.S. Southern Command/X View image in fullscreen Ecuador\u2019s defense ministry said details of the offensive operations were classified. The US Southern Command released a brief video of the operation which involved helicopters. Photograph: U.S. Southern Command/X US news US military launches operation in Ecuador to combat drug trafficking US Southern Command said joint mission with Ecuadorian forces involves \u2018decisive action\u2019 against narco-terrorists Reuters Wed 4 Mar 2026 04.06 GMT Last modified on Wed 4 Mar 2026 06.23 GMT Share Prefer the Guardian on Google US and Ecuadorian forces have launched joint operations to combat drug trafficking, the US Southern Command said on Tuesday, but neither side gave more details. Southern Command, which encompasses 31 countries through South and Central America and the Caribbean, said in a stateme",
-      "timestamp": "2026-03-04T10:15:19.420284Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "US military launches operation in Ecuador to combat drug trafficking",
-      "summary": "US Southern Command said joint mission with Ecuadorian forces involves \u2018decisive action\u2019 against narco-terrorists US and Ecuadorian forces have launched joint operations to combat drug trafficking, the US Southern Command said on Tuesday, but neither side gave more details. Southern Command, which encompasses 31 countries through South and Central America and the Caribbean, said in a statement on X that the \u201cdecisive action\u201d was aimed at combating illicit drug trafficking. Continue reading...",
-      "link": "https://www.theguardian.com/us-news/2026/mar/04/us-military-action-operation-ecuador",
-      "published": "Wed, 04 Mar 2026 04:06:48 GMT",
-      "matched_keywords": [
-        "ukraine",
-        "military",
-        "crisis",
-        "miss",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "US military launches operation in Ecuador to combat drug trafficking | US news | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Ecuador\u2019s defense ministry said details of the offensive operations were classified. The US Southern Command released a brief video of the operation which involved helicopters. Photograph: U.S. Southern Command/X View image in fullscreen Ecuador\u2019s defense ministry said details of the offensive operations were classified. The US Southern Command released a brief video of the operation which involved helicopters. Photograph: U.S. Southern Command/X US news US military launches operation in Ecuador to combat drug trafficking US Southern Command said joint mission with Ecuadorian forces involves \u2018decisive action\u2019 against narco-terrorists Reuters Wed 4 Mar 2026 04.06 GMT Last modified on Wed 4 Mar 2026 06.23 GMT Share Prefer the Guardian on Google US and Ecuadorian forces have launched joint operations to combat drug trafficking, the US Southern Command said on Tuesday, but neither side gave more details. Southern Command, which encompasses 31 countries through South and Central America and the Caribbean, said in a stateme",
-      "timestamp": "2026-03-04T09:15:19.130132Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "CNBC's China Connection newsletter: New AI players think global from day one",
-      "summary": "Chinese startups rush to launch AI tools for overseas markets.",
-      "link": "https://www.cnbc.com/2026/03/04/cnbc-china-connection-newsletter-ai-startups-global-expansion-nvidia-warning-tripo-isales.html",
-      "published": "Wed, 04 Mar 2026 04:02:07 GMT",
-      "matched_keywords": [
-        "china",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.116550Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "CNBC's China Connection newsletter: New AI players think global from day one",
-      "summary": "Chinese startups rush to launch AI tools for overseas markets.",
-      "link": "https://www.cnbc.com/2026/03/04/cnbc-china-connection-newsletter-ai-startups-global-expansion-nvidia-warning-tripo-isales.html",
-      "published": "Wed, 04 Mar 2026 04:02:07 GMT",
-      "matched_keywords": [
-        "china",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.397568Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "China to lean on Russian oil as Iran crisis chokes supply",
-      "summary": "Energy disruption set to force Xi Jinping closer to Vladimir Putin and to consider drawing on reserves",
-      "link": "https://www.ft.com/content/114997aa-7d7c-4d85-b696-bc5123ade6cb",
-      "published": "Wed, 04 Mar 2026 04:00:47 GMT",
-      "matched_keywords": [
-        "oil",
-        "energy",
-        "russia",
-        "putin",
-        "crisis",
-        "china"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:26.546948Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "China to lean on Russian oil as Iran crisis chokes supply",
-      "summary": "Energy disruption set to force Xi Jinping closer to Vladimir Putin and to consider drawing on reserves",
-      "link": "https://www.ft.com/content/114997aa-7d7c-4d85-b696-bc5123ade6cb",
-      "published": "Wed, 04 Mar 2026 04:00:47 GMT",
-      "matched_keywords": [
-        "oil",
-        "energy",
-        "russia",
-        "putin",
-        "crisis",
-        "china"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:25.836832Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "Moderna\u2019s stock rallies as deal over a patent dispute clears vaccine pipeline",
-      "summary": "The deal would provide \u2018certainty\u2019 for Moderna\u2019s vaccine portfolio.",
-      "link": "https://www.marketwatch.com/story/modernas-stock-rallies-more-than-10-as-deal-over-a-patent-dispute-clears-vaccine-pipeline-d34e6793?mod=mw_rss_topstories",
-      "published": "Wed, 04 Mar 2026 03:43:00 GMT",
-      "matched_keywords": [
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:27.781523Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "Moderna\u2019s stock rallies as deal over a patent dispute clears vaccine pipeline",
-      "summary": "The deal would provide \u2018certainty\u2019 for Moderna\u2019s vaccine portfolio.",
-      "link": "https://www.marketwatch.com/story/modernas-stock-rallies-more-than-10-as-deal-over-a-patent-dispute-clears-vaccine-pipeline-d34e6793?mod=mw_rss_topstories",
-      "published": "Wed, 04 Mar 2026 03:43:00 GMT",
-      "matched_keywords": [
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:27.052251Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "News Corp is essentially an AI \u2018input company\u2019, chief executive says, after US$150m deal with Meta",
-      "summary": "Chief executive Robert Thomson says he often speaks to both OpenAI\u2019s Sam Altman and Meta\u2019s Mark Zuckerberg News Corp\u2019s global chief executive has described news organisations as a valuable \u201cinput\u201d for artificial intelligence, as the media empire signs an AI content licensing deal with Meta worth up to US$50m (A$71m) a year. In an upbeat presentation, the chief executive of Rupert Murdoch\u2019s company, Robert Thomson, said the \u201creliable\u201d breaking news and information in publications like the Australian, the Times of London and Dow Jones was \u201chard to beat\u201d as an \u201cinput\u201d for AI. Continue reading...",
-      "link": "https://www.theguardian.com/media/2026/mar/04/news-corp-meta-ai-deal-us50m",
-      "published": "Wed, 04 Mar 2026 03:12:56 GMT",
-      "matched_keywords": [
-        "beat",
-        "cut",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:24.213363Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "News Corp is essentially an AI \u2018input company\u2019, chief executive says, after US$150m deal with Meta",
-      "summary": "Chief executive Robert Thomson says he often speaks to both OpenAI\u2019s Sam Altman and Meta\u2019s Mark Zuckerberg News Corp\u2019s global chief executive has described news organisations as a valuable \u201cinput\u201d for artificial intelligence, as the media empire signs an AI content licensing deal with Meta worth up to US$50m (A$71m) a year. In an upbeat presentation, the chief executive of Rupert Murdoch\u2019s company, Robert Thomson, said the \u201creliable\u201d breaking news and information in publications like the Australian, the Times of London and Dow Jones was \u201chard to beat\u201d as an \u201cinput\u201d for AI. Continue reading...",
-      "link": "https://www.theguardian.com/media/2026/mar/04/news-corp-meta-ai-deal-us50m",
-      "published": "Wed, 04 Mar 2026 03:12:56 GMT",
-      "matched_keywords": [
-        "beat",
-        "cut",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:23.332134Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "China\u2019s Abrupt Yuan Reversal Reveals Anxiety Over War, Oil Shock - Bloomberg",
-      "summary": "China\u2019s Abrupt Yuan Reversal Reveals Anxiety Over War, Oil Shock Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNQk1qUzUzVFFaX2x2T3pfaUx6bk5CUnpxamJTekFHa1RXdUt4bEFNX3dQczREcUhtejJQTHhTQzNxUGtvSEhxZmJMczEwcElvcUtfNFdUWnRFUkF3cm4tZll0TTE0T3VZZDdSanRfZTd4V2ZybFBVR0c3QTRNRGphaU1Ha1hjU2FnZHU2VzI3Y2xlRDdaUlo1QWkxOWdnU3AxUnFNcWFDLU1kdDVNVHc0cWxscFY?oc=5",
-      "published": "Wed, 04 Mar 2026 02:51:00 GMT",
-      "matched_keywords": [
-        "oil",
-        "war",
-        "china",
-        "ev"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:30.275229Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Reuters_BreakingViews",
-      "title": "Hyundai Motor's robots herald hardware reboot",
-      "summary": "The Tucson maker depends \u200con cars for profit, but less so for a recently enlarged $100 bln market cap. Rather, the rise \u200breflects optimism in its Boston Dynamics unit \u200bcommercialising the tech. A renaissance in valuing \u2060building over coding can also reward more \u200bcompanies across Asia.",
-      "link": "https://www.reuters.com/commentary/breakingviews/hyundai-motors-robots-herald-hardware-reboot-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 02:24:46 GMT",
-      "matched_keywords": [
-        "war",
-        "profit",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:29.093819Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Reuters_BreakingViews",
-      "title": "Hyundai Motor's robots herald hardware reboot",
-      "summary": "The Tucson maker depends \u200con cars for profit, but less so for a recently enlarged $100 bln market cap. Rather, the rise \u200breflects optimism in its Boston Dynamics unit \u200bcommercialising the tech. A renaissance in valuing \u2060building over coding can also reward more \u200bcompanies across Asia.",
-      "link": "https://www.reuters.com/commentary/breakingviews/hyundai-motors-robots-herald-hardware-reboot-2026-03-04/",
-      "published": "Wed, 04 Mar 2026 02:24:46 GMT",
-      "matched_keywords": [
-        "war",
-        "profit",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:28.383840Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Vance takes low profile on Iran after resisting foreign wars ",
-      "summary": "Frontrunner to succeed Donald Trump has been opposed to foreign military entanglements",
-      "link": "https://www.ft.com/content/d0b9dadc-8532-48b5-9f9c-024c7e511c85",
-      "published": "Wed, 04 Mar 2026 02:22:21 GMT",
-      "matched_keywords": [
-        "war",
-        "military"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:26.546866Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Vance takes low profile on Iran after resisting foreign wars ",
-      "summary": "Frontrunner to succeed Donald Trump has been opposed to foreign military entanglements",
-      "link": "https://www.ft.com/content/d0b9dadc-8532-48b5-9f9c-024c7e511c85",
-      "published": "Wed, 04 Mar 2026 02:22:21 GMT",
-      "matched_keywords": [
-        "war",
-        "military"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T09:15:25.836756Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "China's factory activity slumps more than expected in February as holiday disrupts production",
-      "summary": "China's factory activity faltered in February as manufacturers paused production and cargo shipment to celebrate an extended holiday.",
-      "link": "https://www.cnbc.com/2026/03/04/china-factory-activity-february-pmi.html",
-      "published": "Wed, 04 Mar 2026 01:42:44 GMT",
-      "matched_keywords": [
-        "rate",
-        "china"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-04T10:15:28.116573Z",
+      "timestamp": "2026-03-05T03:15:29.145255Z",
       "source_type": "rss"
     }
   ]

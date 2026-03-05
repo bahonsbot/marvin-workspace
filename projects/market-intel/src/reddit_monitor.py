@@ -6,12 +6,30 @@ Uses Reddit's JSON endpoints - Free, no API key needed
 import json
 import os
 import random
+import re
 import sys
 import time
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List
+
+
+def scrub_pii(text: str) -> str:
+    """Remove common PII patterns from text."""
+    if not text:
+        return text
+    
+    # Email addresses
+    text = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '[EMAIL_REDACTED]', text, flags=re.IGNORECASE)
+    
+    # Phone numbers (various formats)
+    text = re.sub(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', '[PHONE_REDACTED]', text)
+    
+    # Reddit usernames (u/username or /u/username)
+    text = re.sub(r'/?u/[A-Za-z0-9_-]+', '[USER_REDACTED]', text)
+    
+    return text
 
 
 class RedditMonitor:
@@ -117,8 +135,8 @@ class RedditMonitor:
                     else ""
                 )
 
-                selftext = (post.get("selftext") or "").strip()
-                top_comments = self.fetch_post_comments(permalink) if permalink else []
+                selftext = scrub_pii((post.get("selftext") or "").strip())
+                top_comments = [scrub_pii(c) for c in self.fetch_post_comments(permalink)] if permalink else []
 
                 posts.append(
                     {

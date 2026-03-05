@@ -24,6 +24,28 @@ YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
+# Telegram alert function
+send_telegram_alert() {
+    local message="$1"
+    local chat_id="${TELEGRAM_CHAT_ID:-}"
+    local bot_token="${TELEGRAM_BOT_TOKEN:-}"
+    
+    if [[ -z "$chat_id" || -z "$bot_token" ]]; then
+        echo "[ALERT] Would send Telegram: $message"
+        return
+    fi
+    
+    # URL encode the message
+    local encoded_message
+    encoded_message=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$message'''))" 2>/dev/null || echo "$message")
+    
+    curl -s -X POST "https://api.telegram.org/bot${bot_token}/sendMessage" \
+        -d "chat_id=${chat_id}" \
+        -d "text=${encoded_message}" \
+        -d "parse_mode=Markdown" \
+        >/dev/null 2>&1 || true
+}
+
 echo "=== Token Age Check ==="
 echo "Max allowed age: ${MAX_AGE_DAYS} days"
 echo "Manifest: ${MANIFEST_PATH}"
@@ -88,10 +110,12 @@ for i in $(jq '.tokens | keys | .[]' "$MANIFEST_PATH" 2>/dev/null | tr -d '"'); 
         if [[ $SECONDS_UNTIL_EXPIRY -lt 0 ]]; then
             echo -e "${RED}[EXPIRED]${NC} $TOKEN_NAME - expired on $EXPIRES"
             EXPIRED_COUNT=$((EXPIRED_COUNT + 1))
+            send_telegram_alert "🚨 TOKEN EXPIRED: $TOKEN_NAME\n\nExpired on: $EXPIRES\n\nImmediate action required."
             continue
         elif [[ $DAYS_UNTIL_EXPIRY -le 7 ]]; then
             echo -e "${RED}[CRITICAL]${NC} $TOKEN_NAME - expires in ${DAYS_UNTIL_EXPIRY} days ($EXPIRES)"
             EXPIRED_COUNT=$((EXPIRED_COUNT + 1))
+            send_telegram_alert "⚠️ TOKEN EXPIRING SOON: $TOKEN_NAME\n\nExpires in ${DAYS_UNTIL_EXPIRY} days ($EXPIRES)\n\nPlease rotate this token."
             continue
         elif [[ $DAYS_UNTIL_EXPIRY -le 14 ]]; then
             echo -e "${YELLOW}[WARNING]${NC} $TOKEN_NAME - expires in ${DAYS_UNTIL_EXPIRY} days ($EXPIRES)"

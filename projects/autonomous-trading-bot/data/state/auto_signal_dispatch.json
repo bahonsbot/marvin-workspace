@@ -1,0 +1,824 @@
+{
+  "sent": {
+    "6dd97ece4caff32e96d1069af9406098baae1b67351b5e774fd07ac232d21028": {
+      "title": "S\u00e1nchez calls US-Israeli war in Iran a \u2018disaster\u2019 amid spat with Trump",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": true,
+          "status": "submitted",
+          "reason": "accepted",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": {
+            "symbol": "AAPL",
+            "side": "buy",
+            "qty": 0.6,
+            "type": "market",
+            "time_in_force": "day",
+            "client_order_id": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f",
+            "meta": {
+              "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+              "confidence_adjustment": -0.25,
+              "size_multiplier": 0.6
+            }
+          },
+          "broker_result": {
+            "id": "8f8d2e22-d7fc-4b9c-b871-f8991073208f",
+            "client_order_id": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f",
+            "created_at": "2026-03-04T14:30:45.539706905Z",
+            "updated_at": "2026-03-04T14:30:45.541324325Z",
+            "submitted_at": "2026-03-04T14:30:45.539706905Z",
+            "filled_at": null,
+            "expired_at": null,
+            "canceled_at": null,
+            "failed_at": null,
+            "replaced_at": null,
+            "replaced_by": null,
+            "replaces": null,
+            "asset_id": "b0b6dd9d-8b9b-48a9-ba46-b9d54906e415",
+            "symbol": "AAPL",
+            "asset_class": "us_equity",
+            "notional": null,
+            "qty": "0.6",
+            "filled_qty": "0",
+            "filled_avg_price": null,
+            "order_class": "",
+            "order_type": "market",
+            "type": "market",
+            "side": "buy",
+            "position_intent": "buy_to_open",
+            "time_in_force": "day",
+            "limit_price": null,
+            "stop_price": null,
+            "status": "pending_new",
+            "extended_hours": false,
+            "legs": null,
+            "trail_percent": null,
+            "trail_price": null,
+            "hwm": null,
+            "subtag": null,
+            "source": null,
+            "expires_at": "2026-03-04T21:00:00Z"
+          },
+          "paper_only": true,
+          "audit": {
+            "risk_reasons": [],
+            "context_summary": {
+              "risk_bias": "neutral",
+              "severity": "high",
+              "high_confidence_signal_count": 48,
+              "geopolitical_count": 3,
+              "tracked_take_ratio": 1.0,
+              "ab_enriched_lift": 36,
+              "news_headline_count": 0,
+              "available_context": true
+            }
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "41361eb10cdeba3a99d4926abb5473d3ab1e26625267fb48f7acf489288af959": {
+      "title": "Dubai evacuation costs rise as high as $250,000 as more families flee",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "c893aebfad24a7788bccbab60cfe503142000ed5198e6e305561539195c5496e": {
+      "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "00fa504e7164845ac868d290790bf80033271b98f36549b9352239aadb21a358": {
+      "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "c008c1db9ecc207de5a465c315a61ae64b82c8e9a5a935445c08854d5844387b": {
+      "title": "Unemployment set to hit 5.3% this year amid \u2018worrying\u2019 rise in young jobless",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "dba91b631b1658cb1081ba7894d97b4df34fab56767c4f5170bd9836ce8c40bd": {
+      "title": "Oil-production shutdowns loom as some Middle Eastern countries could run out of ",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "4f3b0eac68ede68b237d545a456d83f10baeee106e44d85958815cda630ef29c": {
+      "title": "Kraken wins access to Fed's core payments system, WSJ reports",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "80aa6ca01cc5b22a10a4930a36342aa7a786a7e1872f249541ba83f52df8ac70": {
+      "title": "German intelligence accuses Russia of hiding true economic cost of war",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "3bc771c05caeb90ff8e8313d8e9bdd879743d3003c4d19bb8db58f22b6dd08fd": {
+      "title": "US dollar surge since start of war on Iran unlikely to last, say FX strategists:",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "a5c78648275a0dbb1b9ca3c9363d47973a870128efaa3b9db5c31666406b77a4": {
+      "title": "AI may be creating instead of destroying jobs for now, ECB blog argues",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "c626afb9d07d595b9c0668e8609cc5306649195730858e3175043e9fbcd16bab": {
+      "title": "Private credit pioneers see downside of redemption",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "5a141cbbd8023deaa5dbf2aaefd889a502cb057783f1f237ffeb30ce2d3ec0d0": {
+      "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "0ca3dddabf6d2916ac9c53226e527bd953bf49675003948c12b905a8fd832d73": {
+      "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "042da5505905bf465939661c80fe73b81b5789bb8efe610dbe9d3b6152ce6eef": {
+      "title": "Iran crisis just lit up energy prices. What Monday/Tuesday actually told us abou",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "5aba0857a1ac8d473737cabc17665e53efe4ef12df7a44339c4b2db3516da5cd": {
+      "title": "Moderna +10% after-hours as Moderna agrees to pay up to $2.25B to settle COVID v",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "51f003280cb7a1f3770088a98e12673343d7c92581a4c2052e587615839e0327": {
+      "title": "Fed's Kashkari says Iran war obscures monetary policy outlook",
+      "timestamp": "2026-03-04T14:30:44.833089+00:00",
+      "status": 200,
+      "accepted": true,
+      "response": {
+        "accepted": true,
+        "reasons": [],
+        "proposal": {
+          "raw_qty": 1.0,
+          "adjusted_qty": 0.6,
+          "size_multiplier": 0.6,
+          "confidence_adjustment": -0.25
+        },
+        "decision_context": {
+          "confidence_adjustment": -0.25,
+          "size_multiplier": 0.6,
+          "block_reason": null,
+          "reasons": [
+            "High-severity macro/news regime reduces long risk appetite."
+          ],
+          "paper_only": true,
+          "ruleset": "context-fusion-v1"
+        },
+        "execution": {
+          "executed": false,
+          "status": "duplicate_suppressed",
+          "reason": "idempotency_key_exists",
+          "idempotency_key": "d5dbf080a6d01ba9252fba82692eb94a18c47fb2ac3fd10f47e4b37205e99b06",
+          "order_intent": null,
+          "broker_result": null,
+          "paper_only": true,
+          "audit": {
+            "first_seen": "2026-03-04T14:30:45.644677+00:00"
+          },
+          "paper_execute": true
+        },
+        "paper_only": true
+      }
+    },
+    "d70449f98d838e191222e67609606e36e1b05e12068bbe085d12ebac50d4df21": {
+      "title": "S\u00e1nchez calls US-Israeli war in Iran a \u2018disaster\u2019 amid spat with Trump",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "9960ced2eb0d8d0716e012c62c22f2423b37c2af27fa87a4ce8ae640b33c2ee0": {
+      "title": "Dubai evacuation costs rise as high as $250,000 as more families flee",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "a54d8c8dce6c037f18242eecf1be2531d13d3950b28ded3a60e935a199da737b": {
+      "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "197994d7afc7bd7fb0dd4259af98859e589633614e2087cc8b52c34363f543b5": {
+      "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "6ce28ba0a683ed48f8fda7421cf5df0abb3030b7c98531449455ae6c936e6ecf": {
+      "title": "ADP says businesses add 63,000 jobs in February. Hiring picks up, but labor mark",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "1826773b180f7c51e304ad798b7f1a879f40264ccd0b78a0bd9fb0f3cff22c0c": {
+      "title": "Kraken wins access to Fed's core payments system, WSJ reports",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "d3a2442b467dacc96ffd99c872b97d0ec359e06799abc9c60cdf240bde5799a2": {
+      "title": "German intelligence accuses Russia of hiding true economic cost of war",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "20ba91a0b249de706a50a511933dbfd7193aeee2573cd8088552490b039a68e8": {
+      "title": "US dollar surge since start of war on Iran unlikely to last, say FX strategists:",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "3e51ed730a052bfebf1379a5d0d841f4bfc0d25ab0964ef305e31818b5a25582": {
+      "title": "AI may be creating instead of destroying jobs for now, ECB blog argues",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "9c63dfe69bef044f676eb788fc73bf0e5742da4eb87cd6ea63147506b549f2d9": {
+      "title": "Private credit pioneers see downside of redemption",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "f22e1a34ac2823f86a9a500b5607a25d0886c1c79efcbdc8d6c16e26c442f6d1": {
+      "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "d2f1ca19134286e130c4a184874d5679032e17c155debabe02b63df990b5f903": {
+      "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "dd9e09fd8f540688d4e7dba814ac411912c7b640765bdb777257d507fc587d1a": {
+      "title": "Iran crisis just lit up energy prices. What Monday/Tuesday actually told us abou",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "d0ce0a5f778e1de96d0bf95fd7aae44f9135639aba9dcf1fa8361c4e1abfb00e": {
+      "title": "Moderna +10% after-hours as Moderna agrees to pay up to $2.25B to settle COVID v",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "f4eeefd16d844b719786e045c88392b4ba2e664e11238168947b21a2d70c1d80": {
+      "title": "Fed's Kashkari says Iran war obscures monetary policy outlook",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "e8e7fc591994434d0c13281a665367ffe6750e9f61ea97286a7a26465e2c7560": {
+      "title": "Moderna +10% after-hours as Moderna agrees to pay up to $2.25B to settle COVID v",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    },
+    "2fa26be286bd9cb3d188f6368a60ba460d17bb4265370fba260565ecb1d30542": {
+      "title": "Fed's Kashkari says Iran war obscures monetary policy outlook",
+      "timestamp": "2026-03-04T14:50:19.071658+00:00",
+      "status": 0,
+      "accepted": false,
+      "response": "<urlopen error [Errno 111] Connection refused>"
+    }
+  },
+  "updated_at": "2026-03-04T20:55:07.836703+00:00",
+  "last_mode": "FAST"
+}

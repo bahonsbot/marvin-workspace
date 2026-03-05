@@ -6,6 +6,7 @@ an Alpaca paper order. Includes deterministic idempotency suppression.
 
 from __future__ import annotations
 
+import fcntl
 import hashlib
 import json
 import logging
@@ -17,6 +18,7 @@ from .trade_notifier import TelegramNotifier
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_IDEMPOTENCY_STORE = ROOT / "data" / "state" / "idempotency.json"
+IDEMPOTENCY_LOCK = ROOT / "data" / "state" / "idempotency.lock"
 
 logger = logging.getLogger(__name__)
 
@@ -73,51 +75,60 @@ class ExecutionOrchestrator:
                 },
             }
 
-        store = self._read_store()
-        if idempotency_key in store:
-            return {
-                "executed": False,
-                "status": "duplicate_suppressed",
-                "reason": "idempotency_key_exists",
-                "idempotency_key": idempotency_key,
-                "order_intent": None,
-                "broker_result": None,
-                "paper_only": True,
-                "audit": {"first_seen": store[idempotency_key].get("created_at")},
-            }
-
-        order_intent = self._build_order_intent(
-            signal=signal,
-            decision_context=decision_context or {},
-            idempotency_key=idempotency_key,
-        )
-        broker_result = self.broker_adapter.submit_order(order_intent)
-
-        # Send Telegram notification if notifier is configured
-        if self.notifier:
+        # Use file-based locking to prevent race conditions on concurrent webhooks
+        lock_path = IDEMPOTENCY_LOCK
+        lock_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(lock_path, "w") as lock_file:
+            fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
             try:
-                order_id = broker_result.get("id", order_intent.get("client_order_id", ""))
-                filled_price = broker_result.get("filled_avg_price") or broker_result.get("filled_price")
-                self.notifier.notify_trade_execution(
-                    ticker=order_intent["symbol"],
-                    side=order_intent["side"],
-                    quantity=order_intent["qty"],
-                    price=float(filled_price) if filled_price else None,
-                    order_id=str(order_id),
-                    timestamp=signal.get("timestamp"),
-                )
-            except Exception as e:
-                logger.warning(f"Failed to send trade notification: {e}")
+                store = self._read_store()
+                if idempotency_key in store:
+                    return {
+                        "executed": False,
+                        "status": "duplicate_suppressed",
+                        "reason": "idempotency_key_exists",
+                        "idempotency_key": idempotency_key,
+                        "order_intent": None,
+                        "broker_result": None,
+                        "paper_only": True,
+                        "audit": {"first_seen": store[idempotency_key].get("created_at")},
+                    }
 
-        store[idempotency_key] = {
-            "created_at": self._utc_now_iso(),
-            "symbol": signal.get("symbol"),
-            "side": signal.get("side"),
-            "timestamp": signal.get("timestamp"),
-            "source": source,
-            "client_order_id": order_intent["client_order_id"],
-        }
-        self._write_store(store)
+                order_intent = self._build_order_intent(
+                    signal=signal,
+                    decision_context=decision_context or {},
+                    idempotency_key=idempotency_key,
+                )
+                broker_result = self.broker_adapter.submit_order(order_intent)
+
+                # Send Telegram notification if notifier is configured
+                if self.notifier:
+                    try:
+                        order_id = broker_result.get("id", order_intent.get("client_order_id", ""))
+                        filled_price = broker_result.get("filled_avg_price") or broker_result.get("filled_price")
+                        self.notifier.notify_trade_execution(
+                            ticker=order_intent["symbol"],
+                            side=order_intent["side"],
+                            quantity=order_intent["qty"],
+                            price=float(filled_price) if filled_price else None,
+                            order_id=str(order_id),
+                            timestamp=signal.get("timestamp"),
+                        )
+                    except Exception as e:
+                        logger.warning(f"Failed to send trade notification: {e}")
+
+                store[idempotency_key] = {
+                    "created_at": self._utc_now_iso(),
+                    "symbol": signal.get("symbol"),
+                    "side": signal.get("side"),
+                    "timestamp": signal.get("timestamp"),
+                    "source": source,
+                    "client_order_id": order_intent["client_order_id"],
+                }
+                self._write_store(store)
+            finally:
+                fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
 
         return {
             "executed": True,

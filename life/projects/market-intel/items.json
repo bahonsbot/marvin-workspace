@@ -8,8 +8,8 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 3,
+    "lastAccessed": "2026-03-05",
+    "accessCount": 4,
     "source": "memory/2026-02-26.md"
   },
   {
@@ -21,8 +21,8 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 3,
+    "lastAccessed": "2026-03-05",
+    "accessCount": 4,
     "source": "memory/2026-02-26.md"
   },
   {
@@ -35,8 +35,8 @@
       "areas/people/philippe",
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 3,
+    "lastAccessed": "2026-03-05",
+    "accessCount": 4,
     "source": "memory/2026-02-26.md"
   },
   {
@@ -49,8 +49,8 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2
+    "lastAccessed": "2026-03-05",
+    "accessCount": 3
   },
   {
     "id": "mi-005",
@@ -62,8 +62,8 @@
     "relatedEntities": [
       "resources/cron-jobs"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 3
+    "lastAccessed": "2026-03-05",
+    "accessCount": 4
   },
   {
     "id": "mi-006",
@@ -75,8 +75,8 @@
     "relatedEntities": [
       "areas/people/philippe"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2
+    "lastAccessed": "2026-03-05",
+    "accessCount": 3
   },
   {
     "id": "mi-007",
@@ -88,8 +88,8 @@
     "relatedEntities": [
       "projects/market-intel-news-reader"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 3
+    "lastAccessed": "2026-03-05",
+    "accessCount": 4
   },
   {
     "id": "mi-008",
@@ -101,8 +101,8 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2
+    "lastAccessed": "2026-03-05",
+    "accessCount": 3
   },
   {
     "id": "mi-009",
@@ -114,8 +114,8 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2
+    "lastAccessed": "2026-03-05",
+    "accessCount": 3
   },
   {
     "id": "mi-010",
@@ -128,7 +128,21 @@
       "areas/people/philippe",
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2
+    "lastAccessed": "2026-03-05",
+    "accessCount": 3
+  },
+  {
+    "id": "mi-011",
+    "fact": "Signal Review Session achieved 96.4% accuracy (5 CORRECT, 1 PARTIAL) on Signal #15-20. Categories: Israel/Hizbollah, Ghana/Russia, US Embassy Saudi, Blue Owl private credit, Trump Navy, China/Russia oil. Protocol: Use simple format (Signal #X, Category, Date, Outcome).",
+    "category": "status",
+    "timestamp": "2026-03-04T14:48:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-04.md"
   }
 ]

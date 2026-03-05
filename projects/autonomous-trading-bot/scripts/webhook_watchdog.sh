@@ -38,9 +38,21 @@ ensure_running() {
   return 1
 }
 
+RETRY_COUNT=0
+MAX_RETRIES=5
+
 log "watchdog started (interval=${CHECK_INTERVAL}s)"
 
 while true; do
-  ensure_running || true
+  ensure_running || {
+    log "ERROR: Failed to start webhook receiver"
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    if [[ $RETRY_COUNT -ge $MAX_RETRIES ]]; then
+      log "CRITICAL: Max retries ($MAX_RETRIES) exceeded - receiver may need manual intervention"
+      # Reset counter after alert to allow future recovery
+      RETRY_COUNT=0
+    fi
+    log "Retry $RETRY_COUNT/$MAX_RETRIES in ${CHECK_INTERVAL}s"
+  }
   sleep "$CHECK_INTERVAL"
 done

@@ -36,8 +36,10 @@ from src.execution_orchestrator import ExecutionOrchestrator
 from src.risk_manager import AccountState, RiskConfig, evaluate_risk_decision
 from src.signal_fusion import derive_decision_context
 from src.signal_validator import validate_signal_payload
+import secrets
 
 LOG_PATH = ROOT / "logs" / "webhook_decisions.jsonl"
+MAX_PAYLOAD_SIZE = 1024 * 1024  # 1MB
 
 _RATE_LIMIT_BUCKETS: Dict[str, list[float]] = {}
 _RATE_LIMIT_LOCK = Lock()
@@ -97,14 +99,18 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
     """
     secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
     if not secret:
-        return True
+        logger.error("Webhook receiver started without WEBHOOK_SHARED_SECRET - rejecting all requests")
+        return False  # Fail-closed: reject if no secret configured
 
     header_secret = headers.get("X-Webhook-Secret", "")
     payload_secret = ""
     if payload and isinstance(payload, dict):
         payload_secret = str(payload.get("secret", ""))
 
-    return header_secret == secret or payload_secret == secret
+    # Use constant-time comparison to prevent timing attacks
+    header_match = secrets.compare_digest(header_secret.encode(), secret.encode())
+    payload_match = secrets.compare_digest(payload_secret.encode(), secret.encode())
+    return header_match or payload_match
 
 
 def process_webhook_payload(
@@ -244,8 +250,13 @@ class WebhookHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "Missing Content-Length", "paper_only": True})
             return
 
+        content_length_int = int(content_length)
+        if content_length_int > MAX_PAYLOAD_SIZE:
+            self._send_json(413, {"error": "Payload too large", "max_size": MAX_PAYLOAD_SIZE, "paper_only": True})
+            return
+
         try:
-            raw = self.rfile.read(int(content_length))
+            raw = self.rfile.read(content_length_int)
             payload = json.loads(raw.decode("utf-8"))
         except (ValueError, json.JSONDecodeError):
             self._send_json(400, {"error": "Invalid JSON payload", "paper_only": True})
@@ -258,10 +269,15 @@ class WebhookHandler(BaseHTTPRequestHandler):
         result = process_webhook_payload(payload)
         status = 200 if result["accepted"] else 422
 
+        # Redact sensitive fields before logging
+        log_payload = payload.copy() if isinstance(payload, dict) else payload
+        if isinstance(log_payload, dict) and "secret" in log_payload:
+            log_payload["secret"] = "[REDACTED]"
+
         record = {
             "timestamp": _utc_now_iso(),
             "path": self.path,
-            "request": payload,
+            "request": log_payload,
             "result": result,
             "paper_only": True,
         }

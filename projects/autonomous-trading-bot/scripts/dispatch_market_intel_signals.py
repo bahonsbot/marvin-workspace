@@ -77,8 +77,20 @@ def _in_us_market_hours(now: datetime) -> bool:
         from zoneinfo import ZoneInfo
 
         et = now.astimezone(ZoneInfo("America/New_York"))
-    except Exception:
-        return True  # fail-open if tz db missing
+    except Exception as e:
+        # Fail-closed: skip dispatch if timezone fails, but alert Philippe
+        print(f"ERROR: Timezone detection failed - skipping dispatch: {e}")
+        try:
+            notifier = TelegramNotifier()
+            notifier._send_message(
+                "🚨 CRITICAL: Timezone detection failed in signal dispatcher\n\n"
+                f"Error: {e}\n\n"
+                "Signal dispatch is SKIPPED until fixed.\n"
+                "Check dispatch_market_intel_signals.py"
+            )
+        except Exception as notify_err:
+            print(f"Failed to send alert: {notify_err}")
+        return False  # fail-closed: skip execution
 
     if et.weekday() >= 5:
         return False
