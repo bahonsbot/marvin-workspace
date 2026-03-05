@@ -1,0 +1,60 @@
+{
+  "paper_only": true,
+  "positions": [
+    {
+      "contract": "GC",
+      "contract_month": null,
+      "entry_price": 0.0,
+      "entry_time": "2026-03-05T14:26:48.106893+00:00",
+      "exit_price": null,
+      "exit_reason": null,
+      "exit_time": null,
+      "expiration": null,
+      "position_id": "/GC:1772720808106",
+      "qty": 1,
+      "realized_pnl": 0.0,
+      "side": "buy",
+      "symbol": "/GC",
+      "tick_size": 0.1,
+      "tick_value": 10.0,
+      "unrealized_pnl": 0.0
+    },
+    {
+      "contract": "ES",
+      "contract_month": null,
+      "entry_price": 0.0,
+      "entry_time": "2026-03-05T14:27:03.591344+00:00",
+      "exit_price": null,
+      "exit_reason": null,
+      "exit_time": null,
+      "expiration": null,
+      "position_id": "/ES:1772720823591",
+      "qty": 1,
+      "realized_pnl": 0.0,
+      "side": "buy",
+      "symbol": "/ES",
+      "tick_size": 0.25,
+      "tick_value": 12.5,
+      "unrealized_pnl": 0.0
+    },
+    {
+      "contract": "ES",
+      "contract_month": null,
+      "entry_price": 0.0,
+      "entry_time": "2026-03-05T14:27:03.594188+00:00",
+      "exit_price": null,
+      "exit_reason": null,
+      "exit_time": null,
+      "expiration": null,
+      "position_id": "/ES:1772720823594",
+      "qty": 1,
+      "realized_pnl": 0.0,
+      "side": "buy",
+      "symbol": "/ES",
+      "tick_size": 0.25,
+      "tick_value": 12.5,
+      "unrealized_pnl": 0.0
+    }
+  ],
+  "updated_at": "2026-03-05T14:27:03.594215+00:00"
+}
