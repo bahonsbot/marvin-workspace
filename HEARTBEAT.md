@@ -23,10 +23,15 @@
 2. Check for pending fixes or documented issues
 3. Run quick system health checks
 4. Proactive Execution (active - Phase 2)
+5. Monitor webhook watchdog status (trading bot health)
 
 ## Proactive Execution (Phase 2)
 
 Goal: make steady progress on project tasks between prompts.
+
+**Proactive Queue File:** `memory/proactive-queue.json`
+- Format: JSON array of task objects with `id`, `title`, `priority`, `ready`, `phase2_eligible`, `project`
+- Updated by: daily memory extraction, manual additions, task completion
 
 Per heartbeat:
 1. Check for candidate work in this order:
@@ -49,6 +54,10 @@ Sub-agent routing:
 - Use Codex for coding tasks
 - Use MiniMax for research/data tasks
 - Announce every spawn + completion
+
+**Related Cron Jobs:**
+- `auto-signal-dispatcher` — Every 5 minutes, dispatches STRONG BUY signals from Market Intel to trading bot
+- Webhook watchdog — Continuous loop (60s sleep), restarts webhook receiver if down
 
 ## When to Stay Quiet (HEARTBEAT_OK)
 - Outside active hours (22:00-09:00)

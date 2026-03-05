@@ -96,9 +96,15 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - coding-agent (built-in OpenClaw skill)
 
 ### Models (Active)
-- **Primary:** minimax/MiniMax-M2.5
-- **Fallback:** openai-codex/gpt-5.3-codex
+- **Primary:** MiniMax-M2.5 via Bailian (subscription ends 2026-03-22)
+- **Bailian Provider:** Multi-model access (configured Mar 4, 2026)
+  - Qwen family: qwen3.5-plus, qwen3-max-2026-01-23, qwen3-coder-next/plus
+  - Zhipu GLM: glm-5, glm-4.7
+  - Kimi: kimi-k2.5
+  - MiniMax-M2.5 (via Bailian, migration target before direct subscription expires)
+- **Fallback:** openai-codex/gpt-5.3-codex (OAuth)
 - **Nexos:** Removed (caused cron job issues, won't use)
+- **Migration pending:** Move cron jobs from direct MiniMax to Bailian-hosted MiniMax-M2.5 before March 22, 2026
 
 ### Scripts
 - `scripts/ralphy.sh` — Autonomous coding agent (reads PRD, iterates on code)
@@ -112,8 +118,15 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ### Active Projects
 - `projects/horizons-pms/` — PMS system for hotel front-desk (PRD in progress)
 - `projects/market-intel/` — Stock market analysis and research (Phase 1-3 complete)
-- `projects/autonomous-trading-bot/` — Autonomous trading via Alpaca + TradingView webhooks
+- `projects/autonomous-trading-bot/` — Autonomous trading via Alpaca (paper trading live since Mar 1, 2026)
+  - **Webhook endpoint:** `https://tradehook.motiondisplay.cloud/webhook` (public HTTPS, nginx + Certbot)
+  - **Symbol mapper:** 50+ sector ETFs, 60+ company tickers, 30+ macro ETFs (no blind AAPL trades)
+  - **Auto-dispatch:** STRONG BUY gating, min confidence threshold, market-hours gate, duplicate suppression
+  - **FAST regime:** Dynamic activation under high/critical context stress (lower threshold, bounded qty multiplier)
+  - **Watchdog:** Lightweight restart script (60s sleep loop, no cron)
+  - **Risk controls:** Idempotency locking, payload size limits (1MB), rate limiting, secret redaction
 - `projects/market-intel-news-reader/` — PWA news reader app for iPhone (PRD in progress)
+- `projects/autonomous-futures-bot/` — Futures trading bot (PRD created Mar 4, scheduled for implementation)
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
