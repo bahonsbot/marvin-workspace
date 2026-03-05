@@ -169,6 +169,23 @@ def _send_digest(lines: list[str]) -> None:
         pass
 
 
+def _check_webhook_health(webhook_url: str) -> bool:
+    """Check if webhook receiver is healthy before dispatching."""
+    # Extract base URL (e.g., http://127.0.0.1:8000/webhook -> http://127.0.0.1:8000)
+    base_url = webhook_url.rsplit("/", 1)[0] if "/" in webhook_url else webhook_url
+    health_url = f"{base_url}/health"
+    
+    try:
+        req = request.Request(health_url, method="GET")
+        with request.urlopen(req, timeout=5) as resp:
+            if resp.status == 200:
+                return True
+    except Exception:
+        pass
+    
+    return False
+
+
 def _fast_regime_active(cfg: Config, context_summary: dict[str, Any]) -> bool:
     if not cfg.fast_regime_enabled:
         return False
@@ -192,7 +209,19 @@ def main() -> int:
 
     if cfg.market_hours_only and not _in_us_market_hours(now):
         print("Outside US market hours, skipping dispatch")
+        # Send "all quiet" notification so user knows dispatcher is working
+        _send_digest(["⏸️ Outside US market hours — dispatch paused", f"Next check: 9:30 AM ET"])
         return 0
+
+    # Check webhook health before attempting dispatch
+    if not _check_webhook_health(cfg.webhook_url):
+        print(f"ERROR: Webhook receiver not healthy at {cfg.webhook_url}")
+        _send_digest([
+            "🚨 Webhook receiver DOWN",
+            f"URL: {cfg.webhook_url}",
+            "Auto-dispatch SKIPPED — restart webhook receiver"
+        ])
+        return 1
 
     if not cfg.webhook_secret:
         print("WEBHOOK_SHARED_SECRET missing, abort")

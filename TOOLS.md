@@ -118,7 +118,9 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ### Active Projects
 - `projects/horizons-pms/` — PMS system for hotel front-desk (PRD in progress)
 - `projects/market-intel/` — Stock market analysis and research (Phase 1-3 complete)
-- `projects/autonomous-trading-bot/` — Autonomous trading via Alpaca (paper trading live since Mar 1, 2026)
+- `projects/autonomous-trading-bot/` — Autonomous **equity** trading via Alpaca (paper trading live since Mar 1, 2026)
+  - **Nickname:** "equity-bot" (for distinction from futures-bot)
+  - **Directory:** `autonomous-trading-bot` (don't rename — breaks cron paths)
   - **Webhook endpoint:** `https://tradehook.motiondisplay.cloud/webhook` (public HTTPS, nginx + Certbot)
   - **Symbol mapper:** 50+ sector ETFs, 60+ company tickers, 30+ macro ETFs (no blind AAPL trades)
   - **Auto-dispatch:** STRONG BUY gating, min confidence threshold, market-hours gate, duplicate suppression
@@ -126,7 +128,7 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - **Watchdog:** Lightweight restart script (60s sleep loop, no cron)
   - **Risk controls:** Idempotency locking, payload size limits (1MB), rate limiting, secret redaction
 - `projects/market-intel-news-reader/` — PWA news reader app for iPhone (PRD in progress)
-- `projects/autonomous-futures-bot/` — Futures trading bot (PRD created Mar 4, scheduled for implementation)
+- `projects/futures-bot/` — Futures trading bot (PRD created Mar 4, scheduled for implementation)
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
