@@ -12,5 +12,18 @@
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
     "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "afb-002",
+    "fact": "Project renamed (Mar 5, 2026): autonomous-futures-bot → futures-bot (shorter name). All references updated in PRD, TOOLS.md, memory files.",
+    "category": "status",
+    "timestamp": "2026-03-05T12:42:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/futures-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
   }
 ]

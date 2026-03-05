@@ -1,24 +1,24 @@
 [
   {
-    "timestamp": "2026-03-05T11:47:29.681908",
-    "baseline_count": 37,
+    "timestamp": "2026-03-05T12:47:30.347145",
+    "baseline_count": 35,
     "enriched_count": 50,
-    "overlap_count": 15,
-    "baseline_only_count": 17,
-    "enriched_only_count": 32,
-    "enriched_lift": 32,
+    "overlap_count": 13,
+    "baseline_only_count": 14,
+    "enriched_only_count": 19,
+    "enriched_lift": 19,
     "baseline_top5": [
       "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
       "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "China sets lowest GDP growth target in decades"
+      "China warns of \u2018challenges\u2019 as it sets lowest GDP growth target in decades"
     ],
     "enriched_top5": [
       "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "China sets lowest GDP growth target in decades",
+      "China warns of \u2018challenges\u2019 as it sets lowest GDP growth target in decades",
       "Bitcoin Holds Firm Above $70,000 as Global Assets Recover"
     ]
   }

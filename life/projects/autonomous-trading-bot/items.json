@@ -51,5 +51,18 @@
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
     "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "atb-005",
+    "fact": "Ops Day 2 review (Mar 5): Webhook receiver crashed due to WEBHOOK_HOST=0.0.0.0 in .env (security feature refused bind). Fixed to 127.0.0.1. Added webhook health check to dispatcher + market-hours pause notification. First trade executed Mar 4 14:30 UTC: AAPL buy 0.6 shares with 0.6x context multiplier.",
+    "category": "status",
+    "timestamp": "2026-03-05T12:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
   }
 ]
