@@ -3,68 +3,6 @@
     "signal": {
       "source": "rss",
       "feed": "Financial_Times",
-      "title": "Oil and gas prices soar and stocks slide as Middle East conflict escalates",
-      "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
-      "timestamp": "2026-03-02T20:47:43.963112",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-02T20:47:43.965939",
-    "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Market Shock): core call hit exactly. Energy complex exploded higher with initial broad risk-off equity response, then index-level rebound while sector dispersion remained extreme.",
-    "evaluated_at": "2026-03-03T12:46:00+07:00",
-    "legacy_outcome": "correct",
-    "evidence_pack": {
-      "summary": "Energy spike + initial panic validated; late index rebound did not negate sector-level risk repricing.",
-      "drivers": [
-        "Operation Epic Fury escalation",
-        "Iranian retaliation on regional energy hubs",
-        "Risk-off positioning then intraday fog-of-war reversal"
-      ],
-      "metrics": [
-        "Gas oil +19%",
-        "Brent +7-8% (intraday touch ~82)",
-        "EU Nat Gas +50%",
-        "S&P open ~-1.2% then near-flat close",
-        "DAX -2.6%, Hang Seng -2.1%",
-        "Gold near 5,419 and DXY stronger"
-      ],
-      "sector_impact": [
-        "Energy/defense outperformed",
-        "Airlines/cruises underperformed on fuel shock"
-      ],
-      "confidence": "HIGH"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
       "title": "Gas prices soar as Iranian attacks shut down Qatari production",
       "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
       "timestamp": "2026-03-02T21:47:29.157219",
@@ -937,6 +875,48 @@
       "root_causes": []
     },
     "added_at": "2026-03-06T07:47:31.654980",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Reprieve for India as US eases sanctions on buying Russian oil",
+      "url": "https://www.ft.com/content/f513bca3-507f-41ae-a95d-2bb906d3d9e9",
+      "timestamp": "2026-03-06T14:47:30.885498",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-06T14:47:30.888793",
     "verified": false,
     "actual_outcome": null,
     "notes": ""
