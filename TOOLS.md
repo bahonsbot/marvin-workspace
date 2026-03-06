@@ -96,15 +96,15 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - coding-agent (built-in OpenClaw skill)
 
 ### Models (Active)
-- **Current primary:** MiniMax-M2.5 (direct subscription ends 2026-03-22)
-- **Bailian Provider:** Multi-model access (configured Mar 4, 2026) — testing/evaluation phase
+- **Bailian Provider:** Primary provider (configured Mar 4, 2026 — migration complete Mar 6, 2026)
+  - `bailian/MiniMax-M2.5` — Basic tasks, data gathering, simple dispatch (7 cron jobs)
+  - `bailian/qwen3.5-plus` — Reasoning, analysis, security reviews (7 cron jobs)
   - Qwen family: qwen3.5-plus, qwen3-max-2026-01-23, qwen3-coder-next/plus
   - Zhipu GLM: glm-5, glm-4.7
   - Kimi: kimi-k2.5
-  - MiniMax-M2.5 (via Bailian — no expiration, migration target before direct sub expires)
+- **Direct MiniMax-M2.5:** Deprecated (subscription ended 2026-03-22, all jobs migrated to Bailian)
 - **Fallback:** openai-codex/gpt-5.3-codex (OAuth)
 - **Nexos:** Removed (caused cron job issues, won't use)
-- **Migration pending:** Move cron jobs from direct MiniMax to Bailian-hosted MiniMax-M2.5 before March 22, 2026
 
 ### Codex CLI Setup (Fallback Model)
 

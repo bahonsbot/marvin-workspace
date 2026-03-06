@@ -9,14 +9,15 @@
 ## Philippe's Setup
 
 ### Models
-- **Current primary:** MiniMax-M2.5 (direct subscription, ends 2026-03-22)
-- **Bailian provider:** Configured Mar 4, 2026 — testing phase (Qwen, Zhipu GLM, Kimi, MiniMax-M2.5 hosted)
-- **Migration plan:** Evaluate Bailian-hosted models before March 22 deadline, then migrate cron jobs
+- **Bailian Provider:** Primary (migration complete Mar 6, 2026)
+  - `bailian/MiniMax-M2.5` — 7 cron jobs (data gathering, simple tasks)
+  - `bailian/qwen3.5-plus` — 7 cron jobs (reasoning, analysis, security)
+- **Direct MiniMax-M2.5:** Deprecated (all jobs migrated, subscription ended 2026-03-22)
 - **Fallback:** OpenAI Codex GPT-5.3 (openai-codex/gpt-5.3-codex) via OAuth
 - **Nexos:** Removed (caused cron job issues, won't use)
 - **Incident note (Feb 24 rollback):** bad provider-key schema edits previously caused invalid config/boot issues; only use CLI/schema-safe edits
 - **Known instability (Feb 25):** Multiple "terminated" errors from MiniMax at 21:36, 22:17, 22:52. Fallback to Codex worked.
-- **Fallback Protocol (Feb 28):** If MiniMax fails with "terminated" error, immediately switch to Codex. Do not retry MiniMax more than once per session.
+- **Fallback Protocol (Feb 28):** If model fails with "terminated" error, immediately switch to Codex. Do not retry more than once per session.
 - **Switch commands:** /minimax, /codex, "switch to minimax", "switch to codex"
 - **Authoritative reference:** See TOOLS.md for full Bailian provider list and current model routing
 
