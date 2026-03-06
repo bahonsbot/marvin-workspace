@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-06T14:47:29.268890",
-    "baseline_count": 36,
+    "timestamp": "2026-03-06T15:47:28.942490",
+    "baseline_count": 34,
     "enriched_count": 50,
-    "overlap_count": 22,
+    "overlap_count": 20,
     "baseline_only_count": 10,
-    "enriched_only_count": 26,
-    "enriched_lift": 26,
+    "enriched_only_count": 28,
+    "enriched_lift": 28,
     "baseline_top5": [
       "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "HSBC, Nationwide and Coventry raise rates on fixed mortgages amid Middle East cr",
-      "The Guardian view on rising youth unemployment: regional leaders as well as mini"
+      "The Guardian view on rising youth unemployment: regional leaders as well as mini",
+      "Reprieve for India as US eases sanctions on buying Russian oil"
     ],
     "enriched_top5": [
       "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
       "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "HSBC, Nationwide and Coventry raise rates on fixed mortgages amid Middle East cr",
-      "The Guardian view on rising youth unemployment: regional leaders as well as mini"
+      "The Guardian view on rising youth unemployment: regional leaders as well as mini",
+      "Reprieve for India as US eases sanctions on buying Russian oil"
     ]
   }
 ]

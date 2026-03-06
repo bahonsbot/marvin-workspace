@@ -1,28 +1,69 @@
 {
   "version": 1,
-  "last_updated": "2026-03-06T15:00:00Z",
+  "last_updated": "2026-03-06T15:40:00Z",
   "pipeline": "market-intel",
   "jobs": {
     "rss-feed-monitor": {
-      "last_run": null,
-      "status": "pending",
-      "items_found": 0,
-      "summary": "",
-      "context": {}
+      "last_run": "2026-03-06T15:14:00Z",
+      "status": "ok",
+      "items_found": 111,
+      "summary": "111 matches across 20 feeds. Major themes: Iran war escalation, Trump-Putin alignment, US foreign policy shifts, AI sector news (Anthropic Pentagon dispute, DeepSeek rout), earnings beats (Broadcom, Marvell, Lufthansa). 6 feed URLs have whitespace issues.",
+      "context": {
+        "top_keywords": ["war", "oil", "ai", "conflict", "ukraine", "ev"],
+        "feed_errors": ["Business_Bloomberg", "FinancialJuice", "YCombinator", "ZeroHedge", "UnusualWhales", "Reuters_Finance"],
+        "enrichment_rate": "50%",
+        "notable_stories": [
+          "Trump embraces Putin, doubting own intel",
+          "Iran war escalation - oil prices surge",
+          "Anthropic Pentagon blacklisting",
+          "DeepSeek sparks AI rout",
+          "Broadcom, Marvell earnings beat"
+        ]
+      }
     },
     "reddit-monitor": {
-      "last_run": null,
-      "status": "pending",
-      "items_found": 0,
-      "summary": "",
-      "context": {}
+      "last_run": "2026-03-06T15:40:00Z",
+      "status": "ok",
+      "items_found": 92,
+      "summary": "92 relevant posts from r/wallstreetbets, r/investing, r/options, r/StockMarket. Top discussions: Softbank/OpenAI circular funding mechanism (619 upvotes on insider trading thread), Venezuela diplomatic revival (oil play), ADBE war & AI play. 8 subreddits rate-limited (429).",
+      "context": {
+        "top_posts": [
+          "Why Is Insider Trading Allowed for Some People? - TTD/OpenAI ads (619 upvotes)",
+          "US-Venezuela diplomatic ties resume - oil play (57 upvotes)",
+          "Softbank/OpenAI circular loan/equity scheme (39 upvotes)",
+          "ADBE war & AI play stock pitch"
+        ],
+        "correlations_with_rss": [
+          "AI sector: OpenAI ads on TTD + Softbank funding story aligns with RSS AI news (Anthropic, DeepSeek)",
+          "Oil/Geopolitics: Venezuela revival aligns with RSS Iran/oil escalation themes",
+          "Earnings: ADBE discussion aligns with RSS Broadcom/Marvell earnings theme"
+        ],
+        "rate_limited_subreddits": ["securityanalysis", "economics", "finance", "trading", "stocks", "ValueInvesting", "Daytrading", "Cryptocurrency"]
+      }
     },
     "signal-generator": {
-      "last_run": null,
-      "status": "pending",
-      "signals_generated": 0,
-      "summary": "",
-      "context": {}
+      "last_run": "2026-03-06T15:47:00Z",
+      "status": "ok",
+      "signals_generated": 34,
+      "summary": "34 signals generated (15 HIGH/STRONG BUY, 19 MEDIUM/BUY+HOLD). Categories: geopolitical (Russia-Ukraine, Iran oil sanctions), macroeconomic (US credit rating, youth unemployment, job growth, COVID pandemic unit), financial_credit (private credit stress). Top themes: Trump-Putin alignment, Iran war escalation, AI sector volatility.",
+      "context": {
+        "cross_source_correlations": [
+          "AI sector: RSS (Anthropic Pentagon blacklisting, DeepSeek rout) + Reddit (Softbank/OpenAI circular funding, TTD insider trading thread) → HIGH confidence AI volatility signal",
+          "Oil/Geopolitics: RSS (Iran war escalation, US eases Russia oil sanctions) + Reddit (US-Venezuela diplomatic revival oil play) → HIGH confidence energy sector signal",
+          "Earnings/Tech: RSS (Broadcom, Marvell earnings beat) + Reddit (ADBE war & AI play stock pitch) → MEDIUM confidence tech earnings signal"
+        ],
+        "top_reasoning_themes": [
+          "Russia-Ukraine conflict escalation (defense, wheat, European gas risk premium)",
+          "US foreign policy shifts under Trump (volatility spike, risk repricing)",
+          "Macroeconomic stress indicators (credit rating, unemployment, private credit)"
+        ],
+        "enriched_shadow_comparison": {
+          "baseline_signals": 34,
+          "enriched_signals": 50,
+          "overlap": 20,
+          "enriched_only": 28
+        }
+      }
     }
   },
   "alerts": [],
