@@ -217,6 +217,36 @@ Morning Meeting reviewed nightly-security-review report — 22 fixes approved an
 
 All changes committed and pushed to marvin-workspace repo.
 
+### Workspace Optimization (Mar 6, 2026 PM)
+Comprehensive audit of Docker environment — 10 findings, 7 implemented:
+
+**Storage optimization (96% reduction):**
+- Workspace: 767 MB → 32 MB
+- Removed: `**/node_modules/`, `**/.next/`, `**/__pycache__/` (added to .gitignore)
+- Rebuild instructions: Already in `projects/horizons-pms/SETUP.md`
+
+**Model migration (deadline met 16 days early):**
+- All 14 cron jobs migrated from direct MiniMax to Bailian
+- Strategy: `bailian/MiniMax-M2.5` (7 jobs, basic tasks) + `bailian/qwen3.5-plus` (7 jobs, reasoning)
+- Documentation: Updated TOOLS.md, MEMORY.md
+
+**News Reader app resumed:**
+- Architecture: Direct loading from `market-intel/data/rss_alerts.json` + `reddit_alerts.json`
+- No duplicate feed generation needed
+- Feed updates hourly via existing RSS/Reddit monitor cron jobs
+
+**Cleanup:**
+- Removed disabled cron job (`fixed-heartbeat-30m` — Feb 25 test artifact)
+- Added log rotation to `data-manager` cron (weekly: delete logs >30 days, truncate >10MB)
+- Archived stale proactive queue (`memory/archives/proactive-queue-2026-03-01.json`)
+
+**Skipped (working as designed):**
+- Knowledge graph schema standardization (both formats work fine)
+- Template/reference directories (useful reference materials)
+- Multi-layer documentation (daily notes + knowledge graph + MEMORY.md — by design)
+
+All changes committed and pushed to marvin-workspace repo.
+
 ### Accepted Security Risks (Mar 2026)
 - **Control UI flags:** `dangerouslyDisableDeviceAuth=true` and `dangerouslyAllowHostHeaderOriginFallback=true` — Accepted because gateway is local-only (loopback bind), no external exposure. Keep explicit allowedOrigins for localhost.
 - **Webhook security:** localhost-only bind by default + rate limiting (120/60s per IP) — accepted for trading bot use

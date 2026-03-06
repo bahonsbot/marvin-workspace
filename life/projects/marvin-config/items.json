@@ -396,5 +396,60 @@
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
     "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mc-32",
+    "fact": "Workspace storage optimized: 767 MB \u2192 32 MB (96% reduction) by adding node_modules/.next/__pycache__ to .gitignore and cleaning build artifacts",
+    "category": "status",
+    "timestamp": "2026-03-06T14:56:11.143286",
+    "source": "memory/2026-03-06.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/horizons-pms",
+      "resources/git-config"
+    ],
+    "lastAccessed": "2026-03-06",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-33",
+    "fact": "Model migration complete: All 14 cron jobs migrated to Bailian (7 bailian/MiniMax-M2.5 for basic tasks, 7 bailian/qwen3.5-plus for reasoning) \u2014 16 days before March 22 deadline",
+    "category": "status",
+    "timestamp": "2026-03-06T14:56:11.143339",
+    "source": "memory/2026-03-06.md",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-06",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-34",
+    "fact": "Disabled test cron job removed: fixed-heartbeat-30m (created Feb 25 during heartbeat debugging, disabled for 9+ days)",
+    "category": "status",
+    "timestamp": "2026-03-06T14:56:11.143346",
+    "source": "memory/2026-03-06.md",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-06",
+    "accessCount": 1
+  },
+  {
+    "id": "mc-35",
+    "fact": "Log rotation implemented: Added to data-manager cron job (Sundays 5 AM) \u2014 deletes logs >30 days, truncates error logs >10MB",
+    "category": "status",
+    "timestamp": "2026-03-06T14:56:11.143350",
+    "source": "memory/2026-03-06.md",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-06",
+    "accessCount": 1
   }
 ]
