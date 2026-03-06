@@ -1,83 +1,88 @@
 # Market Intel News Reader
 
-Simple PWA news reader that renders `news_feed.json` in `app/index.html`.
+Simple PWA news reader that displays RSS and Reddit alerts from the market-intel pipeline.
 
-## Generate feed
+## Architecture
 
-From **any** working directory:
+The app reads **directly from the market-intel data sources**:
 
-```bash
-python3 /data/.openclaw/workspace/projects/market-intel-news-reader/scripts/generate_feed.py
+- `projects/market-intel/data/rss_alerts.json` — Updated hourly by `rss-feed-monitor` cron
+- `projects/market-intel/data/reddit_alerts.json` — Updated hourly by `reddit-monitor` cron
+
+**No separate feed generation needed** — the app combines both sources in real-time.
+
+## Data Flow
+
+```
+RSS feeds → rss-feed-monitor (cron) → rss_alerts.json → News Reader App
+Reddit → reddit-monitor (cron) → reddit_alerts.json → News Reader App
 ```
 
-Or from workspace root:
+## Opening the App
+
+### Local Development
+
+From the `app/` directory:
 
 ```bash
-cd /data/.openclaw/workspace
-python3 projects/market-intel-news-reader/scripts/generate_feed.py
+cd projects/market-intel-news-reader/app
+python3 -m http.server 8080
 ```
 
-Output file:
+Open: http://localhost:8080
 
-- `/data/.openclaw/workspace/projects/market-intel-news-reader/news_feed.json`
+### Production (GitHub Pages)
 
-## Data sources and fallback behavior
+Push `app/` directory to GitHub Pages branch. The app fetches data from the workspace via relative paths.
 
-The generator prefers cached monitor outputs from:
+## Data Schema
 
-- `projects/market-intel/data/rss_alerts.json`
-- `projects/market-intel/data/reddit_alerts.json`
+The app normalizes both RSS and Reddit items to a common format:
 
-If these are missing or too small, it self-heals:
+**RSS items:**
+- `id`: `rss_<timestamp>`
+- `title`, `summary`, `url`, `source`, `category`, `timestamp`
+- `type`: `"rss"`
+- `enriched_text_source`: `headline_only`, `summary`, or `article_excerpt`
 
-- RSS fallback: fetches multiple feeds with retry/backoff, custom user-agent, and pacing to reduce rate-limit issues
-- Reddit fallback: fetches subreddit JSON endpoints first, then subreddit RSS as backup
+**Reddit items:**
+- `id`: `reddit_<timestamp>`
+- `title`, `summary` (from selftext or top comment), `url`, `source`, `category`, `timestamp`
+- `type`: `"reddit"`
+- `score`, `comments`: engagement metrics
 
-## Enriched content fields
+## Features
 
-When upstream monitors provide enrichment, feed items preserve it:
-
-- RSS items may include:
-  - `enriched_text_source` (`headline_only`, `summary`, `article_excerpt`)
-  - `article_excerpt` (best-effort, capped excerpt)
-- Reddit items may include:
-  - `selftext_snippet`
-  - `top_comment_snippet`
-
-This keeps backward compatibility with older consumers while exposing richer context for ranking and UI.
-
-## Cron-safe notes
-
-This script now resolves paths from its own file location, so it works whether cron runs from `/`, workspace root, or project directory.
+- **Combined feed**: RSS + Reddit in a single chronological view
+- **Category filters**: Filter by topic (geopolitical, financial, sentiment, etc.)
+- **Source filters**: Toggle RSS vs Reddit sources
+- **Dark/Light theme**: Auto-detects system preference, manual toggle available
+- **PWA-ready**: Install on iPhone/Android as a standalone app
+- **Responsive**: Optimized for mobile and desktop
 
 ## Troubleshooting
 
+### Feed not loading
+
+1. Check that market-intel monitors are running:
+   ```bash
+   openclaw cron list | grep -E "rss-feed|reddit"
+   ```
+
+2. Verify data files exist and are recent:
+   ```bash
+   ls -lh projects/market-intel/data/rss_alerts.json
+   ls -lh projects/market-intel/data/reddit_alerts.json
+   ```
+
+3. Check browser console for fetch errors (F12 → Console)
+
 ### RSS count is low
 
-1. Re-run once after a minute to allow rate-limit backoff.
-2. Check network from VPS:
-   ```bash
-   curl -I https://feeds.marketwatch.com/marketwatch/topstories/
-   ```
-3. If some providers are blocked temporarily, cached fallback can still populate feed.
+- Re-run monitor: `cd projects/market-intel && python3 src/rss_monitor.py`
+- Check network from VPS: `curl -I https://feeds.marketwatch.com/marketwatch/topstories/`
 
 ### Reddit count is zero
 
-1. Test direct endpoint:
-   ```bash
-   curl -A "MarketIntelNewsReader/1.1" "https://www.reddit.com/r/investing/hot/.json?limit=5&raw_json=1"
-   ```
-2. If JSON is blocked, script automatically falls back to `https://www.reddit.com/r/<subreddit>/.rss`.
-3. Ensure outbound HTTPS is allowed on the VPS.
-
-### Validate feed quickly
-
-```bash
-python3 - <<'PY'
-import json
-p='/data/.openclaw/workspace/projects/market-intel-news-reader/news_feed.json'
-with open(p) as f:d=json.load(f)
-print(d['stats'])
-print('sample sources:', sorted({i['source'] for i in d['items'][:10]}))
-PY
-```
+- Test endpoint: `curl -A "MarketIntelNewsReader/1.1" "https://www.reddit.com/r/investing/hot/.json?limit=5&raw_json=1"`
+- Ensure outbound HTTPS is allowed on the VPS

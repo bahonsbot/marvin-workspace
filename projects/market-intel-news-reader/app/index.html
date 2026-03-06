@@ -326,32 +326,77 @@
             const lastUpdated = document.getElementById('lastUpdated');
             feed.classList.add('loading');
             
-            // Try multiple paths for GitHub Pages compatibility
-            const paths = [
-                'news_feed.json',
-                '../news_feed.json',
-                '../../news_feed.json'
-            ];
+            // Load RSS and Reddit data directly from market-intel
+            const rssPath = '../../market-intel/data/rss_alerts.json';
+            const redditPath = '../../market-intel/data/reddit_alerts.json';
             
-            let data = null;
-            for (const path of paths) {
-                try {
-                    const response = await fetch(path);
-                    if (response.ok) {
-                        data = await response.json();
-                        console.log('Loaded from:', path);
-                        break;
-                    }
-                } catch (e) {
-                    console.log('Failed:', path, e);
+            let rssData = [];
+            let redditData = [];
+            
+            try {
+                const [rssResponse, redditResponse] = await Promise.all([
+                    fetch(rssPath),
+                    fetch(redditPath)
+                ]);
+                
+                if (rssResponse.ok) {
+                    rssData = await rssResponse.json();
+                    console.log('Loaded RSS alerts:', rssData.length, 'items');
                 }
+                
+                if (redditResponse.ok) {
+                    redditData = await redditResponse.json();
+                    console.log('Loaded Reddit alerts:', redditData.length, 'items');
+                }
+                
+                // Combine and normalize both sources
+                newsData = [
+                    ...rssData.map(item => ({
+                        id: 'rss_' + item.timestamp,
+                        title: item.title,
+                        summary: item.summary || item.article_excerpt || '',
+                        url: item.link,
+                        source: 'RSS: ' + item.feed,
+                        category: Array.isArray(item.matched_keywords) && item.matched_keywords.length > 0 
+                            ? item.matched_keywords.slice(0, 3) 
+                            : ['other'],
+                        published: item.published,
+                        timestamp: item.timestamp,
+                        type: 'rss',
+                        enriched_text_source: item.enriched_text_source || 'summary',
+                        article_excerpt: item.article_excerpt || ''
+                    })),
+                    ...redditData.map(item => ({
+                        id: 'reddit_' + item.timestamp,
+                        title: item.title,
+                        summary: item.selftext_snippet || item.top_comment_snippet || '',
+                        url: item.url,
+                        source: 'Reddit: r/' + item.subreddit,
+                        category: item.keyword_matched ? [item.keyword_matched] : ['sentiment'],
+                        published: item.timestamp,
+                        timestamp: item.timestamp,
+                        type: 'reddit',
+                        selftext: item.selftext || '',
+                        score: item.score || 0,
+                        comments: item.comments || 0
+                    }))
+                ];
+                
+                // Sort by timestamp (newest first)
+                newsData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                const latestTimestamp = newsData.length > 0 
+                    ? new Date(newsData[0].timestamp).toLocaleString()
+                    : 'Unknown';
+                lastUpdated.textContent = `Updated: ${latestTimestamp}`;
+                renderFeed();
+                
+            } catch (e) {
+                console.error('Failed to load feeds:', e);
+                feed.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--text-dim);">Failed to load news feeds. Please refresh the page.</p>';
             }
             
-            if (data) {
-                newsData = data.items || [];
-                lastUpdated.textContent = `Updated: ${new Date(data.generated).toLocaleString()}`;
-                renderFeed();
-            } else {
+            if (newsData.length === 0) {
                 feed.innerHTML = '<div class="empty-state">Error loading feed. Pull to refresh.</div>';
             }
             
