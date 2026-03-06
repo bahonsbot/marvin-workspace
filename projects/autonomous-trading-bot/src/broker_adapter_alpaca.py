@@ -9,6 +9,7 @@ import json
 import os
 from typing import Any, Dict, List, Optional
 from urllib import error, request
+from urllib.parse import urlparse
 
 
 PAPER_BASE_URL = "https://paper-api.alpaca.markets"
@@ -47,10 +48,17 @@ class AlpacaPaperAdapter:
         if not self.paper_mode:
             raise PaperOnlyViolationError("Live mode is prohibited. PAPER_MODE must be true.")
 
-        if self.base_url != PAPER_BASE_URL:
+        # Parse URLs to compare hostnames (not full paths which may include /v2, etc.)
+        parsed_config = urlparse(self.base_url)
+        parsed_paper = urlparse(PAPER_BASE_URL)
+        
+        config_hostname = parsed_config.hostname or ""
+        paper_hostname = parsed_paper.hostname or ""
+        
+        if config_hostname != paper_hostname:
             raise PaperOnlyViolationError(
                 f"Invalid Alpaca base URL for paper mode: {self.base_url}. "
-                f"Required: {PAPER_BASE_URL}."
+                f"Hostname must be: {paper_hostname} (got: {config_hostname})."
             )
 
         # Extra hard guard against known live endpoint aliases.
