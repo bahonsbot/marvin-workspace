@@ -2,255 +2,6 @@
   {
     "signal": {
       "source": "rss",
-      "feed": "AP_Top",
-      "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
-      "timestamp": "2026-03-01T19:47:28.985711",
-      "pattern_id": "p004",
-      "pattern": "COVID-19 Market Crash",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 80.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-01T19:47:28.988263",
-    "verified": true,
-    "actual_outcome": "correct",
-    "notes": "",
-    "evaluated_at": "2026-03-04T14:45:11.064098",
-    "legacy_outcome": "partial",
-    "evidence_pack": {
-      "verification_date": "2026-03-04",
-      "outcome": "correct",
-      "verification_status": "Validated (Strategic Pivot)",
-      "key_drivers": [
-        "China shifted procurement to Russian energy due to Strait of Hormuz blockade",
-        "Russian seaborne exports to China hit record 2.1M bpd",
-        "China replaced India as primary destination for Russian Urals crude",
-        "ESPO pipeline and overland routes via Kazakhstan immune to naval blockades",
-        "China negotiating $15/barrel discount (DES) for March-April deliveries"
-      ],
-      "metrics_observed": {
-        "russian_exports": "Record 2.1M bpd to China",
-        "brent": "Surged 7% to $85.12/barrel - highest since 2024",
-        "ovx": "Multi-year high - pricing permanent loss of Iranian/Qatari supply",
-        "kospi": "Collapsed 12%",
-        "nikkei": "Fell 1.3%"
-      },
-      "sector_impact": {
-        "energy_axis": "China-Russia axis solidifies, bypasses conflict zones",
-        "asian_manufacturing": "Massive sell-off - no overland Russian access",
-        "inflation": "Repricing for 'Higher for Longer' rates globally"
-      },
-      "trade_viability": "Strong Buy - 'new world order' for energy confirmed",
-      "verifier_notes": "Signal confirms 'Global Pivot' to only stable supply left. China-Russia axis solidified."
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Opec+ to raise oil output in bid to calm markets after US-Israel strikes kill Kh",
-      "url": "https://www.ft.com/content/e026b4a7-1115-493a-9b31-c8b0b5965491",
-      "timestamp": "2026-03-01T20:47:35.691497",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-01T20:47:35.693905",
-    "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated: OPEC+ April hike headline confirmed and market response matched predicted volatility spike + risk repricing. Attempted calming signal was interpreted as insufficient versus conflict-related supply/transit risks.",
-    "evaluated_at": "2026-03-02T17:26:00+08:00",
-    "legacy_outcome": "correct",
-    "evidence_pack": {
-      "summary": "OPEC+ supply increase headline failed to suppress panic premium; tape repriced on transit/security risk.",
-      "drivers": [
-        "OPEC+ V8 announced +206k bpd for April",
-        "Hormuz blockade risk dominated marginal supply adjustment",
-        "Market skepticism around deliverability/spare capacity in conflict context"
-      ],
-      "metrics": [
-        "Brent moved into ~80-82 range post-announcement",
-        "Oil vol (OVX) at multi-month highs",
-        "Street stress scenarios repriced toward higher oil tails (120-150 in persistent blockade case)"
-      ],
-      "sector_impact": [
-        "Broad risk assets pressured by energy shock risk",
-        "Energy complex stayed bid on geopolitical premium"
-      ],
-      "confidence": "HIGH"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Oil prices forecast to jump despite Opec+ pledge to raise output",
-      "url": "https://www.ft.com/content/160cfda1-fe72-4efe-93b0-042be5dd2014",
-      "timestamp": "2026-03-02T00:47:28.472644",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "March 2020 oil price war crashed crude 65% in days. More recently, OPEC+ increases have pushed oil lower. Energy stocks typically underperform 1-3% on supply additions. Airlines get relief.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-02T00:47:28.475184",
-    "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Strongly validated: market ignored near-term OPEC+ calming narrative and repriced immediately on physical supply/transit disruption risk. Forecasted jump despite output pledge played out as predicted.",
-    "evaluated_at": "2026-03-02T17:29:00+08:00",
-    "legacy_outcome": "correct",
-    "evidence_pack": {
-      "summary": "Supply pledge was treated as delayed/insufficient; real-time disruption risk dominated price discovery and cross-asset repricing.",
-      "drivers": [
-        "Hormuz transit closure risk",
-        "Ras Tanura disruption shock",
-        "OPEC+ +206k bpd seen as lagged and too small versus immediate risk"
-      ],
-      "metrics": [
-        "Brent gap-up ~13% to ~82",
-        "OVX and energy options tail-risk pricing elevated",
-        "Tanker war-risk/charter premiums jumped sharply (reported 30-50%)"
-      ],
-      "sector_impact": [
-        "Indices opened risk-off (S&P/Nasdaq pressure)",
-        "Energy complex strong; inflation-sensitive sectors repriced",
-        "Electricity/compute-cost sensitivity concern for render-heavy businesses"
-      ],
-      "confidence": "HIGH"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Retail investors shun private credit funds after Blue Owl gating",
-      "url": "https://www.ft.com/content/ea11d307-73af-4403-840d-b47dffce9cd0",
-      "timestamp": "2026-03-02T14:47:31.698417",
-      "pattern_id": "p005",
-      "pattern": "GameStop Short Squeeze",
-      "category": "sentiment_social",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "forced_covering",
-        "borrow_fee_spike",
-        "volatility_clustering"
-      ],
-      "predicted_causal_chain": [
-        "Crowded short setup",
-        "Call buying surge",
-        "Dealer hedging amplifies upside"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-02T14:47:31.701689",
-    "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated (crisis-event variant): retail-flow/liquidity squeeze dynamics played out in private credit after Blue Owl gating + loan-sale actions. Signal worked as a sentiment-contagion analog to squeeze mechanics (in reverse direction).",
-    "evaluated_at": "2026-03-02T17:32:00+08:00",
-    "legacy_outcome": "correct",
-    "evidence_pack": {
-      "summary": "Retail withdrawal pressure and gating shock triggered liquidity-premium repricing and volatility clustering across private-credit-linked names.",
-      "drivers": [
-        "Blue Owl ~1.4-1.5bn loan sale to institutions",
-        "OBDC II redemption gating/permanent restriction signal",
-        "Retail confidence shock across semi-liquid private credit products"
-      ],
-      "metrics": [
-        "Sector fundraising down ~40% over late-Feb window",
-        "OWL volume spike (~226% vs avg) with sharp swings",
-        "Borrow costs rose for related public vehicles/managers"
-      ],
-      "sector_impact": [
-        "Alt-asset managers and listed private-credit proxies volatile",
-        "Liquidity-premium repricing across retail private-credit complex"
-      ],
-      "confidence": "HIGH",
-      "pattern_interpretation": "GAMESTOP_DARK_MIRROR"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
       "feed": "Financial_Times",
       "title": "Oil and gas prices soar and stocks slide as Middle East conflict escalates",
       "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
@@ -1015,6 +766,177 @@
       "root_causes": []
     },
     "added_at": "2026-03-05T13:47:31.875098",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "reddit",
+      "feed": "r/investing",
+      "title": "Private Credit Bubble and Why It Won't Matter",
+      "url": "https://reddit.com/r/investing/comments/1rkw1e7/private_credit_bubble_and_why_it_wont_matter/",
+      "timestamp": "2026-03-06T03:47:58.753661",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "score": 0,
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-06T03:47:58.755009",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "AP_Top",
+      "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
+      "timestamp": "2026-03-06T05:47:34.108835",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-06T05:47:34.112683",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Industry casts doubt on Trump plan to insure Gulf oil tankers as Iran war halts ",
+      "url": "https://www.ft.com/content/6ddeb488-0d6f-4b6a-b419-2a2ba7437a25",
+      "timestamp": "2026-03-06T06:47:32.327763",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-06T06:47:32.331592",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Industry doubts Trump plan to insure Gulf oil tankers as Iran war halts transit",
+      "url": "https://www.ft.com/content/6ddeb488-0d6f-4b6a-b419-2a2ba7437a25",
+      "timestamp": "2026-03-06T07:47:31.651451",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-06T07:47:31.654980",
     "verified": false,
     "actual_outcome": null,
     "notes": ""

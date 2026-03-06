@@ -8,8 +8,8 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-05",
-    "accessCount": 4,
+    "lastAccessed": "2026-03-06",
+    "accessCount": 5,
     "source": "memory/2026-02-26.md"
   },
   {
@@ -144,5 +144,19 @@
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
     "source": "memory/2026-03-04.md"
+  },
+  {
+    "id": "mi-012",
+    "fact": "Signal accuracy review (Mar 5, 12:19 ICT): Achieved 96.4% weighted accuracy with 14 verified signals. Fixed delivery issue where signal-accuracy-review was caught in Mar 3 Health Council blanket change (delivery.mode: none) and wasn't delivering to Telegram.",
+    "category": "status",
+    "timestamp": "2026-03-05T12:19:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-06",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
   }
 ]

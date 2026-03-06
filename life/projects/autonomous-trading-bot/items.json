@@ -11,7 +11,7 @@
       "areas/people/philippe"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 4
+    "accessCount": 5
   },
   {
     "id": "atb-002",
@@ -62,6 +62,20 @@
       "projects/autonomous-trading-bot"
     ],
     "lastAccessed": "2026-03-05",
+    "accessCount": 1,
+    "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "atb-006",
+    "fact": "Signal delivery routing fixed (Mar 5, 12:19 ICT): signal-accuracy-review delivery changed back to 'telegram' targeting market-signals channel (-1003850594375) after being inadvertently disabled by Health Council blanket change.",
+    "category": "status",
+    "timestamp": "2026-03-05T12:19:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-06",
     "accessCount": 1,
     "source": "memory/2026-03-05.md"
   }

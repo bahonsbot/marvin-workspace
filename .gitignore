@@ -3,7 +3,10 @@
 backup/
 memory/
 .openclaw/
-node_modules/
+**/node_modules/
+**/.next/
+**/__pycache__/
+*.pyc
 *.bak
 projects/market-intel/data/last_signal_check
 projects/market-intel/data/rss_alerts.json
