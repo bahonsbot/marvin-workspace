@@ -1,67 +1,70 @@
 {
   "version": 1,
-  "last_updated": "2026-03-06T15:40:00Z",
+  "last_updated": "2026-03-06T17:14:00Z",
   "pipeline": "market-intel",
   "jobs": {
     "rss-feed-monitor": {
-      "last_run": "2026-03-06T15:14:00Z",
+      "last_run": "2026-03-06T17:14:00Z",
       "status": "ok",
-      "items_found": 111,
-      "summary": "111 matches across 20 feeds. Major themes: Iran war escalation, Trump-Putin alignment, US foreign policy shifts, AI sector news (Anthropic Pentagon dispute, DeepSeek rout), earnings beats (Broadcom, Marvell, Lufthansa). 6 feed URLs have whitespace issues.",
+      "items_found": 108,
+      "summary": "108 matches across 20 feeds. Major themes: Iran war (oil biggest weekly gain in 4 years, Hormuz traffic paralyzed), Trump-Putin alignment, Anthropic Pentagon blacklisting, DeepSeek AI rout, Broadcom/Marvell earnings beats. 6 feed URLs still have whitespace issues.",
       "context": {
-        "top_keywords": ["war", "oil", "ai", "conflict", "ukraine", "ev"],
+        "top_keywords": ["war", "oil", "ai", "ukraine", "conflict", "ev"],
         "feed_errors": ["Business_Bloomberg", "FinancialJuice", "YCombinator", "ZeroHedge", "UnusualWhales", "Reuters_Finance"],
         "enrichment_rate": "50%",
         "notable_stories": [
           "Trump embraces Putin, doubting own intel",
-          "Iran war escalation - oil prices surge",
-          "Anthropic Pentagon blacklisting",
-          "DeepSeek sparks AI rout",
-          "Broadcom, Marvell earnings beat"
+          "Iran war enters seventh day - oil biggest weekly gain in 4 years, Hormuz paralyzed",
+          "Anthropic Pentagon blacklisting - CEO fights back",
+          "DeepSeek sparks AI rout - China competition concerns",
+          "Broadcom, Marvell earnings beat",
+          "India gets US waiver for Russian oil purchases"
         ]
       }
     },
     "reddit-monitor": {
-      "last_run": "2026-03-06T15:40:00Z",
+      "last_run": "2026-03-06T16:40:00Z",
       "status": "ok",
       "items_found": 92,
-      "summary": "92 relevant posts from r/wallstreetbets, r/investing, r/options, r/StockMarket. Top discussions: Softbank/OpenAI circular funding mechanism (619 upvotes on insider trading thread), Venezuela diplomatic revival (oil play), ADBE war & AI play. 8 subreddits rate-limited (429).",
+      "summary": "92 relevant posts. Top: Nvidia CEO on $30B OpenAI investment (3141 upvotes), US grants India Russia oil waiver (2321), Oracle job cuts due to AI (2213). Softbank/OpenAI circular funding still hot (250). 8 subreddits rate-limited (429).",
       "context": {
         "top_posts": [
-          "Why Is Insider Trading Allowed for Some People? - TTD/OpenAI ads (619 upvotes)",
-          "US-Venezuela diplomatic ties resume - oil play (57 upvotes)",
-          "Softbank/OpenAI circular loan/equity scheme (39 upvotes)",
-          "ADBE war & AI play stock pitch"
+          "Man, times really are tough out there (44k upvotes - meta)",
+          "Nvidia CEO Huang says $30B OpenAI investment 'mi' (3141 upvotes)",
+          "US grants waiver to allow India to buy Russian oil (2321 upvotes)",
+          "Oracle Plans Thousands of Job Cuts in Face of AI (2213 upvotes)",
+          "Softbank OpenAI circular loan/equity scheme (250 upvotes)"
         ],
         "correlations_with_rss": [
-          "AI sector: OpenAI ads on TTD + Softbank funding story aligns with RSS AI news (Anthropic, DeepSeek)",
-          "Oil/Geopolitics: Venezuela revival aligns with RSS Iran/oil escalation themes",
-          "Earnings: ADBE discussion aligns with RSS Broadcom/Marvell earnings theme"
+          "AI sector: Nvidia CEO confirming $30B OpenAI investment aligns with RSS Anthropic/DeepSeek AI news",
+          "Oil/Geopolitics: India Russia oil waiver aligns with RSS Iran war/oil sanctions theme",
+          "Tech Earnings: Oracle job cuts narrative aligns with RSS Broadcom/Marvell AI chip earnings theme"
         ],
         "rate_limited_subreddits": ["securityanalysis", "economics", "finance", "trading", "stocks", "ValueInvesting", "Daytrading", "Cryptocurrency"]
       }
     },
     "signal-generator": {
-      "last_run": "2026-03-06T15:47:00Z",
+      "last_run": "2026-03-06T16:47:00Z",
       "status": "ok",
-      "signals_generated": 34,
-      "summary": "34 signals generated (15 HIGH/STRONG BUY, 19 MEDIUM/BUY+HOLD). Categories: geopolitical (Russia-Ukraine, Iran oil sanctions), macroeconomic (US credit rating, youth unemployment, job growth, COVID pandemic unit), financial_credit (private credit stress). Top themes: Trump-Putin alignment, Iran war escalation, AI sector volatility.",
+      "signals_generated": 38,
+      "summary": "38 signals generated (19 STRONG BUY, 16 BUY, 3 HOLD). Categories: geopolitical (Russia-Ukraine, Iran war, Taiwan/China), macroeconomic (US credit rating, COVID pandemic unit, youth unemployment, job growth, Fed rates), financial_credit (private credit stress), sentiment_social (retail options, AI/semis), corporate (earnings). Top themes: Iran war escalation, Trump-Putin alignment, AI sector volatility, private credit stress.",
       "context": {
         "cross_source_correlations": [
-          "AI sector: RSS (Anthropic Pentagon blacklisting, DeepSeek rout) + Reddit (Softbank/OpenAI circular funding, TTD insider trading thread) → HIGH confidence AI volatility signal",
-          "Oil/Geopolitics: RSS (Iran war escalation, US eases Russia oil sanctions) + Reddit (US-Venezuela diplomatic revival oil play) → HIGH confidence energy sector signal",
-          "Earnings/Tech: RSS (Broadcom, Marvell earnings beat) + Reddit (ADBE war & AI play stock pitch) → MEDIUM confidence tech earnings signal"
+          "RSS + Reddit both discussing Iran conflict + Russia oil sanctions → HIGH confidence geopolitical signal (India waiver appears in both sources)",
+          "AI sector: RSS (DeepSeek rout, Broadcom/Marvell earnings) + Reddit (Nvidia CEO $30B OpenAI investment, US export controls) → HIGH confidence AI volatility signal",
+          "Private credit: RSS (BreakingViews show-me-the-money moment, redemption stress) → standalone HIGH confidence financial stress signal"
         ],
         "top_reasoning_themes": [
-          "Russia-Ukraine conflict escalation (defense, wheat, European gas risk premium)",
-          "US foreign policy shifts under Trump (volatility spike, risk repricing)",
-          "Macroeconomic stress indicators (credit rating, unemployment, private credit)"
+          "Iran war escalation (oil risk premium, defense stocks, supply chain disruption)",
+          "Russia-Ukraine conflict (Trump-Putin alignment, sanctions waivers, European gas risk)",
+          "AI sector volatility (China competition, export controls, capex concentration)",
+          "Macroeconomic stress (Fed no-cut scenario, private credit, youth unemployment)"
         ],
         "enriched_shadow_comparison": {
-          "baseline_signals": 34,
+          "baseline_signals": 38,
           "enriched_signals": 50,
-          "overlap": 20,
-          "enriched_only": 28
+          "overlap": 21,
+          "enriched_only": 26
         }
       }
     }
