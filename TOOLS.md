@@ -96,15 +96,26 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - coding-agent (built-in OpenClaw skill)
 
 ### Models (Active)
-- **Primary:** MiniMax-M2.5 via Bailian (subscription ends 2026-03-22)
-- **Bailian Provider:** Multi-model access (configured Mar 4, 2026)
+- **Current primary:** MiniMax-M2.5 (direct subscription ends 2026-03-22)
+- **Bailian Provider:** Multi-model access (configured Mar 4, 2026) — testing/evaluation phase
   - Qwen family: qwen3.5-plus, qwen3-max-2026-01-23, qwen3-coder-next/plus
   - Zhipu GLM: glm-5, glm-4.7
   - Kimi: kimi-k2.5
-  - MiniMax-M2.5 (via Bailian, migration target before direct subscription expires)
+  - MiniMax-M2.5 (via Bailian — no expiration, migration target before direct sub expires)
 - **Fallback:** openai-codex/gpt-5.3-codex (OAuth)
 - **Nexos:** Removed (caused cron job issues, won't use)
 - **Migration pending:** Move cron jobs from direct MiniMax to Bailian-hosted MiniMax-M2.5 before March 22, 2026
+
+### Codex CLI Setup (Fallback Model)
+
+- **Separate OAuth:** Codex CLI requires its own OAuth login, independent of OpenClaw's OAuth
+  - Login command: `codex login --device-auth` (device code flow works best)
+  - Tokens stored in `~/.codex/` — both Codex CLI and OpenClaw OAuth needed
+- **Git repo required:** Codex refuses to run outside a git repository
+  - For scratch work: `mktemp -d && git init` before running Codex
+- **Coding agent skill:** Built-in OpenClaw skill `coding-agent` delegates to Codex/Claude Code/Pi
+  - Usage: `pty:true workdir:~/project background:true command:"codex exec --full-auto 'prompt'"`
+  - Always use `pty:true` — coding agents need a pseudo-terminal
 
 ### Scripts
 - `scripts/ralphy.sh` — Autonomous coding agent (reads PRD, iterates on code)
@@ -129,6 +140,9 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - **Risk controls:** Idempotency locking, payload size limits (1MB), rate limiting, secret redaction
 - `projects/market-intel-news-reader/` — PWA news reader app for iPhone (PRD in progress)
 - `projects/futures-bot/` — Futures trading bot (PRD created Mar 4, scheduled for implementation)
+  - **Broker:** IBKR (application submitted Mar 2026, pending approval 1-3 business days)
+  - **Paper trading:** Free with IBKR (vs Tradovate $25/month)
+  - **Phase 1 status:** Complete — 1,349 LOC, 14/14 tests passed, dry-run validated
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)

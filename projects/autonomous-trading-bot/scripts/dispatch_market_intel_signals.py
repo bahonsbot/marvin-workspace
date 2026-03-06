@@ -82,7 +82,7 @@ def _in_us_market_hours(now: datetime) -> bool:
         print(f"ERROR: Timezone detection failed - skipping dispatch: {e}")
         try:
             notifier = TelegramNotifier()
-            notifier._send_message(
+            notifier._send(
                 "🚨 CRITICAL: Timezone detection failed in signal dispatcher\n\n"
                 f"Error: {e}\n\n"
                 "Signal dispatch is SKIPPED until fixed.\n"
@@ -138,9 +138,12 @@ def _normalize_side(sig: dict[str, Any]) -> str:
     return "buy"
 
 
-def _post_webhook(url: str, body: dict[str, Any]) -> tuple[int, dict[str, Any] | str]:
+def _post_webhook(url: str, body: dict[str, Any], secret: str | None = None) -> tuple[int, dict[str, Any] | str]:
     data = json.dumps(body).encode("utf-8")
-    req = request.Request(url, data=data, method="POST", headers={"Content-Type": "application/json"})
+    headers = {"Content-Type": "application/json"}
+    if secret:
+        headers["Authorization"] = f"Bearer {secret}"
+    req = request.Request(url, data=data, method="POST", headers=headers)
     try:
         with request.urlopen(req, timeout=20) as resp:
             raw = resp.read().decode("utf-8", errors="replace")
@@ -274,7 +277,6 @@ def main() -> int:
             "qty": qty,
             "timestamp": now.isoformat(),
             "strategy": "market-intel-auto",
-            "secret": cfg.webhook_secret,
             "source_title": sig.get("title", ""),
             "source_url": sig.get("url", ""),
             "symbol_reasoning": symbol_decision.reasoning,
@@ -282,15 +284,20 @@ def main() -> int:
             "symbol_confidence": symbol_decision.confidence,
         }
 
-        status, resp = _post_webhook(cfg.webhook_url, body)
+        status, resp = _post_webhook(cfg.webhook_url, body, cfg.webhook_secret)
         accepted = isinstance(resp, dict) and bool(resp.get("accepted")) and status in {200, 201}
 
+        # Sanitize response before storing (never persist secrets)
+        stored_resp = resp
+        if isinstance(resp, dict):
+            stored_resp = {k: v for k, v in resp.items() if k.lower() not in ("secret", "token", "auth", "api_key")}
+        
         sent[key] = {
             "title": sig.get("title", ""),
             "timestamp": now.isoformat(),
             "status": status,
             "accepted": accepted,
-            "response": resp,
+            "response": stored_resp,
         }
 
         if accepted:

@@ -35,10 +35,13 @@ send_telegram_alert() {
         return
     fi
     
-    # URL encode the message
+    # URL encode the message (sanitize: pass via env var, not shell interpolation)
     local encoded_message
-    encoded_message=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$message'''))" 2>/dev/null || echo "$message")
+    encoded_message=$(MESSAGE="$message" python3 -c "import urllib.parse,os; print(urllib.parse.quote(os.environ['MESSAGE']))" 2>/dev/null || echo "$message")
     
+    # Note: Telegram Bot API requires token in URL path (no header auth support)
+    # This is an accepted risk - Telegram's API design limitation
+    # Token may appear in proxy/access logs if not on localhost
     curl -s -X POST "https://api.telegram.org/bot${bot_token}/sendMessage" \
         -d "chat_id=${chat_id}" \
         -d "text=${encoded_message}" \

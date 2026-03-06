@@ -79,6 +79,13 @@ class AlpacaPaperAdapter:
                 return json.loads(raw)
         except error.HTTPError as exc:
             raw = exc.read().decode("utf-8", errors="replace")
+            # Redact sensitive fields from error response (account_id, keys, etc.)
+            try:
+                body = json.loads(raw)
+                redacted = {k: "[REDACTED]" if k.lower() in ("account_id", "api_key", "secret", "token") else v for k, v in body.items()}
+                raw = json.dumps(redacted)
+            except Exception:
+                raw = "[Non-JSON error response]"
             raise RuntimeError(f"Alpaca API error: status={exc.code} body={raw}") from exc
         except error.URLError as exc:
             raise RuntimeError(f"Alpaca API connection error: {exc.reason}") from exc

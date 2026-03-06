@@ -15,7 +15,7 @@ python3 -c "from src.log_utils import rotate_log; from pathlib import Path; rota
 
 # Load only required variables explicitly (avoid exporting all .env contents)
 set -u
-for var in WEBHOOK_SHARED_SECRET ALPACA_API_KEY ALPACA_SECRET_KEY TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID AUTO_MIN_CONFIDENCE WEBHOOK_HOST WEBHOOK_PORT; do
+for var in WEBHOOK_SHARED_SECRET ALPACA_API_KEY ALPACA_API_SECRET TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID AUTO_MIN_CONFIDENCE WEBHOOK_HOST WEBHOOK_PORT; do
     if [[ -f ./.env ]]; then
         val=$(grep "^${var}=" ./.env 2>/dev/null | cut -d'=' -f2- | tr -d '"' | tr -d "'" || true)
         if [[ -n "$val" ]]; then

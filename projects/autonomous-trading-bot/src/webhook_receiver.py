@@ -8,6 +8,7 @@ and can optionally submit to Alpaca PAPER endpoint only.
 from __future__ import annotations
 
 import json
+import logging
 import os
 import sys
 from datetime import datetime, timezone
@@ -16,6 +17,8 @@ from pathlib import Path
 from threading import Lock
 from time import time
 from typing import Any, Dict
+
+logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -250,8 +253,13 @@ class WebhookHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "Missing Content-Length", "paper_only": True})
             return
 
+        # Validate Content-Length is a valid non-negative integer
+        if not content_length.strip().isdigit():
+            self._send_json(400, {"error": "Invalid Content-Length format", "paper_only": True})
+            return
+
         content_length_int = int(content_length)
-        if content_length_int > MAX_PAYLOAD_SIZE:
+        if content_length_int < 0 or content_length_int > MAX_PAYLOAD_SIZE:
             self._send_json(413, {"error": "Payload too large", "max_size": MAX_PAYLOAD_SIZE, "paper_only": True})
             return
 
