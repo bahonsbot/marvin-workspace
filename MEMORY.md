@@ -206,6 +206,16 @@ All issues from nightly-security-review addressed. Cron jobs now save reports to
 - platform-health-council → memory/health-council/
 - self-improvement → memory/self-improvement/
 
+### Security Hardening (Mar 6, 2026)
+Morning Meeting reviewed nightly-security-review report — 22 fixes approved and implemented:
+- **CRITICAL (1):** Webhook secret removed from dispatch payload (now uses Authorization header), response sanitization before storage
+- **HIGH (5):** Futures webhook rate limiting (120 req/60s), Tradovate URL validation (proper parsing), futures webhook localhost bind guard, file locking for idempotency store, Telegram token-in-URL limitation documented
+- **MEDIUM (9):** Logger import added, Content-Length validation, env var sanitization, Alpaca error redaction, config permission check, RALPHY_ALLOW_UNSAFE warning enhanced, method call fix (_send_message → _send)
+- **LOW (7):** Env var name mismatch fixed, SSL verification explicit, minor hardening items
+- **Skipped:** Backup procedures doc (Philippe handles VPS snapshots manually)
+
+All changes committed and pushed to marvin-workspace repo.
+
 ### Accepted Security Risks (Mar 2026)
 - **Control UI flags:** `dangerouslyDisableDeviceAuth=true` and `dangerouslyAllowHostHeaderOriginFallback=true` — Accepted because gateway is local-only (loopback bind), no external exposure. Keep explicit allowedOrigins for localhost.
 - **Webhook security:** localhost-only bind by default + rate limiting (120/60s per IP) — accepted for trading bot use
