@@ -95,8 +95,9 @@ def _rate_limit_allowed(client_ip: str) -> bool:
 def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None) -> bool:
     """Optional shared-secret auth for incoming webhooks.
 
-    Accepts either:
+    Accepts any of:
     - Header: X-Webhook-Secret
+    - Header: Authorization: Bearer <secret>
     - JSON payload field: secret
     (TradingView cannot set custom headers, so payload secret is supported.)
     """
@@ -106,14 +107,19 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
         return False  # Fail-closed: reject if no secret configured
 
     header_secret = headers.get("X-Webhook-Secret", "")
+    bearer_secret = ""
+    auth_header = headers.get("Authorization", "")
+    if auth_header.startswith("Bearer "):
+        bearer_secret = auth_header[7:]
     payload_secret = ""
     if payload and isinstance(payload, dict):
         payload_secret = str(payload.get("secret", ""))
 
     # Use constant-time comparison to prevent timing attacks
-    header_match = secrets.compare_digest(header_secret.encode(), secret.encode())
+    x_webhook_match = secrets.compare_digest(header_secret.encode(), secret.encode())
+    bearer_match = secrets.compare_digest(bearer_secret.encode(), secret.encode())
     payload_match = secrets.compare_digest(payload_secret.encode(), secret.encode())
-    return header_match or payload_match
+    return x_webhook_match or bearer_match or payload_match
 
 
 def process_webhook_payload(
