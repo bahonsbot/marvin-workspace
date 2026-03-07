@@ -326,12 +326,14 @@
             const lastUpdated = document.getElementById('lastUpdated');
             feed.classList.add('loading');
             
-            // Load RSS and Reddit data directly from market-intel
-            const rssPath = '../../market-intel/data/rss_alerts.json';
-            const redditPath = '../../market-intel/data/reddit_alerts.json';
+            // Load RSS and Reddit data from API endpoints
+            const rssPath = '/api/rss';
+            const redditPath = '/api/reddit';
             
             let rssData = [];
             let redditData = [];
+            
+            console.log('Loading news feeds from API...');
             
             try {
                 const [rssResponse, redditResponse] = await Promise.all([
@@ -393,11 +395,17 @@
                 
             } catch (e) {
                 console.error('Failed to load feeds:', e);
-                feed.innerHTML = '<p style="padding: 20px; text-align: center; color: var(--text-dim);">Failed to load news feeds. Please refresh the page.</p>';
+                feed.innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: var(--text-dim);">
+                        <p>Failed to load news feeds.</p>
+                        <p style="font-size: 12px; margin-top: 8px;">${e.message}</p>
+                        <p style="font-size: 12px; margin-top: 16px;">Pull to refresh or check server status at <a href="/api/health" style="color: var(--accent);">/api/health</a></p>
+                    </div>
+                `;
             }
             
             if (newsData.length === 0) {
-                feed.innerHTML = '<div class="empty-state">Error loading feed. Pull to refresh.</div>';
+                feed.innerHTML = '<div class="empty-state">No news items found. Pull to refresh.</div>';
             }
             
             feed.classList.remove('loading');
