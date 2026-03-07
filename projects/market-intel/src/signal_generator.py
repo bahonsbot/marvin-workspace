@@ -5,9 +5,14 @@ Generates actionable market signals
 """
 import json
 import os
-from datetime import datetime
+import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Tuple
+
+# Import context manager for cron pipeline
+sys.path.insert(0, str(Path(__file__).parent))
+from cron_context import CronContext
 
 class SignalGenerator:
     def __init__(self):
@@ -406,7 +411,53 @@ class SignalGenerator:
             )
             print("  Saved: data/signals_enriched_shadow.json + data/signal_ab_comparison.json")
 
+        # Write to shared cron context for pipeline
+        self._update_cron_context(baseline, enriched if mode == 'shadow' else None)
+
         return baseline
+
+    def _update_cron_context(self, baseline: List[Dict], enriched: Optional[List[Dict]] = None) -> None:
+        """Update shared cron context with signal generation results."""
+        try:
+            ctx = CronContext.load()
+            
+            # Count by confidence
+            high_count = len([s for s in baseline if s.get('confidence') == 'HIGH'])
+            strong_buy_count = len([s for s in baseline if s.get('confidence_level') == 'STRONG BUY'])
+            buy_count = len([s for s in baseline if s.get('confidence_level') == 'BUY'])
+            hold_count = len([s for s in baseline if s.get('confidence_level') == 'HOLD'])
+            
+            # Count by category
+            categories = {}
+            for s in baseline:
+                cat = s.get('category', 'unknown')
+                categories[cat] = categories.get(cat, 0) + 1
+            
+            signals_generated = len(baseline)
+            summary = f"{signals_generated} signals generated ({strong_buy_count} STRONG BUY, {buy_count} BUY, {hold_count} HOLD). Top categories: {', '.join([f'{k}={v}' for k, v in sorted(categories.items(), key=lambda x: x[1], reverse=True)[:3]])}"
+            
+            ctx.update_job('market-signal-generator', {
+                'last_run': datetime.now(timezone.utc).isoformat(),
+                'status': 'ok',
+                'signals_generated': signals_generated,
+                'summary': summary,
+                'context': {
+                    'by_confidence': {
+                        'STRONG_BUY': strong_buy_count,
+                        'BUY': buy_count,
+                        'HOLD': hold_count,
+                        'HIGH_confidence': high_count
+                    },
+                    'by_category': categories,
+                    'shadow_mode': enriched is not None,
+                    'enriched_count': len(enriched) if enriched else None
+                }
+            })
+            
+            ctx.save()
+            print("✓ Updated cron-context.json")
+        except Exception as e:
+            print(f"⚠️  Failed to update cron context: {e}")
 
 
 if __name__ == "__main__":

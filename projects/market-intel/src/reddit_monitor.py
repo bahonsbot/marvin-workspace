@@ -14,6 +14,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List
 
+# Import context manager for cron pipeline
+sys.path.insert(0, str(Path(__file__).parent))
+from cron_context import CronContext
+
 
 def scrub_pii(text: str) -> str:
     """Remove common PII patterns from text."""
@@ -262,7 +266,56 @@ class RedditMonitor:
         else:
             self.log("\nNo matching posts found.")
 
+        # Write to shared cron context for pipeline
+        self._update_cron_context(results)
+
         return results
+
+    def _update_cron_context(self, results: List[Dict]) -> None:
+        """Update shared cron context with this run's results."""
+        try:
+            ctx = CronContext.load()
+            
+            # Build summary
+            items_found = len(results)
+            if items_found > 0:
+                # Extract top posts and correlations
+                top_posts = [f"{r.get('title', '')[:80]} ({r.get('score', 0)} upvotes)" for r in results[:5]]
+                
+                # Try to find correlations with RSS (if RSS already ran this hour)
+                correlations = []
+                rss_summary = ctx.get_job_summary('rss-feed-monitor').lower()
+                reddit_titles = ' '.join([r.get('title', '').lower() for r in results])
+                
+                for keyword in ['oil', 'iran', 'war', 'fed', 'jobs', 'credit', 'ai']:
+                    if keyword in rss_summary and keyword in reddit_titles:
+                        correlations.append(f"{keyword}: Trending on both RSS + Reddit")
+                
+                summary = f"{items_found} posts after enrichment. Top discussions: {', '.join(top_posts[:2])}"
+                
+                ctx.update_job('reddit-monitor', {
+                    'last_run': datetime.now(timezone.utc).isoformat(),
+                    'status': 'ok',
+                    'items_found': items_found,
+                    'summary': summary,
+                    'context': {
+                        'top_posts': top_posts,
+                        'correlations_with_rss': correlations
+                    }
+                })
+            else:
+                ctx.update_job('reddit-monitor', {
+                    'last_run': datetime.now(timezone.utc).isoformat(),
+                    'status': 'ok',
+                    'items_found': 0,
+                    'summary': 'No matching posts found',
+                    'context': {}
+                })
+            
+            ctx.save()
+            self.log("✓ Updated cron-context.json")
+        except Exception as e:
+            self.log(f"⚠️  Failed to update cron context: {e}")
 
 
 if __name__ == "__main__":

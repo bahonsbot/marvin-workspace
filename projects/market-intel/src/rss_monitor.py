@@ -19,6 +19,10 @@ from pathlib import Path
 from typing import Dict, List, Optional
 from urllib.parse import urlparse
 
+# Import context manager for cron pipeline
+sys.path.insert(0, str(Path(__file__).parent))
+from cron_context import CronContext
+
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
 
 
@@ -359,7 +363,54 @@ class RSSMonitor:
         else:
             self.log("\nNo matching entries found.")
 
+        # Write to shared cron context for pipeline
+        self._update_cron_context(results)
+
         return results
+
+    def _update_cron_context(self, results: List[Dict]) -> None:
+        """Update shared cron context with this run's results."""
+        try:
+            ctx = CronContext.load()
+            
+            # Build summary
+            items_found = len(results)
+            if items_found > 0:
+                # Extract top keywords and notable stories
+                keyword_counts = {}
+                notable = []
+                for r in results[:10]:
+                    for kw in r.get('matched_keywords', []):
+                        keyword_counts[kw.lower()] = keyword_counts.get(kw.lower(), 0) + 1
+                    notable.append(r.get('title', '')[:100])
+                
+                top_keywords = sorted(keyword_counts.keys(), key=lambda k: keyword_counts[k], reverse=True)[:8]
+                summary = f"{items_found} matches across {len(self.feeds)} feeds. Top themes: {', '.join(notable[:3])}"
+                
+                ctx.update_job('rss-feed-monitor', {
+                    'last_run': datetime.now(timezone.utc).isoformat(),
+                    'status': 'ok',
+                    'items_found': items_found,
+                    'summary': summary,
+                    'context': {
+                        'top_keywords': top_keywords,
+                        'notable_stories': notable[:15],
+                        'enrichment_rate': f"{sum(1 for r in results if r.get('article_excerpt')) / max(items_found, 1) * 100:.0f}%"
+                    }
+                })
+            else:
+                ctx.update_job('rss-feed-monitor', {
+                    'last_run': datetime.now(timezone.utc).isoformat(),
+                    'status': 'ok',
+                    'items_found': 0,
+                    'summary': 'No matching entries found',
+                    'context': {}
+                })
+            
+            ctx.save()
+            self.log("✓ Updated cron-context.json")
+        except Exception as e:
+            self.log(f"⚠️  Failed to update cron context: {e}")
 
 
 if __name__ == "__main__":
