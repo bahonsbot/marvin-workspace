@@ -120,14 +120,21 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
     if auth_header.startswith("Bearer "):
         bearer_secret = auth_header[7:]
     payload_secret = ""
+    payload_secret_used = False
     if payload and isinstance(payload, dict):
         payload_secret = str(payload.get("secret", ""))
+        if payload_secret:
+            payload_secret_used = True
 
     # Use constant-time comparison to prevent timing attacks
     x_webhook_match = secrets.compare_digest(header_secret.encode(), secret.encode())
     bearer_match = secrets.compare_digest(bearer_secret.encode(), secret.encode())
     payload_match = secrets.compare_digest(payload_secret.encode(), secret.encode())
     basic_auth_ok = x_webhook_match or bearer_match or payload_match
+    
+    # Deprecation warning: payload-based secret is less secure (logged by proxies/debug tools)
+    if payload_secret_used and basic_auth_ok and not x_webhook_match and not bearer_match:
+        logger.warning("DEPRECATED: Webhook auth via payload['secret'] is deprecated. Use X-Webhook-Secret or Authorization header instead.")
     
     if not basic_auth_ok:
         return False
