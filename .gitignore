@@ -14,6 +14,8 @@ projects/market-intel/data/reddit_alerts.json
 projects/market-intel/data/signals.json
 projects/market-intel/data/enhanced_signals.json
 projects/market-intel/data/signal_state.json
+projects/autonomous-trading-bot/data/state/auto_signal_dispatch.json
+projects/autonomous-trading-bot/data/state/idempotency.json
 auth.json
 *.json.bak*
 *.json.bak
