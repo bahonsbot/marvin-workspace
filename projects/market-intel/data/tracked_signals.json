@@ -3,186 +3,6 @@
     "signal": {
       "source": "rss",
       "feed": "Financial_Times",
-      "title": "Gas prices soar as Iranian attacks shut down Qatari production",
-      "url": "https://www.ft.com/content/dac7a77d-e0f4-4f52-a3d4-55b145e67347",
-      "timestamp": "2026-03-02T21:47:29.157219",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-02T21:47:29.159731",
-    "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Market Shock): Qatari production disruption produced immediate and outsized global gas repricing.",
-    "evaluated_at": "2026-03-03T12:48:00+07:00",
-    "legacy_outcome": "correct",
-    "evidence_pack": {
-      "summary": "Physical LNG disruption plus Hormuz transit risk created a textbook vertical gas-price shock.",
-      "drivers": [
-        "Ras Laffan and Mesaieed disruption",
-        "Qatar LNG supply significance (~20% global)",
-        "Maritime/transit threat premium"
-      ],
-      "metrics": [
-        "TTF +52% (intraday up to ~59%)",
-        "UK gas +43%",
-        "JKM +39%"
-      ],
-      "sector_impact": [
-        "Energy producers and gas-linked exposures bid strongly",
-        "Import-dependent regions repriced energy cost risk"
-      ],
-      "confidence": "HIGH"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Blackstone flagship private credit fund hit with wave of redemptions ",
-      "url": "https://www.ft.com/content/7dadc5b5-d5d2-40d6-9ee0-abcb03e0a598",
-      "timestamp": "2026-03-03T07:47:29.573856",
-      "pattern_id": "p018",
-      "pattern": "Regional Banking Crisis 2023",
-      "category": "financial_credit",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "financials_volatility",
-        "treasury_bid",
-        "credit_tightening"
-      ],
-      "predicted_causal_chain": [
-        "Funding stress",
-        "Credit spreads widen",
-        "Bank equities underperform",
-        "Policy support expectations rise"
-      ],
-      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-03T07:47:29.576872",
-    "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Systemic Credit Signal): BCRED redemption wave and sponsor intervention confirmed private-credit liquidity stress and sector contagion.",
-    "evaluated_at": "2026-03-03T13:25:00+07:00",
-    "legacy_outcome": "correct",
-    "evidence_pack": {
-      "summary": "Retail private-credit liquidity anxiety escalated from Blue Owl into Blackstone bellwether stress.",
-      "drivers": [
-        "BCRED redemption requests above gate",
-        "Net outflow pressure",
-        "Sponsor confidence intervention (cap upsize + capital injection)"
-      ],
-      "metrics": [
-        "Redemption requests 7.9% vs 5% cap",
-        "Flows: +2.0B in vs 3.7B out => -1.7B net",
-        "Blackstone/employee injection 400M",
-        "Peer listed names (Apollo/Ares) ~8% down sympathy move"
-      ],
-      "sector_impact": [
-        "Alt-credit managers repriced on liquidity-premium risk",
-        "Contagion concern across semi-liquid private-credit products"
-      ],
-      "confidence": "HIGH"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Rubio says US launched strikes on Iran because Israel planned to attack",
-      "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
-      "timestamp": "2026-03-03T11:47:37.469695",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-03T11:47:37.472484",
-    "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Geopolitical Trigger Event): Rubio's explanation became the catalyst narrative for repricing conflict duration, policy friction, and defense-risk premium.",
-    "evaluated_at": "2026-03-03T13:29:00+08:00",
-    "legacy_outcome": "correct",
-    "evidence_pack": {
-      "summary": "US preemptive-strike rationale tied to Israeli trigger intelligence became dominant escalation narrative.",
-      "drivers": [
-        "Rubio disclosure on preemptive logic",
-        "Expected automatic retaliation framework",
-        "Shift from localized skirmish to broader campaign expectations"
-      ],
-      "metrics": [
-        "Gold at/near fresh highs (~5,419)",
-        "Defense/cyber-defense leadership (e.g. PLTR strength)",
-        "Conflict duration premium repriced toward multi-week scenario"
-      ],
-      "sector_impact": [
-        "Defense/cyber outperformance",
-        "Broader risk premium and policy-friction uncertainty increased"
-      ],
-      "confidence": "HIGH"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
       "title": "\u2018Half of Dubai is booking\u2019: expatriates drive to Oman and Saudi Arabia to find f",
       "url": "https://www.ft.com/content/7ecea3fe-295d-4592-abf2-206da6f6b8ca",
       "timestamp": "2026-03-03T12:47:32.445349",
@@ -917,6 +737,136 @@
       "root_causes": []
     },
     "added_at": "2026-03-06T14:47:30.888793",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "AP_Top",
+      "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
+      "timestamp": "2026-03-06T22:47:31.930388",
+      "pattern_id": "p004",
+      "pattern": "COVID-19 Market Crash",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-06T22:47:31.934290",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "BlackRock limits redemptions at private credit fund as outflows swell",
+      "url": "https://www.ft.com/content/2336fccb-745d-4f3b-8ade-d84f0027e70f",
+      "timestamp": "2026-03-07T02:47:31.081674",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-07T02:47:31.085925",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
+      "url": "https://www.ft.com/content/2fa83bbf-abf2-43f1-b2f0-84a1391150b9",
+      "timestamp": "2026-03-07T10:47:31.914425",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-07T10:47:31.917682",
     "verified": false,
     "actual_outcome": null,
     "notes": ""

@@ -155,8 +155,35 @@
       "projects/market-intel",
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-06",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-07",
+    "accessCount": 2,
     "source": "memory/2026-03-05.md"
+  },
+  {
+    "id": "mi-013",
+    "fact": "Context-sharing cron pipeline Phase 1 complete (Mar 6, 2026): Market-intel pipeline now shares context via memory/cron-context.json — RSS, Reddit, and signal-generator build on each other's work, enabling cross-source correlations.",
+    "category": "status",
+    "timestamp": "2026-03-06T23:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-07",
+    "accessCount": 1,
+    "source": "memory/2026-03-06.md"
+  },
+  {
+    "id": "mi-014",
+    "fact": "High market activity day (Mar 6, 2026): 106 RSS matches (major: oil $90 Brent, Iran war escalation, payrolls -92K, DeepSeek AI rout, private credit stress), 88 Reddit posts (viral: payrolls miss 6992 upvotes), 37 signals generated (27 STRONG BUY, 8 BUY, 2 HOLD).",
+    "category": "status",
+    "timestamp": "2026-03-06T23:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-07",
+    "accessCount": 1,
+    "source": "memory/cron-context.json"
   }
 ]

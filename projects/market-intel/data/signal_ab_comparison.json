@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-06T16:47:29.887182",
-    "baseline_count": 38,
+    "timestamp": "2026-03-07T15:47:28.071376",
+    "baseline_count": 29,
     "enriched_count": 50,
-    "overlap_count": 21,
-    "baseline_only_count": 11,
-    "enriched_only_count": 26,
-    "enriched_lift": 26,
+    "overlap_count": 17,
+    "baseline_only_count": 10,
+    "enriched_only_count": 31,
+    "enriched_lift": 31,
     "baseline_top5": [
-      "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "The Guardian view on rising youth unemployment: regional leaders as well as mini",
-      "Reprieve for India as US eases sanctions on buying Russian oil"
+      "Iran war pushes oil price above $90, threatening rise in global inflation",
+      "\u2018Geopolitical uncertainties\u2019 amid Iran war could slow fall in mortgage rates, sa",
+      "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
+      "U.S. payrolls unexpectedly fell by 92,000 in February; unemployment rate rises t"
     ],
     "enriched_top5": [
-      "Trump embraces longtime US foe Putin, doubting own intel - AP News",
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "The Guardian view on rising youth unemployment: regional leaders as well as mini",
-      "Reprieve for India as US eases sanctions on buying Russian oil"
+      "Iran war pushes oil price above $90, threatening rise in global inflation",
+      "\u2018Geopolitical uncertainties\u2019 amid Iran war could slow fall in mortgage rates, sa",
+      "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
+      "U.S. payrolls unexpectedly fell by 92,000 in February; unemployment rate rises t"
     ]
   }
 ]

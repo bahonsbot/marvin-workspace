@@ -1,0 +1,16 @@
+[
+  {
+    "id": "mtb-001",
+    "fact": "Pre-Market Trading Brief System launched (Mar 6, 2026): Daily brief at 8:00 PM ICT featuring sharp movers >3%, catalyst analysis, sentiment, and actionable insights. Telegram DM delivery configured.",
+    "category": "status",
+    "timestamp": "2026-03-06T14:56:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "areas/people/philippe",
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-07",
+    "accessCount": 1,
+    "source": "memory/2026-03-06.md"
+  }
+]

@@ -1,81 +1,35 @@
 {
-  "generated_at": "2026-03-06T17:16:10.616188",
+  "generated_at": "2026-03-07T15:16:25.289732",
   "total_alerts": 250,
   "rss_count": 200,
   "reddit_count": 50,
   "alerts": [
     {
-      "feed": "Bloomberg_Tech",
-      "title": "Meta Plans to Develop Custom Chips to Train Its AI Models - Bloomberg.com",
-      "summary": "Meta Plans to Develop Custom Chips to Train Its AI Models Bloomberg.com",
-      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPUVRaZnczQWJ0dlh6dDNyVW9TalNkWDBZelljMkkySW5NWl9UaU5FbEtmaHlUcDhoVW9kbFJQWVV1dHAwelozSW9qSE1pWTlOa1hudE9TUFFvZjlZUVF3dWM0eFVrSll2R25tWFBucUV1ZUh4bHk3SHlnenJSVUptSzZIa2VGVjNXaU45b21GeHdwVDZ3X3hzUmFwTGlqS0xSUTc2RzZLQkVIV2hs?oc=5",
-      "published": "Wed, 04 Mar 2026 21:57:32 GMT",
+      "feed": "AP_Top",
+      "title": "AP Explains: What happens when migrants arrive at US border - AP News",
+      "summary": "AP Explains: What happens when migrants arrive at US border AP News",
+      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNSk84NHlld1o2TkdTSGxlWkFRUGdMaFVPclI4MjRHREdTQXo5LWg5bDdqREZzdEF5akpIU2lDaERZdzlsampCRjBRU1RFUVZfdDU5amJuRzhmb0FXTVBYOXZ5ZTM1d244T0tHUnBrS19qalZDd25nYWV1RElRc1FjakR3NENXS1l2MEEwWEJDYlhJTHIzc0JXSzVnUmJsSXM4T3ZjNE05LWNZMm51akZNTXIzSUhadmtuUEE?oc=5",
+      "published": "Wed, 26 Jun 2019 07:00:00 GMT",
       "matched_keywords": [
-        "ev",
-        "chip",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443208Z",
+      "timestamp": "2026-03-07T07:15:12.932606Z",
       "source_type": "rss"
     },
     {
-      "feed": "Bloomberg_Tech",
-      "title": "Meta Plans to Develop Custom Chips to Train Its AI Models - Bloomberg",
-      "summary": "Meta Plans to Develop Custom Chips to Train Its AI Models Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPUVRaZnczQWJ0dlh6dDNyVW9TalNkWDBZelljMkkySW5NWl9UaU5FbEtmaHlUcDhoVW9kbFJQWVV1dHAwelozSW9qSE1pWTlOa1hudE9TUFFvZjlZUVF3dWM0eFVrSll2R25tWFBucUV1ZUh4bHk3SHlnenJSVUptSzZIa2VGVjNXaU45b21GeHdwVDZ3X3hzUmFwTGlqS0xSUTc2RzZLQkVIV2hs?oc=5",
-      "published": "Wed, 04 Mar 2026 21:57:32 GMT",
+      "feed": "AP_Top",
+      "title": "AP Explains: What happens when migrants arrive at US border - AP News",
+      "summary": "AP Explains: What happens when migrants arrive at US border AP News",
+      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNSk84NHlld1o2TkdTSGxlWkFRUGdMaFVPclI4MjRHREdTQXo5LWg5bDdqREZzdEF5akpIU2lDaERZdzlsampCRjBRU1RFUVZfdDU5amJuRzhmb0FXTVBYOXZ5ZTM1d244T0tHUnBrS19qalZDd25nYWV1RElRc1FjakR3NENXS1l2MEEwWEJDYlhJTHIzc0JXSzVnUmJsSXM4T3ZjNE05LWNZMm51akZNTXIzSUhadmtuUEE?oc=5",
+      "published": "Wed, 26 Jun 2019 07:00:00 GMT",
       "matched_keywords": [
-        "ev",
-        "chip",
         "ai"
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.268012Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "summary": "Latest outage darkens island facing dwindling oil reserves and increasing pressure from Washington A blackout hit the western half of Cuba on Wednesday, leaving millions of people in Havana and beyond without power in the latest outage to affect an island struggling with dwindling oil reserves and a crumbling electricity grid. The government\u2019s Electric Union confirmed the outage on social platform X, saying it affected people from the western city of Pinar del Rio to the central town of Camaguey. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/04/blackout-cuba-us-oil",
-      "published": "Wed, 04 Mar 2026 19:42:57 GMT",
-      "matched_keywords": [
-        "oil",
-        "ukraine",
-        "crisis",
-        "health",
-        "eu",
-        "ev",
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "Blackout in Cuba leaves millions without power amid US oil chokehold | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Malena Borrell waits for clients in her shop during a mass blackout across most of Cuba, in Havana on 4 March. Photograph: Norlys Perez/Reuters View image in fullscreen Malena Borrell waits for clients in her shop during a mass blackout across most of Cuba, in Havana on 4 March. Photograph: Norlys Perez/Reuters Cuba Blackout in Cuba leaves millions without power amid US oil chokehold Latest outage darkens island facing dwindling oil reserves and increasing pressure from Washington Associated Press Wed 4 Mar 2026 19.42 GMT Last modified on Thu 5 Mar 2026 10.50 GMT Share Prefer the Guardian on Google A blackout hit the western half of Cuba on Wednesday, leaving millions of people in Havana and beyond without power in the latest outage to affect an island struggling with dwindling oil reserves and a crumbling electricity grid. The government\u2019s Electric Union confirmed the outage on social platform X, saying it affected people from the western city of Pinar del Rio to the central town of Camaguey. The agency said crews were ",
-      "timestamp": "2026-03-06T09:15:26.157242Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "Blackout in Cuba leaves millions without power amid US oil chokehold",
-      "summary": "Latest outage darkens island facing dwindling oil reserves and increasing pressure from Washington A blackout hit the western half of Cuba on Wednesday, leaving millions of people in Havana and beyond without power in the latest outage to affect an island struggling with dwindling oil reserves and a crumbling electricity grid. The government\u2019s Electric Union confirmed the outage on social platform X, saying it affected people from the western city of Pinar del Rio to the central town of Camaguey. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/04/blackout-cuba-us-oil",
-      "published": "Wed, 04 Mar 2026 19:42:57 GMT",
-      "matched_keywords": [
-        "oil",
-        "ukraine",
-        "crisis",
-        "health",
-        "eu",
-        "ev",
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "Blackout in Cuba leaves millions without power amid US oil chokehold | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Malena Borrell waits for clients in her shop during a mass blackout across most of Cuba, in Havana on 4 March. Photograph: Norlys Perez/Reuters View image in fullscreen Malena Borrell waits for clients in her shop during a mass blackout across most of Cuba, in Havana on 4 March. Photograph: Norlys Perez/Reuters Cuba Blackout in Cuba leaves millions without power amid US oil chokehold Latest outage darkens island facing dwindling oil reserves and increasing pressure from Washington Associated Press Wed 4 Mar 2026 19.42 GMT Last modified on Thu 5 Mar 2026 10.50 GMT Share Prefer the Guardian on Google A blackout hit the western half of Cuba on Wednesday, leaving millions of people in Havana and beyond without power in the latest outage to affect an island struggling with dwindling oil reserves and a crumbling electricity grid. The government\u2019s Electric Union confirmed the outage on social platform X, saying it affected people from the western city of Pinar del Rio to the central town of Camaguey. The agency said crews were ",
-      "timestamp": "2026-03-06T08:15:25.246390Z",
+      "timestamp": "2026-03-07T06:15:12.599112Z",
       "source_type": "rss"
     },
     {
@@ -91,7 +45,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884487Z",
+      "timestamp": "2026-03-07T07:15:32.663434Z",
       "source_type": "rss"
     },
     {
@@ -107,53 +61,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690243Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack",
-      "summary": "Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/04/cuba-charges-six-exiles-terrorism-speedboat-attack",
-      "published": "Wed, 04 Mar 2026 07:01:11 GMT",
-      "matched_keywords": [
-        "attack",
-        "war",
-        "ukraine",
-        "military",
-        "crisis",
-        "cut",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP View image in fullscreen Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP Cuba Cuba charges six exiles with terrorism in wake of deadly speedboat attack Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Guardian staff and agencies Wed 4 Mar 2026 07.01 GMT Last modified on Thu 5 Mar 2026 02.30 GMT Share Prefer the Guardian on Google Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. The coast gu",
-      "timestamp": "2026-03-06T09:15:27.308342Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack",
-      "summary": "Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/04/cuba-charges-six-exiles-terrorism-speedboat-attack",
-      "published": "Wed, 04 Mar 2026 07:01:11 GMT",
-      "matched_keywords": [
-        "attack",
-        "war",
-        "ukraine",
-        "military",
-        "crisis",
-        "cut",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "Cuba charges six exiles with terrorism in wake of deadly speedboat attack | Cuba | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP View image in fullscreen Cache of weapons that Cuban authorities allege were recovered from a US-registered speedboat that was involved in a shootout in Cuban waters. Photograph: Ram\u00f3n Espinosa/AP Cuba Cuba charges six exiles with terrorism in wake of deadly speedboat attack Detainees accused of coming from the US with intent to sow chaos and attack military units on Communist-ruled island Guardian staff and agencies Wed 4 Mar 2026 07.01 GMT Last modified on Thu 5 Mar 2026 02.30 GMT Share Prefer the Guardian on Google Cuban prosecutors have formally charged six people with crimes of terrorism after a US-flagged speedboat was involved in a deadly shootout with Cuba\u2019s coast guard last week. The US-based Cuban defendants are accused of packing a boat with weapons and heading toward Cuba in hopes of destabilising the government in Havana. The coast gu",
-      "timestamp": "2026-03-06T08:15:26.469329Z",
+      "timestamp": "2026-03-07T06:15:33.864471Z",
       "source_type": "rss"
     },
     {
@@ -174,7 +82,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884521Z",
+      "timestamp": "2026-03-07T07:15:32.663469Z",
       "source_type": "rss"
     },
     {
@@ -195,49 +103,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690278Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "US military launches operation in Ecuador to combat drug trafficking",
-      "summary": "US Southern Command said joint mission with Ecuador involves \u2018decisive action\u2019 against illicit drug trafficking US and Ecuadorian forces have launched joint operations to combat drug trafficking , the US Southern Command said on Tuesday, but neither side gave more details. Southern Command, which encompasses 31 countries through South and Central America and the Caribbean, said in a statement on X that the \u201cdecisive action\u201d was aimed at combating illicit drug trafficking. Continue reading...",
-      "link": "https://www.theguardian.com/us-news/2026/mar/04/us-military-action-operation-ecuador",
-      "published": "Wed, 04 Mar 2026 04:06:48 GMT",
-      "matched_keywords": [
-        "ukraine",
-        "military",
-        "crisis",
-        "miss",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "US military launches operation in Ecuador to combat drug trafficking | Ecuador | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development The US Southern Command released a brief video of the operation which involved helicopters. Photograph: US Southern Command/X View image in fullscreen The US Southern Command released a brief video of the operation which involved helicopters. Photograph: US Southern Command/X Ecuador US military launches operation in Ecuador to combat drug trafficking US Southern Command said joint mission with Ecuador involves \u2018decisive action\u2019 against illicit drug trafficking Reuters Wed 4 Mar 2026 04.06 GMT Last modified on Thu 5 Mar 2026 02.30 GMT Share Prefer the Guardian on Google US and Ecuadorian forces have launched joint operations to combat drug trafficking , the US Southern Command said on Tuesday, but neither side gave more details. Southern Command, which encompasses 31 countries through South and Central America and the Caribbean, said in a statement on X that the \u201cdecisive action\u201d was aimed at combating illicit drug trafficking. Ecuador\u2019s defense ministry said details of the offensive operations were classified. The an",
-      "timestamp": "2026-03-06T09:15:28.437736Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "US military launches operation in Ecuador to combat drug trafficking",
-      "summary": "US Southern Command said joint mission with Ecuador involves \u2018decisive action\u2019 against illicit drug trafficking US and Ecuadorian forces have launched joint operations to combat drug trafficking , the US Southern Command said on Tuesday, but neither side gave more details. Southern Command, which encompasses 31 countries through South and Central America and the Caribbean, said in a statement on X that the \u201cdecisive action\u201d was aimed at combating illicit drug trafficking. Continue reading...",
-      "link": "https://www.theguardian.com/us-news/2026/mar/04/us-military-action-operation-ecuador",
-      "published": "Wed, 04 Mar 2026 04:06:48 GMT",
-      "matched_keywords": [
-        "ukraine",
-        "military",
-        "crisis",
-        "miss",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "US military launches operation in Ecuador to combat drug trafficking | Ecuador | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development The US Southern Command released a brief video of the operation which involved helicopters. Photograph: US Southern Command/X View image in fullscreen The US Southern Command released a brief video of the operation which involved helicopters. Photograph: US Southern Command/X Ecuador US military launches operation in Ecuador to combat drug trafficking US Southern Command said joint mission with Ecuador involves \u2018decisive action\u2019 against illicit drug trafficking Reuters Wed 4 Mar 2026 04.06 GMT Last modified on Thu 5 Mar 2026 02.30 GMT Share Prefer the Guardian on Google US and Ecuadorian forces have launched joint operations to combat drug trafficking , the US Southern Command said on Tuesday, but neither side gave more details. Southern Command, which encompasses 31 countries through South and Central America and the Caribbean, said in a statement on X that the \u201cdecisive action\u201d was aimed at combating illicit drug trafficking. Ecuador\u2019s defense ministry said details of the offensive operations were classified. The an",
-      "timestamp": "2026-03-06T08:15:27.625004Z",
+      "timestamp": "2026-03-07T06:15:33.864507Z",
       "source_type": "rss"
     },
     {
@@ -253,7 +119,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884557Z",
+      "timestamp": "2026-03-07T07:15:32.663505Z",
       "source_type": "rss"
     },
     {
@@ -269,43 +135,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690314Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Reuters_BreakingViews",
-      "title": "Private credit pioneers see downside of redemption",
-      "summary": "Blackstone reached into its pocket \u200cto help its $82 bln loan fund meet investor cash calls. Outflows, if sustained, may force it to \u200bcurb withdrawals or sell assets. The practice \u200bof packaging hard-to-trade assets into accessible formats \u2060may turn from growth driver into a \u200bdrag.",
-      "link": "https://www.reuters.com/commentary/breakingviews/private-credit-pioneers-see-downside-redemption-2026-03-03/",
-      "published": "Tue, 03 Mar 2026 17:08:50 GMT",
-      "matched_keywords": [
-        "credit",
-        "outflow",
-        "flow",
-        "growth",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884593Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Reuters_BreakingViews",
-      "title": "Private credit pioneers see downside of redemption",
-      "summary": "Blackstone reached into its pocket \u200cto help its $82 bln loan fund meet investor cash calls. Outflows, if sustained, may force it to \u200bcurb withdrawals or sell assets. The practice \u200bof packaging hard-to-trade assets into accessible formats \u2060may turn from growth driver into a \u200bdrag.",
-      "link": "https://www.reuters.com/commentary/breakingviews/private-credit-pioneers-see-downside-redemption-2026-03-03/",
-      "published": "Tue, 03 Mar 2026 17:08:50 GMT",
-      "matched_keywords": [
-        "credit",
-        "outflow",
-        "flow",
-        "growth",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690349Z",
+      "timestamp": "2026-03-07T06:15:33.864542Z",
       "source_type": "rss"
     },
     {
@@ -327,7 +157,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "South Sudan risks return to full-blown civil war as violence escalates | South Sudan | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Displaced civilians attend a community health session last month in Bor, Jonglei state. Photograph: Luis Tato/AFP/Getty Images View image in fullscreen Displaced civilians attend a community health session last month in Bor, Jonglei state. Photograph: Luis Tato/AFP/Getty Images South Sudan South Sudan risks return to full-blown civil war as violence escalates At least 169 killed in raid near Sudan border as clashes between government and opposition forces intensify Carlos Mureithi in Nairobi Tue 3 Mar 2026 15.49 GMT Last modified on Tue 3 Mar 2026 22.26 GMT Share Prefer the Guardian on Google South Sudan is reeling from an escalating conflict between the government-aligned army and opposition forces and allied groups that observers say risks returning the country to a full-blown civil war. Violent confrontations in the world\u2019s youngest country between the military, which is loyal to President Salva Kiir, and insurgents believed to be allied to the suspended vice-president, Riek Machar, have increased in recent w",
-      "timestamp": "2026-03-06T09:15:22.724712Z",
+      "timestamp": "2026-03-07T07:15:20.408345Z",
       "source_type": "rss"
     },
     {
@@ -349,278 +179,22 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "South Sudan risks return to full-blown civil war as violence escalates | South Sudan | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 4 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Displaced civilians attend a community health session last month in Bor, Jonglei state. Photograph: Luis Tato/AFP/Getty Images View image in fullscreen Displaced civilians attend a community health session last month in Bor, Jonglei state. Photograph: Luis Tato/AFP/Getty Images South Sudan South Sudan risks return to full-blown civil war as violence escalates At least 169 killed in raid near Sudan border as clashes between government and opposition forces intensify Carlos Mureithi in Nairobi Tue 3 Mar 2026 15.49 GMT Last modified on Tue 3 Mar 2026 22.26 GMT Share Prefer the Guardian on Google South Sudan is reeling from an escalating conflict between the government-aligned army and opposition forces and allied groups that observers say risks returning the country to a full-blown civil war. Violent confrontations in the world\u2019s youngest country between the military, which is loyal to President Salva Kiir, and insurgents believed to be allied to the suspended vice-president, Riek Machar, have increased in recent w",
-      "timestamp": "2026-03-06T08:15:20.292595Z",
+      "timestamp": "2026-03-07T06:15:20.045874Z",
       "source_type": "rss"
     },
     {
-      "feed": "Guardian_World",
-      "title": "\u2018Imperialist undertones\u2019: global south condemns US-Israeli war with Iran",
-      "summary": "China calls it unacceptable to \u2018kill leader of sovereign state\u2019, while South Africa questions \u2018pre-emptive\u2019 justification Middle East crisis \u2013 live updates The US-Israeli war on Iran has been condemned as illegal across much of the global south, with China saying it was unacceptable to \u201cblatantly kill the leader of a sovereign state\u201d. Many countries objected that negotiations between the US and Iran over its nuclear programme and missile capability were not given a chance to succeed before Washington and Israel began bombing, and analysts often saw the war in terms of a colonial-style exercise of might. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/03/global-south-condemns-us-israeli-war-with-iran",
-      "published": "Tue, 03 Mar 2026 13:11:17 GMT",
+      "feed": "AP_Top",
+      "title": "US & International Top News Stories Today - AP News",
+      "summary": "US & International Top News Stories Today AP News",
+      "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPQXNvcFlHY1N0S3FHdDNsdkVvLTRDQXVoMEZYOF9xR0UydkZDSTBsSGlsLTBaLS01ZU5tdFRqYURCR3VYUzI3TUZtdWc5OTY4V1pVYl9Sd2cwMEU0eGRHQnNzNHU2dlEyR3EtdUUyblY5SHZ3ZDBRblJmeW5ZaWI3cGdfYklBZllR?oc=5",
+      "published": "Tue, 03 Mar 2026 05:39:24 GMT",
       "matched_keywords": [
-        "attack",
-        "missile",
-        "war",
-        "ukraine",
-        "nuclear",
-        "crisis",
-        "miss",
-        "health",
-        "eu",
-        "china",
-        "ev",
-        "ai"
+        "default",
+        "eu"
       ],
       "enriched_text_source": "article_excerpt",
-      "article_excerpt": "\u2018Imperialist undertones\u2019: global south condemns US-Israeli war with Iran | US-Israel war on Iran | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Protesters against the US attacks on Iran march through Peshawar, Pakistan, on Monday. Pakistan is among those calling the killing of Iran\u2019s leader illegal. Photograph: Bilawal Arbab/EPA View image in fullscreen Protesters against the US attacks on Iran march through Peshawar, Pakistan, on Monday. Pakistan is among those calling the killing of Iran\u2019s leader illegal. Photograph: Bilawal Arbab/EPA US-Israel war on Iran \u2018Imperialist undertones\u2019: global south condemns US-Israeli war with Iran China calls it unacceptable to \u2018kill leader of sovereign state\u2019, while South Africa questions \u2018pre-emptive\u2019 justification Middle East crisis \u2013 live updates <",
-      "timestamp": "2026-03-06T08:15:21.712822Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Reuters_BreakingViews",
-      "title": "Why Africa\u2019s growth prospects may be looking up: podcast",
-      "summary": "It\u2019s easy to be glum about a continent grappling with US tariffs, cuts to aid, and climate change. Yet Joe Studwell, author of \u2018How Africa Works\u2019, says the conditions for development are in place. In this episode of The Big View, he tells Peter Thal Larsen why he\u2019s optimistic.",
-      "link": "https://www.reuters.com/podcasts/why-africas-growth-prospects-may-be-looking-up-podcast-2026-03-03/",
-      "published": "Tue, 03 Mar 2026 05:38:49 GMT",
-      "matched_keywords": [
-        "cut",
-        "growth",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884627Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Reuters_BreakingViews",
-      "title": "Why Africa\u2019s growth prospects may be looking up: podcast",
-      "summary": "It\u2019s easy to be glum about a continent grappling with US tariffs, cuts to aid, and climate change. Yet Joe Studwell, author of \u2018How Africa Works\u2019, says the conditions for development are in place. In this episode of The Big View, he tells Peter Thal Larsen why he\u2019s optimistic.",
-      "link": "https://www.reuters.com/podcasts/why-africas-growth-prospects-may-be-looking-up-podcast-2026-03-03/",
-      "published": "Tue, 03 Mar 2026 05:38:49 GMT",
-      "matched_keywords": [
-        "cut",
-        "growth",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690384Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Long-Trusted Haven Trades Are Failing as Gold, Treasuries Fall - Bloomberg.com",
-      "summary": "Long-Trusted Haven Trades Are Failing as Gold, Treasuries Fall Bloomberg.com",
-      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOVVFiSlBoZ0h3WDJjU2duSFE5R2FyWl94NVVad2dUaG5XLUdFemEwVHMyeGUwTnRDYzBiLXNMSHA3dFNYVWRYQmJrbUlRSjdmRmVzc2EtbXdKRjFkOWFuZzUwQUJ3OVRGUVV1bzdnV1VQMzZ6RGhOa3d2WTg0NlBIVWwxUDhpZm1BWnVuVC1obmtRQ2xnOGp3eE5ScUZLdm40UWxlNTJCa093OFlEbk1XMmVB?oc=5",
-      "published": "Thu, 05 Mar 2026 23:47:16 GMT",
-      "matched_keywords": [
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:35.058550Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Long-Trusted Haven Trades Are Failing as Gold, Treasuries Fall - Bloomberg",
-      "summary": "Long-Trusted Haven Trades Are Failing as Gold, Treasuries Fall Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOVVFiSlBoZ0h3WDJjU2duSFE5R2FyWl94NVVad2dUaG5XLUdFemEwVHMyeGUwTnRDYzBiLXNMSHA3dFNYVWRYQmJrbUlRSjdmRmVzc2EtbXdKRjFkOWFuZzUwQUJ3OVRGUVV1bzdnV1VQMzZ6RGhOa3d2WTg0NlBIVWwxUDhpZm1BWnVuVC1obmtRQ2xnOGp3eE5ScUZLdm40UWxlNTJCa093OFlEbk1XMmVB?oc=5",
-      "published": "Thu, 05 Mar 2026 23:47:16 GMT",
-      "matched_keywords": [
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.784720Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "Asia markets set to open lower, tracking Wall Street losses, as Iran conflict sends oil prices soaring",
-      "summary": "Overnight, oil prices broke through the $80 per barrel mark, with Brent futures up 3.54% and last trading at $84.31.",
-      "link": "https://www.cnbc.com/2026/03/06/asia-markets-live-oil-prices-iran-nikkei-kospi-hang-seng.html",
-      "published": "Thu, 05 Mar 2026 23:46:13 GMT",
-      "matched_keywords": [
-        "oil",
-        "conflict"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:32.804109Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "Asia markets set to open lower, tracking Wall Street losses, as Iran conflict sends oil prices soaring",
-      "summary": "Overnight, oil prices broke through the $80 per barrel mark, with Brent futures up 3.54% and last trading at $84.31.",
-      "link": "https://www.cnbc.com/2026/03/06/asia-markets-live-oil-prices-iran-nikkei-kospi-hang-seng.html",
-      "published": "Thu, 05 Mar 2026 23:46:13 GMT",
-      "matched_keywords": [
-        "oil",
-        "conflict"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:33.345897Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "\u2018My mother refuses to turn on the heat\u2019: Will America\u2019s war with Iran really push up our utility bills?",
-      "summary": "\u201cShe is reading alarmist headlines about Iran in the newspapers.\u201d",
-      "link": "https://www.marketwatch.com/story/my-mother-refuses-to-turn-on-the-heat-will-americas-war-with-iran-really-push-up-our-utility-bills-df746548?mod=mw_rss_topstories",
-      "published": "Thu, 05 Mar 2026 23:15:00 GMT",
-      "matched_keywords": [
-        "war"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:32.404894Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "\u2018My mother refuses to turn on the heat\u2019: Will America\u2019s war with Iran really push up our utility bills?",
-      "summary": "\u201cShe is reading alarmist headlines about Iran in the newspapers.\u201d",
-      "link": "https://www.marketwatch.com/story/my-mother-refuses-to-turn-on-the-heat-will-americas-war-with-iran-really-push-up-our-utility-bills-df746548?mod=mw_rss_topstories",
-      "published": "Thu, 05 Mar 2026 23:15:00 GMT",
-      "matched_keywords": [
-        "war"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:32.978852Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "Western automakers outsourced supply chains for decades \u2014 now Chinese rivals have the cost edge",
-      "summary": "A recent Rhodium Group report found that structural factors outweigh the effects of state subsidies on the profit margins of Chinese electric vehicle companies.",
-      "link": "https://www.cnbc.com/2026/03/06/china-ev-cost-advantage-vertical-integration-byd-tesla-rhodium-report.html",
-      "published": "Thu, 05 Mar 2026 23:11:11 GMT",
-      "matched_keywords": [
-        "profit",
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:32.804143Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "Western automakers outsourced supply chains for decades \u2014 now Chinese rivals have the cost edge",
-      "summary": "A recent Rhodium Group report found that structural factors outweigh the effects of state subsidies on the profit margins of Chinese electric vehicle companies.",
-      "link": "https://www.cnbc.com/2026/03/06/china-ev-cost-advantage-vertical-integration-byd-tesla-rhodium-report.html",
-      "published": "Thu, 05 Mar 2026 23:11:11 GMT",
-      "matched_keywords": [
-        "profit",
-        "electric",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:33.345931Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "Trade Desk\u2019s stock soars, as a potential OpenAI partnership gives investors reason to cheer",
-      "summary": "Shares of Trade Desk were having their best day in nearly a year on Thursday amid reports of a potential partnership with OpenAI.",
-      "link": "https://www.marketwatch.com/story/trade-desks-stock-soars-as-a-potential-openai-partnership-gave-investors-reason-to-cheer-542f2331?mod=mw_rss_topstories",
-      "published": "Thu, 05 Mar 2026 23:10:00 GMT",
-      "matched_keywords": [
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:32.404929Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "Trade Desk\u2019s stock soars, as a potential OpenAI partnership gives investors reason to cheer",
-      "summary": "Shares of Trade Desk were having their best day in nearly a year on Thursday amid reports of a potential partnership with OpenAI.",
-      "link": "https://www.marketwatch.com/story/trade-desks-stock-soars-as-a-potential-openai-partnership-gave-investors-reason-to-cheer-542f2331?mod=mw_rss_topstories",
-      "published": "Thu, 05 Mar 2026 23:10:00 GMT",
-      "matched_keywords": [
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:32.978879Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "Kroger extended its streak of sales misses \u2014 but that\u2019s not hurting its profits",
-      "summary": "Kroger\u2019s stock stood out Thursday with healthy gains amid a broader stock market selloff, after the grocery giant reported quarterly profits that beat expectations and showed that it was earning more money on each dollar of sales.",
-      "link": "https://www.marketwatch.com/story/kroger-extended-its-streak-of-sales-misses-but-thats-not-hurting-profits-5001f32e?mod=mw_rss_topstories",
-      "published": "Thu, 05 Mar 2026 23:04:00 GMT",
-      "matched_keywords": [
-        "beat",
-        "miss",
-        "quarterly",
-        "profit",
-        "health",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:32.404965Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "MarketWatch",
-      "title": "Kroger extended its streak of sales misses \u2014 but that\u2019s not hurting its profits",
-      "summary": "Kroger\u2019s stock stood out Thursday with healthy gains amid a broader stock market selloff, after the grocery giant reported quarterly profits that beat expectations and showed that it was earning more money on each dollar of sales.",
-      "link": "https://www.marketwatch.com/story/kroger-extended-its-streak-of-sales-misses-but-thats-not-hurting-profits-5001f32e?mod=mw_rss_topstories",
-      "published": "Thu, 05 Mar 2026 23:04:00 GMT",
-      "matched_keywords": [
-        "beat",
-        "miss",
-        "quarterly",
-        "profit",
-        "health",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:32.978914Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "Dow futures are little changed as index heads for worst week since October on oil surge: Live updates",
-      "summary": "The Dow Jones Industrial Average lost nearly 785 points, or 1.6%, putting the index on track for its second negative week in a row.",
-      "link": "https://www.cnbc.com/2026/03/05/stock-market-today-live-updates.html",
-      "published": "Thu, 05 Mar 2026 23:02:26 GMT",
-      "matched_keywords": [
-        "oil"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:32.804168Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "Dow futures are little changed as index heads for worst week since October on oil surge: Live updates",
-      "summary": "The Dow Jones Industrial Average lost nearly 785 points, or 1.6%, putting the index on track for its second negative week in a row.",
-      "link": "https://www.cnbc.com/2026/03/05/stock-market-today-live-updates.html",
-      "published": "Thu, 05 Mar 2026 23:02:26 GMT",
-      "matched_keywords": [
-        "oil"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:33.345955Z",
+      "article_excerpt": "Google News window.IJ_values = ['\\/\\/www.google.com\\/advanced_search?hl\\x3den-GB\\x26fg\\x3d1',[null,null,\"\",false,null,null,true,false],'0','www.google.com','https:\\/\\/news.google.com\\/', null ,'boq_dotssplashserver_20260303.13_p0','news.google.com','MY:en', 0.0 , 1.0 , 0.0 , null , null , null ,'GB','MkdWUdR9fML00Rts2LLOfQ','fG0bYPHyDBvOzBfjLcIrIw','DEFAULT','English (Malaysia)','', 2026.0 ,'https:\\/\\/news.google.com\\/rss\\/articles\\/CBMiiAFBVV95cUxPQXNvcFlHY1N0S3FHdDNsdkVvLTRDQXVoMEZYOF9xR0UydkZDSTBsSGlsLTBaLS01ZU5tdFRqYURCR3VYUzI3TUZtdWc5OTY4V1pVYl9Sd2cwMEU0eGRHQnNzNHU2dlEyR3EtdUUyblY5SHZ3ZDBRblJmeW5ZaWI3cGdfYklBZllR', null ,'ltr', false ,'https:\\/\\/accounts.google.com\\/AccountChooser?continue\\x3dhttps:\\/\\/news.google.com\\/rss\\/articles\\/CBMiiAFBVV95cUxPQXNvcF",
+      "timestamp": "2026-03-07T07:15:11.066942Z",
       "source_type": "rss"
     },
     {
@@ -635,13 +209,13 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443140Z",
+      "timestamp": "2026-03-07T07:15:33.182581Z",
       "source_type": "rss"
     },
     {
       "feed": "Bloomberg_Tech",
-      "title": "China\u2019s First Gaming Billionaire Aims to Create \u2018Smarter-Than-Man\u2019 AI - Bloomberg",
-      "summary": "China\u2019s First Gaming Billionaire Aims to Create \u2018Smarter-Than-Man\u2019 AI Bloomberg",
+      "title": "China\u2019s First Gaming Billionaire Aims to Create \u2018Smarter-Than-Man\u2019 AI - Bloomberg.com",
+      "summary": "China\u2019s First Gaming Billionaire Aims to Create \u2018Smarter-Than-Man\u2019 AI Bloomberg.com",
       "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQblAzUDlmTms5NHVjUW9TRGtKaG1NYkV6aDJlRExGNS1nMVVjbHNBdzdGYnA4RjRXMlpFSldxRmdTT1ZSMnBVWjRFUFlOa2NqS0ZFOVM0ZmE2cjZkQVNjQXFyZDFMbVN0bngzUVRiVDVKamxwZEJQZ3FERTN2NE1mX09yZGhVSFNqM0ZzUkpqakZLejUxMXBGeE9MaUduV2NhenlJWUV6U2VHbl9KQlU4dW05V3doZ0QxdXNFanQ5ZVRaWS1aZmc?oc=5",
       "published": "Thu, 05 Mar 2026 23:00:18 GMT",
       "matched_keywords": [
@@ -650,107 +224,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.267946Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "Mark Zuckerberg says criminal behavior on Facebook inevitable",
-      "summary": "Meta CEO, grilled about children\u2019s safety, says in taped deposition a user pool of billions will include bad actors Harms to children, such as sexual exploitation and detriments to mental health, are inevitable on Meta\u2019s platforms, the company\u2019s CEO Mark Zuckerberg and Instagram leader Adam Mosseri said in taped depositions played at a trial in New Mexico on Tuesday and Wednesday. \u201cI just think if you\u2019re serving billions of people, the unfortunate reality is that some very small percent of them are going to be criminals, and we should work as hard as we can to stop that activity from happening,\u201d said Zuckerberg. \u201cI don\u2019t think that the standard for our platforms would be that you should assume that it will ever be perfect.\u201d Continue reading...",
-      "link": "https://www.theguardian.com/technology/2026/mar/05/mark-zuckerberg-meta-trial",
-      "published": "Thu, 05 Mar 2026 22:26:14 GMT",
-      "matched_keywords": [
-        "deposit",
-        "health",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:29.278367Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "Mark Zuckerberg says criminal behavior on Facebook inevitable",
-      "summary": "Meta CEO, grilled about children\u2019s safety, says in taped deposition a user pool of billions will include bad actors Harms to children, such as sexual exploitation and detriments to mental health, are inevitable on Meta\u2019s platforms, the company\u2019s CEO Mark Zuckerberg and Instagram leader Adam Mosseri said in taped depositions played at a trial in New Mexico on Tuesday and Wednesday. \u201cI just think if you\u2019re serving billions of people, the unfortunate reality is that some very small percent of them are going to be criminals, and we should work as hard as we can to stop that activity from happening,\u201d said Zuckerberg. \u201cI don\u2019t think that the standard for our platforms would be that you should assume that it will ever be perfect.\u201d Continue reading...",
-      "link": "https://www.theguardian.com/technology/2026/mar/05/mark-zuckerberg-meta-trial",
-      "published": "Thu, 05 Mar 2026 22:26:14 GMT",
-      "matched_keywords": [
-        "deposit",
-        "health",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:28.457543Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "Trump says he fired Anthropic \u2018like dogs\u2019 as Pentagon formally blacklists AI startup",
-      "summary": "Reports say talks have resumed between defense department and startup over military\u2019s use of company\u2019s AI US politics live \u2013 latest updates Trump ousts DHS secretary Kristi Noem Donald Trump boasted about severing ties between the US military and Anthropic on Thursday, the same day multiple reports said that negotiations between the Department of Defense and the AI startup had resumed. They\u2019re among the latest developments in the twisting rift between the US government and the AI company. Continue reading...",
-      "link": "https://www.theguardian.com/technology/2026/mar/05/trump-anthropic-ai-pentagon",
-      "published": "Thu, 05 Mar 2026 22:11:22 GMT",
-      "matched_keywords": [
-        "military",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:29.278131Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "Trump says he fired Anthropic \u2018like dogs\u2019 as Pentagon formally blacklists AI startup",
-      "summary": "Reports say talks have resumed between defense department and startup over military\u2019s use of company\u2019s AI US politics live \u2013 latest updates Trump ousts DHS secretary Kristi Noem Donald Trump boasted about severing ties between the US military and Anthropic on Thursday, the same day multiple reports said that negotiations between the Department of Defense and the AI startup had resumed. They\u2019re among the latest developments in the twisting rift between the US government and the AI company. Continue reading...",
-      "link": "https://www.theguardian.com/technology/2026/mar/05/trump-anthropic-ai-pentagon",
-      "published": "Thu, 05 Mar 2026 22:11:22 GMT",
-      "matched_keywords": [
-        "military",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:28.457341Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Gulf states could review overseas investments to ease Iran war strains",
-      "summary": "Three leading Middle East economies consider options as US-Israeli campaign against Tehran continues",
-      "link": "https://www.ft.com/content/ab7d597d-5e72-4cbf-8d3b-53815695d68f",
-      "published": "Thu, 05 Mar 2026 22:02:29 GMT",
-      "matched_keywords": [
-        "war",
-        "options",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:31.273851Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Financial_Times",
-      "title": "Gulf states could review overseas investments to ease Iran war strains",
-      "summary": "Three leading Middle East economies consider options as US-Israeli campaign against Tehran continues",
-      "link": "https://www.ft.com/content/ab7d597d-5e72-4cbf-8d3b-53815695d68f",
-      "published": "Thu, 05 Mar 2026 22:02:29 GMT",
-      "matched_keywords": [
-        "war",
-        "options",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:31.589086Z",
+      "timestamp": "2026-03-07T06:15:34.388310Z",
       "source_type": "rss"
     },
     {
@@ -767,7 +241,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884296Z",
+      "timestamp": "2026-03-07T07:15:32.663257Z",
       "source_type": "rss"
     },
     {
@@ -784,23 +258,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690023Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "CNBC_Top",
-      "title": "ATMs are fighting for relevance \u2014 here\u2019s how they\u2019re keeping up in a digital economy",
-      "summary": "As payments go digital and consumers migrate online, demand for branches and ATMs is shrinking \u2014 raising new questions about their place in a fully digital economy.",
-      "link": "https://www.cnbc.com/video/2026/03/05/atms-fight-for-relevance-as-the-economy-goes-digital.html",
-      "published": "Thu, 05 Mar 2026 22:00:01 GMT",
-      "matched_keywords": [
-        "rate",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:33.345985Z",
+      "timestamp": "2026-03-07T06:15:33.864293Z",
       "source_type": "rss"
     },
     {
@@ -815,13 +273,13 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443115Z",
+      "timestamp": "2026-03-07T07:15:33.182547Z",
       "source_type": "rss"
     },
     {
       "feed": "Bloomberg_Tech",
-      "title": "Iran War Provides a Large-Scale Test for AI-Assisted Warfare - Bloomberg",
-      "summary": "Iran War Provides a Large-Scale Test for AI-Assisted Warfare Bloomberg",
+      "title": "Iran War Provides a Large-Scale Test for AI-Assisted Warfare - Bloomberg.com",
+      "summary": "Iran War Provides a Large-Scale Test for AI-Assisted Warfare Bloomberg.com",
       "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNWUg2TG5INkZlWl9nbVJjTWdGOTVXWnI0Q2l5YVlvQVFtYXhxZ3REampEb0dQS1lPMHhtNVFVQnR5SzRRcFdBbU9GTUdQSnJvb3dGOVkwTUZaSzY3dUc0VGRxdTBKYzZGaUdBWTZXUW5yQXdQc2plTlBaejBQcjAydUxkXzBZSlU3UG14OFNRQm42dnBMUzBnVkkwZWxkcHJwbTZyOV9uR3U3eXg3MkExTjk1NGo?oc=5",
       "published": "Thu, 05 Mar 2026 21:48:09 GMT",
       "matched_keywords": [
@@ -830,24 +288,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.267921Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "New York and other US states sue Trump over \u2018illegal and reckless\u2019 tariffs",
-      "summary": "Lawsuit says president does not have authority to impose levies and demands refunds from federal government A coalition of Democratic attorneys general and governors across 24 US states are suing Donald Trump to block his latest round of tariffs. The White House is planning to enact a new 15% tariff on all imports after the supreme court declared Trump\u2019s \u201cliberation day\u201d tariffs illegal . The tariffs have yet to go into effect, though the White House said the new rate would start this week. Continue reading...",
-      "link": "https://www.theguardian.com/us-news/2026/mar/05/trump-administration-tariff-lawsuit",
-      "published": "Thu, 05 Mar 2026 20:10:16 GMT",
-      "matched_keywords": [
-        "fed",
-        "rate",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:28.457666Z",
+      "timestamp": "2026-03-07T06:15:34.388282Z",
       "source_type": "rss"
     },
     {
@@ -869,7 +310,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Dismay as Hegseth urges Latin American allies to join \u2018offense\u2019 against cartels | US news | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Pete Hegseth at the inaugural Counter Cartel Conference in Florida on Thursday. Photograph: Rebecca Blackwell/AP View image in fullscreen Pete Hegseth at the inaugural Counter Cartel Conference in Florida on Thursday. Photograph: Rebecca Blackwell/AP US news Dismay as Hegseth urges Latin American allies to join \u2018offense\u2019 against cartels Critics sceptical Pentagon chief\u2019s plan for increased military force \u2013 amid rising US intervention \u2013 will stop drug gangs Tiago Rogero South America correspondent Thu 5 Mar 2026 19.50 GMT Last modified on Thu 5 Mar 2026 20.49 GMT Share Prefer the Guardian on Google Pete Hegseth, the US defence secretary, has urged Latin American countries to adopt a more aggressive approach against drug cartels, warning that the Trump administration may otherwise act unilaterally in the region. Hegseth\u2019s remarks come in a context of escalating US intervention in the region, both militarily and in elections , which culminated in the capture of Venezuelan dictator Nicol\u00e1s Maduro \u2013 the first US",
-      "timestamp": "2026-03-06T09:15:23.794592Z",
+      "timestamp": "2026-03-07T07:15:25.831580Z",
       "source_type": "rss"
     },
     {
@@ -891,69 +332,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Dismay as Hegseth urges Latin American allies to join \u2018offense\u2019 against cartels | US news | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Pete Hegseth at the inaugural Counter Cartel Conference in Florida on Thursday. Photograph: Rebecca Blackwell/AP View image in fullscreen Pete Hegseth at the inaugural Counter Cartel Conference in Florida on Thursday. Photograph: Rebecca Blackwell/AP US news Dismay as Hegseth urges Latin American allies to join \u2018offense\u2019 against cartels Critics sceptical Pentagon chief\u2019s plan for increased military force \u2013 amid rising US intervention \u2013 will stop drug gangs Tiago Rogero South America correspondent Thu 5 Mar 2026 19.50 GMT Last modified on Thu 5 Mar 2026 20.49 GMT Share Prefer the Guardian on Google Pete Hegseth, the US defence secretary, has urged Latin American countries to adopt a more aggressive approach against drug cartels, warning that the Trump administration may otherwise act unilaterally in the region. Hegseth\u2019s remarks come in a context of escalating US intervention in the region, both militarily and in elections , which culminated in the capture of Venezuelan dictator Nicol\u00e1s Maduro \u2013 the first US",
-      "timestamp": "2026-03-06T08:15:22.945311Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "EU agrees to chop meaty names from vegetarian and vegan food products",
-      "summary": "Lawmakers will outlaw use of 31 meat-related names as part of efforts to help livestock farmers in food supply markets EU lawmakers have agreed to ban meaty names such as steak and bacon for vegetarian and vegan foods, but \u201cveggie burgers\u201d and \u201cmeat-free sausages\u201d will remain on the table. Negotiators from the European parliament and EU council of ministers found a recipe for compromise on rules for food names on Thursday, although critics said they were creating needless complexity. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/05/eu-ban-meaty-names-vegetarian-vegan-food",
-      "published": "Thu, 05 Mar 2026 19:44:04 GMT",
-      "matched_keywords": [
-        "european",
-        "eu",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:29.278246Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "EU agrees to chop meaty names from vegetarian and vegan food products",
-      "summary": "Lawmakers will outlaw use of 31 meat-related names as part of efforts to help livestock farmers in food supply markets EU lawmakers have agreed to ban meaty names such as steak and bacon for vegetarian and vegan foods, but \u201cveggie burgers\u201d and \u201cmeat-free sausages\u201d will remain on the table. Negotiators from the European parliament and EU council of ministers found a recipe for compromise on rules for food names on Thursday, although critics said they were creating needless complexity. Continue reading...",
-      "link": "https://www.theguardian.com/world/2026/mar/05/eu-ban-meaty-names-vegetarian-vegan-food",
-      "published": "Thu, 05 Mar 2026 19:44:04 GMT",
-      "matched_keywords": [
-        "european",
-        "eu",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:28.457464Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Tech",
-      "title": "US Military Relying on AI as Key Tool to Speed Iran Operations - Bloomberg.com",
-      "summary": "US Military Relying on AI as Key Tool to Speed Iran Operations Bloomberg.com",
-      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOQjFxaGs4NWc2OGxTQ1NDMTIzUXZLdl9ObmxvMEd5OHdDUFV6bHNFMk5VTHR0VnIzZ1Y0NFNnaUFEaVdZUFlLbG1OLWx5RnAwRWpWWXdvZlJyUVNuUFdoTHFrUUN0bmFSbFR3TUNoVEMxTzNXZ0FSQm9sc0hvWXBXdDBKUUNEaXNZS3YxajRmbkI4OTJQbEdwRzMxN0dTWld2YmszTG5TRkVicTJvZ0dIeHUzYw?oc=5",
-      "published": "Thu, 05 Mar 2026 19:22:10 GMT",
-      "matched_keywords": [
-        "military",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443097Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Tech",
-      "title": "US Military Relying on AI as Key Tool to Speed Iran Operations - Bloomberg",
-      "summary": "US Military Relying on AI as Key Tool to Speed Iran Operations Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOQjFxaGs4NWc2OGxTQ1NDMTIzUXZLdl9ObmxvMEd5OHdDUFV6bHNFMk5VTHR0VnIzZ1Y0NFNnaUFEaVdZUFlLbG1OLWx5RnAwRWpWWXdvZlJyUVNuUFdoTHFrUUN0bmFSbFR3TUNoVEMxTzNXZ0FSQm9sc0hvWXBXdDBKUUNEaXNZS3YxajRmbkI4OTJQbEdwRzMxN0dTWld2YmszTG5TRkVicTJvZ0dIeHUzYw?oc=5",
-      "published": "Thu, 05 Mar 2026 19:22:10 GMT",
-      "matched_keywords": [
-        "military",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.267904Z",
+      "timestamp": "2026-03-07T06:15:26.122505Z",
       "source_type": "rss"
     },
     {
@@ -973,7 +352,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Three men deported by US file legal case against Eswatini over detention | Eswatini | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 2 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development The claimants, one of whom has since been repatriated to his home country, were held at Matsapha correctional complex in Eswatini. Photograph: AP View image in fullscreen The claimants, one of whom has since been repatriated to his home country, were held at Matsapha correctional complex in Eswatini. Photograph: AP Eswatini Three men deported by US file legal case against Eswatini over detention The men, sent to Africa after completing criminal sentences in the US, are from Cuba, Jamaica and Yemen Rachel Savage Southern Africa correspondent Thu 5 Mar 2026 19.17 GMT First published on Thu 5 Mar 2026 15.50 GMT Share Prefer the Guardian on Google Three men deported by the US to Eswatini \u2013 rather than their home countries \u2013 have filed a case against Eswatini\u2019s government with the African Union\u2019s human rights body, claiming their detention was an unlawful violation of their rights. Two of the claimants, from Cuba and Yemen, have been in prison in Eswatini, formerly Swaziland, for eight months . The third, Orville Etor",
-      "timestamp": "2026-03-06T09:15:18.318964Z",
+      "timestamp": "2026-03-07T07:15:17.093994Z",
       "source_type": "rss"
     },
     {
@@ -993,73 +372,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Three men deported by US file legal case against Eswatini over detention | Eswatini | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 2 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development The claimants, one of whom has since been repatriated to his home country, were held at Matsapha correctional complex in Eswatini. Photograph: AP View image in fullscreen The claimants, one of whom has since been repatriated to his home country, were held at Matsapha correctional complex in Eswatini. Photograph: AP Eswatini Three men deported by US file legal case against Eswatini over detention The men, sent to Africa after completing criminal sentences in the US, are from Cuba, Jamaica and Yemen Rachel Savage Southern Africa correspondent Thu 5 Mar 2026 19.17 GMT First published on Thu 5 Mar 2026 15.50 GMT Share Prefer the Guardian on Google Three men deported by the US to Eswatini \u2013 rather than their home countries \u2013 have filed a case against Eswatini\u2019s government with the African Union\u2019s human rights body, claiming their detention was an unlawful violation of their rights. Two of the claimants, from Cuba and Yemen, have been in prison in Eswatini, formerly Swaziland, for eight months . The third, Orville Etor",
-      "timestamp": "2026-03-06T08:15:16.999271Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "The Guardian view on rising youth unemployment: regional leaders as well as ministers must take action | Editorial",
-      "summary": "Worsening health is only part of the reason for the concerning rise in young people who are neither studying nor working Launching a review into unemployment and economic inactivity among young people in December, the former health secretary Alan Milburn described the situation as a \u201cnational outrage\u201d, and suggested that a \u201ccoalition of the concerned\u201d would be needed to turn things around for the 16- to 24-year-olds known as Neets (not in education, employment or training). The latest figures, showing another increase in the final quarter of last year, to 957,000, underline the scale of the problem. The review is evidence that ministers are paying attention. The \u201cyouth guarantee\u201d in the autumn budget means that \u00a3820m will be spent on paid work placements for 18- to 21-year-olds. But further bold reforms are needed if young adults are to be enabled to flourish. Do you have an opinion on the issues raised in this article? If you would like to submit a response of up to 300 words by email to be considered for publication in our letters section, please click here . Continue reading...",
-      "link": "https://www.theguardian.com/commentisfree/2026/mar/05/the-guardian-view-on-rising-youth-unemployment-regional-leaders-as-well-as-ministers-must-take-action",
-      "published": "Thu, 05 Mar 2026 18:29:22 GMT",
-      "matched_keywords": [
-        "regional",
-        "unemployment",
-        "health",
-        "who",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:29.278473Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_Business",
-      "title": "The Guardian view on rising youth unemployment: regional leaders as well as ministers must take action | Editorial",
-      "summary": "Worsening health is only part of the reason for the concerning rise in young people who are neither studying nor working Launching a review into unemployment and economic inactivity among young people in December, the former health secretary Alan Milburn described the situation as a \u201cnational outrage\u201d, and suggested that a \u201ccoalition of the concerned\u201d would be needed to turn things around for the 16- to 24-year-olds known as Neets (not in education, employment or training). The latest figures, showing another increase in the final quarter of last year, to 957,000, underline the scale of the problem. The review is evidence that ministers are paying attention. The \u201cyouth guarantee\u201d in the autumn budget means that \u00a3820m will be spent on paid work placements for 18- to 21-year-olds. But further bold reforms are needed if young adults are to be enabled to flourish. Do you have an opinion on the issues raised in this article? If you would like to submit a response of up to 300 words by email to be considered for publication in our letters section, please click here . Continue reading...",
-      "link": "https://www.theguardian.com/commentisfree/2026/mar/05/the-guardian-view-on-rising-youth-unemployment-regional-leaders-as-well-as-ministers-must-take-action",
-      "published": "Thu, 05 Mar 2026 18:29:22 GMT",
-      "matched_keywords": [
-        "regional",
-        "unemployment",
-        "health",
-        "who",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:28.457771Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Trump Is Undoing Trades He Pushed as Oil, Yields, Dollar Surge - Bloomberg.com",
-      "summary": "Trump Is Undoing Trades He Pushed as Oil, Yields, Dollar Surge Bloomberg.com",
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPeThNSXluc3dOWVVIX0pPRHdiX0pPaEIyVzAwakZNSkJ1aEdzMGFBeGFJNHo1TXlRRV90SzNDNEpOSUJIbk1IUlJ5cndwWk50X2ozdncyWFQ0bHV3NkhHYTJpcXBXNUEzeHJxZ3cyV2d6ZlR0bTVrNHZDSEY4bl9Walp3WUdhTlNaX1p1TnptNUVJZ2dWQUdSQXJfZVhOYXF1Zi0wUEtfakpFcjZtYzJSUQ?oc=5",
-      "published": "Thu, 05 Mar 2026 16:51:05 GMT",
-      "matched_keywords": [
-        "oil"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:35.058640Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "Trump Is Undoing Trades He Pushed as Oil, Yields, Dollar Surge - Bloomberg",
-      "summary": "Trump Is Undoing Trades He Pushed as Oil, Yields, Dollar Surge Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPeThNSXluc3dOWVVIX0pPRHdiX0pPaEIyVzAwakZNSkJ1aEdzMGFBeGFJNHo1TXlRRV90SzNDNEpOSUJIbk1IUlJ5cndwWk50X2ozdncyWFQ0bHV3NkhHYTJpcXBXNUEzeHJxZ3cyV2d6ZlR0bTVrNHZDSEY4bl9Walp3WUdhTlNaX1p1TnptNUVJZ2dWQUdSQXJfZVhOYXF1Zi0wUEtfakpFcjZtYzJSUQ?oc=5",
-      "published": "Thu, 05 Mar 2026 16:51:05 GMT",
-      "matched_keywords": [
-        "oil"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.784771Z",
+      "timestamp": "2026-03-07T06:15:16.633662Z",
       "source_type": "rss"
     },
     {
@@ -1078,7 +391,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "South Africa\u2019s president calls Trump\u2019s policy to offer refuge to white Afrikaners \u2018racist\u2019 | South Africa | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Ramaphosa says Trump ambushed him in the Oval Office in May 2025 by showing a video he falsely claimed showed \u2018white genocide\u2019 in South Africa. Photograph: Evan Vucci/AP View image in fullscreen Ramaphosa says Trump ambushed him in the Oval Office in May 2025 by showing a video he falsely claimed showed \u2018white genocide\u2019 in South Africa. Photograph: Evan Vucci/AP South Africa South Africa\u2019s president calls Trump\u2019s policy to offer refuge to white Afrikaners \u2018racist\u2019 US president is \u2018truly uninformed\u2019 for spreading claims of \u2018white genocide\u2019 in South Africa, Cyril Ramaphosa tells New York Times Rachel Savage in Johannesburg Thu 5 Mar 2026 16.23 GMT Last modified on Thu 5 Mar 2026 17.03 GMT Share Prefer the Guardian on Google South Africa\u2019s president, Cyril Ramaphosa, has called Donald Trump\u2019s policy of allowing white Afrikaners to apply for refugee status in the US \u201cracist\u201d, saying the US president was \u201ctruly uninformed\u201d in a rare instance of direct criticism. Ramaphosa told the New York Times ",
-      "timestamp": "2026-03-06T09:15:20.234578Z",
+      "timestamp": "2026-03-07T07:15:18.153987Z",
       "source_type": "rss"
     },
     {
@@ -1097,7 +410,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "South Africa\u2019s president calls Trump\u2019s policy to offer refuge to white Afrikaners \u2018racist\u2019 | South Africa | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development Ramaphosa says Trump ambushed him in the Oval Office in May 2025 by showing a video he falsely claimed showed \u2018white genocide\u2019 in South Africa. Photograph: Evan Vucci/AP View image in fullscreen Ramaphosa says Trump ambushed him in the Oval Office in May 2025 by showing a video he falsely claimed showed \u2018white genocide\u2019 in South Africa. Photograph: Evan Vucci/AP South Africa South Africa\u2019s president calls Trump\u2019s policy to offer refuge to white Afrikaners \u2018racist\u2019 US president is \u2018truly uninformed\u2019 for spreading claims of \u2018white genocide\u2019 in South Africa, Cyril Ramaphosa tells New York Times Rachel Savage in Johannesburg Thu 5 Mar 2026 16.23 GMT Last modified on Thu 5 Mar 2026 17.03 GMT Share Prefer the Guardian on Google South Africa\u2019s president, Cyril Ramaphosa, has called Donald Trump\u2019s policy of allowing white Afrikaners to apply for refugee status in the US \u201cracist\u201d, saying the US president was \u201ctruly uninformed\u201d in a rare instance of direct criticism. Ramaphosa told the New York Times ",
-      "timestamp": "2026-03-06T08:15:18.059284Z",
+      "timestamp": "2026-03-07T06:15:17.795155Z",
       "source_type": "rss"
     },
     {
@@ -1111,13 +424,13 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443019Z",
+      "timestamp": "2026-03-07T07:15:33.182505Z",
       "source_type": "rss"
     },
     {
       "feed": "Bloomberg_Tech",
-      "title": "Netflix Acquires Ben Affleck-Founded AI Moviemaking Business - Bloomberg",
-      "summary": "Netflix Acquires Ben Affleck-Founded AI Moviemaking Business Bloomberg",
+      "title": "Netflix Acquires Ben Affleck-Founded AI Moviemaking Business - Bloomberg.com",
+      "summary": "Netflix Acquires Ben Affleck-Founded AI Moviemaking Business Bloomberg.com",
       "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPaVhqUG9YMUNzbVFsVzZjMS03LXhhb2RpeVhPMWZvbXZ6WF95RnJpSjhWUExMZkxvaXBwdEZOTlo3bHBvWi04dXh3ZGZ4QTBQWHE2QndOTDNfTmlSMjcxVVN2LXk5a1l4SVdEU2ZhZWpicU8yaHBtU28wWkZDWGhoM3JNcDk1NEN1a3pMMHlZOXYwZk91RGlIR0I3dV9hU0tyMU5heGpUeDRVUDVIcURuNg?oc=5",
       "published": "Thu, 05 Mar 2026 16:00:00 GMT",
       "matched_keywords": [
@@ -1125,7 +438,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.267851Z",
+      "timestamp": "2026-03-07T06:15:34.388244Z",
       "source_type": "rss"
     },
     {
@@ -1139,13 +452,13 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443077Z",
+      "timestamp": "2026-03-07T07:15:33.182464Z",
       "source_type": "rss"
     },
     {
       "feed": "Bloomberg_Tech",
-      "title": "Brain Tech Startup Science Corp. Raises $230 Million to Treat Blindness - Bloomberg",
-      "summary": "Brain Tech Startup Science Corp. Raises $230 Million to Treat Blindness Bloomberg",
+      "title": "Brain Tech Startup Science Corp. Raises $230 Million to Treat Blindness - Bloomberg.com",
+      "summary": "Brain Tech Startup Science Corp. Raises $230 Million to Treat Blindness Bloomberg.com",
       "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNLU1Va3hSVVJNRkJxZE5JQTFIZ0xoVlo0bHdrZHlhYnpFTTlVRmtCeFhyN2pYeFBHaXdzNlVQODA3OXhtc0c3clNIdUwweW5nNmtHQ1o4SmR6Ym5PVEczcm14SzN4REhJLWFyTkk3VjNaWktNTThNekVVdHBackh0ZHlZY2EybjNjQ0RvQS1KUC16eFpRMkxzVTBrQXlfaHpVNW9BRWdFS05tT2dOUzlCczZ3Ml9TV0htTUtZZw?oc=5",
       "published": "Thu, 05 Mar 2026 15:00:19 GMT",
       "matched_keywords": [
@@ -1153,60 +466,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.267885Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "JPMorgan\u2019s 3,500-Person Leveraged Finance Event Jolted by War Reality Check - Bloomberg.com",
-      "summary": "JPMorgan\u2019s 3,500-Person Leveraged Finance Event Jolted by War Reality Check Bloomberg.com",
-      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNeUp1LTlCTEx5Q2gwb3NjMkpSbFFKUlJVZVdDTklqTmdmMkZaTVM1VG9JOUZwNkU0T09hV0FNa0JOQVZvNnpnNTNZTUZ0ZUw1clAxN1R5NDRzUUtSQzZxcWk3X193cTdrMWpQeG0xTV9nSERRUG1Cd1lYS3M0c0xUdWczbHBScVRhTmI5SjhHRmh1XzhWN0dXaV9fXzJ5alhuSzNHbUY1YnBCSVBsd3FpczZ3b1YtQQ?oc=5",
-      "published": "Thu, 05 Mar 2026 14:25:00 GMT",
-      "matched_keywords": [
-        "war",
-        "ev"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:35.058670Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "\u2018It creates a sense of belonging\u2019: Brazil bets on hiking trails for conservation",
-      "summary": "The country\u2019s network of footpaths is growing \u2013 with hopes they will develop local economies and better preserve the environment Follow the yellow footprints along Brazil\u2019s newest long-distance trail, and they will take you through lush green forests and sandy shrubland, past sweeping vistas and bizarre rock formations, into grottos and rural communities. Spanning 186km (115 miles) of paths once used by 19th-century merchants, the Caminhos da Ibiapaba is the first waymarked long-distance footpath in Brazil\u2019s north-east region, adding to a growing network of hiking trails in the country. Continue reading...",
-      "link": "https://www.theguardian.com/environment/2026/mar/05/brazil-hiking-trails-conservation",
-      "published": "Thu, 05 Mar 2026 14:01:39 GMT",
-      "matched_keywords": [
-        "ukraine",
-        "crisis",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "\u2018It creates a sense of belonging\u2019: Brazil bets on hiking trails for conservation | Environment | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us View image in fullscreen The Caminhos da Ibiapaba is Brazil\u2019s newest long-distance trail, with views over the Atlantic forest, pictured. Photograph: Victor Ara\u00fajo/FUNBIO The alternatives \u2018It creates a sense of belonging\u2019: Brazil bets on hiking trails for conservation The Caminhos da Ibiapaba is Brazil\u2019s newest long-distance trail, with views over the Atlantic forest, pictured. Photograph: Victor Ara\u00fajo/FUNBIO The country\u2019s network of footpaths is growing \u2013 with hopes they will develop local economies and better preserve the environment By Constance Malleret in Ubajara and Sete Cidades, Brazil Thu 5 Mar 2026 14.01 GMT Last modified on Thu 5 Mar 2026 14.20 GMT Share Prefer the Guardian on Google F ollow the yellow footprints along Brazil\u2019s newest long-distance trail, and they will take you through lush green forests and sandy shrubland, past sweeping vistas and bizarre rock formations, into grottos and rural communities. Spanning 186km (115 miles) of paths once used by 19th-century merchants, the Caminhos da Ibiapaba is the first waymarked long-distance footpath in Brazil\u2019s north-east region, add",
-      "timestamp": "2026-03-06T09:15:24.971124Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Guardian_World",
-      "title": "\u2018It creates a sense of belonging\u2019: Brazil bets on hiking trails for conservation",
-      "summary": "The country\u2019s network of footpaths is growing \u2013 with hopes they will develop local economies and better preserve the environment Follow the yellow footprints along Brazil\u2019s newest long-distance trail, and they will take you through lush green forests and sandy shrubland, past sweeping vistas and bizarre rock formations, into grottos and rural communities. Spanning 186km (115 miles) of paths once used by 19th-century merchants, the Caminhos da Ibiapaba is the first waymarked long-distance footpath in Brazil\u2019s north-east region, adding to a growing network of hiking trails in the country. Continue reading...",
-      "link": "https://www.theguardian.com/environment/2026/mar/05/brazil-hiking-trails-conservation",
-      "published": "Thu, 05 Mar 2026 14:01:39 GMT",
-      "matched_keywords": [
-        "ukraine",
-        "crisis",
-        "health",
-        "eu",
-        "ev",
-        "ai"
-      ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "\u2018It creates a sense of belonging\u2019: Brazil bets on hiking trails for conservation | Environment | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 3 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us View image in fullscreen The Caminhos da Ibiapaba is Brazil\u2019s newest long-distance trail, with views over the Atlantic forest, pictured. Photograph: Victor Ara\u00fajo/FUNBIO The alternatives \u2018It creates a sense of belonging\u2019: Brazil bets on hiking trails for conservation The Caminhos da Ibiapaba is Brazil\u2019s newest long-distance trail, with views over the Atlantic forest, pictured. Photograph: Victor Ara\u00fajo/FUNBIO The country\u2019s network of footpaths is growing \u2013 with hopes they will develop local economies and better preserve the environment By Constance Malleret in Ubajara and Sete Cidades, Brazil Thu 5 Mar 2026 14.01 GMT Last modified on Thu 5 Mar 2026 14.20 GMT Share Prefer the Guardian on Google F ollow the yellow footprints along Brazil\u2019s newest long-distance trail, and they will take you through lush green forests and sandy shrubland, past sweeping vistas and bizarre rock formations, into grottos and rural communities. Spanning 186km (115 miles) of paths once used by 19th-century merchants, the Caminhos da Ibiapaba is the first waymarked long-distance footpath in Brazil\u2019s north-east region, add",
-      "timestamp": "2026-03-06T08:15:24.099192Z",
+      "timestamp": "2026-03-07T06:15:34.388204Z",
       "source_type": "rss"
     },
     {
@@ -1227,7 +487,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Lewis Hamilton sets sights on racing in an African grand prix before retiring | Lewis Hamilton | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us Football Cricket Rugby union Tennis Cycling F1 Golf US sports Lewis Hamilton suggested former colonial rulers still exerted undue power in Africa and called for action to reverse that influence. Photograph: Mario Renzi/Formula 1/Getty Images View image in fullscreen Lewis Hamilton suggested former colonial rulers still exerted undue power in Africa and called for action to reverse that influence. Photograph: Mario Renzi/Formula 1/Getty Images Lewis Hamilton Lewis Hamilton sets sights on racing in an African grand prix before retiring British former champion hits out at former colonial rulers \u2018I\u2019m hoping countries unite and take Africa back\u2019 PA Media Thu 5 Mar 2026 13.37 GMT Last modified on Thu 5 Mar 2026 16.25 GMT Share Prefer the Guardian on Google Lewis Hamilton has called for a movement to \u201ctake Africa back\u201d, claiming the continent is being \u201ccontrolled\u201d by European powers. On the eve of the new Formula One season in Melbourne, the seven-time champion outlined his ambition to compete in a grand prix on African soil. But the 41-year-old, F1\u2019s first black race driver, did not stop there. He su",
-      "timestamp": "2026-03-06T09:15:21.560368Z",
+      "timestamp": "2026-03-07T07:15:19.203509Z",
       "source_type": "rss"
     },
     {
@@ -1248,7 +508,7 @@
       ],
       "enriched_text_source": "article_excerpt",
       "article_excerpt": "Lewis Hamilton sets sights on racing in an African grand prix before retiring | Lewis Hamilton | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us Football Cricket Rugby union Tennis Cycling F1 Golf US sports Lewis Hamilton suggested former colonial rulers still exerted undue power in Africa and called for action to reverse that influence. Photograph: Mario Renzi/Formula 1/Getty Images View image in fullscreen Lewis Hamilton suggested former colonial rulers still exerted undue power in Africa and called for action to reverse that influence. Photograph: Mario Renzi/Formula 1/Getty Images Lewis Hamilton Lewis Hamilton sets sights on racing in an African grand prix before retiring British former champion hits out at former colonial rulers \u2018I\u2019m hoping countries unite and take Africa back\u2019 PA Media Thu 5 Mar 2026 13.37 GMT Last modified on Thu 5 Mar 2026 16.25 GMT Share Prefer the Guardian on Google Lewis Hamilton has called for a movement to \u201ctake Africa back\u201d, claiming the continent is being \u201ccontrolled\u201d by European powers. On the eve of the new Formula One season in Melbourne, the seven-time champion outlined his ambition to compete in a grand prix on African soil. But the 41-year-old, F1\u2019s first black race driver, did not stop there. He su",
-      "timestamp": "2026-03-06T08:15:19.243755Z",
+      "timestamp": "2026-03-07T06:15:18.981601Z",
       "source_type": "rss"
     },
     {
@@ -1263,7 +523,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884345Z",
+      "timestamp": "2026-03-07T07:15:32.663292Z",
       "source_type": "rss"
     },
     {
@@ -1278,21 +538,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690100Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Markets",
-      "title": "This Oil Shock Hits Differently for the US - Bloomberg.com",
-      "summary": "This Oil Shock Hits Differently for the US Bloomberg.com",
-      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOdzd4Vm9sa1ZTSzBUMWRkTDB3STBDeVRYMk1KTXR0dGZIUHpILUltM041Rzl0WUtkYVFPLVR0VXZNNGN4dUdybl9WOV9JRWdJSkdNUTd6ZnFqZ2RGNy1VMnJKYzZFMDZQdnhqd3BIQkMzZHpUbWpfaGE1YkNEOGFWSE03OTZab05VdC1sNTZxZU1IOVlScHpDdmlyZ1g?oc=5",
-      "published": "Thu, 05 Mar 2026 10:30:05 GMT",
-      "matched_keywords": [
-        "oil"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:35.058710Z",
+      "timestamp": "2026-03-07T06:15:33.864329Z",
       "source_type": "rss"
     },
     {
@@ -1310,7 +556,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884381Z",
+      "timestamp": "2026-03-07T07:15:32.663327Z",
       "source_type": "rss"
     },
     {
@@ -1328,7 +574,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690135Z",
+      "timestamp": "2026-03-07T06:15:33.864364Z",
       "source_type": "rss"
     },
     {
@@ -1344,13 +590,13 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443171Z",
+      "timestamp": "2026-03-07T07:15:33.182636Z",
       "source_type": "rss"
     },
     {
       "feed": "Bloomberg_Tech",
-      "title": "NATO to Shift Focus From Tanks to Drones, AI at July Summit - Bloomberg",
-      "summary": "NATO to Shift Focus From Tanks to Drones, AI at July Summit Bloomberg",
+      "title": "NATO to Shift Focus From Tanks to Drones, AI at July Summit - Bloomberg.com",
+      "summary": "NATO to Shift Focus From Tanks to Drones, AI at July Summit Bloomberg.com",
       "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPN2JTUUd1SW91bWo4REdiUzcyT010RHhLd0xZSVloVFVkR2tHZFhqMTY5RHltek9yZzVRQ0pwV1F6TjlXZkxUendZQlYxRVprbV9wb2NtLWtTb1hQWk5uVndmcHlFMk9uWEdranE2XzNJdEM4MnVLOFVhT3pQcFotZmU5czZrbnVKMF9yX3Q5X1F1VTRCS0JVOXNmNUs2emwxZ19KNmQxVUhHN19iQVE?oc=5",
       "published": "Thu, 05 Mar 2026 05:15:00 GMT",
       "matched_keywords": [
@@ -1360,7 +606,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.267977Z",
+      "timestamp": "2026-03-07T06:15:34.388349Z",
       "source_type": "rss"
     },
     {
@@ -1377,7 +623,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884416Z",
+      "timestamp": "2026-03-07T07:15:32.663362Z",
       "source_type": "rss"
     },
     {
@@ -1394,7 +640,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690171Z",
+      "timestamp": "2026-03-07T06:15:33.864399Z",
       "source_type": "rss"
     },
     {
@@ -1410,7 +656,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:33.884451Z",
+      "timestamp": "2026-03-07T07:15:32.663397Z",
       "source_type": "rss"
     },
     {
@@ -1426,41 +672,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:34.690206Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Tech",
-      "title": "Alibaba Qwen Head Who Warned of OpenAI Gap Steps Down - Bloomberg.com",
-      "summary": "Alibaba Qwen Head Who Warned of OpenAI Gap Steps Down Bloomberg.com",
-      "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQN0VGb0hjRHgtLXBjb3BQeDc3T0MxWGlnRS1aQjlWZzM1TXhDeWdSd1RlSC1vNk03anVIaUZoV1hWSlNRSjN1cVJDTXdlYjJ3WXo0a2tLejlmNXJscXozbWttenBaLXp0NFhMNnZtVm92SktmTFlYUERYLXRfbzZmMHVGODNwaHNCS1NDSUJ3UkdRME10OXlhRVNtejU2S09MWjlsMF9hQQ?oc=5",
-      "published": "Thu, 05 Mar 2026 03:07:00 GMT",
-      "matched_keywords": [
-        "war",
-        "eps",
-        "who",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443156Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "Bloomberg_Tech",
-      "title": "Alibaba Qwen Head Who Warned of OpenAI Gap Steps Down - Bloomberg",
-      "summary": "Alibaba Qwen Head Who Warned of OpenAI Gap Steps Down Bloomberg",
-      "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQN0VGb0hjRHgtLXBjb3BQeDc3T0MxWGlnRS1aQjlWZzM1TXhDeWdSd1RlSC1vNk03anVIaUZoV1hWSlNRSjN1cVJDTXdlYjJ3WXo0a2tLejlmNXJscXozbWttenBaLXp0NFhMNnZtVm92SktmTFlYUERYLXRfbzZmMHVGODNwaHNCS1NDSUJ3UkdRME10OXlhRVNtejU2S09MWjlsMF9hQQ?oc=5",
-      "published": "Thu, 05 Mar 2026 03:07:00 GMT",
-      "matched_keywords": [
-        "war",
-        "eps",
-        "who",
-        "ai"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.267962Z",
+      "timestamp": "2026-03-07T06:15:33.864434Z",
       "source_type": "rss"
     },
     {
@@ -1475,7 +687,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:14.696243Z",
+      "timestamp": "2026-03-07T07:15:12.683978Z",
       "source_type": "rss"
     },
     {
@@ -1490,7 +702,413 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:14.594381Z",
+      "timestamp": "2026-03-07T06:15:12.309251Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "China's Jiangsu touts AI industrial push as Xi urges province to lead",
+      "summary": "Government officials from China's eastern economic powerhouse Jiangsu highlighted plans to expand artificial intelligence infrastructure and upgrade manufacturing on Saturday, after \u200cPresident Xi Jinping urged the province to take the lead in developing \u200ctechnology-driven growth. Jiangsu is China's second-largest provincial economy and one of its most important manufacturing and export bases. The province \u200bgenerated about 14 trillion yuan ($2 trillion) in output in 2025, making its economy larger than countries such as Spain and central to Beijing's push to sustain growth and industrial competitiveness amid rising geopolitical and trade tensions with the West.",
+      "link": "https://finance.yahoo.com/news/chinas-jiangsu-touts-ai-industrial-063631376.html",
+      "published": "Sat, 07 Mar 2026 06:36:31 GMT",
+      "matched_keywords": [
+        "rate",
+        "growth",
+        "china",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945527Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Indonesia to file suspension of concessions against EU on palm oil dispute in WTO",
+      "summary": "Indonesia's trade ministry said on Saturday that the government will file a suspension-of-concessions request \u200bagainst the European Union at the World Trade \u200cOrganization's (WTO's) dispute settlement body, citing the block's failure to meet a WTO ruling in a palm oil case.",
+      "link": "https://www.reuters.com/world/asia-pacific/indonesia-file-suspension-concessions-against-eu-palm-oil-dispute-wto-2026-03-07/",
+      "published": "Sat, 07 Mar 2026 05:41:16 GMT",
+      "matched_keywords": [
+        "oil",
+        "failure",
+        "european",
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:32.283514Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "The war of unintended consequences",
+      "summary": "Israel and the US have achieved many military aims in Iran, but the unpredictable fallout poses threats to everyone",
+      "link": "https://www.ft.com/content/0b16e3e8-d52b-4b87-a212-bba90af39ceb",
+      "published": "Sat, 07 Mar 2026 05:00:27 GMT",
+      "matched_keywords": [
+        "war",
+        "military",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:29.874369Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "The war of unintended consequences",
+      "summary": "Israel and the US have achieved many military aims in Iran, but the unpredictable fallout poses threats to everyone",
+      "link": "https://www.ft.com/content/0b16e3e8-d52b-4b87-a212-bba90af39ceb",
+      "published": "Sat, 07 Mar 2026 05:00:27 GMT",
+      "matched_keywords": [
+        "war",
+        "military",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:29.984384Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Trump\u2019s war on Iran is spreading. Where does it stop?",
+      "summary": "US allies in the Arab world have been plunged into a conflict they neither wanted nor consented to. Historian Eugene Rogan on what it means for the Middle East",
+      "link": "https://www.ft.com/content/ddb4a3fd-2f99-43a4-8ae6-330c6d29c14a",
+      "published": "Sat, 07 Mar 2026 05:00:26 GMT",
+      "matched_keywords": [
+        "war",
+        "conflict",
+        "eu"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:29.874348Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "We\u2019ll always have Dubai",
+      "summary": "Why the newly endangered city will endure",
+      "link": "https://www.ft.com/content/fa5caf43-0ad4-4da2-a6fc-d2575bea4f41",
+      "published": "Sat, 07 Mar 2026 05:00:26 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:29.874385Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Trump\u2019s war on Iran is spreading. Where does it stop?",
+      "summary": "US allies in the Arab world have been plunged into a conflict they neither wanted nor consented to. Historian Eugene Rogan on what it means for the Middle East",
+      "link": "https://www.ft.com/content/ddb4a3fd-2f99-43a4-8ae6-330c6d29c14a",
+      "published": "Sat, 07 Mar 2026 05:00:26 GMT",
+      "matched_keywords": [
+        "war",
+        "conflict",
+        "eu"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:29.984365Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "We\u2019ll always have Dubai",
+      "summary": "Why the newly endangered city will endure",
+      "link": "https://www.ft.com/content/fa5caf43-0ad4-4da2-a6fc-d2575bea4f41",
+      "published": "Sat, 07 Mar 2026 05:00:26 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:29.984398Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Trump Demands Iran Relent While US Aims to Calm Energy Markets - Bloomberg.com",
+      "summary": "Trump Demands Iran Relent While US Aims to Calm Energy Markets Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNMUtTN2RJYzVtYll2V2ZtNTBPYTRBbnRiY1ZpTkZ4eTVLcUpJV092Rk91MkN6d01xSGk2ZVZESmJEa0pRbUM4ckdkb0FWUFpMMko4SDZJVmFfc0tQOFp1X2FtdzlDbkpoS3ppRUlnc1FRVU81MGtlRVg1d0IzQWo4d3FCSm80cVlLZDFFNWE0LVBTZGZZNDc0c3NsMVlxVXUwWFhPQUFyWFpvQkpCc1FGb3NnUQ?oc=5",
+      "published": "Sat, 07 Mar 2026 04:48:00 GMT",
+      "matched_keywords": [
+        "energy",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:33.753689Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Trump Demands Iran Relent While US Aims to Calm Energy Markets - Bloomberg.com",
+      "summary": "Trump Demands Iran Relent While US Aims to Calm Energy Markets Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNMUtTN2RJYzVtYll2V2ZtNTBPYTRBbnRiY1ZpTkZ4eTVLcUpJV092Rk91MkN6d01xSGk2ZVZESmJEa0pRbUM4ckdkb0FWUFpMMko4SDZJVmFfc0tQOFp1X2FtdzlDbkpoS3ppRUlnc1FRVU81MGtlRVg1d0IzQWo4d3FCSm80cVlLZDFFNWE0LVBTZGZZNDc0c3NsMVlxVXUwWFhPQUFyWFpvQkpCc1FGb3NnUQ?oc=5",
+      "published": "Sat, 07 Mar 2026 04:48:00 GMT",
+      "matched_keywords": [
+        "energy",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:34.959210Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Gold Stuck in Dubai Is Being Sold at Discount as War Widens",
+      "summary": "Many buyers have stepped back from new orders, unwilling to pay exceptionally high shipping and insurance costs with no guarantee of prompt delivery. Many shipments remained stranded on Friday, the people said, although some bullion had been loaded onto flights leaving Dubai from the middle of this week. The United Arab Emirates, and Dubai in particular, is an important center for refining and exporting bullion to buyers across Asia, as well as a conduit for shipments from Switzerland, the UK and several African countries.",
+      "link": "https://finance.yahoo.com/news/gold-stuck-dubai-being-sold-084523920.html",
+      "published": "Sat, 07 Mar 2026 02:48:44 GMT",
+      "matched_keywords": [
+        "war",
+        "rate",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945593Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Gold Stuck in Dubai Is Being Sold at Discount as War Widens",
+      "summary": "Many buyers have stepped back from new orders, unwilling to pay exceptionally high shipping and insurance costs with no guarantee of prompt delivery. Many shipments remained stranded on Friday, the people said, although some bullion had been loaded onto flights leaving Dubai from the middle of this week. The United Arab Emirates, and Dubai in particular, is an important center for refining and exporting bullion to buyers across Asia, as well as a conduit for shipments from Switzerland, the UK and several African countries.",
+      "link": "https://finance.yahoo.com/news/gold-stuck-dubai-being-sold-084523920.html",
+      "published": "Sat, 07 Mar 2026 02:48:44 GMT",
+      "matched_keywords": [
+        "war",
+        "rate",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:32.699796Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Google gives CEO Sundar Pichai new pay deal worth up to $692mn",
+      "summary": "Alphabet boss gets bumper package of stock options tied to the share price and growth of Waymo in the next three years",
+      "link": "https://www.ft.com/content/1d3fa4f9-ec94-49ff-b22f-bd69b92be8ce",
+      "published": "Sat, 07 Mar 2026 01:10:33 GMT",
+      "matched_keywords": [
+        "options",
+        "growth",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:29.874455Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Google gives CEO Sundar Pichai new pay deal worth up to $692mn",
+      "summary": "Alphabet boss gets bumper package of stock options tied to the share price and growth of Waymo in the next three years",
+      "link": "https://www.ft.com/content/1d3fa4f9-ec94-49ff-b22f-bd69b92be8ce",
+      "published": "Sat, 07 Mar 2026 01:10:33 GMT",
+      "matched_keywords": [
+        "options",
+        "growth",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:29.984458Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Novo and Hims resolve dispute, will sell obesity drugs together, Bloomberg News reports",
+      "summary": "Wegovy maker Novo Nordisk \u200bplans to sell \u200cits weight-loss drugs on Hims & Hers \u200bHealth platform, \u200bbringing an end to \u2060a dispute \u200bbetween the two \u200bcompanies that escalated into a legal battle \u200blast month, \u200bBloomberg News reported on \u200cFriday.",
+      "link": "https://www.reuters.com/business/healthcare-pharmaceuticals/novo-hims-resolve-dispute-will-sell-obesity-drugs-together-bloomberg-news-2026-03-07/",
+      "published": "Sat, 07 Mar 2026 01:04:02 GMT",
+      "matched_keywords": [
+        "battle",
+        "health"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:32.283565Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Novo and Hims resolve dispute, will sell obesity drugs together, Bloomberg News reports",
+      "summary": "Wegovy maker Novo Nordisk \u200bplans to sell \u200cits weight-loss drugs on Hims & Hers \u200bHealth platform, \u200bbringing an end to \u2060a dispute \u200bbetween the two \u200bcompanies that escalated into a legal battle \u200blast month, \u200bBloomberg News reported on \u200cFriday.",
+      "link": "https://www.reuters.com/business/healthcare-pharmaceuticals/novo-hims-resolve-dispute-will-sell-obesity-drugs-together-bloomberg-news-2026-03-07/",
+      "published": "Sat, 07 Mar 2026 01:04:02 GMT",
+      "matched_keywords": [
+        "battle",
+        "health"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:33.057783Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "US pump prices surge as Iran war upends global energy supply",
+      "summary": "By Nicole Jao, Jayla Whitfield-Anderson and Rich McKay MARIETTA/NEW YORK, March 6 (Reuters) - U.S. retail gasoline and diesel prices are soaring as the U.S.-Israel war with Iran constrains oil and",
+      "link": "https://finance.yahoo.com/news/us-pump-prices-surge-iran-010158648.html",
+      "published": "Sat, 07 Mar 2026 01:01:58 GMT",
+      "matched_keywords": [
+        "oil",
+        "energy",
+        "war",
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945627Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "US pump prices surge as Iran war upends global energy supply",
+      "summary": "By Nicole Jao, Jayla Whitfield-Anderson and Rich McKay MARIETTA/NEW YORK, March 6 (Reuters) - U.S. retail gasoline and diesel prices are soaring as the U.S.-Israel war with Iran constrains oil and",
+      "link": "https://finance.yahoo.com/news/us-pump-prices-surge-iran-010158648.html",
+      "published": "Sat, 07 Mar 2026 01:01:58 GMT",
+      "matched_keywords": [
+        "oil",
+        "energy",
+        "war",
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:32.699839Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "US draws up strict new AI guidelines amid Anthropic clash, FT reports",
+      "summary": "The Trump administration has drawn up \u200bstrict rules for \u200ccivilian artificial intelligence contracts that would require AI \u200bcompanies to allow \"any \u200blawful\" use of their \u2060models amid a stand-off \u200bbetween the Pentagon and \u200bAnthropic, the Financial Times reported on Friday.",
+      "link": "https://www.reuters.com/business/media-telecom/us-draws-up-strict-new-ai-guidelines-amid-anthropic-clash-ft-reports-2026-03-07/",
+      "published": "Sat, 07 Mar 2026 00:44:15 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:32.283617Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "US draws up strict new AI guidelines amid Anthropic clash, FT reports",
+      "summary": "The Trump administration has drawn up \u200bstrict rules for \u200ccivilian artificial intelligence contracts that would require AI \u200bcompanies to allow \"any \u200blawful\" use of their \u2060models amid a stand-off \u200bbetween the Pentagon and \u200bAnthropic, the Financial Times reported on Friday.",
+      "link": "https://www.reuters.com/business/media-telecom/us-draws-up-strict-new-ai-guidelines-amid-anthropic-clash-ft-reports-2026-03-07/",
+      "published": "Sat, 07 Mar 2026 00:44:15 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:33.057835Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Explosions rock Tehran\u2019s Mehrabad Airport as Israel strikes more targets",
+      "summary": "Trump says no deal with Iran except \u2018unconditional surrender\u2019",
+      "link": "https://www.ft.com/content/bbd79c63-8131-4b20-9d2d-708bc8acea38",
+      "published": "Sat, 07 Mar 2026 00:37:05 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:29.874278Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Explosions rock Tehran\u2019s Mehrabad Airport",
+      "summary": "Trump says no deal with Iran except \u2018unconditional surrender\u2019",
+      "link": "https://www.ft.com/content/bbd79c63-8131-4b20-9d2d-708bc8acea38",
+      "published": "Sat, 07 Mar 2026 00:37:05 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:29.984301Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Japan asked US not to disadvantage Tokyo under new tariff rules",
+      "summary": "March 6 (Reuters) - Japan has sought assurances from the U. that Tokyo will not be put at a disadvantage under Washington's latest tariff \u200cmeasures, urging that a potential 15% tariff not be applied to Japanese \u200cgoods, its trade minister said on Friday.",
+      "link": "https://finance.yahoo.com/news/japan-asked-us-not-disadvantage-003026817.html",
+      "published": "Sat, 07 Mar 2026 00:30:26 GMT",
+      "matched_keywords": [
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945663Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Japan asked US not to disadvantage Tokyo under new tariff rules",
+      "summary": "March 6 (Reuters) - Japan has sought assurances from the U. that Tokyo will not be put at a disadvantage under Washington's latest tariff \u200cmeasures, urging that a potential 15% tariff not be applied to Japanese \u200cgoods, its trade minister said on Friday.",
+      "link": "https://finance.yahoo.com/news/japan-asked-us-not-disadvantage-003026817.html",
+      "published": "Sat, 07 Mar 2026 00:30:26 GMT",
+      "matched_keywords": [
+        "eu",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:32.699878Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "US draws up strict new AI guidelines amid Anthropic clash",
+      "summary": "Draft rules mandate civilian government contracts make models available for \u2018any lawful\u2019 use",
+      "link": "https://www.ft.com/content/d8c2969f-2812-44d2-8860-3059fb770bdb",
+      "published": "Sat, 07 Mar 2026 00:02:22 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:29.874410Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "US draws up strict new AI guidelines amid Anthropic clash",
+      "summary": "Draft rules mandate civilian government contracts make models available for \u2018any lawful\u2019 use",
+      "link": "https://www.ft.com/content/d8c2969f-2812-44d2-8860-3059fb770bdb",
+      "published": "Sat, 07 Mar 2026 00:02:22 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:29.984419Z",
       "source_type": "rss"
     },
     {
@@ -1507,7 +1125,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:36.260876Z",
+      "timestamp": "2026-03-07T07:15:34.635942Z",
       "source_type": "rss"
     },
     {
@@ -1523,7 +1141,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:36.260921Z",
+      "timestamp": "2026-03-07T07:15:34.635989Z",
       "source_type": "rss"
     },
     {
@@ -1537,7 +1155,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:36.260940Z",
+      "timestamp": "2026-03-07T07:15:34.636008Z",
       "source_type": "rss"
     },
     {
@@ -1552,7 +1170,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:36.260972Z",
+      "timestamp": "2026-03-07T07:15:34.636076Z",
       "source_type": "rss"
     },
     {
@@ -1567,7 +1185,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:36.261000Z",
+      "timestamp": "2026-03-07T07:15:34.636106Z",
       "source_type": "rss"
     },
     {
@@ -1582,7 +1200,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:36.261054Z",
+      "timestamp": "2026-03-07T07:15:34.636141Z",
       "source_type": "rss"
     },
     {
@@ -1596,7 +1214,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:36.261071Z",
+      "timestamp": "2026-03-07T07:15:34.636158Z",
       "source_type": "rss"
     },
     {
@@ -1611,35 +1229,7 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:36.261087Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "AP_Top",
-      "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
-      "summary": "Trump embraces longtime US foe Putin, doubting own intel AP News",
-      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
-      "published": "Mon, 16 Jul 2018 07:00:00 GMT",
-      "matched_keywords": [
-        "putin"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:13.915808Z",
-      "source_type": "rss"
-    },
-    {
-      "feed": "AP_Top",
-      "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
-      "summary": "Trump embraces longtime US foe Putin, doubting own intel AP News",
-      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
-      "published": "Mon, 16 Jul 2018 07:00:00 GMT",
-      "matched_keywords": [
-        "putin"
-      ],
-      "enriched_text_source": "summary",
-      "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:13.812769Z",
+      "timestamp": "2026-03-07T07:15:34.636175Z",
       "source_type": "rss"
     },
     {
@@ -1653,13 +1243,13 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T09:15:34.443229Z",
+      "timestamp": "2026-03-07T07:15:33.182666Z",
       "source_type": "rss"
     },
     {
       "feed": "Bloomberg_Tech",
-      "title": "Oracle Loses Health Unit Leaders With Ellison\u2019s Bet Struggling - Bloomberg",
-      "summary": "Oracle Loses Health Unit Leaders With Ellison\u2019s Bet Struggling Bloomberg",
+      "title": "Oracle Loses Health Unit Leaders With Ellison\u2019s Bet Struggling - Bloomberg.com",
+      "summary": "Oracle Loses Health Unit Leaders With Ellison\u2019s Bet Struggling Bloomberg.com",
       "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOWnZXUS1lcklEMWpreFR1WDNSQkI0dTFjRjNRSWhGUDAzYnJva0hmR0dpREx0OWd5aVZFdldvN0tUYUdOcUZ2TUdrWFlwRmdCelhQTDJ3WDdkRkI1R2JrZnYtMG85cUZaSE11LUV3Yk1jNVVVTks3Rk1qaXdWWjljNXBEZWwyNm83aXY5dUJLX2w2TmZjRWktWmtBM1p1Tldza0FMMzFtc091MUhmd29yVnRNMA?oc=5",
       "published": "Mon, 02 Mar 2026 13:44:04 GMT",
       "matched_keywords": [
@@ -1667,28 +1257,390 @@
       ],
       "enriched_text_source": "summary",
       "article_excerpt": "",
-      "timestamp": "2026-03-06T08:15:35.268049Z",
+      "timestamp": "2026-03-07T06:15:34.388376Z",
       "source_type": "rss"
     },
     {
-      "feed": "Guardian_World",
-      "title": "Weight-loss jab could be made for $3 a month, study finds",
-      "summary": "Cheap semaglutide, the drug in Ozempic and Wegovy, could help millions with diabetes and obesity in 160 countries Weight-loss jabs such as Wegovy and Ozempic could be made for just $3 a month, according to new analysis, potentially making the treatment available to millions in poorer countries as patents expire. More than a billion people live with obesity worldwide, with rates rising fast in lower-income nations as they shift to westernised diets and more sedentary lifestyles. Continue reading...",
-      "link": "https://www.theguardian.com/global-development/2026/mar/06/generic-drugs-weight-loss-semaglutide-ozempic-wegovy-diabetes-obesity-study",
-      "published": "Fri, 06 Mar 2026 09:00:16 GMT",
+      "feed": "Yahoo_Finance",
+      "title": "Amid oil shock uncertainty, Fed's Hammack says central bank must lower inflation",
+      "summary": "NEW YORK, March 6 (Reuters) - Federal Reserve Bank of Cleveland President Beth Hammack said on Friday that while she expects inflation pressures to moderate, if they are not easing later this year the U. central bank may have to weigh tighter monetary policy to ensure price pressures retreat to 2%.",
+      "link": "https://finance.yahoo.com/news/amid-oil-shock-uncertainty-feds-233035412.html",
+      "published": "Fri, 06 Mar 2026 23:30:35 GMT",
       "matched_keywords": [
-        "ukraine",
-        "crisis",
+        "oil",
+        "bank",
+        "inflation",
+        "fed",
         "rate",
-        "health",
-        "who",
         "eu",
         "ev",
         "ai"
       ],
-      "enriched_text_source": "article_excerpt",
-      "article_excerpt": "Weight-loss jab could be made for $3 a month, study finds | Global health | The Guardian Skip to main content Skip to navigation Close dialogue 1 / 1 Next image Previous image Toggle caption Skip to navigation Print subscriptions Search jobs Sign in Int International edition UK edition US edition Australia edition Europe edition The Guardian - Back to home The Guardian News Opinion Sport Culture Lifestyle Show more Hide expanded menu News View all News World news US politics UK news Climate crisis Middle East Ukraine Environment Science Global development Football Tech Business Obituaries Opinion View all Opinion The Guardian view Columnists Cartoons Opinion videos Letters Sport View all Sport Football Cricket Rugby union Tennis Cycling F1 Golf US sports Culture View all Culture Books Music TV & radio Art & design Film Games Classical Stage Lifestyle View all Lifestyle Fashion Food Recipes Love & sex Health & fitness Home & garden Women Men Family Travel Money Search input google-search Search Support us Print subscriptions Search jobs Holidays Digital Archive Guardian Licensing Live events About Us The Guardian app Video Podcasts Pictures Newsletters Today's paper Inside the Guardian Guardian Weekly Crosswords Wordiply Corrections Tips Search input google-search Search Search jobs Holidays Digital Archive Guardian Licensing Live events About Us World Europe US news Americas Asia Australia Middle East Africa Inequality Global development The WHO designated semaglutide \u2013 sold to treat obesity under the Wegovy brand name and diabetes under the brand name Ozempic \u2013 as an essential medicine last year. Photograph: Getty View image in fullscreen The WHO designated semaglutide \u2013 sold to treat obesity under the Wegovy brand name and diabetes under the brand name Ozempic \u2013 as an essential medicine last year. Photograph: Getty Global health Weight-loss jab could be made for $3 a month, study finds Cheap semaglutide, the drug in Ozempic and Wegovy, could help millions with diabetes and obesity in 160 countries Supported by About this content Kat Lay , Global health corespondent Fri 6 Mar 2026 09.00 GMT Last modified on Fri 6 Mar 2026 09.02 GMT Share Prefer the Guardian on Google Weight-loss jabs such as Wegovy and Ozempic could be made for just $3 a month, according to new analysis, potentially making the treatment available to millions in poorer countries as patents expire. More than a billion people live with obesity worldwide, with rates rising fast in lower-incom",
-      "timestamp": "2026-03-06T09:15:17.136788Z",
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945698Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Amid oil shock uncertainty, Fed's Hammack says central bank must lower inflation",
+      "summary": "NEW YORK, March 6 (Reuters) - Federal Reserve Bank of Cleveland President Beth Hammack said on Friday that while she expects inflation pressures to moderate, if they are not easing later this year the U. central bank may have to weigh tighter monetary policy to ensure price pressures retreat to 2%.",
+      "link": "https://finance.yahoo.com/news/amid-oil-shock-uncertainty-feds-233035412.html",
+      "published": "Fri, 06 Mar 2026 23:30:35 GMT",
+      "matched_keywords": [
+        "oil",
+        "bank",
+        "inflation",
+        "fed",
+        "rate",
+        "eu",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:32.699915Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Iran conflict boosts U.S. Gulf oil prices to highest since 2020",
+      "summary": "U.S. Gulf Coast heavy grades continued to surge on Friday as the Iran conflict spurred several Middle Eastern producers of heavy crude to curtail \u200bproduction and drove buyers to scoop up U.S. barrels.",
+      "link": "https://www.reuters.com/business/energy/iran-conflict-boosts-us-gulf-oil-prices-highest-since-2020-2026-03-06/",
+      "published": "Fri, 06 Mar 2026 23:21:27 GMT",
+      "matched_keywords": [
+        "oil",
+        "conflict",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:32.283648Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Iran conflict boosts U.S. Gulf oil prices to highest since 2020",
+      "summary": "U.S. Gulf Coast heavy grades continued to surge on Friday as the Iran conflict spurred several Middle Eastern producers of heavy crude to curtail \u200bproduction and drove buyers to scoop up U.S. barrels.",
+      "link": "https://www.reuters.com/business/energy/iran-conflict-boosts-us-gulf-oil-prices-highest-since-2020-2026-03-06/",
+      "published": "Fri, 06 Mar 2026 23:21:27 GMT",
+      "matched_keywords": [
+        "oil",
+        "conflict",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:33.057867Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Bloomberg_Markets",
+      "title": "Stocks Fall as Bond Rout Deepens After Jump in Oil: Markets Wrap - Bloomberg.com",
+      "summary": "Stocks Fall as Bond Rout Deepens After Jump in Oil: Markets Wrap Bloomberg.com",
+      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNVmxENm1KNTZyQzFWN2tTZ3d4WE8wel83SW1IbDh6ODJ4dXl4OXJ5b2tCeVVuNklpSFRiYTFTeE80VWlScC11R3VJb0RqQ1c3aC1pV3piN3EtZ1NXTEZOQkFQNUVKQVRNdGowcjNyNDVQZ213aFViNk1XTktXeHZzWkRwZi1uSUNoYW9aTDUtR29jWHFHMkZCdTd4SkZnNzFETVdlLTJxOFo5LWxIMW5IQlBDbw?oc=5",
+      "published": "Fri, 06 Mar 2026 23:17:11 GMT",
+      "matched_keywords": [
+        "oil"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:33.753854Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Saks Global to shutter 15 more department stores in bankruptcy restructuring",
+      "summary": "The parent company of Saks Fifth Avenue and Neiman Marcus is closing more department stores as it focuses on its most profitable businesses and trims debt during its Chapter 11 bankruptcy restructuring. Saks Global Inc. said Friday it will close 12 more Saks Fifth Avenue stores and three more Neiman Marcus stores. The shuttered Saks stores include sites in Chevy, Chase, Maryland, Chicago and San Antonio, Texas.",
+      "link": "https://finance.yahoo.com/news/saks-global-shutter-15-more-230259446.html",
+      "published": "Fri, 06 Mar 2026 23:02:59 GMT",
+      "matched_keywords": [
+        "bank",
+        "bankruptcy",
+        "profit",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945742Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Saks Global to shutter 15 more department stores in bankruptcy restructuring",
+      "summary": "The parent company of Saks Fifth Avenue and Neiman Marcus is closing more department stores as it focuses on its most profitable businesses and trims debt during its Chapter 11 bankruptcy restructuring. Saks Global Inc. said Friday it will close 12 more Saks Fifth Avenue stores and three more Neiman Marcus stores. The shuttered Saks stores include sites in Chevy, Chase, Maryland, Chicago and San Antonio, Texas.",
+      "link": "https://finance.yahoo.com/news/saks-global-shutter-15-more-230259446.html",
+      "published": "Fri, 06 Mar 2026 23:02:59 GMT",
+      "matched_keywords": [
+        "bank",
+        "bankruptcy",
+        "profit",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:32.699959Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "Four companies, including AI and data-center plays, are joining the S&P 500 index",
+      "summary": "Vertiv, Lumentum, Coherent and EchoStar are the newest entrants to the S&P 500.",
+      "link": "https://www.marketwatch.com/story/s-p-500-changes-are-due-out-soon-these-ai-stocks-could-join-the-index-ded9e245?mod=mw_rss_topstories",
+      "published": "Fri, 06 Mar 2026 23:01:00 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.008972Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "MarketWatch",
+      "title": "Four companies, including AI and data-center plays, are joining the S&P 500 index",
+      "summary": "Vertiv, Lumentum, Coherent and EchoStar are the newest entrants to the S&P 500.",
+      "link": "https://www.marketwatch.com/story/s-p-500-changes-are-due-out-soon-these-ai-stocks-could-join-the-index-ded9e245?mod=mw_rss_topstories",
+      "published": "Fri, 06 Mar 2026 23:01:00 GMT",
+      "matched_keywords": [
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:31.585246Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Investors are expecting Donald Trump to back down in the war with Iran \u2013 but what if he doesn\u2019t?",
+      "summary": "Global markets have become inured to the US president\u2019s posturing over the past year, but economists warn they may be \u2018a little bit complacent\u2019 in anticipating a short conflict in the Middle East Investors over the past year have learned that Donald Trump has a boundless capacity to quickly reverse course in the face of acute political or market pressures. But a week since the United States and Israel launched missile strikes on Iran, there are fears the war could morph into a protracted conflict. Patrick Commins is Guardian Australia\u2019s economics editor Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/06/investors-are-expecting-donald-trump-to-back-down-in-the-war-with-iran-but-what-if-he-doesnt",
+      "published": "Fri, 06 Mar 2026 23:00:34 GMT",
+      "matched_keywords": [
+        "missile",
+        "war",
+        "conflict",
+        "miss",
+        "short",
+        "cut",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:26.662235Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Guardian_Business",
+      "title": "Investors are expecting Donald Trump to back down in the war with Iran \u2013 but what if he doesn\u2019t?",
+      "summary": "Global markets have become inured to the US president\u2019s posturing over the past year, but economists warn they may be \u2018a little bit complacent\u2019 in anticipating a short conflict in the Middle East Investors over the past year have learned that Donald Trump has a boundless capacity to quickly reverse course in the face of acute political or market pressures. But a week since the United States and Israel launched missile strikes on Iran, there are fears the war could morph into a protracted conflict. Patrick Commins is Guardian Australia\u2019s economics editor Continue reading...",
+      "link": "https://www.theguardian.com/business/2026/mar/06/investors-are-expecting-donald-trump-to-back-down-in-the-war-with-iran-but-what-if-he-doesnt",
+      "published": "Fri, 06 Mar 2026 23:00:34 GMT",
+      "matched_keywords": [
+        "missile",
+        "war",
+        "conflict",
+        "miss",
+        "short",
+        "cut",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:26.956923Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Binance, Zhao win dismissal of lawsuit by victims of 64 attacks",
+      "summary": "A federal judge on Friday dismissed a civil lawsuit seeking to hold Binance, the world's largest cryptocurrency exchange, \u200cand founder Changpeng Zhao liable for transactions that allegedly helped terrorist groups \u200cconduct 64 attacks around the world. U.S. District Judge Jeannette Vargas in Manhattan said the 535 plaintiffs, including victims \u200band relatives of victims, did not plausibly allege that the defendants \"culpably associated themselves with these terrorist attacks, participated in them as something they wanted to bring about, or sought by their actions to ensure their success.\" The plaintiffs said the attacks occurred between 2017 and \u200c2024, and attributed them to \u2060what they called foreign terrorist groups (\"FTOs\") including Hamas, Hezbollah, Iran's Revolutionary Guard, Islamic State, Kataib Hezbollah, Palestinian Islamic Jihad and al Qaeda.",
+      "link": "https://finance.yahoo.com/news/binance-zhao-win-dismissal-lawsuit-230021800.html",
+      "published": "Fri, 06 Mar 2026 23:00:21 GMT",
+      "matched_keywords": [
+        "attack",
+        "miss",
+        "fed",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945825Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Binance, Zhao win dismissal of lawsuit by victims of 64 attacks",
+      "summary": "A federal judge on Friday dismissed a civil lawsuit seeking to hold Binance, the world's largest cryptocurrency exchange, \u200cand founder Changpeng Zhao liable for transactions that allegedly helped terrorist groups \u200cconduct 64 attacks around the world. U.S. District Judge Jeannette Vargas in Manhattan said the 535 plaintiffs, including victims \u200band relatives of victims, did not plausibly allege that the defendants \"culpably associated themselves with these terrorist attacks, participated in them as something they wanted to bring about, or sought by their actions to ensure their success.\" The plaintiffs said the attacks occurred between 2017 and \u200c2024, and attributed them to \u2060what they called foreign terrorist groups (\"FTOs\") including Hamas, Hezbollah, Iran's Revolutionary Guard, Islamic State, Kataib Hezbollah, Palestinian Islamic Jihad and al Qaeda.",
+      "link": "https://finance.yahoo.com/news/binance-zhao-win-dismissal-lawsuit-230021800.html",
+      "published": "Fri, 06 Mar 2026 23:00:21 GMT",
+      "matched_keywords": [
+        "attack",
+        "miss",
+        "fed",
+        "ev",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:32.700072Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "SeekingAlpha",
+      "title": "Sphere 3D GAAP EPS of -$7.37, revenue of $11.81M",
+      "summary": "",
+      "link": "https://seekingalpha.com/news/4562068-sphere-3d-gaap-eps-of-7_37-revenue-of-11_81m?utm_source=feed_news_all&utm_medium=referral&feed_item_type=news",
+      "published": "Fri, 06 Mar 2026 22:57:34 -0500",
+      "matched_keywords": [
+        "revenue",
+        "eps",
+        "ev"
+      ],
+      "enriched_text_source": "headline_only",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:34.879812Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "FDA vaccine chief Vinay Prasad set to leave post next month",
+      "summary": "Vinay Prasad will depart the Center for Biologics Evaluation and Research next month to return to his prior career in academia. News of Prasad\u2019s departure sent shares of some biotech firms soaring. The company has been engaged in a public feud with Prasad\u2019s division over the requirements for seeking approval for its gene therapy for Huntington\u2019s disease.",
+      "link": "https://finance.yahoo.com/news/fda-vaccine-chief-vinay-prasad-225628622.html",
+      "published": "Fri, 06 Mar 2026 22:56:28 GMT",
+      "matched_keywords": [
+        "eu",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945878Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "FDA vaccine chief Vinay Prasad set to leave post next month",
+      "summary": "Vinay Prasad will depart the Center for Biologics Evaluation and Research next month to return to his prior career in academia. News of Prasad\u2019s departure sent shares of some biotech firms soaring. The company has been engaged in a public feud with Prasad\u2019s division over the requirements for seeking approval for its gene therapy for Huntington\u2019s disease.",
+      "link": "https://finance.yahoo.com/news/fda-vaccine-chief-vinay-prasad-225628622.html",
+      "published": "Fri, 06 Mar 2026 22:56:28 GMT",
+      "matched_keywords": [
+        "eu",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:32.700116Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Japan, France, Canada work on alternatives to US-led trade bloc for rare earth supplies",
+      "summary": "TORONTO, March 6 (Reuters) - Group of Seven members Japan, France and Canada are working on alternatives to a U.-led trade bloc to secure critical minerals and reduce reliance on China, according to three senior officials \u200cfrom these countries.",
+      "link": "https://finance.yahoo.com/news/japan-france-canada-alternatives-us-224128037.html",
+      "published": "Fri, 06 Mar 2026 22:42:31 GMT",
+      "matched_keywords": [
+        "eu",
+        "china",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.945916Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Yahoo_Finance",
+      "title": "Japan, France, Canada work on alternatives to US-led trade bloc for rare earth supplies",
+      "summary": "TORONTO, March 6 (Reuters) - Group of Seven members Japan, France and Canada are working on alternatives to a U.-led trade bloc to secure critical minerals and reduce reliance on China, according to three senior officials \u200cfrom these countries.",
+      "link": "https://finance.yahoo.com/news/japan-france-canada-alternatives-us-224128037.html",
+      "published": "Fri, 06 Mar 2026 22:42:31 GMT",
+      "matched_keywords": [
+        "eu",
+        "china",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:32.700153Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Japan, France, Canada work on alternatives to US-led trade bloc for rare earth supplies",
+      "summary": "Group of Seven members Japan, France and Canada are working on alternatives to a U.S.-led \u200btrade bloc to secure critical minerals and reduce reliance on China, according to three senior officials from these countries.",
+      "link": "https://www.reuters.com/world/asia-pacific/japan-france-canada-work-alternatives-us-led-trade-bloc-rare-earth-supplies-2026-03-06/",
+      "published": "Fri, 06 Mar 2026 22:40:19 GMT",
+      "matched_keywords": [
+        "china",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:32.283682Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Nasdaq_News",
+      "title": "Japan, France, Canada work on alternatives to US-led trade bloc for rare earth supplies",
+      "summary": "Group of Seven members Japan, France and Canada are working on alternatives to a U.S.-led \u200btrade bloc to secure critical minerals and reduce reliance on China, according to three senior officials from these countries.",
+      "link": "https://www.reuters.com/world/asia-pacific/japan-france-canada-work-alternatives-us-led-trade-bloc-rare-earth-supplies-2026-03-06/",
+      "published": "Fri, 06 Mar 2026 22:40:19 GMT",
+      "matched_keywords": [
+        "china",
+        "ev"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:33.057902Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
+      "summary": "Meta in talks to take up additional computing capacity that the ChatGPT maker will not take up",
+      "link": "https://www.ft.com/content/2fa83bbf-abf2-43f1-b2f0-84a1391150b9",
+      "published": "Fri, 06 Mar 2026 22:40:01 GMT",
+      "matched_keywords": [
+        "putin",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:29.874433Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "Financial_Times",
+      "title": "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
+      "summary": "Meta in talks to take up additional computing capacity that the ChatGPT maker will not take up",
+      "link": "https://www.ft.com/content/2fa83bbf-abf2-43f1-b2f0-84a1391150b9",
+      "published": "Fri, 06 Mar 2026 22:40:01 GMT",
+      "matched_keywords": [
+        "putin",
+        "ai"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T06:15:29.984438Z",
+      "source_type": "rss"
+    },
+    {
+      "feed": "CNBC_Top",
+      "title": "Palantir rallies 15% for the week as Iran war boosts prospects, muting Anthropic concern",
+      "summary": "Palantir's stock had its best week since August and outperformed all of its large-cap tech peers after the U.S. attacked Iran.",
+      "link": "https://www.cnbc.com/2026/03/06/palantir-stock-jumps-15percent-in-week-on-iran-war-boosts-anthropic-muted.html",
+      "published": "Fri, 06 Mar 2026 22:26:20 GMT",
+      "matched_keywords": [
+        "attack",
+        "war"
+      ],
+      "enriched_text_source": "summary",
+      "article_excerpt": "",
+      "timestamp": "2026-03-07T07:15:31.371663Z",
       "source_type": "rss"
     }
   ]

@@ -1,70 +1,99 @@
 {
   "version": 1,
-  "last_updated": "2026-03-06T17:14:00Z",
+  "last_updated": "2026-03-07T15:40:00Z",
   "pipeline": "market-intel",
   "jobs": {
     "rss-feed-monitor": {
-      "last_run": "2026-03-06T17:14:00Z",
+      "last_run": "2026-03-07T15:14:00Z",
       "status": "ok",
-      "items_found": 108,
-      "summary": "108 matches across 20 feeds. Major themes: Iran war (oil biggest weekly gain in 4 years, Hormuz traffic paralyzed), Trump-Putin alignment, Anthropic Pentagon blacklisting, DeepSeek AI rout, Broadcom/Marvell earnings beats. 6 feed URLs still have whitespace issues.",
+      "items_found": 110,
+      "summary": "110 matches across 20 feeds. Top themes: Oil $90+ (Iran war, record weekly gain, $100 target, overbought since 1990, Hormuz closure); Payrolls -92K miss, unemployment 4.1%; Private credit stress (9.2% defaults, BlackRock limits, Pimco warning); Defense stocks rally (Palantir +15%, Trump quadrupling production, NATO drones/AI shift); DeepSeek AI rout continues; Oracle/OpenAI data center scrap; Marvell +18% beat. 6 feed URLs still have whitespace issues.",
       "context": {
-        "top_keywords": ["war", "oil", "ai", "ukraine", "conflict", "ev"],
+        "top_keywords": ["oil", "war", "ai", "conflict", "ukraine", "iran", "ev", "credit"],
         "feed_errors": ["Business_Bloomberg", "FinancialJuice", "YCombinator", "ZeroHedge", "UnusualWhales", "Reuters_Finance"],
-        "enrichment_rate": "50%",
+        "enrichment_rate": "55%",
         "notable_stories": [
-          "Trump embraces Putin, doubting own intel",
-          "Iran war enters seventh day - oil biggest weekly gain in 4 years, Hormuz paralyzed",
-          "Anthropic Pentagon blacklisting - CEO fights back",
-          "DeepSeek sparks AI rout - China competition concerns",
-          "Broadcom, Marvell earnings beat",
-          "India gets US waiver for Russian oil purchases"
+          "Oil hits highest level since 2023 as Iran war triggers historic surge",
+          "Oil prices notch record weekly gain of nearly 36%, biggest since 1985",
+          "Crude-oil futures haven't been this overbought since 1990",
+          "Traders warn $100 oil is imminent if Iran war keeps raging",
+          "US payrolls unexpectedly fell by 92,000 in February, unemployment rises to 4.1%",
+          "US private credit defaults hit record 9.2% in 2025 (Fitch)",
+          "Private credit meets 'show-me-the-money' moment (Bloomberg)",
+          "Private debt should face 'full-blown default cycle,' Pimco says",
+          "Oil surge sparks Treasury market's worst weekly rout since 'liberation'",
+          "Defense-tech stocks are the hot trade as Iran conflict widens",
+          "Trump says defense firms to quadruple production of some weapons",
+          "Palantir rallies 15% for the week as Iran war boosts prospects",
+          "Marvell stock surges 18% as CEO points to continuing AI demand",
+          "DeepSeek AI rout continues - stocks sink in broad AI rout sparked by China's DeepSeek",
+          "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
+          "NATO to shift focus from tanks to drones, AI at July summit"
         ]
       }
     },
     "reddit-monitor": {
-      "last_run": "2026-03-06T16:40:00Z",
+      "last_run": "2026-03-07T15:40:00Z",
       "status": "ok",
-      "items_found": 92,
-      "summary": "92 relevant posts. Top: Nvidia CEO on $30B OpenAI investment (3141 upvotes), US grants India Russia oil waiver (2321), Oracle job cuts due to AI (2213). Softbank/OpenAI circular funding still hot (250). 8 subreddits rate-limited (429).",
+      "items_found": 50,
+      "summary": "50 posts after enrichment (93 scanned). 8/12 subreddits rate-limited. Top discussions: BlackRock $26B private credit limits (7550 upvotes - UP from 7237, MASSIVE), Oil 35% weekly gain (3239 upvotes), Jobs -92K (2114 upvotes), Oracle/OpenAI scrap (1907 upvotes), Qatar Gulf export warning (1471 upvotes), Marvell +18% (350 upvotes). Strong alignment with RSS - private credit story accelerating, oil/war dominates.",
       "context": {
         "top_posts": [
-          "Man, times really are tough out there (44k upvotes - meta)",
-          "Nvidia CEO Huang says $30B OpenAI investment 'mi' (3141 upvotes)",
-          "US grants waiver to allow India to buy Russian oil (2321 upvotes)",
-          "Oracle Plans Thousands of Job Cuts in Face of AI (2213 upvotes)",
-          "Softbank OpenAI circular loan/equity scheme (250 upvotes)"
+          "BlackRock $26 Billion Private Credit Fund Limits Withdrawals (7550 upvotes)",
+          "Oil surges 35% this week for biggest gain in futures trading history (3239 upvotes)",
+          "US lost 92k jobs in February (2114 upvotes)",
+          "Oracle and OpenAI End Plans to Expand Flagship Data Center (1907 upvotes)",
+          "Qatar warns war will force Gulf to stop energy exports within days (1471 upvotes)"
         ],
         "correlations_with_rss": [
-          "AI sector: Nvidia CEO confirming $30B OpenAI investment aligns with RSS Anthropic/DeepSeek AI news",
-          "Oil/Geopolitics: India Russia oil waiver aligns with RSS Iran war/oil sanctions theme",
-          "Tech Earnings: Oracle job cuts narrative aligns with RSS Broadcom/Marvell AI chip earnings theme"
+          "Private Credit: Reddit (BlackRock $26B limits, 7550 upvotes - MASSIVE, up from 7237) aligns with RSS (BlackRock $26B fund limits redemptions, 9.2% defaults, Pimco warning) - SAME STORY, EXTREME confidence, story ACCELERATING",
+          "Oil/Energy: Reddit (35% weekly gain, 3239 upvotes; Qatar export warning 1471 upvotes) aligns with RSS (Oil $90+, Iran war, record 36% weekly gain, Hormuz closure) - SAME STORY, HIGH confidence, dominant theme",
+          "Jobs/Macro: Reddit (92K jobs lost, 2114 upvotes) aligns with RSS (payrolls -92K, unemployment 4.1%) - SAME STORY, HIGH confidence, remains salient",
+          "AI/Tech: Reddit (Marvell +18%, Oracle/OpenAI scrap) aligns with RSS (Marvell beat, Oracle/OpenAI scrap deal) - SAME STORY, moderate engagement",
+          "Defense: Reddit (no specific post) - RSS has Palantir +15%, NATO drones/AI shift"
         ],
-        "rate_limited_subreddits": ["securityanalysis", "economics", "finance", "trading", "stocks", "ValueInvesting", "Daytrading", "Cryptocurrency"]
+        "rate_limited_subreddits": ["securityanalysis", "economics", "finance", "trading", "stocks", "ValueInvesting", "Daytrading", "Cryptocurrency"],
+        "keywords": {
+          "miss": 50,
+          "call": 0,
+          "put": 0,
+          "earnings": 0,
+          "energy": 0,
+          "dividend": 0,
+          "ipo": 0,
+          "crisis": 0,
+          "ai": 0,
+          "inflation": 0
+        },
+        "emerging_topics": [
+          "Private Credit: BlackRock $26B limits trending MASSIVE (7550 upvotes vs 7237 previously) - highest engagement, clear signal, story strengthening"
+        ],
+        "notable_shift": "Private credit overtook oil as #1 topic by engagement - story is accelerating, not fading"
       }
     },
     "signal-generator": {
-      "last_run": "2026-03-06T16:47:00Z",
+      "last_run": "2026-03-07T15:47:00Z",
       "status": "ok",
-      "signals_generated": 38,
-      "summary": "38 signals generated (19 STRONG BUY, 16 BUY, 3 HOLD). Categories: geopolitical (Russia-Ukraine, Iran war, Taiwan/China), macroeconomic (US credit rating, COVID pandemic unit, youth unemployment, job growth, Fed rates), financial_credit (private credit stress), sentiment_social (retail options, AI/semis), corporate (earnings). Top themes: Iran war escalation, Trump-Putin alignment, AI sector volatility, private credit stress.",
+      "signals_generated": 29,
+      "summary": "29 signals generated (18 STRONG BUY, 6 BUY, 5 HOLD). Categories: geopolitical (Iran war escalation, oil $90+ surge, Hormuz supply disruption, Russia-Ukraine conflict, defense stocks rally, Oracle/OpenAI data center scrap), macroeconomic (payrolls -92K miss, unemployment 4.1%, Fed rate cut bets, oil-driven inflation fears, pandemic unit disbandment), financial_credit (private credit stress - BlackRock $26B fund limits redemptions, 9.2% defaults, Pimco warning, contagion risk), sentiment_social (DeepSeek AI rout, retail options activity, Google CEO pay deal). Top themes: Iran war driving historic oil surge with defense/energy risk premium, weak jobs data fueling recession concerns, private credit redemption limits echoing Jan 2023 regional bank crisis, AI sector divergence on capex debate.",
       "context": {
         "cross_source_correlations": [
-          "RSS + Reddit both discussing Iran conflict + Russia oil sanctions → HIGH confidence geopolitical signal (India waiver appears in both sources)",
-          "AI sector: RSS (DeepSeek rout, Broadcom/Marvell earnings) + Reddit (Nvidia CEO $30B OpenAI investment, US export controls) → HIGH confidence AI volatility signal",
-          "Private credit: RSS (BreakingViews show-me-the-money moment, redemption stress) → standalone HIGH confidence financial stress signal"
+          "RSS + Reddit both on jobs miss → HIGH confidence macro signal (Reddit 2.0K upvotes aligns with RSS CNBC/Bloomberg/FT coverage - unemployment 4.1% triggers recession fears)",
+          "RSS + Reddit both on private credit stress → HIGH confidence financial stability signal (Reddit top post 7.2K upvotes on BlackRock $26B limits aligns with RSS FT/Reuters/BreakingViews - 9.2% defaults, Pimco warning)",
+          "RSS + Reddit both on Iran war oil escalation → HIGH confidence geopolitical signal (Reddit 2.8K upvotes on 35% weekly oil gain aligns with RSS Brent $90+, Hormuz traffic drop, Qatar warning - overbought since 1990)",
+          "AI sector: RSS (DeepSeek rout, Marvell +18%, Oracle/OpenAI scrap deal) + Reddit (data center discussion, AI memory bottleneck) → HIGH confidence AI volatility signal"
         ],
         "top_reasoning_themes": [
-          "Iran war escalation (oil risk premium, defense stocks, supply chain disruption)",
-          "Russia-Ukraine conflict (Trump-Putin alignment, sanctions waivers, European gas risk)",
-          "AI sector volatility (China competition, export controls, capex concentration)",
-          "Macroeconomic stress (Fed no-cut scenario, private credit, youth unemployment)"
+          "Iran war escalation (oil $90+ risk premium, Hormuz supply disruption, defense stocks rally Palantir +15%, European gas shock risk, mortgage rate pressure)",
+          "Macroeconomic stress (payrolls -92K miss, unemployment 4.1%, Fed rate cut bets rise, private credit redemption limits)",
+          "Financial credit contagion (BlackRock private credit fund limits withdrawals - Jan 2023 regional bank crisis parallel, 9.2% default rate, Pimco 'full-blown default cycle' warning)",
+          "AI sector divergence (DeepSeek China competition pressure vs Marvell/Broadcom earnings beats, Oracle/OpenAI data center scrap, memory bottleneck discussion)"
         ],
         "enriched_shadow_comparison": {
-          "baseline_signals": 38,
+          "baseline_signals": 29,
           "enriched_signals": 50,
-          "overlap": 21,
-          "enriched_only": 26
+          "overlap": 17,
+          "enriched_only": 31
         }
       }
     }
