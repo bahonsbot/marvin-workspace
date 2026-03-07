@@ -7,6 +7,7 @@ Paper-only, conservative by default.
 from __future__ import annotations
 
 import hashlib
+import hmac
 import json
 import os
 import sys
@@ -139,10 +140,20 @@ def _normalize_side(sig: dict[str, Any]) -> str:
 
 
 def _post_webhook(url: str, body: dict[str, Any], secret: str | None = None) -> tuple[int, dict[str, Any] | str]:
-    data = json.dumps(body).encode("utf-8")
+    data = json.dumps(body, sort_keys=True, separators=(',', ':')).encode("utf-8")
     headers = {"Content-Type": "application/json"}
+    
     if secret:
+        # Add timestamp and HMAC signature for replay protection
+        timestamp = datetime.now(UTC).isoformat()
+        headers["X-Timestamp"] = timestamp
+        # Sign: timestamp + canonicalized body to prevent replay with modified payload
+        message = f"{timestamp}:{data.decode('utf-8')}"
+        signature = hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
+        headers["X-Signature"] = signature
+        # Keep Bearer auth for backward compatibility
         headers["Authorization"] = f"Bearer {secret}"
+    
     req = request.Request(url, data=data, method="POST", headers=headers)
     try:
         with request.urlopen(req, timeout=20) as resp:

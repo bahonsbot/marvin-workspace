@@ -7,11 +7,13 @@ and can optionally submit to Alpaca PAPER endpoint only.
 
 from __future__ import annotations
 
+import hashlib
+import hmac
 import json
 import logging
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Lock
@@ -92,13 +94,18 @@ def _rate_limit_allowed(client_ip: str) -> bool:
         return True
 
 
-def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None) -> bool:
-    """Optional shared-secret auth for incoming webhooks.
+def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None, body_bytes: bytes | None = None) -> bool:
+    """Optional shared-secret auth for incoming webhooks with replay protection.
 
     Accepts any of:
     - Header: X-Webhook-Secret
     - Header: Authorization: Bearer <secret>
     - JSON payload field: secret
+    
+    Plus replay protection (when signature present):
+    - Header: X-Timestamp (ISO-8601, must be within 5 minutes)
+    - Header: X-Signature (HMAC-SHA256 of timestamp + body)
+    
     (TradingView cannot set custom headers, so payload secret is supported.)
     """
     secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
@@ -106,6 +113,7 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
         logger.error("Webhook receiver started without WEBHOOK_SHARED_SECRET - rejecting all requests")
         return False  # Fail-closed: reject if no secret configured
 
+    # Basic secret validation (backward compatible)
     header_secret = headers.get("X-Webhook-Secret", "")
     bearer_secret = ""
     auth_header = headers.get("Authorization", "")
@@ -119,7 +127,46 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
     x_webhook_match = secrets.compare_digest(header_secret.encode(), secret.encode())
     bearer_match = secrets.compare_digest(bearer_secret.encode(), secret.encode())
     payload_match = secrets.compare_digest(payload_secret.encode(), secret.encode())
-    return x_webhook_match or bearer_match or payload_match
+    basic_auth_ok = x_webhook_match or bearer_match or payload_match
+    
+    if not basic_auth_ok:
+        return False
+    
+    # Replay protection: validate signature and timestamp if present
+    timestamp_str = headers.get("X-Timestamp", "")
+    signature = headers.get("X-Signature", "")
+    
+    if timestamp_str and signature and body_bytes is not None:
+        # Validate timestamp window (5 minutes)
+        try:
+            # Parse ISO-8601 timestamp
+            timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+            now = datetime.now(timezone.utc)
+            age = (now - timestamp).total_seconds()
+            if abs(age) > 300:  # 5 minute window
+                logger.warning(f"Webhook timestamp outside 5-min window: age={age:.1f}s")
+                return False
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Invalid webhook timestamp format: {e}")
+            return False
+        
+        # Validate HMAC signature
+        try:
+            # Reconstruct the signed message
+            body_str = body_bytes.decode('utf-8')
+            message = f"{timestamp_str}:{body_str}"
+            expected_sig = hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
+            if not secrets.compare_digest(signature.encode(), expected_sig.encode()):
+                logger.warning("Webhook signature mismatch")
+                return False
+        except Exception as e:
+            logger.warning(f"Signature validation error: {e}")
+            return False
+    elif timestamp_str or signature:
+        # Partial signature headers (one but not both) - log warning but accept for backward compat
+        logger.warning("Webhook has partial signature headers (timestamp or signature missing)")
+    
+    return True
 
 
 def process_webhook_payload(
@@ -276,7 +323,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "Invalid JSON payload", "paper_only": True})
             return
 
-        if not _auth_allowed(dict(self.headers), payload):
+        if not _auth_allowed(dict(self.headers), payload, raw):
             self._send_json(401, {"error": "Unauthorized webhook", "paper_only": True})
             return
 

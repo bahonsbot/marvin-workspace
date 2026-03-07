@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "last_updated": "2026-03-07T15:40:00Z",
+  "last_updated": "2026-03-07T16:14:00Z",
   "pipeline": "market-intel",
   "jobs": {
     "rss-feed-monitor": {
-      "last_run": "2026-03-07T15:14:00Z",
+      "last_run": "2026-03-07T16:14:00Z",
       "status": "ok",
-      "items_found": 110,
-      "summary": "110 matches across 20 feeds. Top themes: Oil $90+ (Iran war, record weekly gain, $100 target, overbought since 1990, Hormuz closure); Payrolls -92K miss, unemployment 4.1%; Private credit stress (9.2% defaults, BlackRock limits, Pimco warning); Defense stocks rally (Palantir +15%, Trump quadrupling production, NATO drones/AI shift); DeepSeek AI rout continues; Oracle/OpenAI data center scrap; Marvell +18% beat. 6 feed URLs still have whitespace issues.",
+      "items_found": 109,
+      "summary": "109 matches across 20 feeds. Top themes: Oil $90+ (Iran war, record 36% weekly gain, $100 target, overbought since 1990, Hormuz closure); Payrolls -92K miss, unemployment 4.1%; Private credit stress (9.2% defaults, BlackRock limits, Pimco warning); Defense stocks rally (Palantir +15%, Trump quadrupling production); DeepSeek AI rout continues; Oracle/OpenAI data center scrap; Marvell +18% beat. 6 feed URLs still have whitespace issues.",
       "context": {
         "top_keywords": ["oil", "war", "ai", "conflict", "ukraine", "iran", "ev", "credit"],
         "feed_errors": ["Business_Bloomberg", "FinancialJuice", "YCombinator", "ZeroHedge", "UnusualWhales", "Reuters_Finance"],
