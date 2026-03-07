@@ -20,7 +20,8 @@ TS="$(date +'%Y-%m-%dT%H:%M:%S%z')"
 
 # Sanitize input to prevent log injection
 sanitize() {
-    printf '%s' "$1" | tr -cd '[:print:]\n\t' | head -c 500
+    # Strip all control characters except space, truncate to prevent overflow
+    printf '%s' "$1" | tr -cd '[:print:]' | tr -d '\n\t' | head -c 500
 }
 
 sanitized_action=$(sanitize "$ACTION")
