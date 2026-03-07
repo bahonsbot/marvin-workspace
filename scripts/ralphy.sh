@@ -196,18 +196,11 @@ notify() {
 log "Starting Ralph Loop for $PRD_FILE in $WORKSPACE"
 log "Model: $MODEL, Max iterations: $MAX_ITERATIONS"
 
-# Security: Scan PRD for dangerous patterns
-if ! is_unsafe_allowed; then
-    if ! scan_prd_for_dangers "$PRD_FILE"; then
-        log "SECURITY BLOCK: Dangerous patterns detected in PRD"
-        read -p "PRD contains dangerous commands. Continue anyway? (y/n) " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            log "Aborted due to security concerns"
-            exit 1
-        fi
-        log "User acknowledged security warning, continuing..."
-    fi
+# Security: Scan PRD for dangerous patterns (ALWAYS run, even in unsafe mode)
+PRD_HAS_DANGERS=false
+if ! scan_prd_for_dangers "$PRD_FILE"; then
+    PRD_HAS_DANGERS=true
+    log "SECURITY WARNING: Dangerous patterns detected in PRD"
 fi
 
 # Human approval gate - prevent automated execution without review
@@ -220,21 +213,26 @@ if is_unsafe_allowed; then
     echo "========================================"
     echo "⚠️  UNSAFE MODE ACTIVE"
     echo "========================================"
-    echo "All approval gates are BYPASSED"
-    echo "Autonomous coding will proceed without confirmation"
-    echo "SECURITY: PRD security scan SKIPPED"
-    echo "AUDIT: Human approval SKIPPED"
+    echo "Autonomous coding will proceed without interactive confirmation"
+    if [[ "$PRD_HAS_DANGERS" == "true" ]]; then
+        echo "SECURITY: Dangerous patterns detected (logged to audit)"
+        log "SECURITY: Proceeding despite dangerous patterns (unsafe mode)"
+    fi
+    echo "AUDIT: Human approval prompt SKIPPED"
     echo "Use ONLY in trusted environments"
     echo "Audit log: $AUDIT_LOG"
     echo "========================================"
     echo ""
-    log "BYPASS: RALPHY_ALLOW_UNSAFE=1 set, skipping approval gate and security scan"
+    log "BYPASS: RALPHY_ALLOW_UNSAFE=1 set, skipping approval prompt (PRD scan still ran)"
 elif [[ -t 0 ]]; then
     echo "========================================"
     echo "About to execute PRD: $PRD_FILE"
     echo "Workspace: $WORKSPACE"
     echo "Model: $MODEL"
     echo "========================================"
+    if [[ "$PRD_HAS_DANGERS" == "true" ]]; then
+        echo "⚠️  WARNING: PRD contains dangerous patterns"
+    fi
     read -p "Continue? (y/n) " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
