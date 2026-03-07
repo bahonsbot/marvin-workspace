@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-03-07T16:40:00Z",
+  "last_updated": "2026-03-07T16:47:00Z",
   "pipeline": "market-intel",
   "jobs": {
     "rss-feed-monitor": {
@@ -72,25 +72,25 @@
       }
     },
     "signal-generator": {
-      "last_run": "2026-03-07T15:47:00Z",
+      "last_run": "2026-03-07T16:47:00Z",
       "status": "ok",
       "signals_generated": 29,
-      "summary": "29 signals generated (18 STRONG BUY, 6 BUY, 5 HOLD). Categories: geopolitical (Iran war escalation, oil $90+ surge, Hormuz supply disruption, Russia-Ukraine conflict, defense stocks rally, Oracle/OpenAI data center scrap), macroeconomic (payrolls -92K miss, unemployment 4.1%, Fed rate cut bets, oil-driven inflation fears, pandemic unit disbandment), financial_credit (private credit stress - BlackRock $26B fund limits redemptions, 9.2% defaults, Pimco warning, contagion risk), sentiment_social (DeepSeek AI rout, retail options activity, Google CEO pay deal). Top themes: Iran war driving historic oil surge with defense/energy risk premium, weak jobs data fueling recession concerns, private credit redemption limits echoing Jan 2023 regional bank crisis, AI sector divergence on capex debate.",
+      "summary": "29 signals generated (baseline). Categories: geopolitical (Iran war, oil $90+, Saudi attacks, Russia-Ukraine, Oracle/OpenAI scrap), macroeconomic (COVID-19 unit disbandment, payrolls -92K, unemployment 4.1%, credit rating concerns), financial_credit (oil-driven inflation, Fed policy uncertainty), defense (Iran conflict, production quadrupling). Top themes: Iran war/oil surge dominates, jobs miss triggers recession concerns, private credit stress continues, AI sector volatility from DeepSeek vs Marvell earnings.",
       "context": {
         "cross_source_correlations": [
-          "RSS + Reddit both on jobs miss → HIGH confidence macro signal (Reddit 2.0K upvotes aligns with RSS CNBC/Bloomberg/FT coverage - unemployment 4.1% triggers recession fears)",
-          "RSS + Reddit both on private credit stress → HIGH confidence financial stability signal (Reddit top post 7.2K upvotes on BlackRock $26B limits aligns with RSS FT/Reuters/BreakingViews - 9.2% defaults, Pimco warning)",
-          "RSS + Reddit both on Iran war oil escalation → HIGH confidence geopolitical signal (Reddit 2.8K upvotes on 35% weekly oil gain aligns with RSS Brent $90+, Hormuz traffic drop, Qatar warning - overbought since 1990)",
-          "AI sector: RSS (DeepSeek rout, Marvell +18%, Oracle/OpenAI scrap deal) + Reddit (data center discussion, AI memory bottleneck) → HIGH confidence AI volatility signal"
+          "RSS + Reddit both on Iran war/oil escalation → HIGH confidence geopolitical signal (Reddit 35% weekly oil gain aligns with RSS $90+, Hormuz - dominant theme across both sources)",
+          "RSS + Reddit both on jobs miss (-92K) → HIGH confidence macro signal (Reddit 2138 upvotes aligns with RSS - unemployment 4.1% triggers recession concerns)",
+          "RSS + Reddit both on private credit stress → HIGH confidence financial stability signal (Reddit BlackRock $26B limits trending MASSIVE aligns with RSS 9.2% defaults, Pimco warning)",
+          "RSS + Reddit both on Oracle/OpenAI scrap → MODERATE confidence tech signal (both covering data center expansion cancellation)"
         ],
         "top_reasoning_themes": [
-          "Iran war escalation (oil $90+ risk premium, Hormuz supply disruption, defense stocks rally Palantir +15%, European gas shock risk, mortgage rate pressure)",
-          "Macroeconomic stress (payrolls -92K miss, unemployment 4.1%, Fed rate cut bets rise, private credit redemption limits)",
-          "Financial credit contagion (BlackRock private credit fund limits withdrawals - Jan 2023 regional bank crisis parallel, 9.2% default rate, Pimco 'full-blown default cycle' warning)",
-          "AI sector divergence (DeepSeek China competition pressure vs Marvell/Broadcom earnings beats, Oracle/OpenAI data center scrap, memory bottleneck discussion)"
+          "Iran war escalation (oil $90+, record 36% weekly gain, $100 target, Hormuz supply threat, defense stocks rally)",
+          "Macroeconomic stress (payrolls -92K miss, unemployment 4.1%, Fed uncertainty amid oil shock)",
+          "Financial credit (private credit defaults 9.2%, BlackRock $26B limits, Pimco full-blown default cycle warning)",
+          "AI sector divergence (DeepSeek rout continues vs Marvell +18% beat, Oracle/OpenAI scrap)"
         ],
         "enriched_shadow_comparison": {
-          "baseline_signals": 29,
+          "baseline_signals": 30,
           "enriched_signals": 50,
           "overlap": 17,
           "enriched_only": 31

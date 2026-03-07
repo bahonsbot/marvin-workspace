@@ -4,7 +4,7 @@
     "feed": "AP_Top",
     "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
     "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
-    "timestamp": "2026-03-07T07:15:12.683978Z",
+    "timestamp": "2026-03-07T08:15:10.175792Z",
     "pattern_id": "p004",
     "pattern": "COVID-19 Market Crash",
     "category": "macroeconomic",
@@ -17,7 +17,7 @@
     "feed": "Guardian_Business",
     "title": "Iran war pushes oil price above $90, threatening rise in global inflation",
     "url": "https://www.theguardian.com/business/2026/mar/06/iran-war-pushes-oil-price-above-90-dollars-a-barrel",
-    "timestamp": "2026-03-07T07:15:26.661667Z",
+    "timestamp": "2026-03-07T08:15:24.822921Z",
     "pattern_id": "p004",
     "pattern": "COVID-19 Market Crash",
     "category": "macroeconomic",
@@ -30,7 +30,7 @@
     "feed": "Guardian_Business",
     "title": "\u2018Geopolitical uncertainties\u2019 amid Iran war could slow fall in mortgage rates, sa",
     "url": "https://www.theguardian.com/business/2026/mar/06/geopolitical-uncertainties-amid-iran-war-could-slow-fall-in-mortgage-rates-says-halifax",
-    "timestamp": "2026-03-07T07:15:26.662173Z",
+    "timestamp": "2026-03-07T08:15:24.823427Z",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
@@ -43,7 +43,7 @@
     "feed": "Financial_Times",
     "title": "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
     "url": "https://www.ft.com/content/2fa83bbf-abf2-43f1-b2f0-84a1391150b9",
-    "timestamp": "2026-03-07T07:15:29.874433Z",
+    "timestamp": "2026-03-07T08:15:27.741659Z",
     "pattern_id": "p002",
     "pattern": "Russia-Ukraine Conflict",
     "category": "geopolitical",
@@ -56,7 +56,7 @@
     "feed": "CNBC_Top",
     "title": "U.S. payrolls unexpectedly fell by 92,000 in February; unemployment rate rises t",
     "url": "https://www.cnbc.com/2026/03/06/february-2026-jobs-report.html",
-    "timestamp": "2026-03-07T07:15:31.371862Z",
+    "timestamp": "2026-03-07T08:15:29.640900Z",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
@@ -69,7 +69,7 @@
     "feed": "Yahoo_Finance",
     "title": "Amid oil shock uncertainty, Fed's Hammack says central bank must lower inflation",
     "url": "https://finance.yahoo.com/news/amid-oil-shock-uncertainty-feds-233035412.html",
-    "timestamp": "2026-03-07T07:15:31.945698Z",
+    "timestamp": "2026-03-07T08:15:29.986605Z",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
@@ -82,7 +82,7 @@
     "feed": "Nasdaq_News",
     "title": "Iran conflict boosts U.S. Gulf oil prices to highest since 2020",
     "url": "https://www.reuters.com/business/energy/iran-conflict-boosts-us-gulf-oil-prices-highest-since-2020-2026-03-06/",
-    "timestamp": "2026-03-07T07:15:32.283648Z",
+    "timestamp": "2026-03-07T08:15:30.353183Z",
     "pattern_id": "p001",
     "pattern": "Saudi Oil Attacks",
     "category": "geopolitical",
@@ -95,7 +95,7 @@
     "feed": "Nasdaq_News",
     "title": "US could lift sanctions on more Russian oil, says Bessent",
     "url": "https://www.reuters.com/business/energy/us-could-lift-sanctions-more-russian-oil-says-bessent-2026-03-06/",
-    "timestamp": "2026-03-07T07:15:32.283716Z",
+    "timestamp": "2026-03-07T08:15:30.353270Z",
     "pattern_id": "p002",
     "pattern": "Russia-Ukraine Conflict",
     "category": "geopolitical",
@@ -108,7 +108,7 @@
     "feed": "Nasdaq_News",
     "title": "US private credit defaults hit record 9.2% in 2025, Fitch says",
     "url": "https://www.reuters.com/business/us-private-credit-defaults-hit-record-92-2025-fitch-says-2026-03-06/",
-    "timestamp": "2026-03-07T07:15:32.283783Z",
+    "timestamp": "2026-03-07T08:15:30.353352Z",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
@@ -121,7 +121,7 @@
     "feed": "Reuters_BreakingViews",
     "title": "Private credit woes come for Larry Fink\u2019s legacy",
     "url": "https://www.reuters.com/commentary/breakingviews/private-credit-woes-come-larry-finks-legacy-2026-03-06/",
-    "timestamp": "2026-03-07T07:15:32.663168Z",
+    "timestamp": "2026-03-07T08:15:31.152647Z",
     "pattern_id": "p018",
     "pattern": "Regional Banking Crisis 2023",
     "category": "financial_credit",
@@ -134,7 +134,7 @@
     "feed": "Reuters_BreakingViews",
     "title": "Private credit meets \u2018show-me-the-money\u2019 moment",
     "url": "https://www.reuters.com/commentary/breakingviews/private-credit-meets-show-me-the-money-moment-2026-03-05/",
-    "timestamp": "2026-03-07T07:15:32.663362Z",
+    "timestamp": "2026-03-07T08:15:31.152840Z",
     "pattern_id": "p018",
     "pattern": "Regional Banking Crisis 2023",
     "category": "financial_credit",
@@ -147,7 +147,7 @@
     "feed": "Reuters_BreakingViews",
     "title": "Hormuz reopening is not solely in Trump\u2019s gift",
     "url": "https://www.reuters.com/commentary/breakingviews/hormuz-reopening-is-not-solely-trumps-gift-2026-03-04/",
-    "timestamp": "2026-03-07T07:15:32.663434Z",
+    "timestamp": "2026-03-07T08:15:31.152912Z",
     "pattern_id": "p005",
     "pattern": "GameStop Short Squeeze",
     "category": "sentiment_social",
@@ -160,7 +160,7 @@
     "feed": "Bloomberg_Markets",
     "title": "US Unexpectedly Sheds 92,000 Jobs, Unemployment Rate Rises - Bloomberg.com",
     "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOZlNDT0huUWRVMGdIWlp4elgxZXlmSV9memxOelB3ZkJfNVhJenlIZDc1YjdTS2FIMzhXNjBud1d5UXhwak0zR3hRYUROUmh4dm1MZHV2ZlJzMjJwVV9SajlyQktxLUxqV0VEb0ZqVEpFUFJOSzRDQzgwaE5RTXhUREpmOUd3RzVNRkR2M201NTg1a1M5NDVCOEZING1icERsempYbElKaDhvaEgt?oc=5",
-    "timestamp": "2026-03-07T07:15:33.753804Z",
+    "timestamp": "2026-03-07T08:15:32.364909Z",
     "pattern_id": "p014",
     "pattern": "US Credit Rating Downgrade",
     "category": "macroeconomic",
@@ -173,7 +173,7 @@
     "feed": "AP_Top",
     "title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
     "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
-    "timestamp": "2026-03-07T06:15:12.309251Z",
+    "timestamp": "2026-03-07T07:15:12.683978Z",
     "pattern_id": "p004",
     "pattern": "COVID-19 Market Crash",
     "category": "macroeconomic",
@@ -192,7 +192,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 77,
+    "score": 1343,
     "signal_score": 300
   },
   {
@@ -234,7 +234,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 526,
+    "score": 550,
     "signal_score": 300
   },
   {
@@ -248,7 +248,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 14,
+    "score": 15,
     "signal_score": 300
   },
   {
@@ -262,7 +262,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 884,
+    "score": 908,
     "signal_score": 300
   },
   {
@@ -276,7 +276,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 40,
+    "score": 38,
     "signal_score": 300
   },
   {
@@ -290,7 +290,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 29,
+    "score": 34,
     "signal_score": 300
   },
   {
@@ -318,7 +318,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 13,
+    "score": 12,
     "signal_score": 300
   },
   {
@@ -332,7 +332,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 76,
+    "score": 79,
     "signal_score": 300
   },
   {
@@ -346,7 +346,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 27,
+    "score": 28,
     "signal_score": 300
   },
   {
@@ -360,7 +360,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 101,
+    "score": 103,
     "signal_score": 300
   },
   {
@@ -374,7 +374,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 690,
+    "score": 701,
     "signal_score": 300
   },
   {
@@ -388,7 +388,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 7550,
+    "score": 7817,
     "signal_score": 300
   },
   {
@@ -402,7 +402,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 1907,
+    "score": 1939,
     "signal_score": 300
   },
   {
@@ -416,7 +416,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 31,
+    "score": 30,
     "signal_score": 300
   },
   {
@@ -430,7 +430,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 3239,
+    "score": 3310,
     "signal_score": 300
   },
   {
@@ -444,7 +444,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 187,
+    "score": 193,
     "signal_score": 300
   },
   {
@@ -458,7 +458,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 26,
+    "score": 28,
     "signal_score": 300
   },
   {
@@ -472,7 +472,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 27,
+    "score": 29,
     "signal_score": 300
   },
   {
@@ -486,7 +486,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 286,
+    "score": 288,
     "signal_score": 300
   },
   {
@@ -500,7 +500,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 6,
+    "score": 8,
     "signal_score": 300
   },
   {
@@ -514,7 +514,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 350,
+    "score": 365,
     "signal_score": 300
   },
   {
@@ -528,7 +528,7 @@
     "category": "sentiment_social",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 615,
+    "score": 641,
     "signal_score": 300
   },
   {
@@ -612,7 +612,7 @@
     "category": "macroeconomic",
     "confidence": "HIGH",
     "time_horizon": "intraday",
-    "score": 2114,
+    "score": 2138,
     "signal_score": 300
   },
   {
@@ -648,7 +648,7 @@
     "feed": "Guardian_Business",
     "title": "German twist in the Telegraph tale shatters Lord Rothermere\u2019s dreams",
     "url": "https://www.theguardian.com/media/2026/mar/06/german-twist-in-the-telegraph-tale-shatters-lord-rothermeres-dreams",
-    "timestamp": "2026-03-07T07:15:26.661878Z",
+    "timestamp": "2026-03-07T08:15:24.823145Z",
     "pattern_id": "p009",
     "pattern": "Brexit Vote",
     "category": "political",
@@ -661,7 +661,7 @@
     "feed": "Guardian_World",
     "title": "South Africa\u2019s president calls Trump\u2019s policy to offer refuge to white Afrikaner",
     "url": "https://www.theguardian.com/world/2026/mar/05/south-africa-president-cyril-ramaphosa-calls-donald-trump-policy-white-afrikaners-racist",
-    "timestamp": "2026-03-07T07:15:18.153987Z",
+    "timestamp": "2026-03-07T08:15:15.815154Z",
     "pattern_id": "p024",
     "pattern": "Retail Options Sentiment",
     "category": "sentiment_social",
@@ -672,9 +672,9 @@
   {
     "source": "rss",
     "feed": "Financial_Times",
-    "title": "Google gives CEO Sundar Pichai new pay deal worth up to $692mn",
-    "url": "https://www.ft.com/content/1d3fa4f9-ec94-49ff-b22f-bd69b92be8ce",
-    "timestamp": "2026-03-07T07:15:29.874455Z",
+    "title": "Middle East war live: Iran calls halt to attacks on neighbours as Israel strikes",
+    "url": "https://www.ft.com/content/bbd79c63-8131-4b20-9d2d-708bc8acea38",
+    "timestamp": "2026-03-07T08:15:27.741505Z",
     "pattern_id": "p024",
     "pattern": "Retail Options Sentiment",
     "category": "sentiment_social",

@@ -51,6 +51,25 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - `qmd index <file>` — add file to index
   - `qmd stats` — show index statistics
 
+**Usage Patterns:**
+- **When to use qmd:** You need to find facts/entities across all memory (daily notes + MEMORY.md + life/ graph)
+- **When to read daily notes directly:** You want chronological context or recent conversations
+- **Category options:** `-c life` (default), `-c projects`, `-c people`, `-c companies`
+- **Examples:**
+  ```bash
+  # Find all facts about autonomous-trading-bot
+  qmd search "autonomous trading bot" -c life -n 5
+  
+  # Find people-related entities
+  qmd search "Philippe girlfriend" -c people -n 3
+  
+  # Search project-specific memory
+  qmd search "futures bot IBKR" -c projects -n 5
+  
+  # Find high-confidence signals
+  qmd search "STRONG BUY signal" -n 10
+  ```
+
 ### Telegram
 - **Bot username:** @bahons_bot
 - **Bot token:** (stored in config, not here)
@@ -192,6 +211,67 @@ cd /data/.openclaw/workspace/projects/autonomous-trading-bot
 pkill -f webhook_receiver.py  # Stop any zombie processes
 bash scripts/run_webhook_receiver.sh  # Restart with proper env
 ```
+
+### Model Learning & Evidence-Pack Workflow
+
+**Purpose:** Improve signal reasoning by learning from historical outcomes. When signals are verified (correct/partial/incorrect), the evidence pack provides context for model fine-tuning.
+
+**File Locations:**
+- `projects/market-intel/data/model_feedback.json` — Central feedback tracker
+- `projects/market-intel/data/enhanced_signals.json` — Signals with reasoning scores
+- `projects/autonomous-trading-bot/data/tracked_signals.json` — Executed trades linked to signals
+- `projects/futures-bot/data/` — Futures-specific signal tracking (Phase 2+)
+
+**Evidence Pack Schema:**
+```json
+{
+  "signal_id": "mi-042",
+  "timestamp": "2026-03-06T14:30:00Z",
+  "title": "Fed signals rate cut pause",
+  "category": "financial",
+  "confidence_level": "STRONG BUY",
+  "reasoning_score": 87,
+  "evidence_pack": {
+    "summary": "Fed Chair Powell hints at pausing rate cuts amid inflation concerns",
+    "drivers": ["inflation uptick", "employment strong", "Fed commentary"],
+    "metrics": {"cpi_mo": 0.4, "unemployment": 3.7, "fed_funds": "4.75-5.0%"},
+    "sector_impact": ["financials", "real_estate", "utilities"],
+    "confidence": 0.85
+  },
+  "outcome": "correct|partial|incorrect",
+  "outcome_date": "2026-03-07",
+  "outcome_notes": "Market moved as predicted, SPY +1.2%"
+}
+```
+
+**Accuracy Tracker Commands:**
+```bash
+# Review pending signals (interactive)
+cd /data/.openclaw/workspace/projects/market-intel
+python3 src/accuracy_tracker.py --review
+
+# Evaluate a specific signal
+python3 src/accuracy_tracker.py --eval 42 correct
+python3 src/accuracy_tracker.py --eval 43 partial
+python3 src/accuracy_tracker.py --eval 44 incorrect
+
+# Generate accuracy report
+python3 src/accuracy_tracker.py --report
+```
+
+**Feedback Loop:**
+1. Signal generated with reasoning score (0-100)
+2. Trade executed (if STRONG BUY + passes risk checks)
+3. Outcome verified after 24-48 hours (manual review via `--review`)
+4. Evidence pack saved to `model_feedback.json`
+5. Reasoning engine uses feedback to adjust future scoring weights
+6. Cron job `signal-accuracy-review` runs daily at 22:00 ICT
+
+**Cross-Project Integration:**
+- **Market Intel:** Generates signals, tracks accuracy
+- **Equity Bot:** Executes signals, logs trade outcomes
+- **Futures Bot:** Will follow same pattern (Phase 2 implementation)
+- **Shared Learning:** All three projects contribute to `model_feedback.json`
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
