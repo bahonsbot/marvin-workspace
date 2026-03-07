@@ -45,9 +45,11 @@ import secrets
 
 LOG_PATH = ROOT / "logs" / "webhook_decisions.jsonl"
 MAX_PAYLOAD_SIZE = 1024 * 1024  # 1MB
+MAX_BUCKETS = 1000  # Global cap on rate-limit buckets to prevent memory exhaustion
 
 _RATE_LIMIT_BUCKETS: Dict[str, list[float]] = {}
 _RATE_LIMIT_LOCK = Lock()
+_bucket_access_order: list[str] = []  # LRU tracking
 
 
 def _utc_now_iso() -> str:
@@ -82,7 +84,21 @@ def _rate_limit_allowed(client_ip: str) -> bool:
     now = time()
 
     with _RATE_LIMIT_LOCK:
-        bucket = _RATE_LIMIT_BUCKETS.setdefault(client_ip, [])
+        # Evict oldest buckets if at global cap (LRU eviction)
+        if client_ip not in _RATE_LIMIT_BUCKETS and len(_RATE_LIMIT_BUCKETS) >= MAX_BUCKETS:
+            # Remove oldest accessed bucket
+            while _bucket_access_order:
+                oldest_ip = _bucket_access_order.pop(0)
+                if oldest_ip in _RATE_LIMIT_BUCKETS:
+                    del _RATE_LIMIT_BUCKETS[oldest_ip]
+                    break
+        
+        # Initialize bucket if new
+        if client_ip not in _RATE_LIMIT_BUCKETS:
+            _RATE_LIMIT_BUCKETS[client_ip] = []
+            _bucket_access_order.append(client_ip)
+        
+        bucket = _RATE_LIMIT_BUCKETS[client_ip]
         cutoff = now - window_seconds
         while bucket and bucket[0] < cutoff:
             bucket.pop(0)
