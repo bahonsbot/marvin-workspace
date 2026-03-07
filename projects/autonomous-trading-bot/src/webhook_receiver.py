@@ -311,6 +311,19 @@ class WebhookHandler(BaseHTTPRequestHandler):
         if self.path == "/health":
             self._send_json(200, {"ok": True, "paper_only": True})
             return
+        if self.path == "/health/auth":
+            # Validate that shared secret is configured and auth path works
+            secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
+            if not secret:
+                self._send_json(503, {"ok": False, "error": "WEBHOOK_SHARED_SECRET not configured", "paper_only": True})
+                return
+            # Test auth validation with the configured secret
+            test_headers = {"X-Webhook-Secret": secret}
+            if _auth_allowed(test_headers):
+                self._send_json(200, {"ok": True, "auth": "valid", "paper_only": True})
+            else:
+                self._send_json(503, {"ok": False, "error": "Auth validation failed", "paper_only": True})
+            return
         self._send_json(404, {"error": "Not found", "paper_only": True})
 
     def log_message(self, format: str, *args: Any) -> None:

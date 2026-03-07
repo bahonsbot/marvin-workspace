@@ -176,7 +176,8 @@ def _check_webhook_health(webhook_url: str) -> bool:
     """Check if webhook receiver is healthy before dispatching."""
     # Extract base URL (e.g., http://127.0.0.1:8000/webhook -> http://127.0.0.1:8000)
     base_url = webhook_url.rsplit("/", 1)[0] if "/" in webhook_url else webhook_url
-    health_url = f"{base_url}/health"
+    # Use /health/auth to validate auth path, not just basic health
+    health_url = f"{base_url}/health/auth"
     
     try:
         req = request.Request(health_url, method="GET")
