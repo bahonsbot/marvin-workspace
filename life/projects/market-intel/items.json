@@ -182,8 +182,22 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-07",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-08",
+    "accessCount": 2,
     "source": "memory/cron-context.json"
+  },
+  {
+    "id": "mi-016",
+    "fact": "March 7th evening signal run (23:08 ICT): 30 signals generated (12 STRONG BUY, 8 BUY, 6 HOLD). Dominant themes: Iran conflict/oil prices highest since 2022, private credit stress (BlackRock $26B limits, Pimco warning), macroeconomic uncertainty (NSC pandemic unit disbandment), AI/tech sector (Oracle/OpenAI data center scrap). Cross-source correlations: RSS + Reddit on Iran/oil = HIGH confidence, RSS + Reddit on private credit = HIGH confidence.",
+    "category": "status",
+    "timestamp": "2026-03-08T00:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-08",
+    "accessCount": 1,
+    "source": "memory/2026-03-08.md"
   }
 ]
