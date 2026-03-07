@@ -297,8 +297,16 @@ def process_webhook_payload(
 
 def _append_log(record: Dict[str, Any], *, log_path: Path = LOG_PATH) -> None:
     log_path.parent.mkdir(parents=True, exist_ok=True)
+    # Create log file with restrictive permissions if it doesn't exist
+    if not log_path.exists():
+        log_path.touch(mode=0o600)
     with log_path.open("a", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+    # Ensure permissions stay restrictive after write (umask may have changed)
+    try:
+        os.chmod(log_path, 0o600)
+    except OSError:
+        pass  # Best-effort permission hardening
 
 
 class WebhookHandler(BaseHTTPRequestHandler):

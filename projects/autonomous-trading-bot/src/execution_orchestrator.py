@@ -10,6 +10,7 @@ import fcntl
 import hashlib
 import json
 import logging
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -183,9 +184,35 @@ class ExecutionOrchestrator:
             data = json.loads(path.read_text(encoding="utf-8"))
             if isinstance(data, dict):
                 return data
+            # Corrupted: not a dict
+            logger.error(f"Idempotency store corrupted (not a dict), quarantining and starting fresh")
+            self._quarantine_store("not_a_dict")
             return {}
-        except (json.JSONDecodeError, OSError):
+        except json.JSONDecodeError as e:
+            logger.error(f"Idempotency store JSON corrupted: {e}, quarantining and starting fresh")
+            self._quarantine_store(f"json_error:{str(e)[:50]}")
             return {}
+        except OSError as e:
+            logger.error(f"Idempotency store read error: {e}")
+            return {}
+    
+    def _quarantine_store(self, reason: str) -> None:
+        """Backup corrupted store file with timestamp for investigation."""
+        path = self.idempotency_store_path
+        if not path.exists():
+            return
+        try:
+            timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+            quarantine_path = path.with_suffix(f".corrupted.{timestamp}.bak")
+            path.rename(quarantine_path)
+            logger.warning(f"Quarantined corrupted idempotency store to {quarantine_path}")
+            # Ensure quarantine file has restrictive permissions
+            try:
+                os.chmod(quarantine_path, 0o600)
+            except OSError:
+                pass
+        except Exception as e:
+            logger.error(f"Failed to quarantine corrupted store: {e}")
 
     def _write_store(self, store: Dict[str, Any]) -> None:
         path = self.idempotency_store_path
@@ -193,6 +220,11 @@ class ExecutionOrchestrator:
         temp_path = path.with_suffix(".tmp")
         temp_path.write_text(json.dumps(store, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
         temp_path.replace(path)
+        # Ensure restrictive permissions on write
+        try:
+            os.chmod(path, 0o600)
+        except OSError:
+            pass
 
     @staticmethod
     def _utc_now_iso() -> str:

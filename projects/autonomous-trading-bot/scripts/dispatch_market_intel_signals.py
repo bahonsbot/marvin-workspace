@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import logging
 import os
 import sys
 from dataclasses import dataclass
@@ -16,6 +17,8 @@ from datetime import UTC, datetime, time
 from pathlib import Path
 from typing import Any
 from urllib import error, request
+
+logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -57,8 +60,14 @@ class Config:
 
 
 def _cfg() -> Config:
+    webhook_url = os.getenv("AUTO_WEBHOOK_URL", "http://127.0.0.1:8000/webhook").strip()
+    # Enforce HTTPS for non-local webhook URLs (allow http for localhost)
+    if not webhook_url.startswith("http://localhost") and not webhook_url.startswith("http://127.0.0.1"):
+        if not webhook_url.startswith("https://"):
+            logger.warning(f"WEBHOOK_SHARED_SECRET: Non-local webhook URL should use HTTPS: {webhook_url[:50]}...")
+    
     return Config(
-        webhook_url=os.getenv("AUTO_WEBHOOK_URL", "http://127.0.0.1:8000/webhook"),
+        webhook_url=webhook_url,
         webhook_secret=os.getenv("WEBHOOK_SHARED_SECRET", "").strip(),
         confidence=os.getenv("AUTO_MIN_CONFIDENCE", "STRONG BUY").strip().upper(),
         min_reasoning_score=float(os.getenv("AUTO_MIN_REASONING_SCORE", "80")),
