@@ -318,3 +318,30 @@ Run: `accuracy_tracker.py --eval INDEX correct|partial|incorrect`
 - **All cron jobs migrated** to Bailian-hosted MiniMax-M2.5 (bailian/MiniMax-M2.5)
 - **Bailian provider:** Multi-model access (Qwen, Zhipu GLM, Kimi, MiniMax-M2.5)
 - **Migration completed:** March 6, 2026 (16 days ahead of deadline)
+
+### Morning Meeting Protocol (Established Mar 7, 2026)
+- **Report order:** Security review (03:30) → Health Council (03:00) → Self-Improvement (04:00)
+- **Review process:** Sort by severity (CRITICAL → HIGH → MEDIUM → LOW), one item at a time
+- **Approval loop:** Present problem → risk → proposed fix → wait for approval → apply → log decision
+- **Repeat findings:** Acknowledge and suppress if identical to previously accepted risk
+- **First meeting:** Mar 7, 2026 — 30+ improvements applied across security, docs, infrastructure
+
+### Security Hardening (Mar 7, 2026)
+- **Webhook auth:** HMAC-SHA256 signatures, 5-min timestamp window, replay protection
+- **Rate limiting:** 120 req/60s per IP, LRU eviction (1000 bucket cap)
+- **Input validation:** Ticker regex (1-10 chars, A-Z0-9), ISO-8601 timestamps, field length limits
+- **Permissions:** .env (600), logs (700/600), state files (600 + gitignored)
+- **Idempotency:** Quarantine corrupted store, alert, backup rotation
+- **Ralphy:** PRD security scan always runs (logged even in unsafe mode)
+
+### Token Optimization (Mar 7, 2026)
+- **auto-signal-dispatcher:** 5 min → 15 min (67% reduction, 288 → 96 runs/day)
+- **market-signal-generator:** qwen3.5-plus → MiniMax-M2.5 (~50% cost reduction)
+- **news-feed-generator:** Disabled (redundant with News Reader PWA)
+- **Total hourly burn:** ~70% reduction
+
+### Cron Context-Sharing Pipeline (Mar 7, 2026)
+- **Phase 1:** memory/cron-context.json enables RSS → Reddit → Signal Generator correlation
+- **Phase 2:** Python scripts manage context directly via CronContext module (not AI agents)
+- **Benefits:** Proper merge behavior, consistent job naming, no overwriting across hours
+- **Correlations:** Automatic detection when same topic trends on RSS + Reddit
