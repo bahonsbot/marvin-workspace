@@ -83,6 +83,22 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 | nightly-memory-extraction | 23:00 | Memory extraction | none |
 | data-manager | Sun 05:00 | Prune old data | none |
 
+**Cron Context-Sharing Pipeline (Market Intel):**
+```
+rss-feed-monitor (:10)
+  ↓ writes to memory/cron-context.json
+reddit-monitor (:40)
+  ↓ reads RSS context, adds Reddit findings
+  ↓ writes to memory/cron-context.json
+market-signal-generator (:45)
+  ↓ reads combined RSS + Reddit context
+  ↓ generates signals with cross-source correlations
+  ↓ runs reasoning-engine
+```
+- **Context file:** `memory/cron-context.json` (5-8 KB, overwritten each run)
+- **Benefits:** Signals leverage multiple sources, higher confidence when RSS + Reddit align
+- **Pattern for new jobs:** Load context → process → update context → next job builds on it
+
 ### Installed Skills (Workspace)
 - humanizer
 - stock-market-pro
@@ -105,6 +121,12 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 - **Direct MiniMax-M2.5:** Deprecated (subscription ended 2026-03-22, all jobs migrated to Bailian)
 - **Fallback:** openai-codex/gpt-5.3-codex (OAuth)
 - **Nexos:** Removed (caused cron job issues, won't use)
+
+**Image Analysis Capabilities:**
+- ✅ **Can analyze:** Telegram attachments (images sent directly to bot)
+- ❌ **Cannot fetch:** External URLs (network restrictions on Bailian models)
+- **Workaround:** Download image first, then send as attachment for analysis
+- **Alternative:** Use Codex for URL-based image analysis (has external fetch capability)
 
 ### Codex CLI Setup (Fallback Model)
 
@@ -143,6 +165,33 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
   - **Broker:** IBKR (application submitted Mar 2026, pending approval 1-3 business days)
   - **Paper trading:** Free with IBKR (vs Tradovate $25/month)
   - **Phase 1 status:** Complete — 1,349 LOC, 14/14 tests passed, dry-run validated
+
+### Trading Bot Troubleshooting
+
+**Common Crash Causes:**
+1. **WEBHOOK_HOST binding:** Receiver refuses `0.0.0.0` (security feature). Use `127.0.0.1` or `localhost`.
+   - Fix: `WEBHOOK_HOST=127.0.0.1` in `.env`
+2. **Unquoted env vars with spaces:** `AUTO_MIN_CONFIDENCE=STRONG BUY` breaks parsing
+   - Fix: Quote values: `AUTO_MIN_CONFIDENCE="STRONG BUY"`
+3. **Port already in use:** Another process bound to 8000
+   - Fix: `lsof -i :8000` to find culprit, or change `WEBHOOK_PORT`
+
+**Watchdog Script:**
+- Location: `projects/autonomous-trading-bot/scripts/webhook_watchdog.sh`
+- Behavior: 60s sleep loop, restarts receiver if down (no cron dependency)
+- Logs: `projects/autonomous-trading-bot/logs/webhook_watchdog.out.log`
+
+**Health Check Endpoints:**
+- Basic health: `http://127.0.0.1:8000/health`
+- Auth validation: `http://127.0.0.1:8000/health/auth` (validates shared secret)
+- Manual test: `curl http://127.0.0.1:8000/health/auth`
+
+**Quick Recovery:**
+```bash
+cd /data/.openclaw/workspace/projects/autonomous-trading-bot
+pkill -f webhook_receiver.py  # Stop any zombie processes
+bash scripts/run_webhook_receiver.sh  # Restart with proper env
+```
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)

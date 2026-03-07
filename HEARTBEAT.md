@@ -9,7 +9,7 @@
 - **Note:** Heartbeat runs 24/7 for project work, only messages during active hours
 
 ## Model
-- **Default model:** MiniMax-M2.5 (minimax/MiniMax-M2.5)
+- **Default model:** bailian/MiniMax-M2.5
 - **Reasoning:** Disabled for heartbeat checks
 
 ## Behavior

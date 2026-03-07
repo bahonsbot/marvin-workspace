@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-03-07T16:14:00Z",
+  "last_updated": "2026-03-07T16:40:00Z",
   "pipeline": "market-intel",
   "jobs": {
     "rss-feed-monitor": {
@@ -33,23 +33,23 @@
       }
     },
     "reddit-monitor": {
-      "last_run": "2026-03-07T15:40:00Z",
+      "last_run": "2026-03-07T16:40:00Z",
       "status": "ok",
       "items_found": 50,
-      "summary": "50 posts after enrichment (93 scanned). 8/12 subreddits rate-limited. Top discussions: BlackRock $26B private credit limits (7550 upvotes - UP from 7237, MASSIVE), Oil 35% weekly gain (3239 upvotes), Jobs -92K (2114 upvotes), Oracle/OpenAI scrap (1907 upvotes), Qatar Gulf export warning (1471 upvotes), Marvell +18% (350 upvotes). Strong alignment with RSS - private credit story accelerating, oil/war dominates.",
+      "summary": "50 posts after enrichment (93 scanned). 8/12 subreddits rate-limited. Top discussions: BlackRock $26B private credit limits (7817 upvotes - UP from 7550, MASSIVE ACCELERATION), Oil 35% weekly gain (3310 upvotes), Jobs -92K (2138 upvotes), Oracle/OpenAI scrap (1939 upvotes), Qatar gulf export warning (1493 upvotes). Strong alignment with RSS - private credit story accelerating sharply, oil/war dominates.",
       "context": {
         "top_posts": [
-          "BlackRock $26 Billion Private Credit Fund Limits Withdrawals (7550 upvotes)",
-          "Oil surges 35% this week for biggest gain in futures trading history (3239 upvotes)",
-          "US lost 92k jobs in February (2114 upvotes)",
-          "Oracle and OpenAI End Plans to Expand Flagship Data Center (1907 upvotes)",
-          "Qatar warns war will force Gulf to stop energy exports within days (1471 upvotes)"
+          "BlackRock $26 Billion Private Credit Fund Limits Withdrawals (7817 upvotes)",
+          "Oil surges 35% this week for biggest gain in futures trading (3310 upvotes)",
+          "US lost 92k jobs in February (2138 upvotes)",
+          "Oracle and OpenAI End Plans to Expand Flagship Data Center (1939 upvotes)",
+          "Qatar warns war will force Gulf to stop energy exports within days (1493 upvotes)"
         ],
         "correlations_with_rss": [
-          "Private Credit: Reddit (BlackRock $26B limits, 7550 upvotes - MASSIVE, up from 7237) aligns with RSS (BlackRock $26B fund limits redemptions, 9.2% defaults, Pimco warning) - SAME STORY, EXTREME confidence, story ACCELERATING",
-          "Oil/Energy: Reddit (35% weekly gain, 3239 upvotes; Qatar export warning 1471 upvotes) aligns with RSS (Oil $90+, Iran war, record 36% weekly gain, Hormuz closure) - SAME STORY, HIGH confidence, dominant theme",
-          "Jobs/Macro: Reddit (92K jobs lost, 2114 upvotes) aligns with RSS (payrolls -92K, unemployment 4.1%) - SAME STORY, HIGH confidence, remains salient",
-          "AI/Tech: Reddit (Marvell +18%, Oracle/OpenAI scrap) aligns with RSS (Marvell beat, Oracle/OpenAI scrap deal) - SAME STORY, moderate engagement",
+          "Private Credit: Reddit (BlackRock $26B limits, 7817 upvotes - MASSIVE, up from 7550) aligns with RSS (BlackRock $26B fund limits redemptions, 9.2% defaults, Pimco warning) - SAME STORY, EXTREME confidence, story ACCELERATING sharply",
+          "Oil/Energy: Reddit (35% weekly gain, 3310 upvotes; Qatar export warning 1493 upvotes) aligns with RSS (Oil $90+, Iran war, record 36% weekly gain, Hormuz closure) - SAME STORY, HIGH confidence, dominant theme",
+          "Jobs/Macro: Reddit (92K jobs lost, 2138 upvotes) aligns with RSS (payrolls -92K, unemployment 4.1%) - SAME STORY, HIGH confidence, remains salient",
+          "AI/Tech: Reddit (Oracle/OpenAI scrap, 1939 upvotes) aligns with RSS (Oracle/OpenAI scrap deal) - SAME STORY, moderate engagement",
           "Defense: Reddit (no specific post) - RSS has Palantir +15%, NATO drones/AI shift"
         ],
         "rate_limited_subreddits": ["securityanalysis", "economics", "finance", "trading", "stocks", "ValueInvesting", "Daytrading", "Cryptocurrency"],
@@ -66,9 +66,9 @@
           "inflation": 0
         },
         "emerging_topics": [
-          "Private Credit: BlackRock $26B limits trending MASSIVE (7550 upvotes vs 7237 previously) - highest engagement, clear signal, story strengthening"
+          "Private Credit: BlackRock $26B limits trending MASSIVE (7817 upvotes vs 7550 previously) - highest engagement, clear signal, story ACCELERATING significantly"
         ],
-        "notable_shift": "Private credit overtook oil as #1 topic by engagement - story is accelerating, not fading"
+        "notable_shift": "Private credit engagement jumped from 7550 to 7817 - story accelerating rapidly, now clearly overtaking oil as #1 by engagement"
       }
     },
     "signal-generator": {

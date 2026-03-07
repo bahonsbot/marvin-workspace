@@ -313,8 +313,8 @@ After outcome, optionally add evidence-pack context:
 Run: `accuracy_tracker.py --eval INDEX correct|partial|incorrect`
 - **TradingView webhook plan:** keep optional due to cost; ask again in future before enabling paid TradingView plan.
 
-### Model Subscription Notes (Mar 2026)
-- **MiniMax direct subscription:** ends 2026-03-22 (auto-renewal canceled)
-- **MiniMax-M2.5 now accessible via Bailian** (alongside Qwen, Zhipu GLM, Kimi)
-- **Action needed before 2026-03-22:** migrate cron jobs from direct MiniMax to Bailian-hosted MiniMax-M2.5
-- Most cron jobs currently use direct MiniMax — schedule migration mid-March
+### Model Migration (Completed Mar 6, 2026)
+- **MiniMax direct subscription:** Auto-renewal canceled, ended 2026-03-22
+- **All cron jobs migrated** to Bailian-hosted MiniMax-M2.5 (bailian/MiniMax-M2.5)
+- **Bailian provider:** Multi-model access (Qwen, Zhipu GLM, Kimi, MiniMax-M2.5)
+- **Migration completed:** March 6, 2026 (16 days ahead of deadline)

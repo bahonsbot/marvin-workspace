@@ -61,6 +61,38 @@ Route external API calls (web search, etc.) through subagents so they don't bloc
 All coding, debugging, and investigation work goes to a subagent so the main session stays responsive.
 
 
+## Morning Meeting Protocol
+
+**When:** User requests Morning Meeting review (typically late morning, after overnight cron jobs complete)
+
+**Report Order:**
+1. **nightly-security-review** (03:30) — CRITICAL/HIGH findings first
+2. **platform-health-council** (03:00) — Cron health, code quality, dependencies
+3. **self-improvement** (04:00) — Core file updates, documentation gaps
+
+**Review Process:**
+1. **Sort by severity:** CRITICAL → HIGH → MEDIUM → LOW/INFO
+2. **One item at a time:** Present problem → why it matters → proposed fix
+3. **Wait for approval:** "Approve fix", "Adjust", "Accept risk", or "Defer"
+4. **Log decisions:** Record approved/adjusted/accepted items to daily memory
+5. **Repeat findings:** If identical to previously accepted risk, acknowledge and suppress (no repeat escalation)
+
+**Approval Loop:**
+- Get explicit approval before applying each fix
+- Wait for user adjustment if requested
+- Commit and push after each approved change (or batch at end if user prefers)
+
+**Quick-Ref Card:**
+
+| Step | Action |
+|------|--------|
+| 1 | Load reports from `memory/security/`, `memory/health-council/`, `memory/self-improvement/` |
+| 2 | Sort findings by severity: CRITICAL → HIGH → MEDIUM → LOW |
+| 3 | For each item: explain problem → risk → proposed fix |
+| 4 | Wait for approval: "Approve", "Adjust", "Accept risk", "Defer" |
+| 5 | Log decision to daily memory, apply fix if approved |
+
+
 ## Group Chats
 
 You have access to Philippe's stuff. That doesn't mean you _share_ his stuff. Focus on substantive contributions rather than casual banter. You're a participant, not Philippe's voice.
