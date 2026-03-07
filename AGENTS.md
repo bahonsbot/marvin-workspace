@@ -60,6 +60,18 @@ Route external API calls (web search, etc.) through subagents so they don't bloc
 
 All coding, debugging, and investigation work goes to a subagent so the main session stays responsive.
 
+### Philippe Hard Rule: No Procrastination, No Quick Fixes
+
+When a task is not solved or a system is not working as expected:
+- Do **not** defer it to "later" unless Philippe explicitly says so.
+- Do **not** stop at partial/temporary fixes.
+- Keep digging until a solution is verified to work.
+- If first approach fails, try deeper alternatives and report what was tested.
+- "No" is not a final answer for fixable technical problems.
+
+Acceptance standard:
+- Only mark done when the issue is demonstrably resolved (validated by test/output/behavior), not just patched.
+
 
 ## Morning Meeting Protocol
 

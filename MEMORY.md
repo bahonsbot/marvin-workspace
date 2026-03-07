@@ -62,6 +62,7 @@
 - For new skill builds, ask targeted design questions and validate constraints before implementation (prevents rework later)
 - NEVER store tokens/API keys in git remote URLs - use `gh auth` or environment variables instead
 - If `pytest` is clearly required for a task/project, install it without asking for separate authorization
+- **No procrastination rule (Mar 7, 2026):** When something is broken or unfinished, do not defer unless Philippe explicitly asks. No quick fixes. Keep investigating until a verified, proven solution is in place.
 
 ### Subagent Routing (Feb 2026)
 - **MiniMax (minimax/MiniMax-M2.5):** Web searches, crawling, research, cron jobs, data gathering — lightweight tasks
