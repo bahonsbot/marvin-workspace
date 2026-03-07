@@ -1,36 +1,39 @@
 {
   "version": 1,
-  "last_updated": "2026-03-07T16:47:00Z",
+  "last_updated": "2026-03-07T09:15:37.442078+00:00",
   "pipeline": "market-intel",
   "jobs": {
     "rss-feed-monitor": {
-      "last_run": "2026-03-07T16:14:00Z",
+      "last_run": "2026-03-07T09:15:37.442043+00:00",
       "status": "ok",
       "items_found": 109,
-      "summary": "109 matches across 20 feeds. Top themes: Oil $90+ (Iran war, record 36% weekly gain, $100 target, overbought since 1990, Hormuz closure); Payrolls -92K miss, unemployment 4.1%; Private credit stress (9.2% defaults, BlackRock limits, Pimco warning); Defense stocks rally (Palantir +15%, Trump quadrupling production); DeepSeek AI rout continues; Oracle/OpenAI data center scrap; Marvell +18% beat. 6 feed URLs still have whitespace issues.",
+      "summary": "109 matches across 20 feeds. Top themes: Trump disbanded NSC pandemic unit that experts had praised - AP News, AP Explains: What happens when migrants arrive at US border - AP News, Weight-loss jab could be made for $3 a month, study finds",
       "context": {
-        "top_keywords": ["oil", "war", "ai", "conflict", "ukraine", "iran", "ev", "credit"],
-        "feed_errors": ["Business_Bloomberg", "FinancialJuice", "YCombinator", "ZeroHedge", "UnusualWhales", "Reuters_Finance"],
-        "enrichment_rate": "55%",
+        "top_keywords": [
+          "ai",
+          "ukraine",
+          "crisis",
+          "health",
+          "eu",
+          "ev",
+          "who",
+          "rate"
+        ],
         "notable_stories": [
-          "Oil hits highest level since 2023 as Iran war triggers historic surge",
-          "Oil prices notch record weekly gain of nearly 36%, biggest since 1985",
-          "Crude-oil futures haven't been this overbought since 1990",
-          "Traders warn $100 oil is imminent if Iran war keeps raging",
-          "US payrolls unexpectedly fell by 92,000 in February, unemployment rises to 4.1%",
-          "US private credit defaults hit record 9.2% in 2025 (Fitch)",
-          "Private credit meets 'show-me-the-money' moment (Bloomberg)",
-          "Private debt should face 'full-blown default cycle,' Pimco says",
-          "Oil surge sparks Treasury market's worst weekly rout since 'liberation'",
-          "Defense-tech stocks are the hot trade as Iran conflict widens",
-          "Trump says defense firms to quadruple production of some weapons",
-          "Palantir rallies 15% for the week as Iran war boosts prospects",
-          "Marvell stock surges 18% as CEO points to continuing AI demand",
-          "DeepSeek AI rout continues - stocks sink in broad AI rout sparked by China's DeepSeek",
-          "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
-          "NATO to shift focus from tanks to drones, AI at July summit"
-        ]
-      }
+          "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+          "AP Explains: What happens when migrants arrive at US border - AP News",
+          "Weight-loss jab could be made for $3 a month, study finds",
+          "Three men deported by US file legal case against Eswatini over detention",
+          "South Africa\u2019s president calls Trump\u2019s policy to offer refuge to white Afrikaners \u2018racist\u2019",
+          "Lewis Hamilton sets sights on racing in an African grand prix before retiring",
+          "South Sudan risks return to full-blown civil war as violence escalates",
+          "\u2018An ideological guest list\u2019: Trump invites Latin America\u2019s rightwing leaders to Florida summit",
+          "Peruvian state responsible for mother\u2019s death in forced sterilisation, court rules",
+          "Iranian mathematician missing in Canada may have been targeted by Tehran, activists say"
+        ],
+        "enrichment_rate": "9%"
+      },
+      "last_updated": "2026-03-07T09:15:37.442074+00:00"
     },
     "reddit-monitor": {
       "last_run": "2026-03-07T16:40:00Z",
@@ -52,7 +55,16 @@
           "AI/Tech: Reddit (Oracle/OpenAI scrap, 1939 upvotes) aligns with RSS (Oracle/OpenAI scrap deal) - SAME STORY, moderate engagement",
           "Defense: Reddit (no specific post) - RSS has Palantir +15%, NATO drones/AI shift"
         ],
-        "rate_limited_subreddits": ["securityanalysis", "economics", "finance", "trading", "stocks", "ValueInvesting", "Daytrading", "Cryptocurrency"],
+        "rate_limited_subreddits": [
+          "securityanalysis",
+          "economics",
+          "finance",
+          "trading",
+          "stocks",
+          "ValueInvesting",
+          "Daytrading",
+          "Cryptocurrency"
+        ],
         "keywords": {
           "miss": 50,
           "call": 0,
@@ -78,10 +90,10 @@
       "summary": "29 signals generated (baseline). Categories: geopolitical (Iran war, oil $90+, Saudi attacks, Russia-Ukraine, Oracle/OpenAI scrap), macroeconomic (COVID-19 unit disbandment, payrolls -92K, unemployment 4.1%, credit rating concerns), financial_credit (oil-driven inflation, Fed policy uncertainty), defense (Iran conflict, production quadrupling). Top themes: Iran war/oil surge dominates, jobs miss triggers recession concerns, private credit stress continues, AI sector volatility from DeepSeek vs Marvell earnings.",
       "context": {
         "cross_source_correlations": [
-          "RSS + Reddit both on Iran war/oil escalation → HIGH confidence geopolitical signal (Reddit 35% weekly oil gain aligns with RSS $90+, Hormuz - dominant theme across both sources)",
-          "RSS + Reddit both on jobs miss (-92K) → HIGH confidence macro signal (Reddit 2138 upvotes aligns with RSS - unemployment 4.1% triggers recession concerns)",
-          "RSS + Reddit both on private credit stress → HIGH confidence financial stability signal (Reddit BlackRock $26B limits trending MASSIVE aligns with RSS 9.2% defaults, Pimco warning)",
-          "RSS + Reddit both on Oracle/OpenAI scrap → MODERATE confidence tech signal (both covering data center expansion cancellation)"
+          "RSS + Reddit both on Iran war/oil escalation \u2192 HIGH confidence geopolitical signal (Reddit 35% weekly oil gain aligns with RSS $90+, Hormuz - dominant theme across both sources)",
+          "RSS + Reddit both on jobs miss (-92K) \u2192 HIGH confidence macro signal (Reddit 2138 upvotes aligns with RSS - unemployment 4.1% triggers recession concerns)",
+          "RSS + Reddit both on private credit stress \u2192 HIGH confidence financial stability signal (Reddit BlackRock $26B limits trending MASSIVE aligns with RSS 9.2% defaults, Pimco warning)",
+          "RSS + Reddit both on Oracle/OpenAI scrap \u2192 MODERATE confidence tech signal (both covering data center expansion cancellation)"
         ],
         "top_reasoning_themes": [
           "Iran war escalation (oil $90+, record 36% weekly gain, $100 target, Hormuz supply threat, defense stocks rally)",

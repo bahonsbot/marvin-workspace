@@ -20,12 +20,12 @@ Reddit → reddit-monitor (cron) → reddit_alerts.json → News Reader App
 
 ## Opening the App
 
-### Local Development
-
-From the `app/` directory:
+### Quick Start (Test Locally)
 
 ```bash
-cd projects/market-intel-news-reader/app
+cd projects/market-intel-news-reader
+./scripts/build_for_github_pages.sh
+cd app
 python3 -m http.server 8080
 ```
 
@@ -33,7 +33,21 @@ Open: http://localhost:8080
 
 ### Production (GitHub Pages)
 
-Push `app/` directory to GitHub Pages branch. The app fetches data from the workspace via relative paths.
+1. **Build the app** (copies RSS/Reddit JSON into app/ folder):
+   ```bash
+   cd projects/market-intel-news-reader
+   ./scripts/build_for_github_pages.sh
+   ```
+
+2. **Push to GitHub Pages**:
+   - Push the `app/` folder contents to your GitHub Pages branch
+   - Or deploy to Netlify/Vercel (drag & drop the `app/` folder)
+
+3. **Update data regularly**:
+   - Re-run `build_for_github_pages.sh` after each RSS/Reddit cron run
+   - Or set up auto-deploy via GitHub Actions
+
+**Note:** The app includes snapshot data from build time. For live data, re-run the build script.
 
 ## Data Schema
 
