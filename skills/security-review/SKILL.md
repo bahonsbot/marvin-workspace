@@ -112,7 +112,8 @@ If critical findings exist:
 
 ## Known False Positives (Do Not Flag)
 
-The following files may appear to contain secrets but are safe by design:
+The following files may appear to contain secrets but are safe by design.
+For accepted-risk items: report once as INFO with baseline note, then suppress repeats unless state changes.
 
 ### auth.json
 - Contains OAuth tokens (access/refresh tokens) for model providers
@@ -134,3 +135,16 @@ The following files may appear to contain secrets but are safe by design:
 - Input is validated against whitelist (minimax/codex), then maps to hardcoded model names
 - **Why safe:** User input is never passed to jq — only used for validation, then hardcoded strings are written
 - Only flag if: input validation is removed AND user input flows into jq
+
+### Historical `.env` exposure / rotation reminders
+- Treat as suppressed accepted risk when all controls are currently healthy:
+  - `.env` and `**/.env` are gitignored
+  - no `.env` files are tracked in git
+  - `.env` file permissions are 600
+  - no fresh leak evidence in logs/reports
+- **Policy override:** Do not re-raise daily as HIGH if above controls remain true.
+- Re-open only on state change (permission drift, tracked/committed `.env`, or new leak evidence).
+
+### urllib vs requests preference
+- Using `urllib` is not itself a vulnerability.
+- Treat as LOW/INFO maintainability note unless there is concrete TLS/verification weakness.
