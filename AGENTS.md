@@ -38,34 +38,22 @@ For simple/low-risk one-step tasks, execute directly.
 
 ## Morning Meeting Protocol
 
-**When:** User requests Morning Meeting review (typically late morning, after overnight cron jobs complete)
+Pre-check before report review:
+0. Confirm `nightly-memory-extraction` completed successfully and produced expected daily memory output.
 
-**Report Order:**
-1. **nightly-security-review** (03:30) — CRITICAL/HIGH findings first
-2. **platform-health-council** (03:00) — Cron health, code quality, dependencies
-3. **self-improvement** (04:00) — Core file updates, documentation gaps
+When requested, review reports in this order:
+1. `nightly-security-review`
+2. `platform-health-council`
+3. `self-improvement`
 
-**Review Process:**
-1. **Sort by severity:** CRITICAL → HIGH → MEDIUM → LOW/INFO
-2. **One item at a time:** Present problem → why it matters → proposed fix
-3. **Wait for approval:** "Approve fix", "Adjust", "Accept risk", or "Defer"
-4. **Log decisions:** Record approved/adjusted/accepted items to daily memory
-5. **Repeat findings:** If identical to previously accepted risk, acknowledge and suppress (no repeat escalation)
+Process each finding one-by-one:
+1. present problem + risk + proposed fix
+2. wait for decision: Approve / Adjust / Accept risk / Defer
+3. apply only approved changes
+4. log decisions in daily memory
+5. suppress repeat accepted-risk findings unless state changes
 
-**Approval Loop:**
-- Get explicit approval before applying each fix
-- Wait for user adjustment if requested
-- Commit and push after each approved change (or batch at end if user prefers)
-
-**Quick-Ref Card:**
-
-| Step | Action |
-|------|--------|
-| 1 | Load reports from `memory/security/`, `memory/health-council/`, `memory/self-improvement/` |
-| 2 | Sort findings by severity: CRITICAL → HIGH → MEDIUM → LOW |
-| 3 | For each item: explain problem → risk → proposed fix |
-| 4 | Wait for approval: "Approve", "Adjust", "Accept risk", "Defer" |
-| 5 | Log decision to daily memory, apply fix if approved |
+Approval is required before each fix unless user explicitly requests batching.
 
 
 ## Group Chats
@@ -112,14 +100,16 @@ For semantic memory search across all memory layers, use the `qmd` command (e.g.
 Cron context-sharing (`memory/cron-context.json`) is maintained by project Python scripts directly (rss_monitor/reddit_monitor/signal_generator), not manual AI merge logic. Keep this script-managed pattern to avoid overwrite/regression bugs.
 
 
-## 💓 Heartbeats
+## Heartbeat Governance
+- Follow `HEARTBEAT.md` as source of truth.
+- Keep heartbeat checks lightweight and non-disruptive.
+- If nothing needs attention: `HEARTBEAT_OK`.
 
-Follow HEARTBEAT.md. Track checks in memory/heartbeat-state.json. During heartbeats, commit and push uncommitted workspace changes and periodically synthesize daily notes into MEMORY.md.
-
-Proactive execution queue source of truth: `memory/proactive-queue.json`.
-- Task shape includes: `id`, `title`, `priority`, `ready`, `phase2_eligible`, `project`
-- Heartbeats should pick one bounded chunk (10-20 minutes), verify outcome, then log to daily memory
-- Keep routine progress silent; only message on milestone/blocker
+## Tooling and Policy Boundaries
+- `TOOLS.md` = live operational runbook
+- `MEMORY.md` = curated durable memory
+- `memory/YYYY-MM-DD.md` = timeline/history
+- Project implementation detail belongs in `projects/*/docs` or `projects/*/notes`
 
 ## Docker Environment Rules
 
@@ -165,5 +155,7 @@ Convert all displayed times to the user's timezone (configured in USER.md). This
 
 
 ## Error Reporting
-
-If any task fails (subagent, API call, cron job, git operation, skill script), report it to the user via your messaging platform with error details. The user won't see stderr output, so proactive reporting is the only way they'll know something went wrong.
+When tasks fail (subagent, cron, API, script, git), report clearly with:
+- what failed
+- what was attempted
+- current status and recommended next step
