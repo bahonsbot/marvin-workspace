@@ -27,7 +27,12 @@ class TestWebhookReceiver(unittest.TestCase):
         fake_context = {"summary": {"available_context": True, "risk_bias": "risk_off", "severity": "high", "geopolitical_count": 5}}
 
         with patch("src.webhook_receiver.load_context_snapshot", return_value=fake_context):
-            result = process_webhook_payload(self._payload(), state=self._state(), config=self._config())
+            result = process_webhook_payload(
+                self._payload(),
+                state=self._state(),
+                config=self._config(),
+                paper_execute=False,
+            )
 
         self.assertIn("proposal", result)
         self.assertLess(result["proposal"]["adjusted_qty"], result["proposal"]["raw_qty"])

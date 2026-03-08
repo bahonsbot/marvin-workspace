@@ -194,7 +194,7 @@ EDGE_CASE_PAYLOADS = [
             "qty": 1,
             "timestamp": "2026-03-01T10:00:00Z",
         },
-        "should_pass": True,  # Schema validates type, not content
+        "should_pass": False,  # Ticker regex now enforces A-Z0-9 format
     },
     {
         "name": "extra_fields_ignored",
