@@ -114,22 +114,11 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - `skills/google_maps_pro/scripts/get_tour_plan.py` — Route matrix helper
 
 ### Active Projects
-- `projects/horizons-pms/` — PMS system for hotel front-desk (PRD in progress)
-- `projects/market-intel/` — Stock market analysis and research (Phase 1-3 complete)
-- `projects/autonomous-trading-bot/` — Autonomous **equity** trading via Alpaca (paper trading live since Mar 1, 2026)
-  - **Nickname:** "equity-bot" (for distinction from futures-bot)
-  - **Directory:** `autonomous-trading-bot` (don't rename — breaks cron paths)
-  - **Webhook endpoint:** `https://tradehook.motiondisplay.cloud/webhook` (public HTTPS, nginx + Certbot)
-  - **Symbol mapper:** 50+ sector ETFs, 60+ company tickers, 30+ macro ETFs (no blind AAPL trades)
-  - **Auto-dispatch:** STRONG BUY gating, min confidence threshold, market-hours gate, duplicate suppression
-  - **FAST regime:** Dynamic activation under high/critical context stress (lower threshold, bounded qty multiplier)
-  - **Watchdog:** Lightweight restart script (60s sleep loop, no cron)
-  - **Risk controls:** Idempotency locking, payload size limits (1MB), rate limiting, secret redaction
-- `projects/market-intel-news-reader/` — PWA news reader app for iPhone (PRD in progress)
-- `projects/futures-bot/` — Futures trading bot (PRD created Mar 4, scheduled for implementation)
-  - **Broker:** IBKR (application submitted Mar 2026, pending approval 1-3 business days)
-  - **Paper trading:** Free with IBKR (vs Tradovate $25/month)
-  - **Phase 1 status:** Complete — 1,349 LOC, 14/14 tests passed, dry-run validated
+- `projects/horizons-pms/` — PMS system (currently on hold)
+- `projects/market-intel/` — signal generation + reasoning pipeline (active)
+- `projects/autonomous-trading-bot/` — Alpaca paper equity bot (active)
+- `projects/market-intel-news-reader/` — PWA news reader (active)
+- `projects/futures-bot/` — futures bot (Phase 1 complete, implementation in progress)
 
 ### Trading Bot Troubleshooting
 
@@ -158,66 +147,14 @@ pkill -f webhook_receiver.py  # Stop any zombie processes
 bash scripts/run_webhook_receiver.sh  # Restart with proper env
 ```
 
-### Model Learning & Evidence-Pack Workflow
+### Model Learning References
+- Canonical evidence-pack schema: `projects/market-intel/docs/evidence-pack-schema.md`
+- Feedback store: `projects/market-intel/data/model_feedback.json`
+- Accuracy tracker: `projects/market-intel/src/accuracy_tracker.py`
 
-**Purpose:** Improve signal reasoning by learning from historical outcomes. When signals are verified (correct/partial/incorrect), the evidence pack provides context for model fine-tuning.
-
-**File Locations:**
-- `projects/market-intel/data/model_feedback.json` — Central feedback tracker
-- `projects/market-intel/data/enhanced_signals.json` — Signals with reasoning scores
-- `projects/autonomous-trading-bot/data/tracked_signals.json` — Executed trades linked to signals
-- `projects/futures-bot/data/` — Futures-specific signal tracking (Phase 2+)
-
-**Evidence Pack Schema:**
-```json
-{
-  "signal_id": "mi-042",
-  "timestamp": "2026-03-06T14:30:00Z",
-  "title": "Fed signals rate cut pause",
-  "category": "financial",
-  "confidence_level": "STRONG BUY",
-  "reasoning_score": 87,
-  "evidence_pack": {
-    "summary": "Fed Chair Powell hints at pausing rate cuts amid inflation concerns",
-    "drivers": ["inflation uptick", "employment strong", "Fed commentary"],
-    "metrics": {"cpi_mo": 0.4, "unemployment": 3.7, "fed_funds": "4.75-5.0%"},
-    "sector_impact": ["financials", "real_estate", "utilities"],
-    "confidence": 0.85
-  },
-  "outcome": "correct|partial|incorrect",
-  "outcome_date": "2026-03-07",
-  "outcome_notes": "Market moved as predicted, SPY +1.2%"
-}
-```
-
-**Accuracy Tracker Commands:**
-```bash
-# Review pending signals (interactive)
-cd /data/.openclaw/workspace/projects/market-intel
-python3 src/accuracy_tracker.py --review
-
-# Evaluate a specific signal
-python3 src/accuracy_tracker.py --eval 42 correct
-python3 src/accuracy_tracker.py --eval 43 partial
-python3 src/accuracy_tracker.py --eval 44 incorrect
-
-# Generate accuracy report
-python3 src/accuracy_tracker.py --report
-```
-
-**Feedback Loop:**
-1. Signal generated with reasoning score (0-100)
-2. Trade executed (if STRONG BUY + passes risk checks)
-3. Outcome verified after 24-48 hours (manual review via `--review`)
-4. Evidence pack saved to `model_feedback.json`
-5. Reasoning engine uses feedback to adjust future scoring weights
-6. Cron job `signal-accuracy-review` runs daily at 22:00 ICT
-
-**Cross-Project Integration:**
-- **Market Intel:** Generates signals, tracks accuracy
-- **Equity Bot:** Executes signals, logs trade outcomes
-- **Futures Bot:** Will follow same pattern (Phase 2 implementation)
-- **Shared Learning:** All three projects contribute to `model_feedback.json`
+### Deeper References
+- Project strategy and history: `MEMORY.md` + `memory/YYYY-MM-DD.md`
+- Market Intel notes: `projects/market-intel/notes/`
 
 ### Environment
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
