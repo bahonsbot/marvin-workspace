@@ -1,82 +1,39 @@
 # MEMORY.md - Curated Long-Term Memory
 
-## AI Assistant: Marvin
-
+## Assistant Baseline
 - Name: Marvin
-- Vibe: Dry wit, direct, helpful friend first
-- Configured with personality in SOUL.md
+- Role: Assistant Director at Motion Display
+- Voice: direct, warm, dry wit, high-accountability
+- Working principle: prioritize verified outcomes over quick patches
 
-## Philippe's Setup
+## Philippe Baseline
+- Name: Philippe
+- Timezone: Asia/Ho_Chi_Minh (GMT+7)
+- Operating preference: decisive recommendations, fast implementation loops
+- Context: creative + technical career exploration, active trading interest
 
-### Models
-- **Bailian Provider:** Primary (migration complete Mar 6, 2026)
-  - `bailian/MiniMax-M2.5` — 7 cron jobs (data gathering, simple tasks)
-  - `bailian/qwen3.5-plus` — 7 cron jobs (reasoning, analysis, security)
-- **Direct MiniMax-M2.5:** Deprecated (all jobs migrated, subscription scheduled to end 2026-03-22)
-- **Fallback:** OpenAI Codex GPT-5.3 (openai-codex/gpt-5.3-codex) via OAuth
-- **Nexos:** Removed (caused cron job issues, won't use)
-- **Incident note (Feb 24 rollback):** bad provider-key schema edits previously caused invalid config/boot issues; only use CLI/schema-safe edits
-- **Known instability (Feb 25):** Multiple "terminated" errors from MiniMax at 21:36, 22:17, 22:52. Fallback to Codex worked.
-- **Fallback Protocol (Feb 28):** If model fails with "terminated" error, immediately switch to Codex. Do not retry more than once per session.
-- **Switch commands:** /minimax, /codex, "switch to minimax", "switch to codex"
-- **Authoritative reference:** See TOOLS.md for full Bailian provider list and current model routing
+## Runtime Baseline
+- Workspace: `/data/.openclaw/workspace`
+- Environment: Hostinger VPS, Docker runtime
+- Memory system:
+  - `MEMORY.md` (curated long-term)
+  - `memory/YYYY-MM-DD.md` (daily timeline)
+  - `life/` knowledge graph (entity memory)
+- Semantic retrieval: `qmd` is the memory search layer across daily notes + MEMORY + life graph
 
-## How Philippe Works
-- Prefers fast iteration — "build the MVP this weekend" energy
-- Will share credentials directly in chat when moving fast
-- When they say "handle it," make the decision yourself - within the context of the Safety Rules
+## Model Baseline
+- Primary provider: Bailian
+- Lightweight delegation: `bailian/MiniMax-M2.5`
+- Higher-reasoning delegation: `bailian/qwen3.5-plus`
+- Coding/deep technical fallback: `openai-codex/gpt-5.3-codex`
+- Fallback protocol: if a model errors repeatedly, switch once to Codex and proceed
 
-### Codex + Coding-Agent Skill Setup (Feb 2026)
-- Codex CLI requires its own separate OAuth login via `codex login` or `codex login --device-auth`
-- Device code flow (`codex login --device-auth`) works best to avoid browser state mismatch issues
-- OAuth tokens saved in Codex CLI are separate from OpenClaw's OAuth (both needed)
-- Built-in OpenClaw skill: `coding-agent` - delegates to Codex/Claude Code/Pi agents
-- Usage: `bash pty:true workdir:~/project background:true command:"codex exec --full-auto 'prompt'"`
-- Always use `pty:true` for coding agents - they need a pseudo-terminal
-- Codex refuses to run outside a git repo - use `mktemp -d && git init` for scratch work
-- Blender Python scripts: Blender 4.x renamed EEVEE → BLENDER_EEVEE_NEXT and Transmission → Transmission Weight
-- Codex can analyze images: `codex exec --full-auto "Look at this image: /path/to/image.jpg"`
-
-### Memory Settings (Feb 2026)
-- Memory flush on compaction: enabled
-- Session memory: enabled
-- **Three-Layer Memory System (Feb 2026):**
-  - **Layer 1:** MEMORY.md - curated long-term memory (this file)
-  - **Layer 2:** memory/YYYY-MM-DD.md - daily notes with timeline
-  - **Layer 3:** ~/life/ - knowledge graph organized by entity (PARA system)
-- **QMD Backend:** Enabled (qmd 1.0.8) for semantic search across all memory layers
-- **Nightly Extraction:** Runs at 23:00 ICT to extract durable facts from conversations
-- **Memory Decay:** Access tracking implemented - frequently referenced facts stay "hot"
-
-### Heartbeat
-- Status: Active
-- Fixed at 60-minute intervals (not 30min - reduced to prevent delivery queue backlog)
-
-### Image Analysis (Feb 2026)
-- Built-in image tool has a bug: rejects MiniMax even though model supports images
-- Workaround: Use Codex to analyze images
-
-### Preferences
-- Always ask for confirmation before installing skills flagged as suspicious by VirusTotal
-- For non-trivial cleanup/fix actions, propose the plan first and wait for Philippe's explicit confirmation before executing
-- For new skill builds, ask targeted design questions and validate constraints before implementation (prevents rework later)
-- NEVER store tokens/API keys in git remote URLs - use `gh auth` or environment variables instead
-- If `pytest` is clearly required for a task/project, install it without asking for separate authorization
-- **No procrastination rule (Mar 7, 2026):** When something is broken or unfinished, do not defer unless Philippe explicitly asks. No quick fixes. Keep investigating until a verified, proven solution is in place.
-- **Overengineering lesson (Mar 7, 2026):** Ask clarifying questions before building complex infrastructure. Prefer the simplest working architecture first.
-- **Skill invocation discipline (Mar 7, 2026):** When Philippe names a specific skill, use that skill directly unless he asks for an alternative.
-
-### Subagent Routing (Feb 2026)
-- **MiniMax (minimax/MiniMax-M2.5):** Web searches, crawling, research, cron jobs, data gathering — lightweight tasks
-- **Codex (openai-codex/gpt-5.3-codex):** Coding tasks, debugging, complex investigations, multi-file features — anything needing programming logic
-- Route all subagent spawns based on task type
-
-### GitHub
-- Account: bahonsbot (GitHub CLI authenticated)
-- Repo: https://github.com/bahonsbot/marvin-workspace (public)
-- Purpose: store code projects (Blender scripts, etc.)
-- .gitignore configured to exclude sensitive files (*.md, backup/, memory/, .openclaw/, etc.)
-- When writing code, always commit and push to this repo automatically
+## High-Confidence Operating Rules
+- No procrastination on fixable technical problems
+- Propose plan first for non-trivial changes
+- Before proposing non-trivial solutions, do sufficient research to verify fit, avoid policy conflicts, and prevent breakage of active processes
+- Ask before external/public actions
+- Keep accepted-risk items suppressed unless state changes
 
 ### Telegram
 - Bot: Configured and working
