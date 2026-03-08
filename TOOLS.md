@@ -34,6 +34,7 @@ Use this file for live setup facts, not historical logs or long retrospectives.
   - proactive-execution: `-1003742262384`
   - market-signals: `-1003850594375`
   - autonomous-trading-bot: `-1003711398278`
+  - goal-tasks: `-1003704803669`
 
 ### Infrastructure
 - Host: Hostinger VPS (`Linux 6.8.0-101-generic`)
@@ -55,6 +56,7 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 | signal-accuracy-review | 22:00 daily | Review pending signal outcomes | none |
 | pre-market-brief | 20:00 daily | Evening market prep brief | none |
 | trading-daily-report | 08:00 daily | Equity bot daily report | none (explicit send in task) |
+| daily-task-generator | 08:00 daily | Goal-driven autonomous task generation (4-5 tasks) | telegram (`goal-tasks`) |
 | enrichment-ab-review | Mon 10:00 | Weekly enrichment A/B review | none |
 | nightly-memory-extraction | 23:00 daily | Durable memory extraction | none |
 | data-manager | Sun 05:00 | Prune old data/logs | none |
@@ -118,6 +120,8 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - `projects/market-intel/` — signal generation + reasoning pipeline (active)
 - `projects/autonomous-trading-bot/` — Alpaca paper equity bot (active)
 - `projects/market-intel-news-reader/` — PWA news reader (active)
+- `projects/autonomous-kanban/` — Goal-driven task Kanban UI (active)
+  - GitHub Pages: `https://bahonsbot.github.io/marvin-workspace/autonomous-kanban/`
 - `projects/futures-bot/` — futures bot (Phase 1 complete, implementation in progress)
 
 ### Trading Bot Troubleshooting

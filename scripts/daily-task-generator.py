@@ -116,7 +116,7 @@ def log_completed_task(task, category="general"):
     if TASKS_LOG_FILE.exists():
         existing = TASKS_LOG_FILE.read_text()
     else:
-        existing = "# Tasks Log\n\n"
+        existing = "# Completed Tasks Log\n\n**Append-only.** Sub-agents: Only add new lines at the bottom. Never edit existing lines.\n\n---\n\n"
     
     TASKS_LOG_FILE.write_text(existing + log_entry)
 

@@ -126,3 +126,10 @@
   - `TOOLS.md` = operational runbook
   - `MEMORY.md` = curated durable memory
   - `memory/YYYY-MM-DD.md` = timeline/history
+- Goal-Driven Autonomous Tasks workflow established (Mar 8):
+  - canonical planner file: `AUTONOMOUS.md` (goals + open backlog only)
+  - append-only completion log: `memory/tasks-log.md`
+  - race-condition rule enforced: sub-agents append ✅ lines to tasks-log only, never edit `AUTONOMOUS.md`
+  - daily generator cron at 08:00 ICT (`daily-task-generator`)
+  - dedicated Telegram group for task updates: `goal-tasks` (`-1003704803669`)
+  - Kanban UI deployed: `https://bahonsbot.github.io/marvin-workspace/autonomous-kanban/`
