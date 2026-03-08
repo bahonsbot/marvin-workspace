@@ -157,11 +157,10 @@ bash scripts/run_webhook_receiver.sh  # Restart with proper env
 - Market Intel notes: `projects/market-intel/notes/`
 
 ### Environment
-- **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
-- **Note:** VPS runs on Asia/Kuala_Lumpur (GMT+8) — always specify Asia/Ho_Chi_Minh for cron jobs and display
-- **User:** Philippe (Netherlands → Vietnam since Sep 2024)
-- **Partner:** Girlfriend in Vietnam
+- Display timezone: `Asia/Ho_Chi_Minh (GMT+7)`
+- Server timezone: `Asia/Kuala_Lumpur (GMT+8)`
+- Rule: schedule and present times in `Asia/Ho_Chi_Minh` unless explicitly requested otherwise
 
 ---
 
-Add whatever helps you do your job. This is your cheat sheet.
+Keep this file operational and current. Move history/retrospectives to MEMORY or project docs.
