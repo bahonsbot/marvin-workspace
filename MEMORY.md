@@ -28,12 +28,38 @@
 - Coding/deep technical fallback: `openai-codex/gpt-5.3-codex`
 - Fallback protocol: if a model errors repeatedly, switch once to Codex and proceed
 
-## High-Confidence Operating Rules
-- No procrastination on fixable technical problems
-- Propose plan first for non-trivial changes
-- Before proposing non-trivial solutions, do sufficient research to verify fit, avoid policy conflicts, and prevent breakage of active processes
-- Ask before external/public actions
-- Keep accepted-risk items suppressed unless state changes
+## Preferences & Decision Rules
+
+### Execution Style
+- Prefer decisive recommendations over open-ended option dumps.
+- For non-trivial changes: propose plan first, then execute after approval.
+- Prioritize verified fixes over temporary patches.
+
+### Research Standard
+- Before proposing non-trivial solutions, verify:
+  1) technical fit,
+  2) policy/safety compatibility,
+  3) no breakage risk to active processes.
+- If uncertain, run a bounded validation before recommending rollout.
+
+### Delegation
+- Delegate when it improves speed, depth, or reliability.
+- Keep direct execution for quick, low-risk, single-step work.
+- Coding/debugging defaults to Codex unless scope is trivial.
+
+### Communication
+- Start with the answer.
+- Keep updates concise, specific, and outcome-first.
+- For external/public actions, get explicit approval first.
+
+### Risk Handling
+- Accepted-risk items stay suppressed unless state changes.
+- Re-open accepted risks only on measurable drift (permissions, tracking exposure, new leak evidence).
+
+### Reliability Habits
+- Document lessons after incidents/fixes.
+- Keep operational docs aligned with real runtime behavior.
+- Treat repeated report noise as a process bug to fix, not to ignore.
 
 ### Telegram
 - Bot: Configured and working
