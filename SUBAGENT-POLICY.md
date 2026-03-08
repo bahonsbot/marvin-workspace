@@ -1,79 +1,63 @@
-# Subagent Policy
+# SUBAGENT-POLICY.md
 
-Core directive: anything other than a simple conversational message should spawn a subagent.
+Purpose: use delegation to improve speed, quality, and reliability while keeping the main chat responsive.
 
-## When to use a subagent
+## Core Rule
+Delegate when it materially improves one or more of:
+- responsiveness (main chat stays unblocked)
+- quality (deeper analysis/research)
+- throughput (parallel work)
+- reliability (failure isolation and safer retries)
 
-Use a subagent for:
+Do work directly when delegation would add overhead without clear benefit.
+
+## Use a Subagent When
 - Searches (web, social, email)
-- API calls
-- Multi-step tasks
-- Data processing
-- File operations beyond simple reads
+- API calls and external data collection
+- Data processing, synthesis, or comparison
 - Calendar/email operations
-- Any task expected to take more than a few seconds
-- Anything that could fail or block the main session
+- Multi-step tasks
+- Anything expected to take more than a few seconds
+- Anything likely to fail/retry and benefit from isolation
+- Coding, debugging, or deep cross-file investigation
+- Parallel work would materially speed completion
 
-## When to work directly
-
-Handle these without a subagent:
+## Work Directly When
 - Simple conversational replies
-- Quick clarifying questions
-- Acknowledgments
-- Quick file reads for context
-- Single-step lookups where spawning a subagent would take longer than just doing it
+- Quick clarifying questions or acknowledgments
+- Quick file reads/checks
+- Single-step actions where spawning would be slower
+- Tiny, low-risk edits with obvious scope
 
-The goal is keeping the main session responsive, not spawning subagents for the sake of it. If a direct approach is faster and simpler, use it.
+## Coding / Debugging Delegation
+- Medium/large coding or investigation: delegate
+- Small, obvious single-file fixes: direct execution is allowed if faster and safe
 
-## Coding, debugging, and investigation delegation
+## Delegation Transparency
+Always announce:
+1. what is being delegated
+2. model/provider being used
+3. completion/failure outcome
 
-All coding, debugging, and investigation tasks go through subagents. The main session should never block on this work.
+## Failure Handling
+1. Report failure clearly
+2. Retry once for transient failures
+3. If retry fails, stop and report both attempts with next recommendation
 
-The subagent evaluates complexity:
-- **Simple:** Handle directly. Config changes, small single-file fixes, appending to existing patterns, checking one log or config value.
-- **Medium / Major:** Delegate to your coding agent CLI. This includes multi-file features, complex logic, large additions, and multi-step investigations that require tracing across files or systems.
+## Default Routing (Current)
+- **Codex (openai-codex/gpt-5.3-codex):**
+  coding, debugging, multi-file technical work, complex investigations
 
-## Why
+- **Bailian MiniMax-M2.5:**
+  lightweight research, extraction, and routine task delegation
 
-Main session stability is critical. Subagents:
-- Keep the main session responsive so the user can keep talking
-- Isolate failures from the main conversation
-- Allow concurrent work
-- Report back when done
+- **Bailian qwen3.5-plus:**
+  heavier reasoning, synthesis, planning, and higher-context analysis
 
-## Delegation announcements
+- **Bailian glm-5 / kimi-k2.5 (optional):**
+  use selectively for comparison/second-opinion runs or task-specific benchmarking,
+  not as default unless a clear quality/cost advantage is established.
 
-When delegating to a subagent, **always tell the user** — regardless of which model is running. This is mandatory, not optional.
-
-**Rule:** If you're spawning a subagent or running a background task, say so. Don't silently do it.
-
-Format: [model] via [provider/tool]
-
-Examples:
-- "Spawning a subagent with MiniMax to search Twitter."
-- "Delegating to Codex via coding agent CLI."
-- "Running a background check on the cron jobs — will report back."
-
-Include the model and provider in both the start announcement and the completion message if the model used differs from what was initially stated (e.g., fallback).
-
-**Note:** Some models (like MiniMax) may be less vocal about internal operations. Override this by explicitly announcing every subagent spawn — consistency matters more than model default behavior.
-
-## Failure handling
-
-When a subagent fails:
-1. Report to the user via messaging platform with error details
-2. Retry once if the failure seems transient (network timeout, rate limit)
-3. If the retry also fails, report both attempts and stop
-
-## Default model routing
-
-- **MiniMax (minimax/MiniMax-M2.5):** Web searches, crawling, research, cron jobs, data gathering — anything lightweight that doesn't need coding muscle.
-- **Codex (openai-codex/gpt-5.3-codex):** Coding tasks, debugging, complex investigations, multi-file features, anything that needs actual programming logic.
-
-## Implementation
-
-Use your framework's subagent spawning mechanism with:
-- Clear task description
-- Route based on task type: MiniMax for research/web tasks, Codex for coding
-- Only deviate when the task specifically requires a different capability
-- Estimated time if helpful
+## Quality Standard
+Subagents are a means, not a ritual.
+Choose the path that gives the best speed + quality + reliability for the task.
