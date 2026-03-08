@@ -61,20 +61,13 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 | news-feed-generator | DISABLED | Superseded by RSS/Reddit monitor pipeline | none |
 
 **Cron Context-Sharing Pipeline (Market Intel):**
-```
-rss-feed-monitor (:10)
-  ↓ writes to memory/cron-context.json
-reddit-monitor (:40)
-  ↓ reads RSS context, adds Reddit findings
-  ↓ writes to memory/cron-context.json
-market-signal-generator (:45)
-  ↓ reads combined RSS + Reddit context
-  ↓ generates signals with cross-source correlations
-  ↓ triggers reasoning engine step in the same run
-```
-- **Context file:** `memory/cron-context.json` (5-8 KB, overwritten each run)
-- **Benefits:** Signals leverage multiple sources, higher confidence when RSS + Reddit align
-- **Pattern for new jobs:** Load context → process → update context → next job builds on it
+- `rss-feed-monitor` writes RSS context
+- `reddit-monitor` enriches with Reddit findings and correlations
+- `market-signal-generator` reads combined context and generates signals
+- `reasoning-engine` runs after signal generation
+
+- **Context file:** `memory/cron-context.json` (rolling state, script-managed updates)
+- **Rule:** Do not manually edit context in cron prompts; Python `CronContext` is source of truth
 
 ### Installed Skills (Workspace)
 - humanizer
@@ -88,22 +81,17 @@ market-signal-generator (:45)
 - creative-prompts
 - coding-agent (built-in OpenClaw skill)
 
-### Models (Active)
-- **Bailian Provider:** Primary provider (configured Mar 4, 2026 — migration complete Mar 6, 2026)
-  - `bailian/MiniMax-M2.5` — Basic tasks, data gathering, simple dispatch (7 cron jobs)
-  - `bailian/qwen3.5-plus` — Reasoning, analysis, security reviews (7 cron jobs)
-  - Qwen family: qwen3.5-plus, qwen3-max-2026-01-23, qwen3-coder-next/plus
-  - Zhipu GLM: glm-5, glm-4.7
-  - Kimi: kimi-k2.5
-- **Direct MiniMax-M2.5:** Deprecated (subscription ended 2026-03-22, all jobs migrated to Bailian)
-- **Fallback:** openai-codex/gpt-5.3-codex (OAuth)
-- **Nexos:** Removed (caused cron job issues, won't use)
+### Models (Operational Routing)
+- Primary provider: Bailian
+- Default lightweight delegation: `bailian/MiniMax-M2.5`
+- Higher-reasoning delegation: `bailian/qwen3.5-plus`
+- Optional comparison models: `glm-5`, `kimi-k2.5`
+- Coding-heavy fallback: `openai-codex/gpt-5.3-codex`
 
-**Image Analysis Capabilities:**
-- ✅ **Can analyze:** Telegram attachments (images sent directly to bot)
-- ❌ **Cannot fetch:** External URLs (network restrictions on Bailian models)
-- **Workaround:** Download image first, then send as attachment for analysis
-- **Alternative:** Use Codex for URL-based image analysis (has external fetch capability)
+### Image Analysis
+- Bailian models: analyze attachments, limited at fetching external image URLs
+- URL-image workaround: fetch/download first, then analyze as attachment
+- Use Codex when URL-based image fetch is required
 
 ### Codex CLI Setup (Fallback Model)
 
