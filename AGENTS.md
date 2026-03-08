@@ -157,6 +157,11 @@ Cron context-sharing (`memory/cron-context.json`) is maintained by project Pytho
 
 Follow HEARTBEAT.md. Track checks in memory/heartbeat-state.json. During heartbeats, commit and push uncommitted workspace changes and periodically synthesize daily notes into MEMORY.md.
 
+Proactive execution queue source of truth: `memory/proactive-queue.json`.
+- Task shape includes: `id`, `title`, `priority`, `ready`, `phase2_eligible`, `project`
+- Heartbeats should pick one bounded chunk (10-20 minutes), verify outcome, then log to daily memory
+- Keep routine progress silent; only message on milestone/blocker
+
 ## Docker Environment Rules
 
 These rules prevent common issues in this Docker setup:
@@ -189,6 +194,11 @@ These rules prevent common issues in this Docker setup:
    - For heartbeat behavior, only use supported config paths or ask Philippe to apply host-side changes
    - Invalid config keys can crash/break gateway startup in this Docker setup
 
+
+## Market Intel Data Hygiene Lessons
+
+- Reddit ingestion for chronology should use `/new/` when the goal is time-ordering. `/hot/` ranks engagement, not recency.
+- Always verify chronological sorting in list views explicitly during testing (check sort key and sample ordering), especially after parser or endpoint changes.
 
 ## Time Display
 
