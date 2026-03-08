@@ -134,8 +134,8 @@
       "resources/cron-jobs",
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-05",
-    "accessCount": 3,
+    "lastAccessed": "2026-03-08",
+    "accessCount": 4,
     "source": "memory/2026-03-04.md"
   },
   {
@@ -148,8 +148,8 @@
       "resources/cron-jobs",
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-05",
-    "accessCount": 2,
+    "lastAccessed": "2026-03-08",
+    "accessCount": 3,
     "source": "memory/2026-03-04.md"
   },
   {
@@ -162,8 +162,8 @@
       "resources/cron-jobs",
       "projects/marvin-config"
     ],
-    "lastAccessed": "2026-03-05",
-    "accessCount": 3,
+    "lastAccessed": "2026-03-08",
+    "accessCount": 4,
     "source": "memory/2026-03-04.md"
   },
   {
@@ -175,8 +175,8 @@
     "relatedEntities": [
       "resources/cron-jobs"
     ],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-08",
+    "accessCount": 2,
     "source": "memory/2026-03-04.md"
   },
   {
@@ -422,8 +422,8 @@
       "resources/cron-jobs",
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-06",
-    "accessCount": 1
+    "lastAccessed": "2026-03-08",
+    "accessCount": 2
   },
   {
     "id": "mc-34",
@@ -451,5 +451,33 @@
     ],
     "lastAccessed": "2026-03-06",
     "accessCount": 1
+  },
+  {
+    "id": "mc-035",
+    "fact": "Bailian MiniMax-M2.5 has 196k token input limit vs qwen3.5-plus higher limit. Large payloads (long session, fat context files) can trigger 400 error. Mitigation: keep MiniMax for simple tasks, use qwen for complex/verbose prompts.",
+    "category": "status",
+    "timestamp": "2026-03-08T00:10:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-08",
+    "accessCount": 1,
+    "source": "memory/2026-03-08.md"
+  },
+  {
+    "id": "mc-036",
+    "fact": "All cron jobs now use delivery.mode: none with explicit Telegram sends in prompt messages. Eliminates duplicate/noisy posts from announce-channel failures. Trading-daily-report fixed to match this pattern.",
+    "category": "decision",
+    "timestamp": "2026-03-08T00:19:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-08",
+    "accessCount": 1,
+    "source": "memory/2026-03-08.md"
   }
 ]

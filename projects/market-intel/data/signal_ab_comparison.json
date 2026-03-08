@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-07T16:47:28.815486",
-    "baseline_count": 30,
+    "timestamp": "2026-03-08T07:47:31.042948",
+    "baseline_count": 31,
     "enriched_count": 50,
-    "overlap_count": 17,
-    "baseline_only_count": 11,
+    "overlap_count": 14,
+    "baseline_only_count": 9,
     "enriched_only_count": 31,
     "enriched_lift": 31,
     "baseline_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "Iran war pushes oil price above $90, threatening rise in global inflation",
-      "\u2018Geopolitical uncertainties\u2019 amid Iran war could slow fall in mortgage rates, sa",
-      "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
-      "U.S. payrolls unexpectedly fell by 92,000 in February; unemployment rate rises t"
+      "ICE deports family, including deaf boy who wasn\u2019t given his assistive devices",
+      "US considers lifting more sanctions on Russian oil as Iran conflict sees global ",
+      "Trump shouldn\u2019t ease Russia sanctions \u2013 they are choking its economy | Phillip I",
+      "US Inflation Gauges Likely Diverged Before War in Iran"
     ],
     "enriched_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "Iran war pushes oil price above $90, threatening rise in global inflation",
-      "\u2018Geopolitical uncertainties\u2019 amid Iran war could slow fall in mortgage rates, sa",
-      "Oracle and OpenAI scrap deal to expand flagship Texas data centre",
-      "U.S. payrolls unexpectedly fell by 92,000 in February; unemployment rate rises t"
+      "ICE deports family, including deaf boy who wasn\u2019t given his assistive devices",
+      "US considers lifting more sanctions on Russian oil as Iran conflict sees global ",
+      "Trump shouldn\u2019t ease Russia sanctions \u2013 they are choking its economy | Phillip I",
+      "US Inflation Gauges Likely Diverged Before War in Iran"
     ]
   }
 ]

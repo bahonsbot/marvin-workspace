@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "last_updated": "2026-03-07T09:15:37.442078+00:00",
+  "last_updated": "2026-03-08T00:15:36.507968+00:00",
   "pipeline": "market-intel",
   "jobs": {
     "rss-feed-monitor": {
-      "last_run": "2026-03-07T09:15:37.442043+00:00",
+      "last_run": "2026-03-08T00:15:36.507938+00:00",
       "status": "ok",
-      "items_found": 109,
-      "summary": "109 matches across 20 feeds. Top themes: Trump disbanded NSC pandemic unit that experts had praised - AP News, AP Explains: What happens when migrants arrive at US border - AP News, Weight-loss jab could be made for $3 a month, study finds",
+      "items_found": 105,
+      "summary": "105 matches across 20 feeds. Top themes: Trump disbanded NSC pandemic unit that experts had praised - AP News, Descendants of Zimbabwe resistance heroes urge UK to locate looted skulls, Weight-loss jab could be made for $3 a month, study finds",
       "context": {
         "top_keywords": [
           "ai",
@@ -17,97 +17,101 @@
           "eu",
           "ev",
           "who",
-          "rate"
+          "pandemic"
         ],
         "notable_stories": [
           "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-          "AP Explains: What happens when migrants arrive at US border - AP News",
+          "Descendants of Zimbabwe resistance heroes urge UK to locate looted skulls",
           "Weight-loss jab could be made for $3 a month, study finds",
           "Three men deported by US file legal case against Eswatini over detention",
           "South Africa\u2019s president calls Trump\u2019s policy to offer refuge to white Afrikaners \u2018racist\u2019",
           "Lewis Hamilton sets sights on racing in an African grand prix before retiring",
-          "South Sudan risks return to full-blown civil war as violence escalates",
-          "\u2018An ideological guest list\u2019: Trump invites Latin America\u2019s rightwing leaders to Florida summit",
-          "Peruvian state responsible for mother\u2019s death in forced sterilisation, court rules",
-          "Iranian mathematician missing in Canada may have been targeted by Tehran, activists say"
+          "Bombing at nightclub in Peru injures 33 people, including minors",
+          "Trump convenes \u2018Shield of Americas\u2019 summit with 12 Latin American leaders",
+          "ICE deports family, including deaf boy who wasn\u2019t given his assistive devices",
+          "\u2018An ideological guest list\u2019: Trump invites Latin America\u2019s rightwing leaders to Florida summit"
         ],
-        "enrichment_rate": "9%"
+        "enrichment_rate": "10%"
       },
-      "last_updated": "2026-03-07T09:15:37.442074+00:00"
+      "last_updated": "2026-03-08T00:15:36.507964+00:00"
     },
     "reddit-monitor": {
-      "last_run": "2026-03-07T16:40:00Z",
+      "last_run": "2026-03-07T17:40:00.000000+00:00",
       "status": "ok",
-      "items_found": 50,
-      "summary": "50 posts after enrichment (93 scanned). 8/12 subreddits rate-limited. Top discussions: BlackRock $26B private credit limits (7817 upvotes - UP from 7550, MASSIVE ACCELERATION), Oil 35% weekly gain (3310 upvotes), Jobs -92K (2138 upvotes), Oracle/OpenAI scrap (1939 upvotes), Qatar gulf export warning (1493 upvotes). Strong alignment with RSS - private credit story accelerating sharply, oil/war dominates.",
+      "items_found": 97,
+      "summary": "97 posts after enrichment. Top discussions: Just for all the people who knew... (3785 upvotes), Robinhood tax lots issue (214 upvotes), Got very lucky? (146 upvotes). 8 subreddits rate-limited (429).",
       "context": {
         "top_posts": [
-          "BlackRock $26 Billion Private Credit Fund Limits Withdrawals (7817 upvotes)",
-          "Oil surges 35% this week for biggest gain in futures trading (3310 upvotes)",
-          "US lost 92k jobs in February (2138 upvotes)",
-          "Oracle and OpenAI End Plans to Expand Flagship Data Center (1939 upvotes)",
-          "Qatar warns war will force Gulf to stop energy exports within days (1493 upvotes)"
+          "Just for all the people who knew... (3785 upvotes)",
+          "Venting - Robinhood screwed up my tax lots and now I'm out $10,000+ (214 upvotes)",
+          "Got very lucky, what now? (146 upvotes)",
+          "OpenAI Robotics head resigns after deal with Pentagon (36 upvotes)",
+          "Let\u2019s see how these play out (69 upvotes)"
         ],
         "correlations_with_rss": [
-          "Private Credit: Reddit (BlackRock $26B limits, 7817 upvotes - MASSIVE, up from 7550) aligns with RSS (BlackRock $26B fund limits redemptions, 9.2% defaults, Pimco warning) - SAME STORY, EXTREME confidence, story ACCELERATING sharply",
-          "Oil/Energy: Reddit (35% weekly gain, 3310 upvotes; Qatar export warning 1493 upvotes) aligns with RSS (Oil $90+, Iran war, record 36% weekly gain, Hormuz closure) - SAME STORY, HIGH confidence, dominant theme",
-          "Jobs/Macro: Reddit (92K jobs lost, 2138 upvotes) aligns with RSS (payrolls -92K, unemployment 4.1%) - SAME STORY, HIGH confidence, remains salient",
-          "AI/Tech: Reddit (Oracle/OpenAI scrap, 1939 upvotes) aligns with RSS (Oracle/OpenAI scrap deal) - SAME STORY, moderate engagement",
-          "Defense: Reddit (no specific post) - RSS has Palantir +15%, NATO drones/AI shift"
+          "oil: Trending on both RSS + Reddit",
+          "iran: Trending on both RSS + Reddit",
+          "war: Trending on both RSS + Reddit",
+          "credit: Trending on both RSS + Reddit",
+          "sanctions: Reddit discussion on Russia sanctions (RSS coverage)"
         ],
-        "rate_limited_subreddits": [
-          "securityanalysis",
-          "economics",
-          "finance",
-          "trading",
-          "stocks",
-          "ValueInvesting",
-          "Daytrading",
-          "Cryptocurrency"
-        ],
-        "keywords": {
-          "miss": 50,
-          "call": 0,
-          "put": 0,
-          "earnings": 0,
-          "energy": 0,
-          "dividend": 0,
-          "ipo": 0,
-          "crisis": 0,
-          "ai": 0,
-          "inflation": 0
-        },
-        "emerging_topics": [
-          "Private Credit: BlackRock $26B limits trending MASSIVE (7817 upvotes vs 7550 previously) - highest engagement, clear signal, story ACCELERATING significantly"
-        ],
-        "notable_shift": "Private credit engagement jumped from 7550 to 7817 - story accelerating rapidly, now clearly overtaking oil as #1 by engagement"
-      }
+        "rate_limited_subreddits": 8
+      },
+      "last_updated": "2026-03-07T17:40:00.000000+00:00"
     },
-    "signal-generator": {
-      "last_run": "2026-03-07T16:47:00Z",
+    "market-signal-generator": {
+      "last_run": "2026-03-08T07:47:33.000000+00:00",
       "status": "ok",
-      "signals_generated": 29,
-      "summary": "29 signals generated (baseline). Categories: geopolitical (Iran war, oil $90+, Saudi attacks, Russia-Ukraine, Oracle/OpenAI scrap), macroeconomic (COVID-19 unit disbandment, payrolls -92K, unemployment 4.1%, credit rating concerns), financial_credit (oil-driven inflation, Fed policy uncertainty), defense (Iran conflict, production quadrupling). Top themes: Iran war/oil surge dominates, jobs miss triggers recession concerns, private credit stress continues, AI sector volatility from DeepSeek vs Marvell earnings.",
+      "signals_generated": 31,
+      "summary": "31 signals generated. Categories: geopolitical (Russia-Ukraine, Iran conflict), macroeconomic (NSC pandemic unit disbandment, US inflation), financial_credit (private credit stress), crypto_credit (FTX). Top themes: Iran war/oil surge, private credit stress, NSC pandemic unit disbandment.",
       "context": {
+        "by_confidence": {
+          "STRONG_BUY": 16,
+          "BUY": 11,
+          "HOLD": 4
+        },
+        "by_category": {
+          "geopolitical": 4,
+          "macroeconomic": 3,
+          "financial_credit": 2,
+          "crypto_credit": 2,
+          "sentiment_social": 20
+        },
         "cross_source_correlations": [
-          "RSS + Reddit both on Iran war/oil escalation \u2192 HIGH confidence geopolitical signal (Reddit 35% weekly oil gain aligns with RSS $90+, Hormuz - dominant theme across both sources)",
-          "RSS + Reddit both on jobs miss (-92K) \u2192 HIGH confidence macro signal (Reddit 2138 upvotes aligns with RSS - unemployment 4.1% triggers recession concerns)",
-          "RSS + Reddit both on private credit stress \u2192 HIGH confidence financial stability signal (Reddit BlackRock $26B limits trending MASSIVE aligns with RSS 9.2% defaults, Pimco warning)",
-          "RSS + Reddit both on Oracle/OpenAI scrap \u2192 MODERATE confidence tech signal (both covering data center expansion cancellation)"
+          "RSS Iran conflict + Reddit oil/energy \u2192 HIGH confidence (oil $90+, Hormuz supply threat)",
+          "RSS private credit stress + Reddit financial platform concerns \u2192 HIGH confidence",
+          "RSS NSC pandemic unit disbandment + Reddit macro concerns \u2192 HIGH confidence",
+          "RSS Russia-Ukraine sanctions + Reddit geopolitical concerns \u2192 HIGH confidence"
         ],
-        "top_reasoning_themes": [
-          "Iran war escalation (oil $90+, record 36% weekly gain, $100 target, Hormuz supply threat, defense stocks rally)",
-          "Macroeconomic stress (payrolls -92K miss, unemployment 4.1%, Fed uncertainty amid oil shock)",
-          "Financial credit (private credit defaults 9.2%, BlackRock $26B limits, Pimco full-blown default cycle warning)",
-          "AI sector divergence (DeepSeek rout continues vs Marvell +18% beat, Oracle/OpenAI scrap)"
+        "shadow_mode": false,
+        "enriched_count": 50
+      },
+      "last_updated": "2026-03-08T07:47:33.000000+00:00"
+    },
+    "reasoning-engine": {
+      "last_run": "2026-03-08T07:47:33.000000+00:00",
+      "status": "ok",
+      "signals_enhanced": 31,
+      "summary": "31 signals with reasoning scores. 16 STRONG BUY (87-88/100), 11 BUY, 4 HOLD. Top reasoning themes: Iran conflict oil spike pattern (Oct 2023 reference), private credit stress (Jan 2023 JPM miss pattern), Russia-Ukraine sanctions escalation pattern, NSC pandemic unit disbandment.",
+      "context": {
+        "by_confidence": {
+          "STRONG_BUY": 16,
+          "BUY": 11,
+          "HOLD": 4
+        },
+        "top_signals": [
+          "NSC pandemic unit disbandment - macro volatility signal",
+          "Russia-Ukraine sanctions - geopolitical escalation",
+          "Iran conflict - oil spike risk (Oct 2023 pattern match)",
+          "Private credit stress - financial contagion risk (Jan 2023 JPM pattern)"
         ],
-        "enriched_shadow_comparison": {
-          "baseline_signals": 30,
-          "enriched_signals": 50,
-          "overlap": 17,
-          "enriched_only": 31
-        }
-      }
+        "historical_patterns": [
+          "Oct 2023 Iran-Israel attack: oil spiked 5% intraday, defense +2-4%, airlines down",
+          "Feb 2022 peace talk failure: markets cratered, defense +2-4%, wheat/gas risk premium",
+          "Jan 2023 JPM miss: regional bank selloff, credit spread widening"
+        ]
+      },
+      "last_updated": "2026-03-08T07:47:33.000000+00:00"
     }
   },
   "alerts": [],
