@@ -26,3 +26,6 @@ auth.json
 *.py
 blender-test/
 .env
+
+# Environment secrets
+**/.env
