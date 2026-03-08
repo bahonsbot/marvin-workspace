@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'projects/autonomous-kanban/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: none
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: projects/autonomous-kanban/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd projects/autonomous-kanban
+          npm ci
+
+      - name: Build
+        run: |
+          cd projects/autonomous-kanban
+          GITHUB_PAGES=true npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: projects/autonomous-kanban/out
+          destination_dir: docs/autonomous-kanban
+          commit_message: "Deploy autonomous-kanban to GitHub Pages"
