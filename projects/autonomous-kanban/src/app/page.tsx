@@ -27,11 +27,14 @@ const COLUMNS: Array<{ key: ColumnKey; title: string; color: string }> = [
 ];
 
 function formatICT(iso: string): string {
+  const dt = new Date(iso);
+  if (Number.isNaN(dt.getTime())) return "-";
+
   return new Intl.DateTimeFormat("en-US", {
     timeZone: "Asia/Ho_Chi_Minh",
     dateStyle: "medium",
     timeStyle: "medium",
-  }).format(new Date(iso));
+  }).format(dt);
 }
 
 export default function Home() {
@@ -40,10 +43,19 @@ export default function Home() {
   const [savingTaskId, setSavingTaskId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
+  const [viewOnly, setViewOnly] = useState(false);
 
   const loadBoard = useCallback(async () => {
     try {
       const response = await fetch("/api/board", { cache: "no-store" });
+      const contentType = response.headers.get("content-type") ?? "";
+
+      if (!contentType.includes("application/json")) {
+        setViewOnly(true);
+        setError(null);
+        return;
+      }
+
       const data = (await response.json()) as {
         board?: BoardData;
         updatedAt?: string;
@@ -57,8 +69,15 @@ export default function Home() {
       setBoard(data.board);
       setUpdatedAt(data.updatedAt ?? null);
       setError(null);
+      setViewOnly(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load board");
+      const msg = err instanceof Error ? err.message : "Failed to load board";
+      if (msg.includes("The string did not match the expected pattern")) {
+        setViewOnly(true);
+        setError(null);
+      } else {
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }
@@ -115,9 +134,6 @@ export default function Home() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight text-slate-900">Autonomous Kanban</h1>
-              <p className="mt-2 text-sm text-slate-600">
-                Source files: <code>AUTONOMOUS.md</code> and <code>memory/tasks-log.md</code>
-              </p>
             </div>
             <div className="text-right text-sm text-slate-600">
               <p>{totalCount} total tasks</p>
@@ -126,6 +142,11 @@ export default function Home() {
               </p>
             </div>
           </div>
+          {viewOnly ? (
+            <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+              View-only mode on GitHub Pages. Live task sync is available in local runtime.
+            </p>
+          ) : null}
           {error ? (
             <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>
           ) : null}
