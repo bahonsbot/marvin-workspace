@@ -120,7 +120,8 @@
 - Morning Meeting protocol established and validated in live operations.
 - Cron context-sharing stabilized with script-managed `CronContext` updates.
 - Automated quality guardrail added: weekly regression test cron.
-- Documentation architecture standardized:
+- Documentation architecture standardized and executed in full core-file cleanup (Mar 8 PM):
+  - removed obsolete bootstrap templates (`BOOTSTRAP.md`, `BOOT.md`)
   - `AGENTS.md` = policy
   - `TOOLS.md` = operational runbook
   - `MEMORY.md` = curated durable memory
