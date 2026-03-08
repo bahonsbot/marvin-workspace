@@ -24,9 +24,4 @@
 
 ## Open Backlog
 
-- [Trading] Learn to make proper business analysis of companies I follow, based on key metrics and financial reports
-- [Career] Build a portfolio that will impress anyone looking for a motion designer, 3D designer, graphic designer, or creative director
-- [Career] Grow Instagram channel to 10k subscribers
-- [Other] Automate as much of my workflow as possible
-- [Personal] Learn Python programming (and maybe PyTorch)
-
+*(Empty — tasks generated at 8:00 AM ICT)*
