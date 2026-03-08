@@ -92,15 +92,21 @@ Skills are shared. Your setup is yours. Keeping them apart means you can update 
 ### Cron Jobs (Active)
 | Job | Time (GMT+7) | Purpose | Delivery |
 |-----|------------|---------|----------|
-| platform-health-council | 03:00 | Daily system audit | none |
-| nightly-security-review | 03:30 | Security analysis | none |
-| self-improvement | 04:00 *(05:00 server GMT+8)* | Core files review | none |
+| platform-health-council | 03:00 daily | Daily system audit | none |
+| nightly-security-review | 03:30 daily | Security analysis | none |
+| self-improvement | 04:00 daily *(05:00 server GMT+8)* | Core files review | none |
+| weekly-test-suite | Sun 02:15 | Weekly regression tests (trading bots) | none (alert only on fail) |
 | rss-feed-monitor | :10 hourly | RSS news scanning | none |
-| reddit-monitor | :40 hourly | Reddit sentiment | none |
-| market-signal-generator | :45 hourly | Signal generation | manual |
-| reasoning-engine | :50 hourly | Signal analysis | none |
-| nightly-memory-extraction | 23:00 | Memory extraction | none |
-| data-manager | Sun 05:00 | Prune old data | none |
+| reddit-monitor | :40 hourly | Reddit sentiment scanning | none |
+| market-signal-generator | :45 hourly | Signal generation (+ reasoning engine trigger) | none |
+| auto-signal-dispatcher | every 15 min | Dispatch STRONG BUY signals to equity bot | none |
+| signal-accuracy-review | 22:00 daily | Review pending signal outcomes | none |
+| pre-market-brief | 20:00 daily | Evening market prep brief | none |
+| trading-daily-report | 08:00 daily | Equity bot daily report | none (explicit send in task) |
+| enrichment-ab-review | Mon 10:00 | Weekly enrichment A/B review | none |
+| nightly-memory-extraction | 23:00 daily | Durable memory extraction | none |
+| data-manager | Sun 05:00 | Prune old data/logs | none |
+| news-feed-generator | DISABLED | Superseded by RSS/Reddit monitor pipeline | none |
 
 **Cron Context-Sharing Pipeline (Market Intel):**
 ```
@@ -112,7 +118,7 @@ reddit-monitor (:40)
 market-signal-generator (:45)
   ↓ reads combined RSS + Reddit context
   ↓ generates signals with cross-source correlations
-  ↓ runs reasoning-engine
+  ↓ triggers reasoning engine step in the same run
 ```
 - **Context file:** `memory/cron-context.json` (5-8 KB, overwritten each run)
 - **Benefits:** Signals leverage multiple sources, higher confidence when RSS + Reddit align

@@ -60,6 +60,10 @@ Route external API calls (web search, etc.) through subagents so they don't bloc
 
 All coding, debugging, and investigation work goes to a subagent so the main session stays responsive.
 
+When Philippe explicitly names a skill, use that exact skill first. Do not substitute with generic web/API approaches unless he asks for alternatives.
+
+Cron delivery-mode rule in this workspace: for isolated cron sessions, prefer `delivery.mode: "none"` and send outward notifications explicitly inside the task body. `telegram`/`announce` with `channel: "last"` can silently fail in isolated runs.
+
 ### Philippe Hard Rule: No Procrastination, No Quick Fixes
 
 When a task is not solved or a system is not working as expected:
@@ -145,6 +149,8 @@ If the user asks a direct question, answer that question first. Do not trigger s
 Skills provide your tools. Check each skill's SKILL.md for usage instructions. Keep environment-specific notes (channel IDs, paths, tokens) in TOOLS.md.
 
 For semantic memory search across all memory layers, use the `qmd` command (e.g., `qmd search "query" -c life -n 3`).
+
+Cron context-sharing (`memory/cron-context.json`) is maintained by project Python scripts directly (rss_monitor/reddit_monitor/signal_generator), not manual AI merge logic. Keep this script-managed pattern to avoid overwrite/regression bugs.
 
 
 ## 💓 Heartbeats

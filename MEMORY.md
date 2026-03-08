@@ -12,7 +12,7 @@
 - **Bailian Provider:** Primary (migration complete Mar 6, 2026)
   - `bailian/MiniMax-M2.5` — 7 cron jobs (data gathering, simple tasks)
   - `bailian/qwen3.5-plus` — 7 cron jobs (reasoning, analysis, security)
-- **Direct MiniMax-M2.5:** Deprecated (all jobs migrated, subscription ended 2026-03-22)
+- **Direct MiniMax-M2.5:** Deprecated (all jobs migrated, subscription scheduled to end 2026-03-22)
 - **Fallback:** OpenAI Codex GPT-5.3 (openai-codex/gpt-5.3-codex) via OAuth
 - **Nexos:** Removed (caused cron job issues, won't use)
 - **Incident note (Feb 24 rollback):** bad provider-key schema edits previously caused invalid config/boot issues; only use CLI/schema-safe edits
@@ -63,6 +63,8 @@
 - NEVER store tokens/API keys in git remote URLs - use `gh auth` or environment variables instead
 - If `pytest` is clearly required for a task/project, install it without asking for separate authorization
 - **No procrastination rule (Mar 7, 2026):** When something is broken or unfinished, do not defer unless Philippe explicitly asks. No quick fixes. Keep investigating until a verified, proven solution is in place.
+- **Overengineering lesson (Mar 7, 2026):** Ask clarifying questions before building complex infrastructure. Prefer the simplest working architecture first.
+- **Skill invocation discipline (Mar 7, 2026):** When Philippe names a specific skill, use that skill directly unless he asks for an alternative.
 
 ### Subagent Routing (Feb 2026)
 - **MiniMax (minimax/MiniMax-M2.5):** Web searches, crawling, research, cron jobs, data gathering — lightweight tasks
@@ -98,6 +100,8 @@
 - **Knowledge graph:** 25 causal chain templates with historical context/briefings
 - **Data sources:** 20 RSS feeds, 12 subreddits, Twitter via rss.app
 - **RSS fix (Mar 1):** Sanitized summary field to strip HTML — Guardian feeds were showing raw HTML tags in subtexts
+- **Sanitization lesson (Mar 1):** Apply sanitization on all ingestion/output paths, not only primary article-fetch paths.
+- **A/B rollout rule (Mar 1):** Run enrichment features in shadow mode first, keep production baseline until outcome quality is validated.
 - **Accuracy tracking:** Wired in, auto-tracks STRONG BUY signals, daily review cron at 22:00 ICT
 - **Cron jobs:** See TOOLS.md for current list
 

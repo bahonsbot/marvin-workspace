@@ -56,7 +56,7 @@ Sub-agent routing:
 - Announce every spawn + completion
 
 **Related Cron Jobs:**
-- `auto-signal-dispatcher` — Every 5 minutes, dispatches STRONG BUY signals from Market Intel to trading bot
+- `auto-signal-dispatcher` — Every 15 minutes, dispatches STRONG BUY signals from Market Intel to trading bot
 - Webhook watchdog — Continuous loop (60s sleep), restarts webhook receiver if down
 
 ## When to Stay Quiet (HEARTBEAT_OK)
