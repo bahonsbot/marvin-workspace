@@ -1,93 +1,45 @@
-# TOOLS.md - Local Notes
+# TOOLS.md - Local Ops Notes
 
-Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
-
-## What Goes Here
-
-Things like:
-
-- Camera names and locations
-- SSH hosts and aliases
-- Preferred voices for TTS
-- Speaker/room names
-- Device nicknames
-- Anything environment-specific
-
-## Examples
-
-```markdown
-### Cameras
-
-- living-room → Main area, 180° wide angle
-- front-door → Entrance, motion-triggered
-
-### SSH
-
-- home-server → 192.168.1.100, user: admin
-
-### TTS
-
-- Preferred voice: "Nova" (warm, slightly British)
-- Default speaker: Kitchen HomePod
-```
-
-## Why Separate?
-
-Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
+Environment-specific runtime notes only.
+Use this file for live setup facts, not historical logs or long retrospectives.
 
 ---
 
-## Current Setup
+## Core Setup
 
 ### GitHub
-- **Account:** bahonsbot
-- **Repo:** https://github.com/bahonsbot/marvin-workspace (public)
-- **CLI:** `gh` authenticated and working
+- Account: `bahonsbot`
+- Repo: `https://github.com/bahonsbot/marvin-workspace`
+- CLI: `gh` authenticated
 
 ### QMD (Semantic Memory Search)
-- **Backend:** qmd 1.0.8 for semantic search across memory layers
-- **Manual commands:**
-  - `qmd search "query" -c life -n 3` — search knowledge graph
-  - `qmd index <file>` — add file to index
-  - `qmd stats` — show index statistics
-
-**Usage Patterns:**
-- **When to use qmd:** You need to find facts/entities across all memory (daily notes + MEMORY.md + life/ graph)
-- **When to read daily notes directly:** You want chronological context or recent conversations
-- **Category options:** `-c life` (default), `-c projects`, `-c people`, `-c companies`
-- **Examples:**
-  ```bash
-  # Find all facts about autonomous-trading-bot
-  qmd search "autonomous trading bot" -c life -n 5
-  
-  # Find people-related entities
-  qmd search "Philippe girlfriend" -c people -n 3
-  
-  # Search project-specific memory
-  qmd search "futures bot IBKR" -c projects -n 5
-  
-  # Find high-confidence signals
-  qmd search "STRONG BUY signal" -n 10
-  ```
+- Backend: `qmd 1.0.8`
+- Quick commands:
+  - `qmd search "query" -c life -n 3`
+  - `qmd index <file>`
+  - `qmd stats`
+- Categories: `life` (default), `projects`, `people`, `companies`
+- QMD usage rules:
+  - Use qmd for cross-memory entity/fact lookup
+  - Read daily notes directly for chronological context
+  - Pick a specific category when scope is project/person/company focused
 
 ### Telegram
-- **Bot username:** @bahons_bot
-- **Bot token:** (stored in config, not here)
-- **Direct chats:** Paired and working
-- **Groups:**
-  - nightly-security-review (`-1003855426803`)
-  - platform-health-council (`-1003504843228`)
-  - self-improvement (`-1003721620909`)
-  - proactive-execution (`-1003742262384`)
-  - market-signals (`-1003850594375`)
-  - autonomous-trading-bot (`-1003711398278`)
+- Bot: `@bahons_bot`
+- Direct chat: paired and working
+- Groups:
+  - nightly-security-review: `-1003855426803`
+  - platform-health-council: `-1003504843228`
+  - self-improvement: `-1003721620909`
+  - proactive-execution: `-1003742262384`
+  - market-signals: `-1003850594375`
+  - autonomous-trading-bot: `-1003711398278`
 
-### VPS / Infrastructure
-- **Host:** Hostinger VPS (Linux 6.8.0-101-generic)
-- **Location:** Hostinger (remote)
-- **SSH:** Access via root user
-- **Container:** Docker running OpenClaw
-- **Workspace:** `/data/.openclaw/workspace`
+### Infrastructure
+- Host: Hostinger VPS (`Linux 6.8.0-101-generic`)
+- Runtime: Docker (OpenClaw)
+- Workspace: `/data/.openclaw/workspace`
+- Primary operator user: `node`
 
 ### Cron Jobs (Active)
 | Job | Time (GMT+7) | Purpose | Delivery |
