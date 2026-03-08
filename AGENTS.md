@@ -111,48 +111,20 @@ Cron context-sharing (`memory/cron-context.json`) is maintained by project Pytho
 - `memory/YYYY-MM-DD.md` = timeline/history
 - Project implementation detail belongs in `projects/*/docs` or `projects/*/notes`
 
-## Docker Environment Rules
+## Environment Safety Constraints (Docker Hostinger)
 
-These rules prevent common issues in this Docker setup:
+1. Do not edit `gateway.auth` or `gateway.mode` directly in `openclaw.json` from inside container.
+2. Do not run `openclaw gateway stop/restart` inside container; request host-side restart if needed.
+3. Verify ownership/permissions before writes under `/data/.openclaw/`.
+4. Do not invent unsupported top-level config keys; validate schema first (`openclaw ... --help`, doctor).
+5. If gateway crashes during active edits, check `/tmp/openclaw/` and treat session logs as potentially corrupted.
 
-1. **"Don't Touch the Lock" Rule**
-   - Do NOT modify `gateway.auth` or `gateway.mode` in openclaw.json directly
-   - These are managed by host environment variables
-   - Changing them breaks CLI pairing and loses access to tools
+## Time Display Rule
+Always display operational times in user timezone (`Asia/Ho_Chi_Minh`) unless explicitly requested otherwise.
 
-2. **"No Internal Restarts" Rule**
-   - Never run `openclaw gateway stop` or `restart` from inside the container
-   - Killing the gateway process can crash the container or cause boot loops
-   - If restart needed, ask Philippe to do it from the VPS host
-
-3. **"Permission Awareness" Rule**
-   - Always verify file ownership before writing to `/data/.openclaw/` directory
-   - If new files are created and access is lost, remind Philippe to run:
-     `sudo chown -R node:node /data/.openclaw/`
-   - This applies to config files, cron jobs, scripts, etc.
-
-4. **"Gateway Crash Recovery" Rule**
-   - If gateway crashes during file editing, corrupted tool-call logs may need cleanup
-   - Symptoms: gateway won't start, file permission errors
-   - Recovery: Philippe removes corrupted log entries from session files
-   - If in doubt, check `/tmp/openclaw/` for crash logs
-
-5. **"Schema-First Config" Rule**
-   - Never invent new top-level keys in `openclaw.json` (example mistake: adding `system`)
-   - Validate CLI-supported config shape first (via `openclaw ... --help` / `doctor`)
-   - For heartbeat behavior, only use supported config paths or ask Philippe to apply host-side changes
-   - Invalid config keys can crash/break gateway startup in this Docker setup
-
-
-## Market Intel Data Hygiene Lessons
-
-- Reddit ingestion for chronology should use `/new/` when the goal is time-ordering. `/hot/` ranks engagement, not recency.
-- Always verify chronological sorting in list views explicitly during testing (check sort key and sample ordering), especially after parser or endpoint changes.
-
-## Time Display
-
-Convert all displayed times to the user's timezone (configured in USER.md). This includes timestamps from cron logs (stored in UTC), calendar events, email timestamps, and any other time references.
-
+## Market Intel Data Hygiene
+- Use Reddit `/new/` for chronology-sensitive ingestion.
+- Explicitly verify ordering in list outputs after parser/endpoint changes.
 
 ## Error Reporting
 When tasks fail (subagent, cron, API, script, git), report clearly with:
