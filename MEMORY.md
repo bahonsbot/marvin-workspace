@@ -71,30 +71,39 @@
 - **Future improvement:** Could implement `/allow` command to auto-add current group, but manual add works fine for now
 - **Market signals group:** -1003850594375 (created Feb 28)
 
-### Market Intel (Feb 2026)
-- **Projects:**
-  - `projects/market-intel/` — Signal generation + reasoning engine
-  - `projects/market-intel-news-reader/` — PWA news reader app
-- **Evaluation preference (Mar 2026):** During manual signal reviews, keep Philippe's full evidence/context notes and feed them back into reasoning improvements, not just outcome labels.
-- **Model-learning upgrade (Mar 3, 2026):** Added structured `evidence_pack` workflow + `model_feedback.json` so reasoning scores can be nudged by validated historical outcomes (with legacy outcome compatibility).
-- **Current tracker state (Mar 3, 2026):** 14/14 verified, 0 pending, weighted accuracy 96.4%, evidence coverage 100%.
-- **Status:** Signal generation, causal chains, and accuracy tracking all working
-- **Signal volume:** 36 signals across 5 categories (geopolitical, financial, sentiment, corporate, macro)
-- **Knowledge graph:** 25 causal chain templates with historical context/briefings
-- **Data sources:** 20 RSS feeds, 12 subreddits, Twitter via rss.app
-- **RSS fix (Mar 1):** Sanitized summary field to strip HTML — Guardian feeds were showing raw HTML tags in subtexts
-- **Sanitization lesson (Mar 1):** Apply sanitization on all ingestion/output paths, not only primary article-fetch paths.
-- **A/B rollout rule (Mar 1):** Run enrichment features in shadow mode first, keep production baseline until outcome quality is validated.
-- **Accuracy tracking:** Wired in, auto-tracks STRONG BUY signals, daily review cron at 22:00 ICT
-- **Cron jobs:** See TOOLS.md for current list
+## Project Snapshot (Current)
 
-### Horizons PMS (Feb 2026)
-- Phase 1 PRD established in `projects/horizons-pms/PRD.md`
-- Active development ongoing
-- Core emphasis: front-desk-friendly UX/UI with fast availability checks by room type + date
-- Booking/unit workflows must support remarks and special requests (late check-in/out, room maintenance context)
-- Dashboard requirements include day-specific remaining availability and occupancy rate
-- Export requirements include monthly CSV/PDF report (bookings, revenue, occupancy) plus maintenance history export
+### Market Intel
+- Status: active
+- Core: RSS/Reddit ingestion, signal generation, reasoning, accuracy tracking
+- Key refs:
+  - `projects/market-intel/PRD.md`
+  - `projects/market-intel/docs/evidence-pack-schema.md`
+  - `projects/market-intel/notes/`
+
+### Autonomous Trading Bot (Equity)
+- Status: active (paper trading)
+- Core: webhook receiver, risk controls, auto-dispatch, watchdog
+- Key refs:
+  - `projects/autonomous-trading-bot/README.md`
+  - `projects/autonomous-trading-bot/TASKS.md`
+  - `projects/autonomous-trading-bot/logs/`
+
+### Futures Bot
+- Status: Phase 1 complete, implementation progressing
+- Core: webhook + risk/execution foundation
+- Key refs:
+  - `projects/futures-bot/PRD.md`
+  - `projects/futures-bot/tests/`
+  - `projects/futures-bot/src/`
+
+### Horizons PMS
+- Status: on hold
+- Core: PRD and schema foundation prepared
+- Key refs:
+  - `projects/horizons-pms/PRD.md`
+  - `projects/horizons-pms/db/`
+  - `projects/horizons-pms/sql/`
 
 ### Infrastructure
 - Git repo initialized (Marvin <marvin@local.com>)
