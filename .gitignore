@@ -1,7 +1,7 @@
 # Ignore these (sensitive/workspace)
 *.md
 backup/
-memory/
+memory/*
 .openclaw/
 **/node_modules/
 **/.next/
@@ -20,9 +20,11 @@ auth.json
 *.json.bak*
 *.json.bak
 
-# Keep these
+# Keep these (exceptions must come AFTER the patterns they override)
 !*.gitignore
 !SUBAGENT-POLICY.md
+!AUTONOMOUS.md
+!memory/tasks-log.md
 *.py
 blender-test/
 .env
