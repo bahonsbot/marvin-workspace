@@ -120,6 +120,32 @@ log_bypass_audit() {
     chmod 600 "$AUDIT_LOG" 2>/dev/null || true
 }
 
+# Resolve codius binary path (supports optional override)
+resolve_codius_bin() {
+    local candidate="${CODIUS_BIN:-}"
+
+    if [[ -n "$candidate" ]]; then
+        if [[ ! -x "$candidate" ]]; then
+            echo "Error: CODIUS_BIN is set but not executable: $candidate"
+            exit 1
+        fi
+        echo "$candidate"
+        return 0
+    fi
+
+    candidate="$(command -v codius 2>/dev/null || true)"
+    if [[ -z "$candidate" ]]; then
+        echo "Error: codius binary not found in PATH"
+        echo "Install codius or set CODIUS_BIN=/absolute/path/to/codius"
+        exit 1
+    fi
+
+    echo "$candidate"
+}
+
+CODIUS_CMD="$(resolve_codius_bin)"
+log "Using codius binary: $CODIUS_CMD"
+
 # Derived values (after LOG_DIR is set)
 SESSION_NAME="ralphy-$(date +%s)"
 PID_FILE="$LOG_DIR/ralphy.pid"
@@ -285,7 +311,7 @@ while [[ $ITERATION -lt $MAX_ITERATIONS ]]; do
     log "Spawning Codex agent..."
     
     # Run Codex in background with PTY
-    timeout 600 codius exec --full-auto "$prompt" 2>&1 | tee "$iteration_log" || {
+    timeout 600 "$CODIUS_CMD" exec --full-auto "$prompt" 2>&1 | tee "$iteration_log" || {
         log "Warning: Agent exited with code $?"
     }
     
