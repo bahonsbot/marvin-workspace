@@ -81,7 +81,7 @@ export default function Home() {
 
   const loadStaticBoard = useCallback(async () => {
     try {
-      const response = await fetch("/board.json", { cache: "no-store" });
+      const response = await fetch("./board.json", { cache: "no-store" });
       if (!response.ok) {
         throw new Error("Static board not found");
       }
