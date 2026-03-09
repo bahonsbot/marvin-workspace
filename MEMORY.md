@@ -41,6 +41,7 @@
   2) policy/safety compatibility,
   3) no breakage risk to active processes.
 - If uncertain, run a bounded validation before recommending rollout.
+- If scope is ambiguous, ask clarifying questions first to avoid overengineering.
 
 ### Delegation
 - Delegate when it improves speed, depth, or reliability.
