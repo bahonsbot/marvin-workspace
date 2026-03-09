@@ -7,12 +7,14 @@ Logs completed actions to memory/tasks-log.md with ✅ prefix.
 
 import os
 import re
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
 WORKSPACE = Path("/data/.openclaw/workspace")
 AUTONOMOUS_FILE = WORKSPACE / "AUTONOMOUS.md"
 TASKS_LOG_FILE = WORKSPACE / "memory" / "tasks-log.md"
+KANBAN_DIR = WORKSPACE / "projects" / "autonomous-kanban"
 
 # Ensure memory directory exists
 TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -120,16 +122,38 @@ def log_completed_task(task, category="general"):
     
     TASKS_LOG_FILE.write_text(existing + log_entry)
 
+def sync_kanban_board_json():
+    """Refresh autonomous-kanban public/board.json after backlog updates."""
+    if not KANBAN_DIR.exists():
+        print("Kanban sync skipped: autonomous-kanban project not found")
+        return
+
+    try:
+        subprocess.run(
+            ["npm", "run", "sync-board"],
+            cwd=KANBAN_DIR,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        print("Synced autonomous-kanban public/board.json")
+    except FileNotFoundError:
+        print("Kanban sync skipped: npm not available")
+    except subprocess.CalledProcessError as exc:
+        stderr = (exc.stderr or "").strip()
+        print(f"Kanban sync failed: {stderr or exc}")
+
 if __name__ == "__main__":
     # Read goals
     goals, _ = read_autonomous_file()
-    
+
     # Generate new tasks
     new_tasks = generate_tasks(goals)
-    
+
     # Update AUTONOMOUS.md with new tasks only
     if new_tasks:
         update_autonomous_file(new_tasks)
         print(f"Generated {len(new_tasks)} tasks and updated AUTONOMOUS.md")
+        sync_kanban_board_json()
     else:
         print("No goals found in AUTONOMOUS.md")
