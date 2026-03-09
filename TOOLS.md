@@ -107,6 +107,11 @@ Use this file for live setup facts, not historical logs or long retrospectives.
   - Usage: `pty:true workdir:~/project background:true command:"codex exec --full-auto 'prompt'"`
   - Always use `pty:true` — coding agents need a pseudo-terminal
 
+### Skill Profile
+- `config/skill-profile.json` — Stores Philippe's current skill levels (novice/beginner/intermediate) and constraints
+- Used by `daily-task-generator.py` to ensure generated tasks match skill level
+- Edit this file to update skill progression
+
 ### Scripts
 - `scripts/ralphy.sh` — Autonomous coding agent (reads PRD, iterates on code)
 - `scripts/ralphy-notify.sh` — Telegram notifications for ralphy

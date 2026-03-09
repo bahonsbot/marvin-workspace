@@ -1,0 +1,69 @@
+{
+  "python": {
+    "level": "novice",
+    "constraints": [
+      "No advanced CLI argument parsing",
+      "No complex async/await patterns",
+      "Prefer simple scripts with clear structure",
+      "No external API integrations without guidance"
+    ],
+    "nextMilestones": [
+      "Write a simple script with input validation",
+      "Use Python standard library for file operations",
+      "Add basic unit tests with pytest",
+      "Understand functions and basic data structures"
+    ]
+  },
+  "blender": {
+    "level": "beginner-intermediate",
+    "constraints": [
+      "Prefer standard primitives over complex modeling",
+      "Use Eevee for faster rendering",
+      "Keep animations under 30 seconds"
+    ],
+    "nextMilestones": [
+      "Complete one procedural modeling tutorial",
+      "Create character basics with proper topology",
+      "Render a short loop with basic materials"
+    ]
+  },
+  "after_effects": {
+    "level": "beginner",
+    "constraints": [
+      "Use built-in effects only",
+      "Keep compositions simple",
+      "Pre-render heavy effects when possible"
+    ],
+    "nextMilestones": [
+      "Master keyframe animations",
+      "Create one loop-ready motion graphic",
+      "Understand basic expressions"
+    ]
+  },
+  "unreal": {
+    "level": "beginner",
+    "constraints": [
+      "Use pre-made assets from Marketplace",
+      "Focus on one mechanic at a time",
+      "Keep projects under 10GB"
+    ],
+    "nextMilestones": [
+      "Set up basic character movement",
+      "Create one interactive scene",
+      "Export a simple build"
+    ]
+  },
+  "trading": {
+    "level": "intermediate",
+    "constraints": [
+      "Paper trading only until consistent profitability",
+      "Max 2% risk per trade",
+      "Focus on 1-2 setups until mastered"
+    ],
+    "nextMilestones": [
+      "Document 10 trade setups with outcomes",
+      "Maintain trading journal for 30 days",
+      "Achieve $200 profit in single day"
+    ]
+  }
+}
