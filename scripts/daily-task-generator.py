@@ -15,6 +15,7 @@ WORKSPACE = Path("/data/.openclaw/workspace")
 AUTONOMOUS_FILE = WORKSPACE / "AUTONOMOUS.md"
 TASKS_LOG_FILE = WORKSPACE / "memory" / "tasks-log.md"
 KANBAN_DIR = WORKSPACE / "projects" / "autonomous-kanban"
+KANBAN_BOARD_FILE = WORKSPACE / "projects" / "autonomous-kanban" / "public" / "board.json"
 
 # Ensure memory directory exists
 TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -126,7 +127,7 @@ def sync_kanban_board_json():
     """Refresh autonomous-kanban public/board.json after backlog updates."""
     if not KANBAN_DIR.exists():
         print("Kanban sync skipped: autonomous-kanban project not found")
-        return
+        return False
 
     try:
         subprocess.run(
@@ -137,11 +138,53 @@ def sync_kanban_board_json():
             text=True,
         )
         print("Synced autonomous-kanban public/board.json")
+        return True
     except FileNotFoundError:
         print("Kanban sync skipped: npm not available")
+        return False
     except subprocess.CalledProcessError as exc:
         stderr = (exc.stderr or "").strip()
         print(f"Kanban sync failed: {stderr or exc}")
+        return False
+
+
+def publish_kanban_board_if_changed():
+    """Commit and push board.json updates to keep GitHub Pages in sync."""
+    if not KANBAN_BOARD_FILE.exists():
+        print("Kanban publish skipped: board.json not found")
+        return
+
+    rel_board = str(KANBAN_BOARD_FILE.relative_to(WORKSPACE))
+
+    diff = subprocess.run(
+        ["git", "diff", "--quiet", "--", rel_board],
+        cwd=WORKSPACE,
+        capture_output=True,
+        text=True,
+    )
+
+    if diff.returncode == 0:
+        print("Kanban publish skipped: board.json unchanged")
+        return
+
+    branch = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=WORKSPACE,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    message = f"chore(kanban): sync board snapshot ({timestamp})"
+
+    try:
+        subprocess.run(["git", "add", rel_board], cwd=WORKSPACE, check=True)
+        subprocess.run(["git", "commit", "-m", message], cwd=WORKSPACE, check=True)
+        subprocess.run(["git", "push", "origin", branch], cwd=WORKSPACE, check=True)
+        print(f"Published kanban board to origin/{branch}")
+    except subprocess.CalledProcessError as exc:
+        print(f"Kanban publish failed: {exc}")
 
 if __name__ == "__main__":
     # Read goals
@@ -154,6 +197,7 @@ if __name__ == "__main__":
     if new_tasks:
         update_autonomous_file(new_tasks)
         print(f"Generated {len(new_tasks)} tasks and updated AUTONOMOUS.md")
-        sync_kanban_board_json()
+        if sync_kanban_board_json():
+            publish_kanban_board_if_changed()
     else:
         print("No goals found in AUTONOMOUS.md")
