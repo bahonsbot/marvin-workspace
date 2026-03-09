@@ -2,33 +2,33 @@
   "board": {
     "todo": [
       {
-        "id": "SW1wbGVt",
-        "text": "Implement one small Python utility script with tests; deliverable: script + test file under projects/learning-lab/; success: pytest passes for the new script",
+        "id": "8J-TiiBB",
+        "text": "📊 Analyze: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably",
         "column": "todo"
       },
       {
-        "id": "QnVpbGQg",
-        "text": "Build one 15-second practice clip tied to 'Improve modelling skills in Blender, motion design in After '; deliverable: MP4 in projects/creative-practice/ with 3 bullet notes on what improved; success: clip exported and notes saved",
+        "id": "8J-UpyBG",
+        "text": "🔧 Fix: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Process runs successfully with measurable improvement | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "UHJvZHVj",
-        "text": "Produce one market setup brief for next session; deliverable: markdown brief with entry, invalidation, and risk notes in projects/trading-briefs/; success: brief contains at least 2 candidate setups",
+        "id": "8J-TnSBE",
+        "text": "📝 Draft: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
         "column": "todo"
       },
       {
-        "id": "QXV0b21h",
-        "text": "Automate one repetitive workspace workflow; deliverable: runnable script under scripts/ with usage comment header; success: script executes end-to-end on a sample run",
+        "id": "8J-TmiBM",
+        "text": "📚 Learn: one 15-second practice clip in Blender; deliverable: MP4 in projects/creative-practice/ with 3 bullet notes on what improved | Why: Directly builds 3D modeling/animation skills needed for Blender/Unreal goals | Proof: Export renders MP4/image and notes what was learned | Unlocks: Progress toward: Complete one procedural modeling tutorial",
         "column": "todo"
       },
       {
         "id": "8J-OqCBD",
-        "text": "🎨 Creative MVP: Record a 1-minute screen capture tutorial; deliverable: working artifact + short demo note in projects/creative-mvp/; success: artifact created and documented",
+        "text": "🎨 Creative MVP: Write a Python script that organizes files in one folder | Why: Creative MVPs build confidence and generate content for portfolio/social | Proof: Artifact created and demo note saved | Unlocks: Unlocks more ambitious creative projects",
         "column": "todo"
       }
     ],
     "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-03-09T15:04:40.322Z"
+  "updatedAt": "2026-03-09T15:17:10.638Z"
 }
