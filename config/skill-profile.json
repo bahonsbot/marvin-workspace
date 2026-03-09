@@ -53,6 +53,19 @@
       "Export a simple build"
     ]
   },
+  "japanese": {
+    "level": "novice",
+    "constraints": [
+      "Use short daily sessions (10-20 minutes)",
+      "Focus on hiragana/katakana + basic vocabulary first",
+      "Avoid advanced grammar until core sentence patterns are stable"
+    ],
+    "nextMilestones": [
+      "Master hiragana and katakana recognition",
+      "Learn 100 high-frequency beginner words",
+      "Write 20 simple self-introduction sentences"
+    ]
+  },
   "trading": {
     "level": "intermediate",
     "constraints": [

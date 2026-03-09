@@ -24,8 +24,8 @@
 
 ## In Progress
 
-- [Personal] 🎨 Creative MVP: Create a quick 10-second motion design loop for Instagram; success: MVP created and demonstrated
-- [Other] Identify and script one repetitive task; create Python/bash script that does [task]; reducing manual effort by [estimate]; success: script runs and achieves task
+- [Career] 🎨 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence
+- [Other] 🔧 Automate one repetitive workspace workflow; deliverable: runnable script in scripts/ with usage notes and before/after time estimate | Why: Reduces manual ops overhead and improves OpenClaw execution reliability | Proof: script completes one full sample run and logs output | Unlocks: Foundation for chaining multiple automations into one routine
 
 ## Open Backlog
 
