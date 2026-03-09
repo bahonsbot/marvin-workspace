@@ -2,33 +2,33 @@
   "board": {
     "todo": [
       {
-        "id": "SW1wcm92",
-        "text": "Improve modelling skills in Blender, motion design in After Effects, and world building & animation in Unreal Engine",
+        "id": "W0NhcmVl",
+        "text": "[Career] Improve modelling skills in Blender, motion design in After Effects, and world building & animation in Unreal Engine",
         "column": "todo"
       },
       {
-        "id": "R3JvdyBJ",
-        "text": "Grow Instagram channel to 10k subscribers",
+        "id": "QXV0b21h",
+        "text": "Automate as much of my workflow as possible",
         "column": "todo"
       },
       {
-        "id": "RWFybiBh",
-        "text": "Earn at least $200 in daily profits by futures trading (when markets are open)",
-        "column": "todo"
-      },
-      {
-        "id": "TGVhcm4g",
-        "text": "Learn to make proper business analysis of companies I follow, based on key metrics and financial reports",
+        "id": "W090aGVy",
+        "text": "[Other] [Career] Build a portfolio that will impress anyone looking for a motion designer, 3D designer, graphic designer, or creative director",
         "column": "todo"
       },
       {
         "id": "QnVpbGQg",
         "text": "Build a portfolio that will impress anyone looking for a motion designer, 3D designer, graphic designer, or creative director",
         "column": "todo"
+      },
+      {
+        "id": "TGVhcm4g",
+        "text": "Learn Python programming (and maybe PyTorch)",
+        "column": "todo"
       }
     ],
     "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-03-09T14:14:41.811Z"
+  "updatedAt": "2026-03-09T14:19:39.056Z"
 }
