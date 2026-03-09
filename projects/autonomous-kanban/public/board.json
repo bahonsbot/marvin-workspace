@@ -2,18 +2,18 @@
   "board": {
     "todo": [
       {
-        "id": "QW5hbHl6",
-        "text": "Analyze one watched company using latest available metrics; deliverable: structured analysis note in projects/company-research/; success: note includes thesis, risks, and 3 key metrics",
-        "column": "todo"
-      },
-      {
         "id": "SW1wbGVt",
         "text": "Implement one small Python utility script with tests; deliverable: script + test file under projects/learning-lab/; success: pytest passes for the new script",
         "column": "todo"
       },
       {
-        "id": "RHJhZnQg",
-        "text": "Draft and schedule 3 content ideas aligned to '[Personal] 🎨 Creative MVP: Create a quick 10-second motion d'; deliverable: content-plan markdown with hooks, CTA, and posting slots; success: plan saved in projects/content-strategy/",
+        "id": "QnVpbGQg",
+        "text": "Build one 15-second practice clip tied to 'Improve modelling skills in Blender, motion design in After '; deliverable: MP4 in projects/creative-practice/ with 3 bullet notes on what improved; success: clip exported and notes saved",
+        "column": "todo"
+      },
+      {
+        "id": "UHJvZHVj",
+        "text": "Produce one market setup brief for next session; deliverable: markdown brief with entry, invalidation, and risk notes in projects/trading-briefs/; success: brief contains at least 2 candidate setups",
         "column": "todo"
       },
       {
@@ -23,12 +23,12 @@
       },
       {
         "id": "8J-OqCBD",
-        "text": "🎨 Creative MVP: Build a simple Python automation script for a daily task; deliverable: working artifact + short demo note in projects/creative-mvp/; success: artifact created and documented",
+        "text": "🎨 Creative MVP: Record a 1-minute screen capture tutorial; deliverable: working artifact + short demo note in projects/creative-mvp/; success: artifact created and documented",
         "column": "todo"
       }
     ],
     "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-03-09T15:04:05.855Z"
+  "updatedAt": "2026-03-09T15:04:40.322Z"
 }
