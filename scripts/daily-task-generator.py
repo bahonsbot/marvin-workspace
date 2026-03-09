@@ -87,7 +87,11 @@ def read_autonomous_file():
                 current_section = subsection_match.group(1)
                 current_goals = []
             elif line.strip().startswith('- '):
-                current_goals.append(line.strip()[2:])
+                candidate = line.strip()[2:].strip()
+                # Guardrail: keep Goals section clean, ignore task-like lines
+                if candidate.startswith('[') or 'success:' in candidate.lower():
+                    continue
+                current_goals.append(candidate)
     
     if current_section and current_goals:
         goals[current_section] = current_goals
@@ -121,96 +125,40 @@ def get_recent_tasks(days=14):
 
 
 def synthesize_task(goal, category, recent_tasks):
-    """
-    Convert a goal into an actionable, executable task.
-    
-    Task format: [category] action + deliverable + scope + success criterion
-    """
+    """Convert a goal into a concrete autonomous task with no placeholders."""
     goal_lower = goal.lower()
-    
-    # Detect goal type and synthesize appropriate task
-    if 'blender' in goal_lower or 'after effects' in goal_lower or 'unreal' in goal_lower:
-        # Creative/3D work
-        action = "Complete a 30-minute practice session on"
-        deliverable = "one new technique demonstration"
-        scope = "focusing on [specific technique from goal]"
-        success = "success: has practiced for 30min with output file"
-        task = f"[{category}] {action} {goal.split(',')[0].strip()}; {deliverable}; {scope}; {success}"
-    
-    elif 'portfolio' in goal_lower:
-        # Portfolio building
-        action = "Add one new piece to portfolio:"
-        deliverable = "create/update [specific work]"
-        scope = "for [target audience: motion designer/3D designer]"
-        success = "success: piece is published and looks professional"
-        task = f"[{category}] {action} {deliverable}; {scope}; {success}"
-    
-    elif 'instagram' in goal_lower or 'social' in goal_lower or '10k' in goal_lower:
-        # Social growth
-        action = "Post one engagement-optimized content piece"
-        deliverable = "[describe content type]"
-        scope = "using 3 relevant hashtags and engaging caption"
-        success = "success: posted within 2 hours"
-        task = f"[{category}] {action}; {deliverable}; {scope}; {success}"
-    
-    elif 'python' in goal_lower or 'pytorch' in goal_lower or 'programming' in goal_lower:
-        # Programming learning
-        action = "Complete one coding exercise/practice"
-        deliverable = "write [X] lines of working code"
-        scope = "focused on [specific Python concept]"
-        success = "success: code runs without errors"
-        task = f"[{category}] {action}; {deliverable}; {scope}; {success}"
-    
-    elif 'japanese' in goal_lower or 'language' in goal_lower:
-        # Language learning
-        action = "Study vocabulary/grammar for 20 minutes"
-        deliverable = "learn [X] new words/phrases"
-        scope = "using [app/method: Anki/Duolingo]"
-        success = "success: can recall [X] items"
-        task = f"[{category}] {action}; {deliverable}; {scope}; {success}"
-    
-    elif 'trading' in goal_lower or 'equity' in goal_lower or 'futures' in goal_lower:
-        # Trading
-        action = "Execute one trading setup with documented rationale"
-        deliverable = "record trade in journal with entry/exit/lesson"
-        scope = "using [strategy/indicator]"
-        success = "success: trade documented with P&L"
-        task = f"[{category}] {action}; {deliverable}; {scope}; {success}"
-    
-    elif 'business analysis' in goal_lower or 'financial' in goal_lower:
-        # Financial analysis
-        action = "Analyze one company from watchlist"
-        deliverable = "write 500-word analysis covering key metrics"
-        scope = "including revenue, margins, and growth"
-        success = "success: analysis saved to trading journal"
-        task = f"[{category}] {action}; {deliverable}; {scope}; {success}"
-    
-    elif 'automate' in goal_lower:
-        # Automation
-        action = "Identify and script one repetitive task"
-        deliverable = "create Python/bash script that does [task]"
-        scope = "reducing manual effort by [estimate]"
-        success = "success: script runs and achieves task"
-        task = f"[{category}] {action}; {deliverable}; {scope}; {success}"
-    
-    elif 'openclaw' in goal_lower or 'optimise' in goal_lower or 'optimize' in goal_lower:
-        # OpenClaw optimization
-        action = "Audit one area for optimization opportunity"
-        deliverable = "document finding + propose fix"
-        scope = "focusing on [efficiency/cost/quality]"
-        success = "success: finding documented with impact estimate"
-        task = f"[{category}] {action}; {deliverable}; {scope}; {success}"
-    
-    else:
-        # Default: make it actionable with clear deliverable
-        action = "Work on:"
-        deliverable = "[specific deliverable]"
-        scope = "spend 30 minutes focused on"
-        success = "success: measurable progress made"
-        task = f"[{category}] {action} {goal}; {deliverable}; {scope}; {success}"
-    
-    return task
 
+    if 'blender' in goal_lower or 'after effects' in goal_lower or 'unreal' in goal_lower:
+        return f"[{category}] Build one 15-second practice clip tied to '{goal[:60]}'; deliverable: MP4 in projects/creative-practice/ with 3 bullet notes on what improved; success: clip exported and notes saved"
+
+    if 'portfolio' in goal_lower:
+        return f"[{category}] Create one portfolio case-study draft from an existing project; deliverable: 250-400 word case-study markdown in projects/portfolio/case-studies/; success: draft includes problem, approach, and result sections"
+
+    if 'instagram' in goal_lower or 'social' in goal_lower or '10k' in goal_lower or 'youtube' in goal_lower:
+        return f"[{category}] Draft and schedule 3 content ideas aligned to '{goal[:60]}'; deliverable: content-plan markdown with hooks, CTA, and posting slots; success: plan saved in projects/content-strategy/"
+
+    if 'python' in goal_lower or 'pytorch' in goal_lower or 'programming' in goal_lower:
+        return f"[{category}] Implement one small Python utility script with tests; deliverable: script + test file under projects/learning-lab/; success: pytest passes for the new script"
+
+    if 'japanese' in goal_lower or 'language' in goal_lower:
+        return f"[{category}] Create a 25-term Japanese study deck from one theme; deliverable: markdown deck with term, reading, and meaning in projects/language/; success: deck saved and includes 25 complete entries"
+
+    if 'trading' in goal_lower or 'equity' in goal_lower or 'futures' in goal_lower:
+        return f"[{category}] Produce one market setup brief for next session; deliverable: markdown brief with entry, invalidation, and risk notes in projects/trading-briefs/; success: brief contains at least 2 candidate setups"
+
+    if 'business analysis' in goal_lower or 'financial' in goal_lower:
+        return f"[{category}] Analyze one watched company using latest available metrics; deliverable: structured analysis note in projects/company-research/; success: note includes thesis, risks, and 3 key metrics"
+
+    if 'automate' in goal_lower or 'openclaw' in goal_lower or 'optimise' in goal_lower or 'optimize' in goal_lower:
+        return f"[{category}] Automate one repetitive workspace workflow; deliverable: runnable script under scripts/ with usage comment header; success: script executes end-to-end on a sample run"
+
+    if 'saas' in goal_lower or 'product' in goal_lower or 'app' in goal_lower:
+        return f"[{category}] Ship one thin MVP increment for '{goal[:60]}'; deliverable: working prototype commit in relevant project folder; success: feature can be run locally and documented in README notes"
+
+    if 'partnership' in goal_lower or 'community' in goal_lower:
+        return f"[{category}] Build a partner/outreach target list from public sources; deliverable: ranked list of 10 targets with rationale in projects/outreach/; success: list complete with priority tiers"
+
+    return f"[{category}] Break down goal into an executable micro-plan; deliverable: 5-step action plan for '{goal[:60]}' in projects/goal-plans/; success: plan has explicit outputs and completion criteria"
 
 def generate_tasks(goals):
     """Generate 4-5 actionable tasks from goals using structured synthesis."""
@@ -245,20 +193,24 @@ def generate_tasks(goals):
     else:
         selected_goals = []
     
-    # Synthesize regular tasks
+    # Synthesize regular tasks with lightweight dedupe
     tasks = []
+    seen = set()
     for category, goal in selected_goals:
         task = synthesize_task(goal, category, recent_tasks)
-        tasks.append(task)
-    
+        key = task.lower().strip()
+        if key not in seen:
+            tasks.append(task)
+            seen.add(key)
+
     # Add at most one creative surprise MVP task
     if MAX_CREATIVE_MVP and tasks:
         creative_task = random.choice(CREATIVE_MVP_PATTERNS)
-        # Find a category to tag it with
         cat = selected_goals[0][0] if selected_goals else "Creative"
-        mvp_task = f"[{cat}] 🎨 Creative MVP: {creative_task}; success: MVP created and demonstrated"
-        tasks.append(mvp_task)
-    
+        mvp_task = f"[{cat}] 🎨 Creative MVP: {creative_task}; deliverable: working artifact + short demo note in projects/creative-mvp/; success: artifact created and documented"
+        if mvp_task.lower() not in seen:
+            tasks.append(mvp_task)
+
     return tasks[:NUM_TASKS]
 
 
