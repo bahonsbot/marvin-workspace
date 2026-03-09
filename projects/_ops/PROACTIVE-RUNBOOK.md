@@ -103,3 +103,38 @@ Example:
 - `memory/tasks-log.md` - Completed tasks (✅ prefix)
 - `memory/executor-log.md` - Executor run history
 - `AUTONOMOUS.md` - Open Backlog and In Progress sections
+
+---
+
+## Hybrid Skill Assessment
+
+### Overview
+
+A dual-mode assessment system that evaluates skill progression:
+
+1. **Test Mode** (Python, Japanese)
+   - Objective checks with predefined test tasks
+   - Scoring against dimension-based rubrics
+   - Automatic evaluation based on existing artifacts
+
+2. **Challenge Mode** (Blender, After Effects, Unreal)
+   - Challenge briefs with constraints and deliverables
+   - Heuristic evaluation of completion evidence
+   - Artifact-based scoring
+
+### Components
+
+- `scripts/skill-level-check.py` - Assessment runner
+  - `--skill <name>`: Assess single skill
+  - `--all`: Assess all active skills
+- `config/skill-profile.json` - Skill levels and constraints
+- `memory/skill-assessments/latest.json` - Latest scores per skill
+
+### Task Generation Integration
+
+The daily-task-generator can optionally bias toward weakest dimensions:
+```bash
+TASK_ASSESSMENT_BIAS=true python3 scripts/daily-task-generator.py
+```
+
+When enabled, task descriptions include focus areas based on lowest-scoring rubric dimensions.

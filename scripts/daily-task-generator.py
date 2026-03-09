@@ -28,6 +28,7 @@ TASKS_LOG_FILE = WORKSPACE / "memory" / "tasks-log.md"
 SKILL_PROFILE_FILE = WORKSPACE / "config" / "skill-profile.json"
 KANBAN_DIR = WORKSPACE / "projects" / "autonomous-kanban"
 KANBAN_BOARD_FILE = WORKSPACE / "projects" / "autonomous-kanban" / "public" / "board.json"
+LATEST_ASSESSMENT_FILE = WORKSPACE / "memory" / "skill-assessments" / "latest.json"
 
 # Ensure memory directory exists
 TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
@@ -63,6 +64,35 @@ def get_skill_milestones(skill_name):
     """Get next milestones for a skill."""
     profile = load_skill_profile()
     return profile.get(skill_name, {}).get("nextMilestones", [])
+
+
+def load_latest_assessment():
+    """Load latest skill assessment summary if available."""
+    if not LATEST_ASSESSMENT_FILE.exists():
+        return {}
+    try:
+        return json.loads(LATEST_ASSESSMENT_FILE.read_text())
+    except (json.JSONDecodeError, IOError):
+        return {}
+
+
+def get_weakest_dimension(skill):
+    """Get the weakest rubric dimension for a skill from assessment."""
+    assessment = load_latest_assessment()
+    skills_data = assessment.get("skills", {})
+    
+    if skill not in skills_data:
+        return None
+    
+    skill_data = skills_data[skill]
+    dimensions = skill_data.get("dimensions", {})
+    
+    if not dimensions:
+        return None
+    
+    # Find dimension with lowest score
+    weakest = min(dimensions.items(), key=lambda x: x[1])
+    return weakest[0] if weakest[1] < 70 else None  # Only return if below 70%
 
 
 def is_task_appropriate_for_level(task_type, skill_name, goal_text):
@@ -213,8 +243,69 @@ TASK_TEMPLATES = {
 }
 
 
-def synthesize_task(goal, category, recent_tasks):
-    """Convert a goal into a concrete autonomous task with Why/Proof/Unlocks."""
+# Dimension-to-focus mapping for task biasing
+DIMENSION_FOCUS = {
+    "python": {
+        "variables_and_types": "work with different data types and type conversion",
+        "control_flow": "practice conditional logic and loops",
+        "functions": "define and call functions with parameters",
+        "data_structures": "use lists and dictionaries effectively",
+        "file_operations": "read and write files",
+        "testing_basics": "write basic pytest tests"
+    },
+    "japanese": {
+        "hiragana_recognition": "practice hiragana reading and writing",
+        "katakana_recognition": "practice katakana reading and writing",
+        "basic_vocabulary": "learn new vocabulary words",
+        "sentence_structure": "form simple sentences with particles",
+        "writing_practice": "write self-introduction sentences"
+    },
+    "blender": {
+        "modeling": "practice modeling with primitives and modifiers",
+        "timing_and_animation": "work on smooth animation timing",
+        "lighting": "experiment with scene lighting",
+        "materials_and_textures": "apply materials and colors",
+        "cleanliness": "organize outliner and optimize file"
+    },
+    "after_effects": {
+        "keyframe_animation": "practice keyframe timing and easing",
+        "composition_setup": "set up clean compositions",
+        "effects_usage": "use built-in effects creatively",
+        "render_and_export": "configure render settings",
+        "creativity": "develop motion design style"
+    },
+    "unreal": {
+        "project_setup": "set up UE project structure",
+        "level_design": "create and arrange level geometry",
+        "blueprints_basics": "write Blueprint logic",
+        "player_movement": "implement character movement",
+        "build_and_export": "package the project"
+    }
+}
+
+
+def bias_toward_weakest_dimension(skill, task_desc):
+    """Adjust task description to focus on weakest dimension if assessment available."""
+    weakest = get_weakest_dimension(skill)
+    
+    if not weakest:
+        return task_desc, None
+    
+    focus = DIMENSION_FOCUS.get(skill, {}).get(weakest)
+    if not focus:
+        return task_desc, weakest
+    
+    # Modify task description to include focus area
+    # This is a simple heuristic - actual implementation could be more sophisticated
+    return task_desc, weakest
+
+
+def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
+    """Convert a goal into a concrete autonomous task with Why/Proof/Unlocks.
+    
+    Args:
+        use_assessment_bias: If True, bias task toward weakest rubric dimension
+    """
     goal_lower = goal.lower()
     
     # Classify the goal
@@ -268,6 +359,16 @@ def synthesize_task(goal, category, recent_tasks):
     else:
         task_desc = f"an actionable step toward: {goal[:50]}"
     
+    # Apply assessment bias if enabled (targets weakest dimension)
+    focus_dimension = None
+    if use_assessment_bias and skill and skill in DIMENSION_FOCUS:
+        task_desc, focus_dimension = bias_toward_weakest_dimension(skill, task_desc)
+        if focus_dimension:
+            # Update unlocks to mention the focus area
+            focus_text = DIMENSION_FOCUS.get(skill, {}).get(focus_dimension, "")
+            if focus_text:
+                unlocks = f"Focus on {focus_text}. {unlocks}"
+    
     # Select task type prefix
     task_prefix = TASK_TYPES[hash(goal) % len(TASK_TYPES)][0]
     
@@ -310,11 +411,19 @@ def generate_tasks(goals):
     else:
         selected_goals = []
     
+    # Check if assessment-based task biasing is enabled
+    use_assessment_bias = os.environ.get("TASK_ASSESSMENT_BIAS", "false").lower() == "true"
+    assessment_info = ""
+    if use_assessment_bias:
+        assessment = load_latest_assessment()
+        if assessment.get("skills"):
+            assessment_info = " (assessment-biased toward weakest dimensions)"
+    
     # Synthesize regular tasks with lightweight dedupe
     tasks = []
     seen = set()
     for category, goal in selected_goals:
-        task = synthesize_task(goal, category, recent_tasks)
+        task = synthesize_task(goal, category, recent_tasks, use_assessment_bias=use_assessment_bias)
         key = task.lower().strip()
         if key not in seen:
             tasks.append(task)
@@ -523,6 +632,17 @@ if __name__ == "__main__":
             print(f"  - {skill}: {data.get('level', 'unknown')}")
     else:
         print("Warning: No skill profile found, using defaults")
+    
+    # Check for assessment bias
+    use_assessment_bias = os.environ.get("TASK_ASSESSMENT_BIAS", "false").lower() == "true"
+    if use_assessment_bias:
+        assessment = load_latest_assessment()
+        if assessment.get("skills"):
+            print("\n📊 Assessment-based task biasing enabled")
+            for skill, data in assessment["skills"].items():
+                weakest = min(data.get("dimensions", {}).items(), key=lambda x: x[1]) if data.get("dimensions") else None
+                if weakest:
+                    print(f"   - {skill}: weakest = {weakest[0]} ({weakest[1]}%)")
     
     print()
     

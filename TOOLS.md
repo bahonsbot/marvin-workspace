@@ -112,6 +112,15 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - Used by `daily-task-generator.py` to ensure generated tasks match skill level
 - Edit this file to update skill progression
 
+### Hybrid Skill Assessment Framework
+- `scripts/skill-level-check.py` — Weekly skill assessment with two modes:
+  - **Test mode** (Python, Japanese): Objective checks with scoring rubric
+  - **Challenge mode** (Blender, After Effects, Unreal): Challenge briefs with heuristic evaluation
+- Outputs reports to `memory/skill-assessments/YYYY-MM-DD-<skill>.md`
+- Maintains summary in `memory/skill-assessments/latest.json`
+- Includes recommendation: `keep-level` or `ready-for-trial-next-level`
+- Set `TASK_ASSESSMENT_BIAS=true` env var to enable assessment-biased task generation
+
 ### Scripts
 - `scripts/ralphy.sh` — Autonomous coding agent (reads PRD, iterates on code)
 - `scripts/ralphy-notify.sh` — Telegram notifications for ralphy
