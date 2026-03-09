@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync-board": "node scripts/sync-board.js"
   },
   "dependencies": {
     "next": "16.1.6",

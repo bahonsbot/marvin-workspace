@@ -47,12 +47,13 @@ export default function Home() {
 
   const loadBoard = useCallback(async () => {
     try {
+      // Try API first (local dev mode)
       const response = await fetch("/api/board", { cache: "no-store" });
       const contentType = response.headers.get("content-type") ?? "";
 
       if (!contentType.includes("application/json")) {
-        setViewOnly(true);
-        setError(null);
+        // Fall back to static JSON (GitHub Pages)
+        await loadStaticBoard();
         return;
       }
 
@@ -70,16 +71,34 @@ export default function Home() {
       setUpdatedAt(data.updatedAt ?? null);
       setError(null);
       setViewOnly(false);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "Failed to load board";
-      if (msg.includes("The string did not match the expected pattern")) {
-        setViewOnly(true);
-        setError(null);
-      } else {
-        setError(msg);
-      }
+    } catch {
+      // API unavailable - fall back to static JSON (GitHub Pages)
+      await loadStaticBoard();
     } finally {
       setLoading(false);
+    }
+  }, []);
+
+  const loadStaticBoard = useCallback(async () => {
+    try {
+      const response = await fetch("/board.json", { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("Static board not found");
+      }
+      const data = (await response.json()) as {
+        board?: BoardData;
+        updatedAt?: string;
+      };
+      if (data.board) {
+        setBoard(data.board);
+        setUpdatedAt(data.updatedAt ?? null);
+        setViewOnly(true);
+        setError(null);
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to load static board";
+      setError(msg);
+      setViewOnly(true);
     }
   }, []);
 
