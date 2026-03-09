@@ -2,33 +2,33 @@
   "board": {
     "todo": [
       {
-        "id": "Q29tcGxl",
-        "text": "Complete one coding exercise/practice; write [X] lines of working code; focused on [specific Python concept]; success: code runs without errors",
+        "id": "QW5hbHl6",
+        "text": "Analyze one watched company using latest available metrics; deliverable: structured analysis note in projects/company-research/; success: note includes thesis, risks, and 3 key metrics",
         "column": "todo"
       },
       {
-        "id": "SWRlbnRp",
-        "text": "Identify and script one repetitive task; create Python/bash script that does [task]; reducing manual effort by [estimate]; success: script runs and achieves task",
+        "id": "SW1wbGVt",
+        "text": "Implement one small Python utility script with tests; deliverable: script + test file under projects/learning-lab/; success: pytest passes for the new script",
         "column": "todo"
       },
       {
-        "id": "QXVkaXQg",
-        "text": "Audit one area for optimization opportunity; document finding + propose fix; focusing on [efficiency/cost/quality]; success: finding documented with impact estimate",
+        "id": "RHJhZnQg",
+        "text": "Draft and schedule 3 content ideas aligned to '[Personal] 🎨 Creative MVP: Create a quick 10-second motion d'; deliverable: content-plan markdown with hooks, CTA, and posting slots; success: plan saved in projects/content-strategy/",
         "column": "todo"
       },
       {
-        "id": "Q29tcGxl",
-        "text": "Complete one coding exercise/practice; write [X] lines of working code; focused on [specific Python concept]; success: code runs without errors",
+        "id": "QXV0b21h",
+        "text": "Automate one repetitive workspace workflow; deliverable: runnable script under scripts/ with usage comment header; success: script executes end-to-end on a sample run",
         "column": "todo"
       },
       {
         "id": "8J-OqCBD",
-        "text": "🎨 Creative MVP: Create a quick 10-second motion design loop for Instagram; success: MVP created and demonstrated",
+        "text": "🎨 Creative MVP: Build a simple Python automation script for a daily task; deliverable: working artifact + short demo note in projects/creative-mvp/; success: artifact created and documented",
         "column": "todo"
       }
     ],
     "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-03-09T14:45:53.075Z"
+  "updatedAt": "2026-03-09T15:04:05.855Z"
 }
