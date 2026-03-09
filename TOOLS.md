@@ -134,6 +134,9 @@ Use this file for live setup facts, not historical logs or long retrospectives.
    - Fix: Quote values: `AUTO_MIN_CONFIDENCE="STRONG BUY"`
 3. **Port already in use:** Another process bound to 8000
    - Fix: `lsof -i :8000` to find culprit, or change `WEBHOOK_PORT`
+4. **MiniMax input token limit:** Bailian `MiniMax-M2.5` accepts up to ~196,608 input tokens.
+   - Symptom: HTTP 400 with message like `Range of input length should be [1, 196608]`
+   - Fix: Use `bailian/qwen3.5-plus` for high-context or reasoning-heavy prompts
 
 **Watchdog Script:**
 - Location: `projects/autonomous-trading-bot/scripts/webhook_watchdog.sh`
