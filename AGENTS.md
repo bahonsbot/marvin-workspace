@@ -31,6 +31,11 @@ For simple/low-risk one-step tasks, execute directly.
 - Use subagents when they improve speed, depth, or reliability.
 - If user explicitly names a skill, use that skill first unless asked otherwise.
 
+### Race-Condition Prevention (Shared State)
+- Sub-agents append completion records to `memory/tasks-log.md` only.
+- Do not have multiple sub-agents edit planning files directly (for example `AUTONOMOUS.md`).
+- Keep planning files main-session managed; use append-only logs for concurrent updates.
+
 ## Completion Standard
 - Do not mark done on partial fixes.
 - Keep investigating until behavior is verified resolved.
