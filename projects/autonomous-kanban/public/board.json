@@ -2,33 +2,33 @@
   "board": {
     "todo": [
       {
-        "id": "W0NhcmVl",
-        "text": "[Career] Improve modelling skills in Blender, motion design in After Effects, and world building & animation in Unreal Engine",
+        "id": "Q29tcGxl",
+        "text": "Complete one coding exercise/practice; write [X] lines of working code; focused on [specific Python concept]; success: code runs without errors",
         "column": "todo"
       },
       {
-        "id": "QXV0b21h",
-        "text": "Automate as much of my workflow as possible",
+        "id": "SWRlbnRp",
+        "text": "Identify and script one repetitive task; create Python/bash script that does [task]; reducing manual effort by [estimate]; success: script runs and achieves task",
         "column": "todo"
       },
       {
-        "id": "W090aGVy",
-        "text": "[Other] [Career] Build a portfolio that will impress anyone looking for a motion designer, 3D designer, graphic designer, or creative director",
+        "id": "QXVkaXQg",
+        "text": "Audit one area for optimization opportunity; document finding + propose fix; focusing on [efficiency/cost/quality]; success: finding documented with impact estimate",
         "column": "todo"
       },
       {
-        "id": "QnVpbGQg",
-        "text": "Build a portfolio that will impress anyone looking for a motion designer, 3D designer, graphic designer, or creative director",
+        "id": "Q29tcGxl",
+        "text": "Complete one coding exercise/practice; write [X] lines of working code; focused on [specific Python concept]; success: code runs without errors",
         "column": "todo"
       },
       {
-        "id": "TGVhcm4g",
-        "text": "Learn Python programming (and maybe PyTorch)",
+        "id": "8J-OqCBD",
+        "text": "🎨 Creative MVP: Create a quick 10-second motion design loop for Instagram; success: MVP created and demonstrated",
         "column": "todo"
       }
     ],
     "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-03-09T14:19:39.056Z"
+  "updatedAt": "2026-03-09T14:45:53.075Z"
 }
