@@ -123,6 +123,7 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - `projects/market-intel-news-reader/` — PWA news reader (active)
 - `projects/autonomous-kanban/` — Goal-driven task Kanban UI (active)
   - GitHub Pages: `https://bahonsbot.github.io/marvin-workspace/autonomous-kanban/`
+  - Deploy flow: `.github/workflows/pages.yml` (build + publish on push)
 - `projects/futures-bot/` — futures bot (Phase 1 complete, implementation in progress)
 
 ### Trading Bot Troubleshooting
