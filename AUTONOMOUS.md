@@ -22,7 +22,14 @@
 
 ---
 
+## In Progress
+
+- [Other] Identify and script one repetitive task; create Python/bash script that does [task]; reducing manual effort by [estimate]; success: script runs and achieves task
+
 ## Open Backlog
 
-*(Empty — tasks generated at 8:00 AM ICT)*
+- [Personal] Complete one coding exercise/practice; write [X] lines of working code; focused on [specific Python concept]; success: code runs without errors
+- [Other] Audit one area for optimization opportunity; document finding + propose fix; focusing on [efficiency/cost/quality]; success: finding documented with impact estimate
+- [Other] Complete one coding exercise/practice; write [X] lines of working code; focused on [specific Python concept]; success: code runs without errors
+- [Personal] 🎨 Creative MVP: Create a quick 10-second motion design loop for Instagram; success: MVP created and demonstrated
 

@@ -57,6 +57,7 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 | pre-market-brief | 20:00 daily | Evening market prep brief | none |
 | trading-daily-report | 08:00 daily | Equity bot daily report | none (explicit send in task) |
 | daily-task-generator | 08:00 daily | Goal-driven autonomous task generation (4-5 tasks) | telegram (`goal-tasks`) |
+| autonomous-task-executor | 09:00 daily | Proactive task execution from Open Backlog | none |
 | enrichment-ab-review | Mon 10:00 | Weekly enrichment A/B review | none |
 | nightly-memory-extraction | 23:00 daily | Durable memory extraction | none |
 | data-manager | Sun 05:00 | Prune old data/logs | none |

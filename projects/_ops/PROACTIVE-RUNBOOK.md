@@ -59,3 +59,47 @@ Include recommendation, not just problem.
 - Non-trivial automation/process changes require approval first.
 - Commit all workspace changes with clear messages.
 - Keep noise low, impact high.
+
+---
+
+## Autonomous Task System
+
+### Overview
+
+Two-script system for goal-driven autonomous work:
+
+1. **daily-task-generator.py** (08:00 ICT)
+   - Reads goals from `AUTONOMOUS.md`
+   - Synthesizes 4-5 actionable tasks with deliverable + success criteria
+   - Deduplicates against recent tasks in `memory/tasks-log.md`
+   - Updates Open Backlog in `AUTONOMOUS.md`
+
+2. **autonomous-task-executor.py** (09:00 ICT)
+   - Reads Open Backlog + In Progress from `AUTONOMOUS.md`
+   - Selects highest-value task via scoring heuristic
+   - Executes one bounded internal work chunk
+   - Logs to `memory/tasks-log.md` (completed) and `memory/executor-log.md`
+
+### Safety Constraints
+
+- **NEVER** performs external/public actions (no Telegram, email, social)
+- Only internal workspace actions (file creation, analysis notes)
+- Idempotent-ish per run to avoid duplicate spam
+
+### Task Format
+
+Tasks in Open Backlog follow:
+```
+[category] action; deliverable; scope; success: criterion
+```
+
+Example:
+```
+[Career] Complete a 30-minute practice session on Blender; one new technique demonstration; focusing on modeling; success: has practiced for 30min with output file
+```
+
+### Logs
+
+- `memory/tasks-log.md` - Completed tasks (✅ prefix)
+- `memory/executor-log.md` - Executor run history
+- `AUTONOMOUS.md` - Open Backlog and In Progress sections
