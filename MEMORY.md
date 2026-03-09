@@ -127,10 +127,24 @@
   - `TOOLS.md` = operational runbook
   - `MEMORY.md` = curated durable memory
   - `memory/YYYY-MM-DD.md` = timeline/history
-- Goal-Driven Autonomous Tasks workflow established (Mar 8):
-  - canonical planner file: `AUTONOMOUS.md` (goals + open backlog only)
+- Goal-Driven Autonomous Tasks workflow established (Mar 8) and upgraded (Mar 9 night):
+  - canonical planner file: `AUTONOMOUS.md`
   - append-only completion log: `memory/tasks-log.md`
   - race-condition rule enforced: sub-agents append ✅ lines to tasks-log only, never edit `AUTONOMOUS.md`
   - daily generator cron at 08:00 ICT (`daily-task-generator`)
-  - dedicated Telegram group for task updates: `goal-tasks` (`-1003704803669`)
-  - Kanban UI deployed: `https://bahonsbot.github.io/marvin-workspace/autonomous-kanban/`
+  - executor cron at 09:00 ICT (`autonomous-task-executor`) for bounded autonomous task execution
+  - task format upgraded to: `Task | Why | Proof | Unlocks`
+  - skill-aware gating added via `config/skill-profile.json` (Python + Japanese novice-aware)
+  - hybrid weekly assessment added (`skill-level-check`, Sunday 07:00 ICT):
+    - test mode: Python/Japanese
+    - challenge mode: Blender/After Effects/Unreal
+  - Kanban sync hardened:
+    - static board fallback (`public/board.json`)
+    - auto-sync + auto-publish after generation
+    - GitHub Pages workflow deployment mode corrected
+  - Kanban UI: `https://bahonsbot.github.io/marvin-workspace/autonomous-kanban/`
+- Market Intel signal review marathon completed (Mar 9 late session):
+  - pending queue reduced from 20 to 0 with evidence-rich one-by-one review
+  - final tracker snapshot: Verified 20, Pending 0, weighted accuracy 82.5%
+  - duplicate-cluster handling applied where appropriate
+  - durable reasoning lesson: stagflation regime repeatedly invalidated expected treasury safety-bid in credit-stress signals
