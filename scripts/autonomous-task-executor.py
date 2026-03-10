@@ -6,14 +6,16 @@ Behavior per run:
 - Read AUTONOMOUS.md Open Backlog and In Progress
 - Select one highest-value autonomous task using simple scoring heuristic
 - Move selected task to In Progress (if from Open Backlog)
-- Execute one bounded work chunk (safe, internal actions only)
+- Execute one bounded work chunk
 - Record result line in memory/tasks-log.md with timestamp and outcome
 - If completed, move to Done; if blocked, keep in In Progress with blocker note
 
 Safety Constraints:
-- NEVER performs external/public actions (no Telegram, no email, no social)
-- Only internal workspace actions (file ops, code edits, analysis)
-- Operations are idempotent-ish to avoid duplicate spam
+- NEVER sends emails, posts comments, or performs other communication in Philippe's name
+  UNLESS explicitly asked to do so by Philippe
+- Operations should be idempotent-ish to avoid duplicate spam
+- For external/public actions beyond communication (e.g., code commits, file uploads), 
+  executor can proceed autonomously if it helps advance the goal
 """
 
 import os
