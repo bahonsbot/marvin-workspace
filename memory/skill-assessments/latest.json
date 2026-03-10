@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-03-09",
+  "last_updated": "2026-03-10",
   "skills": {
     "python": {
-      "date": "2026-03-09",
+      "date": "2026-03-10",
       "level": "novice",
       "score": 65.0,
       "recommendation": "keep-level",
@@ -16,7 +16,7 @@
       }
     },
     "blender": {
-      "date": "2026-03-09",
+      "date": "2026-03-10",
       "level": "beginner-intermediate",
       "score": 0.0,
       "recommendation": "keep-level",
@@ -26,6 +26,45 @@
         "lighting": 0,
         "materials_and_textures": 0,
         "cleanliness": 0
+      }
+    },
+    "japanese": {
+      "date": "2026-03-10",
+      "level": "novice",
+      "score": 0.0,
+      "recommendation": "keep-level",
+      "dimensions": {
+        "hiragana_recognition": 0,
+        "katakana_recognition": 0,
+        "basic_vocabulary": 0,
+        "sentence_structure": 0,
+        "writing_practice": 0
+      }
+    },
+    "after_effects": {
+      "date": "2026-03-10",
+      "level": "beginner",
+      "score": 0.0,
+      "recommendation": "keep-level",
+      "dimensions": {
+        "keyframe_animation": 0,
+        "composition_setup": 0,
+        "effects_usage": 0,
+        "render_and_export": 0,
+        "creativity": 0
+      }
+    },
+    "unreal": {
+      "date": "2026-03-10",
+      "level": "beginner",
+      "score": 0.0,
+      "recommendation": "keep-level",
+      "dimensions": {
+        "project_setup": 0,
+        "level_design": 0,
+        "blueprints_basics": 0,
+        "player_movement": 0,
+        "build_and_export": 0
       }
     }
   }

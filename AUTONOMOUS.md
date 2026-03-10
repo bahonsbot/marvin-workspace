@@ -24,7 +24,6 @@
 
 ## In Progress
 
-- [Trading] 🚀 Launch: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes
 - [Trading] 🎨 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes
 - [Career] 🔨 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably
 - [Career] 📝 Draft: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches
@@ -34,3 +33,7 @@
 ## Open Backlog
 
 
+
+## Done
+
+- [Trading] 🚀 Launch: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk
