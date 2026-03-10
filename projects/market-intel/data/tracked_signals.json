@@ -3,449 +3,6 @@
     "signal": {
       "source": "rss",
       "feed": "Financial_Times",
-      "title": "\u2018Half of Dubai is booking\u2019: expatriates drive to Oman and Saudi Arabia to find f",
-      "url": "https://www.ft.com/content/7ecea3fe-295d-4592-abf2-206da6f6b8ca",
-      "timestamp": "2026-03-03T12:47:32.445349",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 92.0,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-03T12:47:32.448023",
-    "verified": true,
-    "actual_outcome": "STRONG BUY",
-    "notes": "Validated (Mass Exodus Pattern) - Mar 2-3, 2026\nHeadline/source match confirmed (Financial Times / Luxe Jets quote).\nRegional aviation hubs disrupted (DXB/AUH/DOH shutdown context), over 2,000 flight cancellations in 48h.\nObserved behavior shift: overland relocation flows to Muscat/Riyadh and sharp evacuation pricing (private jet/last-minute seat premiums).\nMarket linkage: travel/hospitality shock and regional stability risk repricing consistent with predicted fear-contagion dynamic.",
-    "evaluated_at": "2026-03-03T13:44:00+08:00",
-    "evidence_pack": {
-      "summary": "Mass-expatriate evacuation behavior confirmed during Gulf airspace disruption window; fear-contagion pattern validated.",
-      "drivers": [
-        "Airport shutdowns/disruptions",
-        "Security escalation risk",
-        "Evacuation route substitution to Muscat/Riyadh"
-      ],
-      "metrics": [
-        "2000+ flights canceled (48h)",
-        "Last-minute route pricing +400-600%",
-        "Private charter seat/flight premiums elevated"
-      ],
-      "sector_impact": [
-        "Travel & hospitality under pressure",
-        "Safety-premium repricing in Gulf logistics/travel"
-      ],
-      "confidence": "HIGH"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Israel and Hizbollah exchange fire as Middle East war expands",
-      "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
-      "timestamp": "2026-03-03T14:47:30.006524",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-03T14:47:30.009452",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Guardian_World",
-      "title": "Ghana says at least 55 of its people killed after Russia \u2018lured\u2019 them to fight U",
-      "url": "https://www.theguardian.com/world/2026/feb/27/ghana-men-killed-fight-russia-ukraine",
-      "timestamp": "2026-03-03T18:47:28.969375",
-      "pattern_id": "p002",
-      "pattern": "Russia-Ukraine Conflict",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 87.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-03T18:47:28.971891",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "US embassy in Saudi Arabia warns of imminent attack on oil city of Dhahran",
-      "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
-      "timestamp": "2026-03-03T23:47:31.397089",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-03T23:47:31.400667",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Blue Owl slides below listing price as private credit worries mount",
-      "url": "https://www.ft.com/content/5e1404da-af6c-4f8a-a095-3e16827cadc9",
-      "timestamp": "2026-03-04T02:47:29.050877",
-      "pattern_id": "p018",
-      "pattern": "Regional Banking Crisis 2023",
-      "category": "financial_credit",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "financials_volatility",
-        "treasury_bid",
-        "credit_tightening"
-      ],
-      "predicted_causal_chain": [
-        "Funding stress",
-        "Credit spreads widen",
-        "Bank equities underperform",
-        "Policy support expectations rise"
-      ],
-      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-04T02:47:29.054888",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Trump says US Navy prepared to escort oil tankers in Gulf",
-      "url": "https://www.ft.com/content/459a0b0a-4f8c-44ff-bcd2-473701313353",
-      "timestamp": "2026-03-04T04:47:37.581351",
-      "pattern_id": "p005",
-      "pattern": "GameStop Short Squeeze",
-      "category": "sentiment_social",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "forced_covering",
-        "borrow_fee_spike",
-        "volatility_clustering"
-      ],
-      "predicted_causal_chain": [
-        "Crowded short setup",
-        "Call buying surge",
-        "Dealer hedging amplifies upside"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-04T04:47:37.585162",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "China to lean on Russian oil as Iran crisis chokes supply",
-      "url": "https://www.ft.com/content/114997aa-7d7c-4d85-b696-bc5123ade6cb",
-      "timestamp": "2026-03-04T12:47:28.024586",
-      "pattern_id": "p002",
-      "pattern": "Russia-Ukraine Conflict",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-04T12:47:28.028236",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "S\u00e1nchez calls US-Israeli war in Iran a \u2018disaster\u2019 amid spat with Trump",
-      "url": "https://www.ft.com/content/69e598d5-793d-413b-ae44-c2f4c1dbfb2f",
-      "timestamp": "2026-03-04T17:47:36.992620",
-      "pattern_id": "p002",
-      "pattern": "Russia-Ukraine Conflict",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-04T17:47:36.995995",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Dubai evacuation costs rise as high as $250,000 as more families flee",
-      "url": "https://www.ft.com/content/23e04747-a1fc-4137-8ea2-235981e013d8",
-      "timestamp": "2026-03-05T02:47:30.446798",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-05T02:47:30.450109",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "China sets lowest GDP growth target in decades",
-      "url": "https://www.ft.com/content/bda74d59-3d65-4ad0-a001-b9af585bcd4f",
-      "timestamp": "2026-03-05T10:47:29.973644",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-05T10:47:29.977284",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
       "title": "China warns of \u2018challenges\u2019 as it sets lowest GDP growth target in decades",
       "url": "https://www.ft.com/content/bda74d59-3d65-4ad0-a001-b9af585bcd4f",
       "timestamp": "2026-03-05T12:47:30.387773",
@@ -482,9 +39,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-05T12:47:30.391186",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-09T23:56:07.743290",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -524,9 +89,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-05T13:47:31.875098",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-09T23:58:15.617232",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -569,9 +142,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-06T03:47:58.755009",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "INCORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-09T23:59:27.917546",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -611,9 +192,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-06T05:47:34.112683",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:01:59.632061",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -653,9 +242,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-06T06:47:32.331592",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:03:08.751816",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -695,9 +292,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-06T07:47:31.654980",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:05:46.806380",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -737,9 +342,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-06T14:47:30.888793",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:07:19.838944",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -781,9 +394,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-06T22:47:31.934290",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "INCORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:09:15.845575",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -825,9 +446,17 @@
       "root_causes": []
     },
     "added_at": "2026-03-07T02:47:31.085925",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "INCORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:10:45.888641",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
   },
   {
     "signal": {
@@ -867,6 +496,554 @@
       "root_causes": []
     },
     "added_at": "2026-03-07T10:47:31.917682",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:12:01.325887",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Iran war muddles expectations of likely Fed interest rate cuts",
+      "url": "https://www.ft.com/content/176a8568-5982-459a-a36a-d2cbf577568a",
+      "timestamp": "2026-03-08T21:47:30.372721",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-08T21:47:30.376274",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:13:19.517381",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Investors scale back bets on Fed rate cuts",
+      "url": "https://www.ft.com/content/176a8568-5982-459a-a36a-d2cbf577568a",
+      "timestamp": "2026-03-09T03:47:31.804593",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "2019 rate cuts fueled a 30% market rally. Rate cuts typically boost growth stocks and REITs. Dollar weakens as yield differential narrows. Bond yields fall.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-09T03:47:31.808147",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:14:35.744276",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "China consumer prices buoyed by oil surge and lunar new year ",
+      "url": "https://www.ft.com/content/ea8d8fab-ec23-4fd7-84b6-0f2e15609b45",
+      "timestamp": "2026-03-09T12:47:34.038881",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-09T12:47:34.041778",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:15:42.356948",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Guardian_Business",
+      "title": "UK must be prepared for a price shock from the Iran war | Heather Stewart",
+      "url": "https://www.theguardian.com/business/2026/mar/08/uk-must-be-prepared-for-a-price-shock-from-the-iran-war",
+      "timestamp": "2026-03-09T23:47:33.997210",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 4
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-09T23:47:34.000811",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "",
+    "evaluated_at": "2026-03-10T00:16:24.398955",
+    "evidence_pack": {
+      "summary": "",
+      "drivers": [],
+      "metrics": [],
+      "sector_impact": [],
+      "confidence": "LOW"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Investors bet central banks will respond to oil shock with rate rises",
+      "url": "https://www.ft.com/content/4e9160b1-62ae-41f8-b73e-7727ad018032",
+      "timestamp": "2026-03-10T00:47:31.858562",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-10T00:47:31.861701",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Validated by Philippe on 2026-03-10: war-hike repricing confirmed via ECB/BoE/Fed front-end yield move, DXY strength, and growth-to-value rotation.",
+    "evaluated_at": "2026-03-10T17:49:00+08:00",
+    "evidence_pack": {
+      "summary": "War-hike repricing validated. OIS priced ECB hikes, BoE hike probability rose sharply, 2Y gilt and Treasury yields spiked, DXY held above 104.5, and growth sold off versus energy/value.",
+      "drivers": [
+        "ECB hikes repriced into OIS curve",
+        "BoE hike odds rose materially",
+        "Fed cut expectations vanished",
+        "Oil-shock inflation fear dominated narrative"
+      ],
+      "metrics": [
+        "2Y Gilt ~4.74%",
+        "2Y Treasury ~4.62%",
+        "DXY > 104.5"
+      ],
+      "sector_impact": [
+        "Nasdaq/growth pressured by higher discount rates",
+        "Energy outperformed",
+        "Value-heavy financials benefited"
+      ],
+      "confidence": "HIGH"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Investors reverse bets on central bank rate cuts as oil crisis deepens",
+      "url": "https://www.ft.com/content/4e9160b1-62ae-41f8-b73e-7727ad018032",
+      "timestamp": "2026-03-10T03:47:31.740114",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-10T03:47:31.743918",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Validated by Philippe on 2026-03-10: rate-cut unwind confirmed via front-end yield repricing, DXY strength, and growth-to-value rotation. Duplicate-cluster with prior oil-shock rates repricing signal.",
+    "evaluated_at": "2026-03-10T17:52:00+08:00",
+    "evidence_pack": {
+      "summary": "Rate-cut unwind validated. FedWatch cut odds collapsed, 2Y gilt and Bund yields rose, DXY hit fresh highs, and capital rotated out of long-duration growth into energy, defense, and value.",
+      "drivers": [
+        "CME FedWatch repriced away near-term cuts",
+        "BoE/ECB easing expectations reversed",
+        "Oil-shock inflation persistence dominated policy expectations"
+      ],
+      "metrics": [
+        "2Y Gilt ~4.74%",
+        "DXY ~104.70",
+        "Russell 1000 Value outperformed Growth by ~1.8% over 48h"
+      ],
+      "sector_impact": [
+        "Tech and AI multiples compressed",
+        "Energy and defense outperformed",
+        "Materials/value bid strengthened"
+      ],
+      "confidence": "HIGH"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Guardian_Business",
+      "title": "Roman Abramovich ready to fight UK government over proceeds from \u00a32.5bn Chelsea ",
+      "url": "https://www.theguardian.com/world/2026/mar/09/roman-abramovich-ready-to-fight-uk-government-over-proceeds-from-chelsea-sale",
+      "timestamp": "2026-03-10T06:47:31.580331",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-10T06:47:31.585409",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Validated by Philippe on 2026-03-10: Abramovich legal escalation confirmed, with localized UK legal/sovereign risk volatility and repricing of sanctioned-asset/property-rights risk.",
+    "evaluated_at": "2026-03-10T17:55:00+08:00",
+    "evidence_pack": {
+      "summary": "Legal escalation validated. Abramovich formally challenged UK control of Chelsea sale proceeds ahead of deadline, triggering localized UK legal/sovereign risk volatility and repricing of sanctioned-asset risk.",
+      "drivers": [
+        "Kobre & Kim letter ahead of March 17 deadline",
+        "Dispute over UK attempt to direct funds via license",
+        "Conflict over \"all victims\" clause and political infeasibility"
+      ],
+      "metrics": [
+        "\u00a32.5bn proceeds remain disputed",
+        "March 17 deadline became focal catalyst"
+      ],
+      "sector_impact": [
+        "UK legal/sovereign risk premium volatility",
+        "Sanctioned asset/property-rights risk repriced",
+        "Hope of UK-Russia thaw repriced lower"
+      ],
+      "confidence": "HIGH"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Can the G7 release enough oil to calm the market? ",
+      "url": "https://www.ft.com/content/2ac57d2f-213f-42ee-98a9-a1e14e819915",
+      "timestamp": "2026-03-10T13:47:35.903660",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 97.8,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 5.78,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-10T13:47:35.907239",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Validated by Philippe on 2026-03-10: G7/IEA reserve-release intervention repriced oil lower, drove rates volatility, supported USD, and triggered rotation back toward growth as energy momentum cooled.",
+    "evaluated_at": "2026-03-10T17:57:00+08:00",
+    "evidence_pack": {
+      "summary": "Market-intervention signal validated. Emergency G7/IEA reserve-release talks broke speculative oil fever, pushed Brent sharply lower from peak levels, created rates churn, supported USD, and triggered growth relief versus energy/value.",
+      "drivers": [
+        "G7 and IEA emergency reserve-release discussions",
+        "Prospect of 300-400M barrel synchronized SPR action",
+        "Oil-price correction shifted narrative from inflation panic to intervention-led stabilization"
+      ],
+      "metrics": [
+        "Brent fell from ~119.5 toward ~100",
+        "2Y Treasury traded roughly 4.45% to 4.62%",
+        "DXY ~104.70"
+      ],
+      "sector_impact": [
+        "Nasdaq and S&P rebounded on lower oil pressure",
+        "Energy momentum trade cooled via profit-taking",
+        "Growth regained relative strength"
+      ],
+      "confidence": "HIGH"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Saudi Aramco to restore 70% of normal crude oil exports within days",
+      "url": "https://www.ft.com/content/2a83b917-62f3-4294-875c-a397fc68c652",
+      "timestamp": "2026-03-10T19:47:33.325552",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-10T19:47:33.328781",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Saudi Aramco warns of \u2018catastrophic consequences\u2019 if Iran war drags on",
+      "url": "https://www.ft.com/content/2a83b917-62f3-4294-875c-a397fc68c652",
+      "timestamp": "2026-03-10T20:47:35.842407",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-10T20:47:35.846354",
     "verified": false,
     "actual_outcome": null,
     "notes": ""

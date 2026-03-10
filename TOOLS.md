@@ -124,7 +124,8 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 ### Scripts
 - `scripts/ralphy.sh` — Autonomous coding agent (reads PRD, iterates on code)
 - `scripts/ralphy-notify.sh` — Telegram notifications for ralphy
-- `scripts/audit-log.sh` — Security action logging
+- `scripts/audit-log.sh` — Security action logging (text + JSONL)
+- `scripts/audit-sensitive-snapshot.sh` — Low-noise sensitive-file change detector (baseline + drift logging)
 - `scripts/check-token-age.sh` — Token expiration checker
 - `scripts/nightly-memory-extraction.sh` — Memory extraction cron
 - `scripts/daily-task-generator.py` — Daily autonomous task generation (08:00 ICT, 4-5 goal-aligned tasks)
@@ -132,14 +133,18 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - `skills/google_maps_pro/scripts/get_tour_plan.py` — Route matrix helper
 
 ### Active Projects
-- `projects/horizons-pms/` — PMS system (currently on hold)
+- `AUTONOMOUS.md` — Goal-driven daily task planner (Open Backlog + In Progress)
 - `projects/market-intel/` — signal generation + reasoning pipeline (active)
 - `projects/autonomous-trading-bot/` — Alpaca paper equity bot (active)
-- `projects/market-intel-news-reader/` — PWA news reader (active)
+- `projects/futures-bot/` — futures bot (Phase 1 complete, implementation in progress)
+- `projects/manual-trading-brief/` — pre-market brief generator (cron at 20:00 MYT)
 - `projects/autonomous-kanban/` — Goal-driven task Kanban UI (active)
   - GitHub Pages: `https://bahonsbot.github.io/marvin-workspace/autonomous-kanban/`
   - Deploy flow: `.github/workflows/pages.yml` (build + publish on push)
-- `projects/futures-bot/` — futures bot (Phase 1 complete, implementation in progress)
+
+### Retired Projects (Cryo)
+- `projects-cryo/horizons-pms/` — PMS system (on hold, archived for reference)
+- `projects-cryo/market-intel-news-reader/` — PWA news reader prototype (archived)
 
 ### Trading Bot Troubleshooting
 

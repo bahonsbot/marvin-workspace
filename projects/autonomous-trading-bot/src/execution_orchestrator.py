@@ -81,6 +81,10 @@ class ExecutionOrchestrator:
         lock_path.parent.mkdir(parents=True, exist_ok=True)
         
         with open(lock_path, "w") as lock_file:
+            try:
+                os.chmod(lock_path, 0o600)
+            except OSError:
+                pass
             fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
             try:
                 store = self._read_store()

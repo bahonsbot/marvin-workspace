@@ -39,7 +39,16 @@ CONTEXT_PATH = WORKSPACE_ROOT / "memory" / "cron-context.json"
 
 class CronContext:
     """Shared context for market-intel cron pipeline."""
-    
+
+    REQUIRED_KEYS = {
+        "version": int,
+        "last_updated": str,
+        "pipeline": str,
+        "jobs": dict,
+        "alerts": list,
+        "requires_attention": list,
+    }
+
     def __init__(self, data: Optional[Dict[str, Any]] = None):
         if data:
             self.data = data
@@ -52,32 +61,72 @@ class CronContext:
                 "alerts": [],
                 "requires_attention": []
             }
+
+    @classmethod
+    def _is_valid_context(cls, data: Any) -> bool:
+        """Basic schema validation for cron context structure."""
+        if not isinstance(data, dict):
+            return False
+
+        for key, expected_type in cls.REQUIRED_KEYS.items():
+            if key not in data or not isinstance(data[key], expected_type):
+                return False
+
+        # Guard against incompatible schema version
+        if data.get("version") != 1:
+            return False
+
+        # Ensure nested collection types are sane
+        if not all(isinstance(k, str) and isinstance(v, dict) for k, v in data["jobs"].items()):
+            return False
+        if not all(isinstance(item, dict) for item in data["alerts"]):
+            return False
+        if not all(isinstance(item, dict) for item in data["requires_attention"]):
+            return False
+
+        return True
     
     @classmethod
     def load(cls) -> "CronContext":
-        """Load context from file, or create new if doesn't exist."""
+        """Load context from file, or create new if missing/invalid."""
         if CONTEXT_PATH.exists():
             try:
                 with open(CONTEXT_PATH, 'r') as f:
                     data = json.load(f)
-                return cls(data)
-            except (json.JSONDecodeError, IOError):
-                # Corrupted file, start fresh
+
+                if cls._is_valid_context(data):
+                    return cls(data)
+
+                # Invalid schema shape/version: fail-safe to fresh context
+                return cls()
+            except (json.JSONDecodeError, IOError, OSError):
+                # Corrupted or unreadable file, start fresh
                 return cls()
         return cls()
     
     def save(self) -> None:
         """Save context to file atomically."""
         self.data["last_updated"] = datetime.now(timezone.utc).isoformat()
-        
+
         # Atomic write: write to temp file, then rename
         CONTEXT_PATH.parent.mkdir(parents=True, exist_ok=True)
         temp_path = CONTEXT_PATH.with_suffix('.tmp')
-        
+
         with open(temp_path, 'w') as f:
             json.dump(self.data, f, indent=2)
-        
+
+        # Restrictive permissions on temp + final context file
+        try:
+            os.chmod(temp_path, 0o600)
+        except OSError:
+            pass
+
         temp_path.replace(CONTEXT_PATH)
+
+        try:
+            os.chmod(CONTEXT_PATH, 0o600)
+        except OSError:
+            pass
     
     def get_job(self, job_name: str) -> Optional[Dict[str, Any]]:
         """Get job data by name."""

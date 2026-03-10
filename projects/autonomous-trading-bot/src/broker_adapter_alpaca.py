@@ -87,11 +87,15 @@ class AlpacaPaperAdapter:
                 return json.loads(raw)
         except error.HTTPError as exc:
             raw = exc.read().decode("utf-8", errors="replace")
-            # Redact sensitive fields from error response (account_id, keys, etc.)
+            # Allowlist-based logging: keep only explicitly safe fields.
             try:
                 body = json.loads(raw)
-                redacted = {k: "[REDACTED]" if k.lower() in ("account_id", "api_key", "secret", "token") else v for k, v in body.items()}
-                raw = json.dumps(redacted)
+                safe = {}
+                if isinstance(body, dict):
+                    for key in ("code", "message"):
+                        if key in body:
+                            safe[key] = body[key]
+                raw = json.dumps(safe if safe else {"message": "[redacted]"})
             except Exception:
                 raw = "[Non-JSON error response]"
             raise RuntimeError(f"Alpaca API error: status={exc.code} body={raw}") from exc
@@ -122,3 +126,39 @@ class AlpacaPaperAdapter:
         if isinstance(data, list):
             return data
         return []
+
+    def validate_symbol(self, symbol: str) -> tuple[bool, str]:
+        """Validate symbol against Alpaca assets endpoint.
+
+        Returns: (is_valid, reason)
+        - False, "symbol_not_found": symbol does not exist in broker asset catalog
+        - False, "symbol_inactive": asset exists but is not active
+        - False, "symbol_not_tradable": asset exists but is not tradable
+        - True, "ok": symbol is valid for trading
+        - True, "validation_unavailable": broker validation temporarily unavailable (fail-open)
+        """
+        normalized = str(symbol or "").upper().strip()
+        if not normalized:
+            return False, "symbol_empty"
+
+        try:
+            asset = self._request("GET", f"/v2/assets/{normalized}")
+        except RuntimeError as exc:
+            msg = str(exc)
+            if "status=404" in msg:
+                return False, "symbol_not_found"
+            # Fail-open on transient/unavailable broker validation to avoid breaking
+            # ingestion during broker/API outages.
+            return True, "validation_unavailable"
+
+        if not isinstance(asset, dict):
+            return True, "validation_unavailable"
+
+        status = str(asset.get("status", "")).lower()
+        if status and status != "active":
+            return False, "symbol_inactive"
+
+        if asset.get("tradable") is False:
+            return False, "symbol_not_tradable"
+
+        return True, "ok"

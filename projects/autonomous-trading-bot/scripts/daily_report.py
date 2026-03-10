@@ -95,7 +95,7 @@ def summarize_log(log_path: Path) -> dict:
             stats["denial_reasons"][reason] += 1
 
         # Risk warnings from decision_context
-        ctx = result.get("decision_context", {})
+        ctx = result.get("decision_context") or {}
         warnings = ctx.get("reasons", [])
         for warning in warnings:
             stats["risk_warnings"][warning] += 1

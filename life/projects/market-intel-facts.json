@@ -8,8 +8,8 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-02-26",
-    "accessCount": 1
+    "lastAccessed": "2026-03-09",
+    "accessCount": 2
   },
   {
     "id": "mi-002",
@@ -20,12 +20,12 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-02-26",
-    "accessCount": 1
+    "lastAccessed": "2026-03-09",
+    "accessCount": 2
   },
   {
     "id": "mi-003",
-    "fact": "Operating constraints were set to manual execution, conservative confidence threshold, and €50/month budget.",
+    "fact": "Operating constraints were set to manual execution, conservative confidence threshold, and \u20ac50/month budget.",
     "category": "decision",
     "timestamp": "2026-02-26T23:10:00+07:00",
     "status": "active",
@@ -33,7 +33,92 @@
       "areas/people/philippe",
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-02-26",
+    "lastAccessed": "2026-03-09",
+    "accessCount": 2
+  },
+  {
+    "id": "mi-004",
+    "fact": "Signal #0 (Saudi Dhahran warning) validated STRONG BUY/CORRECT - VIX to 21, crude >$81, gold $5,419",
+    "category": "evaluation",
+    "timestamp": "2026-03-09T23:41:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-09",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-005",
+    "fact": "Signal #1 (Blue Owl) evaluated INCORRECT - stagflation trap overrode treasury safety bid",
+    "category": "evaluation",
+    "timestamp": "2026-03-09T23:43:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-09",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-006",
+    "fact": "Signal #2 (Trump Navy Escorts) validated STRONG BUY/CORRECT - forced covering, borrow fees +30%",
+    "category": "evaluation",
+    "timestamp": "2026-03-09T23:45:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-09",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-007",
+    "fact": "Signal #3 (China/Russia oil axis) validated STRONG BUY/CORRECT - Brent to $119, pipeline-secure outperformed",
+    "category": "evaluation",
+    "timestamp": "2026-03-09T23:47:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-09",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-008",
+    "fact": "Signal #4 (Spain/Sanchez Iran criticism) validated STRONG BUY/CORRECT - IBEX -2.6%, EU cohesion stressed",
+    "category": "evaluation",
+    "timestamp": "2026-03-09T23:49:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-09",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-009",
+    "fact": "Signal #5 (Dubai evacuation) evaluated BUY/PARTIAL - $250k confirmed, FX nuanced due to AED peg",
+    "category": "evaluation",
+    "timestamp": "2026-03-09T23:54:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-09",
+    "accessCount": 1
+  },
+  {
+    "id": "mi-010",
+    "fact": "Philippe established detailed evaluation methodology with market evidence standards for model learning",
+    "category": "pattern",
+    "timestamp": "2026-03-09T23:55:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-03-09",
     "accessCount": 1
   }
 ]

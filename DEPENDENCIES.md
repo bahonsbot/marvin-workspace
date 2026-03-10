@@ -35,9 +35,9 @@ Owner: Platform Health Council follow-up (WARN-5)
 - Build artifact mirror present: `projects/autonomous-kanban/.next/package.json`
 - Notes: source `package.json` is authoritative.
 
-### `projects/horizons-pms/app/`
-- File: `projects/horizons-pms/app/package.json`
-- Notes: project currently on hold; dependency updates can be deferred.
+### `projects-cryo/horizons-pms/app/`
+- File: `projects-cryo/horizons-pms/app/package.json`
+- Notes: project retired to cryo; dependency updates paused indefinitely.
 
 ## Inventory Gaps (tracked)
 

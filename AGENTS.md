@@ -114,6 +114,7 @@ Cron context-sharing (`memory/cron-context.json`) is maintained by project Pytho
 - `TOOLS.md` = live operational runbook
 - `MEMORY.md` = curated durable memory
 - `memory/YYYY-MM-DD.md` = timeline/history
+- `AUTONOMOUS.md` = autonomous task planner (main-session managed)
 - Project implementation detail belongs in `projects/*/docs` or `projects/*/notes`
 
 ## Environment Safety Constraints (Docker Hostinger)

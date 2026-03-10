@@ -670,25 +670,313 @@
         "options_flow_predicts_direction",
         "retail_sentiment_contrarian"
       ]
+    },
+    {
+      "id": "p025",
+      "name": "UK LDI/Gilt Crisis 2022",
+      "category": "financial_credit",
+      "date": "2022-09-23",
+      "description": "UK pension liability-driven investment (LDI) funds faced catastrophic margin calls when gilt yields spiked, forcing BoE emergency intervention to prevent systemic collapse.",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "uk_gilts",
+        "direction": "spike",
+        "magnitude": "gilt_yields_500bp_spike_intraday"
+      },
+      "early_signals": [
+        "mini_budget_announcement",
+        "pension_fund_leverage_ratio",
+        "collateral_call_volume",
+        " gilt_sale_announcements"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "hidden_leverage_in_pension_structs",
+        "boe_emergency_intervention_precedent",
+        "liability_driven_investing_risk"
+      ]
+    },
+    {
+      "id": "p026",
+      "name": "VIX ETN Volmageddon 2018",
+      "category": "financial_credit",
+      "date": "2018-02-05",
+      "description": "Short VIX ETNs (like XIV) imploded when VIX spiked, creating a forced short-vol feedback loop that accelerated equity selloff.",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 0,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "volatility_products",
+        "direction": "crash",
+        "magnitude": "xiv_down_96pct_in_hours"
+      },
+      "early_signals": [
+        "vix_term_structure_contango",
+        "etn_autoroll_negative_carry",
+        "short_vol_position_buildup"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "volatility_product_leverage",
+        "forced_feedback_loops",
+        "contango_decay_risk"
+      ]
+    },
+    {
+      "id": "p027",
+      "name": "Swiss Franc Unpeg Shock 2015",
+      "category": "macroeconomic",
+      "date": "2015-01-15",
+      "description": "SNB removed EUR/CHF floor without warning, causing massive FX dislocation and blowups in leveraged accounts and brokers.",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 0,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "chf_eur",
+        "direction": "spike",
+        "magnitude": "chf_up_30pct_in_minutes"
+      },
+      "early_signals": [
+        "snb_reserve_changes",
+        "ecb_qe_announcement",
+        "swiss_banking_pressures"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "central_bank_credibility_shock",
+        "fx_peg_removal_chaos",
+        "broker_margin_call_cascade"
+      ]
+    },
+    {
+      "id": "p028",
+      "name": "Yen Carry Unwind Regime",
+      "category": "macroeconomic",
+      "date": "2022-12-20",
+      "description": "BOJ policy shift (YCC adjustment) triggered global carry trade unwind, impacting currencies, equities, and commodities across Asia and EM.",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "jpy_cross",
+        "direction": "spike",
+        "magnitude": "jpy_strong_vs_usd_eur"
+      },
+      "early_signals": [
+        "boj_ycc_adjustment_rumors",
+        "jpy_volatility_smile",
+        "carry_trade_positioning_data",
+        "bond_yield_spreads"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "jpy_liquidity_shock_global",
+        "carry_trade_leverage_hidden",
+        "boj_policy_regime_shift"
+      ]
+    },
+    {
+      "id": "p029",
+      "name": "US Regional CRE Stress Wave",
+      "category": "financial_credit",
+      "date": "2023-10-01",
+      "description": "Post-SVB, regional commercial real estate (especially office) refinancing stress cascaded through regional banks and CRE-exposed REITs.",
+      "time_horizon": "medium-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 720,
+        "confirmation_to_market": 168
+      },
+      "market_impact": {
+        "asset": "regional_banks_cre",
+        "direction": "stress",
+        "magnitude": "cre_yields_spike_200bp"
+      },
+      "early_signals": [
+        "office_vacancy_rates",
+        "bank_cre_exposure_reports",
+        "maturity_wall_projections",
+        "cmbs_spread_widening"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "cre_refinancing_wall",
+        "bank_cre_concentration_risk",
+        "work_from_home_structural_shift"
+      ]
+    },
+    {
+      "id": "p030",
+      "name": "Mega-Cap Earnings Shock",
+      "category": "corporate",
+      "date": "2022-10-27",
+      "description": "Major mega-cap (FAAMG/Mag 7) earnings miss or guidance cut triggers broad sector rotation and market-wide risk-off.",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 0,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "sp500",
+        "direction": "rotation",
+        "magnitude": "sector_rotation_impact"
+      },
+      "early_signals": [
+        "guidance_preannouncements",
+        "channel_checks",
+        "options_activity_pre-earnings",
+        "whisper_number_vs_consensus"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "mega_cap_earnings_market_mover",
+        "guidance_cut_triggers_sector_rotation",
+        "options_\u77e5\u60c5\u4eba\u58eb_implied_vol"
+      ]
+    },
+    {
+      "id": "p031",
+      "name": "M&A Antitrust Block",
+      "category": "corporate",
+      "date": "2023-07-20",
+      "description": "Regulatory authorities block or significantly condition major M&A deal, triggering deal-equity volatility and sector consolidation re-rating.",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 168,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "deal_stocks",
+        "direction": "crash",
+        "magnitude": "target_down_10_30pct"
+      },
+      "early_signals": [
+        "regulatory_hearing_announcements",
+        "doj_ftc_statements",
+        "political_opposition",
+        "vertical_vs_horizontal_deal_type"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "antitrust_enforcement_strength",
+        "deal_stock_volatility",
+        "sector_consolidation_reversals"
+      ]
+    },
+    {
+      "id": "p032",
+      "name": "US Government Shutdown",
+      "category": "political",
+      "date": "2018-12-22",
+      "description": "US federal government shutdown due to budget/appropriations impasse, creating market uncertainty and sector rotation into safety.",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 72,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "us_equities",
+        "direction": "volatility",
+        "magnitude": "vix_elevated_2_4_weeks"
+      },
+      "early_signals": [
+        "congress_appropriations_deadline",
+        "continuing_resolution_odds",
+        "partisan_press_announcements",
+        "Treasury_default_ceiling_talks"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "political_gridlock_market_uncertainty",
+        "shutdown_duration_market_impact",
+        "debt_ceiling_link"
+      ]
+    },
+    {
+      "id": "p033",
+      "name": "US Tariff War Escalation",
+      "category": "political",
+      "date": "2018-03-01",
+      "description": "US announces major tariff escalation (China, EU, allies), triggering global trade-war narrative and supply-chain repricing.",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "global_trade",
+        "direction": "risk_off",
+        "magnitude": "china_equities_down_5_10pct"
+      },
+      "early_signals": [
+        "trade_rep_announcements",
+        "section_301_investigation",
+        "retaliatory_threats",
+        "farm_subsidy_announcements"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "tariff_escalation_supply_chain_shock",
+        "retaliation_cycle",
+        "farm_subsidy_bailout_indicator"
+      ]
+    },
+    {
+      "id": "p034",
+      "name": "Major Accounting Scandal",
+      "category": "corporate",
+      "date": "2020-09-25",
+      "description": "Major public company revealed accounting fraud/wirecard-style blowup, triggering sector-wide audit repricing and governance selloff.",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 0,
+        "confirmation_to_market": 0
+      },
+      "market_impact": {
+        "asset": "sector_equities",
+        "direction": "crash",
+        "magnitude": "stock_down_50_90pct"
+      },
+      "early_signals": [
+        "short_seller_research",
+        "auditor_resignation",
+        "whistleblower_news",
+        "sec_investigation_hints"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "short_seller_as_early_warning",
+        "auditor_red_flags",
+        "sector_wide_trust_repricing"
+      ]
     }
   ],
   "metadata": {
-    "total_patterns": 23,
+    "total_patterns": 34,
     "last_updated": "2026-02-27",
     "confidence_distribution": {
-      "HIGH": 14,
-      "MEDIUM_HIGH": 6,
-      "MEDIUM": 3,
+      "HIGH": 18,
+      "MEDIUM_HIGH": 12,
+      "MEDIUM": 4,
       "LOW": 0
     },
     "category_distribution": {
       "geopolitical": 7,
-      "sentiment_social": 2,
-      "macroeconomic": 7,
-      "financial_credit": 3,
+      "sentiment_social": 3,
+      "macroeconomic": 9,
+      "financial_credit": 6,
       "crypto_credit": 1,
-      "political": 1,
-      "corporate": 2
+      "political": 3,
+      "corporate": 5
     }
   }
 }

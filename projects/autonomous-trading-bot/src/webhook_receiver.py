@@ -92,13 +92,51 @@ def _rate_limit_allowed(client_ip: str) -> bool:
                 if oldest_ip in _RATE_LIMIT_BUCKETS:
                     del _RATE_LIMIT_BUCKETS[oldest_ip]
                     break
-        
+
         # Initialize bucket if new
         if client_ip not in _RATE_LIMIT_BUCKETS:
             _RATE_LIMIT_BUCKETS[client_ip] = []
             _bucket_access_order.append(client_ip)
-        
+
         bucket = _RATE_LIMIT_BUCKETS[client_ip]
+        cutoff = now - window_seconds
+        while bucket and bucket[0] < cutoff:
+            bucket.pop(0)
+
+        if len(bucket) >= max_requests:
+            return False
+
+        bucket.append(now)
+        return True
+
+
+def _health_rate_limit_allowed(client_ip: str) -> bool:
+    """Rate limit for health endpoints.
+
+    Uses a separate bucket namespace from /webhook traffic.
+    """
+    enabled = _env_flag("HEALTH_RATE_LIMIT_ENABLED", default=True)
+    if not enabled:
+        return True
+
+    max_requests = _env_int("HEALTH_RATE_LIMIT_MAX_REQUESTS", default=60)
+    window_seconds = _env_int("HEALTH_RATE_LIMIT_WINDOW_SECONDS", default=60)
+    now = time()
+    bucket_key = f"health:{client_ip}"
+
+    with _RATE_LIMIT_LOCK:
+        if bucket_key not in _RATE_LIMIT_BUCKETS and len(_RATE_LIMIT_BUCKETS) >= MAX_BUCKETS:
+            while _bucket_access_order:
+                oldest_ip = _bucket_access_order.pop(0)
+                if oldest_ip in _RATE_LIMIT_BUCKETS:
+                    del _RATE_LIMIT_BUCKETS[oldest_ip]
+                    break
+
+        if bucket_key not in _RATE_LIMIT_BUCKETS:
+            _RATE_LIMIT_BUCKETS[bucket_key] = []
+            _bucket_access_order.append(bucket_key)
+
+        bucket = _RATE_LIMIT_BUCKETS[bucket_key]
         cutoff = now - window_seconds
         while bucket and bucket[0] < cutoff:
             bucket.pop(0)
@@ -116,13 +154,10 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
     Accepts any of:
     - Header: X-Webhook-Secret
     - Header: Authorization: Bearer <secret>
-    - JSON payload field: secret
-    
+
     Plus replay protection (when signature present):
     - Header: X-Timestamp (ISO-8601, must be within 5 minutes)
     - Header: X-Signature (HMAC-SHA256 of timestamp + body)
-    
-    (TradingView cannot set custom headers, so payload secret is supported.)
     """
     secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
     if not secret:
@@ -135,22 +170,10 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
     auth_header = headers.get("Authorization", "")
     if auth_header.startswith("Bearer "):
         bearer_secret = auth_header[7:]
-    payload_secret = ""
-    payload_secret_used = False
-    if payload and isinstance(payload, dict):
-        payload_secret = str(payload.get("secret", ""))
-        if payload_secret:
-            payload_secret_used = True
-
     # Use constant-time comparison to prevent timing attacks
     x_webhook_match = secrets.compare_digest(header_secret.encode(), secret.encode())
     bearer_match = secrets.compare_digest(bearer_secret.encode(), secret.encode())
-    payload_match = secrets.compare_digest(payload_secret.encode(), secret.encode())
-    basic_auth_ok = x_webhook_match or bearer_match or payload_match
-    
-    # Deprecation warning: payload-based secret is less secure (logged by proxies/debug tools)
-    if payload_secret_used and basic_auth_ok and not x_webhook_match and not bearer_match:
-        logger.warning("DEPRECATED: Webhook auth via payload['secret'] is deprecated. Use X-Webhook-Secret or Authorization header instead.")
+    basic_auth_ok = x_webhook_match or bearer_match
     
     if not basic_auth_ok:
         return False
@@ -233,6 +256,33 @@ def process_webhook_payload(
         }
 
     normalized = dict(validation["normalized"])
+
+    # Broker-backed symbol existence/tradability validation (fail-open on broker outage).
+    if _env_flag("BROKER_SYMBOL_VALIDATION_ENABLED", default=True):
+        try:
+            adapter = AlpacaPaperAdapter()
+            symbol_ok, symbol_reason = adapter.validate_symbol(normalized.get("symbol", ""))
+            if not symbol_ok:
+                reason = f"Field 'symbol' failed broker validation: {symbol_reason}"
+                return {
+                    "accepted": False,
+                    "reasons": [reason],
+                    "validation": validation,
+                    "context": None,
+                    "decision_context": None,
+                    "proposal": None,
+                    "risk": None,
+                    "execution": {
+                        "executed": False,
+                        "status": "validation_failed",
+                        "paper_execute": paper_execute,
+                        "paper_only": True,
+                    },
+                    "paper_only": True,
+                }
+        except Exception as exc:
+            logger.warning(f"Broker symbol validation unavailable; continuing with format validation only: {exc}")
+
     context_snapshot = load_context_snapshot()
     decision_context = derive_decision_context(normalized, context_snapshot)
 
@@ -386,6 +436,11 @@ class WebhookHandler(BaseHTTPRequestHandler):
         self._send_json(status, response)
 
     def do_GET(self) -> None:  # noqa: N802
+        client_ip = self.client_address[0] if self.client_address else "unknown"
+        if self.path in {"/health", "/health/auth"} and not _health_rate_limit_allowed(client_ip):
+            self._send_json(429, {"error": "Health endpoint rate limit exceeded", "paper_only": True})
+            return
+
         if self.path == "/health":
             self._send_json(200, {"ok": True, "paper_only": True})
             return

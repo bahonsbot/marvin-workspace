@@ -33,8 +33,8 @@
       "timestamp": "2025-01-01",
       "source": "initial-setup",
       "status": "active",
-      "lastAccessed": "2026-03-01",
-      "accessCount": 2
+      "lastAccessed": "2026-03-09",
+      "accessCount": 3
     },
     {
       "id": "philippe-004",
@@ -77,8 +77,8 @@
         "projects/market-intel",
         "projects/market-intel-news-reader"
       ],
-      "lastAccessed": "2026-03-01",
-      "accessCount": 1
+      "lastAccessed": "2026-03-09",
+      "accessCount": 2
     },
     {
       "id": "philippe-008",

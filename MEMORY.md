@@ -99,12 +99,18 @@
   - `projects/futures-bot/src/`
 
 ### Horizons PMS
-- Status: on hold
+- Status: retired (cryo)
 - Core: PRD and schema foundation prepared
 - Key refs:
-  - `projects/horizons-pms/PRD.md`
-  - `projects/horizons-pms/db/`
-  - `projects/horizons-pms/sql/`
+  - `projects-cryo/horizons-pms/PRD.md`
+  - `projects-cryo/horizons-pms/db/`
+  - `projects-cryo/horizons-pms/sql/`
+
+### Market Intel News Reader
+- Status: retired (cryo)
+- Core: PWA news reader prototype
+- Key refs:
+  - `projects-cryo/market-intel-news-reader/`
 
 ## Reference Index (When You Need Detail)
 - Daily timeline and decisions: `memory/YYYY-MM-DD.md`
@@ -148,3 +154,19 @@
   - final tracker snapshot: Verified 20, Pending 0, weighted accuracy 82.5%
   - duplicate-cluster handling applied where appropriate
   - durable reasoning lesson: stagflation regime repeatedly invalidated expected treasury safety-bid in credit-stress signals
+- Morning Meeting hardening batch completed (Mar 10):
+  - accepted-risk decisions recorded for scanner-overclassified Telegram token path finding, manual-backup policy finding, and cron isolation posture
+  - autonomous-trading-bot security upgrades applied:
+    - broker-backed symbol validation before execution path
+    - allowlist-based Alpaca error redaction (safe fields only)
+    - robust cron env export for trading-daily-report (`set -a && . ./.env && set +a`)
+    - health endpoint rate limiting added
+    - idempotency lock file permission hardening (`0600`)
+    - payload-based webhook secret auth removed (header-based auth only)
+  - market-intel cron context hardening applied:
+    - write permissions enforced (`cron-context.json` as `0600`)
+    - schema validation on load with fail-safe reset for invalid/corrupt shapes
+  - audit logging upgraded:
+    - structured JSONL security log added (`logs/security-actions.jsonl`)
+    - sensitive-file snapshot/drift detector added (`scripts/audit-sensitive-snapshot.sh`)
+  - core docs updated to index `AUTONOMOUS.md` in AGENTS.md and TOOLS.md

@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-08T07:47:31.042948",
-    "baseline_count": 31,
+    "timestamp": "2026-03-10T21:47:34.127477",
+    "baseline_count": 48,
     "enriched_count": 50,
-    "overlap_count": 14,
-    "baseline_only_count": 9,
-    "enriched_only_count": 31,
-    "enriched_lift": 31,
+    "overlap_count": 21,
+    "baseline_only_count": 16,
+    "enriched_only_count": 21,
+    "enriched_lift": 21,
     "baseline_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "ICE deports family, including deaf boy who wasn\u2019t given his assistive devices",
-      "US considers lifting more sanctions on Russian oil as Iran conflict sees global ",
-      "Trump shouldn\u2019t ease Russia sanctions \u2013 they are choking its economy | Phillip I",
-      "US Inflation Gauges Likely Diverged Before War in Iran"
+      "Saudi Aramco to restore 70% of oil exports \u2018within days\u2019 via Red Sea pipeline - ",
+      "Iran war could knock UK homebuyer confidence, says builder Persimmon",
+      "UK inflation likely to rise because of Middle East war, says Rachel Reeves",
+      "Scrapping North Sea windfall tax would not reduce UK energy bills, say experts"
     ],
     "enriched_top5": [
       "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "ICE deports family, including deaf boy who wasn\u2019t given his assistive devices",
-      "US considers lifting more sanctions on Russian oil as Iran conflict sees global ",
-      "Trump shouldn\u2019t ease Russia sanctions \u2013 they are choking its economy | Phillip I",
-      "US Inflation Gauges Likely Diverged Before War in Iran"
+      "Saudi Aramco to restore 70% of oil exports \u2018within days\u2019 via Red Sea pipeline - ",
+      "Iran war could knock UK homebuyer confidence, says builder Persimmon",
+      "UK inflation likely to rise because of Middle East war, says Rachel Reeves",
+      "Scrapping North Sea windfall tax would not reduce UK energy bills, say experts"
     ]
   }
 ]

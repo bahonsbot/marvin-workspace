@@ -8,3 +8,4 @@
 # NOTE: Backup is handled via VPS snapshots (external), not via backup-workspace.sh
 # VPS snapshots provide off-host backup coverage
 # Last manual snapshot: configured via Hostinger control panel
+2026-03-10T15:33:33+0800 | actor=system | action=sensitive_snapshot_init | target= | status=ok | details=Initialized sensitive file baseline
