@@ -12,8 +12,8 @@
 - Learn Japanese
 
 ### Trading
-- Earn at least $200 in daily profits by equity trading (when markets are open)
-- Earn at least $200 in daily profits by futures trading (when markets are open)
+- Earn at least $200 in daily profits by equity trading (autonomous-trading-bot)
+- Earn at least $200 in daily profits by futures trading (futures-bot)
 - Learn to make proper business analysis of companies I follow, based on key metrics and financial reports
 
 ### Other
@@ -24,14 +24,13 @@
 
 ## In Progress
 
+- [Trading] 🚀 Launch: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes
+- [Trading] 🎨 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes
+- [Career] 🔨 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably
+- [Career] 📝 Draft: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches
 - [Career] 🎨 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence
 - [Other] 🔧 Automate one repetitive workspace workflow; deliverable: runnable script in scripts/ with usage notes and before/after time estimate | Why: Reduces manual ops overhead and improves OpenClaw execution reliability | Proof: script completes one full sample run and logs output | Unlocks: Foundation for chaining multiple automations into one routine
 
 ## Open Backlog
 
-- [Career] 📊 Analyze: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably
-- [Other] 🔧 Fix: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Process runs successfully with measurable improvement | Unlocks: Progress toward: Write a simple script with input validation
-- [Trading] 📝 Draft: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes
-- [Career] 📚 Learn: one 15-second practice clip in Blender; deliverable: MP4 in projects/creative-practice/ with 3 bullet notes on what improved | Why: Directly builds 3D modeling/animation skills needed for Blender/Unreal goals | Proof: Export renders MP4/image and notes what was learned | Unlocks: Progress toward: Complete one procedural modeling tutorial
-- [Career] 🎨 Creative MVP: Write a Python script that organizes files in one folder | Why: Creative MVPs build confidence and generate content for portfolio/social | Proof: Artifact created and demo note saved | Unlocks: Unlocks more ambitious creative projects
 
