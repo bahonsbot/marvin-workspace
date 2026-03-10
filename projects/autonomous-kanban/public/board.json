@@ -2,23 +2,23 @@
   "board": {
     "todo": [
       {
-        "id": "8J-UqCBC",
-        "text": "🔨 Build: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes",
-        "column": "todo"
-      },
-      {
-        "id": "8J-agCBM",
-        "text": "🚀 Launch: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Process runs successfully with measurable improvement | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "todo"
-      },
-      {
-        "id": "8J-UqCBC",
-        "text": "🔨 Build: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "id": "8J-OqCBE",
+        "text": "🎨 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
         "column": "todo"
       },
       {
         "id": "8J-TnSBE",
-        "text": "📝 Draft: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice",
+        "text": "📝 Draft: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "column": "todo"
+      },
+      {
+        "id": "8J-agCBM",
+        "text": "🚀 Launch: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes",
+        "column": "todo"
+      },
+      {
+        "id": "8J-UqCBC",
+        "text": "🔨 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably",
         "column": "todo"
       },
       {
@@ -30,5 +30,5 @@
     "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-03-09T15:32:38.514Z"
+  "updatedAt": "2026-03-10T01:02:48.262Z"
 }
