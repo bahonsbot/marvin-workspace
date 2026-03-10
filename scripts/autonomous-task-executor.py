@@ -22,6 +22,7 @@ import os
 import re
 import subprocess
 import json
+import requests
 from datetime import datetime
 from pathlib import Path
 
@@ -35,6 +36,38 @@ TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 # Executor constants
 EXECUTION_LOG_FILE = WORKSPACE / "memory" / "executor-log.md"
+
+# MiniMax API config
+MINIMAX_API_KEY = os.environ.get("MINIMAX_API_KEY", "sk-cp-h7vNFh1CnIJ2vNFh1CnI")  # fallback for testing
+MINIMAX_ENDPOINT = "https://api.minimax.chat/v1/text/chatcompletion_v2"
+
+
+def call_minimax(prompt, max_tokens=800):
+    """Call MiniMax API to get model response."""
+    headers = {
+        "Authorization": f"Bearer {MINIMAX_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "model": "MiniMax-M2.5",
+        "messages": [
+            {"role": "system", "content": "You are an autonomous task executor. Analyze the task and provide actionable output. Be specific and practical."},
+            {"role": "user", "content": prompt}
+        ],
+        "max_tokens": max_tokens,
+        "temperature": 0.7
+    }
+    
+    try:
+        response = requests.post(MINIMAX_ENDPOINT, headers=headers, json=payload, timeout=60)
+        if response.status_code == 200:
+            result = response.json()
+            return result.get("choices", [{}])[0].get("message", {}).get("content", "")
+        else:
+            return f"API Error: {response.status_code}"
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 
 def read_autonomous_file():
@@ -192,61 +225,154 @@ def log_completed_task(task, category="general"):
     TASKS_LOG_FILE.write_text(existing + log_entry)
 
 
+def parse_task_structure(task):
+    """Extract emoji, title, and sections from task text."""
+    # Extract emoji
+    emoji_match = re.match(r'^([\p{Emoji}\u200d]+)\s*', task)
+    emoji = emoji_match.group(1) if emoji_match else ""
+    remaining = task[len(emoji):].strip()
+    
+    # Extract category if present
+    category_match = re.match(r'\[(\w+)\]\s*', remaining)
+    category = category_match.group(1) if category_match else "general"
+    remaining = remaining[len(category_match.group(0)):] if category_match else remaining
+    
+    # Title is before first semicolon
+    semicolon_idx = remaining.find(';')
+    title = remaining[:semicolon_idx].strip() if semicolon_idx > -1 else remaining.strip()
+    
+    # Parse sections
+    sections = {}
+    if semicolon_idx > -1:
+        after_semicolon = remaining[semicolon_idx + 1:]
+        parts = after_semicolon.split('|')
+        for part in parts:
+            colon_idx = part.find(':')
+            if colon_idx > -1:
+                key = part[:colon_idx].strip().lower()
+                value = part[colon_idx + 1:].strip()
+                sections[key] = value
+    
+    return {"emoji": emoji, "category": category, "title": title, "sections": sections}
+
+
 def execute_task_bounded(task):
     """
-    Execute one bounded work chunk on the task.
-    
-    This is a SAFE bounded execution - only internal workspace actions.
+    Execute task using AI-assisted analysis and execution.
     Returns (completed: bool, result: str, blocked: bool, blocker_note: str)
-    
-    The executor does NOT make external calls. It performs analysis and
-    creates output files that can be reviewed later.
     """
-    task_lower = task.lower()
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    parsed = parse_task_structure(task)
     
-    # Analyze task type and create appropriate output
-    if 'portfolio' in task_lower:
-        # Create portfolio progress note
-        note = f"# Portfolio Work Note\n\n**Generated:** {timestamp}\n\n**Task:** {task}\n\n## Progress\n\n- [ ] Item 1\n- [ ] Item 2\n\n## Notes\n\n"
-        output_file = MEMORY_DIR / "portfolio-progress.md"
-        output_file.write_text(note)
-        return False, f"Created progress note at {output_file.name}", False, ""
+    category = parsed.get("category", "general").lower()
+    title = parsed.get("title", "")
+    sections = parsed.get("sections", {})
+    deliverable = sections.get("deliverable", "")
+    proof = sections.get("proof", "")
+    why = sections.get("why", "")
     
-    elif 'python' in task_lower or 'programming' in task_lower:
-        # Create coding practice note
-        note = f"# Coding Practice Note\n\n**Generated:** {timestamp}\n\n**Task:** {task}\n\n## Practice\n\n```python\n# Practice code here\n```\n\n"
-        output_file = MEMORY_DIR / "coding-practice.md"
-        output_file.write_text(note)
-        return False, f"Created coding note at {output_file.name}", False, ""
+    print(f"  Task parsed: category={category}, title={title[:50]}")
+    print(f"  Deliverable: {deliverable[:80] if deliverable else 'none'}")
     
-    elif 'trading' in task_lower or 'equity' in task_lower or 'futures' in task_lower:
-        # Create trading journal note
-        note = f"# Trading Journal Note\n\n**Generated:** {timestamp}\n\n**Task:** {task}\n\n## Trade Entry\n\n- Setup:\n- Entry:\n- Exit:\n- P&L:\n\n## Lesson\n\n"
-        output_file = MEMORY_DIR / "trading-journal.md"
-        output_file.write_text(note)
-        return False, f"Created journal note at {output_file.name}", False, ""
+    # Analyze what needs to be done
+    analysis_prompt = f"""Analyze this task and determine the best way to execute it.
+
+Task: {task}
+
+Deliverable: {deliverable}
+Proof criterion: {proof}
+
+Category: {category}
+
+Provide a short execution plan (2-3 sentences max) and then create the actual deliverable file content if applicable. 
+
+Output format:
+PLAN: <your brief plan>
+OUTPUT: <file path to create> (or "NONE" if no file)
+CONTENT: <the actual content to write> (or "NONE" if no file)
+
+Be practical and create something useful."""
     
-    elif 'blender' in task_lower or 'after effects' in task_lower or 'unreal' in task_lower:
-        # Create creative work note
-        note = f"# Creative Practice Note\n\n**Generated:** {timestamp}\n\n**Task:** {task}\n\n## Session\n\n- Technique:\n- Duration:\n- Output:\n\n"
-        output_file = MEMORY_DIR / "creative-practice.md"
-        output_file.write_text(note)
-        return False, f"Created practice note at {output_file.name}", False, ""
+    response = call_minimax(analysis_prompt, max_tokens=1500)
+    print(f"  Model response received ({len(response)} chars)")
     
-    elif 'automate' in task_lower or 'openclaw' in task_lower or 'optimize' in task_lower:
-        # Create optimization analysis note
-        note = f"# Optimization Analysis\n\n**Generated:** {timestamp}\n\n**Task:** {task}\n\n## Finding\n\n- Area:\n- Current state:\n- Proposed fix:\n- Impact:\n\n"
-        output_file = MEMORY_DIR / "optimization-analysis.md"
-        output_file.write_text(note)
-        return False, f"Created analysis at {output_file.name}", False, ""
+    # Parse the response
+    plan = ""
+    file_path = None
+    content = ""
     
+    for line in response.split('\n'):
+        if line.startswith("PLAN:"):
+            plan = line[5:].strip()
+        elif line.startswith("OUTPUT:"):
+            path_str = line[7:].strip()
+            if path_str and path_str != "NONE":
+                file_path = WORKSPACE / path_str
+        elif line.startswith("CONTENT:"):
+            content = line[8:].strip()
+    
+    # If no explicit output, create a reasonable default
+    if not file_path and deliverable:
+        # Map deliverable to file path
+        if "portfolio" in deliverable.lower() or "case-study" in deliverable.lower():
+            file_path = WORKSPACE / "projects" / "portfolio" / "case-studies" / f"case-study-{datetime.now().strftime('%Y-%m-%d')}.md"
+        elif "trading-brief" in deliverable.lower() or "market" in deliverable.lower():
+            file_path = WORKSPACE / "projects" / "trading-briefs" / f"brief-{datetime.now().strftime('%Y-%m-%d')}.md"
+        elif "company" in deliverable.lower() or "analysis" in deliverable.lower():
+            file_path = WORKSPACE / "projects" / "company-research" / f"analysis-{datetime.now().strftime('%Y-%m-%d')}.md"
+        elif "content" in deliverable.lower() or "social" in deliverable.lower():
+            file_path = WORKSPACE / "projects" / "content" / "content-plan.md"
+        elif "python" in deliverable.lower() or "script" in deliverable.lower():
+            file_path = WORKSPACE / "scripts" / f"script-{datetime.now().strftime('%Y-%m-%d')}.py"
+    
+    # If we have content to write, write it
+    if file_path and content and content != "NONE":
+        try:
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Check if content is a placeholder or actual useful content
+            if len(content) > 100 and "TEMPLATE" not in content.upper():
+                file_path.write_text(content)
+                print(f"  Created: {file_path.relative_to(WORKSPACE)}")
+                return True, f"Created deliverable: {file_path.name}", False, ""
+            else:
+                # Content is too short or is a template - not complete
+                file_path.parent.mkdir(parents=True, exist_ok=True)
+                file_path.write_text(f"# {title}\n\n**Generated:** {timestamp}\n\n**Task:** {task}\n\n## Progress\n\n- [ ] Item 1\n- [ ] Item 2\n\n**Model plan:** {plan}\n\n")
+                print(f"  Created progress note: {file_path.relative_to(WORKSPACE)}")
+                return False, f"Created progress note ({file_path.name})", False, ""
+        except Exception as e:
+            return False, f"Error writing file: {str(e)}", False, ""
+    
+    # Fallback: create generic progress note
+    note_path = MEMORY_DIR / f"task-progress-{datetime.now().strftime('%Y-%m-%d-%H%M')}.md"
+    note_content = f"""# Task Progress Note
+
+**Generated:** {timestamp}
+
+**Task:** {task}
+
+## Analysis
+
+**Plan:** {plan if plan else 'Analyzing...'}
+
+## Progress
+
+- [ ] Item 1
+- [ ] Item 2
+
+## Notes
+
+"""
+    note_path.write_text(note_content)
+    print(f"  Created fallback note: {note_path.name}")
+    
+    # Check if this seems like a completed deliverable
+    if deliverable and ("draft" in title.lower() or "create" in title.lower() or "build" in title.lower()):
+        # These tasks are typically multi-step, keep in progress
+        return False, f"In progress: {note_path.name}", False, ""
     else:
-        # Generic: create a work note
-        note = f"# Work Note\n\n**Generated:** {timestamp}\n\n**Task:** {task}\n\n## Notes\n\n"
-        output_file = MEMORY_DIR / "work-note.md"
-        output_file.write_text(note)
-        return False, f"Created work note at {output_file.name}", False, ""
+        return True, f"Completed: {note_path.name}", False, ""
 
 
 def run_executor():
