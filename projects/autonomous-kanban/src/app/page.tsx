@@ -10,6 +10,59 @@ type KanbanTask = {
   column: ColumnKey;
 };
 
+// Parse task text into structured sections
+function parseTaskText(text: string): { emoji: string; title: string; sections: { label: string; content: string }[] } {
+  const emojiMatch = text.match(/^([\p{Emoji}\u200d]+)\s*/u);
+  const emoji = emojiMatch ? emojiMatch[1] : "";
+  let remaining = text.replace(emojiMatch?.[0] || "", "");
+  
+  // Extract main task name (before first semicolon)
+  const semicolonIdx = remaining.indexOf(";");
+  const title = semicolonIdx > -1 ? remaining.slice(0, semicolonIdx).trim() : remaining.trim();
+  remaining = semicolonIdx > -1 ? remaining.slice(semicolonIdx + 1) : "";
+  
+  // Parse sections by pipe delimiter
+  const sections: { label: string; content: string }[] = [];
+  const parts = remaining.split("|").map(s => s.trim());
+  
+  for (const part of parts) {
+    const colonIdx = part.indexOf(":");
+    if (colonIdx > -1) {
+      const label = part.slice(0, colonIdx).trim();
+      const content = part.slice(colonIdx + 1).trim();
+      sections.push({ label, content });
+    }
+  }
+  
+  return { emoji, title, sections };
+}
+
+function SectionBadge({ label, content }: { label: string; content: string }) {
+  const labelLower = label.toLowerCase();
+  let colorClass = "bg-slate-100 text-slate-600";
+  let icon = "📋";
+  
+  if (labelLower.includes("deliverable") || labelLower.includes("proof")) {
+    colorClass = "bg-blue-50 text-blue-700";
+    icon = "📋";
+  } else if (labelLower.includes("why")) {
+    colorClass = "bg-amber-50 text-amber-700";
+    icon = "💡";
+  } else if (labelLower.includes("unlock")) {
+    colorClass = "bg-emerald-50 text-emerald-700";
+    icon = "🔓";
+  }
+  
+  return (
+    <div className="mt-2">
+      <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium ${colorClass}`}>
+        {icon} {label}
+      </span>
+      <p className="mt-1 text-xs leading-relaxed text-slate-600">{content}</p>
+    </div>
+  );
+}
+
 type BoardData = {
   todo: KanbanTask[];
   inprogress: KanbanTask[];
@@ -191,10 +244,17 @@ export default function Home() {
                       No tasks
                     </p>
                   ) : null}
-                  {tasks.map((task) => (
+                  {tasks.map((task) => {
+                    const parsed = parseTaskText(task.text);
+                    return (
                     <article key={task.id} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-                      <p className="mb-3 text-sm leading-relaxed text-slate-800">{task.text}</p>
-                      <div className="flex flex-wrap gap-2">
+                      <h3 className="text-sm font-semibold leading-relaxed text-slate-800">
+                        {parsed.emoji} {parsed.title}
+                      </h3>
+                      {parsed.sections.map((section, idx) => (
+                        <SectionBadge key={idx} label={section.label} content={section.content} />
+                      ))}
+                      <div className="mt-3 flex flex-wrap gap-2">
                         {task.column !== "todo" ? (
                           <button
                             onClick={() => void move(task, "todo")}
@@ -224,7 +284,8 @@ export default function Home() {
                         ) : null}
                       </div>
                     </article>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             );
