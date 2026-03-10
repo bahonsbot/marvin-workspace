@@ -23,6 +23,7 @@ import re
 import subprocess
 import json
 import requests
+import uuid
 from datetime import datetime
 from pathlib import Path
 
@@ -36,6 +37,122 @@ TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 # Executor constants
 EXECUTION_LOG_FILE = WORKSPACE / "memory" / "executor-log.md"
+
+# Sub-agent session storage
+SESSIONS_FILE = WORKSPACE / "memory" / "executor-sessions.json"
+
+
+def load_sessions():
+    """Load active sub-agent sessions."""
+    if SESSIONS_FILE.exists():
+        return json.loads(SESSIONS_FILE.read_text())
+    return {}
+
+
+def save_sessions(sessions):
+    """Save sub-agent sessions."""
+    SESSIONS_FILE.write_text(json.dumps(sessions, indent=2))
+
+
+def spawn_subagent(task, task_type="general"):
+    """
+    Spawn a sub-agent to execute the task.
+    Returns (session_key, instruction) or (None, error_message)
+    """
+    sessions = load_sessions()
+    
+    # Generate a unique label for this task
+    label = f"executor-{task_type}-{datetime.now().strftime('%Y%m%d%H%M')}"
+    
+    # Parse task for context
+    parsed = parse_task_structure(task)
+    category = parsed.get("category", "general").lower()
+    title = parsed.get("title", "")
+    sections = parsed.get("sections", {})
+    deliverable = sections.get("deliverable", "")
+    proof = sections.get("proof", "")
+    why = sections.get("why", "")
+    
+    # Build instruction based on task type
+    if "portfolio" in deliverable.lower() or "case-study" in deliverable.lower():
+        instruction = f"""Execute this task: {title}
+
+Deliverable: {deliverable}
+Proof: {proof}
+
+Create a complete case study in projects/portfolio/case-studies/. Include:
+- The Problem (what challenge you addressed)
+- The Approach (your methodology)
+- The Result (outcomes and impact)
+- What I Learned (key insights)
+
+Write actual content, not templates. This is for a portfolio."""
+        
+    elif "trading" in deliverable.lower() or "market" in deliverable.lower() or "brief" in deliverable.lower():
+        instruction = f"""Execute this task: {title}
+
+Deliverable: {deliverable}
+Proof: {proof}
+
+Create a trading brief in projects/trading-briefs/. Include:
+- 2+ specific setups with entry, invalidation, risk, and thesis
+- Current market context if relevant
+- Specific price levels where possible
+
+Write actual analysis, not templates."""
+        
+    elif "company" in deliverable.lower() or "analysis" in deliverable.lower():
+        instruction = f"""Execute this task: {title}
+
+Deliverable: {deliverable}
+Proof: {proof}
+
+Create a company analysis in projects/company-research/. Include:
+- Investment thesis (bull case)
+- Key risks (3+)
+- Important metrics (revenue, growth, margins, debt)
+- Conclusion with recommendation
+
+Research a real company if possible, or create a template with realistic structure."""
+        
+    elif "content" in deliverable.lower() or "social" in deliverable.lower() or "instagram" in deliverable.lower():
+        instruction = f"""Execute this task: {title}
+
+Deliverable: {deliverable}
+Proof: {proof}
+
+Create a content plan in projects/content/. Include:
+- 3 content ideas with hooks
+- Format suggestions (reel/post/story)
+- Specific posting times
+- Platform-specific tips
+
+Write actual content ideas, not placeholders."""
+        
+    elif "python" in deliverable.lower() or "script" in deliverable.lower() or "build" in deliverable.lower():
+        instruction = f"""Execute this task: {title}
+
+Deliverable: {deliverable}
+Proof: {proof}
+
+Create working code in scripts/. Include:
+- Working Python script with actual logic
+- Comments explaining what it does
+- Example usage if relevant
+
+Write actual code, not templates."""
+        
+    else:
+        instruction = f"""Execute this task: {title}
+
+Deliverable: {deliverable}
+Proof: {proof}
+
+Create the deliverable in the appropriate location within {WORKSPACE}.
+
+Be practical and create something useful."""
+    
+    return label, instruction
 
 # MiniMax API config (currently unused - pattern-based execution active)
 # To enable AI-assisted execution, add MINIMAX_API_KEY to environment
@@ -242,7 +359,7 @@ def parse_task_structure(task):
 
 def execute_task_bounded(task):
     """
-    Execute task using pattern-based intelligent execution.
+    Execute task - attempts pattern-based first, falls back to marking for sub-agent.
     Returns (completed: bool, result: str, blocked: bool, blocker_note: str)
     """
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -258,9 +375,35 @@ def execute_task_bounded(task):
     print(f"  Task parsed: category={category}, title={title[:50]}")
     print(f"  Deliverable: {deliverable[:80] if deliverable else 'none'}")
     
-    # Determine what to create based on deliverable
-    file_path = None
-    content = ""
+    # Determine task complexity - complex tasks need sub-agents
+    needs_subagent = any([
+        "portfolio" in deliverable.lower() or "case-study" in deliverable.lower(),
+        "trading" in deliverable.lower() or "market" in deliverable.lower() or "brief" in deliverable.lower(),
+        "company" in deliverable.lower() or "analysis" in deliverable.lower(),
+        "content" in deliverable.lower() or "social" in deliverable.lower(),
+    ])
+    
+    if needs_subagent:
+        # Mark task as needing sub-agent execution
+        subagent_queue_file = MEMORY_DIR / "executor-subagent-queue.json"
+        queue = []
+        if subagent_queue_file.exists():
+            queue = json.loads(subagent_queue_file.read_text())
+        
+        queue.append({
+            "task": task,
+            "parsed": parsed,
+            "timestamp": timestamp,
+            "status": "pending"
+        })
+        
+        subagent_queue_file.write_text(json.dumps(queue, indent=2))
+        print(f"  Added to sub-agent queue: {len(queue)} tasks pending")
+        
+        return False, f"Queued for sub-agent execution", True, "Needs sub-agent to complete deliverable"
+    
+    # Simple tasks - execute directly (pattern-based)
+    # ... existing pattern-based code ...
     
     if "python" in deliverable.lower() or "script" in deliverable.lower():
         # Create a Python script
