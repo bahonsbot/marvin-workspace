@@ -41,6 +41,61 @@ EXECUTION_LOG_FILE = WORKSPACE / "memory" / "executor-log.md"
 # Sub-agent session storage
 SESSIONS_FILE = WORKSPACE / "memory" / "executor-sessions.json"
 
+# Kanban board sync
+KANBAN_BOARD_FILE = WORKSPACE / "projects" / "autonomous-kanban" / "public" / "board.json"
+
+
+def sync_kanban_board():
+    """Sync AUTONOMOUS.md sections to Kanban board.json."""
+    import random
+    import string
+    
+    autonomous_file = WORKSPACE / "AUTONOMOUS.md"
+    if not autonomous_file.exists():
+        return
+    
+    content = autonomous_file.read_text()
+    
+    # Parse sections
+    sections = {}
+    current_section = None
+    for line in content.split('\n'):
+        if line.strip().startswith("## "):
+            current_section = line.strip()[2:].lower().replace(" ", "")
+            sections[current_section] = []
+        elif line.strip().startswith("- ") and current_section:
+            sections[current_section].append(line.strip()[2:])
+    
+    # Build board structure
+    def make_task(text):
+        # Generate simple ID
+        tid = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        return {"id": tid, "text": text, "column": "todo"}
+    
+    board = {
+        "todo": [make_task(t) for t in sections.get("openbacklog", [])],
+        "inprogress": [make_task(t) for t in sections.get("inprogress", [])],
+        "done": [make_task(t) for t in sections.get("done", [])]
+    }
+    
+    # Update column keys to match Kanban
+    if sections.get("inprogress"):
+        for t in board["inprogress"]:
+            t["column"] = "inprogress"
+    if sections.get("done"):
+        for t in board["done"]:
+            t["column"] = "done"
+    
+    # Write board.json
+    import json
+    board_data = {
+        "board": board,
+        "updatedAt": datetime.now().strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    }
+    KANBAN_BOARD_FILE.parent.mkdir(parents=True, exist_ok=True)
+    KANBAN_BOARD_FILE.write_text(json.dumps(board_data, indent=2))
+    print(f"  Synced Kanban board: {len(board['todo'])} todo, {len(board['inprogress'])} in progress, {len(board['done'])} done")
+
 
 def load_sessions():
     """Load active sub-agent sessions."""
@@ -633,6 +688,7 @@ def run_executor():
         # Move from Open Backlog to In Progress
         content = move_to_in_progress(selected_task, content)
         AUTONOMOUS_FILE.write_text(content)
+        sync_kanban_board()
         print(f"Moved task to In Progress")
     
     # Execute bounded work chunk
@@ -648,6 +704,7 @@ def run_executor():
         content = AUTONOMOUS_FILE.read_text()
         content = move_to_done(selected_task, content)
         AUTONOMOUS_FILE.write_text(content)
+        sync_kanban_board()
         
         log_execution(selected_task, "completed", result)
         print(f"Task completed and logged")

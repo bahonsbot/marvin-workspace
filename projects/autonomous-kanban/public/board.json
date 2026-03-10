@@ -1,0 +1,40 @@
+{
+  "board": {
+    "todo": [],
+    "inprogress": [
+      {
+        "id": "FhJIkghn",
+        "text": "[Trading] \ud83c\udfa8 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
+        "column": "inprogress"
+      },
+      {
+        "id": "zLJZAXZq",
+        "text": "[Career] \ud83d\udd28 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably",
+        "column": "inprogress"
+      },
+      {
+        "id": "QcscucAO",
+        "text": "[Career] \ud83d\udcdd Draft: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "column": "inprogress"
+      },
+      {
+        "id": "OiI7S7SZ",
+        "text": "[Career] \ud83c\udfa8 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
+        "column": "inprogress"
+      },
+      {
+        "id": "rJbvQaqP",
+        "text": "[Other] \ud83d\udd27 Automate one repetitive workspace workflow; deliverable: runnable script in scripts/ with usage notes and before/after time estimate | Why: Reduces manual ops overhead and improves OpenClaw execution reliability | Proof: script completes one full sample run and logs output | Unlocks: Foundation for chaining multiple automations into one routine",
+        "column": "inprogress"
+      }
+    ],
+    "done": [
+      {
+        "id": "EE35LhbM",
+        "text": "[Trading] \ud83d\ude80 Launch: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk",
+        "column": "done"
+      }
+    ]
+  },
+  "updatedAt": "2026-03-10T22:09:13.000Z"
+}
