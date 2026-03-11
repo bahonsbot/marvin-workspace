@@ -162,13 +162,28 @@ def spawn_subagent(task, task_type="general"):
 Deliverable: {deliverable}
 Proof: {proof}
 
-Create a complete case study in projects/portfolio/case-studies/. Include:
-- The Problem (what challenge you addressed)
-- The Approach (your methodology)
-- The Result (outcomes and impact)
-- What I Learned (key insights)
+This is a CREATIVE PORTFOLIO task. The output must clearly help Philippe with portfolio presentation, creative positioning, or landing creative roles.
 
-Write actual content, not templates. This is for a portfolio."""
+Relevance rules:
+1. Prefer creative-relevant source material first.
+2. Do NOT default to infra, trading, ops, or backend/system projects unless they can be framed credibly as creative-direction, product storytelling, visual communication, or portfolio-worthy presentation work.
+3. Before writing, explicitly check: \"Does this project clearly belong in a creative portfolio?\"
+4. If the answer is no, do NOT force a weak match. Mark the task blocked instead of producing an unrelated case study.
+
+Preferred source order:
+- existing visual / motion / design / branding / creative-direction work
+- portfolio-ready presentation work with a strong visual or storytelling angle
+- only then hybrid product/creative work if it can be framed honestly for creative roles
+
+Create a complete case study in projects/portfolio/case-studies/. Include:
+- The Problem
+- The Approach
+- The Result
+- What I Learned
+- Portfolio Angle
+- Target Role Relevance
+
+Write actual content, not templates. If no suitable creative-relevant source project exists, stop and report that it is blocked for lack of an appropriate portfolio source."""
         
     elif "trading" in deliverable.lower() or "market" in deliverable.lower() or "brief" in deliverable.lower():
         instruction = f"""Execute this task: {title}
