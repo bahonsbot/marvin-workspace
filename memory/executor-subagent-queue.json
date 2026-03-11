@@ -1,0 +1,41 @@
+[
+  {
+    "task": "[Career] 🎨 Design: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+    "parsed": {
+      "emoji": "",
+      "category": "Career",
+      "title": "🎨 Design: one portfolio case-study draft from existing project",
+      "sections": {
+        "deliverable": "250-400 word markdown in projects/portfolio/case-studies/",
+        "why": "Documents existing work - essential for landing creative roles",
+        "proof": "Case-study markdown has problem/approach/result sections",
+        "unlocks": "Unlocks job applications and client pitches"
+      }
+    },
+    "timestamp": "2026-03-11 10:01",
+    "status": "completed",
+    "startedAt": "2026-03-12 00:25",
+    "completedAt": "2026-03-12 00:26",
+    "outputPath": "projects/portfolio/case-studies/market-intelligence-system.md",
+    "label": "executor-career-202603120025",
+    "instruction": "Execute this task: 🎨 Design: one portfolio case-study draft from existing project\n\nDeliverable: 250-400 word markdown in projects/portfolio/case-studies/\nProof: Case-study markdown has problem/approach/result sections\n\nCreate a complete case study in /data/.openclaw/workspace/projects/portfolio/case-studies/. Include:\n- The Problem\n- The Approach\n- The Result\n- What I Learned\n\nWrite actual content, not a placeholder. Then update /data/.openclaw/workspace/memory/tasks-log.md with a verified ✅ entry including the relative output path, remove this task from /data/.openclaw/workspace/AUTONOMOUS.md if present, update this queue entry to status completed with outputPath and completedAt, run `node /data/.openclaw/workspace/projects/autonomous-kanban/scripts/sync-board.js`, commit/push any changed relevant files, and send a Telegram message to group -1003704803669 in this format:\n✅ Task completed\nTask: <full task title>\nOutput: <relative output path>."
+  },
+  {
+    "task": "[Career] 🎨 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
+    "parsed": {
+      "emoji": "",
+      "category": "Career",
+      "title": "🎨 Creative MVP: Create one 10-second motion design loop for Instagram",
+      "sections": {
+        "deliverable": "MP4 in projects/creative-practice/ plus a 3-line caption draft",
+        "why": "Builds visible motion-design proof and supports audience growth goals",
+        "proof": "MP4 exported and caption saved in markdown",
+        "unlocks": "Reusable content format for weekly posting cadence"
+      }
+    },
+    "label": "executor-Career-202603120006",
+    "instruction": "Execute this task: 🎨 Creative MVP: Create one 10-second motion design loop for Instagram\n\nDeliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft\nProof: MP4 exported and caption saved in markdown\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "queuedAt": "2026-03-12 00:06",
+    "status": "pending"
+  }
+]

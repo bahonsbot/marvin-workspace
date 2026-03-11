@@ -2,54 +2,56 @@
   "board": {
     "todo": [
       {
-        "id": "724b057e",
-        "text": "[Career] \ud83c\udfa8 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
+        "id": "caa75c42",
+        "text": "[Career] 🎨 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
         "column": "todo"
       },
       {
-        "id": "d6099102",
-        "text": "[Career] \ud83c\udfa8 Design: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "id": "70a9929f",
+        "text": "[Career] 🔨 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably",
         "column": "todo"
       },
       {
-        "id": "b23781eb",
-        "text": "[Career] \ud83d\udd28 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably",
+        "id": "54867888",
+        "text": "[Career] 📝 Draft: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
         "column": "todo"
       },
       {
-        "id": "e6dd053a",
-        "text": "[Career] \ud83d\udcdd Draft: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "id": "180b7c97",
+        "text": "[Other] 🔧 Automate one repetitive workspace workflow; deliverable: runnable script in scripts/ with usage notes and before/after time estimate | Why: Reduces manual ops overhead and improves OpenClaw execution reliability | Proof: script completes one full sample run and logs output | Unlocks: Foundation for chaining multiple automations into one routine",
         "column": "todo"
       },
       {
-        "id": "305cc818",
-        "text": "[Other] \ud83d\udd27 Automate one repetitive workspace workflow; deliverable: runnable script in scripts/ with usage notes and before/after time estimate | Why: Reduces manual ops overhead and improves OpenClaw execution reliability | Proof: script completes one full sample run and logs output | Unlocks: Foundation for chaining multiple automations into one routine",
+        "id": "bfdeb427",
+        "text": "[Personal] 🚀 Launch: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice",
         "column": "todo"
       },
       {
-        "id": "7af51b22",
-        "text": "[Personal] \ud83d\ude80 Launch: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice",
+        "id": "3194e975",
+        "text": "[Other] 🔧 Fix: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script executes end-to-end on test input | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "3a931e9a",
-        "text": "[Other] \ud83d\udd27 Fix: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script executes end-to-end on test input | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "todo"
-      },
-      {
-        "id": "956b7837",
-        "text": "[Personal] \ud83c\udfa8 Creative MVP: Write a Python script that organizes files in one folder | Why: Creative MVPs build confidence and generate content for portfolio/social | Proof: Artifact created and demo note saved | Unlocks: Unlocks more ambitious creative projects",
+        "id": "960621b1",
+        "text": "[Personal] 🎨 Creative MVP: Write a Python script that organizes files in one folder | Why: Creative MVPs build confidence and generate content for portfolio/social | Proof: Artifact created and demo note saved | Unlocks: Unlocks more ambitious creative projects",
         "column": "todo"
       }
     ],
     "inprogress": [
       {
-        "id": "da4ae1d2",
-        "text": "[Trading] \ud83c\udfa8 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
+        "id": "34ed5eea",
+        "text": "[Trading] 🎨 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
         "column": "inprogress"
       }
     ],
-    "done": []
+    "done": [
+      {
+        "id": "b84c6d60",
+        "text": "🎨 Design: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "column": "done",
+        "outputPath": "projects/portfolio/case-studies/market-intelligence-system.md"
+      }
+    ]
   },
-  "updatedAt": "2026-03-12T00:06:56.000Z"
+  "updatedAt": "2026-03-11T16:27:22.767Z"
 }
