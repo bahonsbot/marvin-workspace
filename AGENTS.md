@@ -9,12 +9,114 @@
 
 Note: capture both tasks and identity-shaping moments (target ~85% tasks, ~15% identity).
 
+## Model-Specific Guidance
+
+When model changes to `openai-codex/gpt-5.4` (codex5.4):
+1. Read `model-guidance/gpt-5.4.md` to refresh optimal prompting patterns
+2. Apply the patterns from that file for this session
+
+This ensures we use GPT-5.4 effectively per OpenAI's official guidance.
+
 ## Memory Discipline
 - If asked to remember something, write it to memory files immediately.
 - Record lessons after mistakes/fixes so they are reusable.
 - Keep separation:
   - `memory/YYYY-MM-DD.md` = timeline/log
   - `MEMORY.md` = curated durable memory
+  - `.learnings/` = structured corrections, errors, and feature requests
+
+## Self-Improving (Detection Triggers)
+
+Log to `.learnings/` when you notice these patterns:
+
+### Corrections → `.learnings/corrections.md`
+- "No, that's not right..."
+- "Actually, it should be..."
+- "You're wrong about..."
+- "I prefer X, not Y"
+- "Remember that I always..."
+- "I told you before..."
+- "Stop doing X"
+- "Why do you keep..."
+
+### Preference Signals → `.learnings/corrections.md` (if explicit)
+- "I like when you..."
+- "Always do X for me"
+- "Never do Y"
+- "My style is..."
+
+### Errors → `.learnings/errors.md`
+- Command fails unexpectedly
+- Tool/API returns error
+- Exception raised
+
+### Feature Requests → `.learnings/requests.md`
+- User requests capability that doesn't exist
+- User wants something we can't do
+
+### Ignore (don't log)
+- One-time instructions ("do X now")
+- Context-specific ("in this file...")
+- Hypotheticals ("what if...")
+
+## Self-Reflection (Post-Task)
+
+After completing significant work, pause and evaluate:
+
+1. **Did it meet expectations?** — Compare outcome vs intent
+2. **What could be better?** — Identify improvements
+3. **Is this a pattern?** — If yes, log to `.learnings/`
+
+When to self-reflect:
+- After completing a multi-step task
+- After receiving feedback (positive or negative)
+- After fixing a bug or mistake
+- When you notice your output could be better
+
+Log format (append to `memory/YYYY-MM-DD.md`):
+```
+## Self-Reflection [timestamp]
+CONTEXT: [type of task]
+REFLECTION: [what I noticed]
+LESSON: [what to do differently]
+```
+
+## Autonomous Queue Safety
+
+For `memory/executor-subagent-queue.json`:
+- Allow at most one entry with `status: "spawned"` at a time.
+- Before starting a new queued task, check whether a `spawned` entry already exists.
+- If a `spawned` entry exists and is recent, do nothing.
+- If a `spawned` entry appears stale (for example no completion after a reasonable window, such as 2 hours, and no evidence of active work), self-heal by changing it from `spawned` to `blocked` with a note explaining it was stale and released the active slot.
+- Never silently discard queued work.
+- After stale recovery, the next wakeup may start exactly one pending task.
+
+## Pre-Task Memory Check
+
+Before starting non-trivial work, check for relevant context:
+
+1. **What qualifies as "non-trivial":**
+   - Multi-step tasks (anything requiring 3+ steps)
+   - Coding/development work
+   - Research or analysis tasks
+   - Tasks affecting production systems
+   - Anything requiring decisions
+
+2. **How to check:**
+   - Use `qmd search "topic" -c life -n 3` for relevant facts
+   - Check `.learnings/` for related corrections/errors
+   - Review recent entries in `memory/YYYY-MM-DD.md`
+
+3. **What to cite:**
+   - "Found X from life/entities/...:N"
+   - "Correction from .learnings/corrections.md:..."
+   - Brief, just what's relevant
+
+4. **When to skip:**
+   - Simple Q&A or conversational replies
+   - One-step confirmations
+   - Clear continuation of recent conversation
+   - Tasks where context is already obvious
 
 ## Core Execution Protocol
 For non-trivial work:
