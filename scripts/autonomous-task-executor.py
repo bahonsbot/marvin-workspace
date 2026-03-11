@@ -138,11 +138,11 @@ def save_sessions(sessions):
 
 def spawn_subagent(task, task_type="general"):
     """
-    Spawn a sub-agent to execute the task.
-    Returns (session_key, instruction) or (None, error_message)
+    Build a sub-agent instruction payload for this task.
+    Runtime spawning happens outside this script via OpenClaw tools.
     """
     sessions = load_sessions()
-    
+
     # Generate a unique label for this task
     label = f"executor-{task_type}-{datetime.now().strftime('%Y%m%d%H%M')}"
     
@@ -448,6 +448,53 @@ def parse_task_structure(task):
     return {"emoji": emoji, "category": category, "title": title, "sections": sections}
 
 
+def task_requires_subagent(parsed):
+    """Return True for rich deliverables that should be delegated, not stubbed."""
+    title = parsed.get("title", "").lower()
+    deliverable = parsed.get("sections", {}).get("deliverable", "").lower()
+    combined = f"{title} | {deliverable}"
+
+    subagent_signals = [
+        "portfolio", "case-study", "case study", "content plan", "social media",
+        "instagram", "motion design", "mp4", "caption", "analysis", "company",
+        "trading brief", "market setup", "deck", "markdown deck", "research",
+        "draft", "creative mvp"
+    ]
+
+    direct_signals = ["python", "script", "automation", "workflow"]
+
+    if any(sig in combined for sig in direct_signals):
+        return False
+    return any(sig in combined for sig in subagent_signals)
+
+
+def queue_subagent_task(task, parsed):
+    """Append task to sub-agent queue if not already pending."""
+    queue_file = MEMORY_DIR / "executor-subagent-queue.json"
+    queue = []
+    if queue_file.exists():
+        try:
+            queue = json.loads(queue_file.read_text())
+        except json.JSONDecodeError:
+            queue = []
+
+    for entry in queue:
+        if entry.get("task") == task and entry.get("status") in {"pending", "spawned"}:
+            return queue_file, False
+
+    label, instruction = spawn_subagent(task, parsed.get("category", "general"))
+    queue.append({
+        "task": task,
+        "parsed": parsed,
+        "label": label,
+        "instruction": instruction,
+        "queuedAt": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "status": "pending"
+    })
+    queue_file.write_text(json.dumps(queue, indent=2))
+    return queue_file, True
+
+
 def is_substantial_completion(parsed, file_path, content):
     """Only mark done when the promised artifact exists and is more than a placeholder."""
     if not file_path or not Path(file_path).exists():
@@ -514,37 +561,13 @@ def execute_task_bounded(task):
     print(f"  Task parsed: category={category}, title={title[:50]}")
     print(f"  Deliverable: {deliverable[:80] if deliverable else 'none'}")
     
-    # Determine task complexity - complex tasks need sub-agents
-    needs_subagent = any([
-        "portfolio" in deliverable.lower() or "case-study" in deliverable.lower(),
-        "trading" in deliverable.lower() or "market" in deliverable.lower() or "brief" in deliverable.lower(),
-        "company" in deliverable.lower() or "analysis" in deliverable.lower(),
-        "content" in deliverable.lower() or "social" in deliverable.lower(),
-    ])
-    
-    if needs_subagent:
-        # Mark task as needing sub-agent execution
-        subagent_queue_file = MEMORY_DIR / "executor-subagent-queue.json"
-        queue = []
-        if subagent_queue_file.exists():
-            queue = json.loads(subagent_queue_file.read_text())
-        
-        queue.append({
-            "task": task,
-            "parsed": parsed,
-            "timestamp": timestamp,
-            "status": "pending"
-        })
-        
-        subagent_queue_file.write_text(json.dumps(queue, indent=2))
-        print(f"  Added to sub-agent queue: {len(queue)} tasks pending")
-        
-        return False, f"Queued for sub-agent execution", True, "Needs sub-agent to complete deliverable", ""
-    
+    if task_requires_subagent(parsed):
+        queue_file, added = queue_subagent_task(task, parsed)
+        note = "Queued for sub-agent execution" if added else "Already queued for sub-agent execution"
+        return False, note, True, note, str(queue_file)
+
     # Simple tasks - execute directly (pattern-based)
-    # ... existing pattern-based code ...
-    
-    if "python" in deliverable.lower() or "script" in deliverable.lower():
+    if "python" in deliverable.lower() or "script" in deliverable.lower() or "automation" in deliverable.lower():
         # Create a Python script
         file_path = WORKSPACE / "scripts" / f"auto-generated-{datetime.now().strftime('%Y%m%d%H%M')}.py"
         script_name = file_path.name.replace(".py", "")
@@ -695,31 +718,8 @@ if __name__ == "__main__":
         print(f"  Creating content plan: {file_path.name}")
         
     else:
-        # Generic fallback - create a general work note
-        file_path = MEMORY_DIR / f"task-progress-{datetime.now().strftime('%Y-%m-%d-%H%M')}.md"
-        content = f'''# Task Progress Note
+        return False, "No direct executor for this task type", True, "Needs sub-agent or manual routing", ""
 
-**Generated:** {timestamp}
-
-**Task:** {title}
-
-**Deliverable:** {deliverable}
-**Proof criterion:** {proof}
-
-## Progress
-
-- [ ] Item 1
-- [ ] Item 2
-
-## Notes
-
-[Additional notes]
-
----
-*Task category: {category}*
-'''
-        print(f"  Creating generic progress note: {file_path.name}")
-    
     # Write the file
     if file_path:
         try:
@@ -797,14 +797,17 @@ def run_executor():
         print(f"Task completed and logged")
     
     elif blocked:
-        if not output_path:
+        queued = "sub-agent" in blocker_note.lower() or "subagent" in blocker_note.lower()
+        if queued or not output_path:
             content = AUTONOMOUS_FILE.read_text()
             content = move_to_open_backlog(selected_task, content)
             AUTONOMOUS_FILE.write_text(content)
             if sync_kanban_board():
                 publish_kanban_board_if_changed()
-        write_last_result(selected_task, "blocked", blocker_note, output_path)
-        log_execution(selected_task, "blocked", blocker_note)
+        outcome = "queued_for_subagent" if queued else "blocked"
+        result_path = output_path if (output_path and not queued) else ""
+        write_last_result(selected_task, outcome, blocker_note, result_path)
+        log_execution(selected_task, outcome, blocker_note)
         print(f"Task blocked: {blocker_note}")
 
     else:
