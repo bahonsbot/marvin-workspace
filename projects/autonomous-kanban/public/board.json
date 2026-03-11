@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "724b057e",
+        "text": "[Career] \ud83c\udfa8 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
+        "column": "todo"
+      },
+      {
         "id": "d6099102",
         "text": "[Career] \ud83c\udfa8 Design: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
         "column": "todo"
@@ -39,11 +44,6 @@
     ],
     "inprogress": [
       {
-        "id": "014db68b",
-        "text": "[Career] \ud83c\udfa8 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
-        "column": "inprogress"
-      },
-      {
         "id": "da4ae1d2",
         "text": "[Trading] \ud83c\udfa8 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
         "column": "inprogress"
@@ -51,5 +51,5 @@
     ],
     "done": []
   },
-  "updatedAt": "2026-03-12T00:06:54.000Z"
+  "updatedAt": "2026-03-12T00:06:56.000Z"
 }
