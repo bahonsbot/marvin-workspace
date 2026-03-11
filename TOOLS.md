@@ -57,10 +57,11 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 | pre-market-brief | 20:00 daily | Evening market prep brief | none |
 | trading-daily-report | 08:00 daily | Equity bot daily report | none (explicit send in task) |
 | daily-task-generator | 08:00 daily | Goal-driven autonomous task generation (4-5 tasks) | telegram (`goal-tasks`) |
-| autonomous-task-executor | 09:00 daily | Proactive task execution from Open Backlog | none |
+| autonomous-task-executor | 09:00 daily | Proactive task execution from Open Backlog | telegram (`goal-tasks`) on verified completion |
+| autonomous-queue-wakeup | hourly at :15 (09:15-21:15) | Main-session wakeup to process one queued autonomous task, max concurrency 1 | telegram (`goal-tasks`) start + completion |
 | enrichment-ab-review | Mon 10:00 | Weekly enrichment A/B review | none |
-| nightly-memory-extraction | 23:00 daily | Durable memory extraction | none |
-| data-manager | Sun 05:00 | Prune old data/logs | none |
+| nightly-memory-extraction | 01:00 daily | Durable memory extraction | none |
+| entity-lifecycle-manager | Sun 05:00 weekly | Demote old life/ entities to archive | none |
 | news-feed-generator | DISABLED | Superseded by RSS/Reddit monitor pipeline | none |
 
 **Cron Context-Sharing Pipeline (Market Intel):**

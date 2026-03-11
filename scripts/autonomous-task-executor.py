@@ -484,7 +484,7 @@ def task_requires_subagent(parsed):
 
 
 def queue_subagent_task(task, parsed):
-    """Append task to sub-agent queue if not already pending."""
+    """Append task to sub-agent queue if not already pending. Enforce one active spawned task at a time."""
     queue_file = MEMORY_DIR / "executor-subagent-queue.json"
     queue = []
     if queue_file.exists():
@@ -493,9 +493,11 @@ def queue_subagent_task(task, parsed):
         except json.JSONDecodeError:
             queue = []
 
+    active_spawned = [entry for entry in queue if entry.get("status") == "spawned"]
+
     for entry in queue:
         if entry.get("task") == task and entry.get("status") in {"pending", "spawned"}:
-            return queue_file, False
+            return queue_file, False, "already_queued"
 
     label, instruction = spawn_subagent(task, parsed.get("category", "general"))
     queue.append({
@@ -507,7 +509,10 @@ def queue_subagent_task(task, parsed):
         "status": "pending"
     })
     queue_file.write_text(json.dumps(queue, indent=2))
-    return queue_file, True
+
+    if active_spawned:
+        return queue_file, True, "queued_waiting_for_active_slot"
+    return queue_file, True, "queued_ready"
 
 
 def is_substantial_completion(parsed, file_path, content):
@@ -577,8 +582,13 @@ def execute_task_bounded(task):
     print(f"  Deliverable: {deliverable[:80] if deliverable else 'none'}")
     
     if task_requires_subagent(parsed):
-        queue_file, added = queue_subagent_task(task, parsed)
-        note = "Queued for sub-agent execution" if added else "Already queued for sub-agent execution"
+        queue_file, added, queue_state = queue_subagent_task(task, parsed)
+        if queue_state == "already_queued":
+            note = "Already queued for sub-agent execution"
+        elif queue_state == "queued_waiting_for_active_slot":
+            note = "Queued for sub-agent execution (waiting for active task to finish)"
+        else:
+            note = "Queued for sub-agent execution"
         return False, note, True, note, str(queue_file)
 
     # Simple tasks - execute directly (pattern-based)
