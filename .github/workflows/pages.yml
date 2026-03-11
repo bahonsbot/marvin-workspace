@@ -47,7 +47,15 @@ jobs:
         run: |
           rm -rf .pages-site
           mkdir -p .pages-site
-          cp -R projects/market-intel-news-reader/app/* .pages-site/
+
+          if [ -d projects/market-intel-news-reader/app ]; then
+            cp -R projects/market-intel-news-reader/app/* .pages-site/
+          elif [ -d projects-cryo/market-intel-news-reader/app ]; then
+            cp -R projects-cryo/market-intel-news-reader/app/* .pages-site/
+          else
+            echo "market-intel-news-reader app not found, skipping"
+          fi
+
           mkdir -p .pages-site/autonomous-kanban
           cp -R projects/autonomous-kanban/out/* .pages-site/autonomous-kanban/
 
