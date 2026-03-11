@@ -46,10 +46,13 @@ function extractCompletedTasks(content) {
   const lines = content.split('\n');
 
   for (const line of lines) {
-    const match = line.match(/^- ✅ \[[^\]]+\] \[[^\]]+\] (.+)$/);
+    const match = line.match(/^- ✅ \[[^\]]+\] \[[^\]]+\] (.+?) \| Output: (.+)$/);
     if (match) {
       const text = match[1].trim();
-      tasks.push({ id: makeId(text), text, column: 'done' });
+      const outputPath = match[2].trim();
+      const absOutput = path.join(WORKSPACE, outputPath);
+      if (!fs.existsSync(absOutput)) continue;
+      tasks.push({ id: makeId(text), text, column: 'done', outputPath });
     }
   }
 

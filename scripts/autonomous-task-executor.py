@@ -37,6 +37,7 @@ TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 # Executor constants
 EXECUTION_LOG_FILE = WORKSPACE / "memory" / "executor-log.md"
+LAST_RESULT_FILE = WORKSPACE / "memory" / "executor-last-result.json"
 
 # Sub-agent session storage
 SESSIONS_FILE = WORKSPACE / "memory" / "executor-sessions.json"
@@ -348,6 +349,15 @@ def move_to_in_progress(task, content):
     return content
 
 
+def move_to_open_backlog(task, content):
+    """Move task from In Progress back to Open Backlog."""
+    content = re.sub(rf'^- {re.escape(task)}\n', '', content, flags=re.MULTILINE)
+    marker = "## Open Backlog"
+    if marker in content:
+        content = re.sub(rf'({re.escape(marker)}\s*\n)', rf'\1- {task}\n', content)
+    return content
+
+
 def move_to_done(task, content):
     """Move task from In Progress to Done (or remove if no Done section)."""
     # Remove from In Progress
@@ -375,22 +385,22 @@ def log_execution(task, outcome, details=""):
     EXECUTION_LOG_FILE.write_text(existing + log_entry)
 
 
-def log_completed_task(task, category="general"):
-    """Append completed task to tasks-log.md with ✅."""
+def log_completed_task(task, output_path, category="general"):
+    """Append completed task to tasks-log.md with ✅ and verified output path."""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    
-    # Extract category from task if present
+
     cat_match = re.match(r'\[(\w+)\]', task)
     if cat_match:
         category = cat_match.group(1)
-    
-    log_entry = f"- ✅ [{timestamp}] [{category}] {task}\n"
-    
+
+    rel_output = str(Path(output_path).relative_to(WORKSPACE)) if output_path else ""
+    log_entry = f"- ✅ [{timestamp}] [{category}] {task} | Output: {rel_output}\n"
+
     if TASKS_LOG_FILE.exists():
         existing = TASKS_LOG_FILE.read_text()
     else:
         existing = "# Completed Tasks Log\n\n**Append-only.** Sub-agents: Only add new lines at the bottom. Never edit existing lines.\n\n---\n\n"
-    
+
     TASKS_LOG_FILE.write_text(existing + log_entry)
 
 
@@ -438,10 +448,58 @@ def parse_task_structure(task):
     return {"emoji": emoji, "category": category, "title": title, "sections": sections}
 
 
+def is_substantial_completion(parsed, file_path, content):
+    """Only mark done when the promised artifact exists and is more than a placeholder."""
+    if not file_path or not Path(file_path).exists():
+        return False
+
+    title = parsed.get("title", "").lower()
+    deliverable = parsed.get("sections", {}).get("deliverable", "").lower()
+    blob = content.lower()
+
+    placeholder_markers = [
+        "[describe",
+        "[explain",
+        "[document",
+        "[brief",
+        "[additional",
+        "[tbd]",
+        "todo:",
+        "todo ",
+        "*this is an ai-generated draft",
+    ]
+    if any(marker in blob for marker in placeholder_markers):
+        return False
+
+    if str(file_path).endswith(".py"):
+        try:
+            proc = subprocess.run(["python3", str(file_path)], cwd=WORKSPACE, capture_output=True, text=True, timeout=20)
+            return proc.returncode == 0 and "TODO" not in content and len(content.strip().splitlines()) >= 8
+        except Exception:
+            return False
+
+    if any(key in title or key in deliverable for key in ["analysis", "brief", "case-study", "content", "deck"]):
+        return len(content.strip()) >= 400 and "##" in content
+
+    return False
+
+
+def write_last_result(task, outcome, details="", output_path=""):
+    payload = {
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "task": task,
+        "outcome": outcome,
+        "details": details,
+        "output_path": str(Path(output_path).relative_to(WORKSPACE)) if output_path else "",
+        "completed": outcome == "completed",
+    }
+    LAST_RESULT_FILE.write_text(json.dumps(payload, indent=2))
+
+
 def execute_task_bounded(task):
     """
     Execute task - attempts pattern-based first, falls back to marking for sub-agent.
-    Returns (completed: bool, result: str, blocked: bool, blocker_note: str)
+    Returns (completed: bool, result: str, blocked: bool, blocker_note: str, output_path: str)
     """
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     parsed = parse_task_structure(task)
@@ -481,7 +539,7 @@ def execute_task_bounded(task):
         subagent_queue_file.write_text(json.dumps(queue, indent=2))
         print(f"  Added to sub-agent queue: {len(queue)} tasks pending")
         
-        return False, f"Queued for sub-agent execution", True, "Needs sub-agent to complete deliverable"
+        return False, f"Queued for sub-agent execution", True, "Needs sub-agent to complete deliverable", ""
     
     # Simple tasks - execute directly (pattern-based)
     # ... existing pattern-based code ...
@@ -669,16 +727,14 @@ if __name__ == "__main__":
             file_path.write_text(content)
             print(f"  SUCCESS: Created {file_path.relative_to(WORKSPACE)}")
             
-            # Check if this is a substantial deliverable
-            if len(content) > 500 and "TODO" not in content.upper():
-                return True, f"Completed: {file_path.name}", False, ""
-            else:
-                return False, f"In progress: {file_path.name}", False, ""
-                
+            if is_substantial_completion(parsed, file_path, content):
+                return True, f"Completed: {file_path.name}", False, "", str(file_path)
+            return False, f"In progress: {file_path.name}", False, "", str(file_path)
+
         except Exception as e:
-            return False, f"Error: {str(e)}", False, ""
-    
-    return False, "No deliverable matched", False, ""
+            return False, f"Error: {str(e)}", False, "", ""
+
+    return False, "No deliverable matched", False, "", ""
 
 
 def run_executor():
@@ -689,6 +745,7 @@ def run_executor():
     # Read current state
     if not AUTONOMOUS_FILE.exists():
         print("ERROR: AUTONOMOUS.md not found")
+        write_last_result("", "error", "AUTONOMOUS.md not found", "")
         return
     
     content = AUTONOMOUS_FILE.read_text()
@@ -702,6 +759,7 @@ def run_executor():
     
     if not selected_task:
         print("No tasks available in Open Backlog")
+        write_last_result("", "skipped", "No tasks in Open Backlog", "")
         log_execution("none", "skipped", "No tasks in Open Backlog")
         return
     
@@ -719,14 +777,15 @@ def run_executor():
         print(f"Moved task to In Progress")
     
     # Execute bounded work chunk
-    completed, result, blocked, blocker_note = execute_task_bounded(selected_task)
+    completed, result, blocked, blocker_note, output_path = execute_task_bounded(selected_task)
     
     print(f"Execution result: {result}")
     
     if completed:
         # Log as completed
-        log_completed_task(selected_task, "autonomous")
-        
+        log_completed_task(selected_task, output_path, "autonomous")
+        write_last_result(selected_task, "completed", result, output_path)
+
         # Remove from In Progress
         content = AUTONOMOUS_FILE.read_text()
         content = move_to_done(selected_task, content)
@@ -738,12 +797,24 @@ def run_executor():
         print(f"Task completed and logged")
     
     elif blocked:
-        # Keep in In Progress with blocker note
+        if not output_path:
+            content = AUTONOMOUS_FILE.read_text()
+            content = move_to_open_backlog(selected_task, content)
+            AUTONOMOUS_FILE.write_text(content)
+            if sync_kanban_board():
+                publish_kanban_board_if_changed()
+        write_last_result(selected_task, "blocked", blocker_note, output_path)
         log_execution(selected_task, "blocked", blocker_note)
         print(f"Task blocked: {blocker_note}")
-    
+
     else:
-        # In progress - task has work to continue
+        if not output_path:
+            content = AUTONOMOUS_FILE.read_text()
+            content = move_to_open_backlog(selected_task, content)
+            AUTONOMOUS_FILE.write_text(content)
+            if sync_kanban_board():
+                publish_kanban_board_if_changed()
+        write_last_result(selected_task, "in_progress", result, output_path)
         log_execution(selected_task, "in_progress", result)
         print(f"Task work chunk complete, remains in In Progress")
     
