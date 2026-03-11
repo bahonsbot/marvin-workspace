@@ -42,21 +42,19 @@ EXECUTION_LOG_FILE = WORKSPACE / "memory" / "executor-log.md"
 SESSIONS_FILE = WORKSPACE / "memory" / "executor-sessions.json"
 
 # Kanban board sync
-KANBAN_BOARD_FILE = WORKSPACE / "projects" / "autonomous-kanban" / "public" / "board.json"
+KANBAN_DIR = WORKSPACE / "projects" / "autonomous-kanban"
+KANBAN_BOARD_FILE = KANBAN_DIR / "public" / "board.json"
 
 
 def sync_kanban_board():
-    """Sync AUTONOMOUS.md sections to Kanban board.json."""
-    import random
-    import string
-    
+    """Sync AUTONOMOUS.md sections to Kanban board.json with deterministic IDs."""
+
     autonomous_file = WORKSPACE / "AUTONOMOUS.md"
     if not autonomous_file.exists():
-        return
-    
+        return False
+
     content = autonomous_file.read_text()
-    
-    # Parse sections
+
     sections = {}
     current_section = None
     for line in content.split('\n'):
@@ -64,30 +62,20 @@ def sync_kanban_board():
             current_section = line.strip()[2:].lower().replace(" ", "")
             sections[current_section] = []
         elif line.strip().startswith("- ") and current_section:
-            sections[current_section].append(line.strip()[2:])
-    
-    # Build board structure
-    def make_task(text):
-        # Generate simple ID
-        tid = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-        return {"id": tid, "text": text, "column": "todo"}
-    
+            text = line.strip()[2:]
+            if text and not text.startswith("*("):
+                sections[current_section].append(text)
+
+    def make_task(text, column):
+        tid = uuid.uuid5(uuid.NAMESPACE_URL, f"{column}:{text}").hex[:8]
+        return {"id": tid, "text": text, "column": column}
+
     board = {
-        "todo": [make_task(t) for t in sections.get("openbacklog", [])],
-        "inprogress": [make_task(t) for t in sections.get("inprogress", [])],
-        "done": [make_task(t) for t in sections.get("done", [])]
+        "todo": [make_task(t, "todo") for t in sections.get("openbacklog", [])],
+        "inprogress": [make_task(t, "inprogress") for t in sections.get("inprogress", [])],
+        "done": [make_task(t, "done") for t in sections.get("done", [])]
     }
-    
-    # Update column keys to match Kanban
-    if sections.get("inprogress"):
-        for t in board["inprogress"]:
-            t["column"] = "inprogress"
-    if sections.get("done"):
-        for t in board["done"]:
-            t["column"] = "done"
-    
-    # Write board.json
-    import json
+
     board_data = {
         "board": board,
         "updatedAt": datetime.now().strftime("%Y-%m-%dT%H:%M:%S.000Z")
@@ -95,6 +83,44 @@ def sync_kanban_board():
     KANBAN_BOARD_FILE.parent.mkdir(parents=True, exist_ok=True)
     KANBAN_BOARD_FILE.write_text(json.dumps(board_data, indent=2))
     print(f"  Synced Kanban board: {len(board['todo'])} todo, {len(board['inprogress'])} in progress, {len(board['done'])} done")
+    return True
+
+
+def publish_kanban_board_if_changed():
+    """Commit and push board snapshot so GitHub Pages reflects executor state."""
+    if not KANBAN_BOARD_FILE.exists():
+        print("  Kanban publish skipped: board.json not found")
+        return
+
+    rel_board = str(KANBAN_BOARD_FILE.relative_to(WORKSPACE))
+    diff = subprocess.run(
+        ["git", "diff", "--quiet", "--", rel_board],
+        cwd=WORKSPACE,
+        capture_output=True,
+        text=True,
+    )
+
+    if diff.returncode == 0:
+        print("  Kanban publish skipped: board.json unchanged")
+        return
+
+    branch = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=WORKSPACE,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+    message = f"chore(kanban): sync board snapshot ({datetime.now().strftime('%Y-%m-%d %H:%M')})"
+
+    try:
+        subprocess.run(["git", "add", rel_board], cwd=WORKSPACE, check=True)
+        subprocess.run(["git", "commit", "-m", message], cwd=WORKSPACE, check=True)
+        subprocess.run(["git", "push", "origin", branch], cwd=WORKSPACE, check=True)
+        print(f"  Published kanban board to origin/{branch}")
+    except subprocess.CalledProcessError as exc:
+        print(f"  Kanban publish failed: {exc}")
 
 
 def load_sessions():
@@ -688,7 +714,8 @@ def run_executor():
         # Move from Open Backlog to In Progress
         content = move_to_in_progress(selected_task, content)
         AUTONOMOUS_FILE.write_text(content)
-        sync_kanban_board()
+        if sync_kanban_board():
+            publish_kanban_board_if_changed()
         print(f"Moved task to In Progress")
     
     # Execute bounded work chunk
@@ -704,8 +731,9 @@ def run_executor():
         content = AUTONOMOUS_FILE.read_text()
         content = move_to_done(selected_task, content)
         AUTONOMOUS_FILE.write_text(content)
-        sync_kanban_board()
-        
+        if sync_kanban_board():
+            publish_kanban_board_if_changed()
+
         log_execution(selected_task, "completed", result)
         print(f"Task completed and logged")
     
