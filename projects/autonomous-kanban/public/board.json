@@ -1,40 +1,34 @@
 {
   "board": {
-    "todo": [],
-    "inprogress": [
+    "todo": [
       {
-        "id": "FhJIkghn",
-        "text": "[Trading] \ud83c\udfa8 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
-        "column": "inprogress"
+        "id": "8J-agCBM",
+        "text": "🚀 Launch: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice",
+        "column": "todo"
       },
       {
-        "id": "zLJZAXZq",
-        "text": "[Career] \ud83d\udd28 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably",
-        "column": "inprogress"
+        "id": "8J-UqCBC",
+        "text": "🔨 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably",
+        "column": "todo"
       },
       {
-        "id": "QcscucAO",
-        "text": "[Career] \ud83d\udcdd Draft: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
-        "column": "inprogress"
+        "id": "8J-UpyBG",
+        "text": "🔧 Fix: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script executes end-to-end on test input | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "todo"
       },
       {
-        "id": "OiI7S7SZ",
-        "text": "[Career] \ud83c\udfa8 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
-        "column": "inprogress"
+        "id": "8J-OqCBE",
+        "text": "🎨 Design: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "column": "todo"
       },
       {
-        "id": "rJbvQaqP",
-        "text": "[Other] \ud83d\udd27 Automate one repetitive workspace workflow; deliverable: runnable script in scripts/ with usage notes and before/after time estimate | Why: Reduces manual ops overhead and improves OpenClaw execution reliability | Proof: script completes one full sample run and logs output | Unlocks: Foundation for chaining multiple automations into one routine",
-        "column": "inprogress"
+        "id": "8J-OqCBD",
+        "text": "🎨 Creative MVP: Write a Python script that organizes files in one folder | Why: Creative MVPs build confidence and generate content for portfolio/social | Proof: Artifact created and demo note saved | Unlocks: Unlocks more ambitious creative projects",
+        "column": "todo"
       }
     ],
-    "done": [
-      {
-        "id": "EE35LhbM",
-        "text": "[Trading] \ud83d\ude80 Launch: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk",
-        "column": "done"
-      }
-    ]
+    "inprogress": [],
+    "done": []
   },
-  "updatedAt": "2026-03-10T22:09:13.000Z"
+  "updatedAt": "2026-03-11T01:03:38.720Z"
 }
