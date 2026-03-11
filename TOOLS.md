@@ -130,6 +130,7 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - `scripts/check-token-age.sh` — Token expiration checker
 - `scripts/nightly-memory-extraction.sh` — Memory extraction cron
 - `scripts/daily-task-generator.py` — Daily autonomous task generation (08:00 ICT, 4-5 goal-aligned tasks)
+- `scripts/queue_state.py` — Queue helper for autonomous-task orchestration (`status`, `can-start`, `heal-stale`)
 - `switch_model.sh` / `switch_model_auto.sh` — Model switching
 - `skills/google_maps_pro/scripts/get_tour_plan.py` — Route matrix helper
 
