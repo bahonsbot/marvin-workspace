@@ -1,8 +1,34 @@
 {
   "board": {
-    "todo": [],
+    "todo": [
+      {
+        "id": "1aef9cc4",
+        "text": "[Trading] 📝 Draft: prepare the first company analysis lesson for Philippe's followed companies; deliverable: markdown lesson in projects/company-research/ using named tickers from his followed-companies list | Why: Business-analysis learning should start from real companies Philippe actually follows | Proof: Lesson uses a defined company list and focuses on one concrete beginner exercise | Unlocks: First guided company-analysis practice task",
+        "column": "todo"
+      },
+      {
+        "id": "873f553c",
+        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "column": "todo"
+      },
+      {
+        "id": "e1d42d94",
+        "text": "[Personal] 📚 Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
+        "column": "todo"
+      },
+      {
+        "id": "084694c2",
+        "text": "[Other] 🔧 Fix: identify one OpenClaw process weakness and propose a small reliability improvement with clear input/output; deliverable: markdown spec in projects/automation/ | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Process runs successfully with measurable improvement | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "todo"
+      },
+      {
+        "id": "d741218d",
+        "text": "[Trading] 📊 Analyze: prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes",
+        "column": "todo"
+      }
+    ],
     "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-03-12T15:44:06.000Z"
+  "updatedAt": "2026-03-12T07:46:36.806Z"
 }
