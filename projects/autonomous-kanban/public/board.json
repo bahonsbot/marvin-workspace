@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "43eae80a",
+        "text": "[Career] \ud83d\ude80 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "column": "todo"
+      },
+      {
         "id": "880e30a5",
         "text": "[Personal] \ud83d\udcdd Draft: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice",
         "column": "todo"
@@ -24,11 +29,6 @@
     ],
     "inprogress": [
       {
-        "id": "75e1dfcf",
-        "text": "[Career] \ud83d\ude80 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
-        "column": "inprogress"
-      },
-      {
         "id": "da4ae1d2",
         "text": "[Trading] \ud83c\udfa8 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
         "column": "inprogress"
@@ -36,5 +36,5 @@
     ],
     "done": []
   },
-  "updatedAt": "2026-03-12T10:00:35.000Z"
+  "updatedAt": "2026-03-12T10:00:37.000Z"
 }
