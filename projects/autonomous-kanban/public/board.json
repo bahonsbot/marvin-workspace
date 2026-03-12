@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "6fb35eff",
+        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ supporting Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing prompts | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice | Proof: Tool outputs one random day-sized challenge per run/view with selectable skill categories | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "column": "todo"
+      },
+      {
         "id": "b4699bbe",
         "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
@@ -28,26 +33,7 @@
       }
     ],
     "inprogress": [],
-    "done": [
-      {
-        "id": "b84c6d60",
-        "text": "🎨 Design: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
-        "column": "done",
-        "outputPath": "projects/portfolio/case-studies/market-intelligence-system.md"
-      },
-      {
-        "id": "e19c5bc8",
-        "text": "🎨 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown",
-        "column": "done",
-        "outputPath": "projects/creative-practice/motion_loop.mp4"
-      },
-      {
-        "id": "267d82e3",
-        "text": "🚀 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
-        "column": "done",
-        "outputPath": "projects/portfolio/case-studies/motion-design-loop.md"
-      }
-    ]
+    "done": []
   },
-  "updatedAt": "2026-03-12T06:53:05.153Z"
+  "updatedAt": "2026-03-12T07:05:23.210Z"
 }
