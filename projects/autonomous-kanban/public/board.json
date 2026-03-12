@@ -1,8 +1,14 @@
 {
   "board": {
     "todo": [],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "280fe9c3",
+        "text": "[Trading] \ud83d\udcdd Draft: prepare the first company analysis lesson for Philippe's followed companies; deliverable: markdown lesson in projects/company-research/ using named tickers from his followed-companies list | Why: Business-analysis learning should start from real companies Philippe actually follows | Proof: Lesson uses a defined company list and focuses on one concrete beginner exercise | Unlocks: First guided company-analysis practice task",
+        "column": "inprogress"
+      }
+    ],
     "done": []
   },
-  "updatedAt": "2026-03-12T15:39:07.000Z"
+  "updatedAt": "2026-03-12T15:44:04.000Z"
 }
