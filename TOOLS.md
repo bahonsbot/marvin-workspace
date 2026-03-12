@@ -188,9 +188,9 @@ bash scripts/run_webhook_receiver.sh  # Restart with proper env
 - Market Intel notes: `projects/market-intel/notes/`
 
 ### Environment
-- Display timezone: `Asia/Ho_Chi_Minh (GMT+7)`
-- Server timezone: `Asia/Kuala_Lumpur (GMT+8)`
-- Rule: schedule and present times in `Asia/Ho_Chi_Minh` unless explicitly requested otherwise
+- System runtime: `Asia/Kuala_Lumpur (GMT+8)` (VPS server time)
+- User-facing display: `Asia/Ho_Chi_Minh (GMT+7)` ( Philippe's timezone)
+- **Rule:** Always display times in `Asia/Ho_Chi_Minh` unless explicitly requested otherwise
 
 ---
 
