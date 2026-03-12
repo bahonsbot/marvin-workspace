@@ -62,6 +62,8 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 | enrichment-ab-review | Mon 10:00 | Weekly enrichment A/B review | none |
 | nightly-memory-extraction | 01:00 daily | Durable memory extraction | none |
 | entity-lifecycle-manager | Sun 05:00 weekly | Demote old life/ entities to archive | none |
+| dependency-update-audit | Mon 10:30 weekly | Check for outdated dependencies | none |
+| skill-level-check | Sun 07:00 weekly | Hybrid skill assessment (test + challenge mode) | none |
 | news-feed-generator | DISABLED | Superseded by RSS/Reddit monitor pipeline | none |
 
 **Cron Context-Sharing Pipeline (Market Intel):**
