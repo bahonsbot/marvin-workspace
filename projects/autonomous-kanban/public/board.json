@@ -2,33 +2,32 @@
   "board": {
     "todo": [
       {
-        "id": "f834a90f",
-        "text": "[Personal] 📝 Draft: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice",
+        "id": "d741218d",
+        "text": "[Trading] 📊 Analyze: prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes",
         "column": "todo"
       },
       {
-        "id": "19f5ecb9",
-        "text": "[Other] 📝 Draft: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Process runs successfully with measurable improvement | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "b4699bbe",
+        "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "0c44cd34",
-        "text": "[Trading] 🔨 Build: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes",
+        "id": "33f6a03e",
+        "text": "[Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
         "column": "todo"
       },
       {
-        "id": "960621b1",
-        "text": "[Personal] 🎨 Creative MVP: Write a Python script that organizes files in one folder | Why: Creative MVPs build confidence and generate content for portfolio/social | Proof: Artifact created and demo note saved | Unlocks: Unlocks more ambitious creative projects",
+        "id": "8f60930b",
+        "text": "[Other] 🔧 Fix: identify one repetitive OpenClaw workflow that wastes time and propose a small automation with clear input/output; deliverable: markdown spec in projects/automation/ | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script executes end-to-end on test input | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "todo"
+      },
+      {
+        "id": "d91eddf8",
+        "text": "[Other] 🔧 Fix: identify one repetitive OpenClaw workflow that wastes time and propose a small automation with clear input/output; deliverable: markdown spec in projects/automation/ | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Process runs successfully with measurable improvement | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "34ed5eea",
-        "text": "[Trading] 🎨 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "b84c6d60",
@@ -50,5 +49,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-12T03:20:21.672Z"
+  "updatedAt": "2026-03-12T06:29:29.326Z"
 }
