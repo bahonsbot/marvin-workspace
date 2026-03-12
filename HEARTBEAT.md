@@ -22,8 +22,8 @@
 4. Optionally execute one proactive work chunk (10-20 min, safe + bounded)
 
 ## Proactive Execution Rules
-- Queue source: `memory/proactive-queue.json`
-- Prioritize tasks with: `ready=true` and `phase2_eligible=true`
+- Queue source: `memory/executor-subagent-queue.json`
+- Process one task at a time (concurrency = 1)
 - Execute one bounded chunk only
 - Log outcomes to daily memory
 - Stay quiet on routine progress; message only on milestone/blocker
