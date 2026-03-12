@@ -7,28 +7,28 @@
         "column": "todo"
       },
       {
-        "id": "b4699bbe",
-        "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "8f42a041",
+        "text": "[Other] 🔧 Fix: identify one OpenClaw process weakness and propose a small reliability improvement with clear input/output, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Spec targets an OpenClaw process weakness without proposing risky live config edits | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "cff2a52a",
-        "text": "[Other] 🔧 Fix: identify one repetitive personal workflow and propose a small automation with clear input/output; deliverable: markdown spec in projects/automation/ | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script executes end-to-end on test input | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "c4fee0b0",
+        "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
         "column": "todo"
       },
       {
-        "id": "33f6a03e",
-        "text": "[Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
+        "id": "978e71e3",
+        "text": "[Career] 📝 Draft: draft 3 Instagram content angles tied to real work Philippe has made or plans to make; deliverable: content-plan markdown with hook, source work, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
         "column": "todo"
       },
       {
-        "id": "0bdcb174",
-        "text": "[Trading] 📝 Draft: prepare a watchlist-first company analysis template for Philippe's followed companies; deliverable: markdown template in projects/company-research/ plus a shortlist request section for named tickers | Why: Understanding company financials is required for informed trading decisions | Proof: Template defines thesis, risks, key metrics, and explicitly requires a named ticker before full analysis | Unlocks: Progress toward: Document 10 trade setups with outcomes",
+        "id": "e136d454",
+        "text": "[Other] 🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
         "column": "todo"
       }
     ],
     "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-03-12T07:48:37.847Z"
+  "updatedAt": "2026-03-12T07:51:44.000Z"
 }
