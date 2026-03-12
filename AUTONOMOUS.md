@@ -28,7 +28,7 @@
 
 ## Done Today
 
-- [Career] 🚀 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | ✅ Completed: projects/portfolio/case-studies/autonomous-trading-bot.md
+- [Career] 🚀 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | ✅ Completed: projects/portfolio/case-studies/motion-design-loop.md
 
 ## Open Backlog
 - [Personal] 📝 Draft: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice

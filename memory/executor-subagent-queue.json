@@ -1,10 +1,10 @@
 [
   {
-    "task": "[Career] \ud83c\udfa8 Design: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+    "task": "[Career] 🎨 Design: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
     "parsed": {
       "emoji": "",
       "category": "Career",
-      "title": "\ud83c\udfa8 Design: one portfolio case-study draft from existing project",
+      "title": "🎨 Design: one portfolio case-study draft from existing project",
       "sections": {
         "deliverable": "250-400 word markdown in projects/portfolio/case-studies/",
         "why": "Documents existing work - essential for landing creative roles",
@@ -18,14 +18,14 @@
     "completedAt": "2026-03-12 00:26",
     "outputPath": "projects/portfolio/case-studies/market-intelligence-system.md",
     "label": "executor-career-202603120025",
-    "instruction": "Execute this task: \ud83c\udfa8 Design: one portfolio case-study draft from existing project\n\nDeliverable: 250-400 word markdown in projects/portfolio/case-studies/\nProof: Case-study markdown has problem/approach/result sections\n\nCreate a complete case study in /data/.openclaw/workspace/projects/portfolio/case-studies/. Include:\n- The Problem\n- The Approach\n- The Result\n- What I Learned\n\nWrite actual content, not a placeholder. Then update /data/.openclaw/workspace/memory/tasks-log.md with a verified \u2705 entry including the relative output path, remove this task from /data/.openclaw/workspace/AUTONOMOUS.md if present, update this queue entry to status completed with outputPath and completedAt, run `node /data/.openclaw/workspace/projects/autonomous-kanban/scripts/sync-board.js`, commit/push any changed relevant files, and send a Telegram message to group -1003704803669 in this format:\n\u2705 Task completed\nTask: <full task title>\nOutput: <relative output path>."
+    "instruction": "Execute this task: 🎨 Design: one portfolio case-study draft from existing project\n\nDeliverable: 250-400 word markdown in projects/portfolio/case-studies/\nProof: Case-study markdown has problem/approach/result sections\n\nCreate a complete case study in /data/.openclaw/workspace/projects/portfolio/case-studies/. Include:\n- The Problem\n- The Approach\n- The Result\n- What I Learned\n\nWrite actual content, not a placeholder. Then update /data/.openclaw/workspace/memory/tasks-log.md with a verified ✅ entry including the relative output path, remove this task from /data/.openclaw/workspace/AUTONOMOUS.md if present, update this queue entry to status completed with outputPath and completedAt, run `node /data/.openclaw/workspace/projects/autonomous-kanban/scripts/sync-board.js`, commit/push any changed relevant files, and send a Telegram message to group -1003704803669 in this format:\n✅ Task completed\nTask: <full task title>\nOutput: <relative output path>."
   },
   {
-    "task": "[Career] \ud83c\udfa8 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
+    "task": "[Career] 🎨 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence",
     "parsed": {
       "emoji": "",
       "category": "Career",
-      "title": "\ud83c\udfa8 Creative MVP: Create one 10-second motion design loop for Instagram",
+      "title": "🎨 Creative MVP: Create one 10-second motion design loop for Instagram",
       "sections": {
         "deliverable": "MP4 in projects/creative-practice/ plus a 3-line caption draft",
         "why": "Builds visible motion-design proof and supports audience growth goals",
@@ -34,7 +34,7 @@
       }
     },
     "label": "executor-Career-202603120006",
-    "instruction": "Execute this task: \ud83c\udfa8 Creative MVP: Create one 10-second motion design loop for Instagram\n\nDeliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft\nProof: MP4 exported and caption saved in markdown\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 🎨 Creative MVP: Create one 10-second motion design loop for Instagram\n\nDeliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft\nProof: MP4 exported and caption saved in markdown\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-03-12 00:06",
     "status": "completed",
     "startedAt": "2026-03-12 02:16",
@@ -42,11 +42,11 @@
     "outputPath": "projects/creative-practice/motion_loop.mp4"
   },
   {
-    "task": "[Career] \ud83d\ude80 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+    "task": "[Career] 🚀 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
     "parsed": {
       "emoji": "",
       "category": "Career",
-      "title": "\ud83d\ude80 Launch: one portfolio case-study draft from existing project",
+      "title": "🚀 Launch: one portfolio case-study draft from existing project",
       "sections": {
         "deliverable": "250-400 word markdown in projects/portfolio/case-studies/",
         "why": "Documents existing work - essential for landing creative roles",
@@ -55,8 +55,11 @@
       }
     },
     "label": "executor-Career-202603121000",
-    "instruction": "Execute this task: \ud83d\ude80 Launch: one portfolio case-study draft from existing project\n\nDeliverable: 250-400 word markdown in projects/portfolio/case-studies/\nProof: Case-study markdown has problem/approach/result sections\n\nThis is a CREATIVE PORTFOLIO task. The output must clearly help Philippe with portfolio presentation, creative positioning, or landing creative roles.\n\nRelevance rules:\n1. Prefer creative-relevant source material first.\n2. Do NOT default to infra, trading, ops, or backend/system projects unless they can be framed credibly as creative-direction, product storytelling, visual communication, or portfolio-worthy presentation work.\n3. Before writing, explicitly check: \"Does this project clearly belong in a creative portfolio?\"\n4. If the answer is no, do NOT force a weak match. Mark the task blocked instead of producing an unrelated case study.\n\nPreferred source order:\n- existing visual / motion / design / branding / creative-direction work\n- portfolio-ready presentation work with a strong visual or storytelling angle\n- only then hybrid product/creative work if it can be framed honestly for creative roles\n\nCreate a complete case study in projects/portfolio/case-studies/. Include:\n- The Problem\n- The Approach\n- The Result\n- What I Learned\n- Portfolio Angle\n- Target Role Relevance\n\nWrite actual content, not templates. If no suitable creative-relevant source project exists, stop and report that it is blocked for lack of an appropriate portfolio source.",
+    "instruction": "Execute this task: 🚀 Launch: one portfolio case-study draft from existing project\n\nDeliverable: 250-400 word markdown in projects/portfolio/case-studies/\nProof: Case-study markdown has problem/approach/result sections\n\nThis is a CREATIVE PORTFOLIO task. The output must clearly help Philippe with portfolio presentation, creative positioning, or landing creative roles.\n\nRelevance rules:\n1. Prefer creative-relevant source material first.\n2. Do NOT default to infra, trading, ops, or backend/system projects unless they can be framed credibly as creative-direction, product storytelling, visual communication, or portfolio-worthy presentation work.\n3. Before writing, explicitly check: \"Does this project clearly belong in a creative portfolio?\"\n4. If the answer is no, do NOT force a weak match. Mark the task blocked instead of producing an unrelated case study.\n\nPreferred source order:\n- existing visual / motion / design / branding / creative-direction work\n- portfolio-ready presentation work with a strong visual or storytelling angle\n- only then hybrid product/creative work if it can be framed honestly for creative roles\n\nCreate a complete case study in projects/portfolio/case-studies/. Include:\n- The Problem\n- The Approach\n- The Result\n- What I Learned\n- Portfolio Angle\n- Target Role Relevance\n\nWrite actual content, not templates. If no suitable creative-relevant source project exists, stop and report that it is blocked for lack of an appropriate portfolio source.",
     "queuedAt": "2026-03-12 10:00",
-    "status": "pending"
+    "status": "completed",
+    "startedAt": "2026-03-12 03:16",
+    "completedAt": "2026-03-12 11:17",
+    "outputPath": "projects/portfolio/case-studies/motion-design-loop.md"
   }
 ]
