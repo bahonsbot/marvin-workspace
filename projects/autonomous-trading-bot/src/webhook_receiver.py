@@ -99,6 +99,8 @@ def _env_int(name: str, *, default: int) -> int:
 
 def _get_client_ip(headers: Dict[str, str], client_address: tuple | None) -> str:
     """Get client IP with X-Forwarded-For support and trusted proxy validation."""
+    import ipaddress
+    
     # Direct connection - use socket peer IP
     if not client_address:
         return "unknown"
@@ -109,15 +111,22 @@ def _get_client_ip(headers: Dict[str, str], client_address: tuple | None) -> str
     trusted_proxies = os.getenv("WEBHOOK_TRUSTED_PROXIES", "").strip().split(",")
     trusted_proxies = [p.strip() for p in trusted_proxies if p.strip()]
     
-    # If direct IP is a known proxy, check X-Forwarded-For
+    # Only trust X-Forwarded-For if direct IP is explicitly in trusted proxies
     if trusted_proxies and direct_ip in trusted_proxies:
         xff = headers.get("X-Forwarded-For", "")
         if xff:
             # X-Forwarded-For can have multiple IPs: client, proxy1, proxy2
             # First one is the original client
-            return xff.split(",")[0].strip()
+            xff_ip = xff.split(",")[0].strip()
+            # Validate it's a proper IP address to prevent header injection
+            try:
+                ipaddress.ip_address(xff_ip)
+                return xff_ip
+            except ValueError:
+                # Invalid IP in X-Forwarded-For, fall back to direct
+                pass
     
-    # Fall back to direct connection IP
+    # Fall back to direct connection IP (localhost webhook - safe default)
     return direct_ip
 
 
@@ -449,6 +458,11 @@ class WebhookHandler(BaseHTTPRequestHandler):
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(encoded)))
+        # Security headers
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("X-XSS-Protection", "1; mode=block")
+        self.send_header("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
         self.end_headers()
         self.wfile.write(encoded)
 
@@ -526,7 +540,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
             # Validate that shared secret is configured and auth path works
             secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
             if not secret:
-                self._send_json(503, {"ok": False, "error": "WEBHOOK_SHARED_SECRET not configured", "paper_only": True})
+                self._send_json(503, {"ok": False, "error": "Service not configured", "paper_only": True})
                 return
             # Test auth validation with the configured secret
             test_headers = {"X-Webhook-Secret": secret}

@@ -183,6 +183,11 @@ class _WebhookHandler(BaseHTTPRequestHandler):
         self.send_response(status_code)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(payload)))
+        # Security headers
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("X-XSS-Protection", "1; mode=block")
+        self.send_header("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
         self.end_headers()
         self.wfile.write(payload)
 
