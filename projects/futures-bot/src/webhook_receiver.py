@@ -69,6 +69,8 @@ def _append_log(record: dict[str, Any], path: Path = LOG_PATH) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, sort_keys=True) + "\n")
+    # Enforce restrictive permissions
+    path.chmod(0o600)
 
 
 def _authorized(headers: dict[str, str], payload: dict[str, Any], body_bytes: bytes | None = None) -> bool:
@@ -105,11 +107,8 @@ def _authorized(headers: dict[str, str], payload: dict[str, Any], body_bytes: by
     timestamp_str = headers.get("X-Timestamp", "")
     signature = headers.get("X-Signature", "")
 
-    # Backward compatibility path: allow basic auth when HMAC headers are absent.
-    if not timestamp_str and not signature:
-        return True
-
-    # If one HMAC header is present, both must be present.
+    # Require both timestamp and signature for all authenticated requests.
+    # This prevents replay attacks - requests without HMAC headers are rejected.
     if not timestamp_str or not signature or body_bytes is None:
         return False
 

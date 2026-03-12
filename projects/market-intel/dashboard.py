@@ -4,9 +4,15 @@ Signal Accuracy Dashboard
 Displays signal tracking statistics and accuracy metrics
 """
 import json
+import html
 from datetime import datetime
 from pathlib import Path
 from collections import defaultdict
+
+
+def _escape(s):
+    """Escape HTML special characters to prevent XSS."""
+    return html.escape(str(s)) if s else ""
 
 # Paths
 DATA_DIR = Path(__file__).parent / 'data'
@@ -166,7 +172,7 @@ def render_html():
         cat_acc = round(data['correct'] / data['total'] * 100, 1) if data['total'] else 0
         cat_rows += f"""
         <tr>
-            <td>{cat}</td>
+            <td>{_escape(cat)}</td>
             <td>{data['correct']}</td>
             <td>{data['partial']}</td>
             <td>{data['incorrect']}</td>
@@ -195,11 +201,11 @@ def render_html():
     recent = sorted(tracked, key=lambda x: x.get('added_at', ''), reverse=True)[:10]
     recent_rows = ""
     for entry in recent:
-        title = entry.get('signal', {}).get('title', 'Unknown')[:50]
-        cat = entry.get('signal', {}).get('category', 'unknown')
+        title = _escape(entry.get('signal', {}).get('title', 'Unknown')[:50])
+        cat = _escape(entry.get('signal', {}).get('category', 'unknown'))
         status = entry.get('actual_outcome', 'pending')
         status_icon = "✅" if status == "correct" else "⚠️" if status == "partial" else "❌" if status == "incorrect" else "⏳"
-        date = entry.get('added_at', '')[:10]
+        date = _escape(entry.get('added_at', '')[:10])
         recent_rows += f"""
         <tr>
             <td>{status_icon}</td>

@@ -2,6 +2,8 @@
 # Ralph Health Monitor - checks on running Ralph loop agents
 # Run via cron or heartbeat
 
+set -euo pipefail
+
 WORKSPACE="${WORKSPACE:-/data/.openclaw/workspace}"
 LOG_DIR="$WORKSPACE/.ralphy-logs"
 
@@ -65,36 +67,7 @@ check_processes() {
     fi
 }
 
-# Main
-log "Running Ralph health check..."
-
-# Check PID first (if available)
-if check_pid; then
-    pid_status="ok"
-fi
-
-# Check for workspace
-if [[ ! -d "$WORKSPACE" ]]; then
-    log "ERROR: Workspace not found: $WORKSPACE"
-    exit 1
-fi
-
-# Run check
-check_processes
-exit_code=$?
-
-if [[ $exit_code -eq 0 ]]; then
-    log "Health check OK"
-elif [[ $exit_code -eq 2 ]]; then
-    log "WARNING: Ralph loop appears stalled"
-    # Could trigger restart here
-else
-    log "No active Ralph loops"
-fi
-
-exit $exit_code
-
-# PID-based health check
+# PID-based health check (moved above first call)
 check_pid() {
     local pid_file="$WORKSPACE/.ralphy-logs/ralphy.pid"
     
@@ -132,3 +105,32 @@ check_pid() {
     
     return 1
 }
+
+# Main
+log "Running Ralph health check..."
+
+# Check PID first (if available)
+if check_pid; then
+    pid_status="ok"
+fi
+
+# Check for workspace
+if [[ ! -d "$WORKSPACE" ]]; then
+    log "ERROR: Workspace not found: $WORKSPACE"
+    exit 1
+fi
+
+# Run check
+check_processes
+exit_code=$?
+
+if [[ $exit_code -eq 0 ]]; then
+    log "Health check OK"
+elif [[ $exit_code -eq 2 ]]; then
+    log "WARNING: Ralph loop appears stalled"
+    # Could trigger restart here
+else
+    log "No active Ralph loops"
+fi
+
+exit $exit_code

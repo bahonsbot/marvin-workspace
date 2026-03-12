@@ -9,7 +9,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.810575"
   },
   {
     "id": "mi-002",
@@ -21,11 +22,12 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.810591"
   },
   {
     "id": "mi-003",
-    "fact": "Operating constraints were set to manual execution, conservative confidence threshold, and \u20ac50/month budget.",
+    "fact": "Operating constraints were set to manual execution, conservative confidence threshold, and €50/month budget.",
     "category": "decision",
     "timestamp": "2026-02-26T23:10:00+07:00",
     "status": "active",
@@ -34,7 +36,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.810596"
   },
   {
     "id": "mi-004",
@@ -46,7 +49,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.810599"
   },
   {
     "id": "mi-005",
@@ -58,7 +62,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.810602"
   },
   {
     "id": "mi-006",
@@ -70,7 +75,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.810604"
   },
   {
     "id": "mi-007",
@@ -82,7 +88,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.810606"
   },
   {
     "id": "mi-008",
@@ -94,7 +101,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.810608"
   },
   {
     "id": "mi-009",
@@ -106,7 +114,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.810610"
   },
   {
     "id": "mi-010",
@@ -119,6 +128,7 @@
       "areas/people/philippe"
     ],
     "lastAccessed": "2026-03-09",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.810612"
   }
 ]

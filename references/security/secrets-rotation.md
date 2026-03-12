@@ -4,6 +4,8 @@
 
 This document outlines the practical secrets rotation policy for the project. Regular rotation of secrets reduces the window of exposure if a secret is compromised.
 
+> **Note:** This policy describes the *aspirational* framework. Actual operational controls are implemented via lightweight scripts (see `scripts/check_token_age.py`). There is no formal "Security Team" — rotation is handled by the autonomous agent operator.
+
 ## Scope
 
 This policy applies to all secrets including:

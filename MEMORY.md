@@ -170,3 +170,11 @@
     - structured JSONL security log added (`logs/security-actions.jsonl`)
     - sensitive-file snapshot/drift detector added (`scripts/audit-sensitive-snapshot.sh`)
   - core docs updated to index `AUTONOMOUS.md` in AGENTS.md and TOOLS.md
+- Self-improving workflow implemented (Mar 11 evening):
+  - `.learnings/` directory with structured logging: corrections.md, errors.md, requests.md
+  - Detection triggers added to AGENTS.md (corrections, errors, preferences, patterns)
+  - Self-reflection prompts added (post-task evaluation format)
+  - Pre-task memory check added (qmd search before non-trivial work)
+  - Tiered lifecycle for life/ entities: `scripts/lifecycle_entities.py` (HOT 0-30d, WARM 30-90d, COLD 90+d)
+  - Weekly cron added (Sun 5 AM) to demote/archive old entities
+  - Memory extraction cron moved from 23:00 → 01:00 (avoid active sessions)

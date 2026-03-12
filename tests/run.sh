@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-bash /data/.openclaw/workspace/tests/test_backup_workspace.sh
+# Backup tests removed - Philippe handles backups manually
 bash /data/.openclaw/workspace/tests/test_security_review.sh
 
 echo "All tests passed"

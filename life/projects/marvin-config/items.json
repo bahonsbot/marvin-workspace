@@ -9,7 +9,8 @@
       "projects/security-review"
     ],
     "lastAccessed": "2026-02-26",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815593"
   },
   {
     "id": "mc-002",
@@ -21,7 +22,8 @@
       "resources/cron-jobs"
     ],
     "lastAccessed": "2026-02-26",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815600"
   },
   {
     "id": "mc-003",
@@ -33,7 +35,8 @@
       "resources/cron-jobs"
     ],
     "lastAccessed": "2026-02-26",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815603"
   },
   {
     "id": "mc-004",
@@ -45,7 +48,8 @@
       "projects/smart-auto-updater"
     ],
     "lastAccessed": "2026-02-26",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815605"
   },
   {
     "id": "mc-005",
@@ -57,7 +61,8 @@
       "resources/timezone-standards"
     ],
     "lastAccessed": "2026-02-26",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815607"
   },
   {
     "id": "mc-006",
@@ -69,7 +74,8 @@
       "projects/security-hardening"
     ],
     "lastAccessed": "2026-02-27",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815609"
   },
   {
     "id": "mc-007",
@@ -82,7 +88,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-02-27",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815610"
   },
   {
     "id": "mc-008",
@@ -96,7 +103,8 @@
     ],
     "lastAccessed": "2026-03-01",
     "accessCount": 1,
-    "source": "memory/2026-02-28.md"
+    "source": "memory/2026-02-28.md",
+    "lastUsed": "2026-03-11T20:52:31.815612"
   },
   {
     "id": "mc-009",
@@ -109,7 +117,8 @@
     ],
     "lastAccessed": "2026-03-03",
     "accessCount": 1,
-    "source": "memory/health-council/2026-03-03.md"
+    "source": "memory/health-council/2026-03-03.md",
+    "lastUsed": "2026-03-11T20:52:31.815614"
   },
   {
     "id": "mc-010",
@@ -122,7 +131,8 @@
     ],
     "lastAccessed": "2026-03-03",
     "accessCount": 1,
-    "source": "memory/health-council/2026-03-03.md"
+    "source": "memory/health-council/2026-03-03.md",
+    "lastUsed": "2026-03-11T20:52:31.815616"
   },
   {
     "id": "mc-011",
@@ -136,7 +146,8 @@
     ],
     "lastAccessed": "2026-03-08",
     "accessCount": 4,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.815618"
   },
   {
     "id": "mc-012",
@@ -150,11 +161,12 @@
     ],
     "lastAccessed": "2026-03-08",
     "accessCount": 3,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.815620"
   },
   {
     "id": "mc-013",
-    "fact": "Nightly memory extraction has failed for 3+ consecutive nights due to path resolution error \u2014 cron uses ~/.openclaw/workspace/ but actual path is /data/.openclaw/workspace/.",
+    "fact": "Nightly memory extraction has failed for 3+ consecutive nights due to path resolution error — cron uses ~/.openclaw/workspace/ but actual path is /data/.openclaw/workspace/.",
     "category": "status",
     "timestamp": "2026-03-04T12:15:00+07:00",
     "status": "active",
@@ -164,11 +176,12 @@
     ],
     "lastAccessed": "2026-03-08",
     "accessCount": 4,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.815622"
   },
   {
     "id": "mc-014",
-    "fact": "Health Council and Self-Improvement reports incorrectly flag cron jobs as 'error' when delivery mode is 'none' \u2014 jobs actually succeed and deliver to Telegram via announce, but lastDeliveryStatus shows 'not-delivered'.",
+    "fact": "Health Council and Self-Improvement reports incorrectly flag cron jobs as 'error' when delivery mode is 'none' — jobs actually succeed and deliver to Telegram via announce, but lastDeliveryStatus shows 'not-delivered'.",
     "category": "status",
     "timestamp": "2026-03-04T12:07:00+07:00",
     "status": "active",
@@ -177,11 +190,12 @@
     ],
     "lastAccessed": "2026-03-08",
     "accessCount": 2,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.815624"
   },
   {
     "id": "mc-015",
-    "fact": "Morning Meeting protocol standardized: report order security\u2192health\u2192self-improvement, severity ladder, one-item approval loop.",
+    "fact": "Morning Meeting protocol standardized: report order security→health→self-improvement, severity ladder, one-item approval loop.",
     "category": "decision",
     "timestamp": "2026-03-03T04:30:00+07:00",
     "status": "active",
@@ -189,7 +203,8 @@
       "AGENTS.md"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815626"
   },
   {
     "id": "mc-016",
@@ -201,7 +216,8 @@
       "cron/jobs.json"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815628"
   },
   {
     "id": "mc-017",
@@ -213,7 +229,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815630"
   },
   {
     "id": "mc-018",
@@ -225,7 +242,8 @@
       "memory/security"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815632"
   },
   {
     "id": "mc-019",
@@ -237,7 +255,8 @@
       "projects/autonomous-trading-bot"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815634"
   },
   {
     "id": "mc-020",
@@ -250,7 +269,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.815636"
   },
   {
     "id": "mc-021",
@@ -263,7 +283,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.815638"
   },
   {
     "id": "mc-022",
@@ -278,7 +299,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815640"
   },
   {
     "id": "mc-023",
@@ -291,7 +313,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815643"
   },
   {
     "id": "mc-024",
@@ -304,7 +327,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815645"
   },
   {
     "id": "mc-025",
@@ -317,7 +341,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815647"
   },
   {
     "id": "mc-026",
@@ -330,7 +355,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815649"
   },
   {
     "id": "mc-027",
@@ -343,7 +369,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815651"
   },
   {
     "id": "mc-028",
@@ -356,7 +383,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815653"
   },
   {
     "id": "mc-029",
@@ -369,7 +397,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815655"
   },
   {
     "id": "mc-030",
@@ -382,7 +411,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815657"
   },
   {
     "id": "mc-031",
@@ -395,11 +425,12 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.815659"
   },
   {
     "id": "mc-32",
-    "fact": "Workspace storage optimized: 767 MB \u2192 32 MB (96% reduction) by adding node_modules/.next/__pycache__ to .gitignore and cleaning build artifacts",
+    "fact": "Workspace storage optimized: 767 MB → 32 MB (96% reduction) by adding node_modules/.next/__pycache__ to .gitignore and cleaning build artifacts",
     "category": "status",
     "timestamp": "2026-03-06T14:56:11.143286",
     "source": "memory/2026-03-06.md",
@@ -409,11 +440,12 @@
       "resources/git-config"
     ],
     "lastAccessed": "2026-03-07",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.815661"
   },
   {
     "id": "mc-33",
-    "fact": "Model migration complete: All 14 cron jobs migrated to Bailian (7 bailian/MiniMax-M2.5 for basic tasks, 7 bailian/qwen3.5-plus for reasoning) \u2014 16 days before March 22 deadline",
+    "fact": "Model migration complete: All 14 cron jobs migrated to Bailian (7 bailian/MiniMax-M2.5 for basic tasks, 7 bailian/qwen3.5-plus for reasoning) — 16 days before March 22 deadline",
     "category": "status",
     "timestamp": "2026-03-06T14:56:11.143339",
     "source": "memory/2026-03-06.md",
@@ -423,7 +455,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-08",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.815662"
   },
   {
     "id": "mc-34",
@@ -436,11 +469,12 @@
       "resources/cron-jobs"
     ],
     "lastAccessed": "2026-03-06",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815664"
   },
   {
     "id": "mc-35",
-    "fact": "Log rotation implemented: Added to data-manager cron job (Sundays 5 AM) \u2014 deletes logs >30 days, truncates error logs >10MB",
+    "fact": "Log rotation implemented: Added to data-manager cron job (Sundays 5 AM) — deletes logs >30 days, truncates error logs >10MB",
     "category": "status",
     "timestamp": "2026-03-06T14:56:11.143350",
     "source": "memory/2026-03-06.md",
@@ -450,7 +484,8 @@
       "projects/autonomous-trading-bot"
     ],
     "lastAccessed": "2026-03-06",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815666"
   },
   {
     "id": "mc-035",
@@ -464,7 +499,8 @@
     ],
     "lastAccessed": "2026-03-08",
     "accessCount": 1,
-    "source": "memory/2026-03-08.md"
+    "source": "memory/2026-03-08.md",
+    "lastUsed": "2026-03-11T20:52:31.815668"
   },
   {
     "id": "mc-036",
@@ -478,6 +514,7 @@
     ],
     "lastAccessed": "2026-03-08",
     "accessCount": 1,
-    "source": "memory/2026-03-08.md"
+    "source": "memory/2026-03-08.md",
+    "lastUsed": "2026-03-11T20:52:31.815670"
   }
 ]

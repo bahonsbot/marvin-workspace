@@ -10,7 +10,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-01",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.815209"
   },
   {
     "id": "minr-002",
@@ -23,11 +24,12 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-01",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815217"
   },
   {
     "id": "nr-001",
-    "fact": "News Reader app architecture changed: Now loads RSS + Reddit data directly from market-intel/data/ (rss_alerts.json + reddit_alerts.json) \u2014 no duplicate feed generation needed, 250 items combined",
+    "fact": "News Reader app architecture changed: Now loads RSS + Reddit data directly from market-intel/data/ (rss_alerts.json + reddit_alerts.json) — no duplicate feed generation needed, 250 items combined",
     "category": "status",
     "timestamp": "2026-03-06T14:56:16.918514",
     "source": "memory/2026-03-06.md",
@@ -37,6 +39,7 @@
       "projects/market-intel-news-reader"
     ],
     "lastAccessed": "2026-03-06",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.815220"
   }
 ]

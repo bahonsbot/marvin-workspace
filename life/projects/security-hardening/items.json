@@ -10,7 +10,8 @@
       "projects/marvin-config"
     ],
     "lastAccessed": "2026-02-27",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.813142"
   },
   {
     "id": "sh-002",
@@ -23,6 +24,7 @@
       "resources/cron-jobs"
     ],
     "lastAccessed": "2026-02-27",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.813151"
   }
 ]

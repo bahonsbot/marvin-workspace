@@ -11,7 +11,8 @@
       "areas/people/philippe"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 5
+    "accessCount": 5,
+    "lastUsed": "2026-03-11T20:52:31.811670"
   },
   {
     "id": "atb-002",
@@ -24,7 +25,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 3,
-    "source": "memory/security/2026-03-03-security-review.md"
+    "source": "memory/security/2026-03-03-security-review.md",
+    "lastUsed": "2026-03-11T20:52:31.811677"
   },
   {
     "id": "atb-003",
@@ -37,7 +39,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.811680"
   },
   {
     "id": "atb-004",
@@ -50,7 +53,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.811682"
   },
   {
     "id": "atb-005",
@@ -63,7 +67,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.811684"
   },
   {
     "id": "atb-006",
@@ -77,6 +82,7 @@
     ],
     "lastAccessed": "2026-03-07",
     "accessCount": 2,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.811686"
   }
 ]

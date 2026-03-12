@@ -560,7 +560,10 @@ def update_autonomous_file(new_tasks):
 
 
 def sync_kanban_board_json():
-    """Refresh autonomous-kanban public/board.json after backlog updates."""
+    """Refresh autonomous-kanban public/board.json after backlog updates.
+
+    NOTE: sync-board.js must preserve todo + inprogress + done consistently.
+    """
     if not KANBAN_DIR.exists():
         print("Kanban sync skipped: autonomous-kanban project not found")
         return False

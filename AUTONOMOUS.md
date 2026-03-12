@@ -26,12 +26,13 @@
 
 - [Trading] 🎨 Design: one company analysis using available metrics; deliverable: structured note in projects/company-research/ | Why: Understanding company financials is required for informed trading decisions | Proof: Analysis note has thesis, risks, and 3+ key metrics | Unlocks: Progress toward: Document 10 trade setups with outcomes
 
-## Open Backlog
+## Done Today
 
-- [Career] 🎨 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown | Unlocks: Reusable content format for weekly posting cadence
-- [Career] 🔨 Build: 3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots | Why: Consistent content is required to grow Instagram audience to 10k | Proof: Content scheduled in planner with specific post times | Unlocks: Advances goal progress measurably
-- [Career] 📝 Draft: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches
-- [Other] 🔧 Automate one repetitive workspace workflow; deliverable: runnable script in scripts/ with usage notes and before/after time estimate | Why: Reduces manual ops overhead and improves OpenClaw execution reliability | Proof: script completes one full sample run and logs output | Unlocks: Foundation for chaining multiple automations into one routine
-- [Personal] 🚀 Launch: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice
-- [Other] 🔧 Fix: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script executes end-to-end on test input | Unlocks: Progress toward: Write a simple script with input validation
+- [Career] 🚀 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | ✅ Completed: projects/portfolio/case-studies/autonomous-trading-bot.md
+
+## Open Backlog
+- [Personal] 📝 Draft: a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/ | Why: Spaced repetition with new vocabulary builds Japanese fluency | Proof: Deck has 25+ complete entries with readings | Unlocks: Unlocks basic conversation and reading practice
+- [Other] 📝 Draft: one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Process runs successfully with measurable improvement | Unlocks: Progress toward: Write a simple script with input validation
+- [Trading] 🔨 Build: one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes
 - [Personal] 🎨 Creative MVP: Write a Python script that organizes files in one folder | Why: Creative MVPs build confidence and generate content for portfolio/social | Proof: Artifact created and demo note saved | Unlocks: Unlocks more ambitious creative projects
+

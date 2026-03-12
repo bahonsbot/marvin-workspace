@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-10T21:47:34.127477",
-    "baseline_count": 48,
+    "timestamp": "2026-03-12T09:47:29.488414",
+    "baseline_count": 32,
     "enriched_count": 50,
-    "overlap_count": 21,
-    "baseline_only_count": 16,
-    "enriched_only_count": 21,
-    "enriched_lift": 21,
+    "overlap_count": 22,
+    "baseline_only_count": 8,
+    "enriched_only_count": 26,
+    "enriched_lift": 26,
     "baseline_top5": [
-      "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "Saudi Aramco to restore 70% of oil exports \u2018within days\u2019 via Red Sea pipeline - ",
-      "Iran war could knock UK homebuyer confidence, says builder Persimmon",
-      "UK inflation likely to rise because of Middle East war, says Rachel Reeves",
-      "Scrapping North Sea windfall tax would not reduce UK energy bills, say experts"
+      "Prison sentences for pair who attacked gay men hailed as sign of hope for Kenya\u2019",
+      "Haiti president\u2019s assassination driven by greed and power, US prosecutors say",
+      "\u2018Convincing\u2019 AI scams drove UK fraud cases to record 444,000 last year",
+      "Will releasing millions of barrels of oil stockpiles really bring down fuel cost",
+      "Food prices could rise as Iran conflict disrupts fertilizer supply chain"
     ],
     "enriched_top5": [
-      "Trump disbanded NSC pandemic unit that experts had praised - AP News",
-      "Saudi Aramco to restore 70% of oil exports \u2018within days\u2019 via Red Sea pipeline - ",
-      "Iran war could knock UK homebuyer confidence, says builder Persimmon",
-      "UK inflation likely to rise because of Middle East war, says Rachel Reeves",
-      "Scrapping North Sea windfall tax would not reduce UK energy bills, say experts"
+      "Prison sentences for pair who attacked gay men hailed as sign of hope for Kenya\u2019",
+      "Haiti president\u2019s assassination driven by greed and power, US prosecutors say",
+      "\u2018Convincing\u2019 AI scams drove UK fraud cases to record 444,000 last year",
+      "Will releasing millions of barrels of oil stockpiles really bring down fuel cost",
+      "Food prices could rise as Iran conflict disrupts fertilizer supply chain"
     ]
   }
 ]

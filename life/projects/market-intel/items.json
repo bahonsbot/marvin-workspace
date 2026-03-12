@@ -10,7 +10,8 @@
     ],
     "lastAccessed": "2026-03-06",
     "accessCount": 5,
-    "source": "memory/2026-02-26.md"
+    "source": "memory/2026-02-26.md",
+    "lastUsed": "2026-03-11T20:52:31.816794"
   },
   {
     "id": "mi-002",
@@ -23,7 +24,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 4,
-    "source": "memory/2026-02-26.md"
+    "source": "memory/2026-02-26.md",
+    "lastUsed": "2026-03-11T20:52:31.816802"
   },
   {
     "id": "mi-003",
@@ -37,7 +39,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 4,
-    "source": "memory/2026-02-26.md"
+    "source": "memory/2026-02-26.md",
+    "lastUsed": "2026-03-11T20:52:31.816804"
   },
   {
     "id": "mi-004",
@@ -50,7 +53,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3
+    "accessCount": 3,
+    "lastUsed": "2026-03-11T20:52:31.816806"
   },
   {
     "id": "mi-005",
@@ -63,7 +67,8 @@
       "resources/cron-jobs"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 4
+    "accessCount": 4,
+    "lastUsed": "2026-03-11T20:52:31.816808"
   },
   {
     "id": "mi-006",
@@ -76,7 +81,8 @@
       "areas/people/philippe"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3
+    "accessCount": 3,
+    "lastUsed": "2026-03-11T20:52:31.816810"
   },
   {
     "id": "mi-007",
@@ -89,7 +95,8 @@
       "projects/market-intel-news-reader"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 4
+    "accessCount": 4,
+    "lastUsed": "2026-03-11T20:52:31.816812"
   },
   {
     "id": "mi-008",
@@ -102,7 +109,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3
+    "accessCount": 3,
+    "lastUsed": "2026-03-11T20:52:31.816814"
   },
   {
     "id": "mi-009",
@@ -115,7 +123,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3
+    "accessCount": 3,
+    "lastUsed": "2026-03-11T20:52:31.816816"
   },
   {
     "id": "mi-010",
@@ -129,7 +138,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3
+    "accessCount": 3,
+    "lastUsed": "2026-03-11T20:52:31.816818"
   },
   {
     "id": "mi-011",
@@ -143,7 +153,8 @@
     ],
     "lastAccessed": "2026-03-05",
     "accessCount": 1,
-    "source": "memory/2026-03-04.md"
+    "source": "memory/2026-03-04.md",
+    "lastUsed": "2026-03-11T20:52:31.816820"
   },
   {
     "id": "mi-012",
@@ -157,7 +168,8 @@
     ],
     "lastAccessed": "2026-03-07",
     "accessCount": 2,
-    "source": "memory/2026-03-05.md"
+    "source": "memory/2026-03-05.md",
+    "lastUsed": "2026-03-11T20:52:31.816822"
   },
   {
     "id": "mi-013",
@@ -171,7 +183,8 @@
     ],
     "lastAccessed": "2026-03-07",
     "accessCount": 1,
-    "source": "memory/2026-03-06.md"
+    "source": "memory/2026-03-06.md",
+    "lastUsed": "2026-03-11T20:52:31.816824"
   },
   {
     "id": "mi-014",
@@ -184,7 +197,8 @@
     ],
     "lastAccessed": "2026-03-08",
     "accessCount": 2,
-    "source": "memory/cron-context.json"
+    "source": "memory/cron-context.json",
+    "lastUsed": "2026-03-11T20:52:31.816826"
   },
   {
     "id": "mi-016",
@@ -198,6 +212,7 @@
     ],
     "lastAccessed": "2026-03-08",
     "accessCount": 1,
-    "source": "memory/2026-03-08.md"
+    "source": "memory/2026-03-08.md",
+    "lastUsed": "2026-03-11T20:52:31.816828"
   }
 ]

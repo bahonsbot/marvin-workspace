@@ -8,7 +8,8 @@
     "status": "active",
     "relatedEntities": [],
     "lastAccessed": "2026-02-27",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.817823"
   },
   {
     "id": "cron-002",
@@ -19,7 +20,8 @@
     "status": "active",
     "relatedEntities": [],
     "lastAccessed": "2026-03-04",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.817831"
   },
   {
     "id": "cron-003",
@@ -30,7 +32,8 @@
     "status": "active",
     "relatedEntities": [],
     "lastAccessed": "2026-03-04",
-    "accessCount": 3
+    "accessCount": 3,
+    "lastUsed": "2026-03-11T20:52:31.817834"
   },
   {
     "id": "cron-004",
@@ -43,7 +46,8 @@
       "projects/security-review"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 6
+    "accessCount": 6,
+    "lastUsed": "2026-03-11T20:52:31.817836"
   },
   {
     "id": "cron-005",
@@ -54,7 +58,8 @@
     "status": "active",
     "relatedEntities": [],
     "lastAccessed": "2026-03-04",
-    "accessCount": 3
+    "accessCount": 3,
+    "lastUsed": "2026-03-11T20:52:31.817838"
   },
   {
     "id": "cron-006",
@@ -68,7 +73,8 @@
       "projects/marvin-config"
     ],
     "lastAccessed": "2026-02-27",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.817840"
   },
   {
     "id": "cron-007",
@@ -81,7 +87,8 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.817842"
   },
   {
     "id": "cron-008",
@@ -94,6 +101,7 @@
       "projects/autonomous-trading-bot"
     ],
     "lastAccessed": "2026-03-04",
-    "accessCount": 1
+    "accessCount": 1,
+    "lastUsed": "2026-03-11T20:52:31.817844"
   }
 ]

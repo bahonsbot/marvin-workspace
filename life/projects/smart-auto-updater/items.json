@@ -10,7 +10,8 @@
       "areas/people/philippe"
     ],
     "lastAccessed": "2026-02-26",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.816336"
   },
   {
     "id": "sau-002",
@@ -23,7 +24,8 @@
       "resources/cron-jobs"
     ],
     "lastAccessed": "2026-02-26",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.816345"
   },
   {
     "id": "sau-003",
@@ -36,6 +38,7 @@
       "areas/people/philippe"
     ],
     "lastAccessed": "2026-02-26",
-    "accessCount": 2
+    "accessCount": 2,
+    "lastUsed": "2026-03-11T20:52:31.816348"
   }
 ]

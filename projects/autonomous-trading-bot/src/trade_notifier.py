@@ -19,6 +19,9 @@ DEFAULT_CHAT_ID = "-1003711398278"
 class TelegramNotifier:
     """Sends trade notifications to Telegram."""
 
+    # Allowed chat IDs for notifications (comma-separated env var)
+    ALLOWED_CHAT_IDS: set[str] = set()
+
     def __init__(
         self,
         *,
@@ -28,6 +31,17 @@ class TelegramNotifier:
     ) -> None:
         self.bot_token = bot_token or self._get_token(workspace)
         self.chat_id = chat_id or DEFAULT_CHAT_ID
+        # Load allowed chat IDs from environment
+        allowed = os.getenv("TELEGRAM_ALLOWED_CHAT_IDS", "").strip()
+        if allowed:
+            TelegramNotifier.ALLOWED_CHAT_IDS = {c.strip() for c in allowed.split(",") if c.strip()}
+
+    def _is_allowed(self, chat_id: str) -> bool:
+        """Check if chat ID is in the allowed list."""
+        # If no allowlist configured, allow the default (backward compatible)
+        if not TelegramNotifier.ALLOWED_CHAT_IDS:
+            return True
+        return chat_id in TelegramNotifier.ALLOWED_CHAT_IDS
 
     def _get_token(self, workspace: Path) -> str:
         """Get bot token from environment or OpenClaw config."""
@@ -76,6 +90,10 @@ class TelegramNotifier:
 
     def _send(self, message: str, parse_mode: str = "Markdown") -> Dict[str, Any]:
         """Send message via Telegram Bot API."""
+        # Validate chat ID against allowlist
+        if not self._is_allowed(self.chat_id):
+            raise RuntimeError(f"Chat ID {self.chat_id} not in TELEGRAM_ALLOWED_CHAT_IDS allowlist")
+        
         url = f"https://api.telegram.org/bot{self.bot_token}/sendMessage"
         payload = json.dumps(
             {

@@ -1,0 +1,9 @@
+# autonomous-trading-bot dependencies
+#
+# This project uses only Python standard library modules.
+# No external dependencies required.
+
+# External packages (if needed for extended features):
+# alpaca-trade-api >= 0.0.1  # For live trading (not paper)
+# pandas >= 2.0.0             # For data analysis (optional)
+# numpy >= 1.24.0             # For numerical operations (optional)

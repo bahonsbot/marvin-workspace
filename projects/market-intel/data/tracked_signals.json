@@ -3,311 +3,6 @@
     "signal": {
       "source": "rss",
       "feed": "Financial_Times",
-      "title": "China warns of \u2018challenges\u2019 as it sets lowest GDP growth target in decades",
-      "url": "https://www.ft.com/content/bda74d59-3d65-4ad0-a001-b9af585bcd4f",
-      "timestamp": "2026-03-05T12:47:30.387773",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "",
-      "root_causes": []
-    },
-    "added_at": "2026-03-05T12:47:30.391186",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "",
-    "evaluated_at": "2026-03-09T23:56:07.743290",
-    "evidence_pack": {
-      "summary": "",
-      "drivers": [],
-      "metrics": [],
-      "sector_impact": [],
-      "confidence": "LOW"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Pentagon eyes Ukrainian interceptor drones to counter Iran",
-      "url": "https://www.ft.com/content/d077e9c6-1573-46dc-8658-3db3aaf7cdfb",
-      "timestamp": "2026-03-05T13:47:31.870794",
-      "pattern_id": "p002",
-      "pattern": "Russia-Ukraine Conflict",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-05T13:47:31.875098",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "",
-    "evaluated_at": "2026-03-09T23:58:15.617232",
-    "evidence_pack": {
-      "summary": "",
-      "drivers": [],
-      "metrics": [],
-      "sector_impact": [],
-      "confidence": "LOW"
-    }
-  },
-  {
-    "signal": {
-      "source": "reddit",
-      "feed": "r/investing",
-      "title": "Private Credit Bubble and Why It Won't Matter",
-      "url": "https://reddit.com/r/investing/comments/1rkw1e7/private_credit_bubble_and_why_it_wont_matter/",
-      "timestamp": "2026-03-06T03:47:58.753661",
-      "pattern_id": "p018",
-      "pattern": "Regional Banking Crisis 2023",
-      "category": "financial_credit",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "score": 0,
-      "signal_score": 300,
-      "reasoning_score": 87.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "financials_volatility",
-        "treasury_bid",
-        "credit_tightening"
-      ],
-      "predicted_causal_chain": [
-        "Funding stress",
-        "Credit spreads widen",
-        "Bank equities underperform",
-        "Policy support expectations rise"
-      ],
-      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-06T03:47:58.755009",
-    "verified": true,
-    "actual_outcome": "INCORRECT",
-    "notes": "",
-    "evaluated_at": "2026-03-09T23:59:27.917546",
-    "evidence_pack": {
-      "summary": "",
-      "drivers": [],
-      "metrics": [],
-      "sector_impact": [],
-      "confidence": "LOW"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "AP_Top",
-      "title": "Trump embraces longtime US foe Putin, doubting own intel - AP News",
-      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNc1lzTk9rX1RfalBXMUF2VXp4Y19fcGZBYjdSblBUMzVScUEwQndESE5fWm9BX19TRnd5cG1tOHA5ajhnNWdaSjMyYnU2dWFPUTh2OGl6U1dsWk5hMEoySWowb3FOV3l1d0hIS05TVjVDRFh2RGlYeklSN0F0aGN4RDUxU0lJRzgyQTgtb3VpS1Fjem9udDRzV3FQZUZrNE0zaDZCbzAzdDRJNlo1TDE1MGlUQ1pwQQ?oc=5",
-      "timestamp": "2026-03-06T05:47:34.108835",
-      "pattern_id": "p002",
-      "pattern": "Russia-Ukraine Conflict",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 300,
-      "reasoning_score": 87.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-06T05:47:34.112683",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "",
-    "evaluated_at": "2026-03-10T00:01:59.632061",
-    "evidence_pack": {
-      "summary": "",
-      "drivers": [],
-      "metrics": [],
-      "sector_impact": [],
-      "confidence": "LOW"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Industry casts doubt on Trump plan to insure Gulf oil tankers as Iran war halts ",
-      "url": "https://www.ft.com/content/6ddeb488-0d6f-4b6a-b419-2a2ba7437a25",
-      "timestamp": "2026-03-06T06:47:32.327763",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-06T06:47:32.331592",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "",
-    "evaluated_at": "2026-03-10T00:03:08.751816",
-    "evidence_pack": {
-      "summary": "",
-      "drivers": [],
-      "metrics": [],
-      "sector_impact": [],
-      "confidence": "LOW"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
-      "title": "Industry doubts Trump plan to insure Gulf oil tankers as Iran war halts transit",
-      "url": "https://www.ft.com/content/6ddeb488-0d6f-4b6a-b419-2a2ba7437a25",
-      "timestamp": "2026-03-06T07:47:31.651451",
-      "pattern_id": "p001",
-      "pattern": "Saudi Oil Attacks",
-      "category": "geopolitical",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 99.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 90.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 92.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 14
-      },
-      "reasoning": "high-credibility source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "volatility_spike",
-        "risk_repricing"
-      ],
-      "predicted_causal_chain": [
-        "Headline catalyst",
-        "Positioning adjustment",
-        "Cross-asset reaction"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": []
-    },
-    "added_at": "2026-03-06T07:47:31.654980",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "",
-    "evaluated_at": "2026-03-10T00:05:46.806380",
-    "evidence_pack": {
-      "summary": "",
-      "drivers": [],
-      "metrics": [],
-      "sector_impact": [],
-      "confidence": "LOW"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Financial_Times",
       "title": "Reprieve for India as US eases sanctions on buying Russian oil",
       "url": "https://www.ft.com/content/f513bca3-507f-41ae-a95d-2bb906d3d9e9",
       "timestamp": "2026-03-06T14:47:30.885498",
@@ -1044,6 +739,261 @@
       "root_causes": []
     },
     "added_at": "2026-03-10T20:47:35.846354",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Guardian_Business",
+      "title": "Aramco warns of oil market \u2018catastrophe\u2019 unless strait of Hormuz reopens soon",
+      "url": "https://www.theguardian.com/business/2026/mar/10/aramco-warns-oil-market-catastrophe-strait-of-hormuz",
+      "timestamp": "2026-03-11T02:47:34.394141",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-11T02:47:34.397766",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Oil swings as traders parse mixed messages on Strait of Hormuz",
+      "url": "https://www.ft.com/content/6fda3451-8fd3-4ec1-8ab2-17f33291ec5e",
+      "timestamp": "2026-03-11T03:47:32.134405",
+      "pattern_id": "p005",
+      "pattern": "GameStop Short Squeeze",
+      "category": "sentiment_social",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "forced_covering",
+        "borrow_fee_spike",
+        "volatility_clustering"
+      ],
+      "predicted_causal_chain": [
+        "Crowded short setup",
+        "Call buying surge",
+        "Dealer hedging amplifies upside"
+      ],
+      "signal_briefing": "",
+      "root_causes": []
+    },
+    "added_at": "2026-03-11T03:47:32.137734",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Kremlin backs covert campaign to keep Orb\u00e1n in power",
+      "url": "https://www.ft.com/content/34df20f9-487b-4cb6-9dc9-d676d959d1ed",
+      "timestamp": "2026-03-11T14:47:36.563605",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 99.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-11T14:47:36.567701",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "JPMorgan marking down loan portfolios of private credit groups ",
+      "url": "https://www.ft.com/content/389a0003-d8de-4afd-9de9-be6e9fc6888c",
+      "timestamp": "2026-03-12T02:47:30.887141",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 89.2,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": -2.84,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-12T02:47:30.892649",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Nasdaq_News",
+      "title": "London-listed Capricorn Energy gets takeover proposals from unit of Saudi's Cafa",
+      "url": "https://www.reuters.com/business/energy/london-listed-capricorn-energy-gets-takeover-proposals-unit-saudis-cafani-group-2026-03-11/",
+      "timestamp": "2026-03-12T04:47:31.402151",
+      "pattern_id": "p001",
+      "pattern": "Saudi Oil Attacks",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "M&A activity is a market health indicator. Deals typically spike 20-50% on announcement. Sector rotation follows \u2014 peers rally on takeover chatter. Watch for regulatory concerns.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-12T04:47:31.405639",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Reuters_BreakingViews",
+      "title": "Iran war pushes Indian rupee towards perfect storm",
+      "url": "https://www.reuters.com/commentary/breakingviews/iran-war-pushes-indian-rupee-towards-perfect-storm-2026-03-11/",
+      "timestamp": "2026-03-12T08:47:32.940219",
+      "pattern_id": "p002",
+      "pattern": "Russia-Ukraine Conflict",
+      "category": "geopolitical",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "volatility_spike",
+        "risk_repricing"
+      ],
+      "predicted_causal_chain": [
+        "Headline catalyst",
+        "Positioning adjustment",
+        "Cross-asset reaction"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": []
+    },
+    "added_at": "2026-03-12T08:47:32.943311",
     "verified": false,
     "actual_outcome": null,
     "notes": ""

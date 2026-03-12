@@ -51,6 +51,29 @@ _RATE_LIMIT_BUCKETS: Dict[str, list[float]] = {}
 _RATE_LIMIT_LOCK = Lock()
 _bucket_access_order: list[str] = []  # LRU tracking
 
+# Sensitive field names to redact (case-insensitive)
+_SENSITIVE_FIELDS = frozenset({
+    "secret", "token", "api_key", "api_secret", "password",
+    "authorization", "bearer", "access_token", "refresh_token",
+    "private_key", "client_secret", "credentials",
+})
+
+
+def _redact_sensitive(data: Any) -> Any:
+    """Recursively redact sensitive fields from data structure."""
+    if isinstance(data, dict):
+        redacted = {}
+        for key, value in data.items():
+            if key.lower() in _SENSITIVE_FIELDS:
+                redacted[key] = "[REDACTED]"
+            else:
+                redacted[key] = _redact_sensitive(value)
+        return redacted
+    elif isinstance(data, list):
+        return [_redact_sensitive(item) for item in data]
+    else:
+        return data
+
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -72,6 +95,30 @@ def _env_int(name: str, *, default: int) -> int:
     except (TypeError, ValueError):
         return default
     return parsed if parsed > 0 else default
+
+
+def _get_client_ip(headers: Dict[str, str], client_address: tuple | None) -> str:
+    """Get client IP with X-Forwarded-For support and trusted proxy validation."""
+    # Direct connection - use socket peer IP
+    if not client_address:
+        return "unknown"
+    
+    direct_ip = client_address[0]
+    
+    # Check if behind trusted proxy
+    trusted_proxies = os.getenv("WEBHOOK_TRUSTED_PROXIES", "").strip().split(",")
+    trusted_proxies = [p.strip() for p in trusted_proxies if p.strip()]
+    
+    # If direct IP is a known proxy, check X-Forwarded-For
+    if trusted_proxies and direct_ip in trusted_proxies:
+        xff = headers.get("X-Forwarded-For", "")
+        if xff:
+            # X-Forwarded-For can have multiple IPs: client, proxy1, proxy2
+            # First one is the original client
+            return xff.split(",")[0].strip()
+    
+    # Fall back to direct connection IP
+    return direct_ip
 
 
 def _rate_limit_allowed(client_ip: str) -> bool:
@@ -178,10 +225,16 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
     if not basic_auth_ok:
         return False
     
-    # Replay protection: validate signature and timestamp if present
+    # Replay protection: validate signature and timestamp - require both or neither
     timestamp_str = headers.get("X-Timestamp", "")
     signature = headers.get("X-Signature", "")
     
+    # Reject partial signature headers - must have both or neither
+    if (timestamp_str and not signature) or (signature and not timestamp_str):
+        logger.warning("Webhook has partial signature headers - both X-Timestamp and X-Signature required")
+        return False
+    
+    # If both are present, validate them
     if timestamp_str and signature and body_bytes is not None:
         # Validate timestamp window (5 minutes)
         try:
@@ -208,9 +261,9 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
         except Exception as e:
             logger.warning(f"Signature validation error: {e}")
             return False
-    elif timestamp_str or signature:
-        # Partial signature headers (one but not both) - log warning but accept for backward compat
-        logger.warning("Webhook has partial signature headers (timestamp or signature missing)")
+    
+    # If neither timestamp nor signature is present, basic auth (secret) still required
+    # This is handled by the caller - we only enforce replay protection when headers are provided
     
     return True
 
@@ -357,6 +410,37 @@ def _append_log(record: Dict[str, Any], *, log_path: Path = LOG_PATH) -> None:
         os.chmod(log_path, 0o600)
     except OSError:
         pass  # Best-effort permission hardening
+    # Prune old entries if log is too large (30-day retention, ~10MB max)
+    _prune_log_if_needed(log_path)
+
+
+def _prune_log_if_needed(log_path: Path, max_size_mb: int = 10, retention_days: int = 30) -> None:
+    """Prune old entries if log exceeds size threshold."""
+    try:
+        if not log_path.exists():
+            return
+        size_mb = log_path.stat().st_size / (1024 * 1024)
+        if size_mb < max_size_mb:
+            return
+        # Log too large - keep only recent entries (last 30 days)
+        cutoff = datetime.now(timezone.utc) - timedelta(days=retention_days)
+        kept = []
+        with log_path.open("r", encoding="utf-8") as f:
+            for line in f:
+                try:
+                    entry = json.loads(line)
+                    ts = entry.get("timestamp", "")
+                    if ts:
+                        entry_time = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                        if entry_time >= cutoff:
+                            kept.append(line)
+                except json.JSONDecodeError:
+                    continue
+        # Overwrite with kept entries
+        with log_path.open("w", encoding="utf-8") as f:
+            f.writelines(kept)
+    except Exception:
+        pass  # Best-effort pruning, don't break logging
 
 
 class WebhookHandler(BaseHTTPRequestHandler):
@@ -377,7 +461,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
             self._send_json(404, {"error": "Not found", "paper_only": True})
             return
 
-        client_ip = self.client_address[0] if self.client_address else "unknown"
+        client_ip = _get_client_ip(dict(self.headers), self.client_address)
         if not _rate_limit_allowed(client_ip):
             self._send_json(429, {"error": "Rate limit exceeded", "paper_only": True})
             return
@@ -411,10 +495,8 @@ class WebhookHandler(BaseHTTPRequestHandler):
         result = process_webhook_payload(payload)
         status = 200 if result["accepted"] else 422
 
-        # Redact sensitive fields before logging
-        log_payload = payload.copy() if isinstance(payload, dict) else payload
-        if isinstance(log_payload, dict) and "secret" in log_payload:
-            log_payload["secret"] = "[REDACTED]"
+        # Redact sensitive fields before logging (comprehensive redaction)
+        log_payload = _redact_sensitive(payload)
 
         record = {
             "timestamp": _utc_now_iso(),
@@ -436,7 +518,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
         self._send_json(status, response)
 
     def do_GET(self) -> None:  # noqa: N802
-        client_ip = self.client_address[0] if self.client_address else "unknown"
+        client_ip = _get_client_ip(dict(self.headers), self.client_address)
         if self.path in {"/health", "/health/auth"} and not _health_rate_limit_allowed(client_ip):
             self._send_json(429, {"error": "Health endpoint rate limit exceeded", "paper_only": True})
             return

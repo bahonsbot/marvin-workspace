@@ -14,7 +14,8 @@
       "source": "initial-setup",
       "status": "active",
       "lastAccessed": "2026-02-25",
-      "accessCount": 1
+      "accessCount": 1,
+      "lastUsed": "2026-03-11T20:52:31.819084"
     },
     {
       "id": "philippe-002",
@@ -24,7 +25,8 @@
       "source": "initial-setup",
       "status": "active",
       "lastAccessed": "2026-02-25",
-      "accessCount": 1
+      "accessCount": 1,
+      "lastUsed": "2026-03-11T20:52:31.819092"
     },
     {
       "id": "philippe-003",
@@ -34,7 +36,8 @@
       "source": "initial-setup",
       "status": "active",
       "lastAccessed": "2026-03-09",
-      "accessCount": 3
+      "accessCount": 3,
+      "lastUsed": "2026-03-11T20:52:31.819095"
     },
     {
       "id": "philippe-004",
@@ -44,7 +47,8 @@
       "source": "initial-setup",
       "status": "active",
       "lastAccessed": "2026-02-25",
-      "accessCount": 1
+      "accessCount": 1,
+      "lastUsed": "2026-03-11T20:52:31.819097"
     },
     {
       "id": "philippe-005",
@@ -54,7 +58,8 @@
       "source": "observation",
       "status": "active",
       "lastAccessed": "2026-02-25",
-      "accessCount": 1
+      "accessCount": 1,
+      "lastUsed": "2026-03-11T20:52:31.819099"
     },
     {
       "id": "philippe-006",
@@ -64,7 +69,8 @@
       "source": "initial-setup",
       "status": "active",
       "lastAccessed": "2026-02-25",
-      "accessCount": 1
+      "accessCount": 1,
+      "lastUsed": "2026-03-11T20:52:31.819101"
     },
     {
       "id": "philippe-007",
@@ -78,7 +84,8 @@
         "projects/market-intel-news-reader"
       ],
       "lastAccessed": "2026-03-09",
-      "accessCount": 2
+      "accessCount": 2,
+      "lastUsed": "2026-03-11T20:52:31.819103"
     },
     {
       "id": "philippe-008",
@@ -89,7 +96,8 @@
       "status": "active",
       "relatedEntities": [],
       "lastAccessed": "2026-03-05",
-      "accessCount": 3
+      "accessCount": 3,
+      "lastUsed": "2026-03-11T20:52:31.819105"
     }
   ]
 }
