@@ -2,38 +2,34 @@
   "board": {
     "todo": [
       {
-        "id": "6fb35eff",
-        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ supporting Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing prompts | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice | Proof: Tool outputs one random day-sized challenge per run/view with selectable skill categories | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "id": "2c48a50e",
+        "text": "[Trading] \ud83d\udcdd Draft: prepare the first company analysis lesson for Philippe's followed companies; deliverable: markdown lesson in projects/company-research/ using named tickers from his followed-companies list | Why: Business-analysis learning should start from real companies Philippe actually follows | Proof: Lesson uses a defined company list and focuses on one concrete beginner exercise | Unlocks: First guided company-analysis practice task",
         "column": "todo"
       },
       {
-        "id": "b4699bbe",
-        "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "71293857",
+        "text": "[Personal] \ud83d\udcda Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "0bdcb174",
-        "text": "[Trading] 📝 Draft: prepare a watchlist-first company analysis template for Philippe's followed companies; deliverable: markdown template in projects/company-research/ plus a shortlist request section for named tickers | Why: Understanding company financials is required for informed trading decisions | Proof: Template defines thesis, risks, key metrics, and explicitly requires a named ticker before full analysis | Unlocks: Progress toward: Document 10 trade setups with outcomes",
+        "id": "738ef737",
+        "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace/OpenClaw workflow that wastes time, excluding `openclaw.json` and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe input/output boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workflow bottleneck, stays outside config mutation, and defines safe boundaries clearly | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "cff2a52a",
-        "text": "[Other] 🔧 Fix: identify one repetitive personal workflow and propose a small automation with clear input/output; deliverable: markdown spec in projects/automation/ | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script executes end-to-end on test input | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "todo"
-      },
-      {
-        "id": "e1d42d94",
-        "text": "[Personal] 📚 Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
-        "column": "todo"
-      },
-      {
-        "id": "978e71e3",
-        "text": "[Career] 📝 Draft: draft 3 Instagram content angles tied to real work Philippe has made or plans to make; deliverable: content-plan markdown with hook, source work, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
+        "id": "6270c039",
+        "text": "[Personal] \ud83d\udcda Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "cb81bcc0",
+        "text": "[Career] \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "column": "inprogress"
+      }
+    ],
     "done": []
   },
-  "updatedAt": "2026-03-12T07:05:23.210Z"
+  "updatedAt": "2026-03-12T15:38:46.000Z"
 }
