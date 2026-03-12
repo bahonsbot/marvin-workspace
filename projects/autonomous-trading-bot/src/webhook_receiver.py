@@ -225,45 +225,41 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
     if not basic_auth_ok:
         return False
     
-    # Replay protection: validate signature and timestamp - require both or neither
+    # Require both timestamp and signature for all authenticated requests.
+    # This prevents replay attacks - requests without HMAC headers are rejected.
     timestamp_str = headers.get("X-Timestamp", "")
     signature = headers.get("X-Signature", "")
     
-    # Reject partial signature headers - must have both or neither
-    if (timestamp_str and not signature) or (signature and not timestamp_str):
-        logger.warning("Webhook has partial signature headers - both X-Timestamp and X-Signature required")
+    # Reject if either timestamp or signature is missing
+    if not timestamp_str or not signature or body_bytes is None:
+        logger.warning("Webhook requires both X-Timestamp and X-Signature headers")
         return False
     
-    # If both are present, validate them
-    if timestamp_str and signature and body_bytes is not None:
-        # Validate timestamp window (5 minutes)
-        try:
-            # Parse ISO-8601 timestamp
-            timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
-            now = datetime.now(timezone.utc)
-            age = (now - timestamp).total_seconds()
-            if abs(age) > 300:  # 5 minute window
-                logger.warning(f"Webhook timestamp outside 5-min window: age={age:.1f}s")
-                return False
-        except (ValueError, TypeError) as e:
-            logger.warning(f"Invalid webhook timestamp format: {e}")
+    # Validate timestamp window (5 minutes)
+    try:
+        # Parse ISO-8601 timestamp
+        timestamp = datetime.fromisoformat(timestamp_str.replace("Z", "+00:00"))
+        now = datetime.now(timezone.utc)
+        age = (now - timestamp).total_seconds()
+        if abs(age) > 300:  # 5 minute window
+            logger.warning(f"Webhook timestamp outside 5-min window: age={age:.1f}s")
             return False
-        
-        # Validate HMAC signature
-        try:
-            # Reconstruct the signed message
-            body_str = body_bytes.decode('utf-8')
-            message = f"{timestamp_str}:{body_str}"
-            expected_sig = hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
-            if not secrets.compare_digest(signature.encode(), expected_sig.encode()):
-                logger.warning("Webhook signature mismatch")
-                return False
-        except Exception as e:
-            logger.warning(f"Signature validation error: {e}")
-            return False
+    except (ValueError, TypeError) as e:
+        logger.warning(f"Invalid webhook timestamp format: {e}")
+        return False
     
-    # If neither timestamp nor signature is present, basic auth (secret) still required
-    # This is handled by the caller - we only enforce replay protection when headers are provided
+    # Validate HMAC signature
+    try:
+        # Reconstruct the signed message
+        body_str = body_bytes.decode('utf-8')
+        message = f"{timestamp_str}:{body_str}"
+        expected_sig = hmac.new(secret.encode(), message.encode(), hashlib.sha256).hexdigest()
+        if not secrets.compare_digest(signature.encode(), expected_sig.encode()):
+            logger.warning("Webhook signature mismatch")
+            return False
+    except Exception as e:
+        logger.warning(f"Signature validation error: {e}")
+        return False
     
     return True
 

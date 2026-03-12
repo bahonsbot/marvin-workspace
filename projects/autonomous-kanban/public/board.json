@@ -41,8 +41,14 @@
         "text": "🎨 Creative MVP: Create one 10-second motion design loop for Instagram; deliverable: MP4 in projects/creative-practice/ plus a 3-line caption draft | Why: Builds visible motion-design proof and supports audience growth goals | Proof: MP4 exported and caption saved in markdown",
         "column": "done",
         "outputPath": "projects/creative-practice/motion_loop.mp4"
+      },
+      {
+        "id": "267d82e3",
+        "text": "🚀 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | Why: Documents existing work - essential for landing creative roles | Proof: Case-study markdown has problem/approach/result sections | Unlocks: Unlocks job applications and client pitches",
+        "column": "done",
+        "outputPath": "projects/portfolio/case-studies/motion-design-loop.md"
       }
     ]
   },
-  "updatedAt": "2026-03-12T02:20:01.224Z"
+  "updatedAt": "2026-03-12T03:20:21.672Z"
 }
