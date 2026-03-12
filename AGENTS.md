@@ -239,3 +239,9 @@ When tasks fail (subagent, cron, API, script, git), report clearly with:
 - what failed
 - what was attempted
 - current status and recommended next step
+
+## Session End Reminder
+Before ending each session, check if any notable corrections, errors, or requests occurred that should be logged to `.learnings/`. Review detection triggers above — if any apply, append to the appropriate file:
+- `.learnings/corrections.md` — preferences, corrections, style preferences
+- `.learnings/errors.md` — command failures, API errors, exceptions
+- `.learnings/requests.md` — feature requests, capability gaps

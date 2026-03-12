@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-12T11:47:28.779518",
-    "baseline_count": 32,
+    "timestamp": "2026-03-12T12:47:31.363378",
+    "baseline_count": 31,
     "enriched_count": 50,
-    "overlap_count": 23,
+    "overlap_count": 22,
     "baseline_only_count": 7,
-    "enriched_only_count": 25,
-    "enriched_lift": 25,
+    "enriched_only_count": 26,
+    "enriched_lift": 26,
     "baseline_top5": [
       "Prison sentences for pair who attacked gay men hailed as sign of hope for Kenya\u2019",
       "Haiti president\u2019s assassination driven by greed and power, US prosecutors say",
       "\u2018Convincing\u2019 AI scams drove UK fraud cases to record 444,000 last year",
       "Will releasing millions of barrels of oil stockpiles really bring down fuel cost",
-      "Food prices could rise as Iran conflict disrupts fertilizer supply chain"
+      "JPMorgan marking down loan portfolios of private credit groups "
     ],
     "enriched_top5": [
       "Prison sentences for pair who attacked gay men hailed as sign of hope for Kenya\u2019",
       "Haiti president\u2019s assassination driven by greed and power, US prosecutors say",
       "\u2018Convincing\u2019 AI scams drove UK fraud cases to record 444,000 last year",
       "Will releasing millions of barrels of oil stockpiles really bring down fuel cost",
-      "Food prices could rise as Iran conflict disrupts fertilizer supply chain"
+      "JPMorgan marking down loan portfolios of private credit groups "
     ]
   }
 ]
