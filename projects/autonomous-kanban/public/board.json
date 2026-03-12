@@ -2,13 +2,8 @@
   "board": {
     "todo": [
       {
-        "id": "d741218d",
-        "text": "[Trading] 📊 Analyze: prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes",
-        "column": "todo"
-      },
-      {
-        "id": "b4699bbe",
-        "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "0bdcb174",
+        "text": "[Trading] 📝 Draft: prepare a watchlist-first company analysis template for Philippe's followed companies; deliverable: markdown template in projects/company-research/ plus a shortlist request section for named tickers | Why: Understanding company financials is required for informed trading decisions | Proof: Template defines thesis, risks, key metrics, and explicitly requires a named ticker before full analysis | Unlocks: Progress toward: Document 10 trade setups with outcomes",
         "column": "todo"
       },
       {
@@ -17,13 +12,13 @@
         "column": "todo"
       },
       {
-        "id": "8f60930b",
-        "text": "[Other] 🔧 Fix: identify one repetitive OpenClaw workflow that wastes time and propose a small automation with clear input/output; deliverable: markdown spec in projects/automation/ | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script executes end-to-end on test input | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "d741218d",
+        "text": "[Trading] 📊 Analyze: prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Brief shows entry/invalidation/risk for 2+ setups | Unlocks: Progress toward: Document 10 trade setups with outcomes",
         "column": "todo"
       },
       {
-        "id": "d91eddf8",
-        "text": "[Other] 🔧 Fix: identify one repetitive OpenClaw workflow that wastes time and propose a small automation with clear input/output; deliverable: markdown spec in projects/automation/ | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Process runs successfully with measurable improvement | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "b4699bbe",
+        "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       }
     ],
@@ -49,5 +44,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-12T06:29:29.326Z"
+  "updatedAt": "2026-03-12T06:29:57.245Z"
 }
