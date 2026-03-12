@@ -46,7 +46,8 @@ Always announce:
 
 ## Default Routing (Current)
 - **Codex (openai-codex/gpt-5.3-codex):**
-  coding, debugging, multi-file technical work, complex investigations
+  **non-trivial coding, debugging, multi-file technical work, complex investigations**
+  → For any coding task beyond simple one-liner fixes, Codex is the default.
 
 - **Bailian MiniMax-M2.5:**
   lightweight research, extraction, and routine task delegation
