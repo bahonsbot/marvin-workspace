@@ -18,6 +18,7 @@ class TestContextAdapter(unittest.TestCase):
         self.assertTrue(snapshot["paper_only"])
         self.assertFalse(snapshot["summary"]["available_context"])
         self.assertEqual(snapshot["summary"]["risk_bias"], "neutral")
+        self.assertEqual(snapshot["summary"]["role"], "macro_overlay_only")
         self.assertGreaterEqual(len(snapshot["warnings"]), 3)
 
     def test_reads_available_market_intel_files(self):
@@ -61,6 +62,7 @@ class TestContextAdapter(unittest.TestCase):
         self.assertTrue(snapshot["summary"]["available_context"])
         self.assertEqual(snapshot["summary"]["risk_bias"], "risk_off")
         self.assertEqual(snapshot["summary"]["severity"], "low")
+        self.assertEqual(snapshot["sources"]["selection_layer"], "execution_candidates")
         self.assertEqual(snapshot["summary"]["ab_enriched_lift"], 12)
         self.assertEqual(snapshot["summary"]["news_headline_count"], 2)
 

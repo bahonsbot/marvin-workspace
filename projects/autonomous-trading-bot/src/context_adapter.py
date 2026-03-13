@@ -1,7 +1,7 @@
 """Context adapter for local Market Intel and News Reader artifacts.
 
 Paper-only helper that reads local JSON files, tolerates missing inputs,
-and derives a compact context snapshot for deterministic fusion rules.
+and derives a compact macro overlay for deterministic fusion rules.
 """
 
 from __future__ import annotations
@@ -89,7 +89,7 @@ def load_context_snapshot(
     market_intel_dir: Path = MARKET_INTEL_DATA_DIR,
     news_reader_dir: Path = NEWS_READER_DATA_DIR,
 ) -> Dict[str, Any]:
-    """Load local context artifacts with graceful fallback on missing files."""
+    """Load local macro/risk context artifacts with graceful fallback."""
     warnings: List[str] = []
 
     enriched_signals, err = _safe_read_json(market_intel_dir / "signals_enriched_shadow.json")
@@ -145,6 +145,7 @@ def load_context_snapshot(
 
     return {
         "summary": {
+            "role": "macro_overlay_only",
             "risk_bias": risk_bias,
             "severity": severity,
             "high_confidence_signal_count": high_conf_count,
@@ -155,6 +156,7 @@ def load_context_snapshot(
             "available_context": bool(category_counter or latest_comparison or headline_count > 0),
         },
         "sources": {
+            "selection_layer": "execution_candidates",
             "market_intel": {
                 "signals_enriched_shadow": isinstance(enriched_signals, list),
                 "tracked_signals": isinstance(tracked_signals, list),

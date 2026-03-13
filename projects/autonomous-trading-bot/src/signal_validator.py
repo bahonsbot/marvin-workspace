@@ -99,6 +99,12 @@ def validate_signal_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
         ("source_title", MAX_TITLE_LENGTH),
         ("source_url", MAX_URL_LENGTH),
         ("strategy", MAX_STRING_LENGTH),
+        ("candidate_id", 128),
+        ("signal_id", 128),
+        ("pattern_id", 128),
+        ("pattern_name", 256),
+        ("expected_horizon", 64),
+        ("risk_overlay_hint", 128),
     ]:
         if field_name in payload and isinstance(payload[field_name], str):
             err = _validate_string_length(payload[field_name], max_len, field_name)

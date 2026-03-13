@@ -25,8 +25,13 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.context_adapter import load_context_snapshot
-from src.symbol_mapper import map_signal_to_symbol
+from src.execution_candidates_adapter import load_ready_execution_candidates
 from src.trade_notifier import TelegramNotifier
+
+try:
+    from scripts.symbol_mapper import map_signal_to_symbol
+except ImportError:
+    from symbol_mapper import map_signal_to_symbol
 MI_DATA = ROOT.parent / "market-intel" / "data"
 STATE_PATH = ROOT / "data" / "state" / "auto_signal_dispatch.json"
 
@@ -47,6 +52,7 @@ def _load_env() -> None:
 class Config:
     webhook_url: str
     webhook_secret: str
+    execution_candidates_enabled: bool
     confidence: str
     min_reasoning_score: float
     qty: float
@@ -69,6 +75,7 @@ def _cfg() -> Config:
     return Config(
         webhook_url=webhook_url,
         webhook_secret=os.getenv("WEBHOOK_SHARED_SECRET", "").strip(),
+        execution_candidates_enabled=os.getenv("EXECUTION_CANDIDATES_ENABLED", "false").lower() in {"1", "true", "yes", "on"},
         confidence=os.getenv("AUTO_MIN_CONFIDENCE", "STRONG BUY").strip().upper(),
         min_reasoning_score=float(os.getenv("AUTO_MIN_REASONING_SCORE", "80")),
         qty=float(os.getenv("AUTO_BASE_QTY", "1")),
@@ -133,6 +140,14 @@ def _load_state() -> dict[str, Any]:
 
 
 def _signal_key(sig: dict[str, Any]) -> str:
+    candidate_id = str(sig.get("candidate_id", "")).strip()
+    if candidate_id:
+        return f"candidate:{candidate_id}"
+
+    signal_id = str(sig.get("signal_id", "")).strip()
+    if signal_id:
+        return f"signal:{signal_id}"
+
     title = str(sig.get("title", ""))
     ts = str(sig.get("timestamp", ""))
     src = str(sig.get("source", ""))
@@ -140,6 +155,14 @@ def _signal_key(sig: dict[str, Any]) -> str:
 
 
 def _normalize_side(sig: dict[str, Any]) -> str:
+    primary_instrument = sig.get("primary_instrument")
+    if isinstance(primary_instrument, dict):
+        direction_bias = str(primary_instrument.get("direction_bias", "")).lower().strip()
+        if direction_bias == "short":
+            return "sell"
+        if direction_bias == "long":
+            return "buy"
+
     rec = str(sig.get("recommendation", "TAKE")).upper()
     if rec in {"TAKE", "BUY", "LONG", "STRONG BUY"}:
         return "buy"
@@ -210,6 +233,57 @@ def _check_webhook_health(webhook_url: str) -> bool:
     return False
 
 
+def _legacy_dispatch_payload(sig: dict[str, Any], *, now: datetime, qty: float) -> dict[str, Any] | None:
+    symbol_decision = map_signal_to_symbol(sig)
+    if not symbol_decision.symbol:
+        return None
+
+    return {
+        "symbol": symbol_decision.symbol,
+        "side": _normalize_side(sig),
+        "qty": qty,
+        "timestamp": now.isoformat(),
+        "strategy": "market-intel-auto",
+        "source_title": sig.get("title", ""),
+        "source_url": sig.get("url", ""),
+        "symbol_reasoning": symbol_decision.reasoning,
+        "symbol_category": symbol_decision.category,
+        "symbol_confidence": symbol_decision.confidence,
+        "market_intel_mode": "legacy_summary_fallback",
+    }
+
+
+def _candidate_dispatch_payload(candidate: dict[str, Any], *, now: datetime, qty: float) -> dict[str, Any] | None:
+    primary_instrument = candidate.get("primary_instrument")
+    if not isinstance(primary_instrument, dict):
+        return None
+
+    symbol = str(primary_instrument.get("symbol", "")).upper().strip()
+    if not symbol:
+        return None
+
+    return {
+        "symbol": symbol,
+        "side": _normalize_side(candidate),
+        "qty": qty,
+        "timestamp": now.isoformat(),
+        "strategy": "market-intel-auto",
+        "source_title": candidate.get("source_title", ""),
+        "source_url": candidate.get("source_url", ""),
+        "candidate_id": candidate.get("candidate_id"),
+        "signal_id": candidate.get("signal_id"),
+        "pattern_id": candidate.get("pattern_id"),
+        "pattern_name": candidate.get("pattern_name"),
+        "expected_horizon": candidate.get("expected_horizon"),
+        "evidence_strength": candidate.get("evidence_strength"),
+        "risk_overlay_hint": candidate.get("risk_overlay_hint"),
+        "market_intel_mode": "execution_candidates",
+        "symbol_reasoning": primary_instrument.get("mapping_type", "execution_candidate_primary"),
+        "symbol_category": candidate.get("category"),
+        "symbol_confidence": primary_instrument.get("mapping_confidence"),
+    }
+
+
 def _fast_regime_active(cfg: Config, context_summary: dict[str, Any]) -> bool:
     if not cfg.fast_regime_enabled:
         return False
@@ -239,11 +313,9 @@ def main() -> int:
     # Check webhook health before attempting dispatch
     if not _check_webhook_health(cfg.webhook_url):
         print(f"ERROR: Webhook receiver not healthy at {cfg.webhook_url}")
-        _send_digest([
-            "🚨 Webhook receiver DOWN",
-            f"URL: {cfg.webhook_url}",
-            "Auto-dispatch SKIPPED — restart webhook receiver"
-        ])
+        # Temporary mute during active construction/audit phase:
+        # avoid Telegram spam from misleading health/auth failures until
+        # monitoring logic is corrected and deduplicated.
         return 1
 
     if not cfg.webhook_secret:
@@ -261,6 +333,17 @@ def main() -> int:
     min_reasoning_score = cfg.fast_min_reasoning_score if fast_mode else cfg.min_reasoning_score
     qty_multiplier = cfg.fast_qty_multiplier if fast_mode else 1.0
 
+    candidate_load = None
+    signal_source = "enhanced_signals"
+    dispatch_items: list[dict[str, Any]] = enhanced
+    if cfg.execution_candidates_enabled:
+        candidate_load = load_ready_execution_candidates()
+        if candidate_load["ok"]:
+            dispatch_items = candidate_load["candidates"]
+            signal_source = "execution_candidates"
+        else:
+            signal_source = "enhanced_signals_fallback"
+
     state = _load_state()
     sent = state["sent"]
 
@@ -268,42 +351,47 @@ def main() -> int:
     blocked = 0
     lines: list[str] = []
 
-    for sig in enhanced:
+    for warning in (candidate_load or {}).get("warnings", []):
+        logger.warning("execution candidates adapter warning: %s", warning)
+
+    for sig in dispatch_items:
         if not isinstance(sig, dict):
             continue
 
-        conf = str(sig.get("confidence_level", "")).upper()
-        reasoning = float(sig.get("reasoning_score", 0) or 0)
-        if conf != cfg.confidence:
-            continue
-        if reasoning < min_reasoning_score:
-            continue
+        if signal_source == "execution_candidates":
+            conf = str(sig.get("confidence_level", "")).upper()
+            reasoning = float(sig.get("reasoning_score", 0) or 0)
+            if conf != cfg.confidence:
+                continue
+            if reasoning < min_reasoning_score:
+                continue
+        else:
+            conf = str(sig.get("confidence_level", "")).upper()
+            reasoning = float(sig.get("reasoning_score", 0) or 0)
+            if conf != cfg.confidence:
+                continue
+            if reasoning < min_reasoning_score:
+                continue
 
         key = _signal_key(sig)
         if key in sent:
             continue
 
-        # Intelligent symbol mapping
-        symbol_decision = map_signal_to_symbol(sig)
-        if not symbol_decision.symbol:
-            # Skip signals without valid ticker mapping
-            blocked += 1
-            lines.append(f"⚠️ skipped (no ticker) | {str(sig.get('title',''))[:70]}")
-            continue
-
         qty = min(cfg.qty * qty_multiplier, cfg.max_qty)
-        body = {
-            "symbol": symbol_decision.symbol,
-            "side": _normalize_side(sig),
-            "qty": qty,
-            "timestamp": now.isoformat(),
-            "strategy": "market-intel-auto",
-            "source_title": sig.get("title", ""),
-            "source_url": sig.get("url", ""),
-            "symbol_reasoning": symbol_decision.reasoning,
-            "symbol_category": symbol_decision.category,
-            "symbol_confidence": symbol_decision.confidence,
-        }
+        if signal_source == "execution_candidates":
+            body = _candidate_dispatch_payload(sig, now=now, qty=qty)
+            if body is None:
+                blocked += 1
+                lines.append(
+                    f"⚠️ skipped (invalid primary instrument) | {str(sig.get('source_title', ''))[:70]}"
+                )
+                continue
+        else:
+            body = _legacy_dispatch_payload(sig, now=now, qty=qty)
+            if body is None:
+                blocked += 1
+                lines.append(f"⚠️ skipped (no ticker) | {str(sig.get('title',''))[:70]}")
+                continue
 
         status, resp = _post_webhook(cfg.webhook_url, body, cfg.webhook_secret)
         accepted = isinstance(resp, dict) and bool(resp.get("accepted")) and status in {200, 201}
@@ -314,40 +402,56 @@ def main() -> int:
             stored_resp = {k: v for k, v in resp.items() if k.lower() not in ("secret", "token", "auth", "api_key")}
         
         sent[key] = {
-            "title": sig.get("title", ""),
+            "title": sig.get("source_title", sig.get("title", "")),
             "timestamp": now.isoformat(),
             "status": status,
             "accepted": accepted,
+            "source_mode": signal_source,
             "response": stored_resp,
         }
 
         if accepted:
             dispatched += 1
-            sym_info = f"{body['symbol']} ({symbol_decision.category})"
-            lines.append(f"✅ {sym_info} {body['side']} qty={qty} | {str(sig.get('title',''))[:60]}")
+            sym_info = f"{body['symbol']} ({body.get('symbol_category', 'unknown')})"
+            lines.append(
+                f"✅ {sym_info} {body['side']} qty={qty} [{signal_source}] | {str(body.get('source_title',''))[:60]}"
+            )
         else:
             blocked += 1
-            lines.append(f"⚠️ blocked status={status} | {str(sig.get('title',''))[:60]}")
+            lines.append(
+                f"⚠️ blocked status={status} [{signal_source}] | {str(body.get('source_title',''))[:60]}"
+            )
 
     mode_name = 'FAST' if fast_mode else 'CONSERVATIVE'
     mode_line = (
         f"mode={mode_name} "
         f"min_score={min_reasoning_score} qty_mult={qty_multiplier}"
     )
+    source_line = (
+        f"candidate_mode={'on' if cfg.execution_candidates_enabled else 'off'} "
+        f"signal_source={signal_source}"
+    )
+
+    if candidate_load and not candidate_load["ok"]:
+        lines.insert(0, f"⚠️ execution_candidates fallback: {', '.join(candidate_load['warnings'])}")
 
     # Notify mode changes even when nothing dispatched (without spamming every cycle)
     mode_changed = state.get("last_mode") != mode_name
     if mode_changed:
-        _send_digest([f"🔁 mode switched: {state.get('last_mode')} → {mode_name}", mode_line])
+        _send_digest([f"🔁 mode switched: {state.get('last_mode')} → {mode_name}", mode_line, source_line])
 
     if dispatched or blocked:
-        _send_digest([mode_line, f"dispatched={dispatched} blocked={blocked}"] + lines[:8])
+        _send_digest([mode_line, source_line, f"dispatched={dispatched} blocked={blocked}"] + lines[:8])
 
     state["last_mode"] = mode_name
+    state["last_signal_source"] = signal_source
     state["updated_at"] = now.isoformat()
     _write_json(STATE_PATH, state)
 
-    print(f"dispatch complete: {mode_line} dispatched={dispatched} blocked={blocked} mode_changed={mode_changed}")
+    print(
+        f"dispatch complete: {mode_line} {source_line} "
+        f"dispatched={dispatched} blocked={blocked} mode_changed={mode_changed}"
+    )
     return 0
 
 

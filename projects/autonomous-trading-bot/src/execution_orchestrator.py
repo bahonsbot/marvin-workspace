@@ -24,6 +24,20 @@ IDEMPOTENCY_LOCK = ROOT / "data" / "state" / "idempotency.lock"
 logger = logging.getLogger(__name__)
 
 
+def _candidate_metadata(signal: Dict[str, Any]) -> Dict[str, Any] | None:
+    metadata = {
+        "candidate_id": signal.get("candidate_id"),
+        "signal_id": signal.get("signal_id"),
+        "pattern_id": signal.get("pattern_id"),
+        "pattern_name": signal.get("pattern_name"),
+        "expected_horizon": signal.get("expected_horizon"),
+        "evidence_strength": signal.get("evidence_strength"),
+        "risk_overlay_hint": signal.get("risk_overlay_hint"),
+    }
+    filtered = {k: v for k, v in metadata.items() if v not in (None, "")}
+    return filtered or None
+
+
 class ExecutionOrchestrator:
     def __init__(
         self,
@@ -47,6 +61,7 @@ class ExecutionOrchestrator:
         source: str = "webhook",
     ) -> Dict[str, Any]:
         idempotency_key = self.build_idempotency_key(signal=signal, source=source)
+        candidate_meta = _candidate_metadata(signal)
 
         if not risk_decision.get("allow", False):
             # Send Telegram notification for rejected trade
@@ -73,6 +88,7 @@ class ExecutionOrchestrator:
                 "audit": {
                     "risk_reasons": list(risk_decision.get("reasons", [])),
                     "context_summary": (context or {}).get("summary") if isinstance(context, dict) else None,
+                    "candidate_metadata": candidate_meta,
                 },
             }
 
@@ -97,7 +113,10 @@ class ExecutionOrchestrator:
                         "order_intent": None,
                         "broker_result": None,
                         "paper_only": True,
-                        "audit": {"first_seen": store[idempotency_key].get("created_at")},
+                        "audit": {
+                            "first_seen": store[idempotency_key].get("created_at"),
+                            "candidate_metadata": candidate_meta,
+                        },
                     }
 
                 order_intent = self._build_order_intent(
@@ -130,6 +149,8 @@ class ExecutionOrchestrator:
                     "timestamp": signal.get("timestamp"),
                     "source": source,
                     "client_order_id": order_intent["client_order_id"],
+                    "candidate_id": signal.get("candidate_id"),
+                    "signal_id": signal.get("signal_id"),
                 }
                 self._write_store(store)
             finally:
@@ -146,11 +167,22 @@ class ExecutionOrchestrator:
             "audit": {
                 "risk_reasons": list(risk_decision.get("reasons", [])),
                 "context_summary": (context or {}).get("summary") if isinstance(context, dict) else None,
+                "candidate_metadata": candidate_meta,
             },
         }
 
     @staticmethod
     def build_idempotency_key(*, signal: Dict[str, Any], source: str) -> str:
+        candidate_id = str(signal.get("candidate_id", "")).strip()
+        if candidate_id:
+            raw = f"candidate:{candidate_id}|{source}"
+            return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
+        signal_id = str(signal.get("signal_id", "")).strip()
+        if signal_id:
+            raw = f"signal:{signal_id}|{source}"
+            return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
         symbol = str(signal.get("symbol", "")).upper().strip()
         side = str(signal.get("side", "")).lower().strip()
         timestamp = str(signal.get("timestamp", "")).strip()
@@ -176,6 +208,7 @@ class ExecutionOrchestrator:
                 "idempotency_key": idempotency_key,
                 "confidence_adjustment": decision_context.get("confidence_adjustment"),
                 "size_multiplier": decision_context.get("size_multiplier"),
+                "candidate_metadata": _candidate_metadata(signal),
             },
         }
 

@@ -45,6 +45,24 @@ class TestWebhookReceiver(unittest.TestCase):
         self.assertFalse(result["execution"]["executed"])
         self.assertEqual(result["execution"]["status"], "dry_run")
 
+    def test_candidate_metadata_survives_validation_and_proposal(self):
+        payload = {
+            **self._payload(),
+            "candidate_id": "cand_1",
+            "signal_id": "sig_1",
+            "pattern_id": "p001",
+            "pattern_name": "AI Momentum",
+            "expected_horizon": "intraday",
+            "evidence_strength": 0.88,
+            "risk_overlay_hint": "macro_event_risk",
+        }
+        result = process_webhook_payload(payload, state=self._state(), config=self._config(), paper_execute=False)
+
+        self.assertTrue(result["validation"]["ok"])
+        self.assertEqual(result["validation"]["normalized"]["candidate_id"], "cand_1")
+        self.assertEqual(result["validation"]["normalized"]["pattern_name"], "AI Momentum")
+        self.assertEqual(result["execution"]["status"], "dry_run")
+
 
 if __name__ == "__main__":
     unittest.main()
