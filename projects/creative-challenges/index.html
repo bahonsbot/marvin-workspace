@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Creative Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e8e8e8;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #e94560, #f5a623);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .date-display {
+            font-size: 1.1rem;
+            color: #8892b0;
+            font-weight: 300;
+        }
+
+        .challenge-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-blender { background: linear-gradient(90deg, #ea7600, #ff9a3c); color: #1a1a2e; }
+        .category-after-effects { background: linear-gradient(90deg, #9999ff, #d4a5ff); color: #1a1a2e; }
+        .category-unreal-engine { background: linear-gradient(90deg, #313131, #585858); color: #fff; }
+        .category-illustrator { background: linear-gradient(90deg, #ff9a00, #ffcc00); color: #1a1a2e; }
+        .category-copywriting { background: linear-gradient(90deg, #00d4aa, #00ffd5); color: #1a1a2e; }
+        .category-storytelling { background: linear-gradient(90deg, #ff6b9d, #ffa3c4); color: #1a1a2e; }
+
+        .challenge-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .challenge-description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #b8c5d6;
+            margin-bottom: 1.5rem;
+        }
+
+        .challenge-requirements {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .challenge-requirements h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #8892b0;
+            margin-bottom: 0.8rem;
+        }
+
+        .challenge-requirements ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .challenge-requirements li {
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #c9d1e3;
+        }
+
+        .challenge-requirements li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #e94560;
+        }
+
+        .time-estimate {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #8892b0;
+            font-size: 0.95rem;
+        }
+
+        .time-estimate svg {
+            width: 18px;
+            height: 18px;
+            fill: #e94560;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #5a6380;
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: #8892b0;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #e94560;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Daily Creative Challenge</h1>
+            <div class="date-display" id="dateDisplay"></div>
+        </header>
+
+        <main class="challenge-card">
+            <span class="category-badge" id="categoryBadge"></span>
+            <h2 class="challenge-title" id="challengeTitle"></h2>
+            <p class="challenge-description" id="challengeDescription"></p>
+            
+            <div class="challenge-requirements">
+                <h3>What to do</h3>
+                <ul id="requirementsList"></ul>
+            </div>
+
+            <div class="time-estimate">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/></svg>
+                <span id="timeEstimate"></span>
+            </div>
+        </main>
+
+        <footer>
+            <p>Challenges rotate daily. Same challenge repeats each week.</p>
+        </footer>
+    </div>
+
+    <script>
+        const categories = [
+            {
+                id: 'blender',
+                name: 'Blender',
+                class: 'category-blender',
+                challenges: [
+                    {
+                        title: "Low-Poly Character Study",
+                        description: "Create a low-poly character model with clean topology. Focus on efficient edge flow and readable forms.",
+                        requirements: [
+                            "Model a character from reference (human or creature)",
+                            "Keep polygon count under 5000 tris",
+                            "Apply simple flat shading with 2-3 color materials",
+                            "Export as GLB for web preview"
+                        ],
+                        time: "45-60 minutes"
+                    },
+                    {
+                        title: "Product Visualization",
+                        description: "Create a clean product render for a simple everyday object.",
+                        requirements: [
+                            "Choose an object (headphones, bottle, speaker, etc.)",
+                            "Set up 3-point lighting",
+                            "Create a shadow-catching plane",
+                            "Render with cycles at 1920x1080"
+                        ],
+                        time: "30-45 minutes"
+                    },
+                    {
+                        title: "Abstract Motion Loop",
+                        description: "Design a mesmerizing abstract animation loop.",
+                        requirements: [
+                            "Use geometry nodes or procedural animation",
+                            "Create seamless loop (0-120 frames)",
+                            "Apply interesting materials/shaders",
+                            "Export as GIF or short MP4"
+                        ],
+                        time: "40-50 minutes"
+                    },
+                    {
+                        title: "Camera Tracking Composite",
+                        description: "Track a simple video shot and add a 3D element.",
+                        requirements: [
+                            "Record or find simple tracking footage",
+                            "Track camera movement accurately",
+                            "Add one 3D object that matches perspective",
+                            "Composite with proper motion blur"
+                        ],
+                        time: "50-70 minutes"
+                    }
+                ]
+            },
+            {
+                id: 'after-effects',
+                name: 'After Effects',
+                class: 'category-after-effects',
+                challenges: [
+                    {
+                        title: "Kinetic Typography",
+                        description: "Create animated text that moves with rhythm and energy.",
+                        requirements: [
+                            "Choose a quote or phrase (5-10 words)",
+                            "Animate each word/letter with purpose",
+                            "Add easing and proper timing",
+                            "Set to music or rhythm (30-60 seconds)",
+                            "Export as MP4"
+                        ],
+                        time: "40-60 minutes"
+                    },
+                    {
+                        title: "Logo Animation",
+                        description: "Bring a logo to life with motion.",
+                        requirements: [
+                            "Use an existing logo or create simple shapes",
+                            "Create at least 3 different versions",
+                            "Use easing, scale, opacity, and rotation",
+                            "Export each version as separate clip"
+                        ],
+                        time: "35-50 minutes"
+                    },
+                    {
+                        title: "Shape Layer Exploration",
+                        description: "Master shape layers through creative experimentation.",
+                        requirements: [
+                            "Create 5 different animated shapes",
+                            "Use path operations (merge, intersect, subtract)",
+                            "Apply repeaters and stroke effects",
+                            "Compile into a 20-second montage"
+                        ],
+                        time: "45-55 minutes"
+                    },
+                    {
+                        title: "UI Animation Prototype",
+                        description: "Animate a mobile app interface flow.",
+                        requirements: [
+                            "Design 3-4 screen states",
+                            "Animate transitions between screens",
+                            "Add micro-interactions (button taps, loading)",
+                            "Export as GIF or video loop"
+                        ],
+                        time: "50-70 minutes"
+                    }
+                ]
+            },
+            {
+                id: 'unreal-engine',
+                name: 'Unreal Engine',
+                class: 'category-unreal-engine',
+                challenges: [
+                    {
+                        title: "Atmospheric Environment",
+                        description: "Build a moody, atmospheric scene using basic assets.",
+                        requirements: [
+                            "Create a small environment (room, cave, or platform)",
+                            "Use fog, volumetric lighting, and post-processing",
+                            "Add atmospheric particles (dust, rain, or fog)",
+                            "Capture 3-5 cinematic screenshots"
+                        ],
+                        time: "60-90 minutes"
+                    },
+                    {
+                        title: "Blueprint Interaction",
+                        description: "Create a simple interactive mechanic.",
+                        requirements: [
+                            "Build a basic interactive object (door, button, lever)",
+                            "Use Blueprints for logic (no C++)",
+                            "Add appropriate sound and visual feedback",
+                            "Test and document the interaction"
+                        ],
+                        time: "45-60 minutes"
+                    },
+                    {
+                        title: "Character Movement Study",
+                        description: "Experiment with character controllers and animations.",
+                        requirements: [
+                            "Set up a Third Person template project",
+                            "Modify movement speed, jump height, or abilities",
+                            "Add a new animation blend",
+                            "Document your changes"
+                        ],
+                        time: "40-55 minutes"
+                    },
+                    {
+                        title: "Lighting Exploration",
+                        description: "Master lighting by recreating a reference image.",
+                        requirements: [
+                            "Find a lighting reference (photo or artwork)",
+                            "Recreate key light, fill, and rim positions",
+                            "Adjust exposure and color grading",
+                            "Match the mood as closely as possible"
+                        ],
+                        time: "35-50 minutes"
+                    }
+                ]
+            },
+            {
+                id: 'illustrator',
+                name: 'Illustrator',
+                class: 'category-illustrator',
+                challenges: [
+                    {
+                        title: "Icon Set Design",
+                        description: "Create a cohesive icon set for a fictional app or brand.",
+                        requirements: [
+                            "Design 6 icons in a consistent style",
+                            "Use a 24x24 or 32x32 pixel grid",
+                            "Apply consistent stroke weight and corner radius",
+                            "Export as SVG and PNG"
+                        ],
+                        time: "45-60 minutes"
+                    },
+                    {
+                        title: "Vector Portrait",
+                        description: "Transform a photo into vector art.",
+                        requirements: [
+                            "Choose a portrait photo",
+                            "Use pen tool for key shapes",
+                            "Limit palette to 5-8 colors",
+                            "Focus on shapes, not tracing every detail"
+                        ],
+                        time: "50-75 minutes"
+                    },
+                    {
+                        title: "Pattern Design",
+                        description: "Create a seamless repeating pattern.",
+                        requirements: [
+                            "Design a single tile element",
+                            "Test seamless repetition",
+                            "Apply 2-3 color variations",
+                            "Export pattern swatch and full preview"
+                        ],
+                        time: "30-45 minutes"
+                    },
+                    {
+                        title: "Brand Identity Piece",
+                        description: "Design one key piece of brand collateral.",
+                        requirements: [
+                            "Create a brand (name, tagline, vibe)",
+                            "Design: business card, letterhead, or social post",
+                            "Apply consistent colors and typography",
+                            "Show variations (light/dark if applicable)"
+                        ],
+                        time: "45-65 minutes"
+                    }
+                ]
+            },
+            {
+                id: 'copywriting',
+                name: 'Commercial Copywriting',
+                class: 'category-copywriting',
+                challenges: [
+                    {
+                        title: "Email Sequence",
+                        description: "Write a 3-email nurture sequence for a product.",
+                        requirements: [
+                            "Choose a product (real or invented)",
+                            "Write: Welcome email → Value email → CTA email",
+                            "Each email: 100-200 words",
+                            "Include subject lines for each"
+                        ],
+                        time: "40-55 minutes"
+                    },
+                    {
+                        title: "Landing Page Hero",
+                        description: "Craft compelling hero section copy.",
+                        requirements: [
+                            "Pick a product or service",
+                            "Write: Headline (≤10 words), Subheadline, CTA button",
+                            "Include one social proof element",
+                            "A/B test 2 headline variations"
+                        ],
+                        time: "25-35 minutes"
+                    },
+                    {
+                        title: "Product Description",
+                        description: "Write product descriptions that sell.",
+                        requirements: [
+                            "Choose 3 products from same category",
+                            "Write benefit-focused descriptions (75-150 words each)",
+                            "Include features, emotions, and CTA",
+                            "Match brand voice consistently"
+                        ],
+                        time: "35-50 minutes"
+                    },
+                    {
+                        title: "Social Media Campaign",
+                        description: "Create a 5-post content series.",
+                        requirements: [
+                            "Pick a campaign theme or offer",
+                            "Write: 2x educational, 2x promotional, 1x testimonial",
+                            "Each post: 50-150 characters",
+                            "Include relevant hashtags"
+                        ],
+                        time: "30-45 minutes"
+                    }
+                ]
+            },
+            {
+                id: 'storytelling',
+                name: 'Storytelling & Novel Writing',
+                class: 'category-storytelling',
+                challenges: [
+                    {
+                        title: "Scene in Real-Time",
+                        description: "Write a scene that unfolds in real-time, no summary.",
+                        requirements: [
+                            "Choose a pivotal moment",
+                            "Write 500-800 words of pure scene",
+                            "Include at least 2 characters with distinct voices",
+                            "End on tension or decision point"
+                        ],
+                        time: "45-60 minutes"
+                    },
+                    {
+                        title: "Character Voice Study",
+                        description: "Develop a distinct character voice through journal entries.",
+                        requirements: [
+                            "Create a character (name, age, background)",
+                            "Write 3 journal entries (200 words each)",
+                            "Entries at different emotional states",
+                            "Voice should be consistent yet evolve slightly"
+                        ],
+                        time: "40-55 minutes"
+                    },
+                    {
+                        title: "Dialogue Only Scene",
+                        description: "Write a scene using only dialogue (no tags or narration).",
+                        requirements: [
+                            "Minimum 2 characters arguing or collaborating",
+                            "Write 400-600 words",
+                            "Context should be clear from words alone",
+                            "Include subtext - what's unsaid?"
+                        ],
+                        time: "30-45 minutes"
+                    },
+                    {
+                        title: "Opening Hook",
+                        description: "Write 3 different opening paragraphs for the same story.",
+                        requirements: [
+                            "Choose one premise/concept",
+                            "Write 3 distinct openings (different tones or POVs)",
+                            "Each opening: 100-200 words",
+                            "Label which you prefer and why"
+                        ],
+                        time: "40-55 minutes"
+                    }
+                ]
+            }
+        ];
+
+        // Deterministic selection based on date
+        function getTodayChallenge() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            
+            // Use day of year to pick category, then use day % challenges in that category
+            const categoryIndex = dayOfYear % categories.length;
+            const category = categories[categoryIndex];
+            const challengeIndex = Math.floor(dayOfYear / categories.length) % category.challenges.length;
+            
+            return {
+                category: category,
+                challenge: category.challenges[challengeIndex],
+                date: now
+            };
+        }
+
+        // Render the challenge
+        function renderChallenge() {
+            const { category, challenge, date } = getTodayChallenge();
+            
+            // Format date nicely
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('dateDisplay').textContent = date.toLocaleDateString('en-US', options);
+            
+            // Category badge
+            const badge = document.getElementById('categoryBadge');
+            badge.textContent = category.name;
+            badge.className = 'category-badge ' + category.class;
+            
+            // Challenge details
+            document.getElementById('challengeTitle').textContent = challenge.title;
+            document.getElementById('challengeDescription').textContent = challenge.description;
+            document.getElementById('timeEstimate').textContent = challenge.time;
+            
+            // Requirements list
+            const reqList = document.getElementById('requirementsList');
+            reqList.innerHTML = '';
+            challenge.requirements.forEach(req => {
+                const li = document.createElement('li');
+                li.textContent = req;
+                reqList.appendChild(li);
+            });
+        }
+
+        // Initialize
+        renderChallenge();
+    </script>
+</body>
+</html>
