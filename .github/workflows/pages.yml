@@ -59,6 +59,13 @@ jobs:
           mkdir -p .pages-site/autonomous-kanban
           cp -R projects/autonomous-kanban/out/* .pages-site/autonomous-kanban/
 
+          if [ -d projects/creative-challenges ]; then
+            mkdir -p .pages-site/creative-challenges
+            cp -R projects/creative-challenges/* .pages-site/creative-challenges/
+          else
+            echo "creative-challenges app not found, skipping"
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
