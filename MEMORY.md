@@ -26,6 +26,9 @@
 - Lightweight delegation: `bailian/MiniMax-M2.5`
 - Higher-reasoning delegation: `bailian/qwen3.5-plus`
 - Coding/deep technical fallback: `openai-codex/gpt-5.3-codex`
+- **Note:** We use both Codex versions intentionally:
+  - `codex5.4` (gpt-5.4): Marvin orchestration, high-reasoning tasks
+  - `codex` (gpt-5.3-codex): Coding-specific work
 - Fallback protocol: if a model errors repeatedly, switch once to Codex and proceed
 
 ## Preferences & Decision Rules
@@ -47,6 +50,12 @@
 - Delegate when it improves speed, depth, or reliability.
 - Keep direct execution for quick, low-risk, single-step work.
 - Coding/debugging defaults to Codex unless scope is trivial.
+- Preferred small-team model mapping:
+  - Marvin/orchestrator → `codex5.4`
+  - Builder → `codex`
+  - Reviewer → `qwenplus`
+- Preferred explanation style: clear, honest, and structured.
+- Preferred agent-team implementation style: hybrid v1 = Marvin holds memory/continuity, Builder and Reviewer use stable shared role templates in delegated task-scoped sessions.
 
 ### Communication
 - Start with the answer.
@@ -178,3 +187,38 @@
   - Tiered lifecycle for life/ entities: `scripts/lifecycle_entities.py` (HOT 0-30d, WARM 30-90d, COLD 90+d)
   - Weekly cron added (Sun 5 AM) to demote/archive old entities
   - Memory extraction cron moved from 23:00 → 01:00 (avoid active sessions)
+- Autonomous Kanban interpretation/quality hardening completed (Mar 12 afternoon):
+  - delegation queue messaging clarified so queue-empty updates no longer imply the whole board is empty
+  - goal wording tightened to prefer Philippe-owned practice over agent-made filler artifacts
+  - case studies blocked by default unless explicitly requested
+  - surprise MVPs restored only for useful tool/system/project-improvement lanes, not creative portfolio-faking output
+  - Python explicitly treated as staged language learning (fundamentals → reading/comprehension → guided practice → practical scripts)
+  - trading goals split into bot/system-improvement work versus staged business-analysis learning
+  - prerequisite gate added: tasks missing key human input move to `Needs Input` instead of `In Progress`
+  - `autonomous-task-executor` notification path moved to main-session messaging for deterministic Telegram `goal-tasks` prompts on `completed` and `needs_input`
+  - social/content tasks now require concrete source work before generation
+  - live Done column cleaned by archiving 3 goal-misaligned completions instead of counting them as valid progress
+  - lightweight suggestion-box flow added: Philippe suggestions are stored and inserted at the top of backlog
+- Hybrid agent-team v1 validated in live trials (Mar 12 evening):
+  - architecture chosen: Marvin (orchestrator) + Builder + Reviewer
+  - implementation style chosen: hybrid v1 with Marvin holding continuity and Builder/Reviewer using stable shared role templates in delegated task-scoped sessions
+  - Trial 1 passed: Builder created `projects/_ops/scripts/autonomous-status.py`, Reviewer verified artifact reality and task fit
+  - Trial 2 passed: Builder created `projects/_ops/agent-team/launch-path-spec.md` and `projects/_ops/agent-team/delegation-helper.sh`, Reviewer verified routing docs/helper and no risky config mutation
+  - preferred role-model mapping documented: Marvin=`codex5.4`, Builder=`codex`, Reviewer=`qwenplus`
+  - current environment limitation documented: delegated sessions may inherit fallback/default model behavior when explicit specialist routing is unavailable
+- Autonomous Kanban execution path validated and hardened (Mar 13 afternoon):
+  - fixed executor misrouting where generic `brief` matching sent a Blender practice brief into `projects/trading-briefs/`
+  - added dedicated creative-practice routing for Blender/After Effects/Unreal practice-brief tasks
+  - upgraded task scoring so Build/Fix tasks with explicit deliverable + proof and `agent_team` fit are selected ahead of lightweight Learn tasks
+  - validated full agent-team chain on a real Kanban item: selector → queue → start announcement → Builder → Reviewer → completion
+  - completed deliverable: `projects/creative-challenges/index.html` + `projects/creative-challenges/README.md`
+  - public access path established via GitHub Pages: `https://bahonsbot.github.io/marvin-workspace/creative-challenges/`
+  - Health Council timeout note for `autonomous-task-executor` downgraded to monitor-only after post-fix manual validation; reopen only if it recurs
+- Market Intel execution-candidates M1 baseline established (Mar 13 late afternoon):
+  - producer created at `projects/market-intel/src/execution_candidates.py`
+  - artifact created at `projects/market-intel/data/execution_candidates.json`
+  - producer test added at `projects/market-intel/tests/test_execution_candidates.py`
+  - deterministic `signal_id` / `candidate_id`, explicit `instrument_candidates`, `primary_instrument`, and `dispatch_readiness` now exist as the first execution-facing handoff layer
+  - two refinement passes hardened the baseline by blocking title/pattern family mismatches, broad roundup headlines, mixed-theme titles, FX-stress secondary mappings, and duplicate-looking material events
+  - final M1 baseline judged good enough to build on: 32 candidates, 6 ready, with conservative blocking preferred over noisy false positives
+  - durable sequencing remains: refine producer/interface first, then plan equity-bot consumer upgrade behind a safer rollout path

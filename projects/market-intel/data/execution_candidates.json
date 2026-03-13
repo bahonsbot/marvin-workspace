@@ -1,0 +1,2644 @@
+[
+  {
+    "candidate_id": "cand_fa7eb158baacf3c8",
+    "signal_id": "sig_1b2f386dc5c23e8d",
+    "signal_fingerprint": "sha256:beddba71682a8dd838ba6a546293c3a33dfaf98dda991ec2fb2f63ed659a0bf7",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Financial_Times",
+    "source_title": "US eases Russian oil sanctions as energy prices soar",
+    "source_url": "https://www.ft.com/content/d213e507-905e-440b-987e-66bfc1acdffe",
+    "source_timestamp": "2026-03-13T15:47:33.958689",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 99.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "high-credibility source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 90.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 92.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.955,
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "USO",
+        "instrument_type": "etf",
+        "relevance_score": 0.88,
+        "mapping_confidence": 0.88,
+        "mapping_type": "commodity_proxy",
+        "direction_bias": "long",
+        "reason": "Oil supply or transport disruption"
+      },
+      {
+        "symbol": "XLE",
+        "instrument_type": "etf",
+        "relevance_score": 0.8,
+        "mapping_confidence": 0.8,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Energy sector usually benefits from higher oil prices"
+      },
+      {
+        "symbol": "JETS",
+        "instrument_type": "etf",
+        "relevance_score": 0.67,
+        "mapping_confidence": 0.67,
+        "mapping_type": "second_order_negative",
+        "direction_bias": "short",
+        "reason": "Airlines face fuel-cost pressure"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "USO",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.88,
+      "mapping_confidence": 0.88
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.946,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_e9d98887eeef0d8e",
+    "signal_id": "sig_48a459818bb9029a",
+    "signal_fingerprint": "sha256:977f1fc30836735b2d3690859626980826fff0251c407f30d305879f86730862",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "AP_Top",
+    "source_title": "Trump disbanded NSC pandemic unit that experts had praised - AP News",
+    "source_url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQd05iVWZZcFA4aTYtSmc2R1VmUnJZamxVWTlMbWoxcmVtY1VlNHZ6aWdDelU3WlpSdFQxSEUxX1RqWmpldmpLNDJubUVIbDJneXNRU1lLTnc2TUxCcWdmQUx3U3hpbHpfWE01U2VRY0wxN0JYMVE1emxtRXJTMlBJT0lrTElMSDA0THFDWW40ZVdlQ19EU1lmekppZ05TMEM3N3Fhb1FJZ2pUV3lUR0hOMFdjQTZhLVJ6bGszR3Etc3l6bW1R?oc=5",
+    "source_timestamp": "2026-03-13T15:47:33.958559",
+    "pattern_id": "p004",
+    "pattern_name": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 79.4,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": -0.64,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.881,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SH",
+        "instrument_type": "etf",
+        "relevance_score": 0.79,
+        "mapping_confidence": 0.79,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Broad equity downside hedge"
+      },
+      {
+        "symbol": "VIXY",
+        "instrument_type": "etf",
+        "relevance_score": 0.74,
+        "mapping_confidence": 0.74,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Volatility exposure for market stress"
+      },
+      {
+        "symbol": "TLT",
+        "instrument_type": "etf",
+        "relevance_score": 0.63,
+        "mapping_confidence": 0.63,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Flight-to-quality treasury proxy"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SH",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.79,
+      "mapping_confidence": 0.79
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.854,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": -0.64,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 3,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_86425dc2131aa490",
+    "signal_id": "sig_67b14cc325071661",
+    "signal_fingerprint": "sha256:f27395c30cd8a2bfa3863888e11f8a5d5d67634a7fe565f16ec128d4b089d69c",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Nasdaq_News",
+    "source_title": "Ukraine's Kyivstar core profit rise 26% driven by digital services",
+    "source_url": "https://www.reuters.com/business/ukraines-kyivstar-core-profit-rise-26-driven-by-digital-services-2026-03-13/",
+    "source_timestamp": "2026-03-13T15:47:33.959128",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "VEON",
+        "instrument_type": "equity",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Direct company mention: kyivstar"
+      },
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.525,
+        "mapping_confidence": 0.525,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "VEON",
+      "instrument_type": "equity",
+      "direction_bias": "long",
+      "relevance_score": 0.78,
+      "mapping_confidence": 0.78
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.843,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_d588931d01fcc822",
+    "signal_id": "sig_5630f9c483bfc84b",
+    "signal_fingerprint": "sha256:0b2267e592c9b07cb818abb7be9d3c73c311aed3542ca3d2b708f9faa2201d74",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "CNBC_Top",
+    "source_title": "These charts show the size of Europe's defense boom, as companies take stock of ",
+    "source_url": "https://www.cnbc.com/2026/03/12/defense-stocks-leonardo-rheinmetall-stock-rhm-ldo-iran-war-ukraine.html",
+    "source_timestamp": "2026-03-13T15:47:33.958960",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "ITA",
+        "instrument_type": "etf",
+        "relevance_score": 0.77,
+        "mapping_confidence": 0.77,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Defense and aerospace demand sensitivity"
+      },
+      {
+        "symbol": "SH",
+        "instrument_type": "etf",
+        "relevance_score": 0.62,
+        "mapping_confidence": 0.62,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Broad risk-off hedge when conflict escalates"
+      },
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.525,
+        "mapping_confidence": 0.525,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "ITA",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.77,
+      "mapping_confidence": 0.77
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.841,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_3e15582b2061bb3f",
+    "signal_id": "sig_7c43d8f2a2f5f991",
+    "signal_fingerprint": "sha256:9c094a961c4bfe1a8da31399fd998bb43593a587a121741ce3a684232181a9a5",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "WSJ_Markets",
+    "source_title": "DeepSeek Won't Sink U.S. AI Titans",
+    "source_url": "https://www.wsj.com/articles/deepseek-us-ai-stocks-nvidia-broadcom-6cdfae81?mod=rss_markets_main",
+    "source_timestamp": "2026-03-13T15:47:33.960020",
+    "pattern_id": "p003",
+    "pattern_name": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "BUY",
+    "reasoning_score": 65.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.63,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SOXX",
+        "instrument_type": "etf",
+        "relevance_score": 0.82,
+        "mapping_confidence": 0.82,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Semiconductor sector proxy"
+      },
+      {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "relevance_score": 0.74,
+        "mapping_confidence": 0.74,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Nvidia is a leading AI/semi proxy"
+      },
+      {
+        "symbol": "XLK",
+        "instrument_type": "etf",
+        "relevance_score": 0.66,
+        "mapping_confidence": 0.66,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Broader technology spillover"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SOXX",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.82,
+      "mapping_confidence": 0.82
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.687,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": false
+    }
+  },
+  {
+    "candidate_id": "cand_e8b28aeb7b1e768c",
+    "signal_id": "sig_bd27319009a06953",
+    "signal_fingerprint": "sha256:b928d3eae410e265ef89bcb4d57fdff11993415870d180bc097f9329da52230e",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "WSJ_Markets",
+    "source_title": "Stocks Sink in Broad AI Rout Sparked by China's DeepSeek",
+    "source_url": "https://www.wsj.com/articles/nikkei-may-rise-as-weak-yen-raises-earnings-hopes-776a8056?mod=rss_markets_main",
+    "source_timestamp": "2026-03-13T15:47:33.959977",
+    "pattern_id": "p003",
+    "pattern_name": "Reddit GPU/Semis Thread",
+    "category": "sentiment_social",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "BUY",
+    "reasoning_score": 65.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.63,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SOXX",
+        "instrument_type": "etf",
+        "relevance_score": 0.82,
+        "mapping_confidence": 0.82,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Semiconductor sector proxy"
+      },
+      {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "relevance_score": 0.74,
+        "mapping_confidence": 0.74,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Nvidia is a leading AI/semi proxy"
+      },
+      {
+        "symbol": "XLK",
+        "instrument_type": "etf",
+        "relevance_score": 0.66,
+        "mapping_confidence": 0.66,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Broader technology spillover"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SOXX",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.82,
+      "mapping_confidence": 0.82
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.687,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": false
+    }
+  },
+  {
+    "candidate_id": "cand_da97f3c6ef5d275d",
+    "signal_id": "sig_1a02382f29644cfb",
+    "signal_fingerprint": "sha256:9516446e1ed2ecfaa40e0b0c58495fcc34705dac5c4d4a366aa1a2d0e6ea4443",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "CNBC_Top",
+    "source_title": "Iran War: U.S. Navy will escort vessels through Strait of Hormuz as soon as 'mil",
+    "source_url": "https://www.cnbc.com/2026/03/12/iran-war-us-navy-strait-of-hormuz-oil-bessent.html",
+    "source_timestamp": "2026-03-13T15:47:33.958910",
+    "pattern_id": "p005",
+    "pattern_name": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.842,
+    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+    "predicted_outcomes": [
+      "forced_covering",
+      "borrow_fee_spike",
+      "volatility_clustering"
+    ],
+    "predicted_causal_chain": [
+      "Crowded short setup",
+      "Call buying surge",
+      "Dealer hedging amplifies upside"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "USO",
+        "instrument_type": "etf",
+        "relevance_score": 0.88,
+        "mapping_confidence": 0.88,
+        "mapping_type": "commodity_proxy",
+        "direction_bias": "long",
+        "reason": "Oil supply or transport disruption"
+      },
+      {
+        "symbol": "XLE",
+        "instrument_type": "etf",
+        "relevance_score": 0.8,
+        "mapping_confidence": 0.8,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Energy sector usually benefits from higher oil prices"
+      },
+      {
+        "symbol": "ITA",
+        "instrument_type": "etf",
+        "relevance_score": 0.77,
+        "mapping_confidence": 0.77,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Defense and aerospace demand sensitivity"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "USO",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.88,
+      "mapping_confidence": 0.88
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.657,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "pattern_topic_mismatch",
+        "title_pattern_family_mismatch"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_9a5f24cebf901af6",
+    "signal_id": "sig_c2f31c559ecdf078",
+    "signal_fingerprint": "sha256:0a2c2f3595703b2ead5c17fccd84dffebf043fe0334e7fdec9b7b8b1a2ace3d2",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Nasdaq_News",
+    "source_title": "China's ByteDance gets access to top Nvidia AI chips, WSJ reports",
+    "source_url": "https://www.reuters.com/world/asia-pacific/chinas-bytedance-gets-access-top-nvidia-ai-chips-wsj-reports-2026-03-13/",
+    "source_timestamp": "2026-03-13T15:47:33.959172",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SOXX",
+        "instrument_type": "etf",
+        "relevance_score": 0.82,
+        "mapping_confidence": 0.82,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Semiconductor sector proxy"
+      },
+      {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Direct company mention: nvidia"
+      },
+      {
+        "symbol": "TCEHY",
+        "instrument_type": "equity",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Direct company mention: bytedance"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SOXX",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.82,
+      "mapping_confidence": 0.82
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.633,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "pattern_topic_mismatch",
+        "title_pattern_family_mismatch"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_b0efa2488656380b",
+    "signal_id": "sig_5d6065c41b61bbb2",
+    "signal_fingerprint": "sha256:94662891abd3453c0a2555c554f6d8a0e29096dcb3f086165197acfe06a8d22d",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Yahoo_Finance",
+    "source_title": "China's ByteDance gets access to top Nvidia AI chips, WSJ reports",
+    "source_url": "https://finance.yahoo.com/news/chinas-bytedance-gets-access-top-031312057.html",
+    "source_timestamp": "2026-03-13T15:47:33.959080",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SOXX",
+        "instrument_type": "etf",
+        "relevance_score": 0.82,
+        "mapping_confidence": 0.82,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Semiconductor sector proxy"
+      },
+      {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Direct company mention: nvidia"
+      },
+      {
+        "symbol": "TCEHY",
+        "instrument_type": "equity",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Direct company mention: bytedance"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SOXX",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.82,
+      "mapping_confidence": 0.82
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.633,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "pattern_topic_mismatch",
+        "title_pattern_family_mismatch"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_048a45e198d41790",
+    "signal_id": "sig_d2213deecfb00e07",
+    "signal_fingerprint": "sha256:062e8644fe5916ca871b61a8b194be0888df460b2a46d2e7f1bb3d3e9236129f",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "MarketWatch",
+    "source_title": "Ulta Beauty says it\u2019s \u2018increasingly mindful\u2019 of effects that global conflicts ha",
+    "source_url": "https://www.marketwatch.com/story/ulta-beauty-says-its-increasingly-mindful-of-effects-that-global-conflicts-have-on-shoppers-as-profit-forecast-sinks-stock-b03cc1c3?mod=mw_rss_topstories",
+    "source_timestamp": "2026-03-13T15:47:33.958754",
+    "pattern_id": "p014",
+    "pattern_name": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 85.8,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.813,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "ULTA",
+        "instrument_type": "equity",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Direct company mention: ulta"
+      },
+      {
+        "symbol": "XRT",
+        "instrument_type": "etf",
+        "relevance_score": 0.68,
+        "mapping_confidence": 0.68,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Retail sector proxy"
+      },
+      {
+        "symbol": "XLY",
+        "instrument_type": "etf",
+        "relevance_score": 0.63,
+        "mapping_confidence": 0.63,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Consumer discretionary proxy"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "ULTA",
+      "instrument_type": "equity",
+      "direction_bias": "long",
+      "relevance_score": 0.78,
+      "mapping_confidence": 0.78
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.617,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "pattern_topic_mismatch",
+        "title_pattern_family_mismatch"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 3,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_b18fdc5eb2ad4c1a",
+    "signal_id": "sig_2d3e9f050f8d7121",
+    "signal_fingerprint": "sha256:51d69dcdd618b609f7dc2d891689b24d18f9a3ac8e41709cb14ad7da4ceaf2f4",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "CNBC_Top",
+    "source_title": "CNBC Daily Open: A prolonged Iran war is on the horizon",
+    "source_url": "https://www.cnbc.com/2026/03/13/cnbc-daily-open-a-prolonged-iran-war-is-on-the-horizon.html",
+    "source_timestamp": "2026-03-13T15:47:33.958806",
+    "pattern_id": "p014",
+    "pattern_name": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 85.8,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.813,
+    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "ITA",
+        "instrument_type": "etf",
+        "relevance_score": 0.77,
+        "mapping_confidence": 0.77,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Defense and aerospace demand sensitivity"
+      },
+      {
+        "symbol": "SH",
+        "instrument_type": "etf",
+        "relevance_score": 0.62,
+        "mapping_confidence": 0.62,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Broad risk-off hedge when conflict escalates"
+      },
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.523,
+        "mapping_confidence": 0.523,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "ITA",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.77,
+      "mapping_confidence": 0.77
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.614,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "pattern_topic_mismatch",
+        "title_pattern_family_mismatch"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 3,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_195aa928eb1643d6",
+    "signal_id": "sig_4f5602c09efa5ee4",
+    "signal_fingerprint": "sha256:a9dbbdd5dcd00feb763d84f84c052cec49c1c87d1b077d4c9957f1fbbc56e3ba",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "reddit",
+    "source_feed": "r/investing",
+    "source_title": "Why is losing $100k on 0DTE options called \"investing,\" but hedging a recession ",
+    "source_url": "https://reddit.com/r/investing/comments/1rsgh26/why_is_losing_100k_on_0dte_options_called/",
+    "source_timestamp": "2026-03-13T15:47:33.959576",
+    "pattern_id": "p005",
+    "pattern_name": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.842,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "forced_covering",
+      "borrow_fee_spike",
+      "volatility_clustering"
+    ],
+    "predicted_causal_chain": [
+      "Crowded short setup",
+      "Call buying surge",
+      "Dealer hedging amplifies upside"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.525,
+        "mapping_confidence": 0.525,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.525,
+      "mapping_confidence": 0.525
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.568,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_870c2ea8dcb1dcca",
+    "signal_id": "sig_740873e9f01023f0",
+    "signal_fingerprint": "sha256:bb8462b84eb8e4dbac891ef7932e108c02b41ccb6f5683c775c8a5eddb3141c4",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "reddit",
+    "source_feed": "r/investing",
+    "source_title": "AST SpaceMobile $2.8 billion cash, $175 million prepayment from Saudi Arabia, ze",
+    "source_url": "https://reddit.com/r/investing/comments/1rrockp/ast_spacemobile_28_billion_cash_175_million/",
+    "source_timestamp": "2026-03-13T15:47:33.959623",
+    "pattern_id": "p001",
+    "pattern_name": "Saudi Oil Attacks",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.842,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.525,
+        "mapping_confidence": 0.525,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.525,
+      "mapping_confidence": 0.525
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.568,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_995f14395e2d91be",
+    "signal_id": "sig_5090ea51fa6bfa46",
+    "signal_fingerprint": "sha256:6f49505016089933dff1e1450c5bb0a0127d3b4bce4e4e881787e4b9f9ca8574",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Reuters_BreakingViews",
+    "source_title": "Russia\u2019s Iran setback comes with consolation prize",
+    "source_url": "https://www.reuters.com/commentary/breakingviews/russias-iran-setback-comes-with-consolation-prize-2026-03-12/",
+    "source_timestamp": "2026-03-13T15:47:33.959277",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.525,
+        "mapping_confidence": 0.525,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.525,
+      "mapping_confidence": 0.525
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.56,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_2028e046895674a5",
+    "signal_id": "sig_3eb877ea8ec91c82",
+    "signal_fingerprint": "sha256:2741b4fc83c6c5347e28135ca02e3a14f21f8d16caed10a74a354cb219ced1e0",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Yahoo_Finance",
+    "source_title": "STMicroelectronics plans robots, retraining to avoid closures",
+    "source_url": "https://finance.yahoo.com/news/stmicroelectronics-plans-robots-retraining-avoid-060153616.html",
+    "source_timestamp": "2026-03-13T15:47:33.959014",
+    "pattern_id": "p014",
+    "pattern_name": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 85.8,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.813,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.523,
+        "mapping_confidence": 0.523,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.523,
+      "mapping_confidence": 0.523
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.553,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 3,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_242ffa507f81e159",
+    "signal_id": "sig_132da1eb83808a8b",
+    "signal_fingerprint": "sha256:980de5013747daea4428802c1292e4162c0b0f65172ec4b120589fdf65674332",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Yahoo_Finance",
+    "source_title": "Apple cuts China App Store commission fees after government pressure",
+    "source_url": "https://finance.yahoo.com/news/apple-cuts-china-app-store-052943883.html",
+    "source_timestamp": "2026-03-13T15:47:33.959671",
+    "pattern_id": "p007",
+    "pattern_name": "Evergrande Crisis",
+    "category": "geopolitical",
+    "historical_confidence": "MEDIUM_HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 75.0,
+    "signal_score": 150.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "medium-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 70.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 70.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.714,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "AAPL",
+        "instrument_type": "equity",
+        "relevance_score": 0.72,
+        "mapping_confidence": 0.72,
+        "mapping_type": "company_direct",
+        "direction_bias": "short",
+        "reason": "Direct company mention: apple"
+      },
+      {
+        "symbol": "XRT",
+        "instrument_type": "etf",
+        "relevance_score": 0.68,
+        "mapping_confidence": 0.68,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Retail sector proxy"
+      },
+      {
+        "symbol": "XLY",
+        "instrument_type": "etf",
+        "relevance_score": 0.63,
+        "mapping_confidence": 0.63,
+        "mapping_type": "sector_proxy",
+        "direction_bias": "long",
+        "reason": "Consumer discretionary proxy"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "AAPL",
+      "instrument_type": "equity",
+      "direction_bias": "short",
+      "relevance_score": 0.72,
+      "mapping_confidence": 0.72
+    },
+    "execution_bias": "block",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.541,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "pattern_topic_mismatch",
+        "title_pattern_family_mismatch",
+        "mapping_too_ambiguous"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 150.0
+    }
+  },
+  {
+    "candidate_id": "cand_c1c6491742c29469",
+    "signal_id": "sig_46f7a61e8717a472",
+    "signal_fingerprint": "sha256:dfa0a29042d0a9576ed90115131314b62922191b65ee81686567225f6a0303f4",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Guardian_World",
+    "source_title": "UK government axes flagship global health project",
+    "source_url": "https://www.theguardian.com/global-development/2026/mar/12/uk-government-axes-flagship-global-health-project",
+    "source_timestamp": "2026-03-13T15:47:33.959464",
+    "pattern_id": "p004",
+    "pattern_name": "COVID-19 Market Crash",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 79.4,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": -0.64,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.805,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.515,
+        "mapping_confidence": 0.515,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "short",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "short",
+      "relevance_score": 0.515,
+      "mapping_confidence": 0.515
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.535,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": -0.64,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 3,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_d759f4b05436b7d1",
+    "signal_id": "sig_8d7a8eb235017ae4",
+    "signal_fingerprint": "sha256:9d89212195f3b5a7dd3235e63dcbe8a104f204c1d71eaf6a5a04164879d91d88",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "reddit",
+    "source_feed": "r/wallstreetbets",
+    "source_title": "If you'd invest 10k in wallstreetbets stock picks for 2026 you would now have YT",
+    "source_url": "https://reddit.com/r/wallstreetbets/comments/1rrqci3/if_youd_invest_10k_in_wallstreetbets_stock_picks/",
+    "source_timestamp": "2026-03-13T15:47:33.959513",
+    "pattern_id": "p005",
+    "pattern_name": "GameStop Short Squeeze",
+    "category": "sentiment_social",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 81.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "social media - verify independently, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 74.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.775,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "forced_covering",
+      "borrow_fee_spike",
+      "volatility_clustering"
+    ],
+    "predicted_causal_chain": [
+      "Crowded short setup",
+      "Call buying surge",
+      "Dealer hedging amplifies upside"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.518,
+        "mapping_confidence": 0.518,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.518,
+      "mapping_confidence": 0.518
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.528,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_cd3dac03a50be03e",
+    "signal_id": "sig_57fbde6e6427666b",
+    "signal_fingerprint": "sha256:498369a2aa34719114810af44c9f93b9b9190878752c188c8915106d6f60667f",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Guardian_Business",
+    "source_title": "Elon Musk\u2019s Tesla given go-ahead to supply electricity in Great Britain",
+    "source_url": "https://www.theguardian.com/technology/2026/mar/12/elon-musk-tesla-given-go-ahead-to-supply-electricity-in-great-britain",
+    "source_timestamp": "2026-03-13T15:47:33.959727",
+    "pattern_id": "p010",
+    "pattern_name": "Tesla Stock Splits",
+    "category": "corporate",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "BUY",
+    "reasoning_score": 60.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "medium-term",
+    "reasoning": "moderate source, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.616,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "TSLA",
+        "instrument_type": "equity",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "company_direct",
+        "direction_bias": "long",
+        "reason": "Direct company mention: tesla"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "TSLA",
+      "instrument_type": "equity",
+      "direction_bias": "long",
+      "relevance_score": 0.78,
+      "mapping_confidence": 0.78
+    },
+    "execution_bias": "observe",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.471,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "evidence_strength_too_weak"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 100.0
+    }
+  },
+  {
+    "candidate_id": "cand_e6cef85b9a435ddd",
+    "signal_id": "sig_99f4cb56fe3ad5de",
+    "signal_fingerprint": "sha256:382fbc579ec0366dad564aa8bcdfb49bde2dabd503b775d8c99859e7919216ab",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Guardian_Business",
+    "source_title": "Do we want to keep fixing the same issue? Unlearned lessons from the first big o",
+    "source_url": "https://www.theguardian.com/environment/2026/mar/13/fixing-the-same-issue-first-big-oil-crisis-middle-eastern-wars",
+    "source_timestamp": "2026-03-13T15:47:33.959783",
+    "pattern_id": "p024",
+    "pattern_name": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "BUY",
+    "reasoning_score": 65.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "moderate source, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.681,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.498,
+        "mapping_confidence": 0.498,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.498,
+      "mapping_confidence": 0.498
+    },
+    "execution_bias": "caution",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.437,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 100.0
+    }
+  },
+  {
+    "candidate_id": "cand_3b380581f9800ead",
+    "signal_id": "sig_cf267373176ec4e0",
+    "signal_fingerprint": "sha256:23d97f5611bc1d904f69c5c4498908a821c5a69b77a7ff3dfc3c91fb573594e9",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Reuters_BreakingViews",
+    "source_title": "Iran shock creates problematic fiscal loop",
+    "source_url": "https://www.reuters.com/commentary/breakingviews/iran-shock-creates-problematic-fiscal-loop-2026-03-10/",
+    "source_timestamp": "2026-03-13T15:47:33.959372",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.525,
+        "mapping_confidence": 0.525,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": null,
+    "execution_bias": "caution",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.428,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mixed_theme_title",
+        "no_clear_primary_instrument"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_5a15791400281217",
+    "signal_id": "sig_2fffdb0cf3b978d1",
+    "signal_fingerprint": "sha256:8038f29ff20c0dca2832d56f7b2496798b5744bbee7a8f63e51044bdf28ec332",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Reuters_BreakingViews",
+    "source_title": "Iran war pushes Indian rupee towards perfect storm",
+    "source_url": "https://www.reuters.com/commentary/breakingviews/iran-war-pushes-indian-rupee-towards-perfect-storm-2026-03-11/",
+    "source_timestamp": "2026-03-13T15:47:33.959328",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SH",
+        "instrument_type": "etf",
+        "relevance_score": 0.62,
+        "mapping_confidence": 0.62,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Broad risk-off hedge when conflict escalates"
+      },
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.525,
+        "mapping_confidence": 0.525,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": null,
+    "execution_bias": "caution",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "execution_priority": 0.428,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "fx_stress_secondary_mapping",
+        "no_clear_primary_instrument"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 4,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_0d6996d0aa1ea20e",
+    "signal_id": "sig_622c0c26486ab578",
+    "signal_fingerprint": "sha256:00f52dc2a5ff122ea62ea7e723e3b93ab893d42b7e8b4f4a146db79ce8aa04f6",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Nasdaq_News",
+    "source_title": "Gold set for weekly drop as oil price surge weighs on rate-cut hopes",
+    "source_url": "https://www.reuters.com/world/india/gold-set-weekly-drop-oil-price-surge-weighs-rate-cut-hopes-2026-03-13/",
+    "source_timestamp": "2026-03-13T15:47:33.959221",
+    "pattern_id": "p014",
+    "pattern_name": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 85.8,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.813,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "front_end_yield_move",
+      "usd_trend_shift",
+      "growth_value_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Inflation/rates surprise",
+      "Bond market reprices terminal rate",
+      "Equity duration factor moves"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.523,
+        "mapping_confidence": 0.523,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": null,
+    "execution_bias": "caution",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.422,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mixed_theme_title",
+        "no_clear_primary_instrument"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 3,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_9afa637fd6b0aef4",
+    "signal_id": "sig_d3e68ef62a00cdbc",
+    "signal_fingerprint": "sha256:1ddf9a11939795232c1b6e367bc468cbc17edcc060a37bf19f9aa6562ec4164c",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "CNBC_Top",
+    "source_title": "Stock futures are flat ahead of key inflation data; traders monitor oil prices a",
+    "source_url": "https://www.cnbc.com/2026/03/12/stock-market-today-live-updates.html",
+    "source_timestamp": "2026-03-13T15:47:33.958859",
+    "pattern_id": "p014",
+    "pattern_name": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 85.8,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.813,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "UUP",
+        "instrument_type": "etf",
+        "relevance_score": 0.56,
+        "mapping_confidence": 0.52,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Higher rates can support the dollar; downgraded for broad roundup headline"
+      },
+      {
+        "symbol": "TLT",
+        "instrument_type": "etf",
+        "relevance_score": 0.54,
+        "mapping_confidence": 0.5,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "short",
+        "reason": "Long-duration bonds are pressured by rising yields; downgraded for broad roundup headline"
+      },
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.478,
+        "mapping_confidence": 0.478,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": null,
+    "execution_bias": "caution",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.422,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "broad_roundup_title",
+        "mixed_theme_title",
+        "no_clear_primary_instrument"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.78,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": 1.0,
+      "tracked_sample_size": 3,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_446050efa777840f",
+    "signal_id": "sig_d3b4cb03d17b3c22",
+    "signal_fingerprint": "sha256:af263a1608d87529ccbccc8e0d5bc63e9d06c4824de8e3263f9f73a1dfe9295a",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "reddit",
+    "source_feed": "r/wallstreetbets",
+    "source_title": "turned $8k into $18k betting on $MU earnings and now I'm YOLOing into April call",
+    "source_url": "https://reddit.com/r/wallstreetbets/comments/1rrz5cp/turned_8k_into_18k_betting_on_mu_earnings_and_now/",
+    "source_timestamp": "2026-03-13T15:47:33.960145",
+    "pattern_id": "p024",
+    "pattern_name": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "HOLD",
+    "reasoning_score": 59.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.614,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.491,
+        "mapping_confidence": 0.491,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.491,
+      "mapping_confidence": 0.491
+    },
+    "execution_bias": "observe",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.376,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "reasoning_score_too_weak",
+        "evidence_strength_too_weak",
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_4bd273535f3ca4c9",
+    "signal_id": "sig_fcc5d41cfafecd9d",
+    "signal_fingerprint": "sha256:749ec0e39f6ab3fa9670c9e29a6e7d2aed0b6368696ee6554df16340c8a79f20",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "reddit",
+    "source_feed": "r/wallstreetbets",
+    "source_title": "Rolled USO and BNO Calls To Lower Strike, Mr Margin Called",
+    "source_url": "https://reddit.com/r/wallstreetbets/comments/1rr8v2w/rolled_uso_and_bno_calls_to_lower_strike_mr/",
+    "source_timestamp": "2026-03-13T15:47:33.960194",
+    "pattern_id": "p024",
+    "pattern_name": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "HOLD",
+    "reasoning_score": 59.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.614,
+    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.491,
+        "mapping_confidence": 0.491,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.491,
+      "mapping_confidence": 0.491
+    },
+    "execution_bias": "observe",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.376,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "reasoning_score_too_weak",
+        "evidence_strength_too_weak",
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_72628ac29083c9f4",
+    "signal_id": "sig_bb20694407b43f47",
+    "signal_fingerprint": "sha256:a10f6cb3fa45e94bf49113364bc1a14b6cc2ebc874ff718b1f4a16fd453ea80e",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "reddit",
+    "source_feed": "r/wallstreetbets",
+    "source_title": "All my eggs in one basket. This is the $CALM before the storm. Mostly YOLO, but ",
+    "source_url": "https://reddit.com/r/wallstreetbets/comments/1rs2mad/all_my_eggs_in_one_basket_this_is_the_calm_before/",
+    "source_timestamp": "2026-03-13T15:47:33.960088",
+    "pattern_id": "p024",
+    "pattern_name": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "HOLD",
+    "reasoning_score": 59.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.614,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.491,
+        "mapping_confidence": 0.491,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.491,
+      "mapping_confidence": 0.491
+    },
+    "execution_bias": "observe",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.376,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "reasoning_score_too_weak",
+        "evidence_strength_too_weak",
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_b6fc5275a42ed84e",
+    "signal_id": "sig_f06086fcb21a6b9f",
+    "signal_fingerprint": "sha256:6c9bf8ee3d9a9aa90a98406faa3cc37fa70c662b1d98a5b35c63fc302233a1b5",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "reddit",
+    "source_feed": "r/wallstreetbets",
+    "source_title": "HIMS YOLO! HERE ARE MY GAINS!",
+    "source_url": "https://reddit.com/r/wallstreetbets/comments/1rr8jme/hims_yolo_here_are_my_gains/",
+    "source_timestamp": "2026-03-13T15:47:33.960239",
+    "pattern_id": "p024",
+    "pattern_name": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "HOLD",
+    "reasoning_score": 59.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.614,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.491,
+        "mapping_confidence": 0.491,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.491,
+      "mapping_confidence": 0.491
+    },
+    "execution_bias": "observe",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.376,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "reasoning_score_too_weak",
+        "evidence_strength_too_weak",
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_d9b9d8dd803de50e",
+    "signal_id": "sig_1edca5283e18a50d",
+    "signal_fingerprint": "sha256:9acaf9303d5676cfff6b53727d94ba064edc972b49e13a146dc45da07190eee1",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "reddit",
+    "source_feed": "r/wallstreetbets",
+    "source_title": "HIMS YOLO",
+    "source_url": "https://reddit.com/r/wallstreetbets/comments/1rr66yu/hims_yolo/",
+    "source_timestamp": "2026-03-13T15:47:33.960285",
+    "pattern_id": "p024",
+    "pattern_name": "Retail Options Sentiment",
+    "category": "sentiment_social",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "HOLD",
+    "reasoning_score": 59.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "social media - verify independently, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 30.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 54.0,
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.614,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "short_squeeze_risk",
+      "gamma_instability",
+      "intraday_mean_reversion"
+    ],
+    "predicted_causal_chain": [
+      "Retail/social narrative acceleration",
+      "Options positioning imbalance",
+      "Dealer hedging feedback loop",
+      "Sharp squeeze or unwind"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.491,
+        "mapping_confidence": 0.491,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SPY",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.491,
+      "mapping_confidence": 0.491
+    },
+    "execution_bias": "observe",
+    "risk_overlay_hint": "crowding_risk",
+    "execution_priority": 0.376,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "reasoning_score_too_weak",
+        "evidence_strength_too_weak",
+        "mapping_confidence_too_low"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 5.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_389e84591dcf8723",
+    "signal_id": "sig_64c20304791b5afe",
+    "signal_fingerprint": "sha256:366850d9a4539d757b32a3994bfe7c81782d86d6cb0627b0b12057d47a8cd23e",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Reuters_BreakingViews",
+    "source_title": "SoftBank's wartime bet on PayPay IPO is shrewd",
+    "source_url": "https://www.reuters.com/commentary/breakingviews/softbanks-wartime-bet-paypay-ipo-is-shrewd-2026-03-12/",
+    "source_timestamp": "2026-03-13T15:47:33.959932",
+    "pattern_id": "p010",
+    "pattern_name": "Tesla Stock Splits",
+    "category": "corporate",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "BUY",
+    "reasoning_score": 60.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "medium-term",
+    "reasoning": "moderate source, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.586,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "instrument_candidates": [],
+    "primary_instrument": null,
+    "execution_bias": "block",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.234,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "evidence_strength_too_weak",
+        "no_tradable_proxy"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": false
+    }
+  },
+  {
+    "candidate_id": "cand_8f229a0a7824314b",
+    "signal_id": "sig_97da9143d9e6498c",
+    "signal_fingerprint": "sha256:169dced7d769649929a55cd9e4973d60fa9c0b270784b9db6fd7d52a0895959c",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "MarketWatch",
+    "source_title": "Why Adobe\u2019s stock is falling despite an earnings beat",
+    "source_url": "https://www.marketwatch.com/story/why-adobes-stock-is-falling-despite-an-earnings-beat-b6a67617?mod=mw_rss_topstories",
+    "source_timestamp": "2026-03-13T15:47:33.959835",
+    "pattern_id": "p010",
+    "pattern_name": "Tesla Stock Splits",
+    "category": "corporate",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "BUY",
+    "reasoning_score": 60.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "medium-term",
+    "reasoning": "moderate source, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.586,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "instrument_candidates": [],
+    "primary_instrument": null,
+    "execution_bias": "block",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.234,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "evidence_strength_too_weak",
+        "no_tradable_proxy"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": false
+    }
+  },
+  {
+    "candidate_id": "cand_a9a4d6d8ee06c3f7",
+    "signal_id": "sig_a6d2aad4beb26117",
+    "signal_fingerprint": "sha256:2a31d060d7804956c05c57a376f90226f85d0ddb86500b2bd0806154d521fd2f",
+    "generated_at": "2026-03-13T15:47:33.960285Z",
+    "source_type": "rss",
+    "source_feed": "Yahoo_Finance",
+    "source_title": "SoftBank\u2019s PayPay Keeps Dual Listing on Table After Solid US IPO",
+    "source_url": "https://finance.yahoo.com/news/softbank-paypay-keeps-dual-listing-041334739.html",
+    "source_timestamp": "2026-03-13T15:47:33.959886",
+    "pattern_id": "p010",
+    "pattern_name": "Tesla Stock Splits",
+    "category": "corporate",
+    "historical_confidence": "MEDIUM",
+    "confidence_level": "BUY",
+    "reasoning_score": 60.0,
+    "signal_score": 100.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "medium-term",
+    "reasoning": "moderate source, moderate pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 50.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 60.0,
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 20
+    },
+    "evidence_strength": 0.586,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "single_name_gap_move",
+      "sector_rotation",
+      "options_iv_spike"
+    ],
+    "predicted_causal_chain": [
+      "Earnings/deal catalyst",
+      "Sector repricing",
+      "Analyst estimate revisions",
+      "Momentum continuation/reversal"
+    ],
+    "instrument_candidates": [],
+    "primary_instrument": null,
+    "execution_bias": "block",
+    "risk_overlay_hint": "macro_event_risk",
+    "execution_priority": 0.234,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "evidence_strength_too_weak",
+        "no_tradable_proxy"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 0.0,
+      "feedback_sample_size": 20,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 26,
+      "shadow_confirmation": false
+    }
+  }
+]
