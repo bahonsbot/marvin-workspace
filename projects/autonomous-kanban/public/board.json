@@ -2,8 +2,18 @@
   "board": {
     "todo": [
       {
+        "id": "873f553c",
+        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "column": "todo"
+      },
+      {
         "id": "c4fee0b0",
         "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
+        "column": "todo"
+      },
+      {
+        "id": "b63d2cf0",
+        "text": "[Career] 📝 Draft: draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
         "column": "todo"
       },
       {
@@ -12,8 +22,8 @@
         "column": "todo"
       },
       {
-        "id": "e1d42d94",
-        "text": "[Personal] 📚 Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
+        "id": "33f6a03e",
+        "text": "[Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
         "column": "todo"
       }
     ],
@@ -26,5 +36,5 @@
     ],
     "done": []
   },
-  "updatedAt": "2026-03-13T07:39:29.676Z"
+  "updatedAt": "2026-03-14T04:51:43.639Z"
 }
