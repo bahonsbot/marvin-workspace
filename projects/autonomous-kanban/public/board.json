@@ -2,18 +2,28 @@
   "board": {
     "todo": [
       {
+        "id": "873f553c",
+        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "column": "todo"
+      },
+      {
         "id": "c4fee0b0",
         "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
         "column": "todo"
       },
       {
-        "id": "b999c42d",
-        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "b4699bbe",
+        "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "e1d42d94",
-        "text": "[Personal] 📚 Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
+        "id": "33f6a03e",
+        "text": "[Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
+        "column": "todo"
+      },
+      {
+        "id": "08499c87",
+        "text": "[Trading] 🎁 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
         "column": "todo"
       }
     ],
@@ -26,5 +36,5 @@
     ],
     "done": []
   },
-  "updatedAt": "2026-03-13T07:39:29.676Z"
+  "updatedAt": "2026-03-14T01:05:16.287Z"
 }
