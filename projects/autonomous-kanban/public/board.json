@@ -2,39 +2,39 @@
   "board": {
     "todo": [
       {
-        "id": "9c45e78c",
-        "text": "[Career] \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "id": "873f553c",
+        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
         "column": "todo"
       },
       {
-        "id": "6a3eb970",
-        "text": "[Trading] \ud83d\udd27 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
+        "id": "b63d2cf0",
+        "text": "[Career] 📝 Draft: draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
         "column": "todo"
       },
       {
-        "id": "b76f3f9c",
-        "text": "[Career] \ud83d\udcdd Draft: draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
+        "id": "b999c42d",
+        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "62071f40",
-        "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "33f6a03e",
+        "text": "[Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
         "column": "todo"
       },
       {
-        "id": "1960113e",
-        "text": "[Career] \ud83d\udcda Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
+        "id": "c4fee0b0",
+        "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
         "column": "todo"
       }
     ],
     "inprogress": [
       {
-        "id": "03a601d5",
-        "text": "[Career] \ud83d\udcda Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
+        "id": "33f6a03e",
+        "text": "[Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
         "column": "inprogress"
       }
     ],
     "done": []
   },
-  "updatedAt": "2026-03-14T12:52:04.000Z"
+  "updatedAt": "2026-03-15T01:08:29.819Z"
 }
