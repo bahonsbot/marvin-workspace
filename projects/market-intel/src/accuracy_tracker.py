@@ -34,6 +34,19 @@ class AccuracyTracker:
     def _normalize_outcome(self, outcome: str) -> str:
         return (outcome or '').strip().lower()
 
+    def _is_reviewed(self, row: Dict[str, Any]) -> bool:
+        return bool(
+            row.get('verified')
+            or row.get('verified_at')
+            or row.get('evaluated_at')
+            or row.get('actual_outcome')
+            or row.get('outcome')
+        )
+
+    def _is_duplicate(self, row: Dict[str, Any]) -> bool:
+        outcome = self._normalize_outcome(row.get('outcome') or row.get('actual_outcome') or '')
+        return outcome == 'duplicate'
+
     def _outcome_score(self, outcome: str) -> float:
         return self.OUTCOME_SCORE.get(self._normalize_outcome(outcome), 0.0)
 
@@ -97,26 +110,30 @@ class AccuracyTracker:
     
     def update_accuracy_history(self):
         """Update accuracy statistics and learning feedback."""
-        verified = [s for s in self.tracked if s.get('verified')]
+        reviewed = [s for s in self.tracked if self._is_reviewed(s)]
+        unique_verified = [s for s in reviewed if not self._is_duplicate(s)]
+        duplicates = [s for s in reviewed if self._is_duplicate(s)]
 
-        if not verified:
+        if not reviewed:
             return
 
-        strong_buy = sum(1 for s in verified if self._normalize_outcome(s.get('actual_outcome', '')) == 'strong buy')
-        buy = sum(1 for s in verified if self._normalize_outcome(s.get('actual_outcome', '')) == 'buy')
-        hold = sum(1 for s in verified if self._normalize_outcome(s.get('actual_outcome', '')) in {'hold', 'partial'})
-        miss = sum(1 for s in verified if self._normalize_outcome(s.get('actual_outcome', '')) in {'miss', 'incorrect'})
+        strong_buy = sum(1 for s in unique_verified if self._normalize_outcome(s.get('actual_outcome', '') or s.get('outcome', '')) == 'strong buy')
+        buy = sum(1 for s in unique_verified if self._normalize_outcome(s.get('actual_outcome', '') or s.get('outcome', '')) == 'buy')
+        hold = sum(1 for s in unique_verified if self._normalize_outcome(s.get('actual_outcome', '') or s.get('outcome', '')) in {'hold', 'partial'})
+        miss = sum(1 for s in unique_verified if self._normalize_outcome(s.get('actual_outcome', '') or s.get('outcome', '')) in {'miss', 'incorrect'})
 
-        weighted_score = sum(self._outcome_score(s.get('actual_outcome', '')) for s in verified)
-        weighted_accuracy = round((weighted_score / len(verified)) * 100, 1)
+        weighted_score = sum(self._outcome_score(s.get('actual_outcome', '') or s.get('outcome', '')) for s in unique_verified)
+        weighted_accuracy = round((weighted_score / len(unique_verified)) * 100, 1) if unique_verified else 0.0
 
         evidence_coverage = round(
-            100 * sum(1 for s in verified if s.get('evidence_pack', {}).get('summary') or s.get('notes')) / len(verified),
+            100 * sum(1 for s in unique_verified if s.get('evidence_pack', {}).get('summary') or s.get('notes')) / len(unique_verified),
             1,
-        )
+        ) if unique_verified else 0.0
 
         stats = {
-            'total_verified': len(verified),
+            'total_reviewed_raw': len(reviewed),
+            'duplicate_count': len(duplicates),
+            'total_verified': len(unique_verified),
             'strong_buy': strong_buy,
             'buy': buy,
             'hold': hold,
@@ -129,8 +146,8 @@ class AccuracyTracker:
         with open(self.history_file, 'w') as f:
             json.dump(stats, f, indent=2)
 
-        self.update_model_feedback(verified)
-        print(f"  ✓ Weighted accuracy: {weighted_accuracy}% across {len(verified)} verified signals")
+        self.update_model_feedback(unique_verified)
+        print(f"  ✓ Weighted accuracy: {weighted_accuracy}% across {len(unique_verified)} unique verified signals ({len(duplicates)} duplicates excluded)")
     
     def update_model_feedback(self, verified: List[Dict[str, Any]]):
         """Build lightweight learning feedback for reasoning engine."""
@@ -173,11 +190,14 @@ class AccuracyTracker:
         print("\n=== Signal Accuracy Tracker ===")
         
         if self.tracked:
-            verified = [s for s in self.tracked if s.get('verified')]
-            pending = [s for s in self.tracked if not s.get('verified')]
+            reviewed = [s for s in self.tracked if self._is_reviewed(s)]
+            pending = [s for s in self.tracked if not self._is_reviewed(s)]
+            duplicates = [s for s in reviewed if self._is_duplicate(s)]
+            unique_verified = [s for s in reviewed if not self._is_duplicate(s)]
             
             print(f"  Tracked signals: {len(self.tracked)}")
-            print(f"    Verified: {len(verified)}")
+            print(f"    Verified: {len(unique_verified)}")
+            print(f"    Duplicates: {len(duplicates)}")
             print(f"    Pending: {len(pending)}")
             
             if self.history_file.exists():
@@ -190,7 +210,7 @@ class AccuracyTracker:
     
     def review_pending(self):
         """Show pending signals for review"""
-        pending = [s for s in self.tracked if not s.get('verified')]
+        pending = [s for s in self.tracked if not self._is_reviewed(s)]
         
         if not pending:
             print("\nNo pending signals to review.")

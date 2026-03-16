@@ -6,8 +6,10 @@ Canonical reference for signal verification data used in learning loops.
 When signals are verified (correct/partial/incorrect), store structured context so future scoring can be improved with real outcomes.
 
 ## File Locations
-- `projects/market-intel/data/model_feedback.json` — central feedback tracker
+- `projects/market-intel/data/tracked_signals.json` — canonical per-signal verification store
+- `projects/market-intel/data/model_feedback.json` — aggregate feedback tracker regenerated from tracked reviews
 - `projects/market-intel/data/enhanced_signals.json` — generated signals with reasoning scores
+- `projects/market-intel/data/signal-verification-evidence-YYYY-MM-DD.md` — human-readable dated review session note
 - `projects/autonomous-trading-bot/data/tracked_signals.json` — executed equity trades linked to signals
 - `projects/futures-bot/data/` — futures-specific signal tracking
 
@@ -52,6 +54,10 @@ python3 src/accuracy_tracker.py --report
 1. Signal generated with reasoning score
 2. Trade executed (if STRONG BUY and risk checks pass)
 3. Outcome verified after 24-48 hours
-4. Evidence pack saved to `model_feedback.json`
-5. Reasoning engine adjusts future score weighting
-6. `signal-accuracy-review` cron tracks daily verification
+4. Structured per-signal evidence pack saved to `tracked_signals.json`
+5. Dated human-readable session note saved to `signal-verification-evidence-YYYY-MM-DD.md`
+6. Aggregate feedback regenerated into `model_feedback.json`
+7. Reasoning engine adjusts future score weighting
+8. `signal-accuracy-review` cron tracks daily verification
+
+See also: `docs/signal-review-workflow.md`

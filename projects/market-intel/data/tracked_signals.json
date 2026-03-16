@@ -37,12 +37,34 @@
       "root_causes": []
     },
     "added_at": "2026-03-10T20:47:35.846354",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "CEO Amin Nasser confirmed 5-year low inventories",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:23:00+07:00",
-    "verification_note": "Aramco CEO warning confirmed, volatility spike and risk repricing observed"
+    "verified_at": "2026-03-16T14:36:53.754749+08:00",
+    "verification_note": "CEO Amin Nasser confirmed 5-year low inventories",
+    "evidence_pack": {
+      "summary": "CEO Amin Nasser confirmed 5-year low inventories; 13M bpd net loss if Strait blocked permanently",
+      "drivers": [
+        "CEO Amin Nasser confirmed 5-year low inventories",
+        "13M bpd net loss if Strait blocked permanently",
+        "Intraday Brent swing nearly $30",
+        "VIX fell 10.08% to 22.93 (relief rally)"
+      ],
+      "metrics": {
+        "observations": [
+          "CEO Amin Nasser confirmed 5-year low inventories",
+          "13M bpd net loss if Strait blocked permanently",
+          "Intraday Brent swing nearly $30",
+          "VIX fell 10.08% to 22.93 (relief rally)"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -82,12 +104,29 @@
       "root_causes": []
     },
     "added_at": "2026-03-11T02:47:34.397766",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Aramco catastrophe warning confirmed, volatility and risk repricing observed",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:24:00+07:00",
-    "verification_note": "Aramco catastrophe warning confirmed, volatility and risk repricing observed"
+    "verified_at": "2026-03-16T14:38:24.817931+08:00",
+    "verification_note": "Aramco catastrophe warning confirmed, volatility and risk repricing observed",
+    "evidence_pack": {
+      "summary": "Strait of Hormuz reopening warning repriced oil and policy expectations",
+      "drivers": [
+        "Brent swung from 1 to 2 in a single session",
+        "Field shut-ins confirmed at Safaniya and Marjan",
+        "ECB and BoE rate-cut probability collapsed"
+      ],
+      "metrics": {
+        "brent_session_move_pct": 12.5,
+        "oil_field_shut_in_mbd": 2.5
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md"
+    }
   },
   {
     "signal": {
@@ -128,12 +167,33 @@
       "root_causes": []
     },
     "added_at": "2026-03-11T03:47:32.137734",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "WTI gapped from $76 to $87 (short-covering panic)",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:25:00+07:00",
-    "verification_note": "Oil squeeze mechanics confirmed, forced covering and volatility clustering observed"
+    "verified_at": "2026-03-16T14:36:53.755206+08:00",
+    "verification_note": "WTI gapped from $76 to $87 (short-covering panic)",
+    "evidence_pack": {
+      "summary": "WTI gapped from $76 to $87 (short-covering panic); OVX hit record 100",
+      "drivers": [
+        "WTI gapped from $76 to $87 (short-covering panic)",
+        "OVX hit record 100",
+        "VIX established in 25-27 range",
+        "\"Positioning Trap\" confirmed"
+      ],
+      "metrics": {
+        "observations": [
+          "WTI gapped from $76 to $87 (short-covering panic)",
+          "OVX hit record 100",
+          "VIX established in 25-27 range"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -173,12 +233,33 @@
       "root_causes": []
     },
     "added_at": "2026-03-11T14:47:36.567701",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "FT confirmed \"Project Danube\" leak",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:27:00+07:00",
-    "verification_note": "Kremlin Orb\u00e1n influence campaign confirmed, HUF volatility and credit spread widening observed"
+    "verified_at": "2026-03-16T14:36:53.755395+08:00",
+    "verification_note": "FT confirmed \"Project Danube\" leak",
+    "evidence_pack": {
+      "summary": "FT confirmed \"Project Danube\" leak; HUF dropped 2.4% vs EUR",
+      "drivers": [
+        "FT confirmed \"Project Danube\" leak",
+        "HUF dropped 2.4% vs EUR",
+        "Hungary-Germany 10Y spread widened 35bps",
+        "Article 7 sanctions discussion triggered"
+      ],
+      "metrics": {
+        "observations": [
+          "HUF dropped 2.4% vs EUR",
+          "Hungary-Germany 10Y spread widened 35bps",
+          "Article 7 sanctions discussion triggered"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -220,12 +301,34 @@
       "root_causes": []
     },
     "added_at": "2026-03-12T02:47:30.892649",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "BlackRock capped redemptions at 5%",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:28:00+07:00",
-    "verification_note": "JPM private credit markdowns confirmed, financials volatility and credit tightening observed"
+    "verified_at": "2026-03-16T14:36:53.755581+08:00",
+    "verification_note": "BlackRock capped redemptions at 5%",
+    "evidence_pack": {
+      "summary": "BlackRock capped redemptions at 5%; Blackstone faced 7.9% redemption request, injected $400M",
+      "drivers": [
+        "BlackRock capped redemptions at 5%",
+        "Blackstone faced 7.9% redemption request, injected $400M",
+        "BLX, GS, MS stocks down 5-7%",
+        "Credit spreads widened 150-200bps in 48 hours"
+      ],
+      "metrics": {
+        "observations": [
+          "BlackRock capped redemptions at 5%",
+          "Blackstone faced 7.9% redemption request, injected $400M",
+          "BLX, GS, MS stocks down 5-7%",
+          "Credit spreads widened 150-200bps in 48 hours"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -265,12 +368,32 @@
       "root_causes": []
     },
     "added_at": "2026-03-12T04:47:31.405639",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "CNE.L surged 6.4% on bid news",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:30:00+07:00",
-    "verification_note": "Capricorn Saudi takeover bid confirmed, volatility and risk repricing observed"
+    "verified_at": "2026-03-16T14:36:53.755772+08:00",
+    "verification_note": "CNE.L surged 6.4% on bid news",
+    "evidence_pack": {
+      "summary": "CNE.L surged 6.4% on bid news; Due diligence granted, April 8 deadline",
+      "drivers": [
+        "CNE.L surged 6.4% on bid news",
+        "Due diligence granted, April 8 deadline",
+        "SMID energy repriced higher",
+        "Egyptian concession values repriced"
+      ],
+      "metrics": {
+        "observations": [
+          "CNE.L surged 6.4% on bid news",
+          "Due diligence granted, April 8 deadline"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -310,12 +433,34 @@
       "root_causes": []
     },
     "added_at": "2026-03-12T08:47:32.943311",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "USD/INR hit record low 92.52",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:31:00+07:00",
-    "verification_note": "USD/INR hit record low 92.52, RBI intervention confirmed"
+    "verified_at": "2026-03-16T14:36:53.755984+08:00",
+    "verification_note": "USD/INR hit record low 92.52",
+    "evidence_pack": {
+      "summary": "USD/INR hit record low 92.52; RBI intervened with $11.7B reserve drawdown",
+      "drivers": [
+        "USD/INR hit record low 92.52",
+        "RBI intervened with $11.7B reserve drawdown",
+        "Banks revised targets to 95.00",
+        "Nifty 50 down 7%"
+      ],
+      "metrics": {
+        "observations": [
+          "USD/INR hit record low 92.52",
+          "RBI intervened with $11.7B reserve drawdown",
+          "Banks revised targets to 95.00",
+          "Nifty 50 down 7%"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -355,12 +500,34 @@
       "root_causes": []
     },
     "added_at": "2026-03-12T14:47:34.136538",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "24-30 VLCCs rushed to Yanbu",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:33:00+07:00",
-    "verification_note": "Tanker armada confirmed, VLCC rates spiked, risk repricing observed"
+    "verified_at": "2026-03-16T14:36:53.756189+08:00",
+    "verification_note": "24-30 VLCCs rushed to Yanbu",
+    "evidence_pack": {
+      "summary": "24-30 VLCCs rushed to Yanbu; Petroline ramped to 7M bpd capacity",
+      "drivers": [
+        "24-30 VLCCs rushed to Yanbu",
+        "Petroline ramped to 7M bpd capacity",
+        "Yanbu exports hit record 2.5M bpd",
+        "War-risk premiums hit 1.3%"
+      ],
+      "metrics": {
+        "observations": [
+          "24-30 VLCCs rushed to Yanbu",
+          "Petroline ramped to 7M bpd capacity",
+          "Yanbu exports hit record 2.5M bpd",
+          "War-risk premiums hit 1.3%"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -401,12 +568,34 @@
       "root_causes": []
     },
     "added_at": "2026-03-12T23:47:32.593621",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Defaults projected to double to 5%+",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:35:00+07:00",
-    "verification_note": "Partners Group default warning confirmed, financials volatility and credit tightening observed"
+    "verified_at": "2026-03-16T14:36:53.756378+08:00",
+    "verification_note": "Defaults projected to double to 5%+",
+    "evidence_pack": {
+      "summary": "Defaults projected to double to 5%+; Morgan Stanley restricted withdrawals (10.9% request, 45% fulfilled)",
+      "drivers": [
+        "Defaults projected to double to 5%+",
+        "Morgan Stanley restricted withdrawals (10.9% request, 45% fulfilled)",
+        "BDCs traded down to 78 cents on dollar",
+        "Spreads widened 100-150bps"
+      ],
+      "metrics": {
+        "observations": [
+          "Defaults projected to double to 5%+",
+          "Morgan Stanley restricted withdrawals (10.9% request, 45% fulfilled)",
+          "BDCs traded down to 78 cents on dollar",
+          "Spreads widened 100-150bps"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -446,12 +635,33 @@
       "root_causes": []
     },
     "added_at": "2026-03-13T08:47:34.127000",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "General License 134 issued",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:36:00+07:00",
-    "verification_note": "US General License 134 confirmed, 128M barrels released, volatility and risk repricing observed"
+    "verified_at": "2026-03-16T14:36:53.756575+08:00",
+    "verification_note": "General License 134 issued",
+    "evidence_pack": {
+      "summary": "General License 134 issued; 128M barrels authorized for 30 days",
+      "drivers": [
+        "General License 134 issued",
+        "128M barrels authorized for 30 days",
+        "Brent dipped below $100 to $99.75",
+        "Merz criticized as \"wrong\""
+      ],
+      "metrics": {
+        "observations": [
+          "General License 134 issued",
+          "128M barrels authorized for 30 days",
+          "Brent dipped below $100 to $99.75"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -491,12 +701,25 @@
       "root_causes": []
     },
     "added_at": "2026-03-13T09:47:35.820100",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
-    "outcome": "correct",
-    "verified_at": "2026-03-15T13:38:00+07:00",
-    "verification_note": "GL 134 confirmed (duplicate of signal 12), volatility and risk repricing observed"
+    "verified": true,
+    "actual_outcome": "DUPLICATE",
+    "notes": "STRONG BUY \u2705",
+    "outcome": "duplicate",
+    "verified_at": "2026-03-16T14:36:53.756766+08:00",
+    "verification_note": "STRONG BUY \u2705",
+    "evidence_pack": {
+      "summary": "STRONG BUY \u2705",
+      "drivers": [],
+      "metrics": {
+        "observations": []
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "duplicate",
+      "asset_expression_verdict": "duplicate",
+      "duplicate_of": "see related verified signal in same session"
+    }
   },
   {
     "signal": {
@@ -536,12 +759,23 @@
       "root_causes": []
     },
     "added_at": "2026-03-13T15:47:33.962169",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
-    "outcome": "correct",
-    "verified_at": "2026-03-15T13:45:00+07:00",
-    "verification_note": "Duplicate of earlier verified signals"
+    "verified": true,
+    "actual_outcome": "DUPLICATE",
+    "notes": "Duplicate of the earlier Russian oil sanctions verification in the same review session",
+    "outcome": "duplicate",
+    "verified_at": "2026-03-16T14:38:24.897275+08:00",
+    "verification_note": "Duplicate of the earlier Russian oil sanctions verification in the same review session",
+    "evidence_pack": {
+      "summary": "Same Russia oil sanctions event cluster as the temporarily-allow-stranded-oil signal",
+      "drivers": [
+        "Headline cluster reflects the same sanctions-easing event"
+      ],
+      "metrics": {},
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "duplicate_of": "US to temporarily allow countries to buy Russian oil stranded at sea",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md"
+    }
   },
   {
     "signal": {
@@ -581,12 +815,23 @@
       "root_causes": []
     },
     "added_at": "2026-03-13T19:47:44.121274",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
-    "outcome": "correct",
-    "verified_at": "2026-03-15T13:45:00+07:00",
-    "verification_note": "Duplicate of earlier verified signals"
+    "verified": true,
+    "actual_outcome": "DUPLICATE",
+    "notes": "Duplicate of the later Merz sanctions-reaction verification in the same review session",
+    "outcome": "duplicate",
+    "verified_at": "2026-03-16T14:38:24.971817+08:00",
+    "verification_note": "Duplicate of the later Merz sanctions-reaction verification in the same review session",
+    "evidence_pack": {
+      "summary": "Same Merz / sanctions-fracture narrative as the companion signal",
+      "drivers": [
+        "Headline cluster reflects the same EU-US sanctions reaction event"
+      ],
+      "metrics": {},
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "duplicate_of": "Germany\u2019s Merz hits out at \u2018wrong\u2019 US decision to ease Russia oil sanctions",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md"
+    }
   },
   {
     "signal": {
@@ -626,12 +871,29 @@
       "root_causes": []
     },
     "added_at": "2026-03-13T20:47:33.857333",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Merz labeled move \"wrong\"",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:40:00+07:00",
-    "verification_note": "Merz criticism confirmed, G7 unity fracture and risk repricing observed"
+    "verified_at": "2026-03-16T14:36:53.756980+08:00",
+    "verification_note": "Merz labeled move \"wrong\"",
+    "evidence_pack": {
+      "summary": "Merz labeled move \"wrong\"; EU-US friction repriced",
+      "drivers": [
+        "Merz labeled move \"wrong\"",
+        "EU-US friction repriced",
+        "Defense stocks bid higher (Rheinmetall, BAE)",
+        "Transatlantic trade risk priced"
+      ],
+      "metrics": {
+        "observations": []
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -671,12 +933,23 @@
       "root_causes": []
     },
     "added_at": "2026-03-13T21:47:35.623393",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
-    "outcome": "correct",
-    "verified_at": "2026-03-15T13:41:00+07:00",
-    "verification_note": "Hegseth confirmation confirmed, 15000+ strikes confirmed, volatility and risk repricing observed"
+    "verified": true,
+    "actual_outcome": "DUPLICATE",
+    "notes": "Duplicate of the later Hegseth escalation verification in the same review session",
+    "outcome": "duplicate",
+    "verified_at": "2026-03-16T14:38:25.035672+08:00",
+    "verification_note": "Duplicate of the later Hegseth escalation verification in the same review session",
+    "evidence_pack": {
+      "summary": "Same Hegseth / Iran escalation event cluster as the companion signal",
+      "drivers": [
+        "Headline cluster reflects the same military-escalation event"
+      ],
+      "metrics": {},
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "duplicate_of": "Hegseth says Iran leader \u2018likely disfigured\u2019 as US vows to intensify strikes",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md"
+    }
   },
   {
     "signal": {
@@ -716,12 +989,33 @@
       "root_causes": []
     },
     "added_at": "2026-03-13T22:47:35.827562",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "15,000+ strikes confirmed in 14 days",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:45:00+07:00",
-    "verification_note": "Duplicate of earlier verified signals"
+    "verified_at": "2026-03-16T14:36:53.757193+08:00",
+    "verification_note": "15,000+ strikes confirmed in 14 days",
+    "evidence_pack": {
+      "summary": "15,000+ strikes confirmed in 14 days; 90% of Iran missile volume destroyed",
+      "drivers": [
+        "15,000+ strikes confirmed in 14 days",
+        "90% of Iran missile volume destroyed",
+        "Brent gapped toward $100",
+        "\"Regime Collapse\" scenario priced"
+      ],
+      "metrics": {
+        "observations": [
+          "15,000+ strikes confirmed in 14 days",
+          "90% of Iran missile volume destroyed",
+          "Brent gapped toward $100"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -762,12 +1056,31 @@
       "root_causes": []
     },
     "added_at": "2026-03-14T12:37:51.608917",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Judge Boasberg ruled \"essentially zero evidence\"",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:43:00+07:00",
-    "verification_note": "Fed vs DOJ ruling confirmed, rates volatility and factor rotation observed"
+    "verified_at": "2026-03-16T14:36:53.757383+08:00",
+    "verification_note": "Judge Boasberg ruled \"essentially zero evidence\"",
+    "evidence_pack": {
+      "summary": "Judge Boasberg ruled \"essentially zero evidence\"; DOJ vowed appeal to D.C. Circuit",
+      "drivers": [
+        "Judge Boasberg ruled \"essentially zero evidence\"",
+        "DOJ vowed appeal to D.C. Circuit",
+        "2-year yield experienced significant churn",
+        "Growth/Value split confirmed"
+      ],
+      "metrics": {
+        "observations": [
+          "2-year yield experienced significant churn"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
@@ -807,12 +1120,31 @@
       "root_causes": []
     },
     "added_at": "2026-03-14T23:47:34.162853",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": "",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Trump confirmed belief in Fox News interview",
     "outcome": "correct",
-    "verified_at": "2026-03-15T13:45:00+07:00",
-    "verification_note": "Trump Putin-Iran admission confirmed, volatility and risk repricing observed"
+    "verified_at": "2026-03-16T14:36:53.757568+08:00",
+    "verification_note": "Trump confirmed belief in Fox News interview",
+    "evidence_pack": {
+      "summary": "Trump confirmed belief in Fox News interview; \"Peace Rally\" collapsed",
+      "drivers": [
+        "Trump confirmed belief in Fox News interview",
+        "\"Peace Rally\" collapsed",
+        "Oil surged back toward $100",
+        "Ukraine-Iran linkage repriced"
+      ],
+      "metrics": {
+        "observations": [
+          "Oil surged back toward $100"
+        ]
+      },
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-15.md",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct"
+    }
   },
   {
     "signal": {
