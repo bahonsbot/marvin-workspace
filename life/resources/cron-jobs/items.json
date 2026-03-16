@@ -100,8 +100,78 @@
     "relatedEntities": [
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-04",
+    "lastAccessed": "2026-03-15",
+    "accessCount": 2,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "cron-009",
+    "fact": "Major cost control: 14 cron jobs moved from Bailian to minimax with lightContext=true (auto-signal-dispatcher, rss-feed-monitor, reddit-monitor, market-signal-generator, weekend-light variants, data-manager, entity-lifecycle-manager, weekly-test-suite, dependency-update-audit, enrichment-ab-review, signal-accuracy-review, skill-level-check).",
+    "category": "decision",
+    "timestamp": "2026-03-15T15:00:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-15",
     "accessCount": 1,
-    "lastUsed": "2026-03-11T20:52:31.817844"
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "cron-010",
+    "fact": "Weekend light-mode added: rss-feed-monitor-weekend-light and reddit-monitor-weekend-light added for lighter weekend scanning.",
+    "category": "status",
+    "timestamp": "2026-03-15T15:00:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "cron-011",
+    "fact": "autonomous-queue-wakeup schedule changed from hourly to 3x daily (10:15, 14:15, 18:15 ICT).",
+    "category": "decision",
+    "timestamp": "2026-03-15T21:13:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "AUTONOMY.md"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "cron-012",
+    "fact": "New cron job added: workspace-home-improvement runs daily at 07:30 ICT for bounded low-risk workspace maintenance, with Morning Meeting disclosure requirement.",
+    "category": "status",
+    "timestamp": "2026-03-15T21:13:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "AUTONOMY.md"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "cron-013",
+    "fact": "Autonomy gate implemented: scripts/autonomy_gate.py with three modes (workspace, queue, improve) provides deterministic preflight checks for autonomous execution.",
+    "category": "status",
+    "timestamp": "2026-03-15T21:13:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "AUTONOMY.md"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
   }
 ]

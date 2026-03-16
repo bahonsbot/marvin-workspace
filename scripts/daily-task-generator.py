@@ -25,17 +25,33 @@ from pathlib import Path
 WORKSPACE = Path("/data/.openclaw/workspace")
 AUTONOMOUS_FILE = WORKSPACE / "AUTONOMOUS.md"
 TASKS_LOG_FILE = WORKSPACE / "memory" / "tasks-log.md"
+TASK_SUGGESTIONS_FILE = WORKSPACE / "memory" / "task-suggestions.json"
 SKILL_PROFILE_FILE = WORKSPACE / "config" / "skill-profile.json"
 KANBAN_DIR = WORKSPACE / "projects" / "autonomous-kanban"
 KANBAN_BOARD_FILE = WORKSPACE / "projects" / "autonomous-kanban" / "public" / "board.json"
 LATEST_ASSESSMENT_FILE = WORKSPACE / "memory" / "skill-assessments" / "latest.json"
+CONTENT_SOURCE_DIRS = [
+    WORKSPACE / "projects" / "creative-practice",
+    WORKSPACE / "projects" / "portfolio",
+    WORKSPACE / "projects" / "creative-challenges",
+]
 
 # Ensure memory directory exists
 TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 # Generation constants
 NUM_TASKS = 5
-MAX_CREATIVE_MVP = 1  # At most one creative surprise MVP per run
+MAX_SURPRISE_MVP = 1  # Allowed only for useful tools/system improvements, not creative-output filler
+DISALLOWED_TASK_PHRASES = [
+    "case-study",
+    "case study",
+]
+REQUIRES_NAMED_SUBJECT_PHRASES = [
+    "company analysis",
+    "financial analysis",
+    "business analysis",
+]
+DELIVERABLE_PATH_PATTERN = re.compile(r'(?:deliverable|output):\s*([^|]+)', re.IGNORECASE)
 
 
 def load_skill_profile():
@@ -153,14 +169,14 @@ def classify_goal(goal_text):
 def generate_why(goal_type, goal_text):
     """Generate explicit reasoning why this task advances the goal."""
     why_templates = {
-        "creative_3d": "Directly builds 3D modeling/animation skills needed for Blender/Unreal goals",
-        "motion_design": "Creates practice opportunity for After Effects motion design skills",
-        "game_dev": "Hands-on experience with Unreal Engine world-building",
-        "portfolio": "Documents existing work - essential for landing creative roles",
-        "social_growth": "Consistent content is required to grow Instagram audience to 10k",
-        "content": "Video content drives YouTube/channel growth metrics",
-        "programming": "Writing code is the only way to actually learn Python - hands-on practice beats reading",
-        "language": "Spaced repetition with new vocabulary builds Japanese fluency",
+        "creative_3d": "Directly builds 3D modeling and animation skill through Philippe-owned practice",
+        "motion_design": "Creates structured After Effects practice that Philippe can personally execute and learn from",
+        "game_dev": "Builds Unreal understanding through scoped hands-on scene work",
+        "portfolio": "Improves portfolio direction by identifying what Philippe should personally make next, not by generating filler artifacts",
+        "social_growth": "Supports Instagram growth through publishable work or process content tied to Philippe's real practice",
+        "content": "Creates content support material only when it reinforces real work, not filler output",
+        "programming": "Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts",
+        "language": "Spaced repetition with focused vocabulary and pattern practice builds usable language skill",
         "trading": "Real market analysis and execution builds trading skill faster than passive learning",
         "automation": "Reduces repetitive manual work, freeing time for skill-building",
         "ops": "Improves OpenClaw reliability - essential for autonomous operations",
@@ -174,14 +190,14 @@ def generate_why(goal_type, goal_text):
 def generate_proof(goal_type):
     """Generate verification criterion for task completion."""
     proof_templates = {
-        "creative_3d": "Export renders MP4/image and notes what was learned",
-        "motion_design": "Motion file exports and plays without errors",
-        "game_dev": "Scene runs in editor with basic interaction working",
-        "portfolio": "Case-study markdown has problem/approach/result sections",
-        "social_growth": "Content scheduled in planner with specific post times",
-        "content": "Video file exists and thumbnail created",
-        "programming": "pytest passes - code runs without errors",
-        "language": "Deck has 25+ complete entries with readings",
+        "creative_3d": "Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill",
+        "motion_design": "Task produces a practice plan, reference pack, or exercise brief Philippe can execute in After Effects",
+        "game_dev": "Task produces a scoped Unreal exercise or scene plan with concrete next actions",
+        "portfolio": "Output ranks portfolio-worthy directions or gaps with a concrete next build choice",
+        "social_growth": "Output ties content ideas to real work Philippe made or will make, with clear posting angle",
+        "content": "Output is directly reusable as support for real work, not standalone filler",
+        "programming": "Task advances Python fundamentals, reading, or guided practice at the current level with a verifiable exercise outcome",
+        "language": "Deck or exercise set has complete entries and is usable for deliberate practice",
         "trading": "Brief shows entry/invalidation/risk for 2+ setups",
         "automation": "Script executes end-to-end on test input",
         "ops": "Process runs successfully with measurable improvement",
@@ -200,12 +216,12 @@ def generate_unlocks(goal_type, skill):
         return f"Progress toward: {milestones[0]}"
     
     unlocks_templates = {
-        "programming": "Unlocks more complex Python utilities and basic CLI tools",
-        "creative_3d": "Unlocks longer-form animations and character work",
-        "motion_design": "Unlocks commercial-ready motion graphics",
-        "trading": "Unlocks larger position sizes and more setups",
-        "language": "Unlocks basic conversation and reading practice",
-        "portfolio": "Unlocks job applications and client pitches",
+        "programming": "Unlocks the next Python learning stage after fundamentals are stable",
+        "creative_3d": "Unlocks more advanced Blender exercises and stronger portfolio pieces Philippe can make himself",
+        "motion_design": "Unlocks more intentional After Effects practice and stronger self-made motion pieces",
+        "trading": "Unlocks better watchlist discipline, named analyses, and more credible setup work",
+        "language": "Unlocks the next stage of reading and basic output practice",
+        "portfolio": "Unlocks better portfolio decisions about what to build next",
     }
     return unlocks_templates.get(goal_type, "Advances goal progress measurably")
 
@@ -300,164 +316,227 @@ def bias_toward_weakest_dimension(skill, task_desc):
     return task_desc, weakest
 
 
+def has_content_source_work():
+    """Return True only when there is concrete source work or a concrete build item to anchor content tasks."""
+    for path in CONTENT_SOURCE_DIRS:
+        if not path.exists():
+            continue
+        if path.is_file() and path.stat().st_size > 0:
+            return True
+        if path.is_dir():
+            for child in path.rglob("*"):
+                if child.is_file() and child.suffix.lower() in {".md", ".png", ".jpg", ".jpeg", ".webp", ".gif", ".mp4", ".blend", ".aep", ".ai", ".txt"}:
+                    if child.stat().st_size > 0:
+                        return True
+    return False
+
+
 def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
     """Convert a goal into a concrete autonomous task with Why/Proof/Unlocks.
-    
-    Args:
-        use_assessment_bias: If True, bias task toward weakest rubric dimension
+
+    Generation policy:
+    - prefer Philippe-owned progress over agent-made artifacts
+    - treat Python as staged language learning, similar to Japanese
+    - do not generate case studies unless explicitly requested
+    - do not generate unspecified company analyses
     """
     goal_lower = goal.lower()
-    
-    # Classify the goal
+
     goal_type, target_outcome, skill = classify_goal(goal)
-    
-    # Check skill-level appropriateness
+
     if skill:
         is_appropriate, reason = is_task_appropriate_for_level("", skill, goal)
         if not is_appropriate:
-            # Fall back to simpler task
             goal = "Learn Python basics with simple exercises"
+            goal_lower = goal.lower()
             goal_type, target_outcome, skill = classify_goal(goal)
-    
-    # Get skill level for task generation
+
     level = get_skill_level(skill) if skill else "intermediate"
-    
-    # Generate reasoning components
     why = generate_why(goal_type, goal)
     proof = generate_proof(goal_type)
     unlocks = generate_unlocks(goal_type, skill)
-    
-    # Build task description based on goal type
+
     if 'blender' in goal_lower:
-        task_desc = "one 15-second practice clip in Blender; deliverable: MP4 in projects/creative-practice/ with 3 bullet notes on what improved"
+        task_prefix = "📚 Learn:"
+        task_desc = "pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist"
     elif 'after effects' in goal_lower or 'after_effects' in goal_lower:
-        task_desc = "one 10-second motion design loop; deliverable: MP4 with built-in effects in projects/creative-practice/"
+        task_prefix = "📚 Learn:"
+        task_desc = "create one After Effects practice brief focused on keyframes, easing, or a simple loop; deliverable: markdown exercise in projects/creative-practice/ with references and execution checklist"
     elif 'unreal' in goal_lower:
-        task_desc = "one basic interactive scene setup; deliverable: UE project with basic movement in projects/game-dev/"
+        task_prefix = "📚 Learn:"
+        task_desc = "prepare one scoped Unreal practice exercise using pre-made assets and one mechanic only; deliverable: scene brief in projects/game-dev/ with setup steps and success checklist"
     elif 'portfolio' in goal_lower:
-        task_desc = "one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/"
+        task_prefix = "📊 Analyze:"
+        task_desc = "rank 3 portfolio directions or existing projects by creative relevance and personal ownership; deliverable: markdown shortlist in projects/portfolio/ with recommendation for what Philippe should build next"
     elif 'instagram' in goal_lower or 'social' in goal_lower:
-        task_desc = "3 content ideas for social media; deliverable: content-plan markdown with hooks and posting slots"
+        if not has_content_source_work():
+            return None
+        task_prefix = "📝 Draft:"
+        task_desc = "draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle"
     elif 'python' in goal_lower:
-        # Skill-aware Python task
+        task_prefix = "📚 Learn:"
         if level == "novice":
-            task_desc = "a simple Python utility script with clear structure; deliverable: script.py with comments, runs on sample input"
+            task_desc = "build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises"
+            proof = "Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts"
+        elif level == "beginner":
+            task_desc = "create one guided Python reading-and-practice exercise on functions, loops, or lists; deliverable: markdown exercise in projects/python-learning/ plus a small starter script"
+            proof = "Exercise includes code reading, prediction questions, and one guided practice task at the current level"
         else:
-            task_desc = "a Python utility with tests; deliverable: script.py + test_file.py with pytest passing"
+            task_desc = "create one guided Python practice task that bridges reading and small real-world application; deliverable: markdown exercise in projects/python-learning/ plus starter code"
+            proof = "Exercise clearly advances the next Python milestone with both comprehension and practice"
     elif 'japanese' in goal_lower:
-        task_desc = "a 25-term Japanese study deck from one theme; deliverable: markdown deck in projects/language/"
-    elif 'trading' in goal_lower or 'equity' in goal_lower or 'futures' in goal_lower:
-        task_desc = "one market setup brief for next session; deliverable: markdown brief in projects/trading-briefs/ with entry/invalidation/risk"
+        task_prefix = "📚 Learn:"
+        task_desc = "create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts"
     elif 'business analysis' in goal_lower or 'financial' in goal_lower:
-        task_desc = "one company analysis using available metrics; deliverable: structured note in projects/company-research/"
-    elif 'automate' in goal_lower or 'openclaw' in goal_lower:
-        task_desc = "one repetitive workflow automation; deliverable: runnable script in scripts/ with usage header"
+        task_prefix = "📚 Learn:"
+        task_desc = "create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts"
+        proof = "Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice"
+        unlocks = "Unlocks later analysis tasks based on real followed companies once the watchlist is defined"
+    elif 'equity' in goal_lower or 'futures' in goal_lower:
+        task_prefix = "🔧 Fix:"
+        task_desc = "identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder"
+        proof = "Spec targets a real bot-support improvement and avoids unsafe live-trading config changes"
+        unlocks = "Unlocks a higher-quality system improvement task for the trading bots"
+    elif 'trading' in goal_lower:
+        task_prefix = "📊 Analyze:"
+        task_desc = "prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules"
+    elif 'automate' in goal_lower:
+        task_prefix = "🔧 Fix:"
+        task_desc = "identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries"
+        proof = "Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly"
+    elif 'openclaw' in goal_lower:
+        task_prefix = "🔧 Fix:"
+        task_desc = "identify one OpenClaw process weakness and propose a small reliability improvement with clear input/output, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/"
+        proof = "Spec targets an OpenClaw process weakness without proposing risky live config edits"
     elif 'saas' in goal_lower or 'product' in goal_lower:
-        task_desc = "one thin MVP increment; deliverable: working prototype in relevant project folder"
+        task_prefix = "📝 Draft:"
+        task_desc = "define one thin MVP increment with explicit scope, dependencies, and success criteria; deliverable: spec note in the relevant project folder"
     elif 'partnership' in goal_lower or 'community' in goal_lower:
-        task_desc = "a partner/outreach target list; deliverable: ranked list of 10 targets in projects/outreach/"
+        task_prefix = "📝 Draft:"
+        task_desc = "create a ranked outreach target list of 10 relevant people or communities; deliverable: markdown list in projects/outreach/ with rationale"
     else:
-        task_desc = f"an actionable step toward: {goal[:50]}"
-    
-    # Apply assessment bias if enabled (targets weakest dimension)
+        task_prefix = "📝 Draft:"
+        task_desc = f"an actionable next step toward: {goal[:50]}"
+
     focus_dimension = None
     if use_assessment_bias and skill and skill in DIMENSION_FOCUS:
         task_desc, focus_dimension = bias_toward_weakest_dimension(skill, task_desc)
         if focus_dimension:
-            # Update unlocks to mention the focus area
             focus_text = DIMENSION_FOCUS.get(skill, {}).get(focus_dimension, "")
             if focus_text:
                 unlocks = f"Focus on {focus_text}. {unlocks}"
-    
-    # Select task type prefix
-    task_prefix = TASK_TYPES[hash(goal) % len(TASK_TYPES)][0]
-    
-    # Build full task with Why/Proof/Unlocks
+
     task = f"[{category}] {task_prefix} {task_desc} | Why: {why} | Proof: {proof} | Unlocks: {unlocks}"
-    
     return task
+
+
+def maybe_add_surprise_mvp(tasks, goals, seen):
+    """Add at most one useful surprise MVP in system/tool/project-improvement lanes."""
+    import random
+
+    if MAX_SURPRISE_MVP <= 0:
+        return tasks
+
+    goal_text = " ".join(item.lower() for items in goals.values() for item in items)
+    candidates = []
+
+    if "openclaw" in goal_text or "automate" in goal_text:
+        candidates.extend([
+            "[Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
+            "[Other] 🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation"
+        ])
+
+    if "equity trading" in goal_text or "autonomous-trading-bot" in goal_text or "futures" in goal_text:
+        candidates.extend([
+            "[Trading] 🎁 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements"
+        ])
+
+    if "japanese" in goal_text or "python" in goal_text or "business analysis" in goal_text:
+        candidates.extend([
+            "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development"
+        ])
+
+    filtered = [c for c in candidates if c.lower() not in seen]
+    if not filtered:
+        return tasks
+
+    # Prefer keeping the surprise MVP visible over weaker replaceable generated tasks.
+    surprise = random.choice(filtered)
+    if len(tasks) >= NUM_TASKS:
+        replaceable_prefixes = [
+            "[trading] 📊 analyze: prepare one market-prep checklist",
+            "[career] 📚 learn: pick one beginner-intermediate blender exercise",
+            "[personal] 📚 learn: create one focused japanese study pack",
+            "[personal] 📚 learn: build one beginner python study sheet",
+            "[other] 🔧 fix: identify one openclaw process weakness",
+            "[other] 🔧 fix: identify one repetitive workspace workflow",
+        ]
+        for i in range(len(tasks) - 1, -1, -1):
+            lower = tasks[i].lower()
+            if any(lower.startswith(prefix) for prefix in replaceable_prefixes):
+                tasks[i] = surprise
+                return tasks[:NUM_TASKS]
+        return tasks[:NUM_TASKS]
+
+    tasks.append(surprise)
+    return tasks[:NUM_TASKS]
 
 
 def generate_tasks(goals):
     """Generate 4-5 actionable tasks from goals using structured synthesis."""
     import random
-    
+
     all_goals = []
     for category, items in goals.items():
         for item in items:
             all_goals.append((category, item))
-    
+
     if not all_goals:
         return []
-    
-    # Get recent tasks for deduplication
+
     recent_tasks = get_recent_tasks()
-    
-    # Prioritize goals not recently worked on
+    completed_deliverables = get_completed_deliverables()
+    existing_deliverables = get_existing_autonomous_deliverables()
+    blocked_deliverables = completed_deliverables | existing_deliverables
+
     available_goals = []
     for category, goal in all_goals:
         goal_key = goal.lower().strip()
         if goal_key not in recent_tasks:
             available_goals.append((category, goal))
-    
-    # If we've covered most goals, allow some overlap but prefer variety
+
     if len(available_goals) < 3:
         available_goals = all_goals[:]
-    
-    # Pick up to NUM_TASKS-1 from available goals (save 1 for creative MVP)
-    num_regular = min(NUM_TASKS - MAX_CREATIVE_MVP, len(available_goals))
-    if num_regular > 0:
-        selected_goals = random.sample(available_goals, min(num_regular, len(available_goals)))
-    else:
-        selected_goals = []
-    
-    # Check if assessment-based task biasing is enabled
+
+    num_regular = min(NUM_TASKS - MAX_SURPRISE_MVP, len(available_goals))
+    selected_goals = random.sample(available_goals, min(num_regular, len(available_goals))) if num_regular > 0 else []
+
     use_assessment_bias = os.environ.get("TASK_ASSESSMENT_BIAS", "false").lower() == "true"
-    assessment_info = ""
-    if use_assessment_bias:
-        assessment = load_latest_assessment()
-        if assessment.get("skills"):
-            assessment_info = " (assessment-biased toward weakest dimensions)"
-    
-    # Synthesize regular tasks with lightweight dedupe
+
     tasks = []
     seen = set()
     for category, goal in selected_goals:
         task = synthesize_task(goal, category, recent_tasks, use_assessment_bias=use_assessment_bias)
+        if not task:
+            continue
         key = task.lower().strip()
+
+        if any(phrase in key for phrase in DISALLOWED_TASK_PHRASES):
+            continue
+
+        if any(phrase in key for phrase in REQUIRES_NAMED_SUBJECT_PHRASES) and "named ticker" not in key and "shortlist" not in key and "template" not in key:
+            continue
+
+        task_deliverables = extract_deliverable_paths(task)
+        if task_deliverables and task_deliverables & blocked_deliverables:
+            continue
+
         if key not in seen:
             tasks.append(task)
             seen.add(key)
-    
-    # Add at most one creative surprise MVP task (skill-appropriate)
-    if MAX_CREATIVE_MVP and tasks:
-        # Choose skill-appropriate creative MVP
-        python_level = get_skill_level("python")
-        
-        if python_level == "novice":
-            creative_options = [
-                "Create a simple Python print script that outputs an encouraging message",
-                "Write a Python script that organizes files in one folder",
-            ]
-        else:
-            creative_options = [
-                "Build a quick Python automation script for a daily task",
-                "Create a simple data visualization with matplotlib",
-                "Write a Python script that fetches and saves web content",
-            ]
-        
-        creative_task = random.choice(creative_options)
-        cat = selected_goals[0][0] if selected_goals else "Creative"
-        
-        # Creative MVP also gets Why/Proof/Unlocks
-        why = "Creative MVPs build confidence and generate content for portfolio/social"
-        proof = "Artifact created and demo note saved"
-        unlocks = "Unlocks more ambitious creative projects"
-        
-        mvp_task = f"[{cat}] 🎨 Creative MVP: {creative_task} | Why: {why} | Proof: {proof} | Unlocks: {unlocks}"
-        if mvp_task.lower() not in seen:
-            tasks.append(mvp_task)
-    
+            blocked_deliverables.update(task_deliverables)
+
+    tasks = maybe_add_surprise_mvp(tasks, goals, seen)
     return tasks[:NUM_TASKS]
 
 
@@ -506,6 +585,25 @@ def read_autonomous_file():
     return goals, []
 
 
+def normalize_pathish(text):
+    return text.strip().strip('`').rstrip('.,)').lower()
+
+
+def extract_deliverable_paths(text):
+    match = DELIVERABLE_PATH_PATTERN.search(text)
+    if not match:
+        return set()
+
+    raw = match.group(1)
+    candidates = re.split(r'[,\n]+', raw)
+    paths = set()
+    for candidate in candidates:
+        cleaned = normalize_pathish(candidate)
+        if '/' in cleaned or cleaned.endswith(('.md', '.py', '.html', '.json', '.txt', '.blend', '.aep')):
+            paths.add(cleaned)
+    return paths
+
+
 def get_recent_tasks(days=14):
     """Get tasks completed in the last N days to avoid repetition."""
     if not TASKS_LOG_FILE.exists():
@@ -531,31 +629,87 @@ def get_recent_tasks(days=14):
     return recent
 
 
+def get_completed_deliverables(days=30):
+    """Collect recently completed deliverable/output paths from tasks-log.md."""
+    if not TASKS_LOG_FILE.exists():
+        return set()
+
+    completed = set()
+    cutoff = datetime.now() - timedelta(days=days)
+
+    for line in TASKS_LOG_FILE.read_text().split('\n'):
+        match = re.match(r'- ✅ \[(\d{4}-\d{2}-\d{2})', line)
+        if not match:
+            continue
+        try:
+            task_date = datetime.strptime(match.group(1), "%Y-%m-%d")
+        except ValueError:
+            continue
+        if task_date < cutoff:
+            continue
+        completed.update(extract_deliverable_paths(line))
+
+    return completed
+
+
+def get_existing_autonomous_deliverables():
+    """Collect deliverable/output paths already referenced in AUTONOMOUS.md."""
+    if not AUTONOMOUS_FILE.exists():
+        return set()
+
+    paths = set()
+    for line in AUTONOMOUS_FILE.read_text().splitlines():
+        paths.update(extract_deliverable_paths(line))
+    return paths
+
+
+def load_task_suggestions():
+    if not TASK_SUGGESTIONS_FILE.exists():
+        return []
+    try:
+        data = json.loads(TASK_SUGGESTIONS_FILE.read_text())
+        return data if isinstance(data, list) else []
+    except (json.JSONDecodeError, IOError):
+        return []
+
+
+def get_active_suggestion_tasks():
+    tasks = []
+    for item in load_task_suggestions():
+        if item.get("status") in {"suggested", "promoted"} and item.get("task"):
+            tasks.append(item["task"])
+    return tasks
+
+
 def update_autonomous_file(new_tasks):
-    """Update AUTONOMOUS.md with new tasks, keeping it token-light."""
-    
-    # Keep max 5 tasks to stay light (~50 lines total)
-    limited = new_tasks[:NUM_TASKS]
-    
-    # Read current file
+    """Update AUTONOMOUS.md with new tasks, preserving Philippe suggestions at the top."""
+
+    suggestion_tasks = get_active_suggestion_tasks()
+    combined = []
+    seen = set()
+
+    for task in suggestion_tasks + new_tasks:
+        key = task.strip().lower()
+        if key and key not in seen:
+            combined.append(task)
+            seen.add(key)
+
+    limited = combined[:NUM_TASKS]
     content = AUTONOMOUS_FILE.read_text()
-    
-    # Replace Open Backlog section
+
     new_section = "## Open Backlog\n\n"
     if limited:
         for task in limited:
             new_section += f"- {task}\n"
     else:
         new_section += "*(Empty - no active tasks)*\n"
-    
-    # Rebuild file with updated section
+
     if "## Open Backlog" in content:
-        # Find and replace existing section
         pattern = r'## Open Backlog\s*\n.*?(?=\n##|\Z)'
         content = re.sub(pattern, new_section.rstrip() + "\n\n", content, flags=re.DOTALL)
     else:
         content += "\n" + new_section
-    
+
     AUTONOMOUS_FILE.write_text(content)
 
 

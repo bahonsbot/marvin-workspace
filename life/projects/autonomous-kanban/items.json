@@ -1,0 +1,118 @@
+[
+  {
+    "id": "ak-001",
+    "fact": "Autonomous Kanban project created to track goal-driven daily tasks with GitHub Pages live board at bahonsbot.github.io/marvin-workspace/autonomous-kanban/.",
+    "category": "status",
+    "timestamp": "2026-03-09T08:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "ak-002",
+    "fact": "Board sync fixed (Mar 12): Fixed drift between sync-board.js and autonomous-task-executor.py by using real sources of truth - Open Backlog -> todo, In Progress -> inprogress, tasks-log.md verified entries -> done.",
+    "category": "status",
+    "timestamp": "2026-03-12T01:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "ak-003",
+    "fact": "GitHub Pages workflow fixed: Corrected stale archived path reference to projects/market-intel-news-reader/app/* that was causing build failures.",
+    "category": "status",
+    "timestamp": "2026-03-12T01:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban",
+      "projects/market-intel-news-reader"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "ak-004",
+    "fact": "Trustworthiness hardening: Done column now requires verified output file exists. Invalidated false completion claim for encouraging-message Python task. Cleaned AUTONOMOUS.md state of fake/stale entries.",
+    "category": "status",
+    "timestamp": "2026-03-12T02:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "ak-005",
+    "fact": "Executor improvements: Rich tasks no longer create placeholder files - they are queued for sub-agent work. Only small script/automation tasks stay on direct executor path. Added memory/executor-last-result.json tracking.",
+    "category": "status",
+    "timestamp": "2026-03-12T03:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "ak-006",
+    "fact": "Queue architecture changed: Switched from isolated cron nested delegation to main-session wakeup (autonomous-queue-wakeup cron). Added queue_state.py helper with status, can-start, heal-stale commands.",
+    "category": "decision",
+    "timestamp": "2026-03-12T04:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "ak-007",
+    "fact": "Prerequisite-gate implemented: Tasks missing required human input now move to Needs Input state with focused blocker question. Detection rules: followed-companies without starter list, tasks depending on unspecified source work or personal workflow choice.",
+    "category": "status",
+    "timestamp": "2026-03-12T14:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "ak-008",
+    "fact": "Agent-team integration: Executor now classifies tasks into execution modes (direct, subagent, agent_team). agent_team mode routes implementation-heavy tasks through Marvin -> Builder -> Reviewer workflow.",
+    "category": "status",
+    "timestamp": "2026-03-12T23:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban",
+      "projects/agent-team"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  }
+]

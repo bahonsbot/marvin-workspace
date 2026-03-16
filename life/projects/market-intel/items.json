@@ -9,7 +9,7 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-06",
-    "accessCount": 5,
+    "accessCount": 6,
     "source": "memory/2026-02-26.md",
     "lastUsed": "2026-03-11T20:52:31.816794"
   },
@@ -23,7 +23,7 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 4,
+    "accessCount": 5,
     "source": "memory/2026-02-26.md",
     "lastUsed": "2026-03-11T20:52:31.816802"
   },
@@ -38,7 +38,7 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 4,
+    "accessCount": 5,
     "source": "memory/2026-02-26.md",
     "lastUsed": "2026-03-11T20:52:31.816804"
   },
@@ -53,7 +53,7 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3,
+    "accessCount": 4,
     "lastUsed": "2026-03-11T20:52:31.816806"
   },
   {
@@ -67,7 +67,7 @@
       "resources/cron-jobs"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 4,
+    "accessCount": 5,
     "lastUsed": "2026-03-11T20:52:31.816808"
   },
   {
@@ -81,7 +81,7 @@
       "areas/people/philippe"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3,
+    "accessCount": 4,
     "lastUsed": "2026-03-11T20:52:31.816810"
   },
   {
@@ -95,7 +95,7 @@
       "projects/market-intel-news-reader"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 4,
+    "accessCount": 5,
     "lastUsed": "2026-03-11T20:52:31.816812"
   },
   {
@@ -109,7 +109,7 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3,
+    "accessCount": 4,
     "lastUsed": "2026-03-11T20:52:31.816814"
   },
   {
@@ -123,7 +123,7 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3,
+    "accessCount": 4,
     "lastUsed": "2026-03-11T20:52:31.816816"
   },
   {
@@ -138,7 +138,7 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-05",
-    "accessCount": 3,
+    "accessCount": 4,
     "lastUsed": "2026-03-11T20:52:31.816818"
   },
   {
@@ -167,7 +167,7 @@
       "projects/autonomous-trading-bot"
     ],
     "lastAccessed": "2026-03-07",
-    "accessCount": 2,
+    "accessCount": 3,
     "source": "memory/2026-03-05.md",
     "lastUsed": "2026-03-11T20:52:31.816822"
   },
@@ -196,7 +196,7 @@
       "projects/market-intel"
     ],
     "lastAccessed": "2026-03-08",
-    "accessCount": 2,
+    "accessCount": 3,
     "source": "memory/cron-context.json",
     "lastUsed": "2026-03-11T20:52:31.816826"
   },
@@ -214,5 +214,50 @@
     "accessCount": 1,
     "source": "memory/2026-03-08.md",
     "lastUsed": "2026-03-11T20:52:31.816828"
+  },
+  {
+    "id": "mi-017",
+    "fact": "Market Intel -> equity-bot interface audit (Mar 12): Identified weaknesses - intelligence compression too early, no strong symbol/instrument relevance bridge, historical-pattern intelligence not transferred, evidence-pack richness not operationally consumed, A/B feedback barely reaches execution. Diagnosis: Market Intel acts more like macro/risk overlay than execution-grade signal-intelligence engine.",
+    "category": "status",
+    "timestamp": "2026-03-12T20:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "mi-018",
+    "fact": "Execution candidates interface created: New execution-oriented layer between Market Intel and bots at projects/market-intel/data/execution_candidates.json. Spec: projects/market-intel/docs/execution-candidates-spec.md. Core design: carries signal_id and candidate_id, exposes ranked instrument_candidates instead of hidden symbol guess, includes dispatch_readiness with reasons when not ready, preserves execution-relevant reasoning/evidence.",
+    "category": "status",
+    "timestamp": "2026-03-12T21:00:00+07:00",
+    "status": "planned",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "mi-019",
+    "fact": "Five-phase execution_candidates implementation plan: Phase 1 producer MVP (src/execution_candidates.py + data/execution_candidates.json), Phase 2 mapping quality layer, Phase 3 readiness/evidence calibration, Phase 4 validation suite, Phase 5 equity-bot consumer integration behind feature flag. Durable sequencing: build/validate producer first, then migrate bot consumption and idempotency to stable signal identity.",
+    "category": "decision",
+    "timestamp": "2026-03-12T21:30:00+07:00",
+    "status": "planned",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
   }
 ]

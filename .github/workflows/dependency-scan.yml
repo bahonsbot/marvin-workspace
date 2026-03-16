@@ -1,0 +1,51 @@
+name: Dependency Security Scan
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 3 * * 1'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pip-audit
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+
+      - name: Run Python dependency audit
+        run: |
+          mkdir -p reports
+          pip-audit -r requirements.txt -f json -o reports/pip-audit-root.json
+          pip-audit -r projects/futures-bot/requirements.txt -f json -o reports/pip-audit-futures-bot.json
+
+      - name: Run npm audit for autonomous-kanban
+        working-directory: projects/autonomous-kanban
+        run: |
+          npm install --package-lock-only
+          npm audit --audit-level=moderate --json > ../../reports/npm-audit-autonomous-kanban.json
+
+      - name: Upload dependency scan reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-scan-reports
+          path: reports/

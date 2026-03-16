@@ -57,11 +57,13 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 | pre-market-brief | 20:00 daily | Evening market prep brief | none |
 | trading-daily-report | 08:00 daily | Equity bot daily report | none (explicit send in task) |
 | daily-task-generator | 08:00 daily | Goal-driven autonomous task generation (4-5 tasks) | telegram (`goal-tasks`) |
-| autonomous-task-executor | 09:00 daily | Proactive task execution from Open Backlog | telegram (`goal-tasks`) on verified completion |
-| autonomous-queue-wakeup | hourly at :15 (09:15-21:15) | Main-session wakeup to process one queued autonomous task, max concurrency 1, with stale `spawned` self-heal | telegram (`goal-tasks`) start + completion |
+| autonomous-task-executor | 09:00 daily | Proactive workspace-lane execution from Open Backlog; gate-enforced via `scripts/autonomy_gate.py workspace`; missing-prerequisite tasks move to `Needs Input` | telegram (`goal-tasks`) on verified completion or focused input request |
+| autonomous-queue-wakeup | 10:15 / 14:15 / 18:15 daily | Main-session wakeup to process one queued autonomous task, max concurrency 1, with stale `spawned` self-heal; gate-enforced via `scripts/autonomy_gate.py queue` | telegram (`goal-tasks`) start + completion |
+| workspace-home-improvement | 11:30 daily | Main-session workspace-lane maintenance pass for one bounded low-risk internal improvement; gate-enforced via `scripts/autonomy_gate.py improve` | none by default; report later in Morning Meeting |
 | enrichment-ab-review | Mon 10:00 | Weekly enrichment A/B review | none |
 | nightly-memory-extraction | 01:00 daily | Durable memory extraction | none |
 | entity-lifecycle-manager | Sun 05:00 weekly | Demote old life/ entities to archive | none |
+| data-manager | Sun 05:00 weekly | JSONL/log rotation (>30 days) | none |
 | dependency-update-audit | Mon 10:30 weekly | Check for outdated dependencies | none |
 | skill-level-check | Sun 07:00 weekly | Hybrid skill assessment (test + challenge mode) | none |
 | news-feed-generator | DISABLED | Superseded by RSS/Reddit monitor pipeline | none |
@@ -75,7 +77,10 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - **Context file:** `memory/cron-context.json` (rolling state, script-managed updates)
 - **Rule:** Do not manually edit context in cron prompts; Python `CronContext` is source of truth
 
-### Installed Skills (Workspace)
+### Built-in OpenClaw Skills
+- coding-agent — Delegates to Codex/Claude Code/Pi for coding tasks
+
+### Workspace-Installed Skills (via clawhub)
 - humanizer
 - stock-market-pro
 - marketing-skills
@@ -85,7 +90,6 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - google_maps_pro
 - security-review
 - creative-prompts
-- coding-agent (built-in OpenClaw skill)
 
 ### Models (Operational Routing)
 - Primary provider: Bailian
@@ -93,6 +97,18 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - Higher-reasoning delegation: `bailian/qwen3.5-plus`
 - Optional comparison models: `glm-5`, `kimi-k2.5`
 - Coding-heavy fallback: `openai-codex/gpt-5.3-codex`
+  - **Note:** We use both Codex versions intentionally:
+    - `codex5.4` (gpt-5.4): Marvin orchestration, high-reasoning tasks
+    - `codex` (gpt-5.3-codex): Coding-specific work
+
+### Hybrid Agent-Team v1
+- **Architecture:** Marvin (orchestrator) → Builder → Reviewer
+- **Model mapping:**
+  - Marvin → codex5.4
+  - Builder → codex
+  - Reviewer → qwenplus
+- **Use for:** Implementation-heavy, high-value, clearly scoped tasks
+- **Reference:** `projects/_ops/agent-team/` package
 
 ### Image Analysis
 - Bailian models: analyze attachments, limited at fetching external image URLs
@@ -104,6 +120,8 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - **Separate OAuth:** Codex CLI requires its own OAuth login, independent of OpenClaw's OAuth
   - Login command: `codex login --device-auth` (device code flow works best)
   - Tokens stored in `~/.codex/` — both Codex CLI and OpenClaw OAuth needed
+- **Important distinction:** Codex CLI auth is separate from the main OpenClaw dashboard/orchestrator runtime, which resolves its Codex identity from `/data/.openclaw/agents/main/agent/auth-profiles.json` via `openai-codex:default`
+- **Runtime note (Mar 14):** earlier dual-home Codex CLI wrapper experiment was removed during cleanup after the working OpenClaw-side manual switch method was established. Do not assume `/data/codex-work-home` or `/data/codex-personal-home` still exist.
 - **Git repo required:** Codex refuses to run outside a git repository
   - For scratch work: `mktemp -d && git init` before running Codex
 - **Coding agent skill:** Built-in OpenClaw skill `coding-agent` delegates to Codex/Claude Code/Pi
@@ -132,19 +150,51 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - `scripts/check-token-age.sh` — Token expiration checker
 - `scripts/nightly-memory-extraction.sh` — Memory extraction cron
 - `scripts/daily-task-generator.py` — Daily autonomous task generation (08:00 ICT, 4-5 goal-aligned tasks)
-- `scripts/queue_state.py` — Queue helper for autonomous-task orchestration (`status`, `can-start`, `heal-stale`)
+  - Guardrails: no default case studies, no fake creative-output MVPs, social/content tasks require concrete source work, useful surprise MVPs allowed for tool/system/project-improvement lanes
+- `scripts/queue_state.py` — Queue helper for autonomous-task orchestration
+  - Usage:
+    - `python scripts/queue_state.py status` — show queue state
+    - `python scripts/queue_state.py can-start` — exit 0 = can start, exit 1 = blocked
+    - `python scripts/queue_state.py heal-stale` — mark stale spawned tasks as blocked
+  - **Note:** `autonomous-subagent-runner` cron is disabled. Active queue processing now happens via `autonomous-queue-wakeup` (main-session wakeup path) and `autonomous-task-executor`.
+- `scripts/autonomy_gate.py` — Cron preflight gate for proactive autonomy
+  - Usage:
+    - `python scripts/autonomy_gate.py workspace` — allow/skip the daily workspace-lane backlog executor
+    - `python scripts/autonomy_gate.py queue` — allow/skip queued delegated work wakeups
+    - `python scripts/autonomy_gate.py improve` — allow/skip the daily workspace home-improvement pass
+  - Returns JSON with `decision: run|skip` and a reason; also self-heals stale queue slots in `queue` mode
+- `scripts/add-task-suggestion.py` — Add a Philippe suggestion and place it at the top of Open Backlog
 - `switch_model.sh` / `switch_model_auto.sh` — Model switching
+- `projects/_ops/agent-team/` — Hybrid v1 reusable internal workflow package
+  - Operator entry: `START-HERE.md`
+  - Map/checklist: `package-map.md`, `operator-checklist.md`
+  - Core roles/prompts/contracts: `builder.md`, `reviewer.md`, `handoff-contracts.md`, `delegation-rules.md`, live prompt files
+  - Routing/support: `launch-path-spec.md`, `delegation-helper.sh`, `live-usage.md`, `example-handoffs.md`, `reusable-workflow-package.md`
+  - Trial artifacts:
+    - `projects/_ops/scripts/autonomous-status.py` — local autonomous workflow status utility
+    - `projects/_ops/agent-team/launch-path-spec.md` — preferred/fallback specialist launch-path spec
+    - `projects/_ops/agent-team/delegation-helper.sh` — quick reference for hybrid delegation routing
 - `skills/google_maps_pro/scripts/get_tour_plan.py` — Route matrix helper
 
 ### Active Projects
 - `AUTONOMOUS.md` — Goal-driven daily task planner (Open Backlog + In Progress)
 - `projects/market-intel/` — signal generation + reasoning pipeline (active)
+  - **Execution-candidates pipeline (Mar 13):**
+    - Producer: `projects/market-intel/src/execution_candidates.py`
+    - Artifact: `projects/market-intel/data/execution_candidates.json`
+    - Purpose: execution-facing handoff layer between Market Intel signals and the equity bot
 - `projects/autonomous-trading-bot/` — Alpaca paper equity bot (active)
+  - Consumer bridge: `projects/autonomous-trading-bot/src/execution_candidates_adapter.py`
+  - Runtime flag: `EXECUTION_CANDIDATES_ENABLED=true`
+  - Current clean-sheet epoch: `candidate-clean-sheet-2026-03-13`
 - `projects/futures-bot/` — futures bot (Phase 1 complete, implementation in progress)
 - `projects/manual-trading-brief/` — pre-market brief generator (cron at 20:00 MYT)
 - `projects/autonomous-kanban/` — Goal-driven task Kanban UI (active)
   - GitHub Pages: `https://bahonsbot.github.io/marvin-workspace/autonomous-kanban/`
   - Deploy flow: `.github/workflows/pages.yml` (build + publish on push)
+- `projects/creative-challenges/` — Daily creative challenge generator (active)
+  - GitHub Pages: `https://bahonsbot.github.io/marvin-workspace/creative-challenges/`
+  - Deploy flow: `.github/workflows/pages.yml` (copied into combined Pages artifact on push)
 
 ### Retired Projects (Cryo)
 - `projects-cryo/horizons-pms/` — PMS system (on hold, archived for reference)
@@ -167,11 +217,14 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - Location: `projects/autonomous-trading-bot/scripts/webhook_watchdog.sh`
 - Behavior: 60s sleep loop, restarts receiver if down (no cron dependency)
 - Logs: `projects/autonomous-trading-bot/logs/webhook_watchdog.out.log`
+- **Runtime note (Mar 13 evening):** watchdog was temporarily down during receiver recovery and was restarted later that night. Verify live process state if troubleshooting automatic recovery.
 
 **Health Check Endpoints:**
 - Basic health: `http://127.0.0.1:8000/health`
-- Auth validation: `http://127.0.0.1:8000/health/auth` (validates shared secret)
+- Auth validation: `http://127.0.0.1:8000/health/auth` (validates the current HMAC-based auth scheme)
 - Manual test: `curl http://127.0.0.1:8000/health/auth`
+- **Auth validation flow (Mar 13 patch):** `/health/auth` now internally generates timestamp + HMAC signature using the bot's configured secret, then validates against the same auth logic as the webhook receiver. Use this to verify auth config without sending an external webhook.
+- **Runtime note (Mar 13 late night):** after the clean-sheet reset, `auto_signal_dispatch.json` was archived and rotated; current dispatch epoch starts from `candidate-clean-sheet-2026-03-13`.
 
 **Quick Recovery:**
 ```bash

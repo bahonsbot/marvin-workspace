@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-12T12:47:31.363378",
-    "baseline_count": 31,
+    "timestamp": "2026-03-16T09:47:30.134257",
+    "baseline_count": 32,
     "enriched_count": 50,
-    "overlap_count": 22,
-    "baseline_only_count": 7,
-    "enriched_only_count": 26,
-    "enriched_lift": 26,
+    "overlap_count": 21,
+    "baseline_only_count": 8,
+    "enriched_only_count": 28,
+    "enriched_lift": 28,
     "baseline_top5": [
-      "Prison sentences for pair who attacked gay men hailed as sign of hope for Kenya\u2019",
-      "Haiti president\u2019s assassination driven by greed and power, US prosecutors say",
-      "\u2018Convincing\u2019 AI scams drove UK fraud cases to record 444,000 last year",
-      "Will releasing millions of barrels of oil stockpiles really bring down fuel cost",
-      "JPMorgan marking down loan portfolios of private credit groups "
+      "UK government axes flagship global health project",
+      "Florida\u2019s real estate \u2018gold rush\u2019 draws the super-rich as rising costs push othe",
+      "Zelenskyy challenges Europe over Russian oil imports",
+      "Ukraine peace talks fizzle out as Trump\u2019s focus shifts to Iran",
+      "It was unthinkable a couple of weeks ago, but could the next move by the Fed be "
     ],
     "enriched_top5": [
-      "Prison sentences for pair who attacked gay men hailed as sign of hope for Kenya\u2019",
-      "Haiti president\u2019s assassination driven by greed and power, US prosecutors say",
-      "\u2018Convincing\u2019 AI scams drove UK fraud cases to record 444,000 last year",
-      "Will releasing millions of barrels of oil stockpiles really bring down fuel cost",
-      "JPMorgan marking down loan portfolios of private credit groups "
+      "UK government axes flagship global health project",
+      "Florida\u2019s real estate \u2018gold rush\u2019 draws the super-rich as rising costs push othe",
+      "Zelenskyy challenges Europe over Russian oil imports",
+      "Ukraine peace talks fizzle out as Trump\u2019s focus shifts to Iran",
+      "It was unthinkable a couple of weeks ago, but could the next move by the Fed be "
     ]
   }
 ]

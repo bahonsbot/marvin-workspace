@@ -7,7 +7,7 @@ import requests
 import json
 import sys
 
-# Your API key - use environment variable MINIMAX_API_KEY
+# API key from environment variable MINIMAX_API_KEY
 import os
 
 # Fail fast if API key is missing

@@ -1,0 +1,104 @@
+[
+  {
+    "id": "at-001",
+    "fact": "Hybrid agent-team v1 architecture created as internal workflow package in projects/_ops/agent-team/. Roles: Marvin (orchestrator), Builder (implementation), Reviewer (quality gate). Built on Antfarm patterns but kept lightweight.",
+    "category": "status",
+    "timestamp": "2026-03-12T15:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/agent-team",
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "at-002",
+    "fact": "Model routing preferences defined: Marvin uses codex5.4, Builder uses codex, Reviewer uses qwenplus. Note: Environment limitations exist around explicit model routing - fallback to default model may occur.",
+    "category": "decision",
+    "timestamp": "2026-03-12T15:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/agent-team"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "at-003",
+    "fact": "Communication preference reinforced: Philippe wants clear, honest, structured explanations from the team.",
+    "category": "relationship",
+    "timestamp": "2026-03-12T15:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/agent-team",
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "at-004",
+    "fact": "Trial 1 success: Created autonomous-status.py utility via Builder -> Reviewer flow. Reads board.json and executor-last-result.json to report backlog counts and task status.",
+    "category": "status",
+    "timestamp": "2026-03-12T16:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/agent-team",
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "at-005",
+    "fact": "Trial 2 success: Created launch-path-spec.md and delegation-helper.sh to document preferred launch paths and graceful degradation rules.",
+    "category": "status",
+    "timestamp": "2026-03-12T16:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/agent-team"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "at-006",
+    "fact": "Trial 3 (first real backlog run): Created daily-check.html via Builder. Reviewer returned retry due to missing append-only logging. Main session accepted artifact but repaired workflow by adding tasks-log.md entry.",
+    "category": "status",
+    "timestamp": "2026-03-12T17:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/agent-team",
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "at-007",
+    "fact": "Package polished: Added START-HERE.md, package-map.md, operator-checklist.md as operator-facing entry points. Kept layered summary + detail for weaker model compatibility.",
+    "category": "status",
+    "timestamp": "2026-03-12T18:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/agent-team"
+    ],
+    "lastAccessed": "2026-03-12",
+    "accessCount": 1,
+    "source": "memory/2026-03-12.md",
+    "lastUsed": "2026-03-12T18:00:00.000000"
+  }
+]

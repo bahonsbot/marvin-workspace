@@ -1,14 +1,15 @@
 # switch_model.sh
-# Usage: bash switch_model.sh <minimax|codex>
+# Usage: bash switch_model.sh <minimax|codex|codex5.4>
 
 set -e
 MODEL_INPUT="$1"
 AUDIT_LOG="/data/.openclaw/workspace/scripts/audit-log.sh"
+GUIDANCE_FILE="/data/.openclaw/workspace/model-guidance/gpt-5.4.md"
 
 # Validate input - only allow known models
 case "$MODEL_INPUT" in
-  minimax|codex) ;;
-  *) echo "Usage: bash switch_model.sh <minimax|codex>"; exit 1 ;;
+  minimax|codex|codex5.4) ;;
+  *) echo "Usage: bash switch_model.sh <minimax|codex|codex5.4>"; exit 1 ;;
 esac
 
 MODEL_LOWER=$(echo "$MODEL_INPUT" | tr '[:upper:]' '[:lower:]')
@@ -36,17 +37,34 @@ if [ "$MODEL_LOWER" = "minimax" ]; then
   "$AUDIT_LOG" "model_switch" "target=MiniMax 2.5 source=switch_model.sh"
   echo "Switched default model to MiniMax 2.5"
 elif [ "$MODEL_LOWER" = "codex" ]; then
-  jq '(.agents.defaults.model.primary) = "OpenAI Codex GPT-5.2"' "$CONFIG" > "$TEMP_CONFIG" && mv "$TEMP_CONFIG" "$CONFIG"
+  jq '(.agents.defaults.model.primary) = "openai-codex/gpt-5.3-codex"' "$CONFIG" > "$TEMP_CONFIG" && mv "$TEMP_CONFIG" "$CONFIG"
   # Validate new config
   if ! jq empty "$CONFIG" 2>/dev/null; then
     echo "ERROR: New config invalid, rolling back"
     mv "$BACKUP_CONFIG" "$CONFIG"
     exit 1
   fi
-  "$AUDIT_LOG" "model_switch" "target=OpenAI Codex GPT-5.2 source=switch_model.sh"
-  echo "Switched default model to OpenAI Codex GPT-5.2"
+  "$AUDIT_LOG" "model_switch" "target=openai-codex/gpt-5.3-codex source=switch_model.sh"
+  echo "Switched default model to openai-codex/gpt-5.3-codex"
+elif [ "$MODEL_LOWER" = "codex5.4" ]; then
+  jq '(.agents.defaults.model.primary) = "openai-codex/gpt-5.4"' "$CONFIG" > "$TEMP_CONFIG" && mv "$TEMP_CONFIG" "$CONFIG"
+  # Validate new config
+  if ! jq empty "$CONFIG" 2>/dev/null; then
+    echo "ERROR: New config invalid, rolling back"
+    mv "$BACKUP_CONFIG" "$CONFIG"
+    exit 1
+  fi
+  "$AUDIT_LOG" "model_switch" "target=openai-codex/gpt-5.4 source=switch_model.sh"
+  echo "Switched default model to openai-codex/gpt-5.4"
+  if [ -f "$GUIDANCE_FILE" ]; then
+    echo
+    echo "=== GPT-5.4 guidance ==="
+    cat "$GUIDANCE_FILE"
+  else
+    echo "NOTE: Guidance file not found at $GUIDANCE_FILE"
+  fi
 else
-  echo "Usage: bash switch_model.sh <minimax|codex>"
+  echo "Usage: bash switch_model.sh <minimax|codex|codex5.4>"
   exit 1
 fi
 

@@ -32,19 +32,28 @@ class TestWebhookAuth(unittest.TestCase):
             "X-Signature": sig,
         }
 
-    def test_accepts_basic_bearer_auth_without_hmac_for_backward_compat(self):
-        headers = {"Authorization": "Bearer test-secret"}
-        self.assertTrue(_authorized(headers, self.payload, body_bytes=self.body))
+    def test_accepts_valid_bearer_auth_with_hmac(self):
+        ts = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        headers = {
+            "Authorization": "Bearer test-secret",
+            "X-Timestamp": ts,
+            "X-Signature": hmac.new(
+                b"test-secret",
+                f"{ts}:{self.body.decode('utf-8')}".encode("utf-8"),
+                hashlib.sha256,
+            ).hexdigest(),
+        }
+        self.assertTrue(_authorized(headers, body_bytes=self.body))
 
     def test_accepts_valid_hmac_signature(self):
         ts = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
         headers = self._signed_headers(ts)
-        self.assertTrue(_authorized(headers, self.payload, body_bytes=self.body))
+        self.assertTrue(_authorized(headers, body_bytes=self.body))
 
     def test_rejects_stale_timestamp(self):
         ts = (datetime.now(UTC) - timedelta(minutes=10)).replace(microsecond=0).isoformat().replace("+00:00", "Z")
         headers = self._signed_headers(ts)
-        self.assertFalse(_authorized(headers, self.payload, body_bytes=self.body))
+        self.assertFalse(_authorized(headers, body_bytes=self.body))
 
     def test_rejects_invalid_signature(self):
         ts = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -53,7 +62,7 @@ class TestWebhookAuth(unittest.TestCase):
             "X-Timestamp": ts,
             "X-Signature": "bad-signature",
         }
-        self.assertFalse(_authorized(headers, self.payload, body_bytes=self.body))
+        self.assertFalse(_authorized(headers, body_bytes=self.body))
 
 
 if __name__ == "__main__":

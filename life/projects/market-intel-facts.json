@@ -8,9 +8,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 2,
-    "lastUsed": "2026-03-11T20:52:31.810575"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 3,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-002",
@@ -21,9 +21,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 2,
-    "lastUsed": "2026-03-11T20:52:31.810591"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 3,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-003",
@@ -35,9 +35,9 @@
       "areas/people/philippe",
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 2,
-    "lastUsed": "2026-03-11T20:52:31.810596"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 3,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-004",
@@ -48,9 +48,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 1,
-    "lastUsed": "2026-03-11T20:52:31.810599"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-005",
@@ -61,9 +61,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 1,
-    "lastUsed": "2026-03-11T20:52:31.810602"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-006",
@@ -74,9 +74,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 1,
-    "lastUsed": "2026-03-11T20:52:31.810604"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-007",
@@ -87,9 +87,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 1,
-    "lastUsed": "2026-03-11T20:52:31.810606"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-008",
@@ -100,9 +100,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 1,
-    "lastUsed": "2026-03-11T20:52:31.810608"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-009",
@@ -113,9 +113,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-09",
-    "accessCount": 1,
-    "lastUsed": "2026-03-11T20:52:31.810610"
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "mi-010",
@@ -127,8 +127,48 @@
       "projects/market-intel",
       "areas/people/philippe"
     ],
-    "lastAccessed": "2026-03-09",
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mi-011",
+    "fact": "Market intel pipeline executed successfully: 37 signals generated in shadow mode, 0 STRONG BUY signals",
+    "category": "status",
+    "timestamp": "2026-03-14T11:37:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-14",
     "accessCount": 1,
-    "lastUsed": "2026-03-11T20:52:31.810612"
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mi-012",
+    "fact": "Execution-candidates pipeline established: producer script generates execution_candidates.json for equity bot handoff, enabled via EXECUTION_CANDIDATES_ENABLED=true",
+    "category": "status",
+    "timestamp": "2026-03-14T13:40:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mi-013",
+    "fact": "Manual OpenAI account switch workaround confirmed: replace only openai-codex section in auth-profiles.json + gateway restart (takes ~10 min, preferred over broken OAuth flow)",
+    "category": "pattern",
+    "timestamp": "2026-03-14T23:39:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "lastUsed": "2026-03-14T18:00:00.000000"
   }
 ]

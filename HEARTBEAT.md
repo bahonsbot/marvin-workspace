@@ -3,7 +3,7 @@
 ## Status
 - **Active**
 - Poll cadence: every 60 minutes
-- Goal: quiet monitoring + bounded progress
+- Goal: quiet monitoring only
 
 ## Active Hours (messaging)
 - 09:00 - 22:00 Asia/Ho_Chi_Minh (GMT+7)
@@ -14,19 +14,18 @@
 - Do not broadcast routine updates to Telegram groups
 - Do not interfere with active user conversations/tasks
 - If nothing needs attention: reply `HEARTBEAT_OK`
+- Do not use heartbeat as the trigger for proactive maintenance or autonomous execution
 
 ## Heartbeat Check Loop (lightweight)
 1. Review latest daily memory notes
 2. Check open issues or blockers
 3. Run quick health checks (including trading webhook/watchdog)
-4. Optionally execute one proactive work chunk (10-20 min, safe + bounded)
+4. Surface only meaningful alerts or blockers
 
-## Proactive Execution Rules
-- Queue source: `memory/executor-subagent-queue.json`
-- Process one task at a time (concurrency = 1)
-- Execute one bounded chunk only
-- Log outcomes to daily memory
-- Stay quiet on routine progress; message only on milestone/blocker
+## Scope Boundary
+- Heartbeat is for monitoring, not building
+- Proactive execution rules live in `AUTONOMY.md`
+- If a proactive task exists but does not require urgent attention, do not execute it from heartbeat
 
 ## Related Runtime
 - `auto-signal-dispatcher`: every 15 minutes

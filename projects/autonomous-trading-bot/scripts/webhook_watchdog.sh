@@ -89,8 +89,8 @@ while true; do
     log "ERROR: Failed to start webhook receiver"
     RETRY_COUNT=$((RETRY_COUNT + 1))
     if [[ $RETRY_COUNT -ge $MAX_RETRIES ]]; then
-      log "CRITICAL: Max retries ($MAX_RETRIES) exceeded - sending alert"
-      send_telegram_alert "🚨 **WATCHDOG ALERT**\n\nWebhook receiver failed to start after $MAX_RETRIES attempts.\n\nManual intervention may be required.\n\nCheck: \`logs/webhook_receiver.out.log\`"
+      log "CRITICAL: Max retries ($MAX_RETRIES) exceeded - sending escalation alert"
+      send_telegram_alert "🚨 **WATCHDOG ESCALATION**\n\nWebhook receiver is still down after $MAX_RETRIES consecutive auto-restart attempts.\n\nThis is different from a single dispatch-side outage alert: auto-recovery has already been tried and is not sticking.\n\nManual intervention is required.\n\nCheck: \`logs/webhook_receiver.out.log\`"
       # Reset counter after alert to allow future recovery
       RETRY_COUNT=0
     fi

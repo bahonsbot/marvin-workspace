@@ -488,7 +488,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
 
         content_length_int = int(content_length)
         if content_length_int < 0 or content_length_int > MAX_PAYLOAD_SIZE:
-            self._send_json(413, {"error": "Payload too large", "max_size": MAX_PAYLOAD_SIZE, "paper_only": True})
+            self._send_json(413, {"error": "Payload too large", "paper_only": True})
             return
 
         try:
@@ -517,12 +517,10 @@ class WebhookHandler(BaseHTTPRequestHandler):
         }
         _append_log(record)
 
+        accepted = bool(result.get("accepted"))
         response = {
-            "accepted": result["accepted"],
-            "reasons": result["reasons"],
-            "proposal": result.get("proposal"),
-            "decision_context": result.get("decision_context"),
-            "execution": result.get("execution"),
+            "accepted": accepted,
+            "status": "accepted" if accepted else "rejected",
             "paper_only": True,
         }
         self._send_json(status, response)
@@ -537,14 +535,25 @@ class WebhookHandler(BaseHTTPRequestHandler):
             self._send_json(200, {"ok": True, "paper_only": True})
             return
         if self.path == "/health/auth":
-            # Validate that shared secret is configured and auth path works
+            # Validate that shared secret is configured and the current auth scheme works.
             secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
             if not secret:
                 self._send_json(503, {"ok": False, "error": "Service not configured", "paper_only": True})
                 return
-            # Test auth validation with the configured secret
-            test_headers = {"X-Webhook-Secret": secret}
-            if _auth_allowed(test_headers):
+
+            test_body = b""
+            test_timestamp = datetime.now(timezone.utc).isoformat()
+            test_signature = hmac.new(
+                secret.encode(),
+                f"{test_timestamp}:{test_body.decode('utf-8')}".encode(),
+                hashlib.sha256,
+            ).hexdigest()
+            test_headers = {
+                "X-Webhook-Secret": secret,
+                "X-Timestamp": test_timestamp,
+                "X-Signature": test_signature,
+            }
+            if _auth_allowed(test_headers, body_bytes=test_body):
                 self._send_json(200, {"ok": True, "auth": "valid", "paper_only": True})
             else:
                 self._send_json(503, {"ok": False, "error": "Auth validation failed", "paper_only": True})

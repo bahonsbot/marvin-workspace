@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+for root in /data/codex-work-home /data/codex-personal-home; do
+  name=$(basename "$root" | sed 's/-home$//')
+  echo "[$name]"
+  echo "HOME=$root"
+  if [ -f "$root/.codex/auth.json" ]; then
+    echo "auth.json: present"
+  else
+    echo "auth.json: missing"
+  fi
+  if [ -f "$root/.codex/config.toml" ]; then
+    echo "config.toml: present"
+  else
+    echo "config.toml: missing"
+  fi
+  echo
+ done

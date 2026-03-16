@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export HOME=/data/codex-personal-home
+mkdir -p "$HOME/.codex"
+chmod 700 "$HOME/.codex" 2>/dev/null || true
+exec codex "$@"

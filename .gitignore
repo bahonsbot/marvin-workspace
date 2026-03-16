@@ -17,6 +17,7 @@ projects/market-intel/data/signal_state.json
 projects/autonomous-trading-bot/data/state/auto_signal_dispatch.json
 projects/autonomous-trading-bot/data/state/idempotency.json
 auth.json
+config/token-manifest.json
 *.json.bak*
 *.json.bak
 

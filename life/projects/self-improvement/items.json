@@ -1,1 +1,98 @@
-[]
+[
+  {
+    "id": "si-001",
+    "fact": "Self-improvement project created as structured reflection system. Uses AGENTS.md policy for session-start memory loading, .learnings/ directory for corrections/errors/requests, and MEMORY.md for curated durable knowledge.",
+    "category": "status",
+    "timestamp": "2026-02-25T04:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/self-improvement"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 5,
+    "source": "memory/2026-02-25.md",
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "si-002",
+    "fact": "Morning Meeting Protocol established: Pre-check nightly-memory-extraction, then review security/health/self-improvement reports in order. Process each finding: present problem+risk+fix, wait for decision, log decisions in daily memory, suppress repeat accepted-risk findings.",
+    "category": "status",
+    "timestamp": "2026-03-03T12:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/self-improvement"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 5,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "si-003",
+    "fact": "Self-improvement workflow fully operational (Mar 6): Corrections logged to .learnings/corrections.md, errors to .learnings/errors.md, requests to .learnings/requests.md. Session-end reminder added to AGENTS.md.",
+    "category": "status",
+    "timestamp": "2026-03-06T23:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/self-improvement"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 4,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "si-004",
+    "fact": "March 12 self-improvement changes applied: Added .learnings reminder to session-end in AGENTS.md, timezone display vs runtime clarified in TOOLS.md, SUBAGATE-POLICY clarified for Codex non-trivial coding, HEARTBEAT queue reference fixed, cron table updated with dependency-update-audit and skill-level-check.",
+    "category": "status",
+    "timestamp": "2026-03-12T12:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/self-improvement"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 2,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "si-005",
+    "fact": "Duplicate prevention hardening: Three-layer fix applied to autonomous executor - (1) queue hardening: duplicate detection uses normalized task text + deliverable paths, (2) pre-selection prune: already-satisfied backlog items skipped before scoring, (3) prune visibility: executor log now surfaces pruned tasks with verified output paths.",
+    "category": "status",
+    "timestamp": "2026-03-15T21:24:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/self-improvement",
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "si-006",
+    "fact": "Self-reflection captured: When splitting governance policy, also wire at least one enforcement mechanism right away and run validation pass, because live execution exposes reliability edges faster than document review.",
+    "category": "pattern",
+    "timestamp": "2026-03-15T20:59:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/self-improvement"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "si-007",
+    "fact": "Self-reflection captured: When preventing duplicate autonomous work, put guards at the earliest cheap decision point first, then reinforce downstream so recovery works if upstream state drifts.",
+    "category": "pattern",
+    "timestamp": "2026-03-15T21:22:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/self-improvement"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  }
+]

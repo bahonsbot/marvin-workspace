@@ -1,4 +1,4 @@
-"""Deterministic rule-based fusion between technical payload and market context."""
+"""Deterministic rule-based fusion between signal payload and macro overlay."""
 
 from __future__ import annotations
 
@@ -85,5 +85,5 @@ def derive_decision_context(signal: Dict[str, Any], context_snapshot: Dict[str, 
         "block_reason": block_reason,
         "reasons": reasons,
         "paper_only": True,
-        "ruleset": "context-fusion-v1",
+        "ruleset": "macro-overlay-v1",
     }

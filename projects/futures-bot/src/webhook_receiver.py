@@ -30,6 +30,11 @@ MAX_PAYLOAD_BYTES = 1_000_000
 # Rate limiting: 120 requests per 60 seconds per IP
 _RATE_LIMIT_BUCKETS: dict[str, list[float]] = {}
 _RATE_LIMIT_LOCK = Lock()
+_SENSITIVE_FIELDS = frozenset({
+    "secret", "token", "api_key", "api_secret", "password",
+    "authorization", "bearer", "access_token", "refresh_token",
+    "private_key", "client_secret", "credentials",
+})
 
 
 def _load_env() -> None:
@@ -56,13 +61,17 @@ def _env_bool(name: str, default: bool) -> bool:
 
 
 def _redact_payload(payload: Any) -> Any:
-    if not isinstance(payload, dict):
-        return payload
-    redacted = dict(payload)
-    for key in ("secret", "token", "api_key", "api_secret", "password"):
-        if key in redacted:
-            redacted[key] = "[REDACTED]"
-    return redacted
+    if isinstance(payload, dict):
+        redacted: dict[str, Any] = {}
+        for key, value in payload.items():
+            if key.lower() in _SENSITIVE_FIELDS:
+                redacted[key] = "[REDACTED]"
+            else:
+                redacted[key] = _redact_payload(value)
+        return redacted
+    if isinstance(payload, list):
+        return [_redact_payload(item) for item in payload]
+    return payload
 
 
 def _append_log(record: dict[str, Any], path: Path = LOG_PATH) -> None:
@@ -71,17 +80,48 @@ def _append_log(record: dict[str, Any], path: Path = LOG_PATH) -> None:
         handle.write(json.dumps(record, sort_keys=True) + "\n")
     # Enforce restrictive permissions
     path.chmod(0o600)
+    _prune_log_if_needed(path)
 
 
-def _authorized(headers: dict[str, str], payload: dict[str, Any], body_bytes: bytes | None = None) -> bool:
-    """Validate webhook auth with optional HMAC replay protection.
+def _prune_log_if_needed(path: Path, max_size_mb: int = 10, retention_days: int = 30) -> None:
+    """Prune old log entries if log exceeds size threshold, using time-based retention."""
+    try:
+        if not path.exists():
+            return
+        size_mb = path.stat().st_size / (1024 * 1024)
+        if size_mb < max_size_mb:
+            return
 
-    Supported basic auth paths (backward-compatible):
+        cutoff = datetime.now(UTC) - timedelta(days=retention_days)
+        kept: list[str] = []
+        with path.open("r", encoding="utf-8") as handle:
+            for line in handle:
+                try:
+                    entry = json.loads(line)
+                    ts = entry.get("timestamp", "")
+                    if not ts:
+                        continue
+                    entry_time = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                    if entry_time >= cutoff:
+                        kept.append(line)
+                except (json.JSONDecodeError, ValueError, TypeError):
+                    continue
+
+        with path.open("w", encoding="utf-8") as handle:
+            handle.writelines(kept)
+        path.chmod(0o600)
+    except OSError:
+        return
+
+
+def _authorized(headers: dict[str, str], body_bytes: bytes | None = None) -> bool:
+    """Validate webhook auth with header-based secret + HMAC replay protection.
+
+    Supported secret transport:
     - X-Webhook-Secret header
     - Authorization: Bearer <secret>
-    - payload["secret"]
 
-    Enhanced protection (recommended):
+    Required replay protection:
     - X-Timestamp (ISO-8601, within 5 minutes)
     - X-Signature (HMAC-SHA256 of "timestamp:body")
     """
@@ -90,7 +130,6 @@ def _authorized(headers: dict[str, str], payload: dict[str, Any], body_bytes: by
         return False
 
     header_secret = headers.get("X-Webhook-Secret", "")
-    payload_secret = str(payload.get("secret", ""))
     bearer_secret = ""
     auth_header = headers.get("Authorization", "")
     if auth_header.startswith("Bearer "):
@@ -98,7 +137,6 @@ def _authorized(headers: dict[str, str], payload: dict[str, Any], body_bytes: by
 
     basic_auth_ok = (
         secrets.compare_digest(header_secret.encode(), expected.encode())
-        or secrets.compare_digest(payload_secret.encode(), expected.encode())
         or secrets.compare_digest(bearer_secret.encode(), expected.encode())
     )
     if not basic_auth_ok:
@@ -175,6 +213,26 @@ def _rate_limit_allowed(client_ip: str) -> bool:
         return True
 
 
+def _health_rate_limit_allowed(client_ip: str) -> bool:
+    """Check if /health requests are within rate limit (60 req/60s per IP)."""
+    max_requests = 60
+    window_seconds = 60
+    now = time()
+    bucket_key = f"health:{client_ip}"
+
+    with _RATE_LIMIT_LOCK:
+        bucket = _RATE_LIMIT_BUCKETS.setdefault(bucket_key, [])
+        cutoff = now - window_seconds
+        while bucket and bucket[0] < cutoff:
+            bucket.pop(0)
+
+        if len(bucket) >= max_requests:
+            return False
+
+        bucket.append(now)
+        return True
+
+
 class _WebhookHandler(BaseHTTPRequestHandler):
     server_version = "FuturesWebhook/0.1"
 
@@ -193,6 +251,10 @@ class _WebhookHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/health":
+            client_ip = self.client_address[0]
+            if not _health_rate_limit_allowed(client_ip):
+                self._send_json(429, {"error": "Rate limit exceeded", "paper_only": True})
+                return
             self._send_json(200, {"ok": True, "paper_only": True})
             return
         self._send_json(404, {"error": "Not found", "paper_only": True})
@@ -229,7 +291,7 @@ class _WebhookHandler(BaseHTTPRequestHandler):
             self._send_json(400, {"error": "Payload must be a JSON object", "paper_only": True})
             return
 
-        if not _authorized(dict(self.headers), payload, body_bytes=raw):
+        if not _authorized(dict(self.headers), body_bytes=raw):
             self._send_json(401, {"error": "Unauthorized", "paper_only": True})
             return
 
@@ -253,10 +315,10 @@ class _WebhookHandler(BaseHTTPRequestHandler):
         }
         _append_log(record)
 
+        accepted = bool(result.get("accepted"))
         response = {
-            "accepted": bool(result.get("accepted")),
-            "status": result.get("status", result.get("reason", "unknown")),
-            "reason": result.get("reason"),
+            "accepted": accepted,
+            "status": "accepted" if accepted else "rejected",
             "paper_only": True,
         }
         self._send_json(status, response)

@@ -45,6 +45,8 @@ SESSIONS_FILE = WORKSPACE / "memory" / "executor-sessions.json"
 # Kanban board sync
 KANBAN_DIR = WORKSPACE / "projects" / "autonomous-kanban"
 KANBAN_BOARD_FILE = KANBAN_DIR / "public" / "board.json"
+FOLLOWED_COMPANIES_FILE = WORKSPACE / "projects" / "company-research" / "followed-companies.md"
+AGENT_TEAM_DIR = WORKSPACE / "projects" / "_ops" / "agent-team"
 
 
 def sync_kanban_board():
@@ -296,53 +298,93 @@ def read_autonomous_file():
 
 def score_task(task, in_progress_tasks):
     """
-    Simple scoring heuristic to pick highest-value task.
-    
-    Scoring factors:
-    - Has clear deliverable (+2)
-    - Has success criterion (+2)
-    - Not recently in progress (+1)
-    - Has action verb (+1)
+    Higher-signal task scoring for autonomous selection.
+
+    Intent:
+    - prefer clearly scoped build/fix tasks over lightweight learn tasks
+    - prefer tasks with explicit deliverables + proof
+    - prefer implementation work suitable for agent-team routing
+    - avoid selecting duplicates of work already in progress
     """
     score = 0
     task_lower = task.lower()
-    
-    # Has deliverable (deliverable, output, create, build, etc.)
-    if 'deliverable' in task_lower or 'output' in task_lower or 'create' in task_lower:
-        score += 2
-    
-    # Has success criterion
-    if 'success:' in task_lower or 'success criterion' in task_lower:
-        score += 2
-    
-    # Has action verb at start
-    action_verbs = ['build', 'create', 'analyze', 'draft', 'design', 'fix', 'complete', 'execute']
-    if any(task_lower.startswith(v) for v in action_verbs):
+    parsed = parse_task_structure(task)
+    title = parsed.get("title", "").lower()
+    sections = parsed.get("sections", {})
+    deliverable = sections.get("deliverable", "").lower()
+    proof = sections.get("proof", "").lower()
+    why = sections.get("why", "").lower()
+    combined = f"{task_lower} | {title} | {deliverable} | {proof} | {why}"
+
+    # Strong structure signals
+    if 'deliverable:' in task_lower or deliverable:
+        score += 3
+    if 'proof:' in task_lower or proof:
+        score += 3
+    if 'unlocks:' in task_lower:
         score += 1
-    
-    # Not already in progress (check by partial match)
+
+    # Action priority: build/fix beats learn/draft when autonomy can create a real artifact
+    if 'build:' in combined or '🔨' in task:
+        score += 5
+    elif 'fix:' in combined or '🔧' in task:
+        score += 4
+    elif 'launch:' in combined or '🚀' in task:
+        score += 3
+    elif 'draft:' in combined or '📝' in task:
+        score += 2
+    elif 'learn:' in combined or '📚' in task:
+        score += 1
+
+    # Prefer implementation-heavy work that benefits from agent-team execution
+    execution_mode = classify_execution_mode(task, parsed)
+    if execution_mode == 'agent_team':
+        score += 4
+    elif execution_mode == 'subagent':
+        score += 2
+
+    # Reward concrete software/artifact language
+    implementation_signals = [
+        'working page', 'working tool', 'tool', 'page', 'generator', 'automation',
+        'diagnostics', 'reporting', 'workflow', 'utility', 'spec'
+    ]
+    if any(sig in combined for sig in implementation_signals):
+        score += 2
+
+    # De-prioritize duplicate/overlapping work already in progress
     for ip in in_progress_tasks:
-        if task[:50] in ip[:50]:  # Similar task already in progress
-            score -= 3
-    
+        if task[:60] in ip[:60] or ip[:60] in task[:60]:
+            score -= 6
+
     return score
 
 
 def select_task(open_backlog, in_progress_tasks):
-    """Select the highest-value task from Open Backlog."""
+    """Select the highest-value task from Open Backlog, skipping already-satisfied work."""
     if not open_backlog:
-        return None, None
-    
-    # Score all tasks
+        return None, None, []
+
     scored = []
+    skipped_satisfied = []
     for task in open_backlog:
+        satisfied, output_paths = task_already_satisfied(task)
+        if satisfied:
+            skipped_satisfied.append((task, output_paths))
+            continue
         score = score_task(task, in_progress_tasks)
-        scored.append((score, task))
-    
-    # Sort by score (descending), then by age (prefer older tasks)
-    scored.sort(key=lambda x: (-x[0], x[1]))
-    
-    return scored[0][1], scored[0][0]
+        parsed = parse_task_structure(task)
+        execution_mode = classify_execution_mode(task, parsed)
+        scored.append((score, execution_mode, task))
+
+    if not scored:
+        return None, None, skipped_satisfied
+
+    # Sort by score, then prefer agent_team over subagent over direct on ties, then lexical fallback
+    mode_rank = {'agent_team': 0, 'subagent': 1, 'direct': 2}
+    scored.sort(key=lambda x: (-x[0], mode_rank.get(x[1], 9), x[2]))
+
+    best_score, _best_mode, best_task = scored[0]
+    return best_task, best_score, skipped_satisfied
 
 
 def move_to_in_progress(task, content):
@@ -375,9 +417,32 @@ def move_to_open_backlog(task, content):
 
 def move_to_done(task, content):
     """Move task from In Progress to Done (or remove if no Done section)."""
-    # Remove from In Progress
     content = re.sub(rf'^- {re.escape(task)}\n', '', content, flags=re.MULTILINE)
-    
+    return content
+
+
+def remove_task_everywhere(task, content):
+    """Remove a task from Open Backlog / In Progress / Needs Input style bullet lines."""
+    content = re.sub(rf'^- {re.escape(task)}\n', '', content, flags=re.MULTILINE)
+    return content
+
+
+def move_to_needs_input(task, content, question):
+    """Move task from Open Backlog/In Progress to Needs Input with a focused blocker question."""
+    content = re.sub(rf'^- {re.escape(task)}\n', '', content, flags=re.MULTILINE)
+
+    entry = f"- {task}\n  - Needs input: {question}\n"
+    marker = "## Needs Input"
+    if marker in content:
+        pattern = rf'({re.escape(marker)}\s*\n)'
+        content = re.sub(pattern, rf'\1{entry}', content)
+    else:
+        insert_before = "## Done Today"
+        if insert_before in content:
+            content = content.replace(insert_before, f"## Needs Input\n\n{entry}\n{insert_before}")
+        else:
+            content += f"\n## Needs Input\n\n{entry}\n"
+
     return content
 
 
@@ -463,12 +528,20 @@ def parse_task_structure(task):
     return {"emoji": emoji, "category": category, "title": title, "sections": sections}
 
 
-def task_requires_subagent(parsed):
-    """Return True for rich deliverables that should be delegated, not stubbed."""
+def classify_execution_mode(task, parsed):
+    """Choose execution mode: direct | subagent | agent_team."""
     title = parsed.get("title", "").lower()
     deliverable = parsed.get("sections", {}).get("deliverable", "").lower()
-    combined = f"{title} | {deliverable}"
+    proof = parsed.get("sections", {}).get("proof", "").lower()
+    combined = f"{task.lower()} | {title} | {deliverable} | {proof}"
 
+    direct_signals = ["python", "script", "automation", "workflow"]
+    agent_team_signals = [
+        "🔨 build", "build:", "tool", "page", "working page", "working tool",
+        "runnable utility", "diagnostics", "reporting", "review tooling",
+        "reliability", "internal utility", "workspace status", "challenge generator"
+    ]
+    risky_or_excluded = ["openclaw.json", "live config mutation"]
     subagent_signals = [
         "portfolio", "case-study", "case study", "content plan", "social media",
         "instagram", "motion design", "mp4", "caption", "analysis", "company",
@@ -476,15 +549,79 @@ def task_requires_subagent(parsed):
         "draft", "creative mvp"
     ]
 
-    direct_signals = ["python", "script", "automation", "workflow"]
-
     if any(sig in combined for sig in direct_signals):
-        return False
-    return any(sig in combined for sig in subagent_signals)
+        return "direct"
+
+    if any(sig in combined for sig in agent_team_signals) and not any(sig in combined for sig in risky_or_excluded):
+        return "agent_team"
+
+    if any(sig in combined for sig in subagent_signals):
+        return "subagent"
+
+    return "direct"
 
 
-def queue_subagent_task(task, parsed):
-    """Append task to sub-agent queue if not already pending. Enforce one active spawned task at a time."""
+def task_requires_subagent(task, parsed):
+    return classify_execution_mode(task, parsed) in {"subagent", "agent_team"}
+
+
+def normalize_task_text(value):
+    return re.sub(r"\s+", " ", (value or "").strip().lower())
+
+
+def deliverable_paths_from_text(text):
+    if not text:
+        return []
+    matches = re.findall(r'([A-Za-z0-9_./-]+/[A-Za-z0-9_./-]+)', text)
+    cleaned = []
+    for match in matches:
+        path = match.strip(" .,;:()[]{}\"'")
+        if "/" in path:
+            cleaned.append(path)
+    return sorted(set(cleaned))
+
+
+def duplicate_completed_entry(task, parsed, queue):
+    normalized_task = normalize_task_text(task)
+    deliverable = parsed.get("sections", {}).get("deliverable", "")
+    candidate_paths = deliverable_paths_from_text(deliverable)
+
+    for entry in queue:
+        if entry.get("status") != "completed":
+            continue
+
+        same_task = normalize_task_text(entry.get("task", "")) == normalized_task
+        output_paths = deliverable_paths_from_text(entry.get("outputPath", ""))
+        verified_paths = output_paths and all((WORKSPACE / rel_path).exists() for rel_path in output_paths)
+        same_paths = bool(candidate_paths) and bool(output_paths) and set(candidate_paths).issubset(set(output_paths))
+
+        if same_task and verified_paths:
+            return entry, output_paths
+        if same_paths and verified_paths:
+            return entry, output_paths
+
+    return None, []
+
+
+def task_already_satisfied(task):
+    parsed = parse_task_structure(task)
+    queue_file = MEMORY_DIR / "executor-subagent-queue.json"
+    queue = []
+    if queue_file.exists():
+        try:
+            queue = json.loads(queue_file.read_text())
+        except json.JSONDecodeError:
+            queue = []
+
+    completed_entry, completed_paths = duplicate_completed_entry(task, parsed, queue)
+    if completed_entry:
+        return True, completed_paths
+
+    return False, []
+
+
+def queue_subagent_task(task, parsed, execution_mode="subagent"):
+    """Append task to sub-agent queue if not already pending and skip verified duplicates already completed."""
     queue_file = MEMORY_DIR / "executor-subagent-queue.json"
     queue = []
     if queue_file.exists():
@@ -494,10 +631,26 @@ def queue_subagent_task(task, parsed):
             queue = []
 
     active_spawned = [entry for entry in queue if entry.get("status") == "spawned"]
+    normalized_task = normalize_task_text(task)
+
+    completed_entry, completed_paths = duplicate_completed_entry(task, parsed, queue)
+    if completed_entry:
+        stamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+        changed = False
+        for entry in queue:
+            if normalize_task_text(entry.get("task", "")) == normalized_task and entry.get("status") in {"pending", "spawned"}:
+                entry["status"] = "blocked"
+                entry["updatedAt"] = stamp
+                entry["note"] = "Duplicate queue entry suppressed because verified completed deliverables already exist"
+                changed = True
+        if changed:
+            queue_file.write_text(json.dumps(queue, indent=2))
+        output_path = ", ".join(completed_paths) if completed_paths else completed_entry.get("outputPath", "")
+        return queue_file, False, "already_completed", output_path
 
     for entry in queue:
         if entry.get("task") == task and entry.get("status") in {"pending", "spawned"}:
-            return queue_file, False, "already_queued"
+            return queue_file, False, "already_queued", entry.get("outputPath", "")
 
     label, instruction = spawn_subagent(task, parsed.get("category", "general"))
     queue.append({
@@ -506,13 +659,15 @@ def queue_subagent_task(task, parsed):
         "label": label,
         "instruction": instruction,
         "queuedAt": datetime.now().strftime("%Y-%m-%d %H:%M"),
-        "status": "pending"
+        "status": "pending",
+        "executionMode": execution_mode,
+        "agentTeam": execution_mode == "agent_team"
     })
     queue_file.write_text(json.dumps(queue, indent=2))
 
     if active_spawned:
-        return queue_file, True, "queued_waiting_for_active_slot"
-    return queue_file, True, "queued_ready"
+        return queue_file, True, "queued_waiting_for_active_slot", ""
+    return queue_file, True, "queued_ready", ""
 
 
 def is_substantial_completion(parsed, file_path, content):
@@ -551,7 +706,7 @@ def is_substantial_completion(parsed, file_path, content):
     return False
 
 
-def write_last_result(task, outcome, details="", output_path=""):
+def write_last_result(task, outcome, details="", output_path="", pruned_satisfied=None):
     payload = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "task": task,
@@ -560,7 +715,29 @@ def write_last_result(task, outcome, details="", output_path=""):
         "output_path": str(Path(output_path).relative_to(WORKSPACE)) if output_path else "",
         "completed": outcome == "completed",
     }
+    if pruned_satisfied:
+        payload["pruned_satisfied"] = pruned_satisfied
     LAST_RESULT_FILE.write_text(json.dumps(payload, indent=2))
+
+
+def detect_missing_prerequisite(task, parsed):
+    """Return a focused user question when a task lacks required human input."""
+    lower_task = task.lower()
+    title = parsed.get("title", "")
+    deliverable = parsed.get("sections", {}).get("deliverable", "")
+    combined = f"{title} | {deliverable}".lower()
+
+    if "followed companies" in combined or "named tickers" in combined:
+        if not FOLLOWED_COMPANIES_FILE.exists() or not FOLLOWED_COMPANIES_FILE.read_text().strip():
+            return "Which companies should be in your starting followed-companies list, or do you want me to propose a starter list for approval?"
+
+    if "real work philippe has made or plans to make" in lower_task or "source work" in lower_task:
+        return "Which specific work item should this be based on?"
+
+    if "personal workflow" in lower_task:
+        return "Which personal workflow do you want this to optimize?"
+
+    return None
 
 
 def execute_task_bounded(task):
@@ -580,19 +757,35 @@ def execute_task_bounded(task):
     
     print(f"  Task parsed: category={category}, title={title[:50]}")
     print(f"  Deliverable: {deliverable[:80] if deliverable else 'none'}")
-    
-    if task_requires_subagent(parsed):
-        queue_file, added, queue_state = queue_subagent_task(task, parsed)
+
+    missing_input_question = detect_missing_prerequisite(task, parsed)
+    if missing_input_question:
+        note = f"Needs input: {missing_input_question}"
+        return False, note, True, note, ""
+
+    execution_mode = classify_execution_mode(task, parsed)
+    print(f"  Execution mode: {execution_mode}")
+
+    if task_requires_subagent(task, parsed):
+        queue_file, added, queue_state, existing_output = queue_subagent_task(task, parsed, execution_mode=execution_mode)
+        mode_label = "agent-team" if execution_mode == "agent_team" else "sub-agent"
+        if queue_state == "already_completed":
+            note = f"Already completed earlier; verified deliverables exist"
+            return True, note, False, "", existing_output
         if queue_state == "already_queued":
-            note = "Already queued for sub-agent execution"
+            note = f"Already queued for {mode_label} execution"
         elif queue_state == "queued_waiting_for_active_slot":
-            note = "Queued for sub-agent execution (waiting for active task to finish)"
+            note = f"Queued for {mode_label} execution (waiting for active task to finish)"
         else:
-            note = "Queued for sub-agent execution"
+            note = f"Queued for {mode_label} execution"
         return False, note, True, note, str(queue_file)
 
     # Simple tasks - execute directly (pattern-based)
-    if "python" in deliverable.lower() or "script" in deliverable.lower() or "automation" in deliverable.lower():
+    deliverable_lower = deliverable.lower()
+    title_lower = title.lower()
+    combined_lower = f"{title_lower} | {deliverable_lower} | {proof.lower()} | {why.lower()}"
+
+    if "python" in deliverable_lower or "script" in deliverable_lower or "automation" in deliverable_lower:
         # Create a Python script
         file_path = WORKSPACE / "scripts" / f"auto-generated-{datetime.now().strftime('%Y%m%d%H%M')}.py"
         script_name = file_path.name.replace(".py", "")
@@ -611,8 +804,50 @@ if __name__ == "__main__":
     main()
 '''
         print(f"  Creating Python script: {file_path.name}")
-        
-    elif "portfolio" in deliverable.lower() or "case-study" in deliverable.lower():
+
+    elif any(sig in combined_lower for sig in ["blender", "after effects", "unreal", "creative-practice", "practice brief", "self-review checklist"]):
+        # Create a creative practice brief
+        file_path = WORKSPACE / "projects" / "creative-practice" / f"practice-brief-{datetime.now().strftime('%Y-%m-%d')}.md"
+        content = f'''# Creative Practice Brief
+
+**Generated:** {timestamp}
+**Task:** {title}
+
+## Exercise Focus
+
+- **Discipline:** [Blender / After Effects / Unreal / other]
+- **Skill target:** [What this exercise is meant to build]
+- **Timebox:** [30-90 minutes]
+
+## Steps
+
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+4. [Step 4]
+
+## Target Outcome
+
+[Describe the finished mini exercise or scene Philippe should complete]
+
+## Self-Review Checklist
+
+- [ ] I finished the exercise within the timebox
+- [ ] I practiced the intended technique
+- [ ] I exported or saved the result
+- [ ] I noted one thing that went well
+- [ ] I noted one thing to improve next time
+
+## Learning Notes
+
+[Short reflection prompts or notes section]
+
+---
+*This is an AI-generated draft. Replace placeholders before treating it as done.*
+'''
+        print(f"  Creating creative practice brief: {file_path.name}")
+
+    elif "portfolio" in deliverable_lower or "case-study" in deliverable_lower:
         # Create a case study draft
         file_path = WORKSPACE / "projects" / "portfolio" / "case-studies" / f"case-study-{datetime.now().strftime('%Y-%m-%d')}.md"
         content = f'''# Case Study Draft
@@ -640,8 +875,8 @@ if __name__ == "__main__":
 *This is an AI-generated draft. Review and expand before use.*
 '''
         print(f"  Creating case study: {file_path.name}")
-        
-    elif "trading" in deliverable.lower() or "market" in deliverable.lower() or "brief" in deliverable.lower():
+
+    elif any(sig in combined_lower for sig in ["trading brief", "market setup", "price level", "entry", "invalidation", "position size"]):
         # Create a trading brief
         file_path = WORKSPACE / "projects" / "trading-briefs" / f"brief-{datetime.now().strftime('%Y-%m-%d')}.md"
         content = f'''# Trading Brief
@@ -671,8 +906,8 @@ if __name__ == "__main__":
 *This is an AI-generated draft. Verify with market data before trading.*
 '''
         print(f"  Creating trading brief: {file_path.name}")
-        
-    elif "company" in deliverable.lower() or "analysis" in deliverable.lower():
+
+    elif "company" in deliverable_lower or "analysis" in deliverable_lower:
         # Create company analysis
         file_path = WORKSPACE / "projects" / "company-research" / f"analysis-{datetime.now().strftime('%Y-%m-%d')}.md"
         content = f'''# Company Analysis
@@ -779,13 +1014,32 @@ def run_executor():
     print(f"Open Backlog: {len(open_backlog)} tasks")
     print(f"In Progress: {len(in_progress)} tasks")
     
-    # Select highest-value task from Open Backlog
-    selected_task, score = select_task(open_backlog, in_progress)
-    
+    # Select highest-value task from Open Backlog, pruning already-satisfied work first
+    selected_task, score, skipped_satisfied = select_task(open_backlog, in_progress)
+    pruned_summary = []
+
+    if skipped_satisfied:
+        for task, output_paths in skipped_satisfied:
+            content = remove_task_everywhere(task, content)
+            print(f"Pruned already-satisfied task from backlog: {task[:80]}...")
+            if output_paths:
+                print(f"  Verified outputs: {', '.join(output_paths)}")
+            pruned_summary.append({
+                "task": task,
+                "output_paths": output_paths,
+            })
+        AUTONOMOUS_FILE.write_text(content)
+        if sync_kanban_board():
+            publish_kanban_board_if_changed()
+        prune_details = f"Pruned {len(pruned_summary)} already-satisfied task(s) from Open Backlog"
+        log_execution("prune", "pruned_satisfied", prune_details)
+        open_backlog, in_progress = read_autonomous_file()
+
     if not selected_task:
-        print("No tasks available in Open Backlog")
-        write_last_result("", "skipped", "No tasks in Open Backlog", "")
-        log_execution("none", "skipped", "No tasks in Open Backlog")
+        reason = "No selectable tasks in Open Backlog" if skipped_satisfied else "No tasks in Open Backlog"
+        print(reason)
+        write_last_result("", "skipped", reason, "", pruned_satisfied=pruned_summary)
+        log_execution("none", "skipped", reason)
         return
     
     print(f"Selected task (score={score}): {selected_task[:80]}...")
@@ -809,7 +1063,7 @@ def run_executor():
     if completed:
         # Log as completed
         log_completed_task(selected_task, output_path, "autonomous")
-        write_last_result(selected_task, "completed", result, output_path)
+        write_last_result(selected_task, "completed", result, output_path, pruned_satisfied=pruned_summary)
 
         # Remove from In Progress
         content = AUTONOMOUS_FILE.read_text()
@@ -822,16 +1076,24 @@ def run_executor():
         print(f"Task completed and logged")
     
     elif blocked:
-        queued = "sub-agent" in blocker_note.lower() or "subagent" in blocker_note.lower()
-        if queued or not output_path:
-            content = AUTONOMOUS_FILE.read_text()
+        queued = any(token in blocker_note.lower() for token in ["sub-agent", "subagent", "agent-team"])
+        agent_team = "agent-team" in blocker_note.lower()
+        needs_input = blocker_note.lower().startswith("needs input:")
+        content = AUTONOMOUS_FILE.read_text()
+
+        if needs_input:
+            question = blocker_note.split(": ", 1)[1] if ": " in blocker_note else blocker_note
+            content = move_to_needs_input(selected_task, content, question)
+        elif queued or not output_path:
             content = move_to_open_backlog(selected_task, content)
-            AUTONOMOUS_FILE.write_text(content)
-            if sync_kanban_board():
-                publish_kanban_board_if_changed()
-        outcome = "queued_for_subagent" if queued else "blocked"
-        result_path = output_path if (output_path and not queued) else ""
-        write_last_result(selected_task, outcome, blocker_note, result_path)
+
+        AUTONOMOUS_FILE.write_text(content)
+        if sync_kanban_board():
+            publish_kanban_board_if_changed()
+
+        outcome = "needs_input" if needs_input else ("queued_for_agent_team" if agent_team else ("queued_for_subagent" if queued else "blocked"))
+        result_path = output_path if (output_path and not queued and not needs_input) else ""
+        write_last_result(selected_task, outcome, blocker_note, result_path, pruned_satisfied=pruned_summary)
         log_execution(selected_task, outcome, blocker_note)
         print(f"Task blocked: {blocker_note}")
 
@@ -842,7 +1104,7 @@ def run_executor():
             AUTONOMOUS_FILE.write_text(content)
             if sync_kanban_board():
                 publish_kanban_board_if_changed()
-        write_last_result(selected_task, "in_progress", result, output_path)
+        write_last_result(selected_task, "in_progress", result, output_path, pruned_satisfied=pruned_summary)
         log_execution(selected_task, "in_progress", result)
         print(f"Task work chunk complete, remains in In Progress")
     

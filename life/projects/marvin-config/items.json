@@ -512,9 +512,178 @@
       "projects/marvin-config",
       "resources/cron-jobs"
     ],
-    "lastAccessed": "2026-03-08",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
     "source": "memory/2026-03-08.md",
-    "lastUsed": "2026-03-11T20:52:31.815670"
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mc-037",
+    "fact": "Model switch executed: default lightweight delegation now uses bailian/qwen3.5-plus (higher reasoning) instead of bailian/MiniMax-M2.5. Primary orchestrator remains bailian/MiniMax-M2.5.",
+    "category": "decision",
+    "timestamp": "2026-03-14T12:35:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "source": "memory/2026-03-14.md",
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mc-038",
+    "fact": "OpenClaw rollback performed due to security finding. Post-rollback state healthy after sanity checks (openclaw status, doctor, log review).",
+    "category": "status",
+    "timestamp": "2026-03-14T12:41:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "source": "memory/2026-03-14.md",
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mc-039",
+    "fact": "OpenAI Codex OAuth investigation concluded: multiple methods failed (main agent, temp agent, sandbox onboarding) - all hang after successful browser OAuth due to upstream OpenClaw bug preventing profile write. Workaround required.",
+    "category": "status",
+    "timestamp": "2026-03-14T15:25:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "source": "memory/2026-03-14.md",
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mc-040",
+    "fact": "Manual OpenAI account switch method confirmed: (1) authenticate personal account on separate device, (2) copy resulting auth-profiles.json, (3) manually replace only openai-codex:default section in live auth-profiles.json, (4) restart gateway, (5) verify with /codex_usage. Takes ~10 min.",
+    "category": "pattern",
+    "timestamp": "2026-03-14T23:39:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "source": "memory/2026-03-14.md",
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mc-041",
+    "fact": "Accepted risks documented (Mar 14 Morning Meeting): backup/recovery gap, plaintext .env secrets, idempotency integrity protection, runtime-only image consent, in-memory rate-limit reset, audit-log crypto integrity.",
+    "category": "decision",
+    "timestamp": "2026-03-14T13:35:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "source": "memory/2026-03-14.md",
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mc-042",
+    "fact": "Runbooks added: dependency-scan-runbook.md, token-rotation-runbook.md, incident-response-runbook.md. Workflow added: .github/workflows/dependency-scan.yml",
+    "category": "status",
+    "timestamp": "2026-03-14T13:38:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "source": "memory/2026-03-14.md",
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "mc-043",
+    "fact": "token-manifest.json removed from git tracking (added to .gitignore) but kept locally. Prevents sensitive token manifests from being committed.",
+    "category": "decision",
+    "timestamp": "2026-03-14T13:38:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 2,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "mc-044",
+    "fact": "Governance v1 framework established: projects/_ops/marvin-governance-v1.md created. Defined workspace-lane (low-risk internal improvements) vs control-plane-lane (high-risk external changes) with approval requirements.",
+    "category": "decision",
+    "timestamp": "2026-03-15T15:00:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "mc-045",
+    "fact": "Autonomy policy split: HEARTBEAT.md now monitoring-only, AUTONOMY.md created for proactive execution with workspace-lane boundaries, exclusions, and reporting rules.",
+    "category": "decision",
+    "timestamp": "2026-03-15T20:59:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "AUTONOMY.md"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "mc-046",
+    "fact": "Core execution protocol refined: high-risk changes require approval, low-risk reversible in-lane changes may execute autonomously but must be reported in next Morning Meeting. Added 'do not stop early on important unresolved work unless Philippe explicitly says to stop'.",
+    "category": "decision",
+    "timestamp": "2026-03-15T15:00:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "AGENTS.md",
+      "MEMORY.md"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "mc-047",
+    "fact": "OpenClaw cost control verified: agents.defaults.model.primary does not consume tokens by existing - acts as fallback routing target only. Surprise-default paths identified: fallback resolution and optional auto-summary.",
+    "category": "status",
+    "timestamp": "2026-03-15T15:00:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "mc-048",
+    "fact": "Daily-task-generator.py hardened with deliverable-path dedupe to prevent reissuing already-completed deliverables (e.g., creative-challenges).",
+    "category": "decision",
+    "timestamp": "2026-03-15T15:00:00+08:00",
+    "source": "memory/2026-03-15.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-15",
+    "accessCount": 1,
+    "lastUsed": "2026-03-15T18:00:00.000000"
   }
 ]

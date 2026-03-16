@@ -31,15 +31,29 @@
   - `codex` (gpt-5.3-codex): Coding-specific work
 - Fallback protocol: if a model errors repeatedly, switch once to Codex and proceed
 
+### Manual Account Switching (Philippe-only)
+- OpenAI Codex account switching is a manual process done by Philippe
+- Process:
+  1. Keep two known-good backup sources outside live file
+  2. Back up current live `/data/.openclaw/agents/main/agent/auth-profiles.json`
+  3. Replace only the `openai-codex:default` entry with target account's known-good entry
+  4. Restart gateway
+  5. Verify with `/codex_usage` or `openclaw models status`
+- Marvin does not need to reference this — it's Philippe's manual procedure
+
 ## Preferences & Decision Rules
 
 ### Execution Style
 - Prefer decisive recommendations over open-ended option dumps.
-- For non-trivial changes: propose plan first, then execute after approval.
+- For meaningful work: think and plan first; high-risk changes require approval before execution, while low-risk, reversible in-lane changes may execute autonomously.
+- If risk classification is unclear, default to proposing first.
 - Prioritize verified fixes over temporary patches.
+- Allow low-risk, reversible workspace improvements without pre-approval when they do not materially affect external access, security posture, routing, uptime, persistent runtime behavior, or host/VPS operations.
+- Any such autonomous low-risk change must be summarized during the next Morning Meeting, including what changed, why it changed, expected benefit, and rollback if relevant.
+- OpenClaw self-updates are manual-only in the current Hostinger VPS setup; Marvin should not execute update paths and should leave updates to Philippe unless Philippe explicitly instructs otherwise.
 
 ### Research Standard
-- Before proposing non-trivial solutions, verify:
+- Before proposing meaningful or high-risk solutions, verify:
   1) technical fit,
   2) policy/safety compatibility,
   3) no breakage risk to active processes.
@@ -61,6 +75,13 @@
 - Start with the answer.
 - Keep updates concise, specific, and outcome-first.
 - For external/public actions, get explicit approval first.
+
+### Marvin Governance Lanes
+- **Marvin: Workspace Lane** = workspace-maintenance lane for docs, runbooks, prompts, memory/logging process, helper scripts, internal tooling, workflow cleanup, local organization, and low-risk internal infrastructure improvements.
+- **Marvin: Control-Plane Lane** = authority lane for persistent config, model routing, cron behavior, channel behavior, restart-affecting settings, security-sensitive infrastructure settings, and runtime behavior that affects access, uptime, or external behavior.
+- High-risk changes are changes that could materially affect external access, security posture, routing, uptime, persistent runtime behavior, host/VPS operations, public/external behavior, destructive data integrity, or broad irreversible project structure.
+- Protected zones are approval-gated, not permanently off-limits: Marvin may inspect, analyze, and recommend changes there, but must present the case first before executing changes that could materially affect external access, security posture, routing, uptime, persistent runtime behavior, or host/VPS operations.
+- Any config mutation must be schema-first: inspect the relevant schema path, confirm field/type support, avoid undocumented keys, and verify results when possible.
 
 ### Risk Handling
 - Accepted-risk items stay suppressed unless state changes.
@@ -222,3 +243,47 @@
   - two refinement passes hardened the baseline by blocking title/pattern family mismatches, broad roundup headlines, mixed-theme titles, FX-stress secondary mappings, and duplicate-looking material events
   - final M1 baseline judged good enough to build on: 32 candidates, 6 ready, with conservative blocking preferred over noisy false positives
   - durable sequencing remains: refine producer/interface first, then plan equity-bot consumer upgrade behind a safer rollout path
+- Equity-bot execution-candidates consumer bridge established (Mar 13 evening):
+  - dispatcher can now prefer `execution_candidates.json` behind `EXECUTION_CANDIDATES_ENABLED=true`
+  - old summary context explicitly demoted to macro-overlay role, not candidate selection
+  - idempotency now prefers `candidate_id`, then `signal_id`, before falling back to the old coarse key
+  - controlled validation confirmed candidate metadata survives through payload generation and duplicate suppression is more precise for repeated candidate dispatch
+  - runtime/code audit immediately after bridge rollout found the next real blocker is operational, not architectural: webhook receiver down, watchdog inactive, dispatch trigger path unclear, candidate mode not yet enabled in `.env`
+  - next phase should restore receiver health and verify scheduler/watchdog truth before attempting live candidate-mode rollout
+- Candidate-mode runtime activation validated (Mar 13 night):
+  - webhook receiver recovered and health endpoints repaired
+  - `/health/auth` bug fixed to match the current HMAC-based auth scheme
+  - watchdog restarted
+  - scheduler truth confirmed: `auto-signal-dispatcher` is a real OpenClaw cron job at 15-minute cadence
+  - `EXECUTION_CANDIDATES_ENABLED=true` enabled in bot `.env`
+  - controlled live-ish dispatch succeeded with `signal_source=execution_candidates`, dispatching 4 paper-mode candidate-driven orders
+  - runtime now visibly reflects intended architecture: candidate layer chooses, macro context tempers risk/size
+- Marvin autonomy architecture split and hardened (Mar 15 night):
+  - heartbeat was intentionally reduced to monitoring-only; proactive execution moved out of `HEARTBEAT.md` into dedicated autonomy policy/state
+  - `AUTONOMY.md` created as the governing policy for proactive execution
+  - deterministic gate added at `scripts/autonomy_gate.py` with separate modes for `workspace`, `queue`, and `improve`
+  - trigger model now separated into:
+    - backlog execution (`autonomous-task-executor`, 09:00 daily)
+    - delegated queue wakeups (`autonomous-queue-wakeup`, 10:15 / 14:15 / 18:15 daily)
+    - workspace home-improvement (`workspace-home-improvement`, 07:30 daily)
+  - workspace home-improvement is intentionally distinct from backlog execution so Morning Meeting can review maintenance results from an earlier daily pass
+  - duplicate prevention was hardened across three layers:
+    - generator dedupe
+    - selector-time prune of already-satisfied backlog tasks
+    - queue-time suppression of already-completed delegated work
+  - duplicate queue entries for already-verified completed work are now auto-suppressed instead of being re-run, and prune events are surfaced in executor logging/result state
+- Candidate-driven clean-sheet trading epoch started (Mar 13 late night):
+  - paper account deliberately flattened (open buys cancelled, legacy positions closed) before the next US market phase
+  - dispatcher cron re-enabled only after the account returned to 0 open positions / 0 open orders
+  - first natural post-reset cycle ran successfully on the candidate-driven path
+  - legacy dispatcher state archived and replaced with a fresh epoch-marked state file (`candidate-clean-sheet-2026-03-13`)
+  - durable evaluation rule: measure future trading behavior against this reset epoch, not against pre-upgrade AAPL-heavy portfolio baggage
+- Dual Codex home isolation validated (Mar 13 late night):
+  - separate Codex homes established at `/data/codex-work-home/.codex` and `/data/codex-personal-home/.codex`
+  - wrapper commands created for safe account targeting: `codex-work`, `codex-personal`, `codex-home-status`
+  - both accounts successfully authenticated independently via device-auth without overwriting each other
+  - current conclusion: separate-home Codex auth is a safe practical multi-account method for delegated Codex work; OpenClaw runtime auth switching can be investigated later as a separate layer
+- OpenClaw runtime auth control point identified (Mar 13 late night):
+  - main dashboard/orchestrator Codex identity is controlled through the OpenClaw auth-profile layer, specifically `openai-codex:default` in `/data/.openclaw/agents/main/agent/auth-profiles.json`
+  - dual Codex CLI homes do not change the main dashboard/runtime account automatically
+  - future quota-based dashboard account switching should likely use a careful manual `openai-codex:default` snapshot/swap procedure rather than automatic magic

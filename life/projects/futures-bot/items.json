@@ -9,10 +9,10 @@
       "projects/autonomous-trading-bot",
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-06",
-    "accessCount": 2,
+    "lastAccessed": "2026-03-14",
+    "accessCount": 3,
     "source": "memory/2026-03-04.md",
-    "lastUsed": "2026-03-11T20:52:31.812815"
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "afb-002",
@@ -23,10 +23,10 @@
     "relatedEntities": [
       "projects/futures-bot"
     ],
-    "lastAccessed": "2026-03-05",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
     "source": "memory/2026-03-05.md",
-    "lastUsed": "2026-03-11T20:52:31.812824"
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "afb-003",
@@ -37,10 +37,10 @@
     "relatedEntities": [
       "projects/futures-bot"
     ],
-    "lastAccessed": "2026-03-05",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
     "source": "memory/2026-03-05.md",
-    "lastUsed": "2026-03-11T20:52:31.812827"
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "afb-004",
@@ -51,10 +51,10 @@
     "relatedEntities": [
       "projects/futures-bot"
     ],
-    "lastAccessed": "2026-03-05",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
     "source": "memory/2026-03-05.md",
-    "lastUsed": "2026-03-11T20:52:31.812830"
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "afb-005",
@@ -66,10 +66,10 @@
       "projects/futures-bot",
       "resources/brokers"
     ],
-    "lastAccessed": "2026-03-07",
-    "accessCount": 2,
+    "lastAccessed": "2026-03-14",
+    "accessCount": 3,
     "source": "memory/2026-03-05.md",
-    "lastUsed": "2026-03-11T20:52:31.812832"
+    "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
     "id": "afb-006",
@@ -80,9 +80,23 @@
     "relatedEntities": [
       "areas/people/philippe"
     ],
-    "lastAccessed": "2026-03-07",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-14",
+    "accessCount": 2,
     "source": "memory/2026-03-06.md",
-    "lastUsed": "2026-03-11T20:52:31.812834"
+    "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "afb-007",
+    "fact": "Security hardening applied (Mar 14, 2026): removed payload-based secret auth, added /health rate limiting, tightened webhook error responses, upgraded log redaction to recursive nested, added time-based retention pruning",
+    "category": "status",
+    "timestamp": "2026-03-14T13:38:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/futures-bot"
+    ],
+    "lastAccessed": "2026-03-14",
+    "accessCount": 1,
+    "source": "memory/2026-03-14.md",
+    "lastUsed": "2026-03-14T18:00:00.000000"
   }
 ]

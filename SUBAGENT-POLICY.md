@@ -45,6 +45,13 @@ Always announce:
 3. If retry fails, stop and report both attempts with next recommendation
 
 ## Default Routing (Current)
+
+**Note:** We use both Codex versions intentionally:
+- `codex5.4` (gpt-5.4): Marvin orchestration, high-reasoning tasks
+- `codex` (gpt-5.3-codex): Coding-specific work
+
+**Why both?** `codex5.4` is the orchestration/reasoning default, while `codex` remains the coding-specialist route. This keeps Marvin on the stronger planner and coding-heavy delegated work on the stronger builder.
+
 - **Codex (openai-codex/gpt-5.3-codex):**
   **non-trivial coding, debugging, multi-file technical work, complex investigations**
   → For any coding task beyond simple one-liner fixes, Codex is the default.

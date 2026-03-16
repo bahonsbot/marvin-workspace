@@ -203,6 +203,22 @@ Audit what process is actually running and whether it matches the repo state.
 - health/auth behavior matches actual code expectations
 - no ambiguity about active runtime version
 
+#### Current audit checkpoint (Mar 13 evening)
+- webhook receiver found down during audit
+- crash evidence indicated port-bind failure (`Errno 98: Address already in use`)
+- watchdog script exists but no active watchdog process was observed
+- documented dispatcher cadence could not initially be confirmed from the first audit path; later verification showed `auto-signal-dispatcher` is a real OpenClaw cron job
+- `EXECUTION_CANDIDATES_ENABLED` was not yet enabled in `.env` during the first audit
+- next action: restore receiver health first, then verify watchdog/scheduler truth before enabling candidate-mode rollout
+
+#### Follow-up checkpoint (Mar 13 night)
+- receiver recovered and health endpoints verified
+- `/health/auth` logic repaired to match the current HMAC auth contract
+- watchdog restarted
+- candidate mode enabled in bot `.env`
+- controlled live-ish dispatcher validation succeeded with candidate-driven payloads reaching the webhook/execution path
+- next follow-up should focus on stabilization decisions (state cleanup, watchdog reliability, and rollout posture), not re-proving the architecture
+
 ### B.2 Redesign idempotency behavior
 Make duplicate suppression precise enough to block real duplicates without suppressing distinct signals.
 
