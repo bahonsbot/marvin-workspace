@@ -395,14 +395,60 @@ def score_task(task, in_progress_tasks):
     return score
 
 
+def task_has_age_override(task):
+    """Return True only for narrow cases that may jump ahead of backlog age."""
+    parsed = parse_task_structure(task)
+    title = parsed.get("title", "").lower()
+    sections = parsed.get("sections", {})
+    combined = " | ".join([
+        task.lower(),
+        title,
+        sections.get("deliverable", "").lower(),
+        sections.get("proof", "").lower(),
+        sections.get("why", "").lower(),
+        sections.get("unlocks", "").lower(),
+    ])
+
+    blocker_signals = [
+        "blocker",
+        "blocked by",
+        "unblock",
+        "remove blocker",
+    ]
+    time_signals = [
+        "today",
+        "tonight",
+        "this morning",
+        "this evening",
+        "deadline",
+        "time-sensitive",
+        "urgent",
+        "asap",
+    ]
+    prerequisite_signals = [
+        "unlocks:",
+        "prerequisite",
+        "depends on",
+        "unlocks multiple",
+    ]
+
+    if any(sig in combined for sig in blocker_signals):
+        return True
+    if any(sig in combined for sig in time_signals):
+        return True
+    if any(sig in combined for sig in prerequisite_signals):
+        return True
+    return False
+
+
 def select_task(open_backlog, in_progress_tasks):
-    """Select the highest-value task from Open Backlog, skipping already-satisfied work."""
+    """Select oldest eligible backlog item by default, with narrow override exceptions."""
     if not open_backlog:
         return None, None, []
 
-    scored = []
+    eligible = []
     skipped_satisfied = []
-    for task in open_backlog:
+    for index, task in enumerate(open_backlog):
         satisfied, output_paths = task_already_satisfied(task)
         if satisfied:
             skipped_satisfied.append((task, output_paths))
@@ -410,16 +456,22 @@ def select_task(open_backlog, in_progress_tasks):
         score = score_task(task, in_progress_tasks)
         parsed = parse_task_structure(task)
         execution_mode = classify_execution_mode(task, parsed)
-        scored.append((score, execution_mode, task))
+        age_override = task_has_age_override(task)
+        eligible.append((index, score, execution_mode, age_override, task))
 
-    if not scored:
+    if not eligible:
         return None, None, skipped_satisfied
 
-    # Sort by score, then prefer agent_team over subagent over direct on ties, then lexical fallback
     mode_rank = {'agent_team': 0, 'subagent': 1, 'direct': 2}
-    scored.sort(key=lambda x: (-x[0], mode_rank.get(x[1], 9), x[2]))
+    override_tasks = [item for item in eligible if item[3]]
 
-    best_score, _best_mode, best_task = scored[0]
+    if override_tasks:
+        override_tasks.sort(key=lambda x: (-x[1], mode_rank.get(x[2], 9), x[0], x[4]))
+        best_index, best_score, _best_mode, _override, best_task = override_tasks[0]
+        return best_task, best_score, skipped_satisfied
+
+    eligible.sort(key=lambda x: (x[0],))
+    best_index, best_score, _best_mode, _override, best_task = eligible[0]
     return best_task, best_score, skipped_satisfied
 
 

@@ -2,11 +2,6 @@
   "board": {
     "todo": [
       {
-        "id": "6a3eb970",
-        "text": "[Trading] \ud83d\udd27 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
-        "column": "todo"
-      },
-      {
         "id": "b76f3f9c",
         "text": "[Career] \ud83d\udcdd Draft: draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
         "column": "todo"
@@ -41,5 +36,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-16T14:05:13.000Z"
+  "updatedAt": "2026-03-16T14:17:45.000Z"
 }

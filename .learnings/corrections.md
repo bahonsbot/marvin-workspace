@@ -17,6 +17,24 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260316-1416]
+
+**Trigger:** "You can remove 'safety/reliability fixes' from your exception list, because we would already tackle those early anyway."
+**What was wrong:** I included safety/reliability fixes as a special backlog-age override exception, but Philippe wants those handled through normal prioritization, not as an extra selector bypass.
+**Lesson:** For backlog selection, default to oldest eligible To Do item. Exception list should stay narrow: blocker-removal, time-sensitive work, and prerequisites that unlock multiple other tasks. Do not include safety/reliability fixes as a separate exception class.
+
+**Priority:** high
+**Status:** resolved
+
+## [CORR-20260316-1340]
+
+**Trigger:** "Please make sure this reporting is part of the Morning Meeting from now on. I thought that was already discussed last night, but perhaps it got lost during the memory processing."
+**What was wrong:** Morning Meeting did not proactively include the workspace home-improvement report, even though Philippe expected autonomous maintenance work from that day to be surfaced there.
+**Lesson:** Morning Meeting should explicitly include any autonomous workspace home-improvement work from that day, with what changed, why, expected benefit, and rollback.
+
+**Priority:** high
+**Status:** resolved
+
 ## [CORR-20260315-1307]
 
 **Trigger:** Morning Meeting protocol - I jumped to Self-Improvement without completing all Security Review findings
