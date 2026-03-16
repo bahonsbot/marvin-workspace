@@ -24,13 +24,13 @@
 
 ## In Progress
 
-- [Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial
 *(Empty - reset pending regenerated task batch)*
 
 ## Done Today
 
 - [Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | ✅ Completed: projects/creative-challenges/index.html, projects/creative-challenges/README.md
 - [Career] 🚀 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | ✅ Completed: projects/portfolio/case-studies/motion-design-loop.md
+- [Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | ✅ Completed: projects/autonomous-trading-bot/notes/bot-support-spec-health-snapshot-reporter-2026-03-16.md
 
 ## Open Backlog
 
