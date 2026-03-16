@@ -73,16 +73,50 @@ def sync_kanban_board():
         tid = uuid.uuid5(uuid.NAMESPACE_URL, f"{column}:{text}").hex[:8]
         return {"id": tid, "text": text, "column": column}
 
+    todo_items = sections.get("openbacklog", [])
+    inprogress_items = sections.get("inprogress", [])
+    done_items = sections.get("done", []) + sections.get("donetoday", [])
+
+    def normalize_task_text(text):
+        return re.sub(r"\s+", " ", text.strip())
+
+    sanity_warnings = []
+    seen = {}
+    for column, items in {
+        "todo": todo_items,
+        "inprogress": inprogress_items,
+        "done": done_items,
+    }.items():
+        for item in items:
+            key = normalize_task_text(item)
+            seen.setdefault(key, []).append(column)
+
+    duplicates = {task: cols for task, cols in seen.items() if len(set(cols)) > 1}
+    if duplicates:
+        sanity_warnings.append(
+            f"duplicate task state across columns detected for {len(duplicates)} task(s)"
+        )
+
+    if sections.get("donetoday", []) and not done_items:
+        sanity_warnings.append("Done Today contains items but done column resolved empty")
+
+    if sections.get("inprogress", []) and all("reset pending regenerated task batch" in item.lower() for item in inprogress_items):
+        sanity_warnings.append("In Progress only contains reset/placeholder text")
+
     board = {
-        "todo": [make_task(t, "todo") for t in sections.get("openbacklog", [])],
-        "inprogress": [make_task(t, "inprogress") for t in sections.get("inprogress", [])],
-        "done": [make_task(t, "done") for t in sections.get("done", [])]
+        "todo": [make_task(t, "todo") for t in todo_items],
+        "inprogress": [make_task(t, "inprogress") for t in inprogress_items],
+        "done": [make_task(t, "done") for t in done_items]
     }
 
     board_data = {
         "board": board,
         "updatedAt": datetime.now().strftime("%Y-%m-%dT%H:%M:%S.000Z")
     }
+    if sanity_warnings:
+        board_data["sanityWarnings"] = sanity_warnings
+        for warning in sanity_warnings:
+            print(f"  Kanban sync warning: {warning}")
     KANBAN_BOARD_FILE.parent.mkdir(parents=True, exist_ok=True)
     KANBAN_BOARD_FILE.write_text(json.dumps(board_data, indent=2))
     print(f"  Synced Kanban board: {len(board['todo'])} todo, {len(board['inprogress'])} in progress, {len(board['done'])} done")
@@ -118,6 +152,8 @@ def publish_kanban_board_if_changed():
     message = f"chore(kanban): sync board snapshot ({datetime.now().strftime('%Y-%m-%d %H:%M')})"
 
     try:
+        # Pull first to avoid conflicts with remote changes
+        subprocess.run(["git", "pull", "--rebase", "origin", branch], cwd=WORKSPACE, capture_output=True)
         subprocess.run(["git", "add", rel_board], cwd=WORKSPACE, check=True)
         subprocess.run(["git", "commit", "-m", message], cwd=WORKSPACE, check=True)
         subprocess.run(["git", "push", "origin", branch], cwd=WORKSPACE, check=True)
