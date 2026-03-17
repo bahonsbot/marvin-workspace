@@ -12,17 +12,18 @@
         "column": "todo"
       },
       {
-        "id": "62071f40",
-        "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "todo"
-      },
-      {
         "id": "f6c81963",
         "text": "[Other] \ud83c\udf81 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "df04d248",
+        "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "1d9b609b",
@@ -41,5 +42,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-17T10:01:57.000Z"
+  "updatedAt": "2026-03-17T10:01:59.000Z"
 }
