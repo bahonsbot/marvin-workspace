@@ -2,39 +2,45 @@
   "board": {
     "todo": [
       {
-        "id": "873f553c",
-        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "id": "71293857",
+        "text": "[Personal] \ud83d\udcda Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "b4699bbe",
-        "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "65b06d89",
+        "text": "[Other] \ud83d\udd27 Fix: identify one OpenClaw process weakness and propose a small reliability improvement with clear input/output, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Spec targets an OpenClaw process weakness without proposing risky live config edits | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "c4fee0b0",
-        "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
-        "column": "todo"
-      },
-      {
-        "id": "8f42a041",
-        "text": "[Other] 🔧 Fix: identify one OpenClaw process weakness and propose a small reliability improvement with clear input/output, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Spec targets an OpenClaw process weakness without proposing risky live config edits | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "todo"
-      },
-      {
-        "id": "6c0ef225",
-        "text": "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
+        "id": "b532aa94",
+        "text": "[Personal] \ud83c\udf81 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
         "column": "todo"
       }
     ],
     "inprogress": [
       {
-        "id": "b999c42d",
-        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "df04d248",
+        "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "inprogress"
       }
     ],
-    "done": []
+    "done": [
+      {
+        "id": "1d9b609b",
+        "text": "[Career] \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | \u2705 Completed: projects/creative-challenges/index.html, projects/creative-challenges/README.md",
+        "column": "done"
+      },
+      {
+        "id": "f69530be",
+        "text": "[Career] \ud83d\ude80 Launch: one portfolio case-study draft from existing project; deliverable: 250-400 word markdown in projects/portfolio/case-studies/ | \u2705 Completed: projects/portfolio/case-studies/motion-design-loop.md",
+        "column": "done"
+      },
+      {
+        "id": "af158b34",
+        "text": "[Trading] \ud83d\udd27 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | \u2705 Completed: projects/autonomous-trading-bot/notes/bot-support-spec-health-snapshot-reporter-2026-03-16.md",
+        "column": "done"
+      }
+    ]
   },
-  "updatedAt": "2026-03-18T01:02:59.720Z"
+  "updatedAt": "2026-03-18T10:01:06.000Z"
 }
