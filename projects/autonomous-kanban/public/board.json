@@ -10,14 +10,15 @@
         "id": "62071f40",
         "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
-      },
-      {
-        "id": "a9de1abb",
-        "text": "[Trading] \ud83c\udf81 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
-        "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "c809cb8e",
+        "text": "[Trading] \ud83c\udf81 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "e1d2d126",
@@ -46,5 +47,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-19T10:03:23.000Z"
+  "updatedAt": "2026-03-19T10:03:25.000Z"
 }
