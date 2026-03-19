@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "a9de1abb",
+        "text": "[Trading] \ud83c\udf81 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
+        "column": "todo"
+      },
+      {
         "id": "1960113e",
         "text": "[Career] \ud83d\udcda Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
         "column": "todo"
@@ -12,13 +17,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "c809cb8e",
-        "text": "[Trading] \ud83c\udf81 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "e1d2d126",
@@ -47,5 +46,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-19T10:03:25.000Z"
+  "updatedAt": "2026-03-19T10:03:28.000Z"
 }
