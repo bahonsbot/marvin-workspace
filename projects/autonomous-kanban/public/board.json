@@ -22,11 +22,6 @@
         "column": "todo"
       },
       {
-        "id": "b76f3f9c",
-        "text": "[Career] \ud83d\udcdd Draft: draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
-        "column": "todo"
-      },
-      {
         "id": "9bd50e2f",
         "text": "[Trading] \ud83d\udcda Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts | Why: Understanding company financials is required for informed trading decisions | Proof: Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice | Unlocks: Unlocks later analysis tasks based on real followed companies once the watchlist is defined",
         "column": "todo"
@@ -37,7 +32,13 @@
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "c51445b6",
+        "text": "[Career] \ud83d\udcdd Draft: draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "e1d2d126",
@@ -66,5 +67,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-20T10:02:38.000Z"
+  "updatedAt": "2026-03-20T10:02:40.000Z"
 }
