@@ -32,13 +32,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "c51445b6",
-        "text": "[Career] \ud83d\udcdd Draft: draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle | Why: Supports Instagram growth through publishable work or process content tied to Philippe's real practice | Proof: Output ties content ideas to real work Philippe made or will make, with clear posting angle | Unlocks: Advances goal progress measurably",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "e1d2d126",
@@ -67,5 +61,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-20T10:02:40.000Z"
+  "updatedAt": "2026-03-20T10:02:41.000Z"
 }
