@@ -7,11 +7,6 @@
         "column": "todo"
       },
       {
-        "id": "62071f40",
-        "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "todo"
-      },
-      {
         "id": "6270c039",
         "text": "[Personal] \ud83d\udcda Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
         "column": "todo"
@@ -37,7 +32,13 @@
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "df04d248",
+        "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "e1d2d126",
@@ -66,5 +67,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-21T10:00:26.000Z"
+  "updatedAt": "2026-03-21T10:00:27.000Z"
 }
