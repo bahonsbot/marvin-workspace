@@ -32,13 +32,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "df04d248",
-        "text": "[Other] \ud83d\udd27 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "e1d2d126",
@@ -67,5 +61,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-21T10:00:27.000Z"
+  "updatedAt": "2026-03-21T10:00:29.000Z"
 }
