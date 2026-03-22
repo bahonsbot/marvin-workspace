@@ -12,6 +12,11 @@ YCombinator,https://rss.app/feeds/I63Gq2ltYQ3P516W.xml       # @ycombinator
 ZeroHedge,https://rss.app/feeds/2pl8vwqzm5ByJ2Zf.xml         # @ZeroHedge
 UnusualWhales,https://rss.app/feeds/vOjbHEjGb1OvmDK3.xml      # @unusual_whales
 Reuters_Finance,https://rss.app/feeds/T0vT7xQ2IYsN1tuW.xml    # @Reuters
+Deltaone,https://rss.app/feeds/QZ4osYhr4dz6GQb2.xml           # @Deltaone
+KobeissiLetter,https://rss.app/feeds/at8g53BlwLzaKcCh.xml    # @KobeissiLetter
+FirstSquawk,https://rss.app/feeds/ChuCsVjdXRGB0eCw.xml        # @FirstSquawk
+GoogleNews_Technology,https://rss.app/feeds/IepnT5szV5gstgRh.xml  # Google News - Technology
+Telegram_FinancialJuice,https://rss.app/feeds/wOzYYg1oWsxi5DlV.xml # Telegram - FinancialJuice
 AP_Top,https://news.google.com/rss/search?q=site%3Aapnews.com+%22AP+Top+News%22&hl=en-US&gl=US&ceid=US%3Aen
 Guardian_World,https://www.theguardian.com/world/rss
 Guardian_Business,https://www.theguardian.com/uk/business/rss
