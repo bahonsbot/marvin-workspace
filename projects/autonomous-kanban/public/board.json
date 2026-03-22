@@ -37,13 +37,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "721b2b5f",
-        "text": "[Other] \ud83d\udd27 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "b9e06daf",
@@ -67,5 +61,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-22T10:00:17.000Z"
+  "updatedAt": "2026-03-22T10:00:18.000Z"
 }
