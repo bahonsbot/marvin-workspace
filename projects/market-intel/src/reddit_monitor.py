@@ -69,8 +69,11 @@ class RedditMonitor:
         ]
 
         self.reddit_timeout = 10
-        self.max_top_comments = 3
+        self.max_top_comments = 2
         self.fetch_top_comments = True
+        self.posts_per_subreddit = 12
+        self.subreddits_per_run = 8
+        self.scan_state_path = self.base_dir / "data" / "reddit_scan_state.json"
         self.selftext_snippet_chars = 280
         self.comment_snippet_chars = 220
 
@@ -135,8 +138,43 @@ class RedditMonitor:
         except Exception:
             return []
 
-    def fetch_subreddit(self, subreddit: str, limit: int = 25) -> List[Dict]:
+    def get_subreddit_batch(self) -> List[str]:
+        """Rotate subreddit scans across runs to reduce Reddit rate limits."""
+        total = len(self.subreddits)
+        per_run = min(self.subreddits_per_run, total)
+        offset = 0
+
+        try:
+            if self.scan_state_path.exists():
+                state = json.loads(self.scan_state_path.read_text())
+                offset = int(state.get("offset", 0)) % total
+        except Exception:
+            offset = 0
+
+        batch = [self.subreddits[(offset + i) % total] for i in range(per_run)]
+        next_offset = (offset + per_run) % total
+
+        try:
+            self.scan_state_path.parent.mkdir(parents=True, exist_ok=True)
+            self.scan_state_path.write_text(
+                json.dumps(
+                    {
+                        "offset": next_offset,
+                        "last_batch": batch,
+                        "updated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                    },
+                    indent=2,
+                )
+            )
+        except Exception:
+            pass
+
+        return batch
+
+    def fetch_subreddit(self, subreddit: str, limit: int | None = None) -> List[Dict]:
         """Fetch newest posts from subreddit JSON endpoint."""
+        if limit is None:
+            limit = self.posts_per_subreddit
         url = f"https://www.reddit.com/r/{subreddit}/new/.json?limit={limit}&raw_json=1"
 
         try:
@@ -154,13 +192,13 @@ class RedditMonitor:
                 )
 
                 selftext = scrub_pii((post.get("selftext") or "").strip())
-                top_comments = [scrub_pii(c) for c in self.fetch_post_comments(permalink)] if permalink else []
 
                 posts.append(
                     {
                         "title": post.get("title", ""),
                         "selftext": selftext,
-                        "top_comments": top_comments,
+                        "permalink": permalink,
+                        "top_comments": [],
                         "url": "https://reddit.com" + permalink if permalink else "",
                         "score": post.get("score", 0),
                         "num_comments": post.get("num_comments", 0),
@@ -169,9 +207,8 @@ class RedditMonitor:
                     }
                 )
 
-                # tiny jitter to avoid burst comment fetching against Reddit
-                if self.fetch_top_comments:
-                    time.sleep(random.uniform(0.05, 0.12))
+                # small jitter to avoid burst subreddit requests against Reddit
+                time.sleep(random.uniform(0.03, 0.08))
 
             return posts
 
@@ -190,14 +227,14 @@ class RedditMonitor:
     def scan_subreddits(self) -> List[Dict]:
         """Scan subreddits for keyword matches across title/selftext/comments."""
         results: List[Dict] = []
-        subreddit_count = len(self.subreddits)
-        self.log(f"Scanning {subreddit_count} subreddits...")
+        batch = self.get_subreddit_batch()
+        self.log(f"Scanning {len(batch)} subreddits (rotating batch of {len(self.subreddits)} total)...")
 
         scanned_posts = 0
         posts_with_selftext = 0
         posts_with_comment_snippets = 0
 
-        for sub in self.subreddits:
+        for sub in batch:
             posts = self.fetch_subreddit(sub)
 
             for post in posts:
@@ -207,30 +244,39 @@ class RedditMonitor:
                 if post.get("top_comments"):
                     posts_with_comment_snippets += 1
 
-                text = self.build_keyword_text(post)
-                for keyword in self.watch_keywords:
-                    if keyword in text:
-                        selftext = post.get("selftext", "")
-                        top_comments = post.get("top_comments") or []
-                        # Use the timestamp already in the post from fetch_subreddit (which has created_utc)
-                        post_timestamp = post.get("timestamp", "")
-                        results.append(
-                            {
-                                "subreddit": post.get("subreddit", ""),
-                                "title": post.get("title", ""),
-                                "selftext": selftext,
-                                "selftext_snippet": selftext[: self.selftext_snippet_chars],
-                                "top_comments": top_comments,
-                                "top_comment_snippet": (top_comments[0] if top_comments else "")[: self.comment_snippet_chars],
-                                "url": post.get("url", ""),
-                                "score": post.get("score", 0),
-                                "comments": post.get("num_comments", 0),
-                                "keyword_matched": keyword,
-                                # Use actual Reddit creation time from fetch, fallback to now only if missing
-                                "timestamp": post_timestamp if post_timestamp else datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-                            }
-                        )
-                        break
+                title_and_selftext = " ".join(
+                    part for part in [post.get("title", ""), post.get("selftext", "")] if part
+                ).lower()
+                matched_keyword = next((keyword for keyword in self.watch_keywords if keyword in title_and_selftext), None)
+
+                top_comments: List[str] = []
+                if not matched_keyword and self.fetch_top_comments and post.get("permalink"):
+                    top_comments = [scrub_pii(c) for c in self.fetch_post_comments(post.get("permalink", ""))]
+                    if top_comments:
+                        comment_text = " ".join(top_comments).lower()
+                        matched_keyword = next((keyword for keyword in self.watch_keywords if keyword in comment_text), None)
+                        if matched_keyword:
+                            posts_with_comment_snippets += 1
+                    time.sleep(random.uniform(0.05, 0.12))
+
+                if matched_keyword:
+                    selftext = post.get("selftext", "")
+                    post_timestamp = post.get("timestamp", "")
+                    results.append(
+                        {
+                            "subreddit": post.get("subreddit", ""),
+                            "title": post.get("title", ""),
+                            "selftext": selftext,
+                            "selftext_snippet": selftext[: self.selftext_snippet_chars],
+                            "top_comments": top_comments,
+                            "top_comment_snippet": (top_comments[0] if top_comments else "")[: self.comment_snippet_chars],
+                            "url": post.get("url", ""),
+                            "score": post.get("score", 0),
+                            "comments": post.get("num_comments", 0),
+                            "keyword_matched": matched_keyword,
+                            "timestamp": post_timestamp if post_timestamp else datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                        }
+                    )
 
         self.log(
             f"Reddit enrichment: posts={scanned_posts}, with_selftext={posts_with_selftext}, "

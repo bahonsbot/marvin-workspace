@@ -135,31 +135,37 @@ class RSSMonitor:
             content = f.read()
 
         in_keywords = False
-        for line in content.split("\n"):
-            line = line.strip()
+        for raw_line in content.split("\n"):
+            line = raw_line.strip()
 
             if line.startswith("WATCH_KEYWORDS:"):
                 in_keywords = True
                 continue
 
-            if in_keywords and line:
-                self.watch_keywords.extend([k.strip().lower() for k in line.split(",") if k.strip()])
+            if in_keywords:
+                keyword_line = raw_line.split("#", 1)[0].strip()
+                if keyword_line:
+                    self.watch_keywords.extend([k.strip().lower() for k in keyword_line.split(",") if k.strip()])
+                continue
 
-            if line and not line.startswith("#") and not in_keywords:
-                parts = line.split(",")
-                if len(parts) >= 2:
-                    feed_name = parts[0].strip()
-                    feed_url = parts[1].strip()
-                    if not self.is_safe_feed_url(feed_url):
-                        self.log(f"Skipping unsafe feed URL for {feed_name}: {feed_url}")
-                        continue
-                    self.feeds.append(
-                        {
-                            "name": feed_name,
-                            "url": feed_url,
-                            "keywords": [k.strip().lower() for k in parts[2:] if k.strip()],
-                        }
-                    )
+            feed_line = raw_line.split("#", 1)[0].strip()
+            if not feed_line:
+                continue
+
+            parts = [part.strip() for part in feed_line.split(",")]
+            if len(parts) >= 2:
+                feed_name = parts[0]
+                feed_url = parts[1]
+                if not self.is_safe_feed_url(feed_url):
+                    self.log(f"Skipping unsafe feed URL for {feed_name}: {feed_url}")
+                    continue
+                self.feeds.append(
+                    {
+                        "name": feed_name,
+                        "url": feed_url,
+                        "keywords": [k.strip().lower() for k in parts[2:] if k.strip()],
+                    }
+                )
 
     def fetch_feed(self, url: str) -> Dict:
         """Fetch and parse an RSS/Atom feed using standard library"""
