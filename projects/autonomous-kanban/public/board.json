@@ -35,14 +35,15 @@
         "id": "71293857",
         "text": "[Personal] \ud83d\udcda Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
-      },
-      {
-        "id": "36e817e4",
-        "text": "[Other] \ud83d\udd27 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "721b2b5f",
+        "text": "[Other] \ud83d\udd27 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "b9e06daf",
@@ -66,5 +67,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-22T10:00:15.000Z"
+  "updatedAt": "2026-03-22T10:00:17.000Z"
 }
