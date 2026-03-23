@@ -117,6 +117,8 @@ COMPANY_TICKER = {
     "abb": "ABBNY",
     "fanuc": "FANUY",
     "emerson": "EMR",
+    "cognex": "CGNX",
+    "keyence": "KYCCF",
 }
 
 THEME_CANDIDATES = [
@@ -617,6 +619,20 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         add("FANUY", "equity", 0.72, "value_chain_operator", "long", "Factory robotics leader exposure")
         add("CAT", "equity", 0.66, "value_chain_operator", "short", "Lower-software, heavier-cycle industrial hardware exposure")
         add("DE", "equity", 0.63, "value_chain_operator", "short", "Machinery exposure less advantaged than preferred automation vendors")
+
+    if theme == "industrial_automation" and sublayer == "machine_vision_sensing":
+        add("CGNX", "equity", 0.84, "value_chain_operator", "long", "Machine-vision specialist with inspection/workflow lock-in")
+        add("KYCCF", "equity", 0.80, "value_chain_operator", "long", "Sensing and machine-vision leader")
+        add("ROK", "equity", 0.68, "value_chain_second_order", "long", "Controls ecosystem overlap")
+        add("CAT", "equity", 0.64, "value_chain_operator", "short", "Generic machinery exposure lacks vision-layer advantage")
+        add("DE", "equity", 0.62, "value_chain_operator", "short", "Machinery exposure less advantaged than sensing specialists")
+
+    if theme == "industrial_automation" and sublayer == "robotics_motion":
+        add("FANUY", "equity", 0.84, "value_chain_operator", "long", "Industrial robotics leader exposure")
+        add("ABBNY", "equity", 0.80, "value_chain_operator", "long", "Robotics and motion-control exposure")
+        add("ROK", "equity", 0.72, "value_chain_second_order", "long", "Controls vendor tied to automation cells")
+        add("CAT", "equity", 0.66, "value_chain_operator", "short", "Lower-software machinery exposure")
+        add("DE", "equity", 0.64, "value_chain_operator", "short", "Machinery exposure less advantaged than robotics vendors")
 
     if theme == "energy_infrastructure" and sublayer == "grid_power_equipment":
         add("ETN", "equity", 0.86, "value_chain_operator", "long", "Power management and electrical infrastructure leader")

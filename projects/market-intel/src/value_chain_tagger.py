@@ -87,6 +87,42 @@ _PATTERN_DEFAULTS: dict[str, dict[str, Any]] = {
         "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
         "structural_interpretation_confidence": 0.68,
     },
+    "p050_future_machine_vision": {
+        "theme": "industrial_automation",
+        "chain_layer": "industrial_inputs",
+        "chain_sublayer": "machine_vision_sensing",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "switching_cost",
+        "moat_type": "preferred_vendor",
+        "fragility_type": NONE_CLEAR,
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "ecosystem_owner",
+        "loser_class": "weak_supplier_without_moat",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Machine vision and sensing specialists with workflow lock-in should outperform more generic hardware suppliers.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Machine vision is a hidden automation enabler with stronger switching costs than generic industrial hardware.",
+        "structural_interpretation_confidence": 0.76,
+    },
+    "p051_future_robotics_motion": {
+        "theme": "industrial_automation",
+        "chain_layer": "industrial_inputs",
+        "chain_sublayer": "robotics_motion",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "capacity",
+        "moat_type": "preferred_vendor",
+        "fragility_type": "execution_risk",
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "ecosystem_owner",
+        "loser_class": "weak_supplier_without_moat",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Robotics and motion-control leaders with installed-base and software tie-ins should outperform lower-margin machinery names.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Robotics and motion control should be treated as a distinct automation chain, not lumped into generic industrials.",
+        "structural_interpretation_confidence": 0.77,
+    },
     "p049_future_energy_infra": {
         "theme": "energy_infrastructure",
         "chain_layer": "industrial_inputs",
@@ -415,7 +451,13 @@ def _infer_from_text(signal: dict[str, Any]) -> dict[str, Any]:
     if any(term in context_text for term in ("rare earth", "rare-earth", "rare earths", "neodymium", "praseodymium", "dysprosium", "terbium", "magnet materials", "magnet metal", "separation plant", "critical minerals", "processing facility", "mp materials", "lynas", "energy fuels")):
         return _with_defaults(_PATTERN_DEFAULTS["p047_future_rare_earths"])
 
-    if any(term in context_text for term in ("robotics", "servo", "plc", "programmable logic controller", "machine vision", "motion control", "industrial automation", "factory automation", "digital twin", "rockwell", "siemens automation", "schneider electric automation")):
+    if any(term in context_text for term in ("cognex", "keyence", "machine vision", "vision sensor", "vision inspection", "industrial camera", "sensing system")):
+        return _with_defaults(_PATTERN_DEFAULTS["p050_future_machine_vision"])
+
+    if any(term in context_text for term in ("robotics", "servo", "motion control", "fanuc", "abb robot", "industrial robot", "automation cell", "servo drive")):
+        return _with_defaults(_PATTERN_DEFAULTS["p051_future_robotics_motion"])
+
+    if any(term in context_text for term in ("plc", "programmable logic controller", "industrial automation", "factory automation", "digital twin", "rockwell", "siemens automation", "schneider electric automation", "controls platform")):
         return _with_defaults(_PATTERN_DEFAULTS["p048_future_industrial_automation"])
 
     if any(term in context_text for term in ("arista", "ethernet switch", "switching", "infini", "interconnect", "network fabric", "networking gear", "ai fabric", "broadcom switch", "cisco networking")):
