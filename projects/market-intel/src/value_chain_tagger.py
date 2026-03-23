@@ -553,7 +553,13 @@ def _infer_from_text(signal: dict[str, Any]) -> dict[str, Any]:
     if any(term in context_text for term in ("trade down", "essentials over discretionary", "retail margin")):
         return _with_defaults(_PATTERN_DEFAULTS["p041"])
 
-    if any(term in context_text for term in ("transformer", "switchgear", "substation", "grid equipment", "grid modernization", "transmission line", "electrical infrastructure", "power management", "distribution equipment", "eaton", "schneider electric", "hitachi energy", "siemens energy", "grid bottleneck")):
+    if (
+        any(term in context_text for term in ("datacenter", "data center", "ai buildout", "server rack", "liquid cooling", "datacenter cooling", "cooling", "hvac", "vertiv"))
+        and any(term in context_text for term in ("power demand", "power capacity", "electrical equipment", "transformer", "eaton", "cooling", "hvac", "liquid cooling"))
+    ):
+        return _with_defaults(_PATTERN_DEFAULTS["p044_future_power_cooling"])
+
+    if any(term in context_text for term in ("transformer", "switchgear", "substation", "grid equipment", "grid modernization", "transmission line", "electrical infrastructure", "power management", "distribution equipment", "schneider electric", "hitachi energy", "siemens energy", "grid bottleneck")):
         return _with_defaults(_PATTERN_DEFAULTS["p049_future_energy_infra"])
 
     if any(term in context_text for term in ("rare earth", "rare-earth", "rare earths", "neodymium", "praseodymium", "dysprosium", "terbium", "magnet materials", "magnet metal", "separation plant", "critical minerals", "processing facility", "mp materials", "lynas", "energy fuels")):
