@@ -17,6 +17,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260323-1708]
+
+**Trigger:** Philippe corrected my typo: "tagger," not "tager."
+**What was wrong:** I misspelled a core implementation term while discussing the Market Intel value-chain tagging work.
+**Lesson:** Slow down on repeated technical nouns during iterative implementation updates; when a term is central to the work, keep the spelling exact and consistent.
+
+**Priority:** low
+**Status:** resolved
+
+
 ## [CORR-20260319-2022]
 
 **Trigger:** Philippe clarified that when timing is roughly comparable, he prefers better semantic recall results over plain keyword/BM25 speed.
