@@ -80,7 +80,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 
 **Disabled legacy OpenClaw cron wrapper posture:**
 - After the Mar 19 deterministic scheduler cutover, old disabled OpenClaw wrapper jobs are cleanup candidates, not runtime truth.
-- Keep `deterministic-scheduler-watchdog` disabled for now as a retained bootstrap safety net unless explicitly removed later.
+- `deterministic-scheduler-watchdog` was removed on 2026-03-23 after host-side verification confirmed `marvin-deterministic-scheduler.service` is installed, enabled, and healthy.
 - Do not treat disabled wrapper timeout/error metadata as current runtime health for tasks now owned by `scripts/deterministic_scheduler.py`.
 | entity-lifecycle-manager | Sun 05:00 weekly | Demote old life/ entities to archive | none |
 | data-manager | Sun 05:00 weekly | JSONL/log rotation (>30 days) | none |
