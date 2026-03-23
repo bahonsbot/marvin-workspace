@@ -153,6 +153,16 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
         unique_symbols = {_primary_symbol(r) for r in items if _primary_symbol(r)}
         strongest_symbol = _primary_symbol(strongest)
         weakest_symbol = _primary_symbol(weakest)
+        strongest_type = str((strongest.get("primary_instrument") or {}).get("instrument_type") or "")
+        weakest_type = str((weakest.get("primary_instrument") or {}).get("instrument_type") or "")
+        strongest_map = str((strongest.get("primary_instrument") or {}).get("mapping_type") or "")
+        weakest_map = str((weakest.get("primary_instrument") or {}).get("mapping_type") or "")
+        operator_ready = (
+            strongest_type == "equity"
+            and weakest_type == "equity"
+            and strongest_map not in {"macro_proxy", "value_chain_macro"}
+            and weakest_map not in {"macro_proxy", "value_chain_macro"}
+        )
         pair_trade_ready = (
             bool(strongest.get("pair_trade_candidate") or weakest.get("pair_trade_candidate"))
             and len(ranked) >= 2
@@ -162,6 +172,7 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
             and strongest_symbol != weakest_symbol
             and (len(unique_patterns) >= 2 or len(unique_titles) >= 2)
             and strongest.get("source_title") != weakest.get("source_title")
+            and operator_ready
         )
         reports.append(
             {
@@ -172,6 +183,7 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
                 "unique_symbol_count": len(unique_symbols),
                 "symbols": sorted(unique_symbols),
                 "pair_trade_ready": pair_trade_ready,
+                "pair_trade_style": "operator_pair" if pair_trade_ready else "not_ready",
                 "strongest": strongest,
                 "weakest": weakest,
                 "strongest_symbol": strongest_symbol,

@@ -54,6 +54,16 @@ COMPANY_TICKER = {
     "facebook": "META",
     "tesla": "TSLA",
     "nvidia": "NVDA",
+    "broadcom": "AVGO",
+    "tsmc": "TSM",
+    "taiwan semiconductor": "TSM",
+    "asml": "ASML",
+    "micron": "MU",
+    "arista": "ANET",
+    "vertiv": "VRT",
+    "amkor": "AMKR",
+    "super micro": "SMCI",
+    "supermicro": "SMCI",
     "bytedance": "TCEHY",
     "tiktok": "META",
     "ulta": "ULTA",
@@ -504,6 +514,72 @@ def has_clean_oil_execution_title(title: str) -> bool:
     return any(term in title_norm for term in OIL_EXECUTION_TERMS)
 
 
+
+def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleContext) -> list[InstrumentCandidate]:
+    theme = normalize_text(signal.get("theme", ""))
+    layer = normalize_text(signal.get("chain_layer", ""))
+    sublayer = normalize_text(signal.get("chain_sublayer", ""))
+    title = normalize_text(signal.get("title", ""))
+
+    candidates: list[InstrumentCandidate] = []
+
+    def add(symbol: str, instrument_type: str, score: float, mapping_type: str, direction_bias: str, reason: str) -> None:
+        candidates.append(
+            InstrumentCandidate(
+                symbol=symbol,
+                instrument_type=instrument_type,
+                relevance_score=round3(score),
+                mapping_confidence=round3(score),
+                mapping_type=mapping_type,
+                direction_bias=direction_bias,
+                reason=reason,
+            )
+        )
+
+    if theme == "energy_infrastructure" and sublayer == "oil_supply":
+        add("USO", "etf", 0.91, "value_chain_theme", "long", "Value-chain oil supply proxy")
+        add("XLE", "etf", 0.86, "value_chain_theme", "long", "Energy-sector proxy for supply shocks")
+        add("JETS", "etf", 0.69, "value_chain_second_order", "short", "Fuel-cost pressure on airlines")
+
+    if theme == "energy_infrastructure" and sublayer == "war_supply_routes":
+        if any(term in title for term in ("port", "shipping", "odesa", "odessa", "black sea", "route")):
+            add("SEA", "etf", 0.82, "value_chain_theme", "long", "Shipping/logistics route sensitivity")
+        add("ITA", "etf", 0.76, "value_chain_theme", "long", "Defense proxy for conflict escalation")
+        add("USO", "etf", 0.72, "value_chain_second_order", "long", "Commodity spillover from conflict routes")
+
+    if theme == "macro_rates_regime":
+        if any(term in title for term in ("rate hike", "rate hikes", "raise rates", "yield", "inflation", "ecb", "fed")):
+            add("UUP", "etf", 0.81, "value_chain_macro", "long", "Rates regime supports dollar / tightening proxy")
+            add("TLT", "etf", 0.78, "value_chain_macro", "short", "Long-duration bonds pressured by rising rates")
+            add("QQQ", "etf", 0.66, "value_chain_second_order", "short", "Higher discount rates pressure growth duration")
+        elif any(term in title for term in ("recession", "slowdown", "hard landing")):
+            add("SH", "etf", 0.74, "value_chain_macro", "long", "Recession hedge proxy")
+            add("TLT", "etf", 0.68, "value_chain_macro", "long", "Flight-to-safety duration proxy")
+
+    if theme == "ai_infrastructure" and layer == "semis_design":
+        company_matches = detect_company_candidates(str(signal.get("title", "")))
+        for candidate in company_matches:
+            add(candidate.symbol, candidate.instrument_type, 0.86, "value_chain_company", candidate.direction_bias, f"Explicit operator mention in AI design chain: {candidate.reason}")
+        add("SOXX", "etf", 0.80, "value_chain_theme", "long", "Semiconductor design chain proxy")
+
+    if theme == "ai_infrastructure" and layer == "semis_memory":
+        add("MU", "equity", 0.84, "value_chain_company", "long", "US-listed memory supplier proxy")
+        add("SOXX", "etf", 0.72, "value_chain_theme", "long", "Semiconductor memory spillover proxy")
+
+    if theme == "ai_infrastructure" and layer == "semis_packaging":
+        add("AMKR", "equity", 0.79, "value_chain_company", "long", "US-listed packaging proxy")
+        add("ASML", "equity", 0.65, "value_chain_second_order", "long", "Advanced process ecosystem proxy")
+
+    deduped: dict[tuple[str, str], InstrumentCandidate] = {}
+    for candidate in candidates:
+        key = (candidate.symbol, candidate.direction_bias)
+        current = deduped.get(key)
+        if current is None or (candidate.relevance_score, candidate.mapping_confidence, candidate.reason) > (
+            current.relevance_score, current.mapping_confidence, current.reason
+        ):
+            deduped[key] = candidate
+    return list(deduped.values())
+
 def detect_theme_candidates(title: str) -> list[InstrumentCandidate]:
     title_norm = normalize_text(title)
     found: list[InstrumentCandidate] = []
@@ -603,6 +679,7 @@ def fallback_macro_candidates(category: str, pattern_name: str, reasoning_score:
 def build_instrument_candidates(signal: dict[str, Any], title_context: TitleContext) -> list[dict[str, Any]]:
     title = str(signal.get("title", ""))
     company = detect_company_candidates(title)
+    value_chain = adjust_candidates_for_title_context(title, detect_value_chain_candidates(signal, title_context), title_context)
     theme = adjust_candidates_for_title_context(title, detect_theme_candidates(title), title_context)
     fallback = fallback_macro_candidates(
         signal.get("category", ""),
@@ -612,7 +689,7 @@ def build_instrument_candidates(signal: dict[str, Any], title_context: TitleCont
     )
 
     merged: dict[tuple[str, str], InstrumentCandidate] = {}
-    for candidate in company + theme + fallback:
+    for candidate in company + value_chain + theme + fallback:
         key = (candidate.symbol, candidate.direction_bias)
         current = merged.get(key)
         if current is None or (candidate.relevance_score, candidate.mapping_confidence, candidate.reason) > (
@@ -659,6 +736,8 @@ def choose_primary_instrument(
         "direction_bias": top["direction_bias"],
         "relevance_score": top["relevance_score"],
         "mapping_confidence": top["mapping_confidence"],
+        "mapping_type": top.get("mapping_type"),
+        "reason": top.get("reason"),
     }
 
 

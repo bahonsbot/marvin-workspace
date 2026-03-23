@@ -1,5 +1,115 @@
 [
   {
+    "candidate_id": "cand_849a4e5c7b10b39a",
+    "signal_id": "sig_7e7ed55cd09505d9",
+    "signal_fingerprint": "sha256:b4ed237ccc84cb1ebef20aec5ca57e599830e34ff88825cd77935c8ffc29cc25",
+    "generated_at": "2026-03-23T17:09:20.779774Z",
+    "source_type": "rss",
+    "source_feed": "FinancialJuice",
+    "source_title": "Saudi Aramco CEO Nasser cancels trip to CERAWeek conference in US due to Iran wa",
+    "source_url": "https://x.com/financialjuice/status/2035824155208134995",
+    "source_timestamp": "2026-03-23T17:09:20.779306",
+    "pattern_id": "p001",
+    "pattern_name": "Saudi Oil Attacks",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 88.0,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "intraday",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 65.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 84.5,
+      "feedback_bias_points": 3.5,
+      "feedback_sample_size": 15
+    },
+    "evidence_strength": 0.874,
+    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "USO",
+        "instrument_type": "etf",
+        "relevance_score": 0.91,
+        "mapping_confidence": 0.91,
+        "mapping_type": "value_chain_theme",
+        "direction_bias": "long",
+        "reason": "Value-chain oil supply proxy"
+      },
+      {
+        "symbol": "XLE",
+        "instrument_type": "etf",
+        "relevance_score": 0.86,
+        "mapping_confidence": 0.86,
+        "mapping_type": "value_chain_theme",
+        "direction_bias": "long",
+        "reason": "Energy-sector proxy for supply shocks"
+      },
+      {
+        "symbol": "JETS",
+        "instrument_type": "etf",
+        "relevance_score": 0.69,
+        "mapping_confidence": 0.69,
+        "mapping_type": "value_chain_second_order",
+        "direction_bias": "short",
+        "reason": "Fuel-cost pressure on airlines"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "USO",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.91,
+      "mapping_confidence": 0.91,
+      "mapping_type": "value_chain_theme",
+      "reason": "Value-chain oil supply proxy"
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "theme": "energy_infrastructure",
+    "chain_layer": "industrial_inputs",
+    "chain_sublayer": "oil_supply",
+    "theme_maturity": "mid_cycle_scaling",
+    "bottleneck_type": "supply_chain",
+    "moat_type": "none_clear",
+    "fragility_type": "commodity_exposure",
+    "supplier_status": "none_clear",
+    "position_in_chain": "infrastructure_backbone",
+    "beneficiary_class": "bottleneck_supplier",
+    "loser_class": "low_margin_integrator",
+    "pair_trade_candidate": true,
+    "pair_trade_rationale": "Oil supply disruption can benefit upstream energy exposure while pressuring margin-thin downstream users.",
+    "valuation_context": "valuation_unknown",
+    "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
+    "structural_interpretation_confidence": 0.86,
+    "execution_priority": 0.898,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": 3.5,
+      "feedback_sample_size": 15,
+      "tracked_take_ratio": null,
+      "tracked_sample_size": 0,
+      "ab_enriched_lift": 3,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
     "candidate_id": "cand_36d9da5203e24725",
     "signal_id": "sig_8b8a0e7406b4f604",
     "signal_fingerprint": "sha256:6151b32e5bfb9f33d1b46d09a7d07cca4fef7fdc53bd6c138322a36f264ec2cd",
@@ -42,37 +152,39 @@
       {
         "symbol": "USO",
         "instrument_type": "etf",
-        "relevance_score": 0.88,
-        "mapping_confidence": 0.88,
-        "mapping_type": "commodity_proxy",
+        "relevance_score": 0.91,
+        "mapping_confidence": 0.91,
+        "mapping_type": "value_chain_theme",
         "direction_bias": "long",
-        "reason": "Oil supply or transport disruption"
+        "reason": "Value-chain oil supply proxy"
       },
       {
         "symbol": "XLE",
         "instrument_type": "etf",
-        "relevance_score": 0.8,
-        "mapping_confidence": 0.8,
-        "mapping_type": "sector_proxy",
+        "relevance_score": 0.86,
+        "mapping_confidence": 0.86,
+        "mapping_type": "value_chain_theme",
         "direction_bias": "long",
-        "reason": "Energy sector usually benefits from higher oil prices"
+        "reason": "Energy-sector proxy for supply shocks"
       },
       {
         "symbol": "JETS",
         "instrument_type": "etf",
-        "relevance_score": 0.67,
-        "mapping_confidence": 0.67,
-        "mapping_type": "second_order_negative",
+        "relevance_score": 0.69,
+        "mapping_confidence": 0.69,
+        "mapping_type": "value_chain_second_order",
         "direction_bias": "short",
-        "reason": "Airlines face fuel-cost pressure"
+        "reason": "Fuel-cost pressure on airlines"
       }
     ],
     "primary_instrument": {
       "symbol": "USO",
       "instrument_type": "etf",
       "direction_bias": "long",
-      "relevance_score": 0.88,
-      "mapping_confidence": 0.88
+      "relevance_score": 0.91,
+      "mapping_confidence": 0.91,
+      "mapping_type": "value_chain_theme",
+      "reason": "Value-chain oil supply proxy"
     },
     "execution_bias": "allow",
     "risk_overlay_hint": "elevated_macro_volatility",
@@ -92,7 +204,7 @@
     "valuation_context": "valuation_unknown",
     "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
     "structural_interpretation_confidence": 0.86,
-    "execution_priority": 0.862,
+    "execution_priority": 0.869,
     "dispatch_readiness": {
       "ready": true,
       "reasons": []
@@ -102,6 +214,338 @@
       "feedback_sample_size": 15,
       "tracked_take_ratio": null,
       "tracked_sample_size": 0,
+      "ab_enriched_lift": 3,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_ab2ddbda84204448",
+    "signal_id": "sig_415500e6c6520825",
+    "signal_fingerprint": "sha256:9c9c649f63401e0f30992e8a3e07e4f109b0f69927cf6158849e9b70ccd12a44",
+    "generated_at": "2026-03-23T17:09:20.779774Z",
+    "source_type": "rss",
+    "source_feed": "FinancialJuice",
+    "source_title": "Russian drones attacked port infrastructure in Ukraine's Odesa region: governor",
+    "source_url": "https://x.com/financialjuice/status/2035960004008657026",
+    "source_timestamp": "2026-03-23T17:09:20.779188",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 81.0,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 65.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 84.5,
+      "feedback_bias_points": -3.5,
+      "feedback_sample_size": 15
+    },
+    "evidence_strength": 0.822,
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SEA",
+        "instrument_type": "etf",
+        "relevance_score": 0.82,
+        "mapping_confidence": 0.82,
+        "mapping_type": "value_chain_theme",
+        "direction_bias": "long",
+        "reason": "Shipping/logistics route sensitivity"
+      },
+      {
+        "symbol": "ITA",
+        "instrument_type": "etf",
+        "relevance_score": 0.76,
+        "mapping_confidence": 0.76,
+        "mapping_type": "value_chain_theme",
+        "direction_bias": "long",
+        "reason": "Defense proxy for conflict escalation"
+      },
+      {
+        "symbol": "USO",
+        "instrument_type": "etf",
+        "relevance_score": 0.72,
+        "mapping_confidence": 0.72,
+        "mapping_type": "value_chain_second_order",
+        "direction_bias": "long",
+        "reason": "Commodity spillover from conflict routes"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SEA",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.82,
+      "mapping_confidence": 0.82,
+      "mapping_type": "value_chain_theme",
+      "reason": "Shipping/logistics route sensitivity"
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "theme": "energy_infrastructure",
+    "chain_layer": "industrial_inputs",
+    "chain_sublayer": "war_supply_routes",
+    "theme_maturity": "mid_cycle_scaling",
+    "bottleneck_type": "supply_chain",
+    "moat_type": "none_clear",
+    "fragility_type": "commodity_exposure",
+    "supplier_status": "none_clear",
+    "position_in_chain": "infrastructure_backbone",
+    "beneficiary_class": "bottleneck_supplier",
+    "loser_class": "low_margin_integrator",
+    "pair_trade_candidate": true,
+    "pair_trade_rationale": "War-related route and commodity disruption can favor upstream constrained exposures and hurt downstream users.",
+    "valuation_context": "valuation_unknown",
+    "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
+    "structural_interpretation_confidence": 0.8,
+    "execution_priority": 0.841,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": -3.5,
+      "feedback_sample_size": 15,
+      "tracked_take_ratio": 0.0,
+      "tracked_sample_size": 2,
+      "ab_enriched_lift": 3,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 300.0
+    }
+  },
+  {
+    "candidate_id": "cand_f9f13c7151d8e4b4",
+    "signal_id": "sig_89b4cb71d26d1d7e",
+    "signal_fingerprint": "sha256:24d5fc3b7dd42341dab530fac879052e6e3d4ff20c9eecfd03fc9fda9ef3e1fa",
+    "generated_at": "2026-03-23T17:09:20.779774Z",
+    "source_type": "rss",
+    "source_feed": "Deltaone",
+    "source_title": "\ud83d\udcc8RECESSION FEARS RISE AGAIN Recession odds have jumped to 36.9%, rebounding shar",
+    "source_url": "https://x.com/DeItaone/status/2035750856503570480",
+    "source_timestamp": "2026-03-23T17:09:20.779630",
+    "pattern_id": "p014",
+    "pattern_name": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 200.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 15
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "",
+    "predicted_outcomes": [
+      "rates_volatility",
+      "fx_move",
+      "equity_factor_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Macro print/policy signal",
+      "Rates reprice",
+      "USD and yields react",
+      "Risk assets rotate"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SH",
+        "instrument_type": "etf",
+        "relevance_score": 0.74,
+        "mapping_confidence": 0.74,
+        "mapping_type": "value_chain_macro",
+        "direction_bias": "long",
+        "reason": "Recession hedge proxy"
+      },
+      {
+        "symbol": "TLT",
+        "instrument_type": "etf",
+        "relevance_score": 0.68,
+        "mapping_confidence": 0.68,
+        "mapping_type": "value_chain_macro",
+        "direction_bias": "long",
+        "reason": "Flight-to-safety duration proxy"
+      },
+      {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "relevance_score": 0.525,
+        "mapping_confidence": 0.525,
+        "mapping_type": "macro_proxy",
+        "direction_bias": "long",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SH",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.74,
+      "mapping_confidence": 0.74,
+      "mapping_type": "value_chain_macro",
+      "reason": "Recession hedge proxy"
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "macro_event_risk",
+    "theme": "macro_rates_regime",
+    "chain_layer": "none_clear",
+    "chain_sublayer": "none_clear",
+    "theme_maturity": "none_clear",
+    "bottleneck_type": "financing",
+    "moat_type": "none_clear",
+    "fragility_type": "financing_dependent",
+    "supplier_status": "none_clear",
+    "position_in_chain": "none_clear",
+    "beneficiary_class": "high_margin_infra_leader",
+    "loser_class": "financing_dependent_scaler",
+    "pair_trade_candidate": true,
+    "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+    "valuation_context": "valuation_unknown",
+    "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+    "structural_interpretation_confidence": 0.68,
+    "execution_priority": 0.833,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 15,
+      "tracked_take_ratio": 0.889,
+      "tracked_sample_size": 9,
+      "ab_enriched_lift": 3,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 200.0
+    }
+  },
+  {
+    "candidate_id": "cand_ca9b5d12d95f5ba1",
+    "signal_id": "sig_68f20a13af5a8606",
+    "signal_fingerprint": "sha256:4f8c3ee08d2b016c6cb548c879ffa772f4285505a249afed816c13833052e33e",
+    "generated_at": "2026-03-23T17:09:20.779774Z",
+    "source_type": "rss",
+    "source_feed": "Telegram_FinancialJuice",
+    "source_title": "Russian drones attacked port infrastructure in Ukraine's Odesa region: governor|",
+    "source_url": "https://t.me/@FinancialJuice/105317",
+    "source_timestamp": "2026-03-23T17:09:20.779395",
+    "pattern_id": "p002",
+    "pattern_name": "Russia-Ukraine Conflict",
+    "category": "geopolitical",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 76.5,
+    "signal_score": 300.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": -3.5,
+      "feedback_sample_size": 15
+    },
+    "evidence_strength": 0.771,
+    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
+    "predicted_outcomes": [
+      "volatility_spike",
+      "risk_repricing"
+    ],
+    "predicted_causal_chain": [
+      "Headline catalyst",
+      "Positioning adjustment",
+      "Cross-asset reaction"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "SEA",
+        "instrument_type": "etf",
+        "relevance_score": 0.82,
+        "mapping_confidence": 0.82,
+        "mapping_type": "value_chain_theme",
+        "direction_bias": "long",
+        "reason": "Shipping/logistics route sensitivity"
+      },
+      {
+        "symbol": "ITA",
+        "instrument_type": "etf",
+        "relevance_score": 0.76,
+        "mapping_confidence": 0.76,
+        "mapping_type": "value_chain_theme",
+        "direction_bias": "long",
+        "reason": "Defense proxy for conflict escalation"
+      },
+      {
+        "symbol": "USO",
+        "instrument_type": "etf",
+        "relevance_score": 0.72,
+        "mapping_confidence": 0.72,
+        "mapping_type": "value_chain_second_order",
+        "direction_bias": "long",
+        "reason": "Commodity spillover from conflict routes"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "SEA",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.82,
+      "mapping_confidence": 0.82,
+      "mapping_type": "value_chain_theme",
+      "reason": "Shipping/logistics route sensitivity"
+    },
+    "execution_bias": "allow",
+    "risk_overlay_hint": "elevated_macro_volatility",
+    "theme": "energy_infrastructure",
+    "chain_layer": "industrial_inputs",
+    "chain_sublayer": "war_supply_routes",
+    "theme_maturity": "mid_cycle_scaling",
+    "bottleneck_type": "supply_chain",
+    "moat_type": "none_clear",
+    "fragility_type": "commodity_exposure",
+    "supplier_status": "none_clear",
+    "position_in_chain": "infrastructure_backbone",
+    "beneficiary_class": "bottleneck_supplier",
+    "loser_class": "low_margin_integrator",
+    "pair_trade_candidate": true,
+    "pair_trade_rationale": "War-related route and commodity disruption can favor upstream constrained exposures and hurt downstream users.",
+    "valuation_context": "valuation_unknown",
+    "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
+    "structural_interpretation_confidence": 0.8,
+    "execution_priority": 0.811,
+    "dispatch_readiness": {
+      "ready": true,
+      "reasons": []
+    },
+    "feedback_context": {
+      "feedback_bias_points": -3.5,
+      "feedback_sample_size": 15,
+      "tracked_take_ratio": 0.0,
+      "tracked_sample_size": 2,
       "ab_enriched_lift": 3,
       "shadow_confirmation": true,
       "shadow_signal_score": 300.0
@@ -151,37 +595,39 @@
       {
         "symbol": "UUP",
         "instrument_type": "etf",
-        "relevance_score": 0.74,
-        "mapping_confidence": 0.74,
-        "mapping_type": "macro_proxy",
+        "relevance_score": 0.81,
+        "mapping_confidence": 0.81,
+        "mapping_type": "value_chain_macro",
         "direction_bias": "long",
-        "reason": "Higher rates can support the dollar"
+        "reason": "Rates regime supports dollar / tightening proxy"
       },
       {
         "symbol": "TLT",
         "instrument_type": "etf",
-        "relevance_score": 0.72,
-        "mapping_confidence": 0.72,
-        "mapping_type": "macro_proxy",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "value_chain_macro",
         "direction_bias": "short",
-        "reason": "Long-duration bonds are pressured by rising yields"
+        "reason": "Long-duration bonds pressured by rising rates"
       },
       {
         "symbol": "QQQ",
         "instrument_type": "etf",
-        "relevance_score": 0.63,
-        "mapping_confidence": 0.63,
-        "mapping_type": "second_order_negative",
+        "relevance_score": 0.66,
+        "mapping_confidence": 0.66,
+        "mapping_type": "value_chain_second_order",
         "direction_bias": "short",
-        "reason": "Higher discount rates pressure duration-heavy equities"
+        "reason": "Higher discount rates pressure growth duration"
       }
     ],
     "primary_instrument": {
       "symbol": "UUP",
       "instrument_type": "etf",
       "direction_bias": "long",
-      "relevance_score": 0.74,
-      "mapping_confidence": 0.74
+      "relevance_score": 0.81,
+      "mapping_confidence": 0.81,
+      "mapping_type": "value_chain_macro",
+      "reason": "Rates regime supports dollar / tightening proxy"
     },
     "execution_bias": "block",
     "risk_overlay_hint": "macro_event_risk",
@@ -201,7 +647,7 @@
     "valuation_context": "valuation_unknown",
     "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
     "structural_interpretation_confidence": 0.68,
-    "execution_priority": 0.642,
+    "execution_priority": 0.66,
     "dispatch_readiness": {
       "ready": false,
       "reasons": [
@@ -262,37 +708,39 @@
       {
         "symbol": "UUP",
         "instrument_type": "etf",
-        "relevance_score": 0.74,
-        "mapping_confidence": 0.74,
-        "mapping_type": "macro_proxy",
+        "relevance_score": 0.81,
+        "mapping_confidence": 0.81,
+        "mapping_type": "value_chain_macro",
         "direction_bias": "long",
-        "reason": "Higher rates can support the dollar"
+        "reason": "Rates regime supports dollar / tightening proxy"
       },
       {
         "symbol": "TLT",
         "instrument_type": "etf",
-        "relevance_score": 0.72,
-        "mapping_confidence": 0.72,
-        "mapping_type": "macro_proxy",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "value_chain_macro",
         "direction_bias": "short",
-        "reason": "Long-duration bonds are pressured by rising yields"
+        "reason": "Long-duration bonds pressured by rising rates"
       },
       {
         "symbol": "QQQ",
         "instrument_type": "etf",
-        "relevance_score": 0.63,
-        "mapping_confidence": 0.63,
-        "mapping_type": "second_order_negative",
+        "relevance_score": 0.66,
+        "mapping_confidence": 0.66,
+        "mapping_type": "value_chain_second_order",
         "direction_bias": "short",
-        "reason": "Higher discount rates pressure duration-heavy equities"
+        "reason": "Higher discount rates pressure growth duration"
       }
     ],
     "primary_instrument": {
       "symbol": "UUP",
       "instrument_type": "etf",
       "direction_bias": "long",
-      "relevance_score": 0.74,
-      "mapping_confidence": 0.74
+      "relevance_score": 0.81,
+      "mapping_confidence": 0.81,
+      "mapping_type": "value_chain_macro",
+      "reason": "Rates regime supports dollar / tightening proxy"
     },
     "execution_bias": "block",
     "risk_overlay_hint": "macro_event_risk",
@@ -312,7 +760,120 @@
     "valuation_context": "valuation_unknown",
     "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
     "structural_interpretation_confidence": 0.68,
-    "execution_priority": 0.613,
+    "execution_priority": 0.631,
+    "dispatch_readiness": {
+      "ready": false,
+      "reasons": [
+        "mapping_too_ambiguous"
+      ]
+    },
+    "feedback_context": {
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 15,
+      "tracked_take_ratio": 0.889,
+      "tracked_sample_size": 9,
+      "ab_enriched_lift": 3,
+      "shadow_confirmation": true,
+      "shadow_signal_score": 200.0
+    }
+  },
+  {
+    "candidate_id": "cand_eff9419c2e153e27",
+    "signal_id": "sig_0972e15fd0a1f4a6",
+    "signal_fingerprint": "sha256:6ee7e3ca51f230bdf7cd629ccab0572cefd05c2ceee21b84c72dbadfa00c9abd",
+    "generated_at": "2026-03-23T17:09:20.779774Z",
+    "source_type": "rss",
+    "source_feed": "Telegram_FinancialJuice",
+    "source_title": "Goldman Sachs expects ECB to deliver two 25 bps rate hikes each in April and Jun",
+    "source_url": "https://t.me/@FinancialJuice/105318",
+    "source_timestamp": "2026-03-23T17:09:20.779725",
+    "pattern_id": "p014",
+    "pattern_name": "US Credit Rating Downgrade",
+    "category": "macroeconomic",
+    "historical_confidence": "HIGH",
+    "confidence_level": "STRONG BUY",
+    "reasoning_score": 87.5,
+    "signal_score": 200.0,
+    "recommendation": "TAKE",
+    "expected_horizon": "short-term",
+    "reasoning": "moderate source, strong historical pattern match.",
+    "reasoning_components": {
+      "source_credibility": 50.0,
+      "pattern_strength": 90.0,
+      "time_horizon_fit": 100.0,
+      "base_score": 80.0,
+      "feedback_bias_points": 7.5,
+      "feedback_sample_size": 15
+    },
+    "evidence_strength": 0.821,
+    "signal_briefing": "March 2022 rate hikes crushed tech (down 30% that year). Rate hikes typically pressure growth stocks and rate-sensitive sectors. Dollar strengthens on yield differential. Bond yields climb.",
+    "predicted_outcomes": [
+      "front_end_yield_move",
+      "usd_trend_shift",
+      "growth_value_rotation"
+    ],
+    "predicted_causal_chain": [
+      "Inflation/rates surprise",
+      "Bond market reprices terminal rate",
+      "Equity duration factor moves"
+    ],
+    "instrument_candidates": [
+      {
+        "symbol": "UUP",
+        "instrument_type": "etf",
+        "relevance_score": 0.81,
+        "mapping_confidence": 0.81,
+        "mapping_type": "value_chain_macro",
+        "direction_bias": "long",
+        "reason": "Rates regime supports dollar / tightening proxy"
+      },
+      {
+        "symbol": "TLT",
+        "instrument_type": "etf",
+        "relevance_score": 0.78,
+        "mapping_confidence": 0.78,
+        "mapping_type": "value_chain_macro",
+        "direction_bias": "short",
+        "reason": "Long-duration bonds pressured by rising rates"
+      },
+      {
+        "symbol": "QQQ",
+        "instrument_type": "etf",
+        "relevance_score": 0.66,
+        "mapping_confidence": 0.66,
+        "mapping_type": "value_chain_second_order",
+        "direction_bias": "short",
+        "reason": "Higher discount rates pressure growth duration"
+      }
+    ],
+    "primary_instrument": {
+      "symbol": "UUP",
+      "instrument_type": "etf",
+      "direction_bias": "long",
+      "relevance_score": 0.81,
+      "mapping_confidence": 0.81,
+      "mapping_type": "value_chain_macro",
+      "reason": "Rates regime supports dollar / tightening proxy"
+    },
+    "execution_bias": "block",
+    "risk_overlay_hint": "macro_event_risk",
+    "theme": "macro_rates_regime",
+    "chain_layer": "none_clear",
+    "chain_sublayer": "none_clear",
+    "theme_maturity": "none_clear",
+    "bottleneck_type": "financing",
+    "moat_type": "none_clear",
+    "fragility_type": "financing_dependent",
+    "supplier_status": "none_clear",
+    "position_in_chain": "none_clear",
+    "beneficiary_class": "high_margin_infra_leader",
+    "loser_class": "financing_dependent_scaler",
+    "pair_trade_candidate": true,
+    "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+    "valuation_context": "valuation_unknown",
+    "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+    "structural_interpretation_confidence": 0.68,
+    "execution_priority": 0.631,
     "dispatch_readiness": {
       "ready": false,
       "reasons": [
@@ -404,7 +965,9 @@
       "instrument_type": "etf",
       "direction_bias": "long",
       "relevance_score": 0.74,
-      "mapping_confidence": 0.74
+      "mapping_confidence": 0.74,
+      "mapping_type": "macro_proxy",
+      "reason": "Higher rates can support the dollar"
     },
     "execution_bias": "block",
     "risk_overlay_hint": "macro_event_risk",
@@ -429,303 +992,6 @@
       "ready": false,
       "reasons": [
         "mapping_too_ambiguous"
-      ]
-    },
-    "feedback_context": {
-      "feedback_bias_points": 7.5,
-      "feedback_sample_size": 15,
-      "tracked_take_ratio": 0.889,
-      "tracked_sample_size": 9,
-      "ab_enriched_lift": 3,
-      "shadow_confirmation": true,
-      "shadow_signal_score": 200.0
-    }
-  },
-  {
-    "candidate_id": "cand_eff9419c2e153e27",
-    "signal_id": "sig_0972e15fd0a1f4a6",
-    "signal_fingerprint": "sha256:6ee7e3ca51f230bdf7cd629ccab0572cefd05c2ceee21b84c72dbadfa00c9abd",
-    "generated_at": "2026-03-23T17:09:20.779774Z",
-    "source_type": "rss",
-    "source_feed": "Telegram_FinancialJuice",
-    "source_title": "Goldman Sachs expects ECB to deliver two 25 bps rate hikes each in April and Jun",
-    "source_url": "https://t.me/@FinancialJuice/105318",
-    "source_timestamp": "2026-03-23T17:09:20.779725",
-    "pattern_id": "p014",
-    "pattern_name": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "historical_confidence": "HIGH",
-    "confidence_level": "STRONG BUY",
-    "reasoning_score": 87.5,
-    "signal_score": 200.0,
-    "recommendation": "TAKE",
-    "expected_horizon": "short-term",
-    "reasoning": "moderate source, strong historical pattern match.",
-    "reasoning_components": {
-      "source_credibility": 50.0,
-      "pattern_strength": 90.0,
-      "time_horizon_fit": 100.0,
-      "base_score": 80.0,
-      "feedback_bias_points": 7.5,
-      "feedback_sample_size": 15
-    },
-    "evidence_strength": 0.821,
-    "signal_briefing": "March 2022 rate hikes crushed tech (down 30% that year). Rate hikes typically pressure growth stocks and rate-sensitive sectors. Dollar strengthens on yield differential. Bond yields climb.",
-    "predicted_outcomes": [
-      "front_end_yield_move",
-      "usd_trend_shift",
-      "growth_value_rotation"
-    ],
-    "predicted_causal_chain": [
-      "Inflation/rates surprise",
-      "Bond market reprices terminal rate",
-      "Equity duration factor moves"
-    ],
-    "instrument_candidates": [
-      {
-        "symbol": "UUP",
-        "instrument_type": "etf",
-        "relevance_score": 0.74,
-        "mapping_confidence": 0.74,
-        "mapping_type": "macro_proxy",
-        "direction_bias": "long",
-        "reason": "Higher rates can support the dollar"
-      },
-      {
-        "symbol": "TLT",
-        "instrument_type": "etf",
-        "relevance_score": 0.72,
-        "mapping_confidence": 0.72,
-        "mapping_type": "macro_proxy",
-        "direction_bias": "short",
-        "reason": "Long-duration bonds are pressured by rising yields"
-      },
-      {
-        "symbol": "QQQ",
-        "instrument_type": "etf",
-        "relevance_score": 0.63,
-        "mapping_confidence": 0.63,
-        "mapping_type": "second_order_negative",
-        "direction_bias": "short",
-        "reason": "Higher discount rates pressure duration-heavy equities"
-      }
-    ],
-    "primary_instrument": {
-      "symbol": "UUP",
-      "instrument_type": "etf",
-      "direction_bias": "long",
-      "relevance_score": 0.74,
-      "mapping_confidence": 0.74
-    },
-    "execution_bias": "block",
-    "risk_overlay_hint": "macro_event_risk",
-    "theme": "macro_rates_regime",
-    "chain_layer": "none_clear",
-    "chain_sublayer": "none_clear",
-    "theme_maturity": "none_clear",
-    "bottleneck_type": "financing",
-    "moat_type": "none_clear",
-    "fragility_type": "financing_dependent",
-    "supplier_status": "none_clear",
-    "position_in_chain": "none_clear",
-    "beneficiary_class": "high_margin_infra_leader",
-    "loser_class": "financing_dependent_scaler",
-    "pair_trade_candidate": true,
-    "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-    "valuation_context": "valuation_unknown",
-    "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-    "structural_interpretation_confidence": 0.68,
-    "execution_priority": 0.613,
-    "dispatch_readiness": {
-      "ready": false,
-      "reasons": [
-        "mapping_too_ambiguous"
-      ]
-    },
-    "feedback_context": {
-      "feedback_bias_points": 7.5,
-      "feedback_sample_size": 15,
-      "tracked_take_ratio": 0.889,
-      "tracked_sample_size": 9,
-      "ab_enriched_lift": 3,
-      "shadow_confirmation": true,
-      "shadow_signal_score": 200.0
-    }
-  },
-  {
-    "candidate_id": "cand_b0ac2612632b054e",
-    "signal_id": "sig_7e7ed55cd09505d9",
-    "signal_fingerprint": "sha256:b4ed237ccc84cb1ebef20aec5ca57e599830e34ff88825cd77935c8ffc29cc25",
-    "generated_at": "2026-03-23T17:09:20.779774Z",
-    "source_type": "rss",
-    "source_feed": "FinancialJuice",
-    "source_title": "Saudi Aramco CEO Nasser cancels trip to CERAWeek conference in US due to Iran wa",
-    "source_url": "https://x.com/financialjuice/status/2035824155208134995",
-    "source_timestamp": "2026-03-23T17:09:20.779306",
-    "pattern_id": "p001",
-    "pattern_name": "Saudi Oil Attacks",
-    "category": "geopolitical",
-    "historical_confidence": "HIGH",
-    "confidence_level": "STRONG BUY",
-    "reasoning_score": 88.0,
-    "signal_score": 300.0,
-    "recommendation": "TAKE",
-    "expected_horizon": "intraday",
-    "reasoning": "moderate source, strong historical pattern match.",
-    "reasoning_components": {
-      "source_credibility": 65.0,
-      "pattern_strength": 90.0,
-      "time_horizon_fit": 100.0,
-      "base_score": 84.5,
-      "feedback_bias_points": 3.5,
-      "feedback_sample_size": 15
-    },
-    "evidence_strength": 0.874,
-    "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-    "predicted_outcomes": [
-      "volatility_spike",
-      "risk_repricing"
-    ],
-    "predicted_causal_chain": [
-      "Headline catalyst",
-      "Positioning adjustment",
-      "Cross-asset reaction"
-    ],
-    "instrument_candidates": [
-      {
-        "symbol": "SPY",
-        "instrument_type": "etf",
-        "relevance_score": 0.526,
-        "mapping_confidence": 0.526,
-        "mapping_type": "macro_proxy",
-        "direction_bias": "long",
-        "reason": "Fallback broad-market proxy for a macro signal"
-      }
-    ],
-    "primary_instrument": {
-      "symbol": "SPY",
-      "instrument_type": "etf",
-      "direction_bias": "long",
-      "relevance_score": 0.526,
-      "mapping_confidence": 0.526
-    },
-    "execution_bias": "caution",
-    "risk_overlay_hint": "elevated_macro_volatility",
-    "theme": "energy_infrastructure",
-    "chain_layer": "industrial_inputs",
-    "chain_sublayer": "oil_supply",
-    "theme_maturity": "mid_cycle_scaling",
-    "bottleneck_type": "supply_chain",
-    "moat_type": "none_clear",
-    "fragility_type": "commodity_exposure",
-    "supplier_status": "none_clear",
-    "position_in_chain": "infrastructure_backbone",
-    "beneficiary_class": "bottleneck_supplier",
-    "loser_class": "low_margin_integrator",
-    "pair_trade_candidate": true,
-    "pair_trade_rationale": "Oil supply disruption can benefit upstream energy exposure while pressuring margin-thin downstream users.",
-    "valuation_context": "valuation_unknown",
-    "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
-    "structural_interpretation_confidence": 0.86,
-    "execution_priority": 0.582,
-    "dispatch_readiness": {
-      "ready": false,
-      "reasons": [
-        "mapping_confidence_too_low"
-      ]
-    },
-    "feedback_context": {
-      "feedback_bias_points": 3.5,
-      "feedback_sample_size": 15,
-      "tracked_take_ratio": null,
-      "tracked_sample_size": 0,
-      "ab_enriched_lift": 3,
-      "shadow_confirmation": true,
-      "shadow_signal_score": 300.0
-    }
-  },
-  {
-    "candidate_id": "cand_64f4a4e7486ce86d",
-    "signal_id": "sig_89b4cb71d26d1d7e",
-    "signal_fingerprint": "sha256:24d5fc3b7dd42341dab530fac879052e6e3d4ff20c9eecfd03fc9fda9ef3e1fa",
-    "generated_at": "2026-03-23T17:09:20.779774Z",
-    "source_type": "rss",
-    "source_feed": "Deltaone",
-    "source_title": "\ud83d\udcc8RECESSION FEARS RISE AGAIN Recession odds have jumped to 36.9%, rebounding shar",
-    "source_url": "https://x.com/DeItaone/status/2035750856503570480",
-    "source_timestamp": "2026-03-23T17:09:20.779630",
-    "pattern_id": "p014",
-    "pattern_name": "US Credit Rating Downgrade",
-    "category": "macroeconomic",
-    "historical_confidence": "HIGH",
-    "confidence_level": "STRONG BUY",
-    "reasoning_score": 87.5,
-    "signal_score": 200.0,
-    "recommendation": "TAKE",
-    "expected_horizon": "short-term",
-    "reasoning": "moderate source, strong historical pattern match.",
-    "reasoning_components": {
-      "source_credibility": 50.0,
-      "pattern_strength": 90.0,
-      "time_horizon_fit": 100.0,
-      "base_score": 80.0,
-      "feedback_bias_points": 7.5,
-      "feedback_sample_size": 15
-    },
-    "evidence_strength": 0.821,
-    "signal_briefing": "",
-    "predicted_outcomes": [
-      "rates_volatility",
-      "fx_move",
-      "equity_factor_rotation"
-    ],
-    "predicted_causal_chain": [
-      "Macro print/policy signal",
-      "Rates reprice",
-      "USD and yields react",
-      "Risk assets rotate"
-    ],
-    "instrument_candidates": [
-      {
-        "symbol": "SPY",
-        "instrument_type": "etf",
-        "relevance_score": 0.525,
-        "mapping_confidence": 0.525,
-        "mapping_type": "macro_proxy",
-        "direction_bias": "long",
-        "reason": "Fallback broad-market proxy for a macro signal"
-      }
-    ],
-    "primary_instrument": {
-      "symbol": "SPY",
-      "instrument_type": "etf",
-      "direction_bias": "long",
-      "relevance_score": 0.525,
-      "mapping_confidence": 0.525
-    },
-    "execution_bias": "caution",
-    "risk_overlay_hint": "macro_event_risk",
-    "theme": "macro_rates_regime",
-    "chain_layer": "none_clear",
-    "chain_sublayer": "none_clear",
-    "theme_maturity": "none_clear",
-    "bottleneck_type": "financing",
-    "moat_type": "none_clear",
-    "fragility_type": "financing_dependent",
-    "supplier_status": "none_clear",
-    "position_in_chain": "none_clear",
-    "beneficiary_class": "high_margin_infra_leader",
-    "loser_class": "financing_dependent_scaler",
-    "pair_trade_candidate": true,
-    "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-    "valuation_context": "valuation_unknown",
-    "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-    "structural_interpretation_confidence": 0.68,
-    "execution_priority": 0.56,
-    "dispatch_readiness": {
-      "ready": false,
-      "reasons": [
-        "mapping_confidence_too_low"
       ]
     },
     "feedback_context": {
@@ -795,7 +1061,9 @@
       "instrument_type": "etf",
       "direction_bias": "long",
       "relevance_score": 0.525,
-      "mapping_confidence": 0.525
+      "mapping_confidence": 0.525,
+      "mapping_type": "macro_proxy",
+      "reason": "Fallback broad-market proxy for a macro signal"
     },
     "execution_bias": "caution",
     "risk_overlay_hint": "macro_event_risk",
@@ -833,191 +1101,7 @@
     }
   },
   {
-    "candidate_id": "cand_bebaf6da4fca8968",
-    "signal_id": "sig_415500e6c6520825",
-    "signal_fingerprint": "sha256:9c9c649f63401e0f30992e8a3e07e4f109b0f69927cf6158849e9b70ccd12a44",
-    "generated_at": "2026-03-23T17:09:20.779774Z",
-    "source_type": "rss",
-    "source_feed": "FinancialJuice",
-    "source_title": "Russian drones attacked port infrastructure in Ukraine's Odesa region: governor",
-    "source_url": "https://x.com/financialjuice/status/2035960004008657026",
-    "source_timestamp": "2026-03-23T17:09:20.779188",
-    "pattern_id": "p002",
-    "pattern_name": "Russia-Ukraine Conflict",
-    "category": "geopolitical",
-    "historical_confidence": "HIGH",
-    "confidence_level": "STRONG BUY",
-    "reasoning_score": 81.0,
-    "signal_score": 300.0,
-    "recommendation": "TAKE",
-    "expected_horizon": "short-term",
-    "reasoning": "moderate source, strong historical pattern match.",
-    "reasoning_components": {
-      "source_credibility": 65.0,
-      "pattern_strength": 90.0,
-      "time_horizon_fit": 100.0,
-      "base_score": 84.5,
-      "feedback_bias_points": -3.5,
-      "feedback_sample_size": 15
-    },
-    "evidence_strength": 0.822,
-    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
-    "predicted_outcomes": [
-      "volatility_spike",
-      "risk_repricing"
-    ],
-    "predicted_causal_chain": [
-      "Headline catalyst",
-      "Positioning adjustment",
-      "Cross-asset reaction"
-    ],
-    "instrument_candidates": [
-      {
-        "symbol": "SPY",
-        "instrument_type": "etf",
-        "relevance_score": 0.517,
-        "mapping_confidence": 0.517,
-        "mapping_type": "macro_proxy",
-        "direction_bias": "long",
-        "reason": "Fallback broad-market proxy for a macro signal"
-      }
-    ],
-    "primary_instrument": {
-      "symbol": "SPY",
-      "instrument_type": "etf",
-      "direction_bias": "long",
-      "relevance_score": 0.517,
-      "mapping_confidence": 0.517
-    },
-    "execution_bias": "caution",
-    "risk_overlay_hint": "elevated_macro_volatility",
-    "theme": "energy_infrastructure",
-    "chain_layer": "industrial_inputs",
-    "chain_sublayer": "war_supply_routes",
-    "theme_maturity": "mid_cycle_scaling",
-    "bottleneck_type": "supply_chain",
-    "moat_type": "none_clear",
-    "fragility_type": "commodity_exposure",
-    "supplier_status": "none_clear",
-    "position_in_chain": "infrastructure_backbone",
-    "beneficiary_class": "bottleneck_supplier",
-    "loser_class": "low_margin_integrator",
-    "pair_trade_candidate": true,
-    "pair_trade_rationale": "War-related route and commodity disruption can favor upstream constrained exposures and hurt downstream users.",
-    "valuation_context": "valuation_unknown",
-    "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
-    "structural_interpretation_confidence": 0.8,
-    "execution_priority": 0.545,
-    "dispatch_readiness": {
-      "ready": false,
-      "reasons": [
-        "mapping_confidence_too_low"
-      ]
-    },
-    "feedback_context": {
-      "feedback_bias_points": -3.5,
-      "feedback_sample_size": 15,
-      "tracked_take_ratio": 0.0,
-      "tracked_sample_size": 2,
-      "ab_enriched_lift": 3,
-      "shadow_confirmation": true,
-      "shadow_signal_score": 300.0
-    }
-  },
-  {
-    "candidate_id": "cand_5eb079c70775ac52",
-    "signal_id": "sig_68f20a13af5a8606",
-    "signal_fingerprint": "sha256:4f8c3ee08d2b016c6cb548c879ffa772f4285505a249afed816c13833052e33e",
-    "generated_at": "2026-03-23T17:09:20.779774Z",
-    "source_type": "rss",
-    "source_feed": "Telegram_FinancialJuice",
-    "source_title": "Russian drones attacked port infrastructure in Ukraine's Odesa region: governor|",
-    "source_url": "https://t.me/@FinancialJuice/105317",
-    "source_timestamp": "2026-03-23T17:09:20.779395",
-    "pattern_id": "p002",
-    "pattern_name": "Russia-Ukraine Conflict",
-    "category": "geopolitical",
-    "historical_confidence": "HIGH",
-    "confidence_level": "STRONG BUY",
-    "reasoning_score": 76.5,
-    "signal_score": 300.0,
-    "recommendation": "TAKE",
-    "expected_horizon": "short-term",
-    "reasoning": "moderate source, strong historical pattern match.",
-    "reasoning_components": {
-      "source_credibility": 50.0,
-      "pattern_strength": 90.0,
-      "time_horizon_fit": 100.0,
-      "base_score": 80.0,
-      "feedback_bias_points": -3.5,
-      "feedback_sample_size": 15
-    },
-    "evidence_strength": 0.771,
-    "signal_briefing": "Feb 2022 peace talk failures preceded the invasion \u2014 markets cratered. Defense names typically rally 2-4% on renewed conflict risk. Wheat and European gas see immediate risk premium.",
-    "predicted_outcomes": [
-      "volatility_spike",
-      "risk_repricing"
-    ],
-    "predicted_causal_chain": [
-      "Headline catalyst",
-      "Positioning adjustment",
-      "Cross-asset reaction"
-    ],
-    "instrument_candidates": [
-      {
-        "symbol": "SPY",
-        "instrument_type": "etf",
-        "relevance_score": 0.512,
-        "mapping_confidence": 0.512,
-        "mapping_type": "macro_proxy",
-        "direction_bias": "long",
-        "reason": "Fallback broad-market proxy for a macro signal"
-      }
-    ],
-    "primary_instrument": {
-      "symbol": "SPY",
-      "instrument_type": "etf",
-      "direction_bias": "long",
-      "relevance_score": 0.512,
-      "mapping_confidence": 0.512
-    },
-    "execution_bias": "caution",
-    "risk_overlay_hint": "elevated_macro_volatility",
-    "theme": "energy_infrastructure",
-    "chain_layer": "industrial_inputs",
-    "chain_sublayer": "war_supply_routes",
-    "theme_maturity": "mid_cycle_scaling",
-    "bottleneck_type": "supply_chain",
-    "moat_type": "none_clear",
-    "fragility_type": "commodity_exposure",
-    "supplier_status": "none_clear",
-    "position_in_chain": "infrastructure_backbone",
-    "beneficiary_class": "bottleneck_supplier",
-    "loser_class": "low_margin_integrator",
-    "pair_trade_candidate": true,
-    "pair_trade_rationale": "War-related route and commodity disruption can favor upstream constrained exposures and hurt downstream users.",
-    "valuation_context": "valuation_unknown",
-    "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
-    "structural_interpretation_confidence": 0.8,
-    "execution_priority": 0.514,
-    "dispatch_readiness": {
-      "ready": false,
-      "reasons": [
-        "mapping_confidence_too_low"
-      ]
-    },
-    "feedback_context": {
-      "feedback_bias_points": -3.5,
-      "feedback_sample_size": 15,
-      "tracked_take_ratio": 0.0,
-      "tracked_sample_size": 2,
-      "ab_enriched_lift": 3,
-      "shadow_confirmation": true,
-      "shadow_signal_score": 300.0
-    }
-  },
-  {
-    "candidate_id": "cand_4f9abb6e16d9f571",
+    "candidate_id": "cand_ecf5520ee2565aba",
     "signal_id": "sig_479bb2e1deb4dd9f",
     "signal_fingerprint": "sha256:4a332e4ca0bbafeca25f34757c280b58c023e9ee9420e99e79d15e9dc76783d2",
     "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -1059,6 +1143,15 @@
     ],
     "instrument_candidates": [
       {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "relevance_score": 0.86,
+        "mapping_confidence": 0.86,
+        "mapping_type": "value_chain_company",
+        "direction_bias": "long",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+      },
+      {
         "symbol": "SOXX",
         "instrument_type": "etf",
         "relevance_score": 0.82,
@@ -1066,15 +1159,6 @@
         "mapping_type": "sector_proxy",
         "direction_bias": "long",
         "reason": "Semiconductor sector proxy"
-      },
-      {
-        "symbol": "NVDA",
-        "instrument_type": "equity",
-        "relevance_score": 0.78,
-        "mapping_confidence": 0.78,
-        "mapping_type": "company_direct",
-        "direction_bias": "long",
-        "reason": "Direct company mention: nvidia"
       },
       {
         "symbol": "XLK",
@@ -1087,11 +1171,13 @@
       }
     ],
     "primary_instrument": {
-      "symbol": "SOXX",
-      "instrument_type": "etf",
+      "symbol": "NVDA",
+      "instrument_type": "equity",
       "direction_bias": "long",
-      "relevance_score": 0.82,
-      "mapping_confidence": 0.82
+      "relevance_score": 0.86,
+      "mapping_confidence": 0.86,
+      "mapping_type": "value_chain_company",
+      "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
     },
     "execution_bias": "observe",
     "risk_overlay_hint": "crowding_risk",
@@ -1111,7 +1197,7 @@
     "valuation_context": "valuation_unknown",
     "value_chain_notes": "Signal points to compute bottlenecks or semiconductor demand inside the AI stack rather than broad end-user app demand.",
     "structural_interpretation_confidence": 0.72,
-    "execution_priority": 0.431,
+    "execution_priority": 0.441,
     "dispatch_readiness": {
       "ready": false,
       "reasons": [

@@ -34,7 +34,7 @@ def main() -> int:
         lines.append(f"## {report['theme']} / {report['chain_layer']} / {report['chain_sublayer']}")
         lines.append(f"- Candidates: {report['candidate_count']}")
         lines.append(f"- Unique symbols: {report.get('unique_symbol_count', 0)} ({', '.join(report.get('symbols', []))})")
-        lines.append(f"- Pair-trade ready: {report['pair_trade_ready']}")
+        lines.append(f"- Pair-trade ready: {report['pair_trade_ready']} ({report.get('pair_trade_style', 'not_ready')})")
         strongest = report['strongest']
         weakest = report['weakest']
         lines.append(

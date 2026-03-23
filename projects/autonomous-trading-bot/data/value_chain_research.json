@@ -25,11 +25,12 @@
       "candidate_count": 1,
       "unique_symbol_count": 1,
       "symbols": [
-        "SOXX"
+        "NVDA"
       ],
       "pair_trade_ready": false,
+      "pair_trade_style": "not_ready",
       "strongest": {
-        "candidate_id": "cand_4f9abb6e16d9f571",
+        "candidate_id": "cand_ecf5520ee2565aba",
         "signal_id": "sig_479bb2e1deb4dd9f",
         "signal_fingerprint": "sha256:4a332e4ca0bbafeca25f34757c280b58c023e9ee9420e99e79d15e9dc76783d2",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -71,6 +72,15 @@
         ],
         "instrument_candidates": [
           {
+            "symbol": "NVDA",
+            "instrument_type": "equity",
+            "relevance_score": 0.86,
+            "mapping_confidence": 0.86,
+            "mapping_type": "value_chain_company",
+            "direction_bias": "long",
+            "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+          },
+          {
             "symbol": "SOXX",
             "instrument_type": "etf",
             "relevance_score": 0.82,
@@ -78,15 +88,6 @@
             "mapping_type": "sector_proxy",
             "direction_bias": "long",
             "reason": "Semiconductor sector proxy"
-          },
-          {
-            "symbol": "NVDA",
-            "instrument_type": "equity",
-            "relevance_score": 0.78,
-            "mapping_confidence": 0.78,
-            "mapping_type": "company_direct",
-            "direction_bias": "long",
-            "reason": "Direct company mention: nvidia"
           },
           {
             "symbol": "XLK",
@@ -99,11 +100,13 @@
           }
         ],
         "primary_instrument": {
-          "symbol": "SOXX",
-          "instrument_type": "etf",
+          "symbol": "NVDA",
+          "instrument_type": "equity",
           "direction_bias": "long",
-          "relevance_score": 0.82,
-          "mapping_confidence": 0.82
+          "relevance_score": 0.86,
+          "mapping_confidence": 0.86,
+          "mapping_type": "value_chain_company",
+          "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
         },
         "execution_bias": "observe",
         "risk_overlay_hint": "crowding_risk",
@@ -123,7 +126,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "Signal points to compute bottlenecks or semiconductor demand inside the AI stack rather than broad end-user app demand.",
         "structural_interpretation_confidence": 0.72,
-        "execution_priority": 0.431,
+        "execution_priority": 0.441,
         "dispatch_readiness": {
           "ready": false,
           "reasons": [
@@ -143,7 +146,7 @@
         "research_score": 12.52
       },
       "weakest": {
-        "candidate_id": "cand_4f9abb6e16d9f571",
+        "candidate_id": "cand_ecf5520ee2565aba",
         "signal_id": "sig_479bb2e1deb4dd9f",
         "signal_fingerprint": "sha256:4a332e4ca0bbafeca25f34757c280b58c023e9ee9420e99e79d15e9dc76783d2",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -185,6 +188,15 @@
         ],
         "instrument_candidates": [
           {
+            "symbol": "NVDA",
+            "instrument_type": "equity",
+            "relevance_score": 0.86,
+            "mapping_confidence": 0.86,
+            "mapping_type": "value_chain_company",
+            "direction_bias": "long",
+            "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+          },
+          {
             "symbol": "SOXX",
             "instrument_type": "etf",
             "relevance_score": 0.82,
@@ -192,15 +204,6 @@
             "mapping_type": "sector_proxy",
             "direction_bias": "long",
             "reason": "Semiconductor sector proxy"
-          },
-          {
-            "symbol": "NVDA",
-            "instrument_type": "equity",
-            "relevance_score": 0.78,
-            "mapping_confidence": 0.78,
-            "mapping_type": "company_direct",
-            "direction_bias": "long",
-            "reason": "Direct company mention: nvidia"
           },
           {
             "symbol": "XLK",
@@ -213,11 +216,13 @@
           }
         ],
         "primary_instrument": {
-          "symbol": "SOXX",
-          "instrument_type": "etf",
+          "symbol": "NVDA",
+          "instrument_type": "equity",
           "direction_bias": "long",
-          "relevance_score": 0.82,
-          "mapping_confidence": 0.82
+          "relevance_score": 0.86,
+          "mapping_confidence": 0.86,
+          "mapping_type": "value_chain_company",
+          "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
         },
         "execution_bias": "observe",
         "risk_overlay_hint": "crowding_risk",
@@ -237,7 +242,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "Signal points to compute bottlenecks or semiconductor demand inside the AI stack rather than broad end-user app demand.",
         "structural_interpretation_confidence": 0.72,
-        "execution_priority": 0.431,
+        "execution_priority": 0.441,
         "dispatch_readiness": {
           "ready": false,
           "reasons": [
@@ -256,11 +261,11 @@
         },
         "research_score": 12.52
       },
-      "strongest_symbol": "SOXX",
-      "weakest_symbol": "SOXX",
+      "strongest_symbol": "NVDA",
+      "weakest_symbol": "NVDA",
       "top_candidates": [
         {
-          "candidate_id": "cand_4f9abb6e16d9f571",
+          "candidate_id": "cand_ecf5520ee2565aba",
           "signal_id": "sig_479bb2e1deb4dd9f",
           "signal_fingerprint": "sha256:4a332e4ca0bbafeca25f34757c280b58c023e9ee9420e99e79d15e9dc76783d2",
           "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -302,6 +307,15 @@
           ],
           "instrument_candidates": [
             {
+              "symbol": "NVDA",
+              "instrument_type": "equity",
+              "relevance_score": 0.86,
+              "mapping_confidence": 0.86,
+              "mapping_type": "value_chain_company",
+              "direction_bias": "long",
+              "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+            },
+            {
               "symbol": "SOXX",
               "instrument_type": "etf",
               "relevance_score": 0.82,
@@ -309,15 +323,6 @@
               "mapping_type": "sector_proxy",
               "direction_bias": "long",
               "reason": "Semiconductor sector proxy"
-            },
-            {
-              "symbol": "NVDA",
-              "instrument_type": "equity",
-              "relevance_score": 0.78,
-              "mapping_confidence": 0.78,
-              "mapping_type": "company_direct",
-              "direction_bias": "long",
-              "reason": "Direct company mention: nvidia"
             },
             {
               "symbol": "XLK",
@@ -330,11 +335,13 @@
             }
           ],
           "primary_instrument": {
-            "symbol": "SOXX",
-            "instrument_type": "etf",
+            "symbol": "NVDA",
+            "instrument_type": "equity",
             "direction_bias": "long",
-            "relevance_score": 0.82,
-            "mapping_confidence": 0.82
+            "relevance_score": 0.86,
+            "mapping_confidence": 0.86,
+            "mapping_type": "value_chain_company",
+            "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
           },
           "execution_bias": "observe",
           "risk_overlay_hint": "crowding_risk",
@@ -354,7 +361,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "Signal points to compute bottlenecks or semiconductor demand inside the AI stack rather than broad end-user app demand.",
           "structural_interpretation_confidence": 0.72,
-          "execution_priority": 0.431,
+          "execution_priority": 0.441,
           "dispatch_readiness": {
             "ready": false,
             "reasons": [
@@ -381,14 +388,14 @@
       "chain_layer": "industrial_inputs",
       "chain_sublayer": "oil_supply",
       "candidate_count": 2,
-      "unique_symbol_count": 2,
+      "unique_symbol_count": 1,
       "symbols": [
-        "SPY",
         "USO"
       ],
-      "pair_trade_ready": true,
+      "pair_trade_ready": false,
+      "pair_trade_style": "not_ready",
       "strongest": {
-        "candidate_id": "cand_b0ac2612632b054e",
+        "candidate_id": "cand_849a4e5c7b10b39a",
         "signal_id": "sig_7e7ed55cd09505d9",
         "signal_fingerprint": "sha256:b4ed237ccc84cb1ebef20aec5ca57e599830e34ff88825cd77935c8ffc29cc25",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -428,23 +435,43 @@
         ],
         "instrument_candidates": [
           {
-            "symbol": "SPY",
+            "symbol": "USO",
             "instrument_type": "etf",
-            "relevance_score": 0.526,
-            "mapping_confidence": 0.526,
-            "mapping_type": "macro_proxy",
+            "relevance_score": 0.91,
+            "mapping_confidence": 0.91,
+            "mapping_type": "value_chain_theme",
             "direction_bias": "long",
-            "reason": "Fallback broad-market proxy for a macro signal"
+            "reason": "Value-chain oil supply proxy"
+          },
+          {
+            "symbol": "XLE",
+            "instrument_type": "etf",
+            "relevance_score": 0.86,
+            "mapping_confidence": 0.86,
+            "mapping_type": "value_chain_theme",
+            "direction_bias": "long",
+            "reason": "Energy-sector proxy for supply shocks"
+          },
+          {
+            "symbol": "JETS",
+            "instrument_type": "etf",
+            "relevance_score": 0.69,
+            "mapping_confidence": 0.69,
+            "mapping_type": "value_chain_second_order",
+            "direction_bias": "short",
+            "reason": "Fuel-cost pressure on airlines"
           }
         ],
         "primary_instrument": {
-          "symbol": "SPY",
+          "symbol": "USO",
           "instrument_type": "etf",
           "direction_bias": "long",
-          "relevance_score": 0.526,
-          "mapping_confidence": 0.526
+          "relevance_score": 0.91,
+          "mapping_confidence": 0.91,
+          "mapping_type": "value_chain_theme",
+          "reason": "Value-chain oil supply proxy"
         },
-        "execution_bias": "caution",
+        "execution_bias": "allow",
         "risk_overlay_hint": "elevated_macro_volatility",
         "theme": "energy_infrastructure",
         "chain_layer": "industrial_inputs",
@@ -462,12 +489,10 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
         "structural_interpretation_confidence": 0.86,
-        "execution_priority": 0.582,
+        "execution_priority": 0.898,
         "dispatch_readiness": {
-          "ready": false,
-          "reasons": [
-            "mapping_confidence_too_low"
-          ]
+          "ready": true,
+          "reasons": []
         },
         "feedback_context": {
           "feedback_bias_points": 3.5,
@@ -523,37 +548,39 @@
           {
             "symbol": "USO",
             "instrument_type": "etf",
-            "relevance_score": 0.88,
-            "mapping_confidence": 0.88,
-            "mapping_type": "commodity_proxy",
+            "relevance_score": 0.91,
+            "mapping_confidence": 0.91,
+            "mapping_type": "value_chain_theme",
             "direction_bias": "long",
-            "reason": "Oil supply or transport disruption"
+            "reason": "Value-chain oil supply proxy"
           },
           {
             "symbol": "XLE",
             "instrument_type": "etf",
-            "relevance_score": 0.8,
-            "mapping_confidence": 0.8,
-            "mapping_type": "sector_proxy",
+            "relevance_score": 0.86,
+            "mapping_confidence": 0.86,
+            "mapping_type": "value_chain_theme",
             "direction_bias": "long",
-            "reason": "Energy sector usually benefits from higher oil prices"
+            "reason": "Energy-sector proxy for supply shocks"
           },
           {
             "symbol": "JETS",
             "instrument_type": "etf",
-            "relevance_score": 0.67,
-            "mapping_confidence": 0.67,
-            "mapping_type": "second_order_negative",
+            "relevance_score": 0.69,
+            "mapping_confidence": 0.69,
+            "mapping_type": "value_chain_second_order",
             "direction_bias": "short",
-            "reason": "Airlines face fuel-cost pressure"
+            "reason": "Fuel-cost pressure on airlines"
           }
         ],
         "primary_instrument": {
           "symbol": "USO",
           "instrument_type": "etf",
           "direction_bias": "long",
-          "relevance_score": 0.88,
-          "mapping_confidence": 0.88
+          "relevance_score": 0.91,
+          "mapping_confidence": 0.91,
+          "mapping_type": "value_chain_theme",
+          "reason": "Value-chain oil supply proxy"
         },
         "execution_bias": "allow",
         "risk_overlay_hint": "elevated_macro_volatility",
@@ -573,7 +600,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
         "structural_interpretation_confidence": 0.86,
-        "execution_priority": 0.862,
+        "execution_priority": 0.869,
         "dispatch_readiness": {
           "ready": true,
           "reasons": []
@@ -589,11 +616,11 @@
         },
         "research_score": 19.06
       },
-      "strongest_symbol": "SPY",
+      "strongest_symbol": "USO",
       "weakest_symbol": "USO",
       "top_candidates": [
         {
-          "candidate_id": "cand_b0ac2612632b054e",
+          "candidate_id": "cand_849a4e5c7b10b39a",
           "signal_id": "sig_7e7ed55cd09505d9",
           "signal_fingerprint": "sha256:b4ed237ccc84cb1ebef20aec5ca57e599830e34ff88825cd77935c8ffc29cc25",
           "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -633,23 +660,43 @@
           ],
           "instrument_candidates": [
             {
-              "symbol": "SPY",
+              "symbol": "USO",
               "instrument_type": "etf",
-              "relevance_score": 0.526,
-              "mapping_confidence": 0.526,
-              "mapping_type": "macro_proxy",
+              "relevance_score": 0.91,
+              "mapping_confidence": 0.91,
+              "mapping_type": "value_chain_theme",
               "direction_bias": "long",
-              "reason": "Fallback broad-market proxy for a macro signal"
+              "reason": "Value-chain oil supply proxy"
+            },
+            {
+              "symbol": "XLE",
+              "instrument_type": "etf",
+              "relevance_score": 0.86,
+              "mapping_confidence": 0.86,
+              "mapping_type": "value_chain_theme",
+              "direction_bias": "long",
+              "reason": "Energy-sector proxy for supply shocks"
+            },
+            {
+              "symbol": "JETS",
+              "instrument_type": "etf",
+              "relevance_score": 0.69,
+              "mapping_confidence": 0.69,
+              "mapping_type": "value_chain_second_order",
+              "direction_bias": "short",
+              "reason": "Fuel-cost pressure on airlines"
             }
           ],
           "primary_instrument": {
-            "symbol": "SPY",
+            "symbol": "USO",
             "instrument_type": "etf",
             "direction_bias": "long",
-            "relevance_score": 0.526,
-            "mapping_confidence": 0.526
+            "relevance_score": 0.91,
+            "mapping_confidence": 0.91,
+            "mapping_type": "value_chain_theme",
+            "reason": "Value-chain oil supply proxy"
           },
-          "execution_bias": "caution",
+          "execution_bias": "allow",
           "risk_overlay_hint": "elevated_macro_volatility",
           "theme": "energy_infrastructure",
           "chain_layer": "industrial_inputs",
@@ -667,12 +714,10 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
           "structural_interpretation_confidence": 0.86,
-          "execution_priority": 0.582,
+          "execution_priority": 0.898,
           "dispatch_readiness": {
-            "ready": false,
-            "reasons": [
-              "mapping_confidence_too_low"
-            ]
+            "ready": true,
+            "reasons": []
           },
           "feedback_context": {
             "feedback_bias_points": 3.5,
@@ -728,37 +773,39 @@
             {
               "symbol": "USO",
               "instrument_type": "etf",
-              "relevance_score": 0.88,
-              "mapping_confidence": 0.88,
-              "mapping_type": "commodity_proxy",
+              "relevance_score": 0.91,
+              "mapping_confidence": 0.91,
+              "mapping_type": "value_chain_theme",
               "direction_bias": "long",
-              "reason": "Oil supply or transport disruption"
+              "reason": "Value-chain oil supply proxy"
             },
             {
               "symbol": "XLE",
               "instrument_type": "etf",
-              "relevance_score": 0.8,
-              "mapping_confidence": 0.8,
-              "mapping_type": "sector_proxy",
+              "relevance_score": 0.86,
+              "mapping_confidence": 0.86,
+              "mapping_type": "value_chain_theme",
               "direction_bias": "long",
-              "reason": "Energy sector usually benefits from higher oil prices"
+              "reason": "Energy-sector proxy for supply shocks"
             },
             {
               "symbol": "JETS",
               "instrument_type": "etf",
-              "relevance_score": 0.67,
-              "mapping_confidence": 0.67,
-              "mapping_type": "second_order_negative",
+              "relevance_score": 0.69,
+              "mapping_confidence": 0.69,
+              "mapping_type": "value_chain_second_order",
               "direction_bias": "short",
-              "reason": "Airlines face fuel-cost pressure"
+              "reason": "Fuel-cost pressure on airlines"
             }
           ],
           "primary_instrument": {
             "symbol": "USO",
             "instrument_type": "etf",
             "direction_bias": "long",
-            "relevance_score": 0.88,
-            "mapping_confidence": 0.88
+            "relevance_score": 0.91,
+            "mapping_confidence": 0.91,
+            "mapping_type": "value_chain_theme",
+            "reason": "Value-chain oil supply proxy"
           },
           "execution_bias": "allow",
           "risk_overlay_hint": "elevated_macro_volatility",
@@ -778,7 +825,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
           "structural_interpretation_confidence": 0.86,
-          "execution_priority": 0.862,
+          "execution_priority": 0.869,
           "dispatch_readiness": {
             "ready": true,
             "reasons": []
@@ -804,11 +851,12 @@
       "candidate_count": 2,
       "unique_symbol_count": 1,
       "symbols": [
-        "SPY"
+        "SEA"
       ],
       "pair_trade_ready": false,
+      "pair_trade_style": "not_ready",
       "strongest": {
-        "candidate_id": "cand_bebaf6da4fca8968",
+        "candidate_id": "cand_ab2ddbda84204448",
         "signal_id": "sig_415500e6c6520825",
         "signal_fingerprint": "sha256:9c9c649f63401e0f30992e8a3e07e4f109b0f69927cf6158849e9b70ccd12a44",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -848,23 +896,43 @@
         ],
         "instrument_candidates": [
           {
-            "symbol": "SPY",
+            "symbol": "SEA",
             "instrument_type": "etf",
-            "relevance_score": 0.517,
-            "mapping_confidence": 0.517,
-            "mapping_type": "macro_proxy",
+            "relevance_score": 0.82,
+            "mapping_confidence": 0.82,
+            "mapping_type": "value_chain_theme",
             "direction_bias": "long",
-            "reason": "Fallback broad-market proxy for a macro signal"
+            "reason": "Shipping/logistics route sensitivity"
+          },
+          {
+            "symbol": "ITA",
+            "instrument_type": "etf",
+            "relevance_score": 0.76,
+            "mapping_confidence": 0.76,
+            "mapping_type": "value_chain_theme",
+            "direction_bias": "long",
+            "reason": "Defense proxy for conflict escalation"
+          },
+          {
+            "symbol": "USO",
+            "instrument_type": "etf",
+            "relevance_score": 0.72,
+            "mapping_confidence": 0.72,
+            "mapping_type": "value_chain_second_order",
+            "direction_bias": "long",
+            "reason": "Commodity spillover from conflict routes"
           }
         ],
         "primary_instrument": {
-          "symbol": "SPY",
+          "symbol": "SEA",
           "instrument_type": "etf",
           "direction_bias": "long",
-          "relevance_score": 0.517,
-          "mapping_confidence": 0.517
+          "relevance_score": 0.82,
+          "mapping_confidence": 0.82,
+          "mapping_type": "value_chain_theme",
+          "reason": "Shipping/logistics route sensitivity"
         },
-        "execution_bias": "caution",
+        "execution_bias": "allow",
         "risk_overlay_hint": "elevated_macro_volatility",
         "theme": "energy_infrastructure",
         "chain_layer": "industrial_inputs",
@@ -882,12 +950,10 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
         "structural_interpretation_confidence": 0.8,
-        "execution_priority": 0.545,
+        "execution_priority": 0.841,
         "dispatch_readiness": {
-          "ready": false,
-          "reasons": [
-            "mapping_confidence_too_low"
-          ]
+          "ready": true,
+          "reasons": []
         },
         "feedback_context": {
           "feedback_bias_points": -3.5,
@@ -901,7 +967,7 @@
         "research_score": 18.84
       },
       "weakest": {
-        "candidate_id": "cand_5eb079c70775ac52",
+        "candidate_id": "cand_ca9b5d12d95f5ba1",
         "signal_id": "sig_68f20a13af5a8606",
         "signal_fingerprint": "sha256:4f8c3ee08d2b016c6cb548c879ffa772f4285505a249afed816c13833052e33e",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -941,23 +1007,43 @@
         ],
         "instrument_candidates": [
           {
-            "symbol": "SPY",
+            "symbol": "SEA",
             "instrument_type": "etf",
-            "relevance_score": 0.512,
-            "mapping_confidence": 0.512,
-            "mapping_type": "macro_proxy",
+            "relevance_score": 0.82,
+            "mapping_confidence": 0.82,
+            "mapping_type": "value_chain_theme",
             "direction_bias": "long",
-            "reason": "Fallback broad-market proxy for a macro signal"
+            "reason": "Shipping/logistics route sensitivity"
+          },
+          {
+            "symbol": "ITA",
+            "instrument_type": "etf",
+            "relevance_score": 0.76,
+            "mapping_confidence": 0.76,
+            "mapping_type": "value_chain_theme",
+            "direction_bias": "long",
+            "reason": "Defense proxy for conflict escalation"
+          },
+          {
+            "symbol": "USO",
+            "instrument_type": "etf",
+            "relevance_score": 0.72,
+            "mapping_confidence": 0.72,
+            "mapping_type": "value_chain_second_order",
+            "direction_bias": "long",
+            "reason": "Commodity spillover from conflict routes"
           }
         ],
         "primary_instrument": {
-          "symbol": "SPY",
+          "symbol": "SEA",
           "instrument_type": "etf",
           "direction_bias": "long",
-          "relevance_score": 0.512,
-          "mapping_confidence": 0.512
+          "relevance_score": 0.82,
+          "mapping_confidence": 0.82,
+          "mapping_type": "value_chain_theme",
+          "reason": "Shipping/logistics route sensitivity"
         },
-        "execution_bias": "caution",
+        "execution_bias": "allow",
         "risk_overlay_hint": "elevated_macro_volatility",
         "theme": "energy_infrastructure",
         "chain_layer": "industrial_inputs",
@@ -975,12 +1061,10 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
         "structural_interpretation_confidence": 0.8,
-        "execution_priority": 0.514,
+        "execution_priority": 0.811,
         "dispatch_readiness": {
-          "ready": false,
-          "reasons": [
-            "mapping_confidence_too_low"
-          ]
+          "ready": true,
+          "reasons": []
         },
         "feedback_context": {
           "feedback_bias_points": -3.5,
@@ -993,11 +1077,11 @@
         },
         "research_score": 18.66
       },
-      "strongest_symbol": "SPY",
-      "weakest_symbol": "SPY",
+      "strongest_symbol": "SEA",
+      "weakest_symbol": "SEA",
       "top_candidates": [
         {
-          "candidate_id": "cand_bebaf6da4fca8968",
+          "candidate_id": "cand_ab2ddbda84204448",
           "signal_id": "sig_415500e6c6520825",
           "signal_fingerprint": "sha256:9c9c649f63401e0f30992e8a3e07e4f109b0f69927cf6158849e9b70ccd12a44",
           "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -1037,23 +1121,43 @@
           ],
           "instrument_candidates": [
             {
-              "symbol": "SPY",
+              "symbol": "SEA",
               "instrument_type": "etf",
-              "relevance_score": 0.517,
-              "mapping_confidence": 0.517,
-              "mapping_type": "macro_proxy",
+              "relevance_score": 0.82,
+              "mapping_confidence": 0.82,
+              "mapping_type": "value_chain_theme",
               "direction_bias": "long",
-              "reason": "Fallback broad-market proxy for a macro signal"
+              "reason": "Shipping/logistics route sensitivity"
+            },
+            {
+              "symbol": "ITA",
+              "instrument_type": "etf",
+              "relevance_score": 0.76,
+              "mapping_confidence": 0.76,
+              "mapping_type": "value_chain_theme",
+              "direction_bias": "long",
+              "reason": "Defense proxy for conflict escalation"
+            },
+            {
+              "symbol": "USO",
+              "instrument_type": "etf",
+              "relevance_score": 0.72,
+              "mapping_confidence": 0.72,
+              "mapping_type": "value_chain_second_order",
+              "direction_bias": "long",
+              "reason": "Commodity spillover from conflict routes"
             }
           ],
           "primary_instrument": {
-            "symbol": "SPY",
+            "symbol": "SEA",
             "instrument_type": "etf",
             "direction_bias": "long",
-            "relevance_score": 0.517,
-            "mapping_confidence": 0.517
+            "relevance_score": 0.82,
+            "mapping_confidence": 0.82,
+            "mapping_type": "value_chain_theme",
+            "reason": "Shipping/logistics route sensitivity"
           },
-          "execution_bias": "caution",
+          "execution_bias": "allow",
           "risk_overlay_hint": "elevated_macro_volatility",
           "theme": "energy_infrastructure",
           "chain_layer": "industrial_inputs",
@@ -1071,12 +1175,10 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
           "structural_interpretation_confidence": 0.8,
-          "execution_priority": 0.545,
+          "execution_priority": 0.841,
           "dispatch_readiness": {
-            "ready": false,
-            "reasons": [
-              "mapping_confidence_too_low"
-            ]
+            "ready": true,
+            "reasons": []
           },
           "feedback_context": {
             "feedback_bias_points": -3.5,
@@ -1090,7 +1192,7 @@
           "research_score": 18.84
         },
         {
-          "candidate_id": "cand_5eb079c70775ac52",
+          "candidate_id": "cand_ca9b5d12d95f5ba1",
           "signal_id": "sig_68f20a13af5a8606",
           "signal_fingerprint": "sha256:4f8c3ee08d2b016c6cb548c879ffa772f4285505a249afed816c13833052e33e",
           "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -1130,23 +1232,43 @@
           ],
           "instrument_candidates": [
             {
-              "symbol": "SPY",
+              "symbol": "SEA",
               "instrument_type": "etf",
-              "relevance_score": 0.512,
-              "mapping_confidence": 0.512,
-              "mapping_type": "macro_proxy",
+              "relevance_score": 0.82,
+              "mapping_confidence": 0.82,
+              "mapping_type": "value_chain_theme",
               "direction_bias": "long",
-              "reason": "Fallback broad-market proxy for a macro signal"
+              "reason": "Shipping/logistics route sensitivity"
+            },
+            {
+              "symbol": "ITA",
+              "instrument_type": "etf",
+              "relevance_score": 0.76,
+              "mapping_confidence": 0.76,
+              "mapping_type": "value_chain_theme",
+              "direction_bias": "long",
+              "reason": "Defense proxy for conflict escalation"
+            },
+            {
+              "symbol": "USO",
+              "instrument_type": "etf",
+              "relevance_score": 0.72,
+              "mapping_confidence": 0.72,
+              "mapping_type": "value_chain_second_order",
+              "direction_bias": "long",
+              "reason": "Commodity spillover from conflict routes"
             }
           ],
           "primary_instrument": {
-            "symbol": "SPY",
+            "symbol": "SEA",
             "instrument_type": "etf",
             "direction_bias": "long",
-            "relevance_score": 0.512,
-            "mapping_confidence": 0.512
+            "relevance_score": 0.82,
+            "mapping_confidence": 0.82,
+            "mapping_type": "value_chain_theme",
+            "reason": "Shipping/logistics route sensitivity"
           },
-          "execution_bias": "caution",
+          "execution_bias": "allow",
           "risk_overlay_hint": "elevated_macro_volatility",
           "theme": "energy_infrastructure",
           "chain_layer": "industrial_inputs",
@@ -1164,12 +1286,10 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
           "structural_interpretation_confidence": 0.8,
-          "execution_priority": 0.514,
+          "execution_priority": 0.811,
           "dispatch_readiness": {
-            "ready": false,
-            "reasons": [
-              "mapping_confidence_too_low"
-            ]
+            "ready": true,
+            "reasons": []
           },
           "feedback_context": {
             "feedback_bias_points": -3.5,
@@ -1190,12 +1310,14 @@
       "chain_layer": "none_clear",
       "chain_sublayer": "none_clear",
       "candidate_count": 6,
-      "unique_symbol_count": 2,
+      "unique_symbol_count": 3,
       "symbols": [
+        "SH",
         "SPY",
         "UUP"
       ],
       "pair_trade_ready": false,
+      "pair_trade_style": "not_ready",
       "strongest": {
         "candidate_id": "cand_132df5503b643a59",
         "signal_id": "sig_b1dd2dd8dcc24df9",
@@ -1240,37 +1362,39 @@
           {
             "symbol": "UUP",
             "instrument_type": "etf",
-            "relevance_score": 0.74,
-            "mapping_confidence": 0.74,
-            "mapping_type": "macro_proxy",
+            "relevance_score": 0.81,
+            "mapping_confidence": 0.81,
+            "mapping_type": "value_chain_macro",
             "direction_bias": "long",
-            "reason": "Higher rates can support the dollar"
+            "reason": "Rates regime supports dollar / tightening proxy"
           },
           {
             "symbol": "TLT",
             "instrument_type": "etf",
-            "relevance_score": 0.72,
-            "mapping_confidence": 0.72,
-            "mapping_type": "macro_proxy",
+            "relevance_score": 0.78,
+            "mapping_confidence": 0.78,
+            "mapping_type": "value_chain_macro",
             "direction_bias": "short",
-            "reason": "Long-duration bonds are pressured by rising yields"
+            "reason": "Long-duration bonds pressured by rising rates"
           },
           {
             "symbol": "QQQ",
             "instrument_type": "etf",
-            "relevance_score": 0.63,
-            "mapping_confidence": 0.63,
-            "mapping_type": "second_order_negative",
+            "relevance_score": 0.66,
+            "mapping_confidence": 0.66,
+            "mapping_type": "value_chain_second_order",
             "direction_bias": "short",
-            "reason": "Higher discount rates pressure duration-heavy equities"
+            "reason": "Higher discount rates pressure growth duration"
           }
         ],
         "primary_instrument": {
           "symbol": "UUP",
           "instrument_type": "etf",
           "direction_bias": "long",
-          "relevance_score": 0.74,
-          "mapping_confidence": 0.74
+          "relevance_score": 0.81,
+          "mapping_confidence": 0.81,
+          "mapping_type": "value_chain_macro",
+          "reason": "Rates regime supports dollar / tightening proxy"
         },
         "execution_bias": "block",
         "risk_overlay_hint": "macro_event_risk",
@@ -1290,7 +1414,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
         "structural_interpretation_confidence": 0.68,
-        "execution_priority": 0.642,
+        "execution_priority": 0.66,
         "dispatch_readiness": {
           "ready": false,
           "reasons": [
@@ -1309,15 +1433,15 @@
         "research_score": 11.04
       },
       "weakest": {
-        "candidate_id": "cand_0dbae2d4e99ca0c5",
-        "signal_id": "sig_8633acc564289a74",
-        "signal_fingerprint": "sha256:14e34c07780931a9642410787dcdee25df5cd6566a178af6eccab34eccbf828e",
+        "candidate_id": "cand_f9f13c7151d8e4b4",
+        "signal_id": "sig_89b4cb71d26d1d7e",
+        "signal_fingerprint": "sha256:24d5fc3b7dd42341dab530fac879052e6e3d4ff20c9eecfd03fc9fda9ef3e1fa",
         "generated_at": "2026-03-23T17:09:20.779774Z",
         "source_type": "rss",
-        "source_feed": "Reuters_Finance",
-        "source_title": "Goldman Sachs expects ECB rate hikes in April and June as inflation concerns mou",
-        "source_url": "https://www.reuters.com/business/finance/goldman-sachs-expects-ecb-rate-hikes-april-june-inflation-concerns-mount-2026-03-23/",
-        "source_timestamp": "2026-03-23T17:09:20.779549",
+        "source_feed": "Deltaone",
+        "source_title": "\ud83d\udcc8RECESSION FEARS RISE AGAIN Recession odds have jumped to 36.9%, rebounding shar",
+        "source_url": "https://x.com/DeItaone/status/2035750856503570480",
+        "source_timestamp": "2026-03-23T17:09:20.779630",
         "pattern_id": "p014",
         "pattern_name": "US Credit Rating Downgrade",
         "category": "macroeconomic",
@@ -1337,54 +1461,57 @@
           "feedback_sample_size": 15
         },
         "evidence_strength": 0.821,
-        "signal_briefing": "March 2022 rate hikes crushed tech (down 30% that year). Rate hikes typically pressure growth stocks and rate-sensitive sectors. Dollar strengthens on yield differential. Bond yields climb.",
+        "signal_briefing": "",
         "predicted_outcomes": [
-          "front_end_yield_move",
-          "usd_trend_shift",
-          "growth_value_rotation"
+          "rates_volatility",
+          "fx_move",
+          "equity_factor_rotation"
         ],
         "predicted_causal_chain": [
-          "Inflation/rates surprise",
-          "Bond market reprices terminal rate",
-          "Equity duration factor moves"
+          "Macro print/policy signal",
+          "Rates reprice",
+          "USD and yields react",
+          "Risk assets rotate"
         ],
         "instrument_candidates": [
           {
-            "symbol": "UUP",
+            "symbol": "SH",
             "instrument_type": "etf",
             "relevance_score": 0.74,
             "mapping_confidence": 0.74,
-            "mapping_type": "macro_proxy",
+            "mapping_type": "value_chain_macro",
             "direction_bias": "long",
-            "reason": "Higher rates can support the dollar"
+            "reason": "Recession hedge proxy"
           },
           {
             "symbol": "TLT",
             "instrument_type": "etf",
-            "relevance_score": 0.72,
-            "mapping_confidence": 0.72,
-            "mapping_type": "macro_proxy",
-            "direction_bias": "short",
-            "reason": "Long-duration bonds are pressured by rising yields"
+            "relevance_score": 0.68,
+            "mapping_confidence": 0.68,
+            "mapping_type": "value_chain_macro",
+            "direction_bias": "long",
+            "reason": "Flight-to-safety duration proxy"
           },
           {
-            "symbol": "QQQ",
+            "symbol": "SPY",
             "instrument_type": "etf",
-            "relevance_score": 0.63,
-            "mapping_confidence": 0.63,
-            "mapping_type": "second_order_negative",
-            "direction_bias": "short",
-            "reason": "Higher discount rates pressure duration-heavy equities"
+            "relevance_score": 0.525,
+            "mapping_confidence": 0.525,
+            "mapping_type": "macro_proxy",
+            "direction_bias": "long",
+            "reason": "Fallback broad-market proxy for a macro signal"
           }
         ],
         "primary_instrument": {
-          "symbol": "UUP",
+          "symbol": "SH",
           "instrument_type": "etf",
           "direction_bias": "long",
           "relevance_score": 0.74,
-          "mapping_confidence": 0.74
+          "mapping_confidence": 0.74,
+          "mapping_type": "value_chain_macro",
+          "reason": "Recession hedge proxy"
         },
-        "execution_bias": "block",
+        "execution_bias": "allow",
         "risk_overlay_hint": "macro_event_risk",
         "theme": "macro_rates_regime",
         "chain_layer": "none_clear",
@@ -1402,12 +1529,10 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
         "structural_interpretation_confidence": 0.68,
-        "execution_priority": 0.613,
+        "execution_priority": 0.833,
         "dispatch_readiness": {
-          "ready": false,
-          "reasons": [
-            "mapping_too_ambiguous"
-          ]
+          "ready": true,
+          "reasons": []
         },
         "feedback_context": {
           "feedback_bias_points": 7.5,
@@ -1421,7 +1546,7 @@
         "research_score": 10.86
       },
       "strongest_symbol": "UUP",
-      "weakest_symbol": "UUP",
+      "weakest_symbol": "SH",
       "top_candidates": [
         {
           "candidate_id": "cand_132df5503b643a59",
@@ -1467,37 +1592,39 @@
             {
               "symbol": "UUP",
               "instrument_type": "etf",
-              "relevance_score": 0.74,
-              "mapping_confidence": 0.74,
-              "mapping_type": "macro_proxy",
+              "relevance_score": 0.81,
+              "mapping_confidence": 0.81,
+              "mapping_type": "value_chain_macro",
               "direction_bias": "long",
-              "reason": "Higher rates can support the dollar"
+              "reason": "Rates regime supports dollar / tightening proxy"
             },
             {
               "symbol": "TLT",
               "instrument_type": "etf",
-              "relevance_score": 0.72,
-              "mapping_confidence": 0.72,
-              "mapping_type": "macro_proxy",
+              "relevance_score": 0.78,
+              "mapping_confidence": 0.78,
+              "mapping_type": "value_chain_macro",
               "direction_bias": "short",
-              "reason": "Long-duration bonds are pressured by rising yields"
+              "reason": "Long-duration bonds pressured by rising rates"
             },
             {
               "symbol": "QQQ",
               "instrument_type": "etf",
-              "relevance_score": 0.63,
-              "mapping_confidence": 0.63,
-              "mapping_type": "second_order_negative",
+              "relevance_score": 0.66,
+              "mapping_confidence": 0.66,
+              "mapping_type": "value_chain_second_order",
               "direction_bias": "short",
-              "reason": "Higher discount rates pressure duration-heavy equities"
+              "reason": "Higher discount rates pressure growth duration"
             }
           ],
           "primary_instrument": {
             "symbol": "UUP",
             "instrument_type": "etf",
             "direction_bias": "long",
-            "relevance_score": 0.74,
-            "mapping_confidence": 0.74
+            "relevance_score": 0.81,
+            "mapping_confidence": 0.81,
+            "mapping_type": "value_chain_macro",
+            "reason": "Rates regime supports dollar / tightening proxy"
           },
           "execution_bias": "block",
           "risk_overlay_hint": "macro_event_risk",
@@ -1517,7 +1644,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
           "structural_interpretation_confidence": 0.68,
-          "execution_priority": 0.642,
+          "execution_priority": 0.66,
           "dispatch_readiness": {
             "ready": false,
             "reasons": [
@@ -1534,6 +1661,119 @@
             "shadow_signal_score": 200.0
           },
           "research_score": 11.04
+        },
+        {
+          "candidate_id": "cand_f9f13c7151d8e4b4",
+          "signal_id": "sig_89b4cb71d26d1d7e",
+          "signal_fingerprint": "sha256:24d5fc3b7dd42341dab530fac879052e6e3d4ff20c9eecfd03fc9fda9ef3e1fa",
+          "generated_at": "2026-03-23T17:09:20.779774Z",
+          "source_type": "rss",
+          "source_feed": "Deltaone",
+          "source_title": "\ud83d\udcc8RECESSION FEARS RISE AGAIN Recession odds have jumped to 36.9%, rebounding shar",
+          "source_url": "https://x.com/DeItaone/status/2035750856503570480",
+          "source_timestamp": "2026-03-23T17:09:20.779630",
+          "pattern_id": "p014",
+          "pattern_name": "US Credit Rating Downgrade",
+          "category": "macroeconomic",
+          "historical_confidence": "HIGH",
+          "confidence_level": "STRONG BUY",
+          "reasoning_score": 87.5,
+          "signal_score": 200.0,
+          "recommendation": "TAKE",
+          "expected_horizon": "short-term",
+          "reasoning": "moderate source, strong historical pattern match.",
+          "reasoning_components": {
+            "source_credibility": 50.0,
+            "pattern_strength": 90.0,
+            "time_horizon_fit": 100.0,
+            "base_score": 80.0,
+            "feedback_bias_points": 7.5,
+            "feedback_sample_size": 15
+          },
+          "evidence_strength": 0.821,
+          "signal_briefing": "",
+          "predicted_outcomes": [
+            "rates_volatility",
+            "fx_move",
+            "equity_factor_rotation"
+          ],
+          "predicted_causal_chain": [
+            "Macro print/policy signal",
+            "Rates reprice",
+            "USD and yields react",
+            "Risk assets rotate"
+          ],
+          "instrument_candidates": [
+            {
+              "symbol": "SH",
+              "instrument_type": "etf",
+              "relevance_score": 0.74,
+              "mapping_confidence": 0.74,
+              "mapping_type": "value_chain_macro",
+              "direction_bias": "long",
+              "reason": "Recession hedge proxy"
+            },
+            {
+              "symbol": "TLT",
+              "instrument_type": "etf",
+              "relevance_score": 0.68,
+              "mapping_confidence": 0.68,
+              "mapping_type": "value_chain_macro",
+              "direction_bias": "long",
+              "reason": "Flight-to-safety duration proxy"
+            },
+            {
+              "symbol": "SPY",
+              "instrument_type": "etf",
+              "relevance_score": 0.525,
+              "mapping_confidence": 0.525,
+              "mapping_type": "macro_proxy",
+              "direction_bias": "long",
+              "reason": "Fallback broad-market proxy for a macro signal"
+            }
+          ],
+          "primary_instrument": {
+            "symbol": "SH",
+            "instrument_type": "etf",
+            "direction_bias": "long",
+            "relevance_score": 0.74,
+            "mapping_confidence": 0.74,
+            "mapping_type": "value_chain_macro",
+            "reason": "Recession hedge proxy"
+          },
+          "execution_bias": "allow",
+          "risk_overlay_hint": "macro_event_risk",
+          "theme": "macro_rates_regime",
+          "chain_layer": "none_clear",
+          "chain_sublayer": "none_clear",
+          "theme_maturity": "none_clear",
+          "bottleneck_type": "financing",
+          "moat_type": "none_clear",
+          "fragility_type": "financing_dependent",
+          "supplier_status": "none_clear",
+          "position_in_chain": "none_clear",
+          "beneficiary_class": "high_margin_infra_leader",
+          "loser_class": "financing_dependent_scaler",
+          "pair_trade_candidate": true,
+          "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+          "valuation_context": "valuation_unknown",
+          "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+          "structural_interpretation_confidence": 0.68,
+          "execution_priority": 0.833,
+          "dispatch_readiness": {
+            "ready": true,
+            "reasons": []
+          },
+          "feedback_context": {
+            "feedback_bias_points": 7.5,
+            "feedback_sample_size": 15,
+            "tracked_take_ratio": 0.889,
+            "tracked_sample_size": 9,
+            "ab_enriched_lift": 3,
+            "shadow_confirmation": true,
+            "shadow_signal_score": 200.0
+          },
+          "research_score": 10.86
         },
         {
           "candidate_id": "cand_0dbae2d4e99ca0c5",
@@ -1579,37 +1819,39 @@
             {
               "symbol": "UUP",
               "instrument_type": "etf",
-              "relevance_score": 0.74,
-              "mapping_confidence": 0.74,
-              "mapping_type": "macro_proxy",
+              "relevance_score": 0.81,
+              "mapping_confidence": 0.81,
+              "mapping_type": "value_chain_macro",
               "direction_bias": "long",
-              "reason": "Higher rates can support the dollar"
+              "reason": "Rates regime supports dollar / tightening proxy"
             },
             {
               "symbol": "TLT",
               "instrument_type": "etf",
-              "relevance_score": 0.72,
-              "mapping_confidence": 0.72,
-              "mapping_type": "macro_proxy",
+              "relevance_score": 0.78,
+              "mapping_confidence": 0.78,
+              "mapping_type": "value_chain_macro",
               "direction_bias": "short",
-              "reason": "Long-duration bonds are pressured by rising yields"
+              "reason": "Long-duration bonds pressured by rising rates"
             },
             {
               "symbol": "QQQ",
               "instrument_type": "etf",
-              "relevance_score": 0.63,
-              "mapping_confidence": 0.63,
-              "mapping_type": "second_order_negative",
+              "relevance_score": 0.66,
+              "mapping_confidence": 0.66,
+              "mapping_type": "value_chain_second_order",
               "direction_bias": "short",
-              "reason": "Higher discount rates pressure duration-heavy equities"
+              "reason": "Higher discount rates pressure growth duration"
             }
           ],
           "primary_instrument": {
             "symbol": "UUP",
             "instrument_type": "etf",
             "direction_bias": "long",
-            "relevance_score": 0.74,
-            "mapping_confidence": 0.74
+            "relevance_score": 0.81,
+            "mapping_confidence": 0.81,
+            "mapping_type": "value_chain_macro",
+            "reason": "Rates regime supports dollar / tightening proxy"
           },
           "execution_bias": "block",
           "risk_overlay_hint": "macro_event_risk",
@@ -1629,120 +1871,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
           "structural_interpretation_confidence": 0.68,
-          "execution_priority": 0.613,
-          "dispatch_readiness": {
-            "ready": false,
-            "reasons": [
-              "mapping_too_ambiguous"
-            ]
-          },
-          "feedback_context": {
-            "feedback_bias_points": 7.5,
-            "feedback_sample_size": 15,
-            "tracked_take_ratio": 0.889,
-            "tracked_sample_size": 9,
-            "ab_enriched_lift": 3,
-            "shadow_confirmation": true,
-            "shadow_signal_score": 200.0
-          },
-          "research_score": 10.86
-        },
-        {
-          "candidate_id": "cand_6ac4f2eb5b8ac333",
-          "signal_id": "sig_41c8f715f6233c98",
-          "signal_fingerprint": "sha256:8e3eb3fb7a1a29e9232757801da197365292b3ddb070b913f88d70c061abf9d0",
-          "generated_at": "2026-03-23T17:09:20.779774Z",
-          "source_type": "rss",
-          "source_feed": "Business_Bloomberg",
-          "source_title": "Japan\u2019s largest labor union group said its workers secured an average pay hike e",
-          "source_url": "https://x.com/business/status/2035987507725152498",
-          "source_timestamp": "2026-03-23T17:09:20.779465",
-          "pattern_id": "p014",
-          "pattern_name": "US Credit Rating Downgrade",
-          "category": "macroeconomic",
-          "historical_confidence": "HIGH",
-          "confidence_level": "STRONG BUY",
-          "reasoning_score": 87.5,
-          "signal_score": 200.0,
-          "recommendation": "TAKE",
-          "expected_horizon": "short-term",
-          "reasoning": "moderate source, strong historical pattern match.",
-          "reasoning_components": {
-            "source_credibility": 50.0,
-            "pattern_strength": 90.0,
-            "time_horizon_fit": 100.0,
-            "base_score": 80.0,
-            "feedback_bias_points": 7.5,
-            "feedback_sample_size": 15
-          },
-          "evidence_strength": 0.821,
-          "signal_briefing": "",
-          "predicted_outcomes": [
-            "rates_volatility",
-            "fx_move",
-            "equity_factor_rotation"
-          ],
-          "predicted_causal_chain": [
-            "Macro print/policy signal",
-            "Rates reprice",
-            "USD and yields react",
-            "Risk assets rotate"
-          ],
-          "instrument_candidates": [
-            {
-              "symbol": "UUP",
-              "instrument_type": "etf",
-              "relevance_score": 0.74,
-              "mapping_confidence": 0.74,
-              "mapping_type": "macro_proxy",
-              "direction_bias": "long",
-              "reason": "Higher rates can support the dollar"
-            },
-            {
-              "symbol": "TLT",
-              "instrument_type": "etf",
-              "relevance_score": 0.72,
-              "mapping_confidence": 0.72,
-              "mapping_type": "macro_proxy",
-              "direction_bias": "short",
-              "reason": "Long-duration bonds are pressured by rising yields"
-            },
-            {
-              "symbol": "QQQ",
-              "instrument_type": "etf",
-              "relevance_score": 0.63,
-              "mapping_confidence": 0.63,
-              "mapping_type": "second_order_negative",
-              "direction_bias": "short",
-              "reason": "Higher discount rates pressure duration-heavy equities"
-            }
-          ],
-          "primary_instrument": {
-            "symbol": "UUP",
-            "instrument_type": "etf",
-            "direction_bias": "long",
-            "relevance_score": 0.74,
-            "mapping_confidence": 0.74
-          },
-          "execution_bias": "block",
-          "risk_overlay_hint": "macro_event_risk",
-          "theme": "macro_rates_regime",
-          "chain_layer": "none_clear",
-          "chain_sublayer": "none_clear",
-          "theme_maturity": "none_clear",
-          "bottleneck_type": "financing",
-          "moat_type": "none_clear",
-          "fragility_type": "financing_dependent",
-          "supplier_status": "none_clear",
-          "position_in_chain": "none_clear",
-          "beneficiary_class": "high_margin_infra_leader",
-          "loser_class": "financing_dependent_scaler",
-          "pair_trade_candidate": true,
-          "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-          "valuation_context": "valuation_unknown",
-          "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-          "structural_interpretation_confidence": 0.68,
-          "execution_priority": 0.613,
+          "execution_priority": 0.631,
           "dispatch_readiness": {
             "ready": false,
             "reasons": [
