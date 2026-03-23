@@ -5,6 +5,7 @@ Generates actionable market signals
 """
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -54,8 +55,48 @@ class SignalGenerator:
             parts = [alert.get('title', ''), alert.get('summary', '')]
         return ' '.join(p for p in parts if p).lower()
 
+    def _clean_reddit_enrichment_text(self, text: str) -> str:
+        """Strip common Reddit enrichment boilerplate/noise before matching."""
+        if not text:
+            return ''
+        cleaned = text
+        boilerplate_patterns = [
+            r'\*\*user report\*\*[\s\S]*?(?:discord\.gg/\S+)?',
+            r'join wsb discord',
+            r'first seen in wsb',
+            r'total submissions',
+            r'total comments',
+            r'previous best dd',
+            r'account age',
+            r'this post contains content not supported on old reddit.*',
+        ]
+        for pat in boilerplate_patterns:
+            cleaned = re.sub(pat, ' ', cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r'https?://\S+', ' ', cleaned)
+        cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+        return cleaned
+
     def _alert_text_enriched(self, alert: Dict) -> str:
-        """Enriched matching corpus with backward-compatible fallback fields."""
+        """Enriched matching corpus with Reddit-specific noise control."""
+        source = (alert.get('source') or '').lower()
+        is_reddit = source == 'reddit' or 'subreddit' in alert
+
+        if is_reddit:
+            parts = [
+                alert.get('title', ''),
+                alert.get('selftext_snippet', '') or alert.get('selftext', ''),
+                alert.get('article_excerpt', ''),
+                alert.get('top_comment_snippet', ''),
+            ]
+            cleaned_parts = []
+            seen = set()
+            for part in parts:
+                cleaned = self._clean_reddit_enrichment_text(str(part))
+                if cleaned and cleaned not in seen:
+                    cleaned_parts.append(cleaned)
+                    seen.add(cleaned)
+            return ' '.join(cleaned_parts).lower()
+
         parts = [
             alert.get('title', ''),
             alert.get('summary', ''),
@@ -108,11 +149,11 @@ class SignalGenerator:
             },
             'p005': {  # GameStop - expanded meme/sentiment coverage
                 'keywords': [
-                    'gme', 'gamestop', 'wallstreetbets', 'wsb', 'short squeeze', 'meme stock',
+                    'gme', 'gamestop', 'short squeeze', 'meme stock',
                     'gamma squeeze', 'call buying frenzy', 'retail traders pile', 'days to cover',
                     'amc', 'bbby', 'bed bath', 'robinhood', 'meme rally', 'reddit rally',
                     'short interest', 'navy', 'chewy', 'retail investors', 'options call',
-                    'calls surge', 'volume surge', 'trending', 'meme basket'
+                    'calls surge', 'volume surge', 'meme basket'
                 ],
                 'exclude': ['real estate', 'housing'],
                 'weight': 3
