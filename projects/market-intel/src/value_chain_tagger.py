@@ -87,6 +87,60 @@ _PATTERN_DEFAULTS: dict[str, dict[str, Any]] = {
         "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
         "structural_interpretation_confidence": 0.68,
     },
+    "p055_future_medical_imaging": {
+        "theme": "healthcare_equipment",
+        "chain_layer": "medtech_systems",
+        "chain_sublayer": "imaging_diagnostics",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "switching_cost",
+        "moat_type": "preferred_vendor",
+        "fragility_type": NONE_CLEAR,
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "ecosystem_owner",
+        "loser_class": "weak_supplier_without_moat",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Imaging and diagnostics leaders with installed base, service, and workflow lock-in should outperform lower-purity device exposure.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Healthcare equipment should distinguish installed-base imaging and diagnostics systems from broader medtech exposure.",
+        "structural_interpretation_confidence": 0.78,
+    },
+    "p056_future_surgical_systems": {
+        "theme": "healthcare_equipment",
+        "chain_layer": "medtech_systems",
+        "chain_sublayer": "surgical_systems",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "switching_cost",
+        "moat_type": "preferred_vendor",
+        "fragility_type": "execution_risk",
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "ecosystem_owner",
+        "loser_class": "weak_supplier_without_moat",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Robotic and procedural platform leaders with training and workflow lock-in should outperform broader lower-purity device names.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Surgical systems are platform businesses with procedure pull-through, not generic healthcare hardware.",
+        "structural_interpretation_confidence": 0.79,
+    },
+    "p057_future_medtech_consumables": {
+        "theme": "healthcare_equipment",
+        "chain_layer": "medtech_components",
+        "chain_sublayer": "tools_consumables",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "software_ecosystem",
+        "moat_type": "preferred_vendor",
+        "fragility_type": NONE_CLEAR,
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "bottleneck_supplier",
+        "loser_class": "low_margin_integrator",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Recurring tools, diagnostics consumables, and procedure-linked medtech suppliers tend to hold better economics than broader undifferentiated equipment exposure.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Recurring medtech tools and consumables deserve separate treatment from big-ticket system vendors.",
+        "structural_interpretation_confidence": 0.76,
+    },
     "p052_future_defense_munitions": {
         "theme": "defense_supply_chain",
         "chain_layer": "defense_subsystems",
@@ -513,6 +567,15 @@ def _infer_from_text(signal: dict[str, Any]) -> dict[str, Any]:
 
     if any(term in context_text for term in ("shipyard", "naval shipbuilding", "destroyer", "frigate", "submarine", "navy fleet", "surface combatant", "huntington ingalls", "general dynamics electric boat")):
         return _with_defaults(_PATTERN_DEFAULTS["p054_future_naval_shipbuilding"])
+
+    if any(term in context_text for term in ("mri", "ct scanner", "ultrasound", "mammography", "molecular imaging", "lab diagnostics", "diagnostic imaging", "siemens healthineers", "ge healthcare", "philips healthcare", "diagnostics platform")):
+        return _with_defaults(_PATTERN_DEFAULTS["p055_future_medical_imaging"])
+
+    if any(term in context_text for term in ("da vinci", "robotic surgery", "surgical robot", "orthopedic robot", "ma ko", "intuitive surgical", "stryker surgical", "minimally invasive surgery")):
+        return _with_defaults(_PATTERN_DEFAULTS["p056_future_surgical_systems"])
+
+    if any(term in context_text for term in ("diagnostic consumable", "reagent", "assay", "catheter", "stent", "endoscopy tool", "procedure tool", "boston scientific", "abbott device", "danaher diagnostics", "bd medical")):
+        return _with_defaults(_PATTERN_DEFAULTS["p057_future_medtech_consumables"])
 
     if any(term in context_text for term in ("cognex", "keyence", "machine vision", "vision sensor", "vision inspection", "industrial camera", "sensing system")):
         return _with_defaults(_PATTERN_DEFAULTS["p050_future_machine_vision"])

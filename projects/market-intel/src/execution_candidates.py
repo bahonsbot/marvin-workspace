@@ -130,6 +130,18 @@ COMPANY_TICKER = {
     "emerson": "EMR",
     "cognex": "CGNX",
     "keyence": "KYCCF",
+    "intuitive surgical": "ISRG",
+    "stryker": "SYK",
+    "ge healthcare": "GEHC",
+    "siemens healthineers": "SMMNY",
+    "philips": "PHG",
+    "philips healthcare": "PHG",
+    "abbott": "ABT",
+    "boston scientific": "BSX",
+    "danaher": "DHR",
+    "becton dickinson": "BDX",
+    "bd": "BDX",
+    "medtronic": "MDT",
 }
 
 THEME_CANDIDATES = [
@@ -489,6 +501,8 @@ def detect_company_candidates(title: str) -> list[InstrumentCandidate]:
     title_norm = normalize_text(title)
     matches = []
     for name, ticker in COMPANY_TICKER.items():
+        if name == "siemens" and "siemens healthineers" in title_norm:
+            continue
         if re.search(rf"(^|[^a-z0-9]){re.escape(name)}([^a-z0-9]|$)", title_norm):
             direction = "long"
             negative_title = False
@@ -685,6 +699,26 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         add("LHX", "equity", 0.68, "value_chain_second_order", "long", "Naval electronics and mission-systems overlap")
         add("BA", "equity", 0.64, "value_chain_operator", "short", "Commercial aerospace mix is less advantaged than scarce naval-yard capacity")
         add("ITA", "etf", 0.60, "value_chain_theme", "long", "Broad defense-sector proxy")
+
+    if theme == "healthcare_equipment" and layer == "medtech_systems" and sublayer == "imaging_diagnostics":
+        add("GEHC", "equity", 0.84, "value_chain_operator", "long", "Installed-base imaging and diagnostics exposure")
+        add("SMMNY", "equity", 0.82, "value_chain_operator", "long", "Imaging and diagnostics systems leader")
+        add("PHG", "equity", 0.72, "value_chain_operator", "long", "Imaging workflow and patient-monitoring exposure")
+        add("ABT", "equity", 0.68, "value_chain_second_order", "long", "Diagnostics-platform overlap")
+        add("MDT", "equity", 0.64, "value_chain_operator", "short", "Broader device exposure is less pure than imaging/diagnostics leaders")
+
+    if theme == "healthcare_equipment" and layer == "medtech_systems" and sublayer == "surgical_systems":
+        add("ISRG", "equity", 0.86, "value_chain_operator", "long", "Robotic surgery platform leader")
+        add("SYK", "equity", 0.80, "value_chain_operator", "long", "Orthopedic and procedural platform exposure")
+        add("MDT", "equity", 0.70, "value_chain_second_order", "long", "Broader procedural-device overlap")
+        add("BSX", "equity", 0.66, "value_chain_operator", "short", "Procedure exposure is less platform-locked than surgical-system leaders")
+
+    if theme == "healthcare_equipment" and layer == "medtech_components" and sublayer == "tools_consumables":
+        add("DHR", "equity", 0.84, "value_chain_operator", "long", "Diagnostics tools and recurring consumables exposure")
+        add("ABT", "equity", 0.78, "value_chain_operator", "long", "Recurring diagnostics and device consumables exposure")
+        add("BDX", "equity", 0.76, "value_chain_operator", "long", "Procedure tools and recurring medtech supplies exposure")
+        add("BSX", "equity", 0.70, "value_chain_operator", "long", "Procedure-device and consumables exposure")
+        add("PHG", "equity", 0.62, "value_chain_operator", "short", "Lower recurring-consumables purity than tools/diagnostics leaders")
 
     if theme == "macro_rates_regime":
         if any(term in title for term in ("rate hike", "rate hikes", "raise rates", "yield", "inflation", "ecb", "fed")):
