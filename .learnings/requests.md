@@ -90,3 +90,12 @@ Capabilities the user wanted but don't exist.
 
 **Priority:** high
 **Status:** pending / planned
+
+## [FEAT-20260323-2245]
+
+**Requested:** for the future Mission Control trading/dashboard direction, support a regularly refreshed market-context layer using free/open-access data where viable, especially index snapshots and commodities snapshots, and only pursue winners/losers if the scope can be kept honest and source quality is good enough without paid vendor subscriptions.
+**Why needed:** Philippe wants parts of the visual market overview style from reference dashboards, but only if the data can be sourced honestly without subscription-heavy infrastructure. The feature should stay snapshot/research-first rather than pretending to be an institutional realtime terminal.
+**Complexity:** medium
+
+**Priority:** medium-high
+**Status:** pending / planned
