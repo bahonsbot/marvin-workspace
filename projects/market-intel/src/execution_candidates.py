@@ -78,6 +78,14 @@ COMPANY_TICKER = {
     "american airlines": "AAL",
     "eaton": "ETN",
     "trane": "TT",
+    "quanta": "PWR",
+    "quanta services": "PWR",
+    "nrg": "NRG",
+    "constellation energy": "CEG",
+    "vistra": "VST",
+    "siemens energy": "SMNEY",
+    "ge vernova": "GEV",
+    "hubbell": "HUBB",
     "johnson controls": "JCI",
     "carrier": "CARR",
     "dell": "DELL",
@@ -609,6 +617,16 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         add("FANUY", "equity", 0.72, "value_chain_operator", "long", "Factory robotics leader exposure")
         add("CAT", "equity", 0.66, "value_chain_operator", "short", "Lower-software, heavier-cycle industrial hardware exposure")
         add("DE", "equity", 0.63, "value_chain_operator", "short", "Machinery exposure less advantaged than preferred automation vendors")
+
+    if theme == "energy_infrastructure" and sublayer == "grid_power_equipment":
+        add("ETN", "equity", 0.86, "value_chain_operator", "long", "Power management and electrical infrastructure leader")
+        add("PWR", "equity", 0.82, "value_chain_operator", "long", "Grid buildout and transmission infrastructure leader")
+        add("GEV", "equity", 0.78, "value_chain_operator", "long", "Grid and generation equipment exposure")
+        add("HUBB", "equity", 0.74, "value_chain_operator", "long", "Transmission and distribution equipment exposure")
+        add("SBGSY", "equity", 0.72, "value_chain_operator", "long", "Power equipment and grid management exposure")
+        add("NRG", "equity", 0.68, "value_chain_operator", "short", "Power buyer/exposure with less bottleneck-vendor advantage")
+        add("VST", "equity", 0.66, "value_chain_operator", "short", "Generation exposure less advantaged than equipment bottlenecks")
+        add("XLU", "etf", 0.60, "value_chain_theme", "long", "Utility/grid broad proxy")
 
     if theme == "macro_rates_regime":
         if any(term in title for term in ("rate hike", "rate hikes", "raise rates", "yield", "inflation", "ecb", "fed")):

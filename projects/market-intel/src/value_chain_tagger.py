@@ -87,6 +87,24 @@ _PATTERN_DEFAULTS: dict[str, dict[str, Any]] = {
         "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
         "structural_interpretation_confidence": 0.68,
     },
+    "p049_future_energy_infra": {
+        "theme": "energy_infrastructure",
+        "chain_layer": "industrial_inputs",
+        "chain_sublayer": "grid_power_equipment",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "energy",
+        "moat_type": "preferred_vendor",
+        "fragility_type": NONE_CLEAR,
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "bottleneck_supplier",
+        "loser_class": "low_margin_integrator",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Grid and power-equipment bottlenecks favor preferred infrastructure vendors over downstream users exposed to delays and capex pressure.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "This is an energy-infrastructure bottleneck signal where grid equipment, transformers, switchgear, and power management matter more than broad utility headlines.",
+        "structural_interpretation_confidence": 0.79,
+    },
     "p047_future_rare_earths": {
         "theme": "rare_earth_supply",
         "chain_layer": "raw_materials",
@@ -390,6 +408,9 @@ def _infer_from_text(signal: dict[str, Any]) -> dict[str, Any]:
         return _with_defaults(_PATTERN_DEFAULTS["p037"])
     if any(term in context_text for term in ("trade down", "essentials over discretionary", "retail margin")):
         return _with_defaults(_PATTERN_DEFAULTS["p041"])
+
+    if any(term in context_text for term in ("transformer", "switchgear", "substation", "grid equipment", "grid modernization", "transmission line", "electrical infrastructure", "power management", "distribution equipment", "eaton", "schneider electric", "hitachi energy", "siemens energy", "grid bottleneck")):
+        return _with_defaults(_PATTERN_DEFAULTS["p049_future_energy_infra"])
 
     if any(term in context_text for term in ("rare earth", "rare-earth", "rare earths", "neodymium", "praseodymium", "dysprosium", "terbium", "magnet materials", "magnet metal", "separation plant", "critical minerals", "processing facility", "mp materials", "lynas", "energy fuels")):
         return _with_defaults(_PATTERN_DEFAULTS["p047_future_rare_earths"])
