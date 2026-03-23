@@ -30,10 +30,12 @@
       "operator_symbols": [
         "ANET",
         "AVGO",
-        "NVDA"
+        "INTC",
+        "NVDA",
+        "TSM"
       ],
-      "pair_trade_ready": false,
-      "pair_trade_style": "not_ready",
+      "pair_trade_ready": true,
+      "pair_trade_style": "operator_pool_pair",
       "strongest": {
         "candidate_id": "cand_ecf5520ee2565aba",
         "signal_id": "sig_479bb2e1deb4dd9f",
@@ -86,6 +88,15 @@
             "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
           },
           {
+            "symbol": "AVGO",
+            "instrument_type": "equity",
+            "relevance_score": 0.82,
+            "mapping_confidence": 0.82,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "AI networking/custom silicon operator"
+          },
+          {
             "symbol": "SOXX",
             "instrument_type": "etf",
             "relevance_score": 0.82,
@@ -95,40 +106,31 @@
             "reason": "Semiconductor sector proxy"
           },
           {
-            "symbol": "AVGO",
-            "instrument_type": "equity",
-            "relevance_score": 0.78,
-            "mapping_confidence": 0.78,
-            "mapping_type": "value_chain_operator",
-            "direction_bias": "long",
-            "reason": "AI networking/custom silicon operator"
-          },
-          {
             "symbol": "ANET",
             "instrument_type": "equity",
-            "relevance_score": 0.72,
-            "mapping_confidence": 0.72,
+            "relevance_score": 0.79,
+            "mapping_confidence": 0.79,
             "mapping_type": "value_chain_operator",
             "direction_bias": "long",
             "reason": "AI network fabric beneficiary"
           },
           {
-            "symbol": "XLK",
-            "instrument_type": "etf",
-            "relevance_score": 0.66,
-            "mapping_confidence": 0.66,
-            "mapping_type": "sector_proxy",
+            "symbol": "TSM",
+            "instrument_type": "equity",
+            "relevance_score": 0.76,
+            "mapping_confidence": 0.76,
+            "mapping_type": "value_chain_operator",
             "direction_bias": "long",
-            "reason": "Broader technology spillover"
+            "reason": "Foundry leverage to advanced AI silicon"
           },
           {
-            "symbol": "SPY",
-            "instrument_type": "etf",
-            "relevance_score": 0.482,
-            "mapping_confidence": 0.482,
-            "mapping_type": "macro_proxy",
-            "direction_bias": "long",
-            "reason": "Fallback broad-market proxy for a macro signal"
+            "symbol": "INTC",
+            "instrument_type": "equity",
+            "relevance_score": 0.74,
+            "mapping_confidence": 0.74,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "short",
+            "reason": "Structurally weaker AI design/foundry position"
           }
         ],
         "primary_instrument": {
@@ -229,6 +231,15 @@
             "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
           },
           {
+            "symbol": "AVGO",
+            "instrument_type": "equity",
+            "relevance_score": 0.82,
+            "mapping_confidence": 0.82,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "AI networking/custom silicon operator"
+          },
+          {
             "symbol": "SOXX",
             "instrument_type": "etf",
             "relevance_score": 0.82,
@@ -238,40 +249,31 @@
             "reason": "Semiconductor sector proxy"
           },
           {
-            "symbol": "AVGO",
-            "instrument_type": "equity",
-            "relevance_score": 0.78,
-            "mapping_confidence": 0.78,
-            "mapping_type": "value_chain_operator",
-            "direction_bias": "long",
-            "reason": "AI networking/custom silicon operator"
-          },
-          {
             "symbol": "ANET",
             "instrument_type": "equity",
-            "relevance_score": 0.72,
-            "mapping_confidence": 0.72,
+            "relevance_score": 0.79,
+            "mapping_confidence": 0.79,
             "mapping_type": "value_chain_operator",
             "direction_bias": "long",
             "reason": "AI network fabric beneficiary"
           },
           {
-            "symbol": "XLK",
-            "instrument_type": "etf",
-            "relevance_score": 0.66,
-            "mapping_confidence": 0.66,
-            "mapping_type": "sector_proxy",
+            "symbol": "TSM",
+            "instrument_type": "equity",
+            "relevance_score": 0.76,
+            "mapping_confidence": 0.76,
+            "mapping_type": "value_chain_operator",
             "direction_bias": "long",
-            "reason": "Broader technology spillover"
+            "reason": "Foundry leverage to advanced AI silicon"
           },
           {
-            "symbol": "SPY",
-            "instrument_type": "etf",
-            "relevance_score": 0.482,
-            "mapping_confidence": 0.482,
-            "mapping_type": "macro_proxy",
-            "direction_bias": "long",
-            "reason": "Fallback broad-market proxy for a macro signal"
+            "symbol": "INTC",
+            "instrument_type": "equity",
+            "relevance_score": 0.74,
+            "mapping_confidence": 0.74,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "short",
+            "reason": "Structurally weaker AI design/foundry position"
           }
         ],
         "primary_instrument": {
@@ -331,7 +333,15 @@
         "direction_bias": "long",
         "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
       },
-      "best_short_operator": null,
+      "best_short_operator": {
+        "symbol": "INTC",
+        "instrument_type": "equity",
+        "relevance_score": 0.74,
+        "mapping_confidence": 0.74,
+        "mapping_type": "value_chain_operator",
+        "direction_bias": "short",
+        "reason": "Structurally weaker AI design/foundry position"
+      },
       "top_candidates": [
         {
           "candidate_id": "cand_ecf5520ee2565aba",
@@ -385,6 +395,15 @@
               "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
             },
             {
+              "symbol": "AVGO",
+              "instrument_type": "equity",
+              "relevance_score": 0.82,
+              "mapping_confidence": 0.82,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "AI networking/custom silicon operator"
+            },
+            {
               "symbol": "SOXX",
               "instrument_type": "etf",
               "relevance_score": 0.82,
@@ -394,40 +413,31 @@
               "reason": "Semiconductor sector proxy"
             },
             {
-              "symbol": "AVGO",
-              "instrument_type": "equity",
-              "relevance_score": 0.78,
-              "mapping_confidence": 0.78,
-              "mapping_type": "value_chain_operator",
-              "direction_bias": "long",
-              "reason": "AI networking/custom silicon operator"
-            },
-            {
               "symbol": "ANET",
               "instrument_type": "equity",
-              "relevance_score": 0.72,
-              "mapping_confidence": 0.72,
+              "relevance_score": 0.79,
+              "mapping_confidence": 0.79,
               "mapping_type": "value_chain_operator",
               "direction_bias": "long",
               "reason": "AI network fabric beneficiary"
             },
             {
-              "symbol": "XLK",
-              "instrument_type": "etf",
-              "relevance_score": 0.66,
-              "mapping_confidence": 0.66,
-              "mapping_type": "sector_proxy",
+              "symbol": "TSM",
+              "instrument_type": "equity",
+              "relevance_score": 0.76,
+              "mapping_confidence": 0.76,
+              "mapping_type": "value_chain_operator",
               "direction_bias": "long",
-              "reason": "Broader technology spillover"
+              "reason": "Foundry leverage to advanced AI silicon"
             },
             {
-              "symbol": "SPY",
-              "instrument_type": "etf",
-              "relevance_score": 0.482,
-              "mapping_confidence": 0.482,
-              "mapping_type": "macro_proxy",
-              "direction_bias": "long",
-              "reason": "Fallback broad-market proxy for a macro signal"
+              "symbol": "INTC",
+              "instrument_type": "equity",
+              "relevance_score": 0.74,
+              "mapping_confidence": 0.74,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "short",
+              "reason": "Structurally weaker AI design/foundry position"
             }
           ],
           "primary_instrument": {

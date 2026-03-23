@@ -77,6 +77,22 @@ COMPANY_TICKER = {
     "delta": "DAL",
     "american airlines": "AAL",
     "eaton": "ETN",
+    "trane": "TT",
+    "johnson controls": "JCI",
+    "carrier": "CARR",
+    "dell": "DELL",
+    "hewlett packard enterprise": "HPE",
+    "hpe": "HPE",
+    "intel": "INTC",
+    "advanced micro devices": "AMD",
+    "amd": "AMD",
+    "cisco": "CSCO",
+    "snowflake": "SNOW",
+    "mongodb": "MDB",
+    "confluent": "CFLT",
+    "elastic": "ESTC",
+    "c3 ai": "AI",
+    "bigbear": "BBAI",
 }
 
 THEME_CANDIDATES = [
@@ -573,20 +589,54 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         company_matches = detect_company_candidates(str(signal.get("title", "")))
         for candidate in company_matches:
             add(candidate.symbol, candidate.instrument_type, 0.90, "value_chain_company", candidate.direction_bias, f"Explicit operator mention in AI design chain: {candidate.reason}")
-        add("NVDA", "equity", 0.82, "value_chain_operator", "long", "Primary AI compute design operator")
-        add("AVGO", "equity", 0.78, "value_chain_operator", "long", "AI networking/custom silicon operator")
-        add("ANET", "equity", 0.72, "value_chain_operator", "long", "AI network fabric beneficiary")
-        add("SOXX", "etf", 0.68, "value_chain_theme", "long", "Semiconductor design chain proxy")
+        add("NVDA", "equity", 0.86, "value_chain_operator", "long", "Primary AI compute design operator")
+        add("AVGO", "equity", 0.82, "value_chain_operator", "long", "AI networking/custom silicon operator")
+        add("ANET", "equity", 0.79, "value_chain_operator", "long", "AI network fabric beneficiary")
+        add("TSM", "equity", 0.76, "value_chain_operator", "long", "Foundry leverage to advanced AI silicon")
+        add("AMD", "equity", 0.70, "value_chain_operator", "long", "Secondary AI compute operator")
+        add("INTC", "equity", 0.74, "value_chain_operator", "short", "Structurally weaker AI design/foundry position")
+        add("CSCO", "equity", 0.68, "value_chain_operator", "short", "Legacy networking exposure versus AI fabric leaders")
+        add("HPE", "equity", 0.66, "value_chain_operator", "short", "Lower-quality downstream enterprise hardware exposure")
+        add("DELL", "equity", 0.65, "value_chain_operator", "short", "Downstream hardware assembler versus scarce AI leaders")
+        add("SOXX", "etf", 0.64, "value_chain_theme", "long", "Semiconductor design chain proxy")
 
     if theme == "ai_infrastructure" and layer == "semis_memory":
         add("MU", "equity", 0.86, "value_chain_operator", "long", "US-listed memory supplier proxy")
-        add("SMCI", "equity", 0.72, "value_chain_operator", "short", "Downstream server assembler exposed to memory cost squeeze")
-        add("SOXX", "etf", 0.68, "value_chain_theme", "long", "Semiconductor memory spillover proxy")
+        add("WDC", "equity", 0.72, "value_chain_operator", "long", "Secondary memory/storage leverage proxy")
+        add("SMCI", "equity", 0.74, "value_chain_operator", "short", "Downstream server assembler exposed to memory cost squeeze")
+        add("DELL", "equity", 0.70, "value_chain_operator", "short", "System builder exposed to memory input costs")
+        add("HPE", "equity", 0.68, "value_chain_operator", "short", "Enterprise hardware exposure to memory inflation")
+        add("SOXX", "etf", 0.62, "value_chain_theme", "long", "Semiconductor memory spillover proxy")
 
     if theme == "ai_infrastructure" and layer == "semis_packaging":
         add("AMKR", "equity", 0.84, "value_chain_operator", "long", "US-listed packaging proxy")
-        add("SMCI", "equity", 0.71, "value_chain_operator", "short", "Downstream system builder exposed to packaging delays")
-        add("ASML", "equity", 0.66, "value_chain_second_order", "long", "Advanced process ecosystem proxy")
+        add("ASML", "equity", 0.76, "value_chain_operator", "long", "Advanced process ecosystem proxy")
+        add("TSM", "equity", 0.72, "value_chain_operator", "long", "Advanced packaging/foundry ecosystem leverage")
+        add("SMCI", "equity", 0.73, "value_chain_operator", "short", "Downstream system builder exposed to packaging delays")
+        add("DELL", "equity", 0.69, "value_chain_operator", "short", "Server/system integrator exposed to packaging delays")
+        add("HPE", "equity", 0.67, "value_chain_operator", "short", "Enterprise hardware exposure to constrained packaging supply")
+
+    if theme == "ai_infrastructure" and layer == "datacenter_networking":
+        add("ANET", "equity", 0.84, "value_chain_operator", "long", "AI fabric and switching beneficiary")
+        add("AVGO", "equity", 0.80, "value_chain_operator", "long", "Custom interconnect and networking silicon beneficiary")
+        add("CSCO", "equity", 0.72, "value_chain_operator", "short", "Legacy networking exposure versus AI-native fabric demand")
+        add("HPE", "equity", 0.66, "value_chain_operator", "short", "Enterprise networking/server mix less advantaged than AI fabric leaders")
+
+    if theme == "ai_infrastructure" and layer == "datacenter_power_cooling":
+        add("VRT", "equity", 0.86, "value_chain_operator", "long", "Datacenter cooling and power infrastructure beneficiary")
+        add("ETN", "equity", 0.80, "value_chain_operator", "long", "Electrical infrastructure beneficiary of datacenter buildout")
+        add("TT", "equity", 0.75, "value_chain_operator", "long", "Cooling/HVAC exposure to datacenter demand")
+        add("JCI", "equity", 0.70, "value_chain_operator", "long", "Building controls and cooling exposure")
+        add("CARR", "equity", 0.66, "value_chain_operator", "short", "Broader HVAC exposure is less pure than datacenter-first power/cooling names")
+
+    if theme == "ai_software" or (theme == "ai_infrastructure" and layer in {"enterprise_data", "app_layer"}):
+        add("MSFT", "equity", 0.80, "value_chain_operator", "long", "Platform-scale AI software and cloud distribution")
+        add("META", "equity", 0.74, "value_chain_operator", "long", "Capital-rich AI platform with distribution and compute access")
+        add("SNOW", "equity", 0.70, "value_chain_operator", "long", "Enterprise data layer with AI monetization option value")
+        add("AI", "equity", 0.74, "value_chain_operator", "short", "Hype-led AI software exposure with weaker economic durability")
+        add("BBAI", "equity", 0.70, "value_chain_operator", "short", "Speculative AI software exposure")
+        add("CFLT", "equity", 0.64, "value_chain_operator", "short", "Mid-tier data software exposure versus platform leaders")
+        add("ESTC", "equity", 0.62, "value_chain_operator", "short", "Search/observability exposure with more competitive fragility")
 
     deduped: dict[tuple[str, str], InstrumentCandidate] = {}
     for candidate in candidates:

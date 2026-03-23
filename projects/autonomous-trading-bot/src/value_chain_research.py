@@ -184,15 +184,24 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
         best_short = sorted(short_ops, key=lambda c: float(c.get("relevance_score", 0) or 0), reverse=True)[0] if short_ops else None
         strongest_symbol = _primary_symbol(strongest)
         weakest_symbol = _primary_symbol(weakest)
-        pair_trade_ready = (
+        operator_pair_ready = (
             bool(strongest.get("pair_trade_candidate") or weakest.get("pair_trade_candidate"))
-            and len(ranked) >= 2
-            and (len(unique_patterns) >= 2 or len(unique_titles) >= 2)
-            and strongest.get("source_title") != weakest.get("source_title")
             and best_long is not None
             and best_short is not None
             and str(best_long.get("symbol")) != str(best_short.get("symbol"))
         )
+        headline_pair_ready = (
+            operator_pair_ready
+            and len(ranked) >= 2
+            and (len(unique_patterns) >= 2 or len(unique_titles) >= 2)
+            and strongest.get("source_title") != weakest.get("source_title")
+        )
+        pair_trade_ready = operator_pair_ready
+        pair_trade_style = "not_ready"
+        if headline_pair_ready:
+            pair_trade_style = "cross_chain_operator_pair"
+        elif operator_pair_ready:
+            pair_trade_style = "operator_pool_pair"
         reports.append(
             {
                 "theme": key[0],
@@ -203,7 +212,7 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
                 "symbols": sorted(unique_symbols),
                 "operator_symbols": sorted(operator_by_symbol.keys()),
                 "pair_trade_ready": pair_trade_ready,
-                "pair_trade_style": "cross_chain_operator_pair" if pair_trade_ready else "not_ready",
+                "pair_trade_style": pair_trade_style,
                 "strongest": strongest,
                 "weakest": weakest,
                 "strongest_symbol": strongest_symbol,

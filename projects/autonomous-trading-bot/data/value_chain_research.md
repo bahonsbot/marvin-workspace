@@ -5,11 +5,12 @@ Source: `projects/market-intel/data/execution_candidates.json`
 ## ai_infrastructure / semis_design / gpu_compute
 - Candidates: 1
 - Unique primary symbols: 1 (NVDA)
-- Operator symbols: ANET, AVGO, NVDA
-- Pair-trade ready: False (not_ready)
+- Operator symbols: ANET, AVGO, INTC, NVDA, TSM
+- Pair-trade ready: True (operator_pool_pair)
 - Strongest: `p003` NVDA score=12.52 | Nvidia CEO Jensen Huang said that he believes AI will increase productivity and 
 - Weakest: `p003` NVDA score=12.52 | Nvidia CEO Jensen Huang said that he believes AI will increase productivity and 
 - Best long operator: NVDA (value_chain_company)
+- Best short operator: INTC (value_chain_operator)
 - Pair-trade rationale: GPU and compute bottlenecks usually benefit scarce upstream enablers more than downstream software hopefuls.
 
 ## energy_infrastructure / industrial_inputs / oil_supply
