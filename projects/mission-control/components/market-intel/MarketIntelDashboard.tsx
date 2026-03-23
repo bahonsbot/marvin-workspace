@@ -165,6 +165,193 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
 
   return (
     <div style={{ display: 'grid', gap: 14 }}>
+      {/* ── Market Context ─────────────────────────────────────── */}
+      <section
+        style={{
+          border: '1px solid rgba(148, 163, 184, 0.2)',
+          borderRadius: 15,
+          padding: 12,
+          background: 'rgba(7, 12, 22, 0.75)',
+          display: 'grid',
+          gap: 10,
+        }}
+      >
+        <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.34, marginBottom: 2 }}>Market context</div>
+
+        {/* Indices row — primary */}
+        <div>
+          <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3, marginBottom: 7 }}>Indices</div>
+          {data.marketContext.indices.length === 0 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+              {['SPY', 'QQQ', 'DIA'].map((sym) => (
+                <div key={sym} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '9px 10px', background: 'rgba(7, 12, 22, 0.72)', display: 'grid', gap: 4 }}>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase' }}>{sym}</div>
+                  <div style={{ fontSize: 14, fontWeight: 760, color: 'var(--muted-strong)' }}>—</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase' }}>pending</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140, 1fr))', gap: 8 }}>
+              {data.marketContext.indices.map((q) => (
+                <MarketContextCard key={q.id} label={q.symbol} price={q.price} changePct={q.changePct} freshness={q.freshness} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Commodities row — secondary, visually less prominent */}
+        <div style={{ borderTop: '1px solid rgba(148, 163, 184, 0.1)', paddingTop: 10 }}>
+          <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3, marginBottom: 7 }}>Commodities</div>
+          {data.marketContext.commodities.length === 0 ? (
+            <div style={{ display: 'flex', gap: 8 }}>
+              {['GLD', 'USO', 'CORN'].map((sym) => (
+                <div key={sym} style={{ border: '1px solid rgba(148, 163, 184, 0.1)', borderRadius: 8, padding: '7px 9px', background: 'rgba(7, 12, 22, 0.45)', display: 'grid', gap: 3 }}>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase' }}>{sym}</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted-strong)' }}>—</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {data.marketContext.commodities.map((q) => (
+                <div key={q.id} style={{ border: '1px solid rgba(148, 163, 184, 0.12)', borderRadius: 8, padding: '7px 9px', background: 'rgba(7, 12, 22, 0.45)', display: 'grid', gap: 4, minWidth: 90 }}>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3 }}>{q.symbol}</div>
+                  <div style={{ fontSize: 13, fontWeight: 760 }}>{q.price !== null ? q.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</div>
+                  {q.changePct !== null ? (
+                    <div style={{ fontSize: 11, fontWeight: 700, color: (q.changePct ?? 0) >= 0 ? '#5eead4' : '#f87171' }}>
+                      {(q.changePct ?? 0) >= 0 ? '+' : ''}{q.changePct!.toFixed(2)}%
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── Manual Watch ─────────────────────────────────────── */}
+      <section
+        style={{
+          border: '1px solid rgba(251, 191, 36, 0.22)',
+          borderRadius: 15,
+          padding: 12,
+          background: 'linear-gradient(120deg, rgba(251, 191, 36, 0.1) 0%, rgba(9, 13, 23, 0.96) 60%, rgba(7, 11, 20, 0.98) 100%)',
+          display: 'grid',
+          gap: 10,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.34 }}>Research &amp; watchlist</div>
+            <div style={{ fontSize: 17, fontWeight: 780, marginTop: 2 }}>Manual watch</div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: 11, color: 'var(--muted)' }}>{data.manualWatch.items.length} items</span>
+            <ManualWatchForm onAdded={() => window.location.reload()} />
+          </div>
+
+        </div>
+
+        {data.manualWatch.items.length === 0 ? (
+          <div
+            style={{
+              border: '1px dashed rgba(251, 191, 36, 0.28)',
+              borderRadius: 12,
+              padding: '20px 20px',
+              textAlign: 'center',
+              color: 'var(--muted)',
+              fontSize: 13,
+              background: 'rgba(251, 191, 36, 0.03)',
+            }}
+          >
+            No manual watch items yet. Tickers added to manual_watch_candidates.json appear here.
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240, 1fr))', gap: 9 }}>
+            {data.manualWatch.items.map((item) => {
+              const conv = toneForConviction(item.conviction);
+              const status = toneForReviewStatus(item.reviewStatus);
+              return (
+                <div
+                  key={item.id}
+                  style={{
+                    border: '1px solid rgba(251, 191, 36, 0.2)',
+                    borderRadius: 12,
+                    padding: '9px 11px',
+                    background: 'rgba(8, 14, 24, 0.75)',
+                    display: 'grid',
+                    gap: 6,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                    <div style={{ fontWeight: 780, fontSize: 15 }}>{item.symbol}</div>
+                    <div style={{ display: 'flex', gap: 5 }}>
+                      <span
+                        style={{
+                          fontSize: 9,
+                          textTransform: 'uppercase',
+                          padding: '2px 6px',
+                          borderRadius: 999,
+                          border: `1px solid ${conv.border}`,
+                          background: conv.bg,
+                          color: conv.color,
+                          fontWeight: 700,
+                        }}
+                      >
+                        {item.conviction}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 9,
+                          textTransform: 'uppercase',
+                          padding: '2px 6px',
+                          borderRadius: 999,
+                          border: `1px solid ${status.border}`,
+                          background: status.bg,
+                          color: status.color,
+                          fontWeight: 700,
+                        }}
+                      >
+                        {item.reviewStatus}
+                      </span>
+                    </div>
+                  </div>
+                  {item.company && (
+                    <div style={{ fontSize: 11, color: 'var(--muted)', fontStyle: 'italic' }}>{item.company}</div>
+                  )}
+                  <div style={{ fontSize: 12, color: 'var(--muted-strong)', lineHeight: 1.5 }}>{item.thesis}</div>
+                  {item.tags.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                      {item.tags.slice(0, 4).map((tag) => (
+                        <span
+                          key={tag}
+                          style={{
+                            fontSize: 10,
+                            padding: '2px 7px',
+                            borderRadius: 999,
+                            background: 'rgba(148, 163, 184, 0.1)',
+                            color: 'var(--muted)',
+                            border: '1px solid rgba(148, 163, 184, 0.2)',
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {item.linkedTheme && (
+                    <div style={{ fontSize: 10, color: '#9d8df5', textTransform: 'uppercase', letterSpacing: 0.3 }}>
+                      {item.linkedTheme}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
       <section
         style={{
           border: '1px solid rgba(110, 168, 255, 0.24)',
@@ -177,9 +364,8 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-          <div>
-            <div style={{ color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.34 }}>Market Intel</div>
-            <div style={{ fontSize: 20, fontWeight: 780, marginTop: 2 }}>Signals command deck</div>
+          <div style={{ color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.34 }}>
+            Signals command deck
           </div>
           <div
             style={{
@@ -198,11 +384,11 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: 9 }}>
-          <KpiCard label="Weighted accuracy" value={formatPct(data.kpis.weightedAccuracy)} />
           <KpiCard label="Verified" value={String(data.kpis.totalVerified)} />
-          <KpiCard label="Duplicates" value={String(data.kpis.duplicateCount)} />
           <KpiCard label="Evidence coverage" value={formatPct(data.kpis.evidenceCoverage)} />
           <KpiCard label="Candidates" value={String(data.kpis.candidateCount)} />
+          <KpiCard label="Research radar" value={String(data.researchRadar.items.length)} />
+          <KpiCard label="Manual watch" value={String(data.manualWatch.items.length)} />
           <KpiCard label="Pending review" value={String(data.kpis.pendingCount)} />
         </div>
       </section>
@@ -659,211 +845,17 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-              <span style={{ color: 'var(--muted)' }}>Weighted accuracy</span>
-              <span style={{ fontWeight: 700 }}>{formatPct(data.accuracySnapshot.weightedAccuracy)}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
               <span style={{ color: 'var(--muted)' }}>Reviewed raw</span>
               <span>{data.accuracySnapshot.totalReviewedRaw ?? '—'}</span>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-              <span style={{ color: 'var(--muted)' }}>Pending review</span>
-              <span>{data.accuracySnapshot.pendingCount}</span>
+              <span style={{ color: 'var(--muted)' }}>Weighted accuracy</span>
+              <span style={{ fontWeight: 700 }}>{formatPct(data.accuracySnapshot.weightedAccuracy)}</span>
             </div>
           </div>
 
           <div style={{ color: 'var(--muted)', fontSize: 11, lineHeight: 1.6 }}>
             Snapshot is computed from tracked signals plus the latest signal_accuracy_history.json. No simulated or placeholder values.
-          </div>
-        </div>
-      </section>
-
-      {/* ── Manual Watch ─────────────────────────────────────── */}
-      <section
-        style={{
-          border: '1px solid rgba(251, 191, 36, 0.22)',
-          borderRadius: 15,
-          padding: 12,
-          background: 'linear-gradient(120deg, rgba(251, 191, 36, 0.1) 0%, rgba(9, 13, 23, 0.96) 60%, rgba(7, 11, 20, 0.98) 100%)',
-          display: 'grid',
-          gap: 10,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-          <div>
-            <div style={{ color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.34 }}>Research &amp; watchlist</div>
-            <div style={{ fontSize: 17, fontWeight: 780, marginTop: 2 }}>Manual watch</div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: 11, color: 'var(--muted)' }}>{data.manualWatch.items.length} items</span>
-            <ManualWatchForm onAdded={() => window.location.reload()} />
-          </div>
-
-        </div>
-
-        {data.manualWatch.items.length === 0 ? (
-          <div
-            style={{
-              border: '1px dashed rgba(251, 191, 36, 0.28)',
-              borderRadius: 12,
-              padding: '20px 20px',
-              textAlign: 'center',
-              color: 'var(--muted)',
-              fontSize: 13,
-              background: 'rgba(251, 191, 36, 0.03)',
-            }}
-          >
-            No manual watch items yet. Tickers added to manual_watch_candidates.json appear here.
-          </div>
-        ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240, 1fr))', gap: 9 }}>
-            {data.manualWatch.items.map((item) => {
-              const conv = toneForConviction(item.conviction);
-              const status = toneForReviewStatus(item.reviewStatus);
-              return (
-                <div
-                  key={item.id}
-                  style={{
-                    border: '1px solid rgba(251, 191, 36, 0.2)',
-                    borderRadius: 12,
-                    padding: '9px 11px',
-                    background: 'rgba(8, 14, 24, 0.75)',
-                    display: 'grid',
-                    gap: 6,
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-                    <div style={{ fontWeight: 780, fontSize: 15 }}>{item.symbol}</div>
-                    <div style={{ display: 'flex', gap: 5 }}>
-                      <span
-                        style={{
-                          fontSize: 9,
-                          textTransform: 'uppercase',
-                          padding: '2px 6px',
-                          borderRadius: 999,
-                          border: `1px solid ${conv.border}`,
-                          background: conv.bg,
-                          color: conv.color,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {item.conviction}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: 9,
-                          textTransform: 'uppercase',
-                          padding: '2px 6px',
-                          borderRadius: 999,
-                          border: `1px solid ${status.border}`,
-                          background: status.bg,
-                          color: status.color,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {item.reviewStatus}
-                      </span>
-                    </div>
-                  </div>
-                  {item.company && (
-                    <div style={{ fontSize: 11, color: 'var(--muted)', fontStyle: 'italic' }}>{item.company}</div>
-                  )}
-                  <div style={{ fontSize: 12, color: 'var(--muted-strong)', lineHeight: 1.5 }}>{item.thesis}</div>
-                  {item.tags.length > 0 && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                      {item.tags.slice(0, 4).map((tag) => (
-                        <span
-                          key={tag}
-                          style={{
-                            fontSize: 10,
-                            padding: '2px 7px',
-                            borderRadius: 999,
-                            background: 'rgba(148, 163, 184, 0.1)',
-                            color: 'var(--muted)',
-                            border: '1px solid rgba(148, 163, 184, 0.2)',
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  {item.linkedTheme && (
-                    <div style={{ fontSize: 10, color: '#9d8df5', textTransform: 'uppercase', letterSpacing: 0.3 }}>
-                      {item.linkedTheme}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {/* ── Market Context ─────────────────────────────────────── */}
-      <section
-        style={{
-          border: '1px solid rgba(148, 163, 184, 0.2)',
-          borderRadius: 15,
-          padding: 12,
-          background: 'rgba(7, 12, 22, 0.75)',
-          display: 'grid',
-          gap: 10,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-          <div>
-            <div style={{ color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.34 }}>Market context</div>
-            <div style={{ fontSize: 16, fontWeight: 780, marginTop: 2 }}>Indices &amp; commodities</div>
-          </div>
-          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-            {data.marketContext.note}
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-          {/* Indices */}
-          <div>
-            <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3, marginBottom: 7 }}>Indices</div>
-            {data.marketContext.indices.length === 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                {['SPY', 'QQQ', 'DIA'].map((sym) => (
-                  <div key={sym} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '9px 10px', background: 'rgba(7, 12, 22, 0.72)', display: 'grid', gap: 4 }}>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase' }}>{sym}</div>
-                    <div style={{ fontSize: 14, fontWeight: 760, color: 'var(--muted-strong)' }}>—</div>
-                    <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase' }}>pending</div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140, 1fr))', gap: 8 }}>
-                {data.marketContext.indices.map((q) => (
-                  <MarketContextCard key={q.id} label={q.symbol} price={q.price} changePct={q.changePct} freshness={q.freshness} />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Commodities */}
-          <div>
-            <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3, marginBottom: 7 }}>Commodities</div>
-            {data.marketContext.commodities.length === 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                {['GLD', 'USO', 'CORN'].map((sym) => (
-                  <div key={sym} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '9px 10px', background: 'rgba(7, 12, 22, 0.72)', display: 'grid', gap: 4 }}>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase' }}>{sym}</div>
-                    <div style={{ fontSize: 14, fontWeight: 760, color: 'var(--muted-strong)' }}>—</div>
-                    <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase' }}>pending</div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140, 1fr))', gap: 8 }}>
-                {data.marketContext.commodities.map((q) => (
-                  <MarketContextCard key={q.id} label={q.symbol} price={q.price} changePct={q.changePct} freshness={q.freshness} />
-                ))}
-              </div>
-            )}
           </div>
         </div>
       </section>
