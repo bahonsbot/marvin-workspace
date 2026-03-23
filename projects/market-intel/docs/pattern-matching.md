@@ -13,19 +13,29 @@ The pattern matching system works in two stages:
 
 ## 1. What Patterns Exist
 
-The system currently maintains 34 historical market patterns across 7 categories:
+The system currently maintains 42 historical market patterns across 7 categories:
 
 | Category | Count | Representative patterns |
 |----------|-------|-------------------------|
-| `geopolitical` | 7 | Saudi Oil Attacks, Russia-Ukraine Conflict, Evergrande Crisis, Iran Nuclear Deal, Taiwan/China Tension |
-| `macroeconomic` | 9 | COVID-19 Market Crash, Black Monday 1987, Japan Lost Decade, US Credit Rating Downgrade, China Devaluation 2015, European Debt Crisis |
-| `financial_credit` | 6 | SVB Collapse, Regional Banking Crisis 2023, LTCM Collapse, UK LDI/Gilt Crisis 2022, VIX ETN Volmageddon 2018 |
+| `geopolitical` | 9 | Saudi Oil Attacks, Russia-Ukraine Conflict, Red Sea Shipping Disruption 2024, China Critical Minerals Export Controls |
+| `macroeconomic` | 11 | COVID-19 Market Crash, US Credit Rating Downgrade, Consumer Trade-Down / Retail Margin Shock, Ever Given / Suez Blockage |
+| `financial_credit` | 7 | SVB Collapse, Regional Banking Crisis 2023, Treasury Dash for Cash 2020, UK LDI/Gilt Crisis 2022, VIX ETN Volmageddon 2018 |
 | `sentiment_social` | 3 | GameStop Short Squeeze, Reddit GPU/Semis Thread, Retail Options Sentiment |
-| `corporate` | 5 | Tesla Stock Splits, Dot-com Bubble, Mega-Cap Earnings Shock, M&A Antitrust Block, Major Accounting Scandal |
+| `corporate` | 7 | Tesla Stock Splits, Mega-Cap Earnings Shock, Major Accounting Scandal, AI Packaging Bottleneck, AI Memory / HBM Shortage |
 | `crypto_credit` | 1 | FTX Collapse |
-| `political` | 3 | Brexit Vote, US Government Shutdown, US Tariff War Escalation |
+| `political` | 4 | Brexit Vote, US Government Shutdown, US Tariff War Escalation, US Debt Ceiling X-Date Stress |
 
 Source of truth: `projects/market-intel/data/patterns.json`. If this document drifts from the live file, trust the live file.
+
+Recent Wave A additions:
+- Red Sea Shipping Disruption 2024
+- U.S. Debt Ceiling X-Date Stress
+- Treasury Dash for Cash 2020
+- AI Packaging Bottleneck
+- AI Memory / HBM Shortage
+- China Critical Minerals Export Controls
+- Consumer Trade-Down / Retail Margin Shock
+- Ever Given / Suez Blockage
 
 ### Pattern Attributes
 

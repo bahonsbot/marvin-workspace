@@ -8,7 +8,7 @@ import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 
 # Import context manager for cron pipeline
 sys.path.insert(0, str(Path(__file__).parent))
@@ -84,9 +84,14 @@ class SignalGenerator:
                 'exclude': ['ukraine', 'russia', 'drone strike', 'military facility'],
                 'weight': 3
             },
-            'p002': {  # Russia-Ukraine - ONLY Eastern Europe conflict
-                'keywords': ['ukraine', 'russia', 'putin', 'kremlin', 'kyiv', 'moscow', 'invasion', 'kremlin'],
-                'exclude': ['saudi', 'opec', 'middle east'],
+            'p002': {  # Russia-Ukraine / war escalation, sanctions, energy spillover
+                'keywords': [
+                    'ukraine', 'kyiv', 'zelenskiy', 'zelensky', 'donbas', 'crimea',
+                    'russia invad', 'russian invasion', 'russia-ukraine', 'ukraine war',
+                    'moscow missile', 'sanctions on russia', 'eu sanctions', 'g7 sanctions',
+                    'black sea grain', 'nord stream', 'europe gas crisis'
+                ],
+                'exclude': ['saudi', 'opec', 'middle east', 'cuba', 'gallium', 'germanium'],
                 'weight': 3
             },
             'p003': {  # GPU/Semis
@@ -136,19 +141,15 @@ class SignalGenerator:
                 'exclude': [],
                 'weight': 3
             },
-            'p010': {  # Tesla / corporate earnings & M&A - expanded
+            'p010': {  # Single-name catalyst momentum
                 'keywords': [
-                    'tesla', 'tsla', 'stock split', '5-for-1', 'elon', 'elon musk',
-                    'earnings beat', 'earnings miss', 'revenue guidance', 'profit warning',
-                    'merger talks', 'acquisition offer', 'take-private', 'buyout bid', 'deal talks',
-                    'quarterly results', 'q4 earnings', 'q3 earnings', 'fiscal year', 'annual report',
-                    'sales growth', 'revenue miss', 'eps beat', 'revenue beat', 'outlook raised',
-                    'outlook cut', 'guidance raised', 'guidance cut', 'forward guidance',
-                    'ipo', 'direct listing', 'secondary offering', 'stock offering',
-                    'ceo change', 'leadership change', 'executive resign', 'board change',
-                    'major acquisition', 'strategic review', 'sale of company', 'privatization'
+                    'tesla', 'tsla', 'stock split', '5-for-1', '3-for-1',
+                    'profit warning', 'guidance raised', 'guidance cut', 'outlook raised', 'outlook cut',
+                    'take-private', 'buyout bid', 'sale of company', 'strategic review',
+                    'ceo resigns', 'chief executive resigns', 'board shakeup',
+                    'index inclusion', 'sp500 inclusion', 'activist stake'
                 ],
-                'exclude': [],
+                'exclude': ['broad market', 'macro outlook', 'fed'],
                 'weight': 2
             },
             # NEW PATTERNS
@@ -167,21 +168,19 @@ class SignalGenerator:
                 'exclude': [],
                 'weight': 2
             },
-            'p014': {  # US Credit Downgrade / macro rates-inflation regime - expanded
+            'p014': {  # US macro / rates regime stress (kept under existing id)
                 'keywords': [
-                    's&p downgrade', 'credit rating', 'aaa downgrade', 'us debt', 'us credit',
-                    'federal reserve', 'fed chair', 'jerome powell', 'fed minutes', 'fomc', 
-                    'cpi', 'core cpi', 'pce inflation', 'inflation data', 'consumer price',
-                    'rate hike', 'rate cut', 'rate decision', 'fed Funds rate',
-                    'treasury yield', 'yield spike', 'yield curve', 'yield curve inversion',
-                    '10-year yield', '2-year yield', '30-year mortgage', 'mortgage rates',
-                    'recession fears', 'recession risk', 'recession signal', 'hard landing', 'soft landing',
-                    'gdp growth', 'gdp slowdown', 'economic slowdown', 'economy warning',
-                    'unemployment', 'jobs report', 'nfp', 'nonfarm payroll', 'labor market',
-                    'interest rates', 'monetary policy', 'tightening', 'easing', 'dovish', 'hawkish'
+                    's&p downgrade', 'credit rating', 'aaa downgrade',
+                    'federal reserve', 'fed chair', 'jerome powell', 'fed minutes', 'fomc',
+                    'cpi', 'core cpi', 'pce inflation', 'inflation data', 'consumer prices',
+                    'rate hike', 'rate cut', 'rate decision', 'fed funds rate',
+                    'treasury yield', 'yield spike', 'yield curve inversion', '10-year yield', '2-year yield',
+                    'recession fears', 'hard landing', 'soft landing', 'gdp slowdown',
+                    'jobs report', 'nonfarm payroll', 'labor market cooling',
+                    'monetary policy'
                 ],
-                'exclude': [],
-                'weight': 3
+                'exclude': ['x-date', 'debt ceiling', 'extraordinary measures', 't-bill', 'default risk'],
+                'weight': 2
             },
             'p015': {  # China Devaluation
                 'keywords': ['china devaluation', 'yuan devalue', 'currency war', 'china export'],
@@ -233,16 +232,54 @@ class SignalGenerator:
                 'exclude': [],
                 'weight': 2
             },
-            'p024': {  # Retail Options Sentiment - NEW
+            'p024': {  # Retail options positioning instability
                 'keywords': [
-                    'bought calls', 'bought puts', 'call bought', 'put bought', 'calls bought',
-                    'yolo', 'yolo trade', 'rolling options', 'options strategy', 'iron condor',
-                    'credit spread', 'debit spread', 'call option', 'put option', 'stock options',
-                    'expiring friday', 'itmo', 'otm', 'itm', 'delta', 'gamma', 'vega',
-                    'option chain', 'options volume', 'unusual options', 'unusual activity', 'calls'
+                    'gamma squeeze', '0dte', 'dealer gamma', 'dealer hedging', 'unusual options activity',
+                    'call sweep', 'put sweep', 'short-dated options', 'options positioning',
+                    'volatility squeeze', 'days to cover', 'forced covering'
                 ],
-                'exclude': [],
+                'exclude': ['iron condor', 'credit spread tutorial', 'options strategy guide'],
                 'weight': 2
+            },
+            'p035': {  # Red Sea shipping disruption
+                'keywords': ['red sea', 'houthi', 'bab el-mandeb', 'suez traffic', 'shipping reroute', 'rerouting around africa', 'shipping insurance'],
+                'exclude': ['tourism', 'cruise'],
+                'weight': 3
+            },
+            'p036': {  # US debt ceiling X-date stress
+                'keywords': ['x-date', 'debt ceiling', 'extraordinary measures', 't-bill stress', 'treasury cash balance', 'default risk'],
+                'exclude': ['corporate debt ceiling', 'household debt'],
+                'weight': 3
+            },
+            'p037': {  # Treasury dash for cash / basis unwind
+                'keywords': ['dash for cash', 'basis trade', 'treasury market dislocation', 'repo stress', 'funding liquidity', 'forced unwind'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p038': {  # AI packaging bottleneck
+                'keywords': ['cowos', 'advanced packaging', 'packaging bottleneck', 'tsmc capacity', 'blackwell delay', 'ai server backlog'],
+                'exclude': ['consumer packaging'],
+                'weight': 3
+            },
+            'p039': {  # AI memory / HBM shortage
+                'keywords': ['hbm shortage', 'high bandwidth memory', 'dram price spike', 'server memory shortage', 'memory supply crunch', 'sk hynix'],
+                'exclude': ['pc memory upgrade'],
+                'weight': 3
+            },
+            'p040': {  # China critical minerals export controls
+                'keywords': ['gallium', 'germanium', 'antimony export', 'chipmaking materials', 'export controls on metals', 'export licensing'],
+                'exclude': ['gallium nitride product launch'],
+                'weight': 3
+            },
+            'p041': {  # Consumer trade-down / retail margin shock
+                'keywords': ['trade down', 'essentials over discretionary', 'retail margin warning', 'inventory glut', 'consumer pullback', 'discretionary purchases'],
+                'exclude': [],
+                'weight': 3
+            },
+            'p042': {  # Ever Given / Suez blockage
+                'keywords': ['ever given', 'suez blockage', 'suez canal blockage', 'grounded vessel', 'queue of ships', 'canal closure'],
+                'exclude': [],
+                'weight': 3
             }
         }
         
@@ -286,7 +323,7 @@ class SignalGenerator:
         for alert in self.rss_alerts[:120]:
             matches = self.match_alert_to_patterns(alert, use_enriched=use_enriched)
             if matches:
-                best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight']))
+                best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight'], len(x.get('matched_keyword', ''))))
                 signals.append({
                     'source': 'rss',
                     'feed': alert.get('feed', 'unknown'),
@@ -304,7 +341,7 @@ class SignalGenerator:
         for alert in self.reddit_alerts[:120]:
             matches = self.match_alert_to_patterns(alert, use_enriched=use_enriched)
             if matches:
-                best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight']))
+                best = max(matches, key=lambda x: (self.confidence_score(x['confidence']), x['match_weight'], len(x.get('matched_keyword', ''))))
                 signals.append({
                     'source': 'reddit',
                     'feed': f"r/{alert.get('subreddit', 'unknown')}",

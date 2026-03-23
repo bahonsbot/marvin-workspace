@@ -33,7 +33,7 @@
       "name": "Russia-Ukraine Conflict",
       "category": "geopolitical",
       "date": "2022-02-24",
-      "description": "Russia invaded Ukraine, triggering energy crisis and market volatility",
+      "description": "Russia-Ukraine war escalation, sanctions, and energy/commodity spillovers drove market volatility",
       "time_horizon": "short-term",
       "time_lag_hours": {
         "early_signal_to_market": 168,
@@ -51,9 +51,9 @@
       ],
       "confidence": "HIGH",
       "key_lessons": [
-        "military_buildup_precedes_invasion",
-        "energy_dependency_exposure",
-        "refugee_flows_indicator"
+        "war_escalation_not_generic_russia_news",
+        "sanctions_and_energy_channels_matter",
+        "shipping_and_commodity_spillovers_amplify"
       ]
     },
     {
@@ -263,7 +263,7 @@
       "name": "Tesla Stock Splits",
       "category": "corporate",
       "date": "2020-08-11",
-      "description": "Tesla 5-for-1 split + consistent earnings beats drove +740% rally",
+      "description": "Single-name momentum catalysts such as stock splits, guidance changes, and major corporate events can drive outsized repricing",
       "time_horizon": "medium-term",
       "time_lag_hours": {
         "early_signal_to_market": 504,
@@ -282,9 +282,9 @@
       ],
       "confidence": "MEDIUM",
       "key_lessons": [
-        "earnings_beats_build_momentum",
-        "stock_splits_drive_retail",
-        "index_inclusion_forced_buying"
+        "single_name_catalysts_stack",
+        "retail_attention_amplifies_momentum",
+        "guidance_and_index_flows_matter"
       ]
     },
     {
@@ -374,7 +374,7 @@
       "name": "US Credit Rating Downgrade",
       "category": "macroeconomic",
       "date": "2011-08-05",
-      "description": "S&P downgraded US credit rating from AAA to AA+",
+      "description": "U.S. macro, rates, fiscal brinkmanship, and policy repricing can trigger Treasury volatility and cross-asset rotation",
       "time_horizon": "short-term",
       "time_lag_hours": {
         "early_signal_to_market": 24,
@@ -387,13 +387,16 @@
       },
       "early_signals": [
         "debt_ceiling",
-        "political_gridlock",
-        "deficit"
+        "x_date",
+        "fed_repricing",
+        "inflation_surprise",
+        "yield_curve_stress"
       ],
       "confidence": "HIGH",
       "key_lessons": [
-        "sovereign_rating_matters",
-        "political_risk"
+        "macro_regime_repricing_moves_fast",
+        "fiscal_brinkmanship_hits_front_end_first",
+        "rates_usd_and_equity_rotation_travel_together"
       ]
     },
     {
@@ -649,7 +652,7 @@
       "name": "Retail Options Sentiment",
       "category": "sentiment_social",
       "date": "2026-02-28",
-      "description": "Retail options activity and trading patterns indicate market sentiment",
+      "description": "Retail and dealer-positioning instability can amplify moves when option flows become one-sided",
       "time_horizon": "intraday",
       "time_lag_hours": {
         "early_signal_to_market": 0,
@@ -667,8 +670,9 @@
       ],
       "confidence": "MEDIUM",
       "key_lessons": [
-        "options_flow_predicts_direction",
-        "retail_sentiment_contrarian"
+        "positioning_matters_more_than_chatter",
+        "gamma_feedback_loops_accelerate_moves",
+        "0dte_and_unusual_flow_need_context"
       ]
     },
     {
@@ -958,25 +962,257 @@
         "auditor_red_flags",
         "sector_wide_trust_repricing"
       ]
+    },
+    {
+      "id": "p035",
+      "name": "Red Sea Shipping Disruption 2024",
+      "category": "geopolitical",
+      "date": "2023-12-01",
+      "description": "Attacks on Red Sea shipping forced rerouting, raised freight costs, and disrupted trade flows",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 72
+      },
+      "market_impact": {
+        "asset": "global_shipping",
+        "direction": "spike",
+        "magnitude": "freight_rates_and_insurance_up"
+      },
+      "early_signals": [
+        "red_sea_attacks",
+        "rerouting_around_cape",
+        "shipping_insurance_spike",
+        "suez_transit_decline"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "trade_routes_are_macro_variables",
+        "freight_costs_feed_inflation",
+        "geopolitics_can_rewire_logistics_fast"
+      ]
+    },
+    {
+      "id": "p036",
+      "name": "US Debt Ceiling X-Date Stress",
+      "category": "political",
+      "date": "2011-07-01",
+      "description": "Debt ceiling brinkmanship around the X-date drove front-end Treasury stress, CDS widening, and risk repricing",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 72,
+        "confirmation_to_market": 12
+      },
+      "market_impact": {
+        "asset": "us_treasury_bills",
+        "direction": "stress",
+        "magnitude": "front_end_yields_and_cds_spike"
+      },
+      "early_signals": [
+        "x_date",
+        "extraordinary_measures",
+        "tbill_dislocation",
+        "default_risk_headlines"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "front_end_moves_first",
+        "fiscal_deadlines_change_plumbing_not_just_sentiment",
+        "policy_resolution_can_reverse_fast"
+      ]
+    },
+    {
+      "id": "p037",
+      "name": "Treasury Dash for Cash 2020",
+      "category": "financial_credit",
+      "date": "2020-03-12",
+      "description": "Treasury market dislocation and basis-trade unwinds created funding stress during the March 2020 dash for cash",
+      "time_horizon": "intraday",
+      "time_lag_hours": {
+        "early_signal_to_market": 12,
+        "confirmation_to_market": 6
+      },
+      "market_impact": {
+        "asset": "us_treasuries",
+        "direction": "dislocation",
+        "magnitude": "liquidity_breakdown_and_repo_stress"
+      },
+      "early_signals": [
+        "basis_widening",
+        "repo_stress",
+        "treasury_liquidity_strain",
+        "forced_unwinds"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "safe_havens_can_be_sold_for_cash",
+        "funding_liquidity_drives_market_liquidity",
+        "dealer_balance_sheet_limits_matter"
+      ]
+    },
+    {
+      "id": "p038",
+      "name": "AI Packaging Bottleneck",
+      "category": "corporate",
+      "date": "2024-03-01",
+      "description": "Advanced packaging constraints such as CoWoS capacity bottlenecked AI chip and server rollouts",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 168,
+        "confirmation_to_market": 72
+      },
+      "market_impact": {
+        "asset": "ai_semiconductors",
+        "direction": "rotation",
+        "magnitude": "supplier_winners_and_delay_risks"
+      },
+      "early_signals": [
+        "cowos_capacity",
+        "advanced_packaging",
+        "blackwell_delay",
+        "tsmc_supply_constraint"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "capacity_constraints_shift_profit_pools",
+        "second_order_suppliers_matter",
+        "ai_demand_is_not_the_same_as_ai_volume"
+      ]
+    },
+    {
+      "id": "p039",
+      "name": "AI Memory / HBM Shortage",
+      "category": "corporate",
+      "date": "2024-06-01",
+      "description": "HBM and AI-server memory shortages raised costs and threatened to delay data-center buildouts",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 168,
+        "confirmation_to_market": 96
+      },
+      "market_impact": {
+        "asset": "memory_semiconductors",
+        "direction": "spike",
+        "magnitude": "pricing_power_and_project_delay_risk"
+      },
+      "early_signals": [
+        "hbm_shortage",
+        "dram_price_spike",
+        "open_ended_orders",
+        "memory_supply_crunch"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "memory_is_a_strategic_ai_bottleneck",
+        "pricing_power_can_shift_fast",
+        "hyperscaler_demand_can_crowd_out_smaller_buyers"
+      ]
+    },
+    {
+      "id": "p040",
+      "name": "China Critical Minerals Export Controls",
+      "category": "geopolitical",
+      "date": "2023-07-03",
+      "description": "China export controls on gallium, germanium, and related materials tightened semiconductor supply chains",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 24,
+        "confirmation_to_market": 72
+      },
+      "market_impact": {
+        "asset": "chip_supply_chain",
+        "direction": "stress",
+        "magnitude": "materials_prices_and_semis_risk_repricing"
+      },
+      "early_signals": [
+        "gallium_controls",
+        "germanium_controls",
+        "export_licensing",
+        "chip_material_restrictions"
+      ],
+      "confidence": "HIGH",
+      "key_lessons": [
+        "materials_can_be_chokepoints",
+        "trade_war_retaliation_hits_supply_chains",
+        "minor_metals_can_have_major_market_effects"
+      ]
+    },
+    {
+      "id": "p041",
+      "name": "Consumer Trade-Down / Retail Margin Shock",
+      "category": "macroeconomic",
+      "date": "2022-05-18",
+      "description": "Consumers shifted toward essentials, hurting discretionary demand and retailer margins before full recession confirmation",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 72,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "consumer_discretionary",
+        "direction": "selloff",
+        "magnitude": "sector_margin_repricing"
+      },
+      "early_signals": [
+        "trade_down_behavior",
+        "inventory_glut",
+        "retail_margin_warning",
+        "essentials_over_discretionary"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "consumer_rotation_matters_before_recession_calls",
+        "margins_break_before_revenues",
+        "inventory_mix_tells_the_story"
+      ]
+    },
+    {
+      "id": "p042",
+      "name": "Ever Given / Suez Blockage",
+      "category": "macroeconomic",
+      "date": "2021-03-23",
+      "description": "The Ever Given blockage exposed chokepoint risk in global shipping and delayed billions in trade",
+      "time_horizon": "short-term",
+      "time_lag_hours": {
+        "early_signal_to_market": 6,
+        "confirmation_to_market": 24
+      },
+      "market_impact": {
+        "asset": "global_trade",
+        "direction": "disruption",
+        "magnitude": "shipping_delays_and_cost_spike"
+      },
+      "early_signals": [
+        "suez_blockage",
+        "canal_closure",
+        "grounded_vessel",
+        "queue_of_ships"
+      ],
+      "confidence": "MEDIUM_HIGH",
+      "key_lessons": [
+        "single_chokepoints_can_freeze_trade",
+        "logistics_delays_create_second_order_inflation",
+        "duration_of_disruption_matters"
+      ]
     }
   ],
   "metadata": {
-    "total_patterns": 34,
-    "last_updated": "2026-02-27",
+    "total_patterns": 42,
+    "last_updated": "2026-03-23",
     "confidence_distribution": {
-      "HIGH": 18,
-      "MEDIUM_HIGH": 12,
+      "HIGH": 22,
+      "MEDIUM_HIGH": 16,
       "MEDIUM": 4,
       "LOW": 0
     },
     "category_distribution": {
-      "geopolitical": 7,
+      "geopolitical": 9,
       "sentiment_social": 3,
-      "macroeconomic": 9,
-      "financial_credit": 6,
+      "macroeconomic": 11,
+      "financial_credit": 7,
       "crypto_credit": 1,
-      "political": 3,
-      "corporate": 5
+      "political": 4,
+      "corporate": 7
     }
   }
 }
