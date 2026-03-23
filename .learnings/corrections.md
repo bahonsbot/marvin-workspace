@@ -227,3 +227,10 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** high
 **Status:** resolved
+## [COR-20260323-2255]
+
+**Correction:** when useful, make deliberate use of the agent team instead of trying to do everything solo
+**Context:** Philippe reminded Marvin during Mission Control work that delegation should be used where it improves speed, depth, or validation quality
+**Rule:** for heavier implementation/audit passes, especially multi-part Mission Control work, consider splitting builder/reviewer work via the agent team rather than defaulting to single-thread execution
+
+**Status:** active
