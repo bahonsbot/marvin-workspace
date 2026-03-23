@@ -432,16 +432,30 @@ def main() -> int:
             "response": stored_resp,
         }
 
+        value_chain_suffix = ""
+        if signal_source == "execution_candidates":
+            vc_bits = []
+            if body.get("theme"):
+                vc_bits.append(str(body.get("theme")))
+            if body.get("chain_layer"):
+                vc_bits.append(str(body.get("chain_layer")))
+            if body.get("bottleneck_type") and body.get("bottleneck_type") != "none_clear":
+                vc_bits.append(f"bottleneck={body.get('bottleneck_type')}")
+            if body.get("beneficiary_class") and body.get("beneficiary_class") != "none_clear":
+                vc_bits.append(f"beneficiary={body.get('beneficiary_class')}")
+            if vc_bits:
+                value_chain_suffix = " | " + " / ".join(vc_bits[:4])
+
         if accepted:
             dispatched += 1
             sym_info = f"{body['symbol']} ({body.get('symbol_category', 'unknown')})"
             lines.append(
-                f"✅ {sym_info} {body['side']} qty={qty} [{signal_source}] | {str(body.get('source_title',''))[:60]}"
+                f"✅ {sym_info} {body['side']} qty={qty} [{signal_source}] | {str(body.get('source_title',''))[:60]}{value_chain_suffix}"
             )
         else:
             blocked += 1
             lines.append(
-                f"⚠️ blocked status={status} [{signal_source}] | {str(body.get('source_title',''))[:60]}"
+                f"⚠️ blocked status={status} [{signal_source}] | {str(body.get('source_title',''))[:60]}{value_chain_suffix}"
             )
 
     mode_name = 'FAST' if fast_mode else 'CONSERVATIVE'

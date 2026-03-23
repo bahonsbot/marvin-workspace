@@ -289,12 +289,39 @@ class ReasoningEngine:
             print(f"  {s['title'][:60]}...")
             print(f"  Source: {s['feed']}")
             print(f"  Reasoning: {s['reasoning']}")
+
+            chain_layer = s.get('chain_layer')
+            if chain_layer and chain_layer != 'none_clear':
+                chain_bits = [chain_layer]
+                if s.get('chain_sublayer') and s.get('chain_sublayer') != 'none_clear':
+                    chain_bits.append(s['chain_sublayer'])
+                print(f"  🧭 Chain: {' / '.join(chain_bits)}")
+
+            structural_bits = []
+            if s.get('bottleneck_type') and s.get('bottleneck_type') != 'none_clear':
+                structural_bits.append(f"bottleneck={s['bottleneck_type']}")
+            if s.get('moat_type') and s.get('moat_type') != 'none_clear':
+                structural_bits.append(f"moat={s['moat_type']}")
+            if s.get('fragility_type') and s.get('fragility_type') != 'none_clear':
+                structural_bits.append(f"fragility={s['fragility_type']}")
+            if structural_bits:
+                print(f"  🏗️ Structure: {', '.join(structural_bits)}")
+
+            market_bits = []
+            if s.get('beneficiary_class') and s.get('beneficiary_class') != 'none_clear':
+                market_bits.append(f"beneficiary={s['beneficiary_class']}")
+            if s.get('loser_class') and s.get('loser_class') != 'none_clear':
+                market_bits.append(f"fragile={s['loser_class']}")
+            if market_bits:
+                print(f"  ⚖️ Positioning: {', '.join(market_bits)}")
             
             if s.get('predicted_outcomes'):
                 print(f"  📈 Predicted: {' → '.join(s['predicted_outcomes'][:3])}")
             
             if s.get('signal_briefing'):
                 print(f"  💡 {s['signal_briefing']}")
+            if s.get('value_chain_notes'):
+                print(f"  🔎 {s['value_chain_notes']}")
             
             print()
     
