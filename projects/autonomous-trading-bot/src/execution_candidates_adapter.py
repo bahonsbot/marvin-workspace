@@ -51,6 +51,16 @@ def load_ready_execution_candidates(
 
     ready_candidates: List[Dict[str, Any]] = []
     warnings: List[str] = []
+    expected_value_chain_fields = [
+        "theme",
+        "chain_layer",
+        "bottleneck_type",
+        "moat_type",
+        "fragility_type",
+        "position_in_chain",
+        "beneficiary_class",
+        "loser_class",
+    ]
 
     for index, row in enumerate(payload):
         if not isinstance(row, dict):
@@ -79,6 +89,14 @@ def load_ready_execution_candidates(
                 f"invalid:{candidate_path.name}:row_{index}:primary_instrument_incomplete"
             )
             continue
+
+        missing_value_chain = [
+            field for field in expected_value_chain_fields if field not in row
+        ]
+        if missing_value_chain:
+            warnings.append(
+                f"warning:{candidate_path.name}:row_{index}:missing_value_chain_fields:{','.join(missing_value_chain)}"
+            )
 
         ready_candidates.append(row)
 

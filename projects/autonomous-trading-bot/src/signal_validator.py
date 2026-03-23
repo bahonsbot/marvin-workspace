@@ -105,6 +105,19 @@ def validate_signal_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
         ("pattern_name", 256),
         ("expected_horizon", 64),
         ("risk_overlay_hint", 128),
+        ("theme", 128),
+        ("chain_layer", 128),
+        ("chain_sublayer", 128),
+        ("bottleneck_type", 128),
+        ("moat_type", 128),
+        ("fragility_type", 128),
+        ("supplier_status", 128),
+        ("position_in_chain", 128),
+        ("beneficiary_class", 128),
+        ("loser_class", 128),
+        ("pair_trade_rationale", 512),
+        ("valuation_context", 64),
+        ("value_chain_notes", 800),
     ]:
         if field_name in payload and isinstance(payload[field_name], str):
             err = _validate_string_length(payload[field_name], max_len, field_name)

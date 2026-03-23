@@ -15,6 +15,7 @@ from knowledge_graph import KnowledgeGraph
 
 # Import accuracy tracker
 from accuracy_tracker import AccuracyTracker
+from value_chain_tagger import enrich_signals
 
 class ReasoningEngine:
     def __init__(self):
@@ -260,6 +261,9 @@ class ReasoningEngine:
                 'timestamp': datetime.now().isoformat()
             }
             enhanced_signals.append(enhanced)
+
+        # Add structural value-chain fields before downstream consumers read the file.
+        enhanced_signals = enrich_signals(enhanced_signals)
 
         # Sort by reasoning score
         enhanced_signals.sort(key=lambda x: x['reasoning_score'], reverse=True)

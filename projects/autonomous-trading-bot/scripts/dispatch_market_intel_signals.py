@@ -67,11 +67,18 @@ class Config:
 
 def _cfg() -> Config:
     webhook_url = os.getenv("AUTO_WEBHOOK_URL", "http://127.0.0.1:8000/webhook").strip()
-    # Enforce HTTPS for non-local webhook URLs (allow http for localhost)
-    if not webhook_url.startswith("http://localhost") and not webhook_url.startswith("http://127.0.0.1"):
-        if not webhook_url.startswith("https://"):
-            logger.warning(f"WEBHOOK_SHARED_SECRET: Non-local webhook URL should use HTTPS: {webhook_url[:50]}...")
-    
+    # Enforce HTTPS for non-local webhook URLs (allow plain HTTP only for local loopback)
+    local_http_prefixes = (
+        "http://localhost",
+        "http://127.0.0.1",
+        "http://[::1]",
+    )
+    if not webhook_url.startswith("https://") and not webhook_url.startswith(local_http_prefixes):
+        raise ValueError(
+            "AUTO_WEBHOOK_URL must use https:// for non-local destinations; "
+            "plain http:// is allowed only for localhost/127.0.0.1/::1"
+        )
+
     return Config(
         webhook_url=webhook_url,
         webhook_secret=os.getenv("WEBHOOK_SHARED_SECRET", "").strip(),
@@ -277,6 +284,21 @@ def _candidate_dispatch_payload(candidate: dict[str, Any], *, now: datetime, qty
         "expected_horizon": candidate.get("expected_horizon"),
         "evidence_strength": candidate.get("evidence_strength"),
         "risk_overlay_hint": candidate.get("risk_overlay_hint"),
+        "theme": candidate.get("theme"),
+        "chain_layer": candidate.get("chain_layer"),
+        "chain_sublayer": candidate.get("chain_sublayer"),
+        "bottleneck_type": candidate.get("bottleneck_type"),
+        "moat_type": candidate.get("moat_type"),
+        "fragility_type": candidate.get("fragility_type"),
+        "supplier_status": candidate.get("supplier_status"),
+        "position_in_chain": candidate.get("position_in_chain"),
+        "beneficiary_class": candidate.get("beneficiary_class"),
+        "loser_class": candidate.get("loser_class"),
+        "pair_trade_candidate": candidate.get("pair_trade_candidate"),
+        "pair_trade_rationale": candidate.get("pair_trade_rationale"),
+        "valuation_context": candidate.get("valuation_context"),
+        "value_chain_notes": candidate.get("value_chain_notes"),
+        "structural_interpretation_confidence": candidate.get("structural_interpretation_confidence"),
         "market_intel_mode": "execution_candidates",
         "symbol_reasoning": primary_instrument.get("mapping_type", "execution_candidate_primary"),
         "symbol_category": candidate.get("category"),
