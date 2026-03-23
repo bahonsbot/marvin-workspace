@@ -70,6 +70,17 @@ COMPANY_TICKER = {
     "kyivstar": "VEON",
     "boeing": "BA",
     "lockheed": "LMT",
+    "lockheed martin": "LMT",
+    "rtx": "RTX",
+    "raytheon": "RTX",
+    "northrop": "NOC",
+    "northrop grumman": "NOC",
+    "l3harris": "LHX",
+    "l3 harris": "LHX",
+    "curtiss-wright": "CW",
+    "curtiss wright": "CW",
+    "general dynamics": "GD",
+    "huntington ingalls": "HII",
     "exxon": "XOM",
     "chevron": "CVX",
     "matson": "MATX",
@@ -480,7 +491,16 @@ def detect_company_candidates(title: str) -> list[InstrumentCandidate]:
     for name, ticker in COMPANY_TICKER.items():
         if re.search(rf"(^|[^a-z0-9]){re.escape(name)}([^a-z0-9]|$)", title_norm):
             direction = "long"
-            if any(term in title_norm for term in NEGATIVE_TITLE_HINTS):
+            negative_title = False
+            for term in NEGATIVE_TITLE_HINTS:
+                if " " in term:
+                    if term in title_norm:
+                        negative_title = True
+                        break
+                elif re.search(rf"(^|[^a-z0-9]){re.escape(term)}([^a-z0-9]|$)", title_norm):
+                    negative_title = True
+                    break
+            if negative_title:
                 direction = "short"
             confidence = 0.78 if direction == "long" else 0.72
             matches.append(
@@ -643,6 +663,28 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         add("NRG", "equity", 0.68, "value_chain_operator", "short", "Power buyer/exposure with less bottleneck-vendor advantage")
         add("VST", "equity", 0.66, "value_chain_operator", "short", "Generation exposure less advantaged than equipment bottlenecks")
         add("XLU", "etf", 0.60, "value_chain_theme", "long", "Utility/grid broad proxy")
+
+    if theme == "defense_supply_chain" and layer == "defense_subsystems" and sublayer == "munitions_propulsion":
+        add("RTX", "equity", 0.85, "value_chain_operator", "long", "Missile and interceptor systems exposure")
+        add("LHX", "equity", 0.82, "value_chain_operator", "long", "Propulsion and precision-munitions exposure")
+        add("NOC", "equity", 0.78, "value_chain_operator", "long", "Missile defense and interceptor exposure")
+        add("LMT", "equity", 0.74, "value_chain_operator", "long", "Prime contractor with missile systems exposure")
+        add("BA", "equity", 0.66, "value_chain_operator", "short", "Lower-purity defense exposure due to commercial aerospace drag")
+        add("ITA", "etf", 0.62, "value_chain_theme", "long", "Broad defense-sector proxy")
+
+    if theme == "defense_supply_chain" and layer == "defense_subsystems" and sublayer == "electronics_sensors":
+        add("LHX", "equity", 0.86, "value_chain_operator", "long", "Defense electronics, ISR, and tactical systems exposure")
+        add("RTX", "equity", 0.80, "value_chain_operator", "long", "Radar and targeting-systems exposure")
+        add("CW", "equity", 0.74, "value_chain_operator", "long", "Embedded defense electronics and control systems exposure")
+        add("NOC", "equity", 0.72, "value_chain_second_order", "long", "Sensor and mission-systems overlap")
+        add("BA", "equity", 0.64, "value_chain_operator", "short", "Less subsystem-pure exposure than electronics specialists")
+
+    if theme == "defense_supply_chain" and layer == "defense_platforms" and sublayer == "naval_shipbuilding":
+        add("HII", "equity", 0.86, "value_chain_operator", "long", "Naval shipyard and fleet-build capacity exposure")
+        add("GD", "equity", 0.80, "value_chain_operator", "long", "Submarine and naval-platform exposure")
+        add("LHX", "equity", 0.68, "value_chain_second_order", "long", "Naval electronics and mission-systems overlap")
+        add("BA", "equity", 0.64, "value_chain_operator", "short", "Commercial aerospace mix is less advantaged than scarce naval-yard capacity")
+        add("ITA", "etf", 0.60, "value_chain_theme", "long", "Broad defense-sector proxy")
 
     if theme == "macro_rates_regime":
         if any(term in title for term in ("rate hike", "rate hikes", "raise rates", "yield", "inflation", "ecb", "fed")):

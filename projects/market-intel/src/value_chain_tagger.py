@@ -87,6 +87,60 @@ _PATTERN_DEFAULTS: dict[str, dict[str, Any]] = {
         "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
         "structural_interpretation_confidence": 0.68,
     },
+    "p052_future_defense_munitions": {
+        "theme": "defense_supply_chain",
+        "chain_layer": "defense_subsystems",
+        "chain_sublayer": "munitions_propulsion",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "capacity",
+        "moat_type": "preferred_vendor",
+        "fragility_type": NONE_CLEAR,
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "bottleneck_supplier",
+        "loser_class": "low_margin_integrator",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Missile, interceptor, and propulsion bottlenecks tend to favor scarce subsystem vendors over lower-purity downstream primes and commercial aerospace exposure.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Defense should be read through constrained munitions and propulsion capacity, not only broad conflict headlines.",
+        "structural_interpretation_confidence": 0.78,
+    },
+    "p053_future_defense_electronics": {
+        "theme": "defense_supply_chain",
+        "chain_layer": "defense_subsystems",
+        "chain_sublayer": "electronics_sensors",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "switching_cost",
+        "moat_type": "preferred_vendor",
+        "fragility_type": NONE_CLEAR,
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "ecosystem_owner",
+        "loser_class": "weak_supplier_without_moat",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Defense electronics, EW, sensors, and avionics specialists with embedded program positions should outperform less differentiated downstream exposure.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Sensors, avionics, tactical radios, EW, and targeting systems are hidden defense enablers with strong switching costs.",
+        "structural_interpretation_confidence": 0.79,
+    },
+    "p054_future_naval_shipbuilding": {
+        "theme": "defense_supply_chain",
+        "chain_layer": "defense_platforms",
+        "chain_sublayer": "naval_shipbuilding",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "capacity",
+        "moat_type": "preferred_vendor",
+        "fragility_type": "execution_risk",
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "infrastructure_backbone",
+        "beneficiary_class": "bottleneck_supplier",
+        "loser_class": "low_margin_integrator",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Naval fleet expansion tends to favor scarce shipyard/platform capacity over lower-purity aerospace exposure.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Naval shipbuilding is a distinct defense-capacity chain with very limited yard and submarine/surface-combatant throughput.",
+        "structural_interpretation_confidence": 0.77,
+    },
     "p050_future_machine_vision": {
         "theme": "industrial_automation",
         "chain_layer": "industrial_inputs",
@@ -450,6 +504,15 @@ def _infer_from_text(signal: dict[str, Any]) -> dict[str, Any]:
 
     if any(term in context_text for term in ("rare earth", "rare-earth", "rare earths", "neodymium", "praseodymium", "dysprosium", "terbium", "magnet materials", "magnet metal", "separation plant", "critical minerals", "processing facility", "mp materials", "lynas", "energy fuels")):
         return _with_defaults(_PATTERN_DEFAULTS["p047_future_rare_earths"])
+
+    if any(term in context_text for term in ("interceptor", "munition", "munitions", "rocket motor", "solid rocket motor", "artillery shell", "missile defense", "precision-guided munition", "propulsion", "raytheon", "rtx missile", "aerojet", "glide phase interceptor")):
+        return _with_defaults(_PATTERN_DEFAULTS["p052_future_defense_munitions"])
+
+    if any(term in context_text for term in ("radar", "electronic warfare", "ew system", "tactical radio", "night vision", "targeting sensor", "missile warning", "avionics", "isr", "l3harris", "curtiss-wright", "defense electronics")):
+        return _with_defaults(_PATTERN_DEFAULTS["p053_future_defense_electronics"])
+
+    if any(term in context_text for term in ("shipyard", "naval shipbuilding", "destroyer", "frigate", "submarine", "navy fleet", "surface combatant", "huntington ingalls", "general dynamics electric boat")):
+        return _with_defaults(_PATTERN_DEFAULTS["p054_future_naval_shipbuilding"])
 
     if any(term in context_text for term in ("cognex", "keyence", "machine vision", "vision sensor", "vision inspection", "industrial camera", "sensing system")):
         return _with_defaults(_PATTERN_DEFAULTS["p050_future_machine_vision"])
