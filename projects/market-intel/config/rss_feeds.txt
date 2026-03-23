@@ -17,10 +17,10 @@ KobeissiLetter,https://rss.app/feeds/at8g53BlwLzaKcCh.xml    # @KobeissiLetter
 FirstSquawk,https://rss.app/feeds/ChuCsVjdXRGB0eCw.xml        # @FirstSquawk
 GoogleNews_Technology,https://rss.app/feeds/IepnT5szV5gstgRh.xml  # Google News - Technology
 Telegram_FinancialJuice,https://rss.app/feeds/wOzYYg1oWsxi5DlV.xml # Telegram - FinancialJuice
-AP_Top,https://news.google.com/rss/search?q=site%3Aapnews.com+%22AP+Top+News%22&hl=en-US&gl=US&ceid=US%3Aen
+AP_Markets_search,https://news.google.com/rss/search?q=site%3Aapnews.com+markets&hl=en-US&gl=US&ceid=US%3Aen
 Guardian_World,https://www.theguardian.com/world/rss
 Guardian_Business,https://www.theguardian.com/uk/business/rss
-DW_Top,https://rss.dw.com/rdf/rss-en-top
+DW_Business_search,https://news.google.com/rss/search?q=site%3Adw.com+business&hl=en-US&gl=US&ceid=US%3Aen
 
 # News / Market (high-priority)
 Financial_Times,https://www.ft.com/rss/home
@@ -43,7 +43,7 @@ Bloomberg_Tech,https://news.google.com/rss/search?q=site%3Abloomberg.com+technol
 Bloomberg_Markets,https://news.google.com/rss/search?q=site%3Abloomberg.com+markets&hl=en-US&gl=US&ceid=US%3Aen
 
 # NEW: WSJ Markets
-WSJ_Markets,https://feeds.a.dj.com/rss/RSSMarketsMain.xml
+WSJ_search_markets,https://news.google.com/rss/search?q=site%3Awsj.com+markets&hl=en-US&gl=US&ceid=US%3Aen
 
 # NEW: Seeking Alpha (earnings/investor sentiment)
 SeekingAlpha,https://seekingalpha.com/market_currents.xml
