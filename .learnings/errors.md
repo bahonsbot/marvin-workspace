@@ -17,6 +17,18 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260323-1158]
+
+**What failed:** Platform Health Council cron-health analysis produced false-positive overdue findings for deterministic jobs
+**Error:** the report counted weekend dates as missed runs for weekday-only jobs and also treated a same-day job as overdue before its scheduled run time, which incorrectly escalated `trading-daily-report` and overstated the `pre-market-brief` issue
+**Context:** Morning Meeting review on 2026-03-23 after the health report flagged multiple missed deterministic scheduler runs
+**Suggested fix:** make cron-health analysis schedule-aware: compare findings against the actual calendar and the task definitions in `scripts/deterministic_scheduler.py`, never count weekend days for weekday-only jobs, and do not flag a job as overdue before its scheduled time on the current day
+**Resolution:** Fixed on 2026-03-23 by updating the `platform-health-council` cron prompt to respect schedule calendars, current-day timing, and deterministic task definitions before calling runs missing
+
+**Priority:** high
+**Status:** resolved
+
+
 ## [ERR-20260322-1237]
 
 **What failed:** self-improvement review + executor task-shape routing both produced false-positive outcomes
