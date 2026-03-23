@@ -17,6 +17,29 @@ The central idea is:
 
 That framing is durable enough to encode into research workflows and product surfaces.
 
+### Important scope clarification
+Although the transcript itself is centered on AI, chips, semiconductors, datacenters, and enterprise software, many of the underlying principles are **portable to other sectors**.
+
+Especially reusable across other domains:
+- broader technology stacks
+- mining and rare earths
+- industrial automation
+- energy infrastructure
+- defense supply chains
+- healthcare technology and equipment
+
+The reusable principles are:
+- map the value chain
+- find the bottleneck
+- find the hidden category-2 enablers
+- track exclusive / preferred suppliers
+- distinguish durable quality from hype
+- look for relative winners and losers inside the same theme
+
+So this memo should be read as:
+- **AI-specific in examples**
+- **cross-sector in method**
+
 ---
 
 ## 2. Combined top takeaways
