@@ -89,7 +89,7 @@ Capabilities the user wanted but don't exist.
 **Complexity:** medium-high
 
 **Priority:** high
-**Status:** pending / planned
+**Status:** partially implemented — Research Radar direction and manual-watch file-backed intake/write flow now exist in Mission Control; downstream influence on Market Intel/equity-bot research logic still needs follow-through
 
 ## [FEAT-20260323-2245]
 
@@ -98,4 +98,4 @@ Capabilities the user wanted but don't exist.
 **Complexity:** medium
 
 **Priority:** medium-high
-**Status:** pending / planned
+**Status:** partially implemented — index snapshot wiring exists and the Market Context block is live; commodities/source quality and a stronger context/polish pass are still needed; winners/losers remains intentionally deferred

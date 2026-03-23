@@ -141,6 +141,18 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
   - Files = non-memory browsing/preview and later file search
   - standalone Search page is transitional and should disappear once file search is embedded in Files
 - Additional feature direction: thin bottom status strip with real machine/runtime metrics
+- Market Intel/trading direction now has a durable 3-layer shape:
+  1. Signal Operations
+  2. Research Radar
+  3. Market Context
+  - with Manual Watch as a shared human-intake layer
+- Mission Control trading surfaces should stay research-first:
+  - interesting companies from signals
+  - strongest/weakest operator context
+  - manual watch candidates
+  - compact market-context blocks
+- Winners/losers is explicitly deferred for now
+- Market Context should use honest delayed/snapshot data from free/open-access sources where viable; no fake realtime, no decorative placeholder market feeds
 
 ## Project Snapshot
 ### Market Intel

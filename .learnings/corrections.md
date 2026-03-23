@@ -227,6 +227,14 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** high
 **Status:** resolved
+## [COR-20260324-0005]
+
+**Correction:** when using a builder/reviewer split, do not surface reviewer commentary before the builder result exists unless Philippe explicitly wants interim process notes
+**Context:** during Mission Control work, Marvin reported reviewer feedback before the builder pass had landed, which Philippe correctly called out as the wrong order for useful progress reporting
+**Rule:** prefer this flow for delegated implementation work: builder completes → reviewer validates built result → Marvin reports the combined outcome. If running them in parallel, keep internal review notes internal until the build exists.
+
+**Status:** active
+
 ## [COR-20260323-2255]
 
 **Correction:** when useful, make deliberate use of the agent team instead of trying to do everything solo
