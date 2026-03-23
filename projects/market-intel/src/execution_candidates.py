@@ -684,6 +684,7 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         add("NOC", "equity", 0.78, "value_chain_operator", "long", "Missile defense and interceptor exposure")
         add("LMT", "equity", 0.74, "value_chain_operator", "long", "Prime contractor with missile systems exposure")
         add("BA", "equity", 0.66, "value_chain_operator", "short", "Lower-purity defense exposure due to commercial aerospace drag")
+        add("GD", "equity", 0.63, "value_chain_operator", "short", "Broader platform mix is less pure than missile and propulsion specialists")
         add("ITA", "etf", 0.62, "value_chain_theme", "long", "Broad defense-sector proxy")
 
     if theme == "defense_supply_chain" and layer == "defense_subsystems" and sublayer == "electronics_sensors":
@@ -692,12 +693,14 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         add("CW", "equity", 0.74, "value_chain_operator", "long", "Embedded defense electronics and control systems exposure")
         add("NOC", "equity", 0.72, "value_chain_second_order", "long", "Sensor and mission-systems overlap")
         add("BA", "equity", 0.64, "value_chain_operator", "short", "Less subsystem-pure exposure than electronics specialists")
+        add("HII", "equity", 0.61, "value_chain_operator", "short", "Shipyard exposure is less electronics-pure than embedded sensor and EW specialists")
 
     if theme == "defense_supply_chain" and layer == "defense_platforms" and sublayer == "naval_shipbuilding":
         add("HII", "equity", 0.86, "value_chain_operator", "long", "Naval shipyard and fleet-build capacity exposure")
         add("GD", "equity", 0.80, "value_chain_operator", "long", "Submarine and naval-platform exposure")
         add("LHX", "equity", 0.68, "value_chain_second_order", "long", "Naval electronics and mission-systems overlap")
         add("BA", "equity", 0.64, "value_chain_operator", "short", "Commercial aerospace mix is less advantaged than scarce naval-yard capacity")
+        add("RTX", "equity", 0.60, "value_chain_operator", "short", "Subsystem-heavy missile and sensor exposure is less direct than constrained naval-yard capacity")
         add("ITA", "etf", 0.60, "value_chain_theme", "long", "Broad defense-sector proxy")
 
     if theme == "healthcare_equipment" and layer == "medtech_systems" and sublayer == "imaging_diagnostics":
@@ -888,6 +891,47 @@ def fallback_macro_candidates(category: str, pattern_name: str, reasoning_score:
     ]
 
 
+def _select_surface_candidates(ordered: list[InstrumentCandidate], limit: int = 6) -> list[InstrumentCandidate]:
+    if len(ordered) <= limit:
+        return ordered
+
+    selected = list(ordered[:limit])
+    selected_keys = {(item.symbol, item.direction_bias) for item in selected}
+
+    all_longs = [item for item in ordered if item.direction_bias == "long"]
+    all_shorts = [item for item in ordered if item.direction_bias == "short"]
+    sel_longs = [item for item in selected if item.direction_bias == "long"]
+    sel_shorts = [item for item in selected if item.direction_bias == "short"]
+
+    def replace_lowest_long_with(candidate: InstrumentCandidate) -> None:
+        nonlocal selected, selected_keys, sel_longs, sel_shorts
+        if (candidate.symbol, candidate.direction_bias) in selected_keys:
+            return
+        if not sel_longs:
+            return
+        removable = sorted(sel_longs, key=lambda item: (item.relevance_score, item.mapping_confidence, item.symbol, item.reason))[0]
+        selected = [item for item in selected if not (item.symbol == removable.symbol and item.direction_bias == removable.direction_bias)]
+        selected.append(candidate)
+        selected_keys = {(item.symbol, item.direction_bias) for item in selected}
+        sel_longs = [item for item in selected if item.direction_bias == "long"]
+        sel_shorts = [item for item in selected if item.direction_bias == "short"]
+
+    if all_shorts and not sel_shorts:
+        replace_lowest_long_with(all_shorts[0])
+
+    if len(all_shorts) >= 2 and len(sel_shorts) < 2 and len(sel_longs) >= 4:
+        for candidate in all_shorts:
+            if (candidate.symbol, candidate.direction_bias) not in selected_keys:
+                replace_lowest_long_with(candidate)
+                break
+
+    selected = sorted(
+        selected,
+        key=lambda item: (-item.relevance_score, -item.mapping_confidence, item.symbol, item.direction_bias, item.reason),
+    )
+    return selected[:limit]
+
+
 def build_instrument_candidates(signal: dict[str, Any], title_context: TitleContext) -> list[dict[str, Any]]:
     title = str(signal.get("title", ""))
     company = detect_company_candidates(title)
@@ -915,7 +959,8 @@ def build_instrument_candidates(signal: dict[str, Any], title_context: TitleCont
         merged.values(),
         key=lambda item: (-item.relevance_score, -item.mapping_confidence, item.symbol, item.direction_bias, item.reason),
     )
-    return [item.to_dict() for item in ordered[:6]]
+    surfaced = _select_surface_candidates(ordered, limit=6)
+    return [item.to_dict() for item in surfaced]
 
 
 def choose_primary_instrument(
