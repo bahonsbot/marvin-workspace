@@ -33,14 +33,15 @@ def main() -> int:
     for report in reports:
         lines.append(f"## {report['theme']} / {report['chain_layer']} / {report['chain_sublayer']}")
         lines.append(f"- Candidates: {report['candidate_count']}")
+        lines.append(f"- Unique symbols: {report.get('unique_symbol_count', 0)} ({', '.join(report.get('symbols', []))})")
         lines.append(f"- Pair-trade ready: {report['pair_trade_ready']}")
         strongest = report['strongest']
         weakest = report['weakest']
         lines.append(
-            f"- Strongest: `{strongest.get('pattern_id')}` score={strongest.get('research_score')} | {strongest.get('source_title','')[:120]}"
+            f"- Strongest: `{strongest.get('pattern_id')}` {report.get('strongest_symbol') or 'n/a'} score={strongest.get('research_score')} | {strongest.get('source_title','')[:120]}"
         )
         lines.append(
-            f"- Weakest: `{weakest.get('pattern_id')}` score={weakest.get('research_score')} | {weakest.get('source_title','')[:120]}"
+            f"- Weakest: `{weakest.get('pattern_id')}` {report.get('weakest_symbol') or 'n/a'} score={weakest.get('research_score')} | {weakest.get('source_title','')[:120]}"
         )
         if report.get('pair_trade_rationale'):
             lines.append(f"- Pair-trade rationale: {report['pair_trade_rationale']}")

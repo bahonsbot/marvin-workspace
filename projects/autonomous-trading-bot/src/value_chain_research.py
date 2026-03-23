@@ -122,6 +122,15 @@ def _bucket_key(row: Dict[str, Any]) -> Tuple[str, str, str]:
     )
 
 
+def _primary_symbol(row: Dict[str, Any]) -> str:
+    primary = row.get("primary_instrument")
+    if isinstance(primary, dict):
+        symbol = str(primary.get("symbol") or "").strip().upper()
+        if symbol:
+            return symbol
+    return ""
+
+
 def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     buckets: Dict[Tuple[str, str, str], List[Dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -141,9 +150,16 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
         weakest = sorted(items, key=lambda r: (r["research_score"], float(r.get("reasoning_score", 0) or 0)))[0]
         unique_patterns = {str(r.get("pattern_id") or "") for r in items if r.get("pattern_id")}
         unique_titles = {str(r.get("source_title") or "") for r in items if r.get("source_title")}
+        unique_symbols = {_primary_symbol(r) for r in items if _primary_symbol(r)}
+        strongest_symbol = _primary_symbol(strongest)
+        weakest_symbol = _primary_symbol(weakest)
         pair_trade_ready = (
             bool(strongest.get("pair_trade_candidate") or weakest.get("pair_trade_candidate"))
             and len(ranked) >= 2
+            and len(unique_symbols) >= 2
+            and strongest_symbol
+            and weakest_symbol
+            and strongest_symbol != weakest_symbol
             and (len(unique_patterns) >= 2 or len(unique_titles) >= 2)
             and strongest.get("source_title") != weakest.get("source_title")
         )
@@ -153,9 +169,13 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
                 "chain_layer": key[1],
                 "chain_sublayer": key[2],
                 "candidate_count": len(items),
+                "unique_symbol_count": len(unique_symbols),
+                "symbols": sorted(unique_symbols),
                 "pair_trade_ready": pair_trade_ready,
                 "strongest": strongest,
                 "weakest": weakest,
+                "strongest_symbol": strongest_symbol,
+                "weakest_symbol": weakest_symbol,
                 "top_candidates": ranked[:3],
                 "pair_trade_rationale": strongest.get("pair_trade_rationale") or weakest.get("pair_trade_rationale") or "",
             }

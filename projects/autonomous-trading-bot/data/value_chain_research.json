@@ -23,6 +23,10 @@
       "chain_layer": "semis_design",
       "chain_sublayer": "gpu_compute",
       "candidate_count": 1,
+      "unique_symbol_count": 1,
+      "symbols": [
+        "SOXX"
+      ],
       "pair_trade_ready": false,
       "strongest": {
         "candidate_id": "cand_4f9abb6e16d9f571",
@@ -252,6 +256,8 @@
         },
         "research_score": 12.52
       },
+      "strongest_symbol": "SOXX",
+      "weakest_symbol": "SOXX",
       "top_candidates": [
         {
           "candidate_id": "cand_4f9abb6e16d9f571",
@@ -375,6 +381,11 @@
       "chain_layer": "industrial_inputs",
       "chain_sublayer": "oil_supply",
       "candidate_count": 2,
+      "unique_symbol_count": 2,
+      "symbols": [
+        "SPY",
+        "USO"
+      ],
       "pair_trade_ready": true,
       "strongest": {
         "candidate_id": "cand_b0ac2612632b054e",
@@ -578,6 +589,8 @@
         },
         "research_score": 19.06
       },
+      "strongest_symbol": "SPY",
+      "weakest_symbol": "USO",
       "top_candidates": [
         {
           "candidate_id": "cand_b0ac2612632b054e",
@@ -789,7 +802,11 @@
       "chain_layer": "industrial_inputs",
       "chain_sublayer": "war_supply_routes",
       "candidate_count": 2,
-      "pair_trade_ready": true,
+      "unique_symbol_count": 1,
+      "symbols": [
+        "SPY"
+      ],
+      "pair_trade_ready": false,
       "strongest": {
         "candidate_id": "cand_bebaf6da4fca8968",
         "signal_id": "sig_415500e6c6520825",
@@ -976,6 +993,8 @@
         },
         "research_score": 18.66
       },
+      "strongest_symbol": "SPY",
+      "weakest_symbol": "SPY",
       "top_candidates": [
         {
           "candidate_id": "cand_bebaf6da4fca8968",
@@ -1171,7 +1190,12 @@
       "chain_layer": "none_clear",
       "chain_sublayer": "none_clear",
       "candidate_count": 6,
-      "pair_trade_ready": true,
+      "unique_symbol_count": 2,
+      "symbols": [
+        "SPY",
+        "UUP"
+      ],
+      "pair_trade_ready": false,
       "strongest": {
         "candidate_id": "cand_132df5503b643a59",
         "signal_id": "sig_b1dd2dd8dcc24df9",
@@ -1396,6 +1420,8 @@
         },
         "research_score": 10.86
       },
+      "strongest_symbol": "UUP",
+      "weakest_symbol": "UUP",
       "top_candidates": [
         {
           "candidate_id": "cand_132df5503b643a59",
