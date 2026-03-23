@@ -177,6 +177,39 @@ Command/tool failures and exceptions.
 
 ---
 
+## [ERR-20260323-1845]
+
+**What failed:** first focused synthetic validation for the Market Intel cross-sector execution-candidate expansion
+**Error:** attempted to import and call `build_primary_instrument` from `projects/market-intel/src/execution_candidates.py`, but the module exposes `choose_primary_instrument` instead
+**Context:** validating rare-earth / industrial-automation routing and execution-candidate mapping after expanding value-chain sector coverage
+**Suggested fix:** when building focused validation harnesses for execution-candidate work, inspect the module’s actual public helper names first and use `choose_primary_instrument` for top mapped instrument selection
+**Resolution:** resolved on 2026-03-23 by switching the validation harness to `choose_primary_instrument` and re-running the synthetic tests successfully
+
+**Priority:** medium
+**Status:** resolved
+
+## [ERR-20260323-1846]
+
+**What failed:** defense-sector direct company detection during synthetic validation
+**Error:** negative-title hint matching used raw substring checks, so `miss` could incorrectly fire inside domain words like `missile`, which could flip a directly mentioned defense company to the wrong direction bias
+**Context:** validating newly added defense supply-chain routes in `projects/market-intel/src/execution_candidates.py`
+**Suggested fix:** for sentiment/direction keyword checks, use phrase-aware or token-boundary-aware matching instead of raw substring scans when sector vocabulary contains overlapping fragments
+**Resolution:** resolved on 2026-03-23 by making `NEGATIVE_TITLE_HINTS` checks boundary-aware inside `detect_company_candidates()`
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260323-1847]
+
+**What failed:** healthcare-imaging company mapping specificity during synthetic validation
+**Error:** generic `siemens` direct matching leaked into `Siemens Healthineers` headlines, pulling the wrong parent-company mapping into healthcare-equipment routing
+**Context:** validating `healthcare_equipment / medtech_systems / imaging_diagnostics` coverage in `projects/market-intel/src/execution_candidates.py`
+**Suggested fix:** when a generic parent-company token overlaps a more specific operating-unit phrase, suppress the generic direct match if the more specific phrase is present
+**Resolution:** resolved on 2026-03-23 by preferring `siemens healthineers` over generic `siemens` during direct company detection
+
+**Priority:** medium
+**Status:** resolved
+
 **Error:** `minimax2.7` alias resolved and runtime restart succeeded, but actual message send returned `HTTP 404: 404 page not found` — even after switching baseUrl from `api.minimax.chat` to `api.minimax.io/v1`.
 **Root cause:** The MiniMax provider was configured without an explicit `api` adapter, causing OpenClaw to fall back to the wrong transport family. The fix required switching to `api: "anthropic-messages"` with `baseUrl: "https://api.minimax.io/anthropic"` — the Anthropic-compatible path, not the bare `/v1` path.
 **Lesson:** When 404 survives a clean provider/alias setup, it is almost always a transport/API-contract mismatch, not a credential or hostname problem. Diagnostic path: (1) read provider's official API docs, (2) read OpenClaw's own provider docs, (3) compare both against current config, then (4) apply the minimum transport-layer fix. Never stack speculative config edits for a 404 — always get the contract right first.

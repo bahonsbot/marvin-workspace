@@ -146,6 +146,9 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 ### Market Intel
 - active
 - core: RSS/Reddit ingestion, signal generation, reasoning, accuracy tracking
+- cross-sector value-chain expansion now includes structured subchains for rare-earth processing, industrial automation, energy infrastructure, defense supply chains, and healthcare equipment
+- durable posture: treat the newer lanes as targeted value-chain subchains, not as claims of full sector coverage
+- validation posture: most newer lanes are bench-ready rather than live-proven; prefer live-flow observation/audit before further broad sector expansion
 - refs: `projects/market-intel/PRD.md`, `projects/market-intel/docs/evidence-pack-schema.md`, `projects/market-intel/notes/`
 
 ### Autonomous Trading Bot (Equity)
