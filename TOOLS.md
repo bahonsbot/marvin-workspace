@@ -55,6 +55,7 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - Primary operator user: `node`
 
 ### Cron Jobs (Active)
+Note: `Delivery: none` means intentional silence by design unless otherwise noted, usually for script-only/artifact-only jobs that save outputs locally rather than announcing to Telegram.
 | Job | Time (GMT+7) | Purpose | Delivery |
 |-----|------------|---------|----------|
 | platform-health-council | 03:00 daily | Daily system audit | telegram (`platform-health-council`) via scheduler announce |
