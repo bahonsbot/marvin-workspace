@@ -87,6 +87,78 @@ _PATTERN_DEFAULTS: dict[str, dict[str, Any]] = {
         "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
         "structural_interpretation_confidence": 0.68,
     },
+    "p043_future_networking": {
+        "theme": "ai_infrastructure",
+        "chain_layer": "datacenter_networking",
+        "chain_sublayer": "ai_fabric",
+        "theme_maturity": "early_infra_buildout",
+        "bottleneck_type": "capacity",
+        "moat_type": "ecosystem_lock_in",
+        "fragility_type": NONE_CLEAR,
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "bottleneck_supplier",
+        "loser_class": "weak_supplier_without_moat",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "AI networking bottlenecks tend to favor fabric leaders over legacy enterprise networking names.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Networking/fabric throughput is the constraint, so switching and interconnect leaders matter more than generic AI demand.",
+        "structural_interpretation_confidence": 0.79,
+    },
+    "p044_future_power_cooling": {
+        "theme": "ai_infrastructure",
+        "chain_layer": "datacenter_power_cooling",
+        "chain_sublayer": "power_cooling_stack",
+        "theme_maturity": "early_infra_buildout",
+        "bottleneck_type": "energy",
+        "moat_type": "preferred_vendor",
+        "fragility_type": NONE_CLEAR,
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "bottleneck_supplier",
+        "loser_class": "low_margin_integrator",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Power and cooling constraints favor datacenter infrastructure specialists over lower-quality broad HVAC or downstream integrators.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Power and cooling are becoming hard datacenter constraints, so infra specialists deserve separate routing from generic AI compute headlines.",
+        "structural_interpretation_confidence": 0.8,
+    },
+    "p045_future_enterprise_data": {
+        "theme": "ai_software",
+        "chain_layer": "enterprise_data",
+        "chain_sublayer": "data_platforms",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "software_ecosystem",
+        "moat_type": "proprietary_data",
+        "fragility_type": "high_sbc",
+        "supplier_status": NONE_CLEAR,
+        "position_in_chain": "application_exposure",
+        "beneficiary_class": "ecosystem_owner",
+        "loser_class": "fragile_app_layer",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Enterprise data platforms with distribution and real data moats should outperform hype-led AI software wrappers.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "This is an enterprise-data layer signal, which sits above compute infra but below pure end-user app hype.",
+        "structural_interpretation_confidence": 0.73,
+    },
+    "p046_future_ai_app": {
+        "theme": "ai_software",
+        "chain_layer": "app_layer",
+        "chain_sublayer": "ai_applications",
+        "theme_maturity": "emerging_speculation",
+        "bottleneck_type": "distribution",
+        "moat_type": NONE_CLEAR,
+        "fragility_type": "hype_led",
+        "supplier_status": NONE_CLEAR,
+        "position_in_chain": "application_exposure",
+        "beneficiary_class": "none_clear",
+        "loser_class": "theme_hype_without_economics",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Speculative AI app layers are often weaker than infrastructure or enterprise-data leaders unless they show real moat and distribution.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "This is a higher-fragility app-layer AI signal and should not be conflated with hard infrastructure bottlenecks.",
+        "structural_interpretation_confidence": 0.68,
+    },
     "p035": {
         "theme": "datacenter_buildout",
         "chain_layer": "industrial_inputs",
@@ -283,27 +355,60 @@ def _infer_from_text(signal: dict[str, Any]) -> dict[str, Any]:
     if any(term in context_text for term in ("trade down", "essentials over discretionary", "retail margin")):
         return _with_defaults(_PATTERN_DEFAULTS["p041"])
 
+    if any(term in context_text for term in ("arista", "ethernet switch", "switching", "infini", "interconnect", "network fabric", "networking gear", "ai fabric", "broadcom switch", "cisco networking")):
+        return _with_defaults(_PATTERN_DEFAULTS["p043_future_networking"])
+
+    if any(term in context_text for term in ("cooling", "liquid cooling", "power demand", "power capacity", "transformer", "electrical equipment", "vertiv", "eaton", "hvac", "datacenter cooling")):
+        return _with_defaults(_PATTERN_DEFAULTS["p044_future_power_cooling"])
+
+    if any(term in context_text for term in ("snowflake", "mongodb", "confluent", "elastic", "data platform", "enterprise data", "data layer", "vector database", "retrieval", "data cloud")):
+        return _with_defaults(_PATTERN_DEFAULTS["p045_future_enterprise_data"])
+
+    if any(term in context_text for term in ("ai assistant", "ai app", "copilot app", "chatbot startup", "agent app", "application layer", "ai wrapper", "c3 ai", "bigbear")):
+        return _with_defaults(_PATTERN_DEFAULTS["p046_future_ai_app"])
+
     if any(term in title_text for term in ("ai ", " ai", "gpu", "semiconductor", "chip", "chips", "nvidia", "datacenter", "hbm", "cowos")):
         tags.update({
             "theme": "ai_infrastructure",
             "chain_layer": "semis_design",
+            "chain_sublayer": "gpu_compute",
             "theme_maturity": "early_infra_buildout",
+            "bottleneck_type": "capacity",
+            "moat_type": "design_leadership",
             "position_in_chain": "category2_hidden_enabler",
             "beneficiary_class": "category2_enabler",
             "loser_class": "fragile_app_layer",
             "value_chain_notes": "Signal appears AI/semiconductor related but lacks enough specificity for a narrower structural tag.",
-            "structural_interpretation_confidence": 0.45,
+            "structural_interpretation_confidence": 0.72,
         })
     return tags
 
 
 def enrich_signal(signal: dict[str, Any]) -> dict[str, Any]:
     pattern_id = str(signal.get("pattern_id") or "")
-    tags = _with_defaults(_PATTERN_DEFAULTS.get(pattern_id, {}))
+    default_tags = _with_defaults(_PATTERN_DEFAULTS.get(pattern_id, {}))
+    inferred = _infer_from_text(signal)
 
-    if tags["theme"] == NONE_CLEAR:
-        inferred = _infer_from_text(signal)
+    tags = dict(default_tags)
+    inferred_conf = float(inferred.get("structural_interpretation_confidence", 0.0) or 0.0)
+    default_conf = float(default_tags.get("structural_interpretation_confidence", 0.0) or 0.0)
+
+    if default_tags["theme"] == NONE_CLEAR:
         tags.update(inferred)
+    else:
+        should_override = (
+            inferred.get("theme") not in (None, NONE_CLEAR, "")
+            and (
+                inferred_conf > default_conf
+                or (
+                    default_tags.get("theme") == "macro_rates_regime"
+                    and inferred.get("theme") != default_tags.get("theme")
+                    and inferred_conf >= 0.6
+                )
+            )
+        )
+        if should_override:
+            tags.update(inferred)
 
     return {**signal, **tags}
 
