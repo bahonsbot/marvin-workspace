@@ -75,8 +75,8 @@ function toneForReviewStatus(status: MarketIntelManualWatchCandidate['reviewStat
   return { color: '#6b7280', bg: 'rgba(107, 114, 128, 0.14)', border: 'rgba(107, 114, 128, 0.3)' };
 }
 
-function MarketContextCard({ label, price, changePct, freshness }: {
-  label: string; price: number | null; changePct: number | null; freshness: string;
+function MarketContextCard({ symbol, label, price, changePct, freshness }: {
+  symbol: string; label?: string; price: number | null; changePct: number | null; freshness: string;
 }) {
   const isUp = (changePct ?? 0) >= 0;
   const tone = isUp
@@ -84,7 +84,8 @@ function MarketContextCard({ label, price, changePct, freshness }: {
     : { color: '#f87171', bg: 'rgba(248, 113, 113, 0.1)' };
   return (
     <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '9px 10px', background: 'rgba(7, 12, 22, 0.72)', display: 'grid', gap: 5 }}>
-      <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3 }}>{label}</div>
+      <div style={{ fontSize: 11, fontWeight: 760, letterSpacing: 0.3 }}>{symbol}</div>
+      {label ? <div style={{ fontSize: 10, color: 'var(--muted)' }}>{label}</div> : null}
       <div style={{ fontSize: 16, fontWeight: 760 }}>{price !== null ? price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</div>
       {changePct !== null ? (
         <div style={{ fontSize: 12, fontWeight: 700, color: tone.color, background: tone.bg, display: 'inline-flex', padding: '2px 7px', borderRadius: 999, alignSelf: 'start' }}>
@@ -123,6 +124,18 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
       ? { kind: 'signal', id: data.trackedSignals[0].id }
       : null,
   );
+
+  // Derive market regime from index changes
+  const marketRegime = (() => {
+    const changes = data.marketContext.indices
+      .map((q) => q.changePct)
+      .filter((c): c is number => c !== null);
+    if (changes.length === 0) return null;
+    const avg = changes.reduce((a, b) => a + b, 0) / changes.length;
+    if (avg >= 0.5) return { label: 'Risk-On', color: '#5eead4', bg: 'rgba(94, 234, 212, 0.14)' };
+    if (avg <= -0.5) return { label: 'Risk-Off', color: '#f87171', bg: 'rgba(248, 113, 113, 0.14)' };
+    return { label: 'Mixed', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.14)' };
+  })();
 
   if (data.status === 'stub') {
     return (
@@ -182,19 +195,13 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
         <div>
           <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3, marginBottom: 7 }}>Indices</div>
           {data.marketContext.indices.length === 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-              {['SPY', 'QQQ', 'DIA'].map((sym) => (
-                <div key={sym} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '9px 10px', background: 'rgba(7, 12, 22, 0.72)', display: 'grid', gap: 4 }}>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase' }}>{sym}</div>
-                  <div style={{ fontSize: 14, fontWeight: 760, color: 'var(--muted-strong)' }}>—</div>
-                  <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase' }}>pending</div>
-                </div>
-              ))}
+            <div style={{ fontSize: 12, color: 'var(--muted)', fontStyle: 'italic' }}>
+              Index data unavailable — source fetch failed or market closed.
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140, 1fr))', gap: 8 }}>
               {data.marketContext.indices.map((q) => (
-                <MarketContextCard key={q.id} label={q.symbol} price={q.price} changePct={q.changePct} freshness={q.freshness} />
+                <MarketContextCard key={q.id} symbol={q.symbol} label={q.label ?? undefined} price={q.price} changePct={q.changePct} freshness={q.freshness} />
               ))}
             </div>
           )}
@@ -204,26 +211,13 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
         <div style={{ borderTop: '1px solid rgba(148, 163, 184, 0.1)', paddingTop: 10 }}>
           <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3, marginBottom: 7 }}>Commodities</div>
           {data.marketContext.commodities.length === 0 ? (
-            <div style={{ display: 'flex', gap: 8 }}>
-              {['GLD', 'USO', 'CORN'].map((sym) => (
-                <div key={sym} style={{ border: '1px solid rgba(148, 163, 184, 0.1)', borderRadius: 8, padding: '7px 9px', background: 'rgba(7, 12, 22, 0.45)', display: 'grid', gap: 3 }}>
-                  <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase' }}>{sym}</div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted-strong)' }}>—</div>
-                </div>
-              ))}
+            <div style={{ fontSize: 12, color: 'var(--muted)', fontStyle: 'italic' }}>
+              Commodity data unavailable.
             </div>
           ) : (
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {data.marketContext.commodities.map((q) => (
-                <div key={q.id} style={{ border: '1px solid rgba(148, 163, 184, 0.12)', borderRadius: 8, padding: '7px 9px', background: 'rgba(7, 12, 22, 0.45)', display: 'grid', gap: 4, minWidth: 90 }}>
-                  <div style={{ fontSize: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.3 }}>{q.symbol}</div>
-                  <div style={{ fontSize: 13, fontWeight: 760 }}>{q.price !== null ? q.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '—'}</div>
-                  {q.changePct !== null ? (
-                    <div style={{ fontSize: 11, fontWeight: 700, color: (q.changePct ?? 0) >= 0 ? '#5eead4' : '#f87171' }}>
-                      {(q.changePct ?? 0) >= 0 ? '+' : ''}{q.changePct!.toFixed(2)}%
-                    </div>
-                  ) : null}
-                </div>
+                <MarketContextCard key={q.id} symbol={q.symbol} label={q.label ?? undefined} price={q.price} changePct={q.changePct} freshness={q.freshness} />
               ))}
             </div>
           )}
@@ -364,32 +358,58 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-          <div style={{ color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.34 }}>
-            Signals command deck
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.34 }}>
+              Signals command deck
+            </div>
+            {marketRegime && (
+              <div
+                style={{
+                  padding: '3px 9px',
+                  borderRadius: 999,
+                  border: `1px solid ${marketRegime.color}44`,
+                  background: marketRegime.bg,
+                  fontSize: 10,
+                  color: marketRegime.color,
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: 0.3,
+                }}
+              >
+                {marketRegime.label}
+              </div>
+            )}
           </div>
-          <div
-            style={{
-              padding: '6px 10px',
-              borderRadius: 999,
-              border: '1px solid rgba(110, 168, 255, 0.28)',
-              background: 'rgba(110, 168, 255, 0.12)',
-              fontSize: 11,
-              color: '#9cc4ff',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-            }}
-          >
-            Updated {formatDate(data.kpis.lastUpdated)}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {data.kpis.lastUpdated && (
+              <span style={{ fontSize: 11, color: 'var(--muted)' }}>
+                Signals {formatDate(data.kpis.lastUpdated)}
+              </span>
+            )}
+            <div
+              style={{
+                padding: '4px 9px',
+                borderRadius: 999,
+                border: '1px solid rgba(110, 168, 255, 0.28)',
+                background: 'rgba(110, 168, 255, 0.1)',
+                fontSize: 10,
+                color: '#9cc4ff',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+              }}
+            >
+              {data.kpis.pendingCount} pending
+            </div>
           </div>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: 9 }}>
-          <KpiCard label="Verified" value={String(data.kpis.totalVerified)} />
-          <KpiCard label="Evidence coverage" value={formatPct(data.kpis.evidenceCoverage)} />
-          <KpiCard label="Candidates" value={String(data.kpis.candidateCount)} />
-          <KpiCard label="Research radar" value={String(data.researchRadar.items.length)} />
-          <KpiCard label="Manual watch" value={String(data.manualWatch.items.length)} />
-          <KpiCard label="Pending review" value={String(data.kpis.pendingCount)} />
+          <KpiCard label="Candidates" value={String(data.kpis.candidateCount)} hint="ready to act on" />
+          <KpiCard label="Pending review" value={String(data.kpis.pendingCount)} hint="need verification" />
+          <KpiCard label="Verified" value={String(data.kpis.totalVerified)} hint="reviewed signals" />
+          <KpiCard label="Evidence coverage" value={formatPct(data.kpis.evidenceCoverage)} hint="with evidence" />
+          <KpiCard label="Research radar" value={String(data.researchRadar.items.length)} hint="ideas surfacing" />
+          <KpiCard label="Duplicates" value={String(data.kpis.duplicateCount)} hint="flagged duplicates" />
         </div>
       </section>
 

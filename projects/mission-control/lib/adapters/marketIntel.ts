@@ -9,6 +9,90 @@ import type {
   MarketIntelOutcome,
 } from '@/lib/types/contracts';
 
+// ── Market Context Fetcher ─────────────────────────────────────
+// Uses real index symbols (not ETF proxies) from Yahoo Finance.
+const INDEX_TICKERS = [
+  { id: '^GSPC', symbol: 'SPX', label: 'S&P 500' },
+  { id: '^NDX', symbol: 'NDX', label: 'Nasdaq 100' },
+  { id: '^DJI', symbol: 'DJI', label: 'Dow Jones' },
+  { id: '^RUT', symbol: 'RUT', label: 'Russell 2000' },
+];
+
+const COMMODITY_TICKERS = [
+  { id: 'GLD', symbol: 'GLD', label: 'Gold' },
+  { id: 'USO', symbol: 'USO', label: 'Oil (USO)' },
+  { id: 'CORN', symbol: 'CORN', label: 'Corn' },
+];
+
+async function fetchQuoteFromYahoo(symbol: string): Promise<{ price: number | null; changePct: number | null }> {
+  try {
+    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=2d`;
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
+      next: { revalidate: 900 },
+    });
+    if (!res.ok) return { price: null, changePct: null };
+    const json = await res.json() as {
+      chart?: { result?: Array<{ meta?: { regularMarketPrice?: number; previousClose?: number } }> };
+    };
+    const result = json?.chart?.result?.[0];
+    if (!result?.meta) return { price: null, changePct: null };
+    const { regularMarketPrice, previousClose } = result.meta;
+    if (typeof regularMarketPrice !== 'number') return { price: null, changePct: null };
+    const changePct =
+      typeof previousClose === 'number' && previousClose > 0
+        ? ((regularMarketPrice - previousClose) / previousClose) * 100
+        : null;
+    return { price: regularMarketPrice, changePct };
+  } catch {
+    return { price: null, changePct: null };
+  }
+}
+
+async function fetchMarketContext(): Promise<{ indices: MarketContextQuote[]; commodities: MarketContextQuote[]; note: string }> {
+  const [indicesResults, commoditiesResults] = await Promise.all([
+    Promise.all(INDEX_TICKERS.map(async (ticker) => {
+      const { price, changePct } = await fetchQuoteFromYahoo(ticker.id);
+      return {
+        id: ticker.id,
+        symbol: ticker.symbol,
+        label: ticker.label,
+        category: 'index' as const,
+        price,
+        change: null,
+        changePct,
+        currency: null,
+        source: 'Yahoo Finance',
+        freshness: price !== null ? 'delayed' as const : 'unavailable' as const,
+        updatedAt: new Date().toISOString(),
+        note: null,
+      };
+    })),
+    Promise.all(COMMODITY_TICKERS.map(async (ticker) => {
+      const { price, changePct } = await fetchQuoteFromYahoo(ticker.id);
+      return {
+        id: ticker.id,
+        symbol: ticker.symbol,
+        label: ticker.label,
+        category: 'commodity' as const,
+        price,
+        change: null,
+        changePct,
+        currency: null,
+        source: 'Yahoo Finance',
+        freshness: price !== null ? 'delayed' as const : 'unavailable' as const,
+        updatedAt: new Date().toISOString(),
+        note: null,
+      };
+    })),
+  ]);
+  return {
+    indices: indicesResults,
+    commodities: commoditiesResults,
+    note: 'Index and commodity quotes sourced from Yahoo Finance (15-min delayed). No ETF proxies used for indices.',
+  };
+}
+
 const EXECUTION_CANDIDATES_PATH = '/data/.openclaw/workspace/projects/market-intel/data/execution_candidates.json';
 const TRACKED_SIGNALS_PATH = '/data/.openclaw/workspace/projects/market-intel/data/tracked_signals.json';
 const ACCURACY_HISTORY_PATH = '/data/.openclaw/workspace/projects/market-intel/data/signal_accuracy_history.json';
@@ -332,14 +416,6 @@ function parseResearchRadar(raw: unknown, executionCandidates: MarketIntelExecut
   return { items: items.slice(0, 12), generatedAt };
 }
 
-function emptyMarketContext(): { indices: MarketContextQuote[]; commodities: MarketContextQuote[]; note: string } {
-  return {
-    indices: [],
-    commodities: [],
-    note: 'Market-context contracts are now reserved for delayed/snapshot index and commodity quotes; source-backed fetch wiring is the next implementation step.',
-  };
-}
-
 function deriveLastUpdated(values: Array<string | null | undefined>): string | null {
   const latest = values
     .map((value) => (value ? Date.parse(value) : NaN))
@@ -385,6 +461,8 @@ export async function getMarketIntelDashboard(): Promise<MarketIntelDashboardSum
       trackedSignals[0]?.verifiedAt,
     ]);
 
+    const marketContext = await fetchMarketContext();
+
     return {
       status: 'partial',
       kpis: {
@@ -408,7 +486,7 @@ export async function getMarketIntelDashboard(): Promise<MarketIntelDashboardSum
         path: MANUAL_WATCH_CANDIDATES_PATH,
         note: 'Manual watch candidates are shared trading-research inputs, not Mission Control-only UI state.',
       },
-      marketContext: emptyMarketContext(),
+      marketContext,
       accuracySnapshot: {
         totalReviewedRaw: asNumber(accuracyRaw.total_reviewed_raw),
         correctCount,
@@ -420,6 +498,8 @@ export async function getMarketIntelDashboard(): Promise<MarketIntelDashboardSum
       refreshedAt: new Date().toISOString(),
     };
   } catch {
+    // Files unreadable — still attempt market context fetch (it is file-independent)
+    const marketContext = await fetchMarketContext();
     return {
       status: 'stub',
       kpis: {
@@ -435,7 +515,7 @@ export async function getMarketIntelDashboard(): Promise<MarketIntelDashboardSum
       trackedSignals: [],
       researchRadar: { items: [], generatedAt: null, note: 'Research radar unavailable.' },
       manualWatch: { items: [], path: MANUAL_WATCH_CANDIDATES_PATH, note: 'Manual watch candidates unavailable.' },
-      marketContext: emptyMarketContext(),
+      marketContext,
       accuracySnapshot: {
         totalReviewedRaw: null,
         correctCount: 0,
