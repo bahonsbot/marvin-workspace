@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "6270c039",
+        "text": "[Personal] \ud83d\udcda Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
+        "column": "todo"
+      },
+      {
         "id": "1960113e",
         "text": "[Career] \ud83d\udcda Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
         "column": "todo"
@@ -22,13 +27,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "d4c67282",
-        "text": "[Personal] \ud83d\udcda Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "4b0ed9db",
@@ -57,5 +56,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-23T10:00:13.000Z"
+  "updatedAt": "2026-03-23T10:00:15.000Z"
 }
