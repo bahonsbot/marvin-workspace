@@ -17,6 +17,135 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260319-2022]
+
+**Trigger:** Philippe clarified that when timing is roughly comparable, he prefers better semantic recall results over plain keyword/BM25 speed.
+**What was wrong:** I was still leaning too conservatively toward `qmd search` as the default recall path after the CPU-mode QMD hardening, even after evidence showed `qmd vsearch` had become fast enough and better in quality.
+**Lesson:** On this VPS, prefer `qmd vsearch` first for memory recall when timing is in the same ballpark, use `qmd search` as the fallback exact-match lane, and reserve `qmd query` for deeper slower lookups.
+
+**Priority:** medium
+**Status:** resolved
+
+## [CORR-20260318-2259]
+
+**Trigger:** Philippe's live Mission Control Chat review kept pushing the layout away from explanatory scaffolding and width-heavy side panels.
+**What was wrong:** I initially let Chat accumulate too many framing panels and too much side-column weight, including a global right inspector, a standalone active-agent sidebar, and multiple explainer blocks in the center. That made Chat feel like a dashboard about chat instead of a place to continue chat.
+**Lesson:** For Mission Control Chat, center-column dominance matters more than extra context furniture. Prefer fewer panels, merge side details into the Agent Rail when possible, remove self-explaining copy aggressively once the structure is clear, and design for laptop-width comfort before adding optional inspectors.
+
+**Priority:** high
+**Status:** resolved
+
+## [CORR-20260318-1709]
+
+**Trigger:** Philippe reviewed the live Mission Control preview and clarified several direction corrections.
+**What was wrong:** I kept some UI choices too utilitarian or too data-heavy. Specifically: the bottom strip used a raw host identifier that is technically correct but not meaningful; the Tasks header copy was too explanatory; task lane tags need more visual personality; and the Sessions page drifted too close to an OpenClaw-style sessions dump instead of a more personal, agent-squad style surface.
+**Lesson:** For Mission Control, prefer meaningful operator signals over raw identifiers, keep explanatory copy minimal on visual surfaces, give task categories more personality, and treat the Sessions page as an agent roster/system cast rather than a cron-heavy session ledger.
+
+**Priority:** high
+**Status:** resolved
+
+
+## [CORR-20260318-1321]
+
+**Trigger:** User pointed out repeated filename typo drift between `TOOLS.md` and incorrect variants in chat.
+**What was wrong:** I kept alternating between the correct `TOOLS.md` filename and typo variants during Morning Meeting replies.
+**Lesson:** When referencing core workspace files, visually verify the exact filename before sending. Do not rely on muscle memory during long review sessions.
+
+**Priority:** medium
+**Status:** resolved
+
+
+## [CORR-20260318-1217]
+
+**Trigger:** User corrected filename/typo sloppiness in Morning Meeting replies.
+**What was wrong:** I introduced avoidable typos in core doc references, including `TOOLS.md` and the correct runbook filename `docs/runbooks/morning-meeting-decision-template.md`.
+**Lesson:** Slow down on filenames and core workspace docs. Verify exact names before sending, especially during Morning Meeting summaries.
+
+**Priority:** medium
+**Status:** resolved
+
+## [CORR-20260318-0040]
+
+**Trigger:** Philippe clarified that the current Mission Control UI is "on the right track" but not yet "premium enough," and highlighted the current strongest/weakest modules after live preview.
+**What was learned:** For Mission Control reviews, the right calibration is promising/coherent/improving, not premium-finished. `Sessions` is currently the strongest page; `Tasks` is the biggest current mismatch because it still needs a more kanban-first mental model.
+**Lesson:** When assessing Mission Control progress, describe the UI as directionally strong but still below the intended premium standard, protect what already works on `Sessions`, and prioritize `Tasks` as the next major correction instead of over-polishing already-stronger modules.
+
+**Priority:** high
+**Status:** resolved
+
+## [CORR-20260318-0041]
+
+**Trigger:** Philippe's live Mission Control preview feedback emphasized that the real open question on Orchestrator is where the actual runtime conversation/chat surface should live inside Mission Control.
+**What was learned:** The Orchestrator problem is no longer just a polish issue. The next major question is the product/architecture decision about chat placement, and superficial UI improvement should not pretend that answer already exists.
+**Lesson:** For Mission Control Orchestrator work, do not fake an embedded chat outcome. Treat chat placement as a deliberate later decision after Tasks/Sessions/system-strip work, and keep the current bridge/framing honest in the meantime.
+
+**Priority:** high
+**Status:** resolved
+
+## [CORR-20260317-1843]
+
+**Trigger:** Philippe wants SearXNG considered moving forward, but only as an optional comparison path first, not as a Brave replacement.
+**What was learned:** For search-provider experiments in this workspace, slower is acceptable if search quality or source diversity improves, but the default provider should not be changed before a real comparison on Philippe's actual query mix.
+**Lesson:** When testing alternative search providers, keep the current provider as default, run a structured comparison first, and only promote the alternative if it shows repeatable wins on real queries rather than anecdotal novelty.
+
+**Priority:** medium
+**Status:** resolved
+
+
+## [CORR-20260317-1203]
+
+**Trigger:** Self-Improvement MEDIUM-001 - recent reusable lessons were left in daily notes instead of being promoted into `.learnings/`
+**What was learned:** Duplicate prevention in autonomous execution works best as a layered pattern: generator dedupe first, selector-time prune second, queue-time suppression and recovery last.
+**Lesson:** When hardening autonomous task systems against duplicate work, add the cheapest guard at the earliest decision point, then reinforce it downstream so the system still self-heals if upstream state drifts.
+
+**Priority:** medium
+**Status:** resolved
+
+## [CORR-20260317-1204]
+
+**Trigger:** Self-Improvement MEDIUM-001 - recent reusable lessons were left in daily notes instead of being promoted into `.learnings/`
+**What was learned:** Publish/sync flows are more reliable when they rebase before push and use an explicit source-of-truth conflict policy for generated artifacts.
+**Lesson:** For git-backed publish scripts, prefer `git pull --rebase` before push, and for generated truth artifacts like `board.json`, resolve conflicts with an explicit rule instead of ad-hoc manual handling.
+
+**Priority:** medium
+**Status:** resolved
+
+## [CORR-20260317-1205]
+
+**Trigger:** Self-Improvement MEDIUM-001 - recent reusable lessons were left in daily notes instead of being promoted into `.learnings/`
+**What was learned:** Human review workflows need a canonical structured store plus a human-readable audit trail, and the writing path should be enforced with a helper when consistency matters.
+**Lesson:** For review pipelines that feed later learning, use a two-artifact contract: machine-readable canonical state for downstream consumers, plus dated markdown for auditability. Provide a helper script for writing the canonical state instead of trusting models to remember storage rules.
+
+**Priority:** medium
+**Status:** resolved
+
+## [CORR-20260317-1206]
+
+**Trigger:** Self-Improvement MEDIUM-001 - recent reusable lessons were left in daily notes instead of being promoted into `.learnings/`
+**What was learned:** Cron migrations are safer when sequenced from deterministic jobs to mixed/reasoning jobs, with lock hardening and same-day direct verification before relying on scheduler truth.
+**Lesson:** For cron architecture changes, migrate deterministic jobs first, harden overlap/lock behavior before rollout, and verify each migrated task directly the same day before trusting scheduled status signals.
+
+**Priority:** medium
+**Status:** resolved
+
+## [CORR-20260316-1844]
+
+**Trigger:** "Also keep the current environment we're running it in into account, the docker-based VPS via SSH that's running 24/7. Ideally I want to keep it local, but if we have to deploy parts online that can be considered - if kept safe and secure."
+**What was learned:** For Mission Control, Philippe prefers a local-first architecture that respects the current Docker-based VPS + SSH + 24/7 environment. Internet exposure is acceptable only if justified and secured properly.
+**Lesson:** Dashboard architecture and deployment recommendations should assume Docker-based VPS hosting, local-first access, and security-conscious optional remote exposure.
+
+**Priority:** high
+**Status:** resolved
+
+## [CORR-20260316-1837]
+
+**Trigger:** "I really don't mind if it turns out to be something that looks it came straight from the Apple design labs. And I do secretly fancy the 'date/time/weather widget' and/or a quote of the day, if it doesn't break the UX."
+**What was learned:** Philippe prefers premium, polished UX for the dashboard/Mission Control project, not just functional operator aesthetics. Ambient touches like date/time/weather and maybe quote-of-the-day are welcome if they improve atmosphere without harming clarity.
+**Lesson:** For the dashboard project, optimize for truthful operator UX first, but allow a distinctly premium, Apple-lab-level visual polish and carefully chosen ambient widgets.
+
+**Priority:** medium
+**Status:** resolved
+
 ## [CORR-20260316-1416]
 
 **Trigger:** "You can remove 'safety/reliability fixes' from your exception list, because we would already tackle those early anyway."
