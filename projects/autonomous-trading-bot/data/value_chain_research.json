@@ -27,6 +27,11 @@
       "symbols": [
         "NVDA"
       ],
+      "operator_symbols": [
+        "ANET",
+        "AVGO",
+        "NVDA"
+      ],
       "pair_trade_ready": false,
       "pair_trade_style": "not_ready",
       "strongest": {
@@ -74,8 +79,8 @@
           {
             "symbol": "NVDA",
             "instrument_type": "equity",
-            "relevance_score": 0.86,
-            "mapping_confidence": 0.86,
+            "relevance_score": 0.9,
+            "mapping_confidence": 0.9,
             "mapping_type": "value_chain_company",
             "direction_bias": "long",
             "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
@@ -90,6 +95,24 @@
             "reason": "Semiconductor sector proxy"
           },
           {
+            "symbol": "AVGO",
+            "instrument_type": "equity",
+            "relevance_score": 0.78,
+            "mapping_confidence": 0.78,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "AI networking/custom silicon operator"
+          },
+          {
+            "symbol": "ANET",
+            "instrument_type": "equity",
+            "relevance_score": 0.72,
+            "mapping_confidence": 0.72,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "AI network fabric beneficiary"
+          },
+          {
             "symbol": "XLK",
             "instrument_type": "etf",
             "relevance_score": 0.66,
@@ -97,14 +120,23 @@
             "mapping_type": "sector_proxy",
             "direction_bias": "long",
             "reason": "Broader technology spillover"
+          },
+          {
+            "symbol": "SPY",
+            "instrument_type": "etf",
+            "relevance_score": 0.482,
+            "mapping_confidence": 0.482,
+            "mapping_type": "macro_proxy",
+            "direction_bias": "long",
+            "reason": "Fallback broad-market proxy for a macro signal"
           }
         ],
         "primary_instrument": {
           "symbol": "NVDA",
           "instrument_type": "equity",
           "direction_bias": "long",
-          "relevance_score": 0.86,
-          "mapping_confidence": 0.86,
+          "relevance_score": 0.9,
+          "mapping_confidence": 0.9,
           "mapping_type": "value_chain_company",
           "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
         },
@@ -126,7 +158,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "Signal points to compute bottlenecks or semiconductor demand inside the AI stack rather than broad end-user app demand.",
         "structural_interpretation_confidence": 0.72,
-        "execution_priority": 0.441,
+        "execution_priority": 0.451,
         "dispatch_readiness": {
           "ready": false,
           "reasons": [
@@ -190,8 +222,8 @@
           {
             "symbol": "NVDA",
             "instrument_type": "equity",
-            "relevance_score": 0.86,
-            "mapping_confidence": 0.86,
+            "relevance_score": 0.9,
+            "mapping_confidence": 0.9,
             "mapping_type": "value_chain_company",
             "direction_bias": "long",
             "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
@@ -206,6 +238,24 @@
             "reason": "Semiconductor sector proxy"
           },
           {
+            "symbol": "AVGO",
+            "instrument_type": "equity",
+            "relevance_score": 0.78,
+            "mapping_confidence": 0.78,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "AI networking/custom silicon operator"
+          },
+          {
+            "symbol": "ANET",
+            "instrument_type": "equity",
+            "relevance_score": 0.72,
+            "mapping_confidence": 0.72,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "AI network fabric beneficiary"
+          },
+          {
             "symbol": "XLK",
             "instrument_type": "etf",
             "relevance_score": 0.66,
@@ -213,14 +263,23 @@
             "mapping_type": "sector_proxy",
             "direction_bias": "long",
             "reason": "Broader technology spillover"
+          },
+          {
+            "symbol": "SPY",
+            "instrument_type": "etf",
+            "relevance_score": 0.482,
+            "mapping_confidence": 0.482,
+            "mapping_type": "macro_proxy",
+            "direction_bias": "long",
+            "reason": "Fallback broad-market proxy for a macro signal"
           }
         ],
         "primary_instrument": {
           "symbol": "NVDA",
           "instrument_type": "equity",
           "direction_bias": "long",
-          "relevance_score": 0.86,
-          "mapping_confidence": 0.86,
+          "relevance_score": 0.9,
+          "mapping_confidence": 0.9,
           "mapping_type": "value_chain_company",
           "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
         },
@@ -242,7 +301,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "Signal points to compute bottlenecks or semiconductor demand inside the AI stack rather than broad end-user app demand.",
         "structural_interpretation_confidence": 0.72,
-        "execution_priority": 0.441,
+        "execution_priority": 0.451,
         "dispatch_readiness": {
           "ready": false,
           "reasons": [
@@ -263,6 +322,16 @@
       },
       "strongest_symbol": "NVDA",
       "weakest_symbol": "NVDA",
+      "best_long_operator": {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "direction_bias": "long",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+      },
+      "best_short_operator": null,
       "top_candidates": [
         {
           "candidate_id": "cand_ecf5520ee2565aba",
@@ -309,8 +378,8 @@
             {
               "symbol": "NVDA",
               "instrument_type": "equity",
-              "relevance_score": 0.86,
-              "mapping_confidence": 0.86,
+              "relevance_score": 0.9,
+              "mapping_confidence": 0.9,
               "mapping_type": "value_chain_company",
               "direction_bias": "long",
               "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
@@ -325,6 +394,24 @@
               "reason": "Semiconductor sector proxy"
             },
             {
+              "symbol": "AVGO",
+              "instrument_type": "equity",
+              "relevance_score": 0.78,
+              "mapping_confidence": 0.78,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "AI networking/custom silicon operator"
+            },
+            {
+              "symbol": "ANET",
+              "instrument_type": "equity",
+              "relevance_score": 0.72,
+              "mapping_confidence": 0.72,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "AI network fabric beneficiary"
+            },
+            {
               "symbol": "XLK",
               "instrument_type": "etf",
               "relevance_score": 0.66,
@@ -332,14 +419,23 @@
               "mapping_type": "sector_proxy",
               "direction_bias": "long",
               "reason": "Broader technology spillover"
+            },
+            {
+              "symbol": "SPY",
+              "instrument_type": "etf",
+              "relevance_score": 0.482,
+              "mapping_confidence": 0.482,
+              "mapping_type": "macro_proxy",
+              "direction_bias": "long",
+              "reason": "Fallback broad-market proxy for a macro signal"
             }
           ],
           "primary_instrument": {
             "symbol": "NVDA",
             "instrument_type": "equity",
             "direction_bias": "long",
-            "relevance_score": 0.86,
-            "mapping_confidence": 0.86,
+            "relevance_score": 0.9,
+            "mapping_confidence": 0.9,
             "mapping_type": "value_chain_company",
             "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
           },
@@ -361,7 +457,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "Signal points to compute bottlenecks or semiconductor demand inside the AI stack rather than broad end-user app demand.",
           "structural_interpretation_confidence": 0.72,
-          "execution_priority": 0.441,
+          "execution_priority": 0.451,
           "dispatch_readiness": {
             "ready": false,
             "reasons": [
@@ -390,12 +486,18 @@
       "candidate_count": 2,
       "unique_symbol_count": 1,
       "symbols": [
-        "USO"
+        "XOM"
       ],
-      "pair_trade_ready": false,
-      "pair_trade_style": "not_ready",
+      "operator_symbols": [
+        "AAL",
+        "CVX",
+        "DAL",
+        "XOM"
+      ],
+      "pair_trade_ready": true,
+      "pair_trade_style": "cross_chain_operator_pair",
       "strongest": {
-        "candidate_id": "cand_849a4e5c7b10b39a",
+        "candidate_id": "cand_f73e7726a630ccbf",
         "signal_id": "sig_7e7ed55cd09505d9",
         "signal_fingerprint": "sha256:b4ed237ccc84cb1ebef20aec5ca57e599830e34ff88825cd77935c8ffc29cc25",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -435,10 +537,28 @@
         ],
         "instrument_candidates": [
           {
+            "symbol": "XOM",
+            "instrument_type": "equity",
+            "relevance_score": 0.9,
+            "mapping_confidence": 0.9,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Integrated oil major with direct supply sensitivity"
+          },
+          {
+            "symbol": "CVX",
+            "instrument_type": "equity",
+            "relevance_score": 0.88,
+            "mapping_confidence": 0.88,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Integrated oil major with direct supply sensitivity"
+          },
+          {
             "symbol": "USO",
             "instrument_type": "etf",
-            "relevance_score": 0.91,
-            "mapping_confidence": 0.91,
+            "relevance_score": 0.87,
+            "mapping_confidence": 0.87,
             "mapping_type": "value_chain_theme",
             "direction_bias": "long",
             "reason": "Value-chain oil supply proxy"
@@ -446,30 +566,39 @@
           {
             "symbol": "XLE",
             "instrument_type": "etf",
-            "relevance_score": 0.86,
-            "mapping_confidence": 0.86,
+            "relevance_score": 0.82,
+            "mapping_confidence": 0.82,
             "mapping_type": "value_chain_theme",
             "direction_bias": "long",
             "reason": "Energy-sector proxy for supply shocks"
           },
           {
-            "symbol": "JETS",
-            "instrument_type": "etf",
-            "relevance_score": 0.69,
-            "mapping_confidence": 0.69,
-            "mapping_type": "value_chain_second_order",
+            "symbol": "DAL",
+            "instrument_type": "equity",
+            "relevance_score": 0.72,
+            "mapping_confidence": 0.72,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "short",
+            "reason": "Fuel-cost pressure on airlines"
+          },
+          {
+            "symbol": "AAL",
+            "instrument_type": "equity",
+            "relevance_score": 0.7,
+            "mapping_confidence": 0.7,
+            "mapping_type": "value_chain_operator",
             "direction_bias": "short",
             "reason": "Fuel-cost pressure on airlines"
           }
         ],
         "primary_instrument": {
-          "symbol": "USO",
-          "instrument_type": "etf",
+          "symbol": "XOM",
+          "instrument_type": "equity",
           "direction_bias": "long",
-          "relevance_score": 0.91,
-          "mapping_confidence": 0.91,
-          "mapping_type": "value_chain_theme",
-          "reason": "Value-chain oil supply proxy"
+          "relevance_score": 0.9,
+          "mapping_confidence": 0.9,
+          "mapping_type": "value_chain_operator",
+          "reason": "Integrated oil major with direct supply sensitivity"
         },
         "execution_bias": "allow",
         "risk_overlay_hint": "elevated_macro_volatility",
@@ -489,7 +618,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
         "structural_interpretation_confidence": 0.86,
-        "execution_priority": 0.898,
+        "execution_priority": 0.896,
         "dispatch_readiness": {
           "ready": true,
           "reasons": []
@@ -506,7 +635,7 @@
         "research_score": 19.24
       },
       "weakest": {
-        "candidate_id": "cand_36d9da5203e24725",
+        "candidate_id": "cand_807cce46605be36b",
         "signal_id": "sig_8b8a0e7406b4f604",
         "signal_fingerprint": "sha256:6151b32e5bfb9f33d1b46d09a7d07cca4fef7fdc53bd6c138322a36f264ec2cd",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -546,41 +675,68 @@
         ],
         "instrument_candidates": [
           {
+            "symbol": "XOM",
+            "instrument_type": "equity",
+            "relevance_score": 0.9,
+            "mapping_confidence": 0.9,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Integrated oil major with direct supply sensitivity"
+          },
+          {
+            "symbol": "CVX",
+            "instrument_type": "equity",
+            "relevance_score": 0.88,
+            "mapping_confidence": 0.88,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Integrated oil major with direct supply sensitivity"
+          },
+          {
             "symbol": "USO",
             "instrument_type": "etf",
-            "relevance_score": 0.91,
-            "mapping_confidence": 0.91,
-            "mapping_type": "value_chain_theme",
+            "relevance_score": 0.88,
+            "mapping_confidence": 0.88,
+            "mapping_type": "commodity_proxy",
             "direction_bias": "long",
-            "reason": "Value-chain oil supply proxy"
+            "reason": "Oil supply or transport disruption"
           },
           {
             "symbol": "XLE",
             "instrument_type": "etf",
-            "relevance_score": 0.86,
-            "mapping_confidence": 0.86,
+            "relevance_score": 0.82,
+            "mapping_confidence": 0.82,
             "mapping_type": "value_chain_theme",
             "direction_bias": "long",
             "reason": "Energy-sector proxy for supply shocks"
           },
           {
-            "symbol": "JETS",
-            "instrument_type": "etf",
-            "relevance_score": 0.69,
-            "mapping_confidence": 0.69,
-            "mapping_type": "value_chain_second_order",
+            "symbol": "DAL",
+            "instrument_type": "equity",
+            "relevance_score": 0.72,
+            "mapping_confidence": 0.72,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "short",
+            "reason": "Fuel-cost pressure on airlines"
+          },
+          {
+            "symbol": "AAL",
+            "instrument_type": "equity",
+            "relevance_score": 0.7,
+            "mapping_confidence": 0.7,
+            "mapping_type": "value_chain_operator",
             "direction_bias": "short",
             "reason": "Fuel-cost pressure on airlines"
           }
         ],
         "primary_instrument": {
-          "symbol": "USO",
-          "instrument_type": "etf",
+          "symbol": "XOM",
+          "instrument_type": "equity",
           "direction_bias": "long",
-          "relevance_score": 0.91,
-          "mapping_confidence": 0.91,
-          "mapping_type": "value_chain_theme",
-          "reason": "Value-chain oil supply proxy"
+          "relevance_score": 0.9,
+          "mapping_confidence": 0.9,
+          "mapping_type": "value_chain_operator",
+          "reason": "Integrated oil major with direct supply sensitivity"
         },
         "execution_bias": "allow",
         "risk_overlay_hint": "elevated_macro_volatility",
@@ -600,7 +756,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
         "structural_interpretation_confidence": 0.86,
-        "execution_priority": 0.869,
+        "execution_priority": 0.867,
         "dispatch_readiness": {
           "ready": true,
           "reasons": []
@@ -616,11 +772,29 @@
         },
         "research_score": 19.06
       },
-      "strongest_symbol": "USO",
-      "weakest_symbol": "USO",
+      "strongest_symbol": "XOM",
+      "weakest_symbol": "XOM",
+      "best_long_operator": {
+        "symbol": "XOM",
+        "instrument_type": "equity",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_operator",
+        "direction_bias": "long",
+        "reason": "Integrated oil major with direct supply sensitivity"
+      },
+      "best_short_operator": {
+        "symbol": "DAL",
+        "instrument_type": "equity",
+        "relevance_score": 0.72,
+        "mapping_confidence": 0.72,
+        "mapping_type": "value_chain_operator",
+        "direction_bias": "short",
+        "reason": "Fuel-cost pressure on airlines"
+      },
       "top_candidates": [
         {
-          "candidate_id": "cand_849a4e5c7b10b39a",
+          "candidate_id": "cand_f73e7726a630ccbf",
           "signal_id": "sig_7e7ed55cd09505d9",
           "signal_fingerprint": "sha256:b4ed237ccc84cb1ebef20aec5ca57e599830e34ff88825cd77935c8ffc29cc25",
           "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -660,10 +834,28 @@
           ],
           "instrument_candidates": [
             {
+              "symbol": "XOM",
+              "instrument_type": "equity",
+              "relevance_score": 0.9,
+              "mapping_confidence": 0.9,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Integrated oil major with direct supply sensitivity"
+            },
+            {
+              "symbol": "CVX",
+              "instrument_type": "equity",
+              "relevance_score": 0.88,
+              "mapping_confidence": 0.88,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Integrated oil major with direct supply sensitivity"
+            },
+            {
               "symbol": "USO",
               "instrument_type": "etf",
-              "relevance_score": 0.91,
-              "mapping_confidence": 0.91,
+              "relevance_score": 0.87,
+              "mapping_confidence": 0.87,
               "mapping_type": "value_chain_theme",
               "direction_bias": "long",
               "reason": "Value-chain oil supply proxy"
@@ -671,30 +863,39 @@
             {
               "symbol": "XLE",
               "instrument_type": "etf",
-              "relevance_score": 0.86,
-              "mapping_confidence": 0.86,
+              "relevance_score": 0.82,
+              "mapping_confidence": 0.82,
               "mapping_type": "value_chain_theme",
               "direction_bias": "long",
               "reason": "Energy-sector proxy for supply shocks"
             },
             {
-              "symbol": "JETS",
-              "instrument_type": "etf",
-              "relevance_score": 0.69,
-              "mapping_confidence": 0.69,
-              "mapping_type": "value_chain_second_order",
+              "symbol": "DAL",
+              "instrument_type": "equity",
+              "relevance_score": 0.72,
+              "mapping_confidence": 0.72,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "short",
+              "reason": "Fuel-cost pressure on airlines"
+            },
+            {
+              "symbol": "AAL",
+              "instrument_type": "equity",
+              "relevance_score": 0.7,
+              "mapping_confidence": 0.7,
+              "mapping_type": "value_chain_operator",
               "direction_bias": "short",
               "reason": "Fuel-cost pressure on airlines"
             }
           ],
           "primary_instrument": {
-            "symbol": "USO",
-            "instrument_type": "etf",
+            "symbol": "XOM",
+            "instrument_type": "equity",
             "direction_bias": "long",
-            "relevance_score": 0.91,
-            "mapping_confidence": 0.91,
-            "mapping_type": "value_chain_theme",
-            "reason": "Value-chain oil supply proxy"
+            "relevance_score": 0.9,
+            "mapping_confidence": 0.9,
+            "mapping_type": "value_chain_operator",
+            "reason": "Integrated oil major with direct supply sensitivity"
           },
           "execution_bias": "allow",
           "risk_overlay_hint": "elevated_macro_volatility",
@@ -714,7 +915,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
           "structural_interpretation_confidence": 0.86,
-          "execution_priority": 0.898,
+          "execution_priority": 0.896,
           "dispatch_readiness": {
             "ready": true,
             "reasons": []
@@ -731,7 +932,7 @@
           "research_score": 19.24
         },
         {
-          "candidate_id": "cand_36d9da5203e24725",
+          "candidate_id": "cand_807cce46605be36b",
           "signal_id": "sig_8b8a0e7406b4f604",
           "signal_fingerprint": "sha256:6151b32e5bfb9f33d1b46d09a7d07cca4fef7fdc53bd6c138322a36f264ec2cd",
           "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -771,41 +972,68 @@
           ],
           "instrument_candidates": [
             {
+              "symbol": "XOM",
+              "instrument_type": "equity",
+              "relevance_score": 0.9,
+              "mapping_confidence": 0.9,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Integrated oil major with direct supply sensitivity"
+            },
+            {
+              "symbol": "CVX",
+              "instrument_type": "equity",
+              "relevance_score": 0.88,
+              "mapping_confidence": 0.88,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Integrated oil major with direct supply sensitivity"
+            },
+            {
               "symbol": "USO",
               "instrument_type": "etf",
-              "relevance_score": 0.91,
-              "mapping_confidence": 0.91,
-              "mapping_type": "value_chain_theme",
+              "relevance_score": 0.88,
+              "mapping_confidence": 0.88,
+              "mapping_type": "commodity_proxy",
               "direction_bias": "long",
-              "reason": "Value-chain oil supply proxy"
+              "reason": "Oil supply or transport disruption"
             },
             {
               "symbol": "XLE",
               "instrument_type": "etf",
-              "relevance_score": 0.86,
-              "mapping_confidence": 0.86,
+              "relevance_score": 0.82,
+              "mapping_confidence": 0.82,
               "mapping_type": "value_chain_theme",
               "direction_bias": "long",
               "reason": "Energy-sector proxy for supply shocks"
             },
             {
-              "symbol": "JETS",
-              "instrument_type": "etf",
-              "relevance_score": 0.69,
-              "mapping_confidence": 0.69,
-              "mapping_type": "value_chain_second_order",
+              "symbol": "DAL",
+              "instrument_type": "equity",
+              "relevance_score": 0.72,
+              "mapping_confidence": 0.72,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "short",
+              "reason": "Fuel-cost pressure on airlines"
+            },
+            {
+              "symbol": "AAL",
+              "instrument_type": "equity",
+              "relevance_score": 0.7,
+              "mapping_confidence": 0.7,
+              "mapping_type": "value_chain_operator",
               "direction_bias": "short",
               "reason": "Fuel-cost pressure on airlines"
             }
           ],
           "primary_instrument": {
-            "symbol": "USO",
-            "instrument_type": "etf",
+            "symbol": "XOM",
+            "instrument_type": "equity",
             "direction_bias": "long",
-            "relevance_score": 0.91,
-            "mapping_confidence": 0.91,
-            "mapping_type": "value_chain_theme",
-            "reason": "Value-chain oil supply proxy"
+            "relevance_score": 0.9,
+            "mapping_confidence": 0.9,
+            "mapping_type": "value_chain_operator",
+            "reason": "Integrated oil major with direct supply sensitivity"
           },
           "execution_bias": "allow",
           "risk_overlay_hint": "elevated_macro_volatility",
@@ -825,7 +1053,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is an energy-supply chokepoint signal rather than an AI-chain signal.",
           "structural_interpretation_confidence": 0.86,
-          "execution_priority": 0.869,
+          "execution_priority": 0.867,
           "dispatch_readiness": {
             "ready": true,
             "reasons": []
@@ -851,12 +1079,18 @@
       "candidate_count": 2,
       "unique_symbol_count": 1,
       "symbols": [
-        "SEA"
+        "ZIM"
       ],
-      "pair_trade_ready": false,
-      "pair_trade_style": "not_ready",
+      "operator_symbols": [
+        "DAL",
+        "LMT",
+        "MATX",
+        "ZIM"
+      ],
+      "pair_trade_ready": true,
+      "pair_trade_style": "cross_chain_operator_pair",
       "strongest": {
-        "candidate_id": "cand_ab2ddbda84204448",
+        "candidate_id": "cand_486cc8d5c7e3aadd",
         "signal_id": "sig_415500e6c6520825",
         "signal_fingerprint": "sha256:9c9c649f63401e0f30992e8a3e07e4f109b0f69927cf6158849e9b70ccd12a44",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -896,41 +1130,68 @@
         ],
         "instrument_candidates": [
           {
+            "symbol": "ZIM",
+            "instrument_type": "equity",
+            "relevance_score": 0.84,
+            "mapping_confidence": 0.84,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Shipping operator leveraged to route disruption"
+          },
+          {
+            "symbol": "MATX",
+            "instrument_type": "equity",
+            "relevance_score": 0.8,
+            "mapping_confidence": 0.8,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Container/logistics operator with route sensitivity"
+          },
+          {
             "symbol": "SEA",
             "instrument_type": "etf",
-            "relevance_score": 0.82,
-            "mapping_confidence": 0.82,
+            "relevance_score": 0.78,
+            "mapping_confidence": 0.78,
             "mapping_type": "value_chain_theme",
             "direction_bias": "long",
             "reason": "Shipping/logistics route sensitivity"
           },
           {
+            "symbol": "LMT",
+            "instrument_type": "equity",
+            "relevance_score": 0.74,
+            "mapping_confidence": 0.74,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Defense operator proxy for conflict escalation"
+          },
+          {
+            "symbol": "DAL",
+            "instrument_type": "equity",
+            "relevance_score": 0.71,
+            "mapping_confidence": 0.71,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "short",
+            "reason": "Travel/fuel sensitivity to route and energy stress"
+          },
+          {
             "symbol": "ITA",
             "instrument_type": "etf",
-            "relevance_score": 0.76,
-            "mapping_confidence": 0.76,
+            "relevance_score": 0.7,
+            "mapping_confidence": 0.7,
             "mapping_type": "value_chain_theme",
             "direction_bias": "long",
             "reason": "Defense proxy for conflict escalation"
-          },
-          {
-            "symbol": "USO",
-            "instrument_type": "etf",
-            "relevance_score": 0.72,
-            "mapping_confidence": 0.72,
-            "mapping_type": "value_chain_second_order",
-            "direction_bias": "long",
-            "reason": "Commodity spillover from conflict routes"
           }
         ],
         "primary_instrument": {
-          "symbol": "SEA",
-          "instrument_type": "etf",
+          "symbol": "ZIM",
+          "instrument_type": "equity",
           "direction_bias": "long",
-          "relevance_score": 0.82,
-          "mapping_confidence": 0.82,
-          "mapping_type": "value_chain_theme",
-          "reason": "Shipping/logistics route sensitivity"
+          "relevance_score": 0.84,
+          "mapping_confidence": 0.84,
+          "mapping_type": "value_chain_operator",
+          "reason": "Shipping operator leveraged to route disruption"
         },
         "execution_bias": "allow",
         "risk_overlay_hint": "elevated_macro_volatility",
@@ -950,7 +1211,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
         "structural_interpretation_confidence": 0.8,
-        "execution_priority": 0.841,
+        "execution_priority": 0.846,
         "dispatch_readiness": {
           "ready": true,
           "reasons": []
@@ -967,7 +1228,7 @@
         "research_score": 18.84
       },
       "weakest": {
-        "candidate_id": "cand_ca9b5d12d95f5ba1",
+        "candidate_id": "cand_930c47cb6a130d7a",
         "signal_id": "sig_68f20a13af5a8606",
         "signal_fingerprint": "sha256:4f8c3ee08d2b016c6cb548c879ffa772f4285505a249afed816c13833052e33e",
         "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -1007,41 +1268,68 @@
         ],
         "instrument_candidates": [
           {
+            "symbol": "ZIM",
+            "instrument_type": "equity",
+            "relevance_score": 0.84,
+            "mapping_confidence": 0.84,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Shipping operator leveraged to route disruption"
+          },
+          {
+            "symbol": "MATX",
+            "instrument_type": "equity",
+            "relevance_score": 0.8,
+            "mapping_confidence": 0.8,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Container/logistics operator with route sensitivity"
+          },
+          {
             "symbol": "SEA",
             "instrument_type": "etf",
-            "relevance_score": 0.82,
-            "mapping_confidence": 0.82,
+            "relevance_score": 0.78,
+            "mapping_confidence": 0.78,
             "mapping_type": "value_chain_theme",
             "direction_bias": "long",
             "reason": "Shipping/logistics route sensitivity"
           },
           {
+            "symbol": "LMT",
+            "instrument_type": "equity",
+            "relevance_score": 0.74,
+            "mapping_confidence": 0.74,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "long",
+            "reason": "Defense operator proxy for conflict escalation"
+          },
+          {
+            "symbol": "DAL",
+            "instrument_type": "equity",
+            "relevance_score": 0.71,
+            "mapping_confidence": 0.71,
+            "mapping_type": "value_chain_operator",
+            "direction_bias": "short",
+            "reason": "Travel/fuel sensitivity to route and energy stress"
+          },
+          {
             "symbol": "ITA",
             "instrument_type": "etf",
-            "relevance_score": 0.76,
-            "mapping_confidence": 0.76,
+            "relevance_score": 0.7,
+            "mapping_confidence": 0.7,
             "mapping_type": "value_chain_theme",
             "direction_bias": "long",
             "reason": "Defense proxy for conflict escalation"
-          },
-          {
-            "symbol": "USO",
-            "instrument_type": "etf",
-            "relevance_score": 0.72,
-            "mapping_confidence": 0.72,
-            "mapping_type": "value_chain_second_order",
-            "direction_bias": "long",
-            "reason": "Commodity spillover from conflict routes"
           }
         ],
         "primary_instrument": {
-          "symbol": "SEA",
-          "instrument_type": "etf",
+          "symbol": "ZIM",
+          "instrument_type": "equity",
           "direction_bias": "long",
-          "relevance_score": 0.82,
-          "mapping_confidence": 0.82,
-          "mapping_type": "value_chain_theme",
-          "reason": "Shipping/logistics route sensitivity"
+          "relevance_score": 0.84,
+          "mapping_confidence": 0.84,
+          "mapping_type": "value_chain_operator",
+          "reason": "Shipping operator leveraged to route disruption"
         },
         "execution_bias": "allow",
         "risk_overlay_hint": "elevated_macro_volatility",
@@ -1061,7 +1349,7 @@
         "valuation_context": "valuation_unknown",
         "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
         "structural_interpretation_confidence": 0.8,
-        "execution_priority": 0.811,
+        "execution_priority": 0.816,
         "dispatch_readiness": {
           "ready": true,
           "reasons": []
@@ -1077,11 +1365,29 @@
         },
         "research_score": 18.66
       },
-      "strongest_symbol": "SEA",
-      "weakest_symbol": "SEA",
+      "strongest_symbol": "ZIM",
+      "weakest_symbol": "ZIM",
+      "best_long_operator": {
+        "symbol": "ZIM",
+        "instrument_type": "equity",
+        "relevance_score": 0.84,
+        "mapping_confidence": 0.84,
+        "mapping_type": "value_chain_operator",
+        "direction_bias": "long",
+        "reason": "Shipping operator leveraged to route disruption"
+      },
+      "best_short_operator": {
+        "symbol": "DAL",
+        "instrument_type": "equity",
+        "relevance_score": 0.71,
+        "mapping_confidence": 0.71,
+        "mapping_type": "value_chain_operator",
+        "direction_bias": "short",
+        "reason": "Travel/fuel sensitivity to route and energy stress"
+      },
       "top_candidates": [
         {
-          "candidate_id": "cand_ab2ddbda84204448",
+          "candidate_id": "cand_486cc8d5c7e3aadd",
           "signal_id": "sig_415500e6c6520825",
           "signal_fingerprint": "sha256:9c9c649f63401e0f30992e8a3e07e4f109b0f69927cf6158849e9b70ccd12a44",
           "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -1121,41 +1427,68 @@
           ],
           "instrument_candidates": [
             {
+              "symbol": "ZIM",
+              "instrument_type": "equity",
+              "relevance_score": 0.84,
+              "mapping_confidence": 0.84,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Shipping operator leveraged to route disruption"
+            },
+            {
+              "symbol": "MATX",
+              "instrument_type": "equity",
+              "relevance_score": 0.8,
+              "mapping_confidence": 0.8,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Container/logistics operator with route sensitivity"
+            },
+            {
               "symbol": "SEA",
               "instrument_type": "etf",
-              "relevance_score": 0.82,
-              "mapping_confidence": 0.82,
+              "relevance_score": 0.78,
+              "mapping_confidence": 0.78,
               "mapping_type": "value_chain_theme",
               "direction_bias": "long",
               "reason": "Shipping/logistics route sensitivity"
             },
             {
+              "symbol": "LMT",
+              "instrument_type": "equity",
+              "relevance_score": 0.74,
+              "mapping_confidence": 0.74,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Defense operator proxy for conflict escalation"
+            },
+            {
+              "symbol": "DAL",
+              "instrument_type": "equity",
+              "relevance_score": 0.71,
+              "mapping_confidence": 0.71,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "short",
+              "reason": "Travel/fuel sensitivity to route and energy stress"
+            },
+            {
               "symbol": "ITA",
               "instrument_type": "etf",
-              "relevance_score": 0.76,
-              "mapping_confidence": 0.76,
+              "relevance_score": 0.7,
+              "mapping_confidence": 0.7,
               "mapping_type": "value_chain_theme",
               "direction_bias": "long",
               "reason": "Defense proxy for conflict escalation"
-            },
-            {
-              "symbol": "USO",
-              "instrument_type": "etf",
-              "relevance_score": 0.72,
-              "mapping_confidence": 0.72,
-              "mapping_type": "value_chain_second_order",
-              "direction_bias": "long",
-              "reason": "Commodity spillover from conflict routes"
             }
           ],
           "primary_instrument": {
-            "symbol": "SEA",
-            "instrument_type": "etf",
+            "symbol": "ZIM",
+            "instrument_type": "equity",
             "direction_bias": "long",
-            "relevance_score": 0.82,
-            "mapping_confidence": 0.82,
-            "mapping_type": "value_chain_theme",
-            "reason": "Shipping/logistics route sensitivity"
+            "relevance_score": 0.84,
+            "mapping_confidence": 0.84,
+            "mapping_type": "value_chain_operator",
+            "reason": "Shipping operator leveraged to route disruption"
           },
           "execution_bias": "allow",
           "risk_overlay_hint": "elevated_macro_volatility",
@@ -1175,7 +1508,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
           "structural_interpretation_confidence": 0.8,
-          "execution_priority": 0.841,
+          "execution_priority": 0.846,
           "dispatch_readiness": {
             "ready": true,
             "reasons": []
@@ -1192,7 +1525,7 @@
           "research_score": 18.84
         },
         {
-          "candidate_id": "cand_ca9b5d12d95f5ba1",
+          "candidate_id": "cand_930c47cb6a130d7a",
           "signal_id": "sig_68f20a13af5a8606",
           "signal_fingerprint": "sha256:4f8c3ee08d2b016c6cb548c879ffa772f4285505a249afed816c13833052e33e",
           "generated_at": "2026-03-23T17:09:20.779774Z",
@@ -1232,41 +1565,68 @@
           ],
           "instrument_candidates": [
             {
+              "symbol": "ZIM",
+              "instrument_type": "equity",
+              "relevance_score": 0.84,
+              "mapping_confidence": 0.84,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Shipping operator leveraged to route disruption"
+            },
+            {
+              "symbol": "MATX",
+              "instrument_type": "equity",
+              "relevance_score": 0.8,
+              "mapping_confidence": 0.8,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Container/logistics operator with route sensitivity"
+            },
+            {
               "symbol": "SEA",
               "instrument_type": "etf",
-              "relevance_score": 0.82,
-              "mapping_confidence": 0.82,
+              "relevance_score": 0.78,
+              "mapping_confidence": 0.78,
               "mapping_type": "value_chain_theme",
               "direction_bias": "long",
               "reason": "Shipping/logistics route sensitivity"
             },
             {
+              "symbol": "LMT",
+              "instrument_type": "equity",
+              "relevance_score": 0.74,
+              "mapping_confidence": 0.74,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "long",
+              "reason": "Defense operator proxy for conflict escalation"
+            },
+            {
+              "symbol": "DAL",
+              "instrument_type": "equity",
+              "relevance_score": 0.71,
+              "mapping_confidence": 0.71,
+              "mapping_type": "value_chain_operator",
+              "direction_bias": "short",
+              "reason": "Travel/fuel sensitivity to route and energy stress"
+            },
+            {
               "symbol": "ITA",
               "instrument_type": "etf",
-              "relevance_score": 0.76,
-              "mapping_confidence": 0.76,
+              "relevance_score": 0.7,
+              "mapping_confidence": 0.7,
               "mapping_type": "value_chain_theme",
               "direction_bias": "long",
               "reason": "Defense proxy for conflict escalation"
-            },
-            {
-              "symbol": "USO",
-              "instrument_type": "etf",
-              "relevance_score": 0.72,
-              "mapping_confidence": 0.72,
-              "mapping_type": "value_chain_second_order",
-              "direction_bias": "long",
-              "reason": "Commodity spillover from conflict routes"
             }
           ],
           "primary_instrument": {
-            "symbol": "SEA",
-            "instrument_type": "etf",
+            "symbol": "ZIM",
+            "instrument_type": "equity",
             "direction_bias": "long",
-            "relevance_score": 0.82,
-            "mapping_confidence": 0.82,
-            "mapping_type": "value_chain_theme",
-            "reason": "Shipping/logistics route sensitivity"
+            "relevance_score": 0.84,
+            "mapping_confidence": 0.84,
+            "mapping_type": "value_chain_operator",
+            "reason": "Shipping operator leveraged to route disruption"
           },
           "execution_bias": "allow",
           "risk_overlay_hint": "elevated_macro_volatility",
@@ -1286,7 +1646,7 @@
           "valuation_context": "valuation_unknown",
           "value_chain_notes": "This is a war-escalation and supply-route signal, not a generic semiconductor signal.",
           "structural_interpretation_confidence": 0.8,
-          "execution_priority": 0.811,
+          "execution_priority": 0.816,
           "dispatch_readiness": {
             "ready": true,
             "reasons": []
@@ -1316,6 +1676,7 @@
         "SPY",
         "UUP"
       ],
+      "operator_symbols": [],
       "pair_trade_ready": false,
       "pair_trade_style": "not_ready",
       "strongest": {
@@ -1385,6 +1746,15 @@
             "mapping_type": "value_chain_second_order",
             "direction_bias": "short",
             "reason": "Higher discount rates pressure growth duration"
+          },
+          {
+            "symbol": "SPY",
+            "instrument_type": "etf",
+            "relevance_score": 0.53,
+            "mapping_confidence": 0.53,
+            "mapping_type": "macro_proxy",
+            "direction_bias": "long",
+            "reason": "Fallback broad-market proxy for a macro signal"
           }
         ],
         "primary_instrument": {
@@ -1418,7 +1788,8 @@
         "dispatch_readiness": {
           "ready": false,
           "reasons": [
-            "mapping_too_ambiguous"
+            "mapping_too_ambiguous",
+            "direction_unclear"
           ]
         },
         "feedback_context": {
@@ -1547,6 +1918,8 @@
       },
       "strongest_symbol": "UUP",
       "weakest_symbol": "SH",
+      "best_long_operator": null,
+      "best_short_operator": null,
       "top_candidates": [
         {
           "candidate_id": "cand_132df5503b643a59",
@@ -1615,6 +1988,15 @@
               "mapping_type": "value_chain_second_order",
               "direction_bias": "short",
               "reason": "Higher discount rates pressure growth duration"
+            },
+            {
+              "symbol": "SPY",
+              "instrument_type": "etf",
+              "relevance_score": 0.53,
+              "mapping_confidence": 0.53,
+              "mapping_type": "macro_proxy",
+              "direction_bias": "long",
+              "reason": "Fallback broad-market proxy for a macro signal"
             }
           ],
           "primary_instrument": {
@@ -1648,7 +2030,8 @@
           "dispatch_readiness": {
             "ready": false,
             "reasons": [
-              "mapping_too_ambiguous"
+              "mapping_too_ambiguous",
+              "direction_unclear"
             ]
           },
           "feedback_context": {
@@ -1842,6 +2225,15 @@
               "mapping_type": "value_chain_second_order",
               "direction_bias": "short",
               "reason": "Higher discount rates pressure growth duration"
+            },
+            {
+              "symbol": "SPY",
+              "instrument_type": "etf",
+              "relevance_score": 0.525,
+              "mapping_confidence": 0.525,
+              "mapping_type": "macro_proxy",
+              "direction_bias": "long",
+              "reason": "Fallback broad-market proxy for a macro signal"
             }
           ],
           "primary_instrument": {
@@ -1875,7 +2267,8 @@
           "dispatch_readiness": {
             "ready": false,
             "reasons": [
-              "mapping_too_ambiguous"
+              "mapping_too_ambiguous",
+              "direction_unclear"
             ]
           },
           "feedback_context": {

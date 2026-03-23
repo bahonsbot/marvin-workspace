@@ -72,6 +72,11 @@ COMPANY_TICKER = {
     "lockheed": "LMT",
     "exxon": "XOM",
     "chevron": "CVX",
+    "matson": "MATX",
+    "zim": "ZIM",
+    "delta": "DAL",
+    "american airlines": "AAL",
+    "eaton": "ETN",
 }
 
 THEME_CANDIDATES = [
@@ -537,15 +542,23 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         )
 
     if theme == "energy_infrastructure" and sublayer == "oil_supply":
-        add("USO", "etf", 0.91, "value_chain_theme", "long", "Value-chain oil supply proxy")
-        add("XLE", "etf", 0.86, "value_chain_theme", "long", "Energy-sector proxy for supply shocks")
-        add("JETS", "etf", 0.69, "value_chain_second_order", "short", "Fuel-cost pressure on airlines")
+        add("XOM", "equity", 0.90, "value_chain_operator", "long", "Integrated oil major with direct supply sensitivity")
+        add("CVX", "equity", 0.88, "value_chain_operator", "long", "Integrated oil major with direct supply sensitivity")
+        add("USO", "etf", 0.87, "value_chain_theme", "long", "Value-chain oil supply proxy")
+        add("XLE", "etf", 0.82, "value_chain_theme", "long", "Energy-sector proxy for supply shocks")
+        add("DAL", "equity", 0.72, "value_chain_operator", "short", "Fuel-cost pressure on airlines")
+        add("AAL", "equity", 0.70, "value_chain_operator", "short", "Fuel-cost pressure on airlines")
+        add("JETS", "etf", 0.66, "value_chain_second_order", "short", "Fuel-cost pressure on airlines")
 
     if theme == "energy_infrastructure" and sublayer == "war_supply_routes":
         if any(term in title for term in ("port", "shipping", "odesa", "odessa", "black sea", "route")):
-            add("SEA", "etf", 0.82, "value_chain_theme", "long", "Shipping/logistics route sensitivity")
-        add("ITA", "etf", 0.76, "value_chain_theme", "long", "Defense proxy for conflict escalation")
-        add("USO", "etf", 0.72, "value_chain_second_order", "long", "Commodity spillover from conflict routes")
+            add("ZIM", "equity", 0.84, "value_chain_operator", "long", "Shipping operator leveraged to route disruption")
+            add("MATX", "equity", 0.80, "value_chain_operator", "long", "Container/logistics operator with route sensitivity")
+            add("SEA", "etf", 0.78, "value_chain_theme", "long", "Shipping/logistics route sensitivity")
+            add("DAL", "equity", 0.71, "value_chain_operator", "short", "Travel/fuel sensitivity to route and energy stress")
+        add("LMT", "equity", 0.74, "value_chain_operator", "long", "Defense operator proxy for conflict escalation")
+        add("ITA", "etf", 0.70, "value_chain_theme", "long", "Defense proxy for conflict escalation")
+        add("USO", "etf", 0.67, "value_chain_second_order", "long", "Commodity spillover from conflict routes")
 
     if theme == "macro_rates_regime":
         if any(term in title for term in ("rate hike", "rate hikes", "raise rates", "yield", "inflation", "ecb", "fed")):
@@ -559,16 +572,21 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
     if theme == "ai_infrastructure" and layer == "semis_design":
         company_matches = detect_company_candidates(str(signal.get("title", "")))
         for candidate in company_matches:
-            add(candidate.symbol, candidate.instrument_type, 0.86, "value_chain_company", candidate.direction_bias, f"Explicit operator mention in AI design chain: {candidate.reason}")
-        add("SOXX", "etf", 0.80, "value_chain_theme", "long", "Semiconductor design chain proxy")
+            add(candidate.symbol, candidate.instrument_type, 0.90, "value_chain_company", candidate.direction_bias, f"Explicit operator mention in AI design chain: {candidate.reason}")
+        add("NVDA", "equity", 0.82, "value_chain_operator", "long", "Primary AI compute design operator")
+        add("AVGO", "equity", 0.78, "value_chain_operator", "long", "AI networking/custom silicon operator")
+        add("ANET", "equity", 0.72, "value_chain_operator", "long", "AI network fabric beneficiary")
+        add("SOXX", "etf", 0.68, "value_chain_theme", "long", "Semiconductor design chain proxy")
 
     if theme == "ai_infrastructure" and layer == "semis_memory":
-        add("MU", "equity", 0.84, "value_chain_company", "long", "US-listed memory supplier proxy")
-        add("SOXX", "etf", 0.72, "value_chain_theme", "long", "Semiconductor memory spillover proxy")
+        add("MU", "equity", 0.86, "value_chain_operator", "long", "US-listed memory supplier proxy")
+        add("SMCI", "equity", 0.72, "value_chain_operator", "short", "Downstream server assembler exposed to memory cost squeeze")
+        add("SOXX", "etf", 0.68, "value_chain_theme", "long", "Semiconductor memory spillover proxy")
 
     if theme == "ai_infrastructure" and layer == "semis_packaging":
-        add("AMKR", "equity", 0.79, "value_chain_company", "long", "US-listed packaging proxy")
-        add("ASML", "equity", 0.65, "value_chain_second_order", "long", "Advanced process ecosystem proxy")
+        add("AMKR", "equity", 0.84, "value_chain_operator", "long", "US-listed packaging proxy")
+        add("SMCI", "equity", 0.71, "value_chain_operator", "short", "Downstream system builder exposed to packaging delays")
+        add("ASML", "equity", 0.66, "value_chain_second_order", "long", "Advanced process ecosystem proxy")
 
     deduped: dict[tuple[str, str], InstrumentCandidate] = {}
     for candidate in candidates:
@@ -703,7 +721,7 @@ def build_instrument_candidates(signal: dict[str, Any], title_context: TitleCont
         merged.values(),
         key=lambda item: (-item.relevance_score, -item.mapping_confidence, item.symbol, item.direction_bias, item.reason),
     )
-    return [item.to_dict() for item in ordered[:3]]
+    return [item.to_dict() for item in ordered[:6]]
 
 
 def choose_primary_instrument(

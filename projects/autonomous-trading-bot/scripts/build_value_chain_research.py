@@ -33,7 +33,8 @@ def main() -> int:
     for report in reports:
         lines.append(f"## {report['theme']} / {report['chain_layer']} / {report['chain_sublayer']}")
         lines.append(f"- Candidates: {report['candidate_count']}")
-        lines.append(f"- Unique symbols: {report.get('unique_symbol_count', 0)} ({', '.join(report.get('symbols', []))})")
+        lines.append(f"- Unique primary symbols: {report.get('unique_symbol_count', 0)} ({', '.join(report.get('symbols', []))})")
+        lines.append(f"- Operator symbols: {', '.join(report.get('operator_symbols', []))}")
         lines.append(f"- Pair-trade ready: {report['pair_trade_ready']} ({report.get('pair_trade_style', 'not_ready')})")
         strongest = report['strongest']
         weakest = report['weakest']
@@ -43,6 +44,10 @@ def main() -> int:
         lines.append(
             f"- Weakest: `{weakest.get('pattern_id')}` {report.get('weakest_symbol') or 'n/a'} score={weakest.get('research_score')} | {weakest.get('source_title','')[:120]}"
         )
+        if report.get('best_long_operator'):
+            lines.append(f"- Best long operator: {report['best_long_operator'].get('symbol')} ({report['best_long_operator'].get('mapping_type')})")
+        if report.get('best_short_operator'):
+            lines.append(f"- Best short operator: {report['best_short_operator'].get('symbol')} ({report['best_short_operator'].get('mapping_type')})")
         if report.get('pair_trade_rationale'):
             lines.append(f"- Pair-trade rationale: {report['pair_trade_rationale']}")
         lines.append("")

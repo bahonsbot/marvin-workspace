@@ -131,6 +131,24 @@ def _primary_symbol(row: Dict[str, Any]) -> str:
     return ""
 
 
+
+def _operator_candidates(row: Dict[str, Any]) -> list[dict[str, Any]]:
+    candidates = row.get("instrument_candidates") or []
+    out = []
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            continue
+        if str(candidate.get("instrument_type") or "") != "equity":
+            continue
+        mapping_type = str(candidate.get("mapping_type") or "")
+        if mapping_type in {"macro_proxy", "value_chain_macro"}:
+            continue
+        symbol = str(candidate.get("symbol") or "").strip().upper()
+        if not symbol:
+            continue
+        out.append(candidate)
+    return out
+
 def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     buckets: Dict[Tuple[str, str, str], List[Dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -151,28 +169,29 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
         unique_patterns = {str(r.get("pattern_id") or "") for r in items if r.get("pattern_id")}
         unique_titles = {str(r.get("source_title") or "") for r in items if r.get("source_title")}
         unique_symbols = {_primary_symbol(r) for r in items if _primary_symbol(r)}
+        operator_pool = []
+        for row in items:
+            operator_pool.extend(_operator_candidates(row))
+        operator_by_symbol: Dict[str, dict[str, Any]] = {}
+        for candidate in operator_pool:
+            symbol = str(candidate.get("symbol") or "").strip().upper()
+            current = operator_by_symbol.get(symbol)
+            if current is None or float(candidate.get("relevance_score", 0) or 0) > float(current.get("relevance_score", 0) or 0):
+                operator_by_symbol[symbol] = candidate
+        long_ops = [c for c in operator_by_symbol.values() if str(c.get("direction_bias") or "") == "long"]
+        short_ops = [c for c in operator_by_symbol.values() if str(c.get("direction_bias") or "") == "short"]
+        best_long = sorted(long_ops, key=lambda c: float(c.get("relevance_score", 0) or 0), reverse=True)[0] if long_ops else None
+        best_short = sorted(short_ops, key=lambda c: float(c.get("relevance_score", 0) or 0), reverse=True)[0] if short_ops else None
         strongest_symbol = _primary_symbol(strongest)
         weakest_symbol = _primary_symbol(weakest)
-        strongest_type = str((strongest.get("primary_instrument") or {}).get("instrument_type") or "")
-        weakest_type = str((weakest.get("primary_instrument") or {}).get("instrument_type") or "")
-        strongest_map = str((strongest.get("primary_instrument") or {}).get("mapping_type") or "")
-        weakest_map = str((weakest.get("primary_instrument") or {}).get("mapping_type") or "")
-        operator_ready = (
-            strongest_type == "equity"
-            and weakest_type == "equity"
-            and strongest_map not in {"macro_proxy", "value_chain_macro"}
-            and weakest_map not in {"macro_proxy", "value_chain_macro"}
-        )
         pair_trade_ready = (
             bool(strongest.get("pair_trade_candidate") or weakest.get("pair_trade_candidate"))
             and len(ranked) >= 2
-            and len(unique_symbols) >= 2
-            and strongest_symbol
-            and weakest_symbol
-            and strongest_symbol != weakest_symbol
             and (len(unique_patterns) >= 2 or len(unique_titles) >= 2)
             and strongest.get("source_title") != weakest.get("source_title")
-            and operator_ready
+            and best_long is not None
+            and best_short is not None
+            and str(best_long.get("symbol")) != str(best_short.get("symbol"))
         )
         reports.append(
             {
@@ -182,12 +201,15 @@ def build_theme_research(rows: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]
                 "candidate_count": len(items),
                 "unique_symbol_count": len(unique_symbols),
                 "symbols": sorted(unique_symbols),
+                "operator_symbols": sorted(operator_by_symbol.keys()),
                 "pair_trade_ready": pair_trade_ready,
-                "pair_trade_style": "operator_pair" if pair_trade_ready else "not_ready",
+                "pair_trade_style": "cross_chain_operator_pair" if pair_trade_ready else "not_ready",
                 "strongest": strongest,
                 "weakest": weakest,
                 "strongest_symbol": strongest_symbol,
                 "weakest_symbol": weakest_symbol,
+                "best_long_operator": best_long,
+                "best_short_operator": best_short,
                 "top_candidates": ranked[:3],
                 "pair_trade_rationale": strongest.get("pair_trade_rationale") or weakest.get("pair_trade_rationale") or "",
             }
