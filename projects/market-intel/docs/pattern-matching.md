@@ -13,17 +13,19 @@ The pattern matching system works in two stages:
 
 ## 1. What Patterns Exist
 
-The system maintains 24 historical market patterns across 7 categories:
+The system currently maintains 34 historical market patterns across 7 categories:
 
-| Category | Count | Patterns |
-|----------|-------|----------|
-| `geopolitical` | 7 | Saudi Oil Attacks, Russia-Ukraine, Arab Spring, Iran Nuclear Deal, Taiwan/China Tension, Evergrande |
-| `macroeconomic` | 7 | COVID Crash, Black Monday 1987, Japan Lost Decade, US Credit Downgrade, China Devaluation, European Debt Crisis, EM Crisis 2018 |
-| `financial_credit` | 3 | SVB Collapse, Regional Banking Crisis 2023, LTCM Collapse |
-| `sentiment_social` | 3 | GameStop Short Squeeze, Reddit GPU/Semis, Retail Options Sentiment |
-| `corporate` | 2 | Tesla Stock Splits, Dot-com Bubble |
+| Category | Count | Representative patterns |
+|----------|-------|-------------------------|
+| `geopolitical` | 7 | Saudi Oil Attacks, Russia-Ukraine Conflict, Evergrande Crisis, Iran Nuclear Deal, Taiwan/China Tension |
+| `macroeconomic` | 9 | COVID-19 Market Crash, Black Monday 1987, Japan Lost Decade, US Credit Rating Downgrade, China Devaluation 2015, European Debt Crisis |
+| `financial_credit` | 6 | SVB Collapse, Regional Banking Crisis 2023, LTCM Collapse, UK LDI/Gilt Crisis 2022, VIX ETN Volmageddon 2018 |
+| `sentiment_social` | 3 | GameStop Short Squeeze, Reddit GPU/Semis Thread, Retail Options Sentiment |
+| `corporate` | 5 | Tesla Stock Splits, Dot-com Bubble, Mega-Cap Earnings Shock, M&A Antitrust Block, Major Accounting Scandal |
 | `crypto_credit` | 1 | FTX Collapse |
-| `political` | 1 | Brexit Vote |
+| `political` | 3 | Brexit Vote, US Government Shutdown, US Tariff War Escalation |
+
+Source of truth: `projects/market-intel/data/patterns.json`. If this document drifts from the live file, trust the live file.
 
 ### Pattern Attributes
 
@@ -248,4 +250,4 @@ MI_ENRICHMENT_MODE=enriched python src/signal_generator.py
 
 ---
 
-_Last updated: 2026-03-02_
+_Last updated: 2026-03-23_
