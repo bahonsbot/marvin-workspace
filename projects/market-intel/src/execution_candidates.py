@@ -93,6 +93,22 @@ COMPANY_TICKER = {
     "elastic": "ESTC",
     "c3 ai": "AI",
     "bigbear": "BBAI",
+    "mp materials": "MP",
+    "mp": "MP",
+    "energy fuels": "UUUU",
+    "lynas": "LYSCF",
+    "neo performance": "NOPMF",
+    "tesla": "TSLA",
+    "general motors": "GM",
+    "ford": "F",
+    "caterpillar": "CAT",
+    "deere": "DE",
+    "rockwell": "ROK",
+    "siemens": "SIEGY",
+    "schneider electric": "SBGSY",
+    "abb": "ABBNY",
+    "fanuc": "FANUY",
+    "emerson": "EMR",
 }
 
 THEME_CANDIDATES = [
@@ -575,6 +591,24 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
         add("LMT", "equity", 0.74, "value_chain_operator", "long", "Defense operator proxy for conflict escalation")
         add("ITA", "etf", 0.70, "value_chain_theme", "long", "Defense proxy for conflict escalation")
         add("USO", "etf", 0.67, "value_chain_second_order", "long", "Commodity spillover from conflict routes")
+
+    if theme == "rare_earth_supply" and sublayer == "rare_earth_processing":
+        add("MP", "equity", 0.88, "value_chain_operator", "long", "US rare-earth producer with processing leverage")
+        add("UUUU", "equity", 0.80, "value_chain_operator", "long", "US critical-minerals and rare-earth processing exposure")
+        add("LYSCF", "equity", 0.74, "value_chain_operator", "long", "Rare-earth separation leader exposure")
+        add("REMX", "etf", 0.72, "value_chain_theme", "long", "Rare earths and strategic metals proxy")
+        add("TSLA", "equity", 0.71, "value_chain_operator", "short", "Downstream EV manufacturing exposed to magnet/input squeeze")
+        add("GM", "equity", 0.67, "value_chain_operator", "short", "Auto OEM exposed to rare-earth component cost risk")
+        add("CAT", "equity", 0.62, "value_chain_operator", "short", "Industrial equipment buyer exposed to input/material squeeze")
+
+    if theme == "industrial_automation" and sublayer == "controls_robotics":
+        add("ROK", "equity", 0.84, "value_chain_operator", "long", "Controls and automation preferred-vendor exposure")
+        add("EMR", "equity", 0.80, "value_chain_operator", "long", "Industrial automation and process-control exposure")
+        add("SBGSY", "equity", 0.76, "value_chain_operator", "long", "Automation and electrification stack exposure")
+        add("ABBNY", "equity", 0.74, "value_chain_operator", "long", "Motion/robotics and automation exposure")
+        add("FANUY", "equity", 0.72, "value_chain_operator", "long", "Factory robotics leader exposure")
+        add("CAT", "equity", 0.66, "value_chain_operator", "short", "Lower-software, heavier-cycle industrial hardware exposure")
+        add("DE", "equity", 0.63, "value_chain_operator", "short", "Machinery exposure less advantaged than preferred automation vendors")
 
     if theme == "macro_rates_regime":
         if any(term in title for term in ("rate hike", "rate hikes", "raise rates", "yield", "inflation", "ecb", "fed")):

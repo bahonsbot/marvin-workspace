@@ -87,6 +87,42 @@ _PATTERN_DEFAULTS: dict[str, dict[str, Any]] = {
         "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
         "structural_interpretation_confidence": 0.68,
     },
+    "p047_future_rare_earths": {
+        "theme": "rare_earth_supply",
+        "chain_layer": "raw_materials",
+        "chain_sublayer": "rare_earth_processing",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "supply_chain",
+        "moat_type": "preferred_vendor",
+        "fragility_type": "commodity_exposure",
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "bottleneck_supplier",
+        "loser_class": "low_margin_integrator",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Rare-earth separation and processing bottlenecks favor scarce upstream processors over downstream manufacturers exposed to input squeezes.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "This is a critical-minerals bottleneck signal where refining, separation, and magnet-material conversion often matter more than the loudest miner headline.",
+        "structural_interpretation_confidence": 0.78,
+    },
+    "p048_future_industrial_automation": {
+        "theme": "industrial_automation",
+        "chain_layer": "industrial_inputs",
+        "chain_sublayer": "controls_robotics",
+        "theme_maturity": "mid_cycle_scaling",
+        "bottleneck_type": "switching_cost",
+        "moat_type": "preferred_vendor",
+        "fragility_type": "execution_risk",
+        "supplier_status": "preferred_vendor_candidate",
+        "position_in_chain": "category2_hidden_enabler",
+        "beneficiary_class": "ecosystem_owner",
+        "loser_class": "weak_supplier_without_moat",
+        "pair_trade_candidate": True,
+        "pair_trade_rationale": "Preferred automation vendors with controls/software lock-in should outperform lower-margin integrators and more commoditized hardware suppliers.",
+        "valuation_context": "valuation_unknown",
+        "value_chain_notes": "Industrial automation should be read as a controls/software/workflow chain rather than a flat machinery sector.",
+        "structural_interpretation_confidence": 0.74,
+    },
     "p043_future_networking": {
         "theme": "ai_infrastructure",
         "chain_layer": "datacenter_networking",
@@ -354,6 +390,12 @@ def _infer_from_text(signal: dict[str, Any]) -> dict[str, Any]:
         return _with_defaults(_PATTERN_DEFAULTS["p037"])
     if any(term in context_text for term in ("trade down", "essentials over discretionary", "retail margin")):
         return _with_defaults(_PATTERN_DEFAULTS["p041"])
+
+    if any(term in context_text for term in ("rare earth", "rare-earth", "rare earths", "neodymium", "praseodymium", "dysprosium", "terbium", "magnet materials", "magnet metal", "separation plant", "critical minerals", "processing facility", "mp materials", "lynas", "energy fuels")):
+        return _with_defaults(_PATTERN_DEFAULTS["p047_future_rare_earths"])
+
+    if any(term in context_text for term in ("robotics", "servo", "plc", "programmable logic controller", "machine vision", "motion control", "industrial automation", "factory automation", "digital twin", "rockwell", "siemens automation", "schneider electric automation")):
+        return _with_defaults(_PATTERN_DEFAULTS["p048_future_industrial_automation"])
 
     if any(term in context_text for term in ("arista", "ethernet switch", "switching", "infini", "interconnect", "network fabric", "networking gear", "ai fabric", "broadcom switch", "cisco networking")):
         return _with_defaults(_PATTERN_DEFAULTS["p043_future_networking"])
