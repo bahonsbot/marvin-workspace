@@ -82,3 +82,11 @@ Capabilities the user wanted but don't exist.
 
 **Priority:** high
 **Status:** implemented — added reminder to AGENTS.md
+## [FEAT-20260323-2235]
+
+**Requested:** expand the future Mission Control trading/Market Intel surface so it not only shows interesting companies surfaced by recent signals, but also supports manually adding candidates to watch based on Philippe's own insight or outside media, with that manual-watch layer affecting Market Intel and/or the equity-bot research path rather than living as UI-only state.
+**Why needed:** Philippe wants the trading surface to work as a research-first idea radar: the system should surface names worth looking into, and Philippe should be able to say "keep an eye on this one" and have that flow into the broader trading-research stack.
+**Complexity:** medium-high
+
+**Priority:** high
+**Status:** pending / planned
