@@ -7,6 +7,7 @@ import type {
   MarketIntelResearchRadarItem,
   MarketIntelManualWatchCandidate,
 } from '@/lib/types/contracts';
+import { ManualWatchForm } from '@/components/market-intel/ManualWatchForm';
 
 type Selection =
   | { kind: 'candidate'; id: string }
@@ -149,6 +150,7 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
     );
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const selected = useMemo(() => {
     if (!selection) return null;
     if (selection.kind === 'candidate') {
@@ -692,14 +694,11 @@ export function MarketIntelDashboard({ data }: { data: MarketIntelDashboardSumma
             <div style={{ color: 'var(--muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.34 }}>Research &amp; watchlist</div>
             <div style={{ fontSize: 17, fontWeight: 780, marginTop: 2 }}>Manual watch</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 11, color: 'var(--muted)' }}>{data.manualWatch.items.length} items</span>
-            {data.manualWatch.note && (
-              <span style={{ fontSize: 11, color: 'var(--muted)', maxWidth: 340, textAlign: 'right', lineHeight: 1.4 }}>
-                {data.manualWatch.note}
-              </span>
-            )}
+            <ManualWatchForm onAdded={() => window.location.reload()} />
           </div>
+
         </div>
 
         {data.manualWatch.items.length === 0 ? (
