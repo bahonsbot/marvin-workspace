@@ -53,6 +53,10 @@ Use this file for live setup facts, not historical logs or long retrospectives.
 - Runtime: Docker (OpenClaw)
 - Workspace: `/data/.openclaw/workspace`
 - Primary operator user: `node`
+- Backup posture:
+  - manual VPS snapshot path exists
+  - automated off-server backup exists
+  - operational rule: do not re-flag backup/DR as missing in Morning Meeting or security review unless there is concrete evidence of drift, failure, or a newly identified coverage gap
 
 ### Cron Jobs (Active)
 Note: `Delivery: none` means intentional silence by design unless otherwise noted, usually for script-only/artifact-only jobs that save outputs locally rather than announcing to Telegram.

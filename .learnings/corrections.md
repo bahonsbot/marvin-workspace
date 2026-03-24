@@ -17,6 +17,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260324-1157]
+
+**Trigger:** Philippe corrected repeated Morning Meeting/security-review backup findings and clarified that a manual snapshot path and automated off-server backup already exist.
+**What was wrong:** I kept treating backup/disaster-recovery as missing because the posture was not captured in durable memory or TOOLS.md, so reviews kept resurfacing the same false gap.
+**Lesson:** Treat backup posture as an explicit operational baseline. For future security or Morning Meeting review, do not flag backup/DR as missing unless there is concrete evidence of drift, failure, stale documentation, or a newly discovered coverage gap.
+
+**Priority:** high
+**Status:** resolved
+
+
 ## [CORR-20260323-1708]
 
 **Trigger:** Philippe corrected my typo: "tagger," not "tager."

@@ -97,6 +97,7 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - `.learnings/*` is first-class memory and should be checked for meaningful work
 - Raw OpenClaw session logs are short-retention artifacts, not durable memory
 - Disabled legacy wrapper jobs after the deterministic scheduler cutover are cleanup residue, not runtime truth
+- Backup posture baseline: Philippe already maintains a manual VPS snapshot path plus an automated off-server backup path. Future security/Morning Meeting reporting should treat backup/DR as present unless there is evidence of drift, failure, or the documented posture becoming stale.
 
 ### Review / Validation Rules
 - Self-improvement missing-file findings must be verification-based
