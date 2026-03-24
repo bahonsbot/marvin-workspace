@@ -499,7 +499,8 @@ def _prune_log_if_needed(log_path: Path, max_size_mb: int = 10, retention_days: 
         # Overwrite with kept entries
         with log_path.open("w", encoding="utf-8") as f:
             f.writelines(kept)
-    except Exception:
+    except Exception as exc:
+        logger.warning("Failed to prune webhook decision log %s: %s", log_path, exc)
         pass  # Best-effort pruning, don't break logging
 
 

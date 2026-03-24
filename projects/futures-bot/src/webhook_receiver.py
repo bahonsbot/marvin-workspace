@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import logging
 import os
 import re
 import secrets
@@ -24,6 +25,8 @@ from src.broker_adapter_tradovate import TradovatePaperAdapter
 from src.execution_orchestrator import ExecutionOrchestrator
 from src.position_manager import PositionManager
 from src.risk_manager import AccountState, RiskConfig
+
+logger = logging.getLogger(__name__)
 
 LOG_PATH = ROOT / "logs" / "webhook_decisions.jsonl"
 MAX_PAYLOAD_BYTES = 1_000_000
@@ -152,7 +155,8 @@ def _prune_log_if_needed(path: Path, max_size_mb: int = 10, retention_days: int 
         with path.open("w", encoding="utf-8") as handle:
             handle.writelines(kept)
         path.chmod(0o600)
-    except OSError:
+    except OSError as exc:
+        logger.warning("Failed to prune webhook decision log %s: %s", path, exc)
         return
 
 
