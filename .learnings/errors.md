@@ -300,3 +300,11 @@ Command/tool failures and exceptions.
 **Fix:** Documented the limitation. The script must be run from Philippe's local machine where Vercel CLI is authenticated.
 **Prevention:** For future Mission Control preview work, either (a) run `vercel dev` locally, or (b) push to GitHub for Vercel auto-deploy to a preview URL.
 
+
+## [ERR-20260325-0020]
+
+**Error:** Codex exec context cannot write to `memory/mission-control-preview/` directory.
+**What happened:** When Codex tries to run the preview helper script, it fails with EACCES permission errors trying to write `latest.pid` and `latest.log`. The script itself works fine when run directly as `node` user.
+**Root cause:** Codex exec runs in a sandboxed environment with restricted filesystem access. The preview helper writes to `memory/mission-control-preview/` which may have different permissions in the Codex sandbox context.
+**Fix:** For preview operations during Codex sessions, run the preview script directly from the main Marvin session rather than inside Codex exec. Alternatively, run as `node` user directly: `bash scripts/preview-start.sh`
+**Prevention:** Don't route preview start/stop through Codex exec. Handle from main session or use a detached exec with proper permissions.

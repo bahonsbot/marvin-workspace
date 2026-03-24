@@ -125,29 +125,20 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 
 ## Mission Control Direction
 - Mission Control remains a hybrid companion shell around real OpenClaw/runtime/workspace truth, not a clean-sheet replacement
-- UX and usefulness come before polish, but the intended visual target is calm premium dark operator desktop, with restrained Apple-lab energy
-- Home may include ambient orientation elements like time/weather/quote if they do not weaken the core operational layout
-- Chat/Orchestrator should stay honest about runtime/auth boundaries and should not fake a production-ready embedded chat path
+- Visual identity is now **FLOATING**: warm cream/ivory palette (#F7F2E9, #F4EEE4), forest green accents (#062E26, #0A332B, #163B31), editorial serif headlines, glass/elevated surfaces, generous whitespace, "Floating Island" aesthetic
+- Two domains: **General** (airy, editorial) and **Trading** (denser, analytical), switched via top tabs
+- Domain split is correct architecture; root `/` redirects to `/general/home`
+- Chat should stay honest about runtime/auth boundaries and should not fake a production-ready embedded chat path
 - Current product calibration:
   - promising and on the right track
-  - not yet premium enough
-  - `Sessions` is the strongest current module
-  - `Tasks` still needs the strongest kanban-first discipline
-- Current roadmap truth:
-  1. Memory
-  2. Files
-  3. Search
-  4. basic Settings / Status
-  5. finish Chat live/embed path
-  6. deepen Logs / Activity / Agents / Cron
-  7. domain modules
-  8. final Home refinement
-- Search split decision:
-  - Memory = memory browsing/search
-  - Files = non-memory browsing/preview and later file search
-  - standalone Search page is transitional and should disappear once file search is embedded in Files
+  - shell/domain migration is done
+  - Chat redesign from Stitch is implemented but needs Philippe feedback/iteration
+  - Tasks, Agents, Crons still need proper Stitch-driven redesign
+  - Memory and Files are mostly consistent
+  - Trading design is explicitly deferred until General is finished
+- Search is NOT a top-level page; belongs embedded in Memory, Files, and Trading pages
 - Additional feature direction: thin bottom status strip with real machine/runtime metrics
-- Market Intel/trading direction now has a durable 3-layer shape:
+- Market Intel/trading direction has a durable 3-layer shape:
   1. Signal Operations
   2. Research Radar
   3. Market Context
@@ -158,7 +149,12 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
   - manual watch candidates
   - compact market-context blocks
 - Winners/losers is explicitly deferred for now
-- Market Context should use honest delayed/snapshot data from free/open-access sources where viable; no fake realtime, no decorative placeholder market feeds
+- Market Context should use honest delayed/snapshot data from free/open-access sources; no fake realtime, no decorative placeholder market feeds
+- Durable non-negotiables:
+  1. truth over polish
+  2. useful before beautiful, then beautiful once useful
+  3. no fake state, no fake realtime, no fake embedded chat success
+  4. domain personality may vary by job (General=airy, Trading=denser)
 
 ## Project Snapshot
 ### Market Intel

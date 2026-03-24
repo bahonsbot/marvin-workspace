@@ -288,3 +288,11 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** When a workflow systematically produces the same class of bug across many components (in this case: colors, borders, backgrounds, bar charts all wrong), the right response is to identify and fix the root cause at the source, not patch individual components. The fix belongs in the design token extraction step before Codex is spawned, not in individual component files after.
 **Status:** resolved — added design token extraction as mandatory Step 0 in the runbook
 
+
+## [CORR-20260325-0015]
+
+**Trigger:** Philippe reviewed the implemented Chat redesign (commit 43805ba) and said "not close to how I want it to be yet, but it's a start."
+**What this means:** The Stitch → Codex implementation captured the structural elements (bubbles, composer, greeting, layout) but didn't hit the right visual quality bar. Needs iteration.
+**Lesson:** First-pass Stitch implementations should be treated as structural proof-of-concept, not final visual quality. Budget for at least one iteration round before declaring a page "done." When Philippe says "it's a start," that means the gap between the Stitch concept and the implementation is still significant.
+**Status:** open — Chat needs a second design iteration pass
+**Prevention:** Set expectations with Philippe that first implementations from Stitch will need at least one review/iteration cycle before reaching the target quality.
