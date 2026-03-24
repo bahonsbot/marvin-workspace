@@ -750,6 +750,9 @@ def update_autonomous_file(new_tasks):
     else:
         content += "\n" + new_section
 
+    # Remove known-empty structural sections so stale placeholders do not linger.
+    content = re.sub(r'\n## In Progress\s*\n(?=\n##|\Z)', '\n', content, flags=re.DOTALL)
+
     AUTONOMOUS_FILE.write_text(content)
 
 
