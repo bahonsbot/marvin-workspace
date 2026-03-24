@@ -100,6 +100,11 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - Backup posture baseline: Philippe already maintains a manual VPS snapshot path plus an automated off-server backup path. Future security/Morning Meeting reporting should treat backup/DR as present unless there is evidence of drift, failure, or the documented posture becoming stale.
 
 ### Review / Validation Rules
+- Overnight review jobs (`nightly-security-review`, `platform-health-council`, `self-improvement`) must check recent daily memory first
+  - read today plus at least the previous 3 `memory/YYYY-MM-DD.md` notes when available
+  - suppress or downgrade findings already fixed, accepted, or investigated recently unless there is concrete evidence of drift, failure, or reopening
+  - do not require every recently handled item to be promoted into `MEMORY.md` or `TOOLS.md` before honoring it
+  - if re-raising despite recent memory, state what changed
 - Self-improvement missing-file findings must be verification-based
   - distinguish `missing from workspace`
   - `exists but not reviewed`
