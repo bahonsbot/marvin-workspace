@@ -30,6 +30,9 @@ SKILL_PROFILE_FILE = WORKSPACE / "config" / "skill-profile.json"
 KANBAN_DIR = WORKSPACE / "projects" / "autonomous-kanban"
 KANBAN_BOARD_FILE = WORKSPACE / "projects" / "autonomous-kanban" / "public" / "board.json"
 LATEST_ASSESSMENT_FILE = WORKSPACE / "memory" / "skill-assessments" / "latest.json"
+KANBAN_SYNC_TIMEOUT_SECONDS = 20
+KANBAN_GIT_TIMEOUT_SECONDS = 15
+KANBAN_PUSH_TIMEOUT_SECONDS = 30
 CONTENT_SOURCE_DIRS = [
     WORKSPACE / "projects" / "creative-practice",
     WORKSPACE / "projects" / "portfolio",
@@ -402,12 +405,12 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
         task_desc = "prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules"
     elif 'automate' in goal_lower:
         task_prefix = "🔧 Fix:"
-        task_desc = "identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries"
-        proof = "Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly"
+        task_desc = "build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output"
+        proof = "Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config"
     elif 'openclaw' in goal_lower:
         task_prefix = "🔧 Fix:"
-        task_desc = "identify one OpenClaw process weakness and propose a small reliability improvement with clear input/output, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/"
-        proof = "Spec targets an OpenClaw process weakness without proposing risky live config edits"
+        task_desc = "build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note"
+        proof = "Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations"
     elif 'saas' in goal_lower or 'product' in goal_lower:
         task_prefix = "📝 Draft:"
         task_desc = "define one thin MVP increment with explicit scope, dependencies, and success criteria; deliverable: spec note in the relevant project folder"
@@ -468,8 +471,8 @@ def maybe_add_surprise_mvp(tasks, goals, seen):
             "[career] 📚 learn: pick one beginner-intermediate blender exercise",
             "[personal] 📚 learn: create one focused japanese study pack",
             "[personal] 📚 learn: build one beginner python study sheet",
-            "[other] 🔧 fix: identify one openclaw process weakness",
-            "[other] 🔧 fix: identify one repetitive workspace workflow",
+            "[other] 🔧 fix: build one small openclaw helper utility",
+            "[other] 🔧 fix: build one small automation utility that addresses one specific documented workspace friction point",
         ]
         for i in range(len(tasks) - 1, -1, -1):
             lower = tasks[i].lower()
@@ -681,25 +684,62 @@ def get_active_suggestion_tasks():
     return tasks
 
 
+def get_current_open_backlog_tasks():
+    """Read the current Open Backlog bullet items in order."""
+    if not AUTONOMOUS_FILE.exists():
+        return []
+
+    content = AUTONOMOUS_FILE.read_text()
+    tasks = []
+    in_open_backlog = False
+
+    for line in content.splitlines():
+        stripped = line.strip()
+        if stripped == "## Open Backlog":
+            in_open_backlog = True
+            continue
+        if in_open_backlog and stripped.startswith("## "):
+            break
+        if in_open_backlog and stripped.startswith("- "):
+            task = stripped[2:].strip()
+            if task and not task.startswith("*("):
+                tasks.append(task)
+
+    return tasks
+
+
+
 def update_autonomous_file(new_tasks):
-    """Update AUTONOMOUS.md with new tasks, preserving Philippe suggestions at the top."""
+    """Update AUTONOMOUS.md by preserving existing backlog and only topping back up to NUM_TASKS."""
 
     suggestion_tasks = get_active_suggestion_tasks()
+    existing_backlog_tasks = get_current_open_backlog_tasks()
     combined = []
     seen = set()
 
-    for task in suggestion_tasks + new_tasks:
+    # Preserve existing visible work first. This prevents the generator from deleting older
+    # backlog items just because a new daily batch was generated.
+    for task in suggestion_tasks + existing_backlog_tasks:
         key = task.strip().lower()
         if key and key not in seen:
             combined.append(task)
             seen.add(key)
 
-    limited = combined[:NUM_TASKS]
+    # Only top back up to NUM_TASKS with fresh tasks. If backlog already exceeds NUM_TASKS
+    # because of earlier runs, preserve it as-is rather than silently dropping older items.
+    for task in new_tasks:
+        if len(combined) >= NUM_TASKS:
+            break
+        key = task.strip().lower()
+        if key and key not in seen:
+            combined.append(task)
+            seen.add(key)
+
     content = AUTONOMOUS_FILE.read_text()
 
     new_section = "## Open Backlog\n\n"
-    if limited:
-        for task in limited:
+    if combined:
+        for task in combined:
             new_section += f"- {task}\n"
     else:
         new_section += "*(Empty - no active tasks)*\n"
@@ -729,6 +769,7 @@ def sync_kanban_board_json():
             check=True,
             capture_output=True,
             text=True,
+            timeout=KANBAN_SYNC_TIMEOUT_SECONDS,
         )
         print("Synced autonomous-kanban public/board.json")
         return True
@@ -754,6 +795,7 @@ def publish_kanban_board_if_changed():
         cwd=WORKSPACE,
         capture_output=True,
         text=True,
+        timeout=KANBAN_GIT_TIMEOUT_SECONDS,
     )
 
     if diff.returncode == 0:
@@ -766,16 +808,19 @@ def publish_kanban_board_if_changed():
         check=True,
         capture_output=True,
         text=True,
+        timeout=KANBAN_GIT_TIMEOUT_SECONDS,
     ).stdout.strip()
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
     message = f"chore(kanban): sync board snapshot ({timestamp})"
 
     try:
-        subprocess.run(["git", "add", rel_board], cwd=WORKSPACE, check=True)
-        subprocess.run(["git", "commit", "-m", message], cwd=WORKSPACE, check=True)
-        subprocess.run(["git", "push", "origin", branch], cwd=WORKSPACE, check=True)
+        subprocess.run(["git", "add", rel_board], cwd=WORKSPACE, check=True, timeout=KANBAN_GIT_TIMEOUT_SECONDS)
+        subprocess.run(["git", "commit", "-m", message], cwd=WORKSPACE, check=True, timeout=KANBAN_GIT_TIMEOUT_SECONDS)
+        subprocess.run(["git", "push", "origin", branch], cwd=WORKSPACE, check=True, timeout=KANBAN_PUSH_TIMEOUT_SECONDS)
         print(f"Published kanban board to origin/{branch}")
+    except subprocess.TimeoutExpired as exc:
+        print(f"Kanban publish timed out after {exc.timeout}s: {exc.cmd}")
     except subprocess.CalledProcessError as exc:
         print(f"Kanban publish failed: {exc}")
 
