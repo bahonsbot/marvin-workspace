@@ -415,6 +415,12 @@ def run_server(host: str = "127.0.0.1", port: int = 8001) -> None:
             f"Allowed: {', '.join(allowed_hosts)}."
         )
 
+    secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
+    if not secret:
+        error = "FATAL: WEBHOOK_SHARED_SECRET is missing. Refusing to start futures webhook receiver in a misconfigured state."
+        print(error)
+        raise SystemExit(1)
+
     server = ThreadingHTTPServer((host, port), _WebhookHandler)
     print(f"Futures webhook receiver listening on http://{host}:{port}/webhook")
     print(f"Health endpoint: http://{host}:{port}/health")
