@@ -215,3 +215,80 @@ Command/tool failures and exceptions.
 **Lesson:** When 404 survives a clean provider/alias setup, it is almost always a transport/API-contract mismatch, not a credential or hostname problem. Diagnostic path: (1) read provider's official API docs, (2) read OpenClaw's own provider docs, (3) compare both against current config, then (4) apply the minimum transport-layer fix. Never stack speculative config edits for a 404 — always get the contract right first.
 **Resolution (2026-03-20):** Applied `baseUrl: "https://api.minimax.io/anthropic"` + `api: "anthropic-messages"` + corrected `contextWindow: 204800`. Live generation test returned clean "MINIMAX_M27_OK" in ~5s. Both `codex5.4mini` and `minimax2.7` are now confirmed working.
 
+
+## [ERR-20260324-1530]
+
+**Error:** Duplicate React import in multiple component files after using sed to bulk-add `import { Icon } from './Icon'`.
+**What happened:** Components that already had `import { Icon }` got a second identical import line, causing `SyntaxError: Duplicate import` at build time.
+**Fix:** Deduplicate Icon imports with a Python script that keeps only the first occurrence per file.
+**Prevention:** Use a dedup-aware sed replacement or check for existing imports before bulk-adding.
+
+## [ERR-20260324-1516]
+
+**Error:** GitHub Pages showing 404 despite files being present on the correct branch.
+**What happened:** After pushing a new commit to `gh-pages`, GitHub Pages was still serving the old build from cache. GitHub Pages in legacy/static mode does not auto-rebuild from the branch — it needs either a new workflow trigger or the Pages settings to be re-saved.
+**Fix:** Pushed an empty commit (`git commit --allow-empty`) to force a new Pages build.
+**Prevention:** After switching Pages modes or pushing a significant change, always verify with `curl` that the new assets are being served. If 404 persists, check `gh api repos/USER/REPO/pages` for the current Pages config.
+
+## [ERR-20260324-1510]
+
+**Error:** npm install failing with "API rate limit reached" during lucide-react installation.
+**What happened:** npm registry has separate rate limits from the MiniMax API used for AI tasks. The 12% Philippe saw in the MiniMax dashboard was unrelated — it was npm's own rate limiting.
+**Fix:** Waited and retried; succeeded on retry.
+**Prevention:** If npm rate limits are frequent, consider using a `.npmrc` with a personal access token, or pre-bundle icon fonts.
+
+## [ERR-20260324-1505]
+
+**Error:** Vite build output had wrong asset paths — `/assets/` instead of `/atelier-bot-dashboard/assets/`.
+**What happened:** The original Vite config had no `base` set. In development (served from `localhost:5173/`) assets resolve correctly at `/assets/`. But on GitHub Pages at `https://USER.github.io/atelier-bot-dashboard/`, the browser looks for `/assets/` at the root, not `/atelier-bot-dashboard/assets/`.
+**Fix:** Rebuilt with `npm run build -- --base /atelier-bot-dashboard/`.
+**Prevention:** Always set the Vite `base` option for subpath deployment before the first production build.
+
+## [ERR-20260324-1420]
+
+**Error:** Material Symbols font showing as text (icon names) instead of rendered icons in production.
+**What happened:** Google Fonts CDN for Material Symbols was blocked or not reaching the browser in the GitHub Pages production environment. The CSS loaded but the actual font files (WOFF2) were not accessible.
+**Fix:** Replaced Material Symbols with Lucide React, which bundles icons as React components with no external CDN dependency.
+**Prevention:** For production deployments, prefer self-contained icon libraries (Lucide React, Heroicons) over icon fonts that require external CDN access.
+
+
+## [ERR-20260324-1700]
+
+**Error:** Codex builds visually correct layouts but loses color fidelity from Stitch.
+**What happened:** When Codex reads the Stitch HTML, it sees rendered Tailwind utility classes (e.g. `bg-surface-container`) not the underlying Material Design 3 CSS custom properties. Codex invents its own Tailwind class names or hardcoded values, missing the actual design token values.
+**Specific losses observed:**
+  - `surface-container` classes rendered as plain white instead of the actual light grey
+  - Bar chart colors wrong (Tailwind opacity notation like `bg-secondary/10` not producing visible results in production)
+  - Border color using Tailwind's default black instead of the translucent `rgba(193,198,215,0.3)`
+  - Active nav state losing the blue text color
+**Fix:** Extract design tokens from the Stitch HTML before handing it to Codex. Include explicit hex values and effect tokens in the Codex prompt.
+**Prevention:** Make design token extraction Step 0 of every Stitch → Codex workflow.
+
+## [ERR-20260324-1701]
+
+**Error:** Lucide React icons don't match Stitch's Material Symbols icons.
+**What happened:** Lucide is a different icon set with different glyphs. "dashboard" in Lucide looks different from "dashboard" in Material Symbols. Some icons (e.g. the pulsing green dot) require custom SVG work rather than a library mapping.
+**Fix:** For future projects, try to get Material Symbols working first (self-host the WOFF2 font). If that fails, accept that Lucide is a close approximation, not an identical match.
+**Prevention:** Note this as an expected tradeoff in the runbook.
+
+## [ERR-20260324-1702]
+
+**Error:** Tailwind's `bg-secondary/10` and similar opacity notation renders differently in production than in dev.
+**What happened:** Tailwind CDN in dev handles opacity-suffixed classes fine. In production build, the specificity and actual color output can differ. Codex also doesn't reliably reproduce these notations when building new components.
+**Fix:** Use explicit RGBA or hex values for any translucent backgrounds rather than Tailwind opacity suffixes.
+**Prevention:** In design token extraction, convert all opacity-suffixed classes to explicit rgba() values.
+
+## [ERR-20260324-1703]
+
+**Error:** Codex interprets "soft shadow" or "glass panel" differently from Stitch's actual implementation.
+**What happened:** Codex sees Stitch's glass panel and generates `backdrop-blur-md` but without the correct border treatment, resulting in panels that look like flat white boxes with thin black borders instead of the subtle translucent effect.
+**Fix:** Extract the exact CSS from Stitch's `<style>` blocks and include it as inline style guidance in the Codex prompt.
+**Prevention:** Add glass panel and shadow CSS tokens to the mandatory design token extraction step.
+
+## [ERR-20260324-1704]
+
+**Error:** Design System screen in Stitch uses an internal `asset-stub-assets-...` ID that is not retrievable via MCP API.
+**What happened:** Philippe's Stitch export instructions referenced a Design System screen with an asset-stub ID. The MCP API returns "entity not found" for this ID type.
+**Fix:** Design tokens must be extracted from the actual screen HTML, not from a separate Design System reference. The screen HTML contains all the colors and CSS needed.
+**Prevention:** Do not rely on separate Design System screen exports via MCP. Always extract from screen HTML.
+

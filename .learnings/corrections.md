@@ -17,6 +17,24 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260324-1311]
+
+**Trigger:** Philippe pointed out that I kept typing `120s` in chat while discussing a cron timeout that was supposed to be `1200s`.
+**What was wrong:** I applied the right live config value but echoed the wrong number in user-facing updates, which is especially dangerous when discussing timeout/config changes.
+**Lesson:** After approval-gated config or cron changes, quote the exact live value from the returned tool state before replying. Do not trust memory for numeric settings.
+
+**Priority:** high
+**Status:** resolved
+
+## [CORR-20260324-1201]
+
+**Trigger:** Philippe corrected my instinct to over-promote resolved review decisions into `MEMORY.md` / `TOOLS.md` and asked that nightly reviews check recent daily memory instead.
+**What was wrong:** I treated lean durable docs as the main suppression layer for recently handled issues, which caused repeat overnight findings when the real source of truth was recent daily memory.
+**Lesson:** For overnight review jobs, use recent daily memory as the first suppression layer for already fixed, accepted, or recently investigated issues. Keep `MEMORY.md` and `TOOLS.md` lean; only promote genuinely durable baselines there.
+
+**Priority:** high
+**Status:** resolved
+
 ## [CORR-20260324-1157]
 
 **Trigger:** Philippe corrected repeated Morning Meeting/security-review backup findings and clarified that a manual snapshot path and automated off-server backup already exist.
@@ -252,3 +270,21 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Rule:** for heavier implementation/audit passes, especially multi-part Mission Control work, consider splitting builder/reviewer work via the agent team rather than defaulting to single-thread execution
 
 **Status:** active
+
+## [CORR-20260324-1539]
+
+**Trigger:** Philippe pointed out that I documented a workflow but missed documenting my own mistakes and operational learnings from the process.
+**What was wrong:** I was going to continue fixing bugs without first capturing the lessons from what went wrong during the build/deploy.
+**Lesson:** When Philippe asks to document everything, that includes what failed, what was learned, and the corrections made along the way — not just the happy path.
+
+**Priority:** high
+**Status:** resolved
+
+
+## [CORR-20260324-1700]
+
+**Trigger:** Philippe pointed out that I documented the Stitch→Codex workflow but missed documenting the systematic visual translation failures that occurred during the Atelier Bot dashboard build.
+**What was wrong:** I was treating each visual bug as an isolated fix rather than recognizing the root cause — Codex's inability to extract design tokens from Stitch HTML.
+**Lesson:** When a workflow systematically produces the same class of bug across many components (in this case: colors, borders, backgrounds, bar charts all wrong), the right response is to identify and fix the root cause at the source, not patch individual components. The fix belongs in the design token extraction step before Codex is spawned, not in individual component files after.
+**Status:** resolved — added design token extraction as mandatory Step 0 in the runbook
+

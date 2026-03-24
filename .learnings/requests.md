@@ -99,3 +99,29 @@ Capabilities the user wanted but don't exist.
 
 **Priority:** medium-high
 **Status:** partially implemented — index snapshot wiring exists and the Market Context block is live; commodities/source quality and a stronger context/polish pass are still needed; winners/losers remains intentionally deferred
+
+## [REQ-20260324-1545]
+
+**Request:** Philippe asked for a Stitch → MCP → Codex → GitHub Pages runbook to be documented properly at `docs/runbooks/` after completing the first full end-to-end design-to-deploy pass.
+**What triggered it:** The process involved multiple steps, several failures, and non-obvious solutions that would be forgotten without documentation.
+**Outcome:** Created `docs/runbooks/stitch-mcp-codex-github-pages-workflow.md` covering: Stitch API key setup, Codex MCP config, building with Codex (including Vite base path), GitHub repo + Pages setup, and troubleshooting.
+**Status:** implemented
+
+## [REQ-20260324-1545b]
+
+**Request:** Add learnings to `.learnings/` folder for everything that went wrong during the build/deploy process.
+**Outcome:** Added entries to `corrections.md`, `errors.md`, and `requests.md` covering: duplicate imports, GitHub Pages 404, npm rate limits, Vite base path, Material Symbols CDN failure.
+**Status:** implemented
+
+
+## [REQ-20260324-1722]
+
+**Request:** Philippe asked to document everything learned from the Stitch design token translation gap and the visual fixes applied to the Atelier Bot dashboard.
+**What was documented:**
+  - Updated `docs/runbooks/stitch-mcp-codex-github-pages-workflow.md` with a mandatory design token extraction step (Step 0)
+  - Added canonical color palette, effect tokens, and icon mapping reference to the runbook
+  - Added guidance on Material Symbols vs Lucide tradeoffs
+  - Added guidance on extracting CSS from Stitch HTML `<style>` blocks
+  - Added errors to `.learnings/errors.md` covering: color fidelity loss, icon mismatches, Tailwind opacity notation failures, glass panel interpretation differences, Design System screen MCP API limitation
+**Status:** implemented
+
