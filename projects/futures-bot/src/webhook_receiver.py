@@ -6,6 +6,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import secrets
 import sys
 from datetime import UTC, datetime, timedelta
@@ -91,11 +92,21 @@ def _env_bool(name: str, default: bool) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def _is_sensitive_key(key: str) -> bool:
+    normalized = key.lower().strip()
+    if normalized in _SENSITIVE_FIELDS:
+        return True
+
+    pieces = [part for part in re.split(r"[^a-z0-9]+", normalized) if part]
+    return any(part in _SENSITIVE_FIELDS for part in pieces)
+
+
+
 def _redact_payload(payload: Any) -> Any:
     if isinstance(payload, dict):
         redacted: dict[str, Any] = {}
         for key, value in payload.items():
-            if key.lower() in _SENSITIVE_FIELDS:
+            if _is_sensitive_key(key):
                 redacted[key] = "[REDACTED]"
             else:
                 redacted[key] = _redact_payload(value)
