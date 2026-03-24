@@ -12,6 +12,7 @@ import hmac
 import json
 import logging
 import os
+import re
 import sys
 from datetime import datetime, timezone, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -26,14 +27,48 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# Load .env from project root
+# Load .env from project root.
+# If a new runtime env var is added for this receiver, update this allowlist too.
+_ALLOWED_ENV_KEYS = {
+    "APP_ENV",
+    "PAPER_MODE",
+    "PAPER_EXECUTE",
+    "KILL_SWITCH",
+    "DAILY_LOSS_CAP",
+    "MAX_POSITION_SIZE",
+    "MAX_OPEN_POSITIONS",
+    "ALPACA_API_KEY",
+    "ALPACA_API_SECRET",
+    "ALPACA_BASE_URL",
+    "WEBHOOK_SHARED_SECRET",
+    "WEBHOOK_HOST",
+    "WEBHOOK_PORT",
+    "AUTO_WEBHOOK_URL",
+    "EXECUTION_CANDIDATES_ENABLED",
+    "AUTO_MIN_CONFIDENCE",
+    "AUTO_MIN_REASONING_SCORE",
+    "AUTO_BASE_QTY",
+    "AUTO_MAX_QTY",
+    "AUTO_MARKET_HOURS_ONLY",
+    "AUTO_FAST_REGIME_ENABLED",
+    "AUTO_FAST_MIN_REASONING_SCORE",
+    "AUTO_FAST_QTY_MULTIPLIER",
+    "AUTO_FAST_GEO_THRESHOLD",
+    "AUTO_FAST_HIGH_CONF_THRESHOLD",
+    "TELEGRAM_BOT_TOKEN",
+    "TELEGRAM_CHAT_ID",
+    "TELEGRAM_PHILIPPE_CHAT_ID",
+}
+
 _env_path = ROOT / ".env"
 if _env_path.exists():
     for line in _env_path.read_text().splitlines():
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             key, val = line.split("=", 1)
-            os.environ.setdefault(key.strip(), val.strip())
+            key = key.strip()
+            if key in _ALLOWED_ENV_KEYS:
+                os.environ.setdefault(key, val.strip())
 
 from src.broker_adapter_alpaca import AlpacaPaperAdapter, PaperOnlyViolationError
 from src.context_adapter import load_context_snapshot
@@ -46,6 +81,7 @@ import secrets
 LOG_PATH = ROOT / "logs" / "webhook_decisions.jsonl"
 MAX_PAYLOAD_SIZE = 1024 * 1024  # 1MB
 MAX_BUCKETS = 1000  # Global cap on rate-limit buckets to prevent memory exhaustion
+_MISSING_SECRET_WARNED = False
 
 _RATE_LIMIT_BUCKETS: Dict[str, list[float]] = {}
 _RATE_LIMIT_LOCK = Lock()
@@ -59,12 +95,22 @@ _SENSITIVE_FIELDS = frozenset({
 })
 
 
+def _is_sensitive_key(key: str) -> bool:
+    """Return True when a field name is sensitive, including compound names."""
+    normalized = key.lower().strip()
+    if normalized in _SENSITIVE_FIELDS:
+        return True
+
+    pieces = [part for part in re.split(r"[^a-z0-9]+", normalized) if part]
+    return any(part in _SENSITIVE_FIELDS for part in pieces)
+
+
 def _redact_sensitive(data: Any) -> Any:
     """Recursively redact sensitive fields from data structure."""
     if isinstance(data, dict):
         redacted = {}
         for key, value in data.items():
-            if key.lower() in _SENSITIVE_FIELDS:
+            if _is_sensitive_key(key):
                 redacted[key] = "[REDACTED]"
             else:
                 redacted[key] = _redact_sensitive(value)
@@ -98,7 +144,13 @@ def _env_int(name: str, *, default: int) -> int:
 
 
 def _get_client_ip(headers: Dict[str, str], client_address: tuple | None) -> str:
-    """Get client IP with X-Forwarded-For support and trusted proxy validation."""
+    """Get client IP with X-Forwarded-For support and trusted proxy validation.
+
+    Client IPs are logged for security/operational reasons only: request rate limiting,
+    replay/auth troubleshooting, and abuse investigation. They flow into
+    `logs/webhook_decisions.jsonl`, which is already pruned by the receiver with the
+    existing 30-day / ~10MB retention path.
+    """
     import ipaddress
     
     # Direct connection - use socket peer IP
@@ -217,7 +269,6 @@ def _auth_allowed(headers: Dict[str, str], payload: Dict[str, Any] | None = None
     """
     secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
     if not secret:
-        logger.error("Webhook receiver started without WEBHOOK_SHARED_SECRET - rejecting all requests")
         return False  # Fail-closed: reject if no secret configured
 
     # Basic secret validation (backward compatible)
@@ -321,10 +372,14 @@ def process_webhook_payload(
             adapter = AlpacaPaperAdapter()
             symbol_ok, symbol_reason = adapter.validate_symbol(normalized.get("symbol", ""))
             if not symbol_ok:
-                reason = f"Field 'symbol' failed broker validation: {symbol_reason}"
+                logger.warning(
+                    "Broker symbol validation failed for %s: %s",
+                    normalized.get("symbol", ""),
+                    symbol_reason,
+                )
                 return {
                     "accepted": False,
-                    "reasons": [reason],
+                    "reasons": ["Validation failed"],
                     "validation": validation,
                     "context": None,
                     "decision_context": None,
@@ -505,16 +560,14 @@ class WebhookHandler(BaseHTTPRequestHandler):
         result = process_webhook_payload(payload)
         status = 200 if result["accepted"] else 422
 
-        # Redact sensitive fields before logging (comprehensive redaction)
-        log_payload = _redact_sensitive(payload)
-
-        record = {
+        # Redact the full log record so nested result fields cannot leak secrets.
+        record = _redact_sensitive({
             "timestamp": _utc_now_iso(),
             "path": self.path,
-            "request": log_payload,
+            "request": payload,
             "result": result,
             "paper_only": True,
-        }
+        })
         _append_log(record)
 
         accepted = bool(result.get("accepted"))
@@ -567,17 +620,29 @@ class WebhookHandler(BaseHTTPRequestHandler):
 
 def run_server(host: str = "127.0.0.1", port: int = 8000) -> None:
     """Run the local webhook HTTP server."""
-    allow_non_local = _env_flag("ALLOW_NON_LOCALHOST_BIND", default=False)
-    if host not in {"127.0.0.1", "localhost", "::1"} and not allow_non_local:
+    global _MISSING_SECRET_WARNED
+
+    allowed_hosts = {"127.0.0.1", "localhost", "::1"}
+    if _env_flag("ALLOW_CONTAINER_BIND", default=False):
+        allowed_hosts.add("0.0.0.0")
+    if host not in allowed_hosts:
         raise ValueError(
             f"Refusing to bind webhook receiver to non-local host '{host}'. "
-            "Set ALLOW_NON_LOCALHOST_BIND=true only for explicit dev/testing use."
+            f"Allowed hosts: {', '.join(sorted(allowed_hosts))}."
         )
+
+    secret = os.getenv("WEBHOOK_SHARED_SECRET", "").strip()
+    if not secret:
+        error = "FATAL: WEBHOOK_SHARED_SECRET is missing. Refusing to start webhook receiver in a misconfigured state."
+        logger.error(error)
+        print(error)
+        _MISSING_SECRET_WARNED = True
+        raise SystemExit(1)
 
     server = ThreadingHTTPServer((host, port), WebhookHandler)
     print(f"Paper-only webhook receiver listening on http://{host}:{port}/webhook")
     print(f"PAPER_EXECUTE={'true' if _env_flag('PAPER_EXECUTE', default=False) else 'false'}")
-    print(f"ALLOW_NON_LOCALHOST_BIND={'true' if allow_non_local else 'false'}")
+    print("Localhost-only bind protection: enabled")
     print(f"Logging decisions to: {LOG_PATH}")
     server.serve_forever()
 
