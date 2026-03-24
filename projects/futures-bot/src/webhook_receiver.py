@@ -343,6 +343,9 @@ class _WebhookHandler(BaseHTTPRequestHandler):
             if not _health_rate_limit_allowed(client_ip):
                 self._send_json(429, {"error": "Rate limit exceeded", "paper_only": True})
                 return
+            if not _authorized(dict(self.headers), body_bytes=b""):
+                self._send_json(401, {"error": "Unauthorized", "paper_only": True})
+                return
             self._send_json(200, {"ok": True, "paper_only": True})
             return
         self._send_json(404, {"error": "Not found", "paper_only": True})
