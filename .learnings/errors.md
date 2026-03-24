@@ -292,3 +292,11 @@ Command/tool failures and exceptions.
 **Fix:** Design tokens must be extracted from the actual screen HTML, not from a separate Design System reference. The screen HTML contains all the colors and CSS needed.
 **Prevention:** Do not rely on separate Design System screen exports via MCP. Always extract from screen HTML.
 
+
+## [ERR-20260324-1955]
+
+**Error:** Could not start Mission Control preview using `vercel dev` / `preview.motiondisplay.cloud` from the VPS.
+**What happened:** The `restart-preview.sh` script uses `vercel dev` which creates a Cloudflare tunnel at `preview.motiondisplay.cloud`. This requires the `VCF_BEARER_TOKEN` environment variable to authenticate with Vercel, which is only set on Philippe's local machine. On the VPS, `vercel dev` hangs on authentication.
+**Fix:** Documented the limitation. The script must be run from Philippe's local machine where Vercel CLI is authenticated.
+**Prevention:** For future Mission Control preview work, either (a) run `vercel dev` locally, or (b) push to GitHub for Vercel auto-deploy to a preview URL.
+
