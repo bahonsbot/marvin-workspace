@@ -13,7 +13,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Lock
 from time import time
-from typing import Any
+from typing import Any, Dict
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -26,15 +26,43 @@ from src.risk_manager import AccountState, RiskConfig
 
 LOG_PATH = ROOT / "logs" / "webhook_decisions.jsonl"
 MAX_PAYLOAD_BYTES = 1_000_000
+MAX_BUCKETS = 1000  # Global cap on rate-limit buckets to prevent memory exhaustion
 
 # Rate limiting: 120 requests per 60 seconds per IP
 _RATE_LIMIT_BUCKETS: dict[str, list[float]] = {}
 _RATE_LIMIT_LOCK = Lock()
+_bucket_access_order: list[str] = []  # LRU tracking
 _SENSITIVE_FIELDS = frozenset({
     "secret", "token", "api_key", "api_secret", "password",
     "authorization", "bearer", "access_token", "refresh_token",
     "private_key", "client_secret", "credentials",
 })
+
+
+_ALLOWED_ENV_KEYS = {
+    "TRADOVATE_API_KEY",
+    "TRADOVATE_API_SECRET",
+    "TRADOVATE_USERNAME",
+    "TRADOVATE_PASSWORD",
+    "TRADOVATE_CID",
+    "TRADOVATE_BASE_URL",
+    "PAPER_MODE",
+    "KILL_SWITCH",
+    "DAILY_LOSS_CAP",
+    "MAX_CONTRACTS_PER_SIGNAL",
+    "MAX_OPEN_POSITIONS",
+    "MARGIN_WARNING_THRESHOLD",
+    "MARGIN_HARD_CAP",
+    "MARKET_HOURS_ONLY",
+    "ALLOW_OVERNIGHT",
+    "WEBHOOK_HOST",
+    "WEBHOOK_PORT",
+    "WEBHOOK_SHARED_SECRET",
+    "AUTO_WEBHOOK_URL",
+    "AUTO_MIN_CONFIDENCE",
+    "AUTO_MIN_REASONING_SCORE",
+    "WEBHOOK_LOG_PATH",
+}
 
 
 def _load_env() -> None:
@@ -46,7 +74,10 @@ def _load_env() -> None:
         if not raw or raw.startswith("#") or "=" not in raw:
             continue
         key, value = raw.split("=", 1)
-        os.environ.setdefault(key.strip(), value.strip())
+        key = key.strip()
+        # If a new runtime env var is added for this receiver, update this allowlist too.
+        if key in _ALLOWED_ENV_KEYS:
+            os.environ.setdefault(key, value.strip())
 
 
 def _utc_now_iso() -> str:
@@ -194,6 +225,30 @@ def _build_account_state(adapter: TradovatePaperAdapter, positions: PositionMana
     )
 
 
+def _get_client_ip(headers: Dict[str, str], client_address: tuple | None) -> str:
+    """Get client IP with X-Forwarded-For support and trusted proxy validation."""
+    import ipaddress
+
+    if not client_address:
+        return "unknown"
+
+    direct_ip = client_address[0]
+    trusted_proxies = os.getenv("WEBHOOK_TRUSTED_PROXIES", "").strip().split(",")
+    trusted_proxies = [p.strip() for p in trusted_proxies if p.strip()]
+
+    if trusted_proxies and direct_ip in trusted_proxies:
+        xff = headers.get("X-Forwarded-For", "")
+        if xff:
+            xff_ip = xff.split(",")[0].strip()
+            try:
+                ipaddress.ip_address(xff_ip)
+                return xff_ip
+            except ValueError:
+                pass
+
+    return direct_ip
+
+
 def _rate_limit_allowed(client_ip: str) -> bool:
     """Check if request is within rate limit (120 req/60s per IP)."""
     max_requests = 120
@@ -201,7 +256,18 @@ def _rate_limit_allowed(client_ip: str) -> bool:
     now = time()
 
     with _RATE_LIMIT_LOCK:
-        bucket = _RATE_LIMIT_BUCKETS.setdefault(client_ip, [])
+        if client_ip not in _RATE_LIMIT_BUCKETS and len(_RATE_LIMIT_BUCKETS) >= MAX_BUCKETS:
+            while _bucket_access_order:
+                oldest_ip = _bucket_access_order.pop(0)
+                if oldest_ip in _RATE_LIMIT_BUCKETS:
+                    del _RATE_LIMIT_BUCKETS[oldest_ip]
+                    break
+
+        if client_ip not in _RATE_LIMIT_BUCKETS:
+            _RATE_LIMIT_BUCKETS[client_ip] = []
+            _bucket_access_order.append(client_ip)
+
+        bucket = _RATE_LIMIT_BUCKETS[client_ip]
         cutoff = now - window_seconds
         while bucket and bucket[0] < cutoff:
             bucket.pop(0)
@@ -221,7 +287,18 @@ def _health_rate_limit_allowed(client_ip: str) -> bool:
     bucket_key = f"health:{client_ip}"
 
     with _RATE_LIMIT_LOCK:
-        bucket = _RATE_LIMIT_BUCKETS.setdefault(bucket_key, [])
+        if bucket_key not in _RATE_LIMIT_BUCKETS and len(_RATE_LIMIT_BUCKETS) >= MAX_BUCKETS:
+            while _bucket_access_order:
+                oldest_ip = _bucket_access_order.pop(0)
+                if oldest_ip in _RATE_LIMIT_BUCKETS:
+                    del _RATE_LIMIT_BUCKETS[oldest_ip]
+                    break
+
+        if bucket_key not in _RATE_LIMIT_BUCKETS:
+            _RATE_LIMIT_BUCKETS[bucket_key] = []
+            _bucket_access_order.append(bucket_key)
+
+        bucket = _RATE_LIMIT_BUCKETS[bucket_key]
         cutoff = now - window_seconds
         while bucket and bucket[0] < cutoff:
             bucket.pop(0)
@@ -251,7 +328,7 @@ class _WebhookHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/health":
-            client_ip = self.client_address[0]
+            client_ip = _get_client_ip(dict(self.headers), self.client_address)
             if not _health_rate_limit_allowed(client_ip):
                 self._send_json(429, {"error": "Rate limit exceeded", "paper_only": True})
                 return
@@ -265,7 +342,7 @@ class _WebhookHandler(BaseHTTPRequestHandler):
             return
 
         # Rate limiting check
-        client_ip = self.client_address[0]
+        client_ip = _get_client_ip(dict(self.headers), self.client_address)
         if not _rate_limit_allowed(client_ip):
             self._send_json(429, {"error": "Rate limit exceeded", "paper_only": True})
             return
@@ -329,15 +406,15 @@ class _WebhookHandler(BaseHTTPRequestHandler):
 
 def run_server(host: str = "127.0.0.1", port: int = 8001) -> None:
     _load_env()
-    
+
     # Localhost-only bind protection (security: prevent accidental public exposure)
     allowed_hosts = ("127.0.0.1", "localhost", "::1")
     if host not in allowed_hosts:
         raise RuntimeError(
             f"Webhook receiver must bind to localhost only. Got: {host}. "
-            f"Allowed: {', '.join(allowed_hosts)}. Set WEBHOOK_HOST=127.0.0.1"
+            f"Allowed: {', '.join(allowed_hosts)}."
         )
-    
+
     server = ThreadingHTTPServer((host, port), _WebhookHandler)
     print(f"Futures webhook receiver listening on http://{host}:{port}/webhook")
     print(f"Health endpoint: http://{host}:{port}/health")
@@ -347,7 +424,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8001) -> None:
 
 if __name__ == "__main__":
     _load_env()
-    host = os.getenv("WEBHOOK_HOST", "127.0.0.1")
+    host = os.getenv("WEBHOOK_HOST", "127.0.0.1").strip()
     try:
         port = int(os.getenv("WEBHOOK_PORT", "8001"))
     except ValueError:
