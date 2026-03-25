@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260325-1223]
+
+**What failed:** nightly-security-review delivery and saved report diverged
+**Error:** the Telegram/operator summary was generated from an intermediate aggregation path while the saved markdown report reflected a later, different reconciliation pass, so the delivered findings and the on-disk report did not match
+**Context:** Morning Meeting audit on 2026-03-25 after Philippe pasted the Telegram security summary and it conflicted with `memory/security/2026-03-25-nightly-security-review.md`
+**Suggested fix:** enforce a canonical-report contract: aggregate once, save the final report first, re-read that saved report, and derive the final delivery summary only from that exact file; never deliver intermediate summaries or unverified carry-forward sections
+**Resolution:** Fixed on 2026-03-25 by patching the live `nightly-security-review` cron prompt plus workspace references (`projects/_ops/model-benchmarks/live-job-prompts.md`, `skills/security-review/SKILL.md`) so delivery must be generated from the saved canonical report
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260323-1158]
 
 **What failed:** Platform Health Council cron-health analysis produced false-positive overdue findings for deterministic jobs

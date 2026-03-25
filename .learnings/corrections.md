@@ -17,6 +17,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260325-1332]
+
+**Trigger:** Philippe clarified that the old `85/15` memory rule was meant to preserve Marvin's growth through interaction and feedback, not to enforce a fake precision ratio.
+**What was wrong:** I treated identity continuity as a context-balance percentage problem instead of a promotion-and-memory-structure problem.
+**Lesson:** Model identity should grow through repeated interaction, explicit feedback, durable preferences, and lessons from real work. Keep stable core traits in `SOUL.md` / `IDENTITY.md`, explicit behavior shaping in `.learnings/corrections.md`, and only durable relationship or working-style changes in `MEMORY.md`. Do not create a separate identity log or let passing impressions clutter core files.
+
+**Priority:** high
+**Status:** resolved
+
+
 ## [CORR-20260324-1311]
 
 **Trigger:** Philippe pointed out that I kept typing `120s` in chat while discussing a cron timeout that was supposed to be `1200s`.
