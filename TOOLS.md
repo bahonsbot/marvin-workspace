@@ -167,6 +167,9 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - **Coding agent skill:** Built-in OpenClaw skill `coding-agent` delegates to Codex/Claude Code/Pi
   - Usage: `pty:true workdir:~/project background:true command:"codex exec --full-auto 'prompt'"`
   - Always use `pty:true` — coding agents need a pseudo-terminal
+- **Stitch → Codex workflow:** when implementing from Stitch or design exports, extract and state the design tokens explicitly first (palette, typography, spacing, surface treatment, icon/style rules) before asking Codex to build.
+  - Runbook: `docs/runbooks/stitch-mcp-codex-github-pages-workflow.md`
+  - Practical rule: do not assume Codex will infer the right visual system from raw Stitch output alone
 
 ### Skill Profile
 - `config/skill-profile.json` — Stores Philippe's current skill levels (novice/beginner/intermediate) and constraints
