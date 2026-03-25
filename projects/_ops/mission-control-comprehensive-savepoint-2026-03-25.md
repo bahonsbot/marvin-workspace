@@ -13,6 +13,7 @@ This file is the current Mission Control continuity anchor and supersedes the pr
 
 For implementation-safe continuation after the Mar 25 product-structure clarification, also read:
 - `projects/_ops/mission-control-execution-spec-2026-03-25.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-25-evening.md` (newer relocation-pause savepoint)
 
 If tomorrow-you only reads one Mission Control handoff file, read this one.
 

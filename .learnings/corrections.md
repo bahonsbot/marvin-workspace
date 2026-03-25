@@ -17,6 +17,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260325-1743]
+
+**Trigger:** Philippe pointed out that the new manual Tasks boards still showed internal/provisional artifacts like `p-seed-1`, `manual`, and `Inspect scope`, which are not meaningful for the real manual-board experience.
+**What was wrong:** I let placeholder/internal card metadata from the provisional implementation leak into the user-facing manual boards, which weakens the illusion of them being real workspaces.
+**Lesson:** When upgrading provisional manual boards into real interaction surfaces, remove seed IDs, internal labels, and autonomous-board copy that no longer serves the product. Placeholder scaffolding should not survive into normal user-facing board use.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260325-1425]
 
 **Trigger:** Philippe reminded me that I sometimes forget two Mission Control build helpers: the Agent Team and Stitch MCP export.

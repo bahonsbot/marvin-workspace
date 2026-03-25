@@ -16,6 +16,15 @@ Capabilities the user wanted but don't exist.
 
 ## Recent Requests
 
+## [FEAT-20260325-1743]
+
+**Requested:** add click-and-drag movement for manual Tasks boards so Personal and Projects cards can be moved between columns by dragging, not only by explicit controls
+**Why needed:** Philippe expects kanban-style manual boards to support direct drag interaction as a normal board affordance; the current manual-board baseline works but still feels slightly too structured/form-like without drag movement
+**Complexity:** medium
+
+**Priority:** medium
+**Status:** pending / next refinement
+
 ## [FEAT-20260323-1741]
 
 **Requested:** when Mission Control later gets a Trading module, add a visible real-time research widget that shows interesting current candidates based on recent signals
