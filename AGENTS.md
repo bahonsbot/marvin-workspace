@@ -9,7 +9,11 @@ Always read, in this order:
 5. `AUTONOMY.md`
 6. In main/direct chat only: `MEMORY.md`
 
-Memory balance target: roughly 85% task/history, 15% identity/context.
+Memory balance guidance:
+- Default toward task/history and current operational context.
+- Keep identity/personality/context present but light.
+- Do not force a ratio; use enough identity/context to preserve voice, continuity, and user-specific preferences without crowding out active work.
+- If there is tension, prioritize the information most likely to improve the current task.
 
 ## Model-Specific Guidance
 When the model switches to `openai-codex/gpt-5.4` (`codex5.4`):
