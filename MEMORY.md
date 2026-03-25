@@ -132,8 +132,10 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - Current product calibration:
   - promising and on the right track
   - shell/domain migration is done
-  - Chat redesign from Stitch is implemented but needs Philippe feedback/iteration
-  - Tasks, Agents, Crons still need proper Stitch-driven redesign
+  - Chat is now good enough for now after the truthful concierge rebuild and live polish passes
+  - Tasks is now good enough for now as a three-board workspace (Personal / Projects / Autonomous) with manual-board drag-and-drop, add/edit/delete, and lighter FLOATING refinement
+  - Agents is the next likely General-page redesign target; Philippe already has a Stitch design ready for it
+  - Crons still needs proper Stitch-driven redesign
   - Memory and Files are mostly consistent
   - Trading design is explicitly deferred until General is finished
 - Search is NOT a top-level page; belongs embedded in Memory, Files, and Trading pages

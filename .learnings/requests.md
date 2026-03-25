@@ -23,7 +23,7 @@ Capabilities the user wanted but don't exist.
 **Complexity:** medium
 
 **Priority:** medium
-**Status:** pending / next refinement
+**Status:** implemented on 2026-03-25/26 — manual Personal and Projects boards now support drag-and-drop column movement via `components/pages/TasksBoardSwitcher.tsx`
 
 ## [FEAT-20260323-1741]
 

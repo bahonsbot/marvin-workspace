@@ -17,6 +17,29 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260325-2303]
+
+**What failed:** manual-board new-task save flow in Mission Control Tasks
+**Error:** the save handler for new manual-board tasks captured stale modal state via `useCallback([])` and still checked `if (!modal) return;`, so saving a newly created task silently bailed out instead of writing it to Personal/Projects
+**Context:** Philippe tested the `+` button flow on the Tasks manual boards after the drag-and-drop/manual-board pass
+**Suggested fix:** when save handlers already receive the full payload, avoid stale closure guards against transient UI state like modal visibility; use the explicit arguments as source of truth and keep modal state out of the write gate
+**Resolution:** Fixed on 2026-03-25 in `components/pages/TasksBoardSwitcher.tsx` by removing the stale modal guard and validating with build + lint + preview restart; Mission Control repo commit `b1a31aed`
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260325-2340]
+
+**What failed:** first Tasks visual refinement pass for Mission Control
+**Error:** the refinement overshot from visual/style polish into structural page redesign, changing more of the page layout than Philippe wanted
+**Context:** applying Stitch-guided Tasks polish after the functional cleanup/draggable-board pass
+**Suggested fix:** for Mission Control page refinements, treat the last user-approved layout as protected unless Philippe explicitly asks for layout changes; use page-specific visual passes for materials, spacing, hierarchy, and typography first
+**Resolution:** Corrected on 2026-03-25/26 by restoring the previous Tasks layout baseline and then applying narrower refinements; Mission Control repo follow-up commits `91d0c29f`, `f54ae40a`, `c812d7c6`
+
+**Priority:** high
+**Status:** resolved
+
+
 ## [ERR-20260325-1223]
 
 **What failed:** nightly-security-review delivery and saved report diverged
