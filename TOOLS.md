@@ -266,7 +266,6 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
     - `queue` self-heals stale spawned slots, then decides based on pending delegated work
     - `improve` allows one bounded workspace improvement pass when active-hour and queue conditions are satisfied
 - `scripts/add-task-suggestion.py` — Add a Philippe suggestion and place it at the top of Open Backlog
-- `switch_model.sh` / `switch_model_auto.sh` — Model switching
 - `projects/_ops/agent-team/` — Hybrid v1 reusable internal workflow package
   - Operator entry: `START-HERE.md`
   - Map/checklist: `package-map.md`, `operator-checklist.md`
