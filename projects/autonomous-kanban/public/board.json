@@ -7,17 +7,18 @@
         "column": "todo"
       },
       {
-        "id": "b532aa94",
-        "text": "[Personal] \ud83c\udf81 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
-        "column": "todo"
-      },
-      {
         "id": "71293857",
         "text": "[Personal] \ud83d\udcda Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "8c9f5bfd",
+        "text": "[Personal] \ud83c\udf81 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "24fa9c1b",
@@ -51,5 +52,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-25T10:00:11.000Z"
+  "updatedAt": "2026-03-25T10:00:13.000Z"
 }
