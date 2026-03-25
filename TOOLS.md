@@ -318,9 +318,9 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
     - Next.js patched from 14.2.15 to ^14.2.35; build passes
     - npm audit still reports upstream high-severity dependency findings; acceptable for local scaffold stage, revisit before real exposed deployment
     - Remaining major implementation question is how far to take Orchestrator integration after the successful read-first spike
-    - Public preview is now live at `http://preview.motiondisplay.cloud`
-    - Current preview routing truth: Mission Control runs inside the OpenClaw container on port `3005`; host nginx must proxy to a reachable container-side target rather than assume the app exists on host loopback
-    - Current working preview target during setup: container `openclaw-ktrt-openclaw-1` at `172.18.0.2:3005` (container IP may change; treat the reachable container-side app target as the durable rule, not the exact IP)
+    - Preview access: Mission Control is intended to be publicly reachable at `http://preview.motiondisplay.cloud` when host nginx is correctly proxying to the container-side app on port `3005`
+    - Runtime truth: Mission Control runs inside the OpenClaw container, not on host loopback
+    - Operational rule: treat host nginx → reachable container-side app routing as the durable requirement; do not rely on a specific container IP remaining stable
 - `projects/market-intel/` — signal generation + reasoning pipeline (active)
   - **Execution-candidates pipeline (Mar 13):**
     - Producer: `projects/market-intel/src/execution_candidates.py`
