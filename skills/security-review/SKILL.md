@@ -47,10 +47,11 @@ This skill runs an automated security review of the workspace codebase at 3:30am
 
 1. **Scan codebase**: Find all code files (.py, .sh, .json)
 2. **Spawn 4 sub-agents** (one per perspective), each analyzes relevant files in parallel
-3. **Aggregate findings**: Combine into structured report
+3. **Aggregate findings**: Combine into one structured canonical report
 4. **Classify severity**: Critical / High / Medium / Low / Info
-5. **Deliver to Telegram**: Numbered findings, critical = immediate alert
-6. **Store report**: Save to memory/ for history
+5. **Store report first**: Save the canonical report to memory/ for history
+6. **Reply from the saved report only**: re-read the saved report and derive the operator summary from that exact file, not from intermediate notes or sub-agent console output
+7. **Do not emit alternate summaries**: if sub-agent outputs conflict, resolve the conflict in the saved report first; never let Telegram/delivery text diverge from the saved report
 
 ## Output Format
 
