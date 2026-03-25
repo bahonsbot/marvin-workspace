@@ -17,6 +17,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260325-1425]
+
+**Trigger:** Philippe reminded me that I sometimes forget two Mission Control build helpers: the Agent Team and Stitch MCP export.
+**What was wrong:** I can drift into single-threaded implementation planning and underuse available build acceleration / design-translation tooling.
+**Lesson:** For Mission Control build work, explicitly consider (1) Agent Team for implementation/review support and (2) Stitch MCP export as a first-class bridge between Stitch design and the real app build. Do not default to manual interpretation if those tools can reduce drift.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260325-1332]
 
 **Trigger:** Philippe clarified that the old `85/15` memory rule was meant to preserve Marvin's growth through interaction and feedback, not to enforce a fake precision ratio.
