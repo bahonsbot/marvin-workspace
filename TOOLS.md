@@ -128,7 +128,10 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Primary provider: Bailian
 - Default lightweight delegation: `minimax/MiniMax-M2.7`
 - Higher-reasoning delegation: `bailian/qwen3.5-plus`
-- Coding-heavy fallback: `openai-codex/gpt-5.3-codex`
+- Active Codex posture uses both:
+  - `openai-codex/gpt-5.4` for runway / orchestration / higher-reasoning work
+  - `openai-codex/gpt-5.3-codex` for coding-heavy delegated work
+- Either Codex route may be used depending on task shape and current runtime needs
 - Optional comparison models: `glm-5`, `kimi-k2.5`
 - Active alias notes:
   - `codex5.4` = Marvin orchestration / higher-reasoning work
