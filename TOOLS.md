@@ -170,6 +170,8 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - **Stitch → Codex workflow:** when implementing from Stitch or design exports, extract and state the design tokens explicitly first (palette, typography, spacing, surface treatment, icon/style rules) before asking Codex to build.
   - Runbook: `docs/runbooks/stitch-mcp-codex-github-pages-workflow.md`
   - Practical rule: do not assume Codex will infer the right visual system from raw Stitch output alone
+- **Codex exec filesystem limits:** sandboxed Codex exec sessions may fail on workspace writes for preview or `memory/` artifacts.
+  - Practical rule: if a task needs to write preview state, logs, or `memory/*` outputs reliably, run it from the main Marvin session instead of inside Codex exec
 
 ### Skill Profile
 - `config/skill-profile.json` — Stores Philippe's current skill levels (novice/beginner/intermediate) and constraints
