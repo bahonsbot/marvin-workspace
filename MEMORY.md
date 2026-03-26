@@ -134,10 +134,11 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
   - shell/domain migration is done
   - Chat is now good enough for now after the truthful concierge rebuild and live polish passes
   - Tasks is now good enough for now as a three-board workspace (Personal / Projects / Autonomous) with manual-board drag-and-drop, add/edit/delete, and lighter FLOATING refinement
-  - Agents is the next likely General-page redesign target; Philippe already has a Stitch design ready for it
-  - Crons still needs proper Stitch-driven redesign
-  - Memory and Files are mostly consistent
-  - Trading design is explicitly deferred until General is finished
+  - Agents has now moved into a real operational/identity Phase 2 pass; the next likely Agents move is editing/reduction/tightening, not a first-principles rebuild
+  - Crons is now good enough for now after FLOATING harmonization and collapsed-by-default cleanup
+  - Memory and Files are now good enough for now after the harmonization pass
+  - Home remains the shell/chrome truth and still may get another refinement pass later
+  - Trading design is explicitly deferred until General is finished enough
 - Search is NOT a top-level page; belongs embedded in Memory, Files, and Trading pages
 - Additional feature direction: thin bottom status strip with real machine/runtime metrics
 - Market Intel/trading direction has a durable 3-layer shape:

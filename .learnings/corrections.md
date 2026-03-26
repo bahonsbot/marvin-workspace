@@ -17,11 +17,29 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260327-0016]
+
+**Trigger:** After reviewing the deeper Agents Phase 2 pass, Philippe said the page now had “a lot more happening” and was “a bit too much” for his liking, even though the added substance was valuable.
+**What was wrong:** I let the next-level operational uplift accumulate too many visible layers at once. The page gained useful substance, but the presentation crossed from underpowered into overloaded.
+**Lesson:** For Mission Control pages, once the substance is finally there, the next pass should usually be editing and restraint, not more feature density. When Philippe says a page is “too much,” preserve the stronger underlying functionality and reduce visual/informational noise instead of rethinking the whole page.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260325-2344]
+
+**Trigger:** Philippe said the first Tasks visual pass changed the whole page layout too much; he preferred the previous layout and only wanted the visual/color treatment updated, plus a serif title with more whitespace similar to Chat.
+**What was wrong:** I let the visual refinement brief drift into structural redesign. The work over-read the Stitch influence and under-protected the existing approved page layout.
+**Lesson:** For Mission Control refinement passes, preserve approved structure unless Philippe explicitly asks for layout changes. Treat visual/style passes as skin, rhythm, spacing, and typography work first. When in doubt, keep layout stable and change tone, materials, and hierarchy more narrowly.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260325-1743]
 
-**Trigger:** Philippe pointed out that the new manual Tasks boards still showed internal/provisional artifacts like `p-seed-1`, `manual`, and `Inspect scope`, which are not meaningful for the real manual-board experience.
-**What was wrong:** I let placeholder/internal card metadata from the provisional implementation leak into the user-facing manual boards, which weakens the illusion of them being real workspaces.
-**Lesson:** When upgrading provisional manual boards into real interaction surfaces, remove seed IDs, internal labels, and autonomous-board copy that no longer serves the product. Placeholder scaffolding should not survive into normal user-facing board use.
+**Trigger:** Philippe pointed out that the new manual Tasks boards still showed internal/provisional artifacts like `p-seed-1`, `manual`, and `Inspect scope`, which are not meaningful for the real manual-board experience. He also clarified that the state-change dropdowns should be removed once drag-and-drop exists.
+**What was wrong:** I let placeholder/internal card metadata from the provisional implementation leak into the user-facing manual boards, and I had not yet treated the temporary state-change dropdown as cleanup debt once drag-and-drop becomes the real interaction model.
+**Lesson:** When upgrading provisional manual boards into real interaction surfaces, remove seed IDs, internal labels, autonomous-board copy, and now-obsolete fallback controls. Placeholder scaffolding should not survive into normal user-facing board use once the intended kanban interaction exists.
 
 **Priority:** high
 **Status:** active

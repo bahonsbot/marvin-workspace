@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260326-2309]
+
+**What failed:** external Mission Control preview accessibility after shell-framing/status work
+**Error:** changing the preview server bind from `0.0.0.0` to `127.0.0.1` preserved local curl checks but broke the reverse-proxied external preview path, leading Philippe to hit `502 Bad Gateway` on `preview.motiondisplay.cloud`
+**Context:** late-night Mission Control preview verification after shell framing changes and multiple rebuild/restart cycles
+**Suggested fix:** when the preview is meant to be reachable through the external reverse-proxy path, keep the app bound to `0.0.0.0`; do not optimize the preview scripts for local-only verification at the expense of external reachability
+**Resolution:** Fixed on 2026-03-26 by restoring `scripts/preview-start.sh` to `--hostname 0.0.0.0` and restarting the preview; Mission Control repo commit `41ef8b60`
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260325-2303]
 
 **What failed:** manual-board new-task save flow in Mission Control Tasks
