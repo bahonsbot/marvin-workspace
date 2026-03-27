@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260327-1257]
+
+**What failed:** nightly-security-review Telegram delivery during offensive-slice recovery
+**Error:** a subagent timeout/recovery narrative leaked into the operator-facing Telegram group even though the parent `nightly-security-review` run completed and saved a canonical report successfully
+**Context:** Morning Meeting investigation on 2026-03-27 after Philippe saw a Telegram message claiming the offensive security review had timed out, while cron state and `memory/security/2026-03-27-nightly-security-review.md` showed a successful delivered parent run
+**Suggested fix:** for scheduled overnight reviews, keep operator delivery single-session and canonical: do not allow subagents, child sessions, or resumable delegated runs to produce user-visible completion/recovery chatter; derive the final delivery only from the saved parent report
+**Resolution:** Fixed on 2026-03-27 by updating the live `nightly-security-review` cron prompt and `skills/security-review/SKILL.md` to require a single parent session with one canonical operator summary only
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260326-2309]
 
 **What failed:** external Mission Control preview accessibility after shell-framing/status work

@@ -46,6 +46,11 @@ For timelines and exact session history, use `memory/YYYY-MM-DD.md`.
 
 ## Durable Preferences & Decision Rules
 
+### Operational Lessons
+- Preview-bind rule: do not casually switch preview server bind from `0.0.0.0` to `127.0.0.1` when external preview path matters; local-only bind breaks reverse-proxy access (502 Bad Gateway)
+- Mission Control auth baseline: non-local Mission Control access should be auth-gated. Current hardening uses Next.js middleware Basic Auth over pages and `/api/*`, with localhost/container bypass only for local verification. Preview runtime should load auth creds from `.preview-runtime/mission-control-preview.env` when persistent auth is desired.
+- Overnight review delivery rule: for scheduled overnight review jobs, operator-facing delivery must come from exactly one canonical parent-run summary. Avoid subagent/resume chatter that can leak non-canonical timeout or recovery narratives into Telegram.
+
 ### Execution Style
 - Prefer decisive recommendations over option dumps
 - Think and plan before meaningful work
@@ -129,16 +134,17 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - Two domains: **General** (airy, editorial) and **Trading** (denser, analytical), switched via top tabs
 - Domain split is correct architecture; root `/` redirects to `/general/home`
 - Chat should stay honest about runtime/auth boundaries and should not fake a production-ready embedded chat path
-- Current product calibration:
-  - promising and on the right track
-  - shell/domain migration is done
+- Current product calibration (Mar 27):
+  - General shell coherence achieved: Home/Chat/Tasks/Agents/Crons/Memory/Files now feel materially more coherent as a page family
+  - Truth hierarchy confirmed: Home = shell/chrome truth, Agents Stitch = page-composition truth (not shell truth), Aura Concierge/FLOATING = only valid design-system lane when Stitch exports multiple systems
   - Chat is now good enough for now after the truthful concierge rebuild and live polish passes
   - Tasks is now good enough for now as a three-board workspace (Personal / Projects / Autonomous) with manual-board drag-and-drop, add/edit/delete, and lighter FLOATING refinement
-  - Agents has now moved into a real operational/identity Phase 2 pass; the next likely Agents move is editing/reduction/tightening, not a first-principles rebuild
-  - Crons is now good enough for now after FLOATING harmonization and collapsed-by-default cleanup
-  - Memory and Files are now good enough for now after the harmonization pass
+  - Agents has entered operational/identity Phase 2 with live trio hierarchy, avatar medallions, and planned-agent names (Rafa/Sloane/Pico); current state is "valuable but a bit overloaded" — next pass is editing/restraint/hierarchy-tightening, not foundational rethink
+  - Crons is now good enough for now after FLOATING harmonization and collapsed-by-default cleanup; should not be reopened casually
+  - Memory and Files are now good enough for now after the FLOATING harmonization pass (Memory muddy-grey contrast fixed)
   - Home remains the shell/chrome truth and still may get another refinement pass later
   - Trading design is explicitly deferred until General is finished enough
+  - Comprehensive savepoint created: `projects/_ops/mission-control-comprehensive-savepoint-2026-03-27-night.md` (commit b593987)
 - Search is NOT a top-level page; belongs embedded in Memory, Files, and Trading pages
 - Additional feature direction: thin bottom status strip with real machine/runtime metrics
 - Market Intel/trading direction has a durable 3-layer shape:
@@ -206,3 +212,4 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - The migration-era OpenClaw watchdog `deterministic-scheduler-watchdog` was removed on 2026-03-23 after host-side verification confirmed `marvin-deterministic-scheduler.service` is the real healthy bootstrap/restart path
 - AGENTS startup sequence now includes `AUTONOMY.md` after `SUBAGENT-POLICY.md`
 - Trading-path egress enforcement is deferred until a dedicated isolated trading boundary exists
+- Mission Control preview is now auth-gated for non-local access, and the unauthenticated API exposure found during the Mar 27 security follow-up is considered addressed pending normal future maintenance
