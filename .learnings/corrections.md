@@ -17,6 +17,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260327-1409]
+
+**Trigger:** During Mission Control auth cleanup, host-side ownership advice assumed `node:node` would exist on the host because the container runtime used `node`, but Philippe correctly surfaced that the host had no such user and the relevant ownership baseline there was `root`.
+**What was wrong:** I blurred container-user assumptions into host-user advice and gave an ownership normalization command that was only valid in one context.
+**Lesson:** When giving ownership/permission commands in this VPS setup, check whether the command targets the host or the container before naming users/groups. Do not assume the container runtime user exists on the host.
+
+**Priority:** medium
+**Status:** active
+
 ## [CORR-20260327-0016]
 
 **Trigger:** After reviewing the deeper Agents Phase 2 pass, Philippe said the page now had “a lot more happening” and was “a bit too much” for his liking, even though the added substance was valuable.

@@ -28,6 +28,17 @@ Command/tool failures and exceptions.
 **Priority:** high
 **Status:** resolved
 
+## [ERR-20260327-1408]
+
+**What failed:** Mission Control persistent auth file rollout used the wrong execution/storage context at first
+**Error:** the persistent Basic Auth file was initially created or reasoned about from the wrong side of the host/container boundary, so the live preview process kept returning `503 Mission Control auth is not configured` until the real `mission-control-preview.env` was written into the container-visible workspace path
+**Context:** Mar 27 Mission Control security hardening follow-up after auth middleware was working but incognito/public preview still showed the auth-not-configured message
+**Suggested fix:** for container-hosted preview/runtime state, verify the file exists from the same execution context that starts the app; do not assume a host-side path write automatically matches the live container-visible path without checking from inside the container
+**Resolution:** Fixed on 2026-03-27 by verifying the live container path, writing the real env file at `/data/.openclaw/workspace/projects/mission-control/.preview-runtime/mission-control-preview.env`, and restarting the preview until public access returned `401 Unauthorized`
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260326-2309]
 
 **What failed:** external Mission Control preview accessibility after shell-framing/status work
