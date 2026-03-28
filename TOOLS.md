@@ -124,6 +124,10 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - security-review
 - creative-prompts
 
+### Workspace Local Skills
+- frontend-skill — verbatim OpenAI front-end skill for visually strong landing pages, websites, apps, prototypes, demos, and game UI
+  - Path: `skills/frontend-skill/SKILL.md`
+
 ### Models (Operational Routing)
 - Primary provider: Bailian
 - Default lightweight delegation: `minimax/MiniMax-M2.7`
