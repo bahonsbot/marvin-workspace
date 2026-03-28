@@ -97,8 +97,10 @@ curl -I http://127.0.0.1:3005
 ### Check the app process inside the container
 ```bash
 ps -ef | grep "next start" | grep -v grep
-pgrep -af "next-server|next start"
+pgrep -af "next-server|next start|preview-origin-proxy|runtime-bridge-ws-sidecar"
 ss -ltnp | grep 3005
+ss -ltnp | grep 3006
+ss -ltnp | grep 3007
 ```
 
 Do **not** assume that host-side deletion or inspection of app paths will affect the exact container-visible build output unless you have confirmed the path mapping.
@@ -113,15 +115,23 @@ Do **not** assume that host-side deletion or inspection of app paths will affect
 Do **not** assume the app is running on host loopback.
 
 ### Current known preview shape
-- Mission Control app serves on port `3005` inside the OpenClaw container runtime
-- host nginx must proxy to the container-side reachable target
-- a past working target was:
+- Mission Control preview now runs as a small three-layer stack inside the OpenClaw container runtime:
+  1. internal Next app on `127.0.0.1:3007`
+  2. preview-origin proxy on `:3005`
+  3. WS sidecar on `127.0.0.1:3006`
+- the browser-facing preview still enters through port `3005`
+- the preview-origin proxy forwards normal HTTP to the internal Next app and websocket upgrades on `/api/runtime-bridge/ws` to the local WS sidecar
+- host nginx must still proxy the public preview origin to the container-side reachable preview entry target
+- a past working container target was:
   - container `openclaw-ktrt-openclaw-1`
   - `172.18.0.2:3005`
 - Mission Control now has Next.js middleware auth for non-local requests
   - env vars required on the app runtime: `MISSION_CONTROL_BASIC_AUTH_USER`, `MISSION_CONTROL_BASIC_AUTH_PASS`
   - localhost/container checks still bypass auth for local verification
   - if the env vars are missing, non-local requests return `503 Mission Control auth is not configured`
+- Mission Control runtime bridge also depends on preview env values such as:
+  - `MISSION_CONTROL_GATEWAY_AUTH_TOKEN`
+  - `MISSION_CONTROL_WS_UPSTREAM_ORIGIN`
 
 Treat the **rule** as durable, not the exact IP.
 Container IPs may change.
@@ -200,16 +210,18 @@ If the old preview is still being served after a rebuild, check for a lingering 
 
 There are two layers to verify.
 
-### Layer 1: app process exists and is serving inside container
+### Layer 1: preview stack exists and is serving inside container
 Inside the container/workspace:
 ```bash
 cd /data/.openclaw/workspace/projects/mission-control
-ps -ef | grep "next start" | grep -v grep
+pgrep -af "next-server|next start|preview-origin-proxy|runtime-bridge-ws-sidecar"
 ss -ltnp | grep 3005
-curl -I http://127.0.0.1:3005
+ss -ltnp | grep 3006
+ss -ltnp | grep 3007
+curl -I http://127.0.0.1:3005/general/chat
 ```
 
-Success means the app itself is alive.
+Success means the preview-origin proxy, internal Next app, and WS sidecar are all alive enough for browser entry.
 
 ### Layer 2: host nginx is actually routing preview traffic to that app
 On the host:

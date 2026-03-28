@@ -375,3 +375,12 @@ Command/tool failures and exceptions.
 **Root cause:** Codex exec runs in a sandboxed environment with restricted filesystem access. The preview helper writes to `memory/mission-control-preview/` which may have different permissions in the Codex sandbox context.
 **Fix:** For preview operations during Codex sessions, run the preview script directly from the main Marvin session rather than inside Codex exec. Alternatively, run as `node` user directly: `bash scripts/preview-start.sh`
 **Prevention:** Don't route preview start/stop through Codex exec. Handle from main session or use a detached exec with proper permissions.
+
+## 2026-03-28 — Mission Control WS bridge pitfalls
+- Symptom cluster during Mission Control runtime-bridge work: repeated `CONNECT.CHALLENGE` storms, websocket session rejection, preview-origin/sidecar 502s, and proxy crashes.
+- Reusable lessons:
+  1. Do not let the main websocket effect depend on the entire refreshed runtime summary object; polling refreshes will tear down and recreate a healthy socket, producing fake instability loops.
+  2. Gateway websocket identity matters exactly: using an invented `client.id` / `mode` can trigger schema rejection even when transport is otherwise fine. Align with the accepted control-ui identity when reusing that gateway lane.
+  3. Websocket proxies must not pass reserved close codes (`1005`, `1006`, etc.) into `ws.close(...)`; normalize to actually valid close codes or the proxy process will crash and surface as misleading 502s.
+  4. For sidecar -> gateway hops, explicit upstream `Origin` may be necessary; browser allowlisting alone may not fix origin rejection if the gateway validates the upstream websocket origin separately.
+  5. After gateway restarts, the Mission Control preview stack can split-brain: preview proxy/sidecar may remain up while the internal Next server is down, producing 502s that are preview-stack failures, not app-code failures.

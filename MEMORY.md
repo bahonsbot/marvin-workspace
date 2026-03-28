@@ -137,7 +137,9 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - Current product calibration (Mar 27):
   - General shell coherence achieved: Home/Chat/Tasks/Agents/Crons/Memory/Files now feel materially more coherent as a page family
   - Truth hierarchy confirmed: Home = shell/chrome truth, Agents Stitch = page-composition truth (not shell truth), Aura Concierge/FLOATING = only valid design-system lane when Stitch exports multiple systems
-  - Chat is now good enough for now after the truthful concierge rebuild and live polish passes
+  - Chat was initially considered good enough for now after the truthful concierge rebuild and live polish passes, but the Mar 28 Nerve audit and runtime bridge work reopened it as a primary page target
+  - Chat now has a real runtime bridge path: runtime bridge foundation → WS sidecar → live handshake/session state → same-origin WS reverse path → minimal live bridge chat loop
+  - End-of-day Mar 28 posture: CONNECT.CHALLENGE storm resolved, same-origin runtime bridge working, Philippe able to talk to Marvin from Mission Control directly; remaining work shifts to stability refinement and UI cleanup rather than proving viability
   - Tasks is now good enough for now as a three-board workspace (Personal / Projects / Autonomous) with manual-board drag-and-drop, add/edit/delete, and lighter FLOATING refinement
   - Agents has entered operational/identity Phase 2 with live trio hierarchy, avatar medallions, and planned-agent names (Rafa/Sloane/Pico); current state is "valuable but a bit overloaded" — next pass is editing/restraint/hierarchy-tightening, not foundational rethink
   - Crons is now good enough for now after FLOATING harmonization and collapsed-by-default cleanup; should not be reopened casually
