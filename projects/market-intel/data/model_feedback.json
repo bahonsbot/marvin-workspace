@@ -1,53 +1,38 @@
 {
-  "generated_at": "2026-03-16T14:38:25.037644",
-  "sample_size": 14,
+  "generated_at": "2026-03-28T12:50:56.250495",
+  "sample_size": 20,
   "by_category": {
-    "geopolitical": {
-      "count": 10,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
-    },
-    "sentiment_social": {
-      "count": 1,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+    "macroeconomic": {
+      "count": 14,
+      "avg_outcome_score": 0.821,
+      "bias_points": 3.21
     },
     "financial_credit": {
-      "count": 2,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+      "count": 3,
+      "avg_outcome_score": 0.667,
+      "bias_points": 1.67
     },
-    "macroeconomic": {
-      "count": 1,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+    "sentiment_social": {
+      "count": 3,
+      "avg_outcome_score": 0.5,
+      "bias_points": 0.0
     }
   },
   "by_pattern": {
-    "Saudi Oil Attacks": {
-      "count": 4,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
-    },
-    "GameStop Short Squeeze": {
-      "count": 1,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
-    },
-    "Russia-Ukraine Conflict": {
-      "count": 6,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+    "US Credit Rating Downgrade": {
+      "count": 14,
+      "avg_outcome_score": 0.821,
+      "bias_points": 3.21
     },
     "Regional Banking Crisis 2023": {
-      "count": 2,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+      "count": 3,
+      "avg_outcome_score": 0.667,
+      "bias_points": 1.67
     },
-    "US Credit Rating Downgrade": {
-      "count": 1,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+    "GameStop Short Squeeze": {
+      "count": 3,
+      "avg_outcome_score": 0.5,
+      "bias_points": 0.0
     }
   }
 }
