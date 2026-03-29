@@ -17,6 +17,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260329-1924]
+
+**Trigger:** Philippe reviewed the first Composer/layout pass for Mission Control Chat and said it looked neat but still behaved wrong: outer-page scrolling still happened near the left gutter, the Composer hovered over the transcript, and the page still wasted bottom space because the server-status strip was present.
+**What was wrong:** I initially treated the requested Chat-page behavior as a local composer/card styling task instead of a route-specific shell layout problem. That produced a visually improved pass that was still mechanically wrong.
+**Lesson:** For Mission Control Chat, fixed top controls + fixed bottom composer + scrolling transcript must be solved at the workspace/shell level. On Chat, remove the normal page header and hide the shell bottom status strip if needed, make the main pane fixed-height, and keep the Composer outside the scrollable transcript card.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260329-1620]
 
 **Trigger:** Philippe corrected the Mission Control Chat effort-control command format and the supported thinking-level matrix after live testing.

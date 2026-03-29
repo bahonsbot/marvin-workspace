@@ -110,6 +110,15 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Intentionally model-backed: `nightly-memory-extraction`, `platform-health-council`, `nightly-security-review`, `self-improvement`, `daily-task-generator`, `signal-accuracy-review`, `market-signal-generator`
 - Save points / refs: `projects/_ops/cron-savepoint-2026-03-16.md`, `docs/runbooks/deterministic-scheduler-host-service.md`
 
+### Mission Control Runtime / Preview Notes
+- Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
+  - registry source: `/data/.openclaw/agents/main/sessions/sessions.json`
+  - important runtime truth: this file is keyed directly by `sessionKey`; do not assume a nested `sessions.*` wrapper when resolving a session
+  - session logs: `/data/.openclaw/agents/main/sessions/<sessionId>.jsonl`
+- Mission Control Chat route posture:
+  - `/general/chat` and `/chat` intentionally suppress the shell bottom system strip so the page can use a true fixed-workspace layout
+  - the Chat page also bypasses the normal shared page-scaffold title/header so the top control rail and bottom composer dock can own the visible working area
+
 ### Built-in OpenClaw Skills
 - coding-agent — Delegates to Codex/Claude Code/Pi for coding tasks
 

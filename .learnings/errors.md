@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260329-1833]
+
+**What failed:** first Mission Control transcript-hydration implementation
+**Error:** the runtime-bridge history route assumed the wrong `sessions.json` shape (`sessions[sessionKey]` / `id`) even though the live session registry on this runtime is keyed directly by session key and exposes `sessionId` / `sessionFile`; the client hydration path also hard-replaced transcript state, which could wipe a just-sent user message when assistant output or refresh landed afterward
+**Context:** Mar 29 evening Mission Control Chat rehydration work after Philippe confirmed reloads still opened with `No live transcript yet...` and later reported that one user message disappeared when the assistant reply arrived
+**Suggested fix:** verify live on-disk session-registry structure before building hydration logic; in chat transcript hydration, merge + dedupe persisted history into live state instead of replacing the whole message array; if manual Refresh works but first load does not, add an explicit hydrate trigger keyed to the resolved active session
+**Resolution:** Fixed on 2026-03-29 in `projects/mission-control/app/api/runtime-bridge/route.ts` and `projects/mission-control/hooks/useRuntimeBridge.ts`; transcript rehydration now works automatically and sanitized hydrated text no longer leaks transport wrappers
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260329-1924]
+
+**What failed:** first Mission Control Composer/fixed-workspace layout pass
+**Error:** the Composer was still implemented inside the scroll card while the shell still reserved bottom-strip space, which caused the Composer to overlay the transcript, left-gutter/outer-page scroll weirdness, and less usable vertical space than intended
+**Context:** Mar 29 evening Chat Composer/layout refinement after the first pass visually improved the page but Philippe reported the controls still scrolled oddly and the Composer blocked part of the transcript
+**Suggested fix:** treat fixed chat-workspace behavior as a shell/layout concern, not only a component concern; on Chat-only routes, reclaim shell height if necessary, keep the Composer outside the transcript scroll region, and let the middle pane own scrolling
+**Resolution:** Fixed on 2026-03-29 by adding Chat-route-aware shell handling in `components/shell/AppShellClient.tsx`, hiding the bottom system strip on Chat only, and moving the Composer into its own bottom dock region outside the transcript scroll card
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260327-1257]
 
 **What failed:** nightly-security-review Telegram delivery during offensive-slice recovery

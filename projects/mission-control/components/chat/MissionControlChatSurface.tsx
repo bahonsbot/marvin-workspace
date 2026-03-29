@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import type { CSSProperties } from 'react';
 import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent, RuntimeBridgeState } from '@/hooks/useRuntimeBridge';
 import { buildChatSurfaceModel, type ChatArtifact, type ChatThreadEntry, type ProcessRail } from '@/lib/chat/thread-model';
@@ -340,6 +340,223 @@ function ProcessRailBlock({
   );
 }
 
+function renderInlineRichText(text: string): React.ReactNode[] {
+  const nodes: React.ReactNode[] = [];
+  const normalized = text
+    .replace(/\\\*/g, '__ESCAPED_STAR__')
+    .replace(/\\`/g, '__ESCAPED_TICK__');
+  const pattern = /(\*\*([^*]+)\*\*|\*([^*]+)\*|`([^`]+)`|\[([^\]]+)\]\(([^)]+)\))/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(normalized)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(
+        normalized
+          .slice(lastIndex, match.index)
+          .replace(/__ESCAPED_STAR__/g, '*')
+          .replace(/__ESCAPED_TICK__/g, '`'),
+      );
+    }
+    if (match[2]) {
+      nodes.push(
+        <strong key={`strong-${match.index}`} style={{ fontWeight: 700, color: 'var(--text-body)' }}>
+          {match[2]}
+        </strong>,
+      );
+    } else if (match[3]) {
+      nodes.push(
+        <em key={`em-${match.index}`} style={{ fontStyle: 'italic' }}>
+          {match[3]}
+        </em>,
+      );
+    } else if (match[4]) {
+      nodes.push(
+        <code
+          key={`code-${match.index}`}
+          style={{
+            fontFamily: monoFont,
+            fontSize: '0.92em',
+            padding: '0.12em 0.38em',
+            borderRadius: 8,
+            background: 'rgba(20, 46, 38, 0.08)',
+            color: 'var(--text-body)',
+          }}
+        >
+          {match[4]}
+        </code>,
+      );
+    } else if (match[5] && match[6]) {
+      nodes.push(
+        <a key={`link-${match.index}`} href={match[6]} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-strong)', textDecoration: 'underline' }}>
+          {match[5]}
+        </a>,
+      );
+    }
+    lastIndex = pattern.lastIndex;
+  }
+
+  if (lastIndex < normalized.length) {
+    nodes.push(normalized.slice(lastIndex).replace(/__ESCAPED_STAR__/g, '*').replace(/__ESCAPED_TICK__/g, '`'));
+  }
+
+  return nodes;
+}
+
+function renderRichText(body: string): React.ReactNode {
+  const lines = body.split('\n');
+  const elements: React.ReactNode[] = [];
+  let paragraph: string[] = [];
+  let bulletItems: string[] = [];
+  let orderedItems: string[] = [];
+  let codeFence: string[] = [];
+  let inCodeFence = false;
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    elements.push(
+      <p key={`p-${elements.length}`} style={{ margin: 0 }}>
+        {renderInlineRichText(paragraph.join(' '))}
+      </p>,
+    );
+    paragraph = [];
+  };
+
+  const flushBulletList = () => {
+    if (!bulletItems.length) return;
+    elements.push(
+      <ul key={`ul-${elements.length}`} style={{ margin: 0, paddingLeft: 20, display: 'grid', gap: 6 }}>
+        {bulletItems.map((item, index) => (
+          <li key={`li-${index}`}>{renderInlineRichText(item)}</li>
+        ))}
+      </ul>,
+    );
+    bulletItems = [];
+  };
+
+  const flushOrderedList = () => {
+    if (!orderedItems.length) return;
+    elements.push(
+      <ol key={`ol-${elements.length}`} style={{ margin: 0, paddingLeft: 22, display: 'grid', gap: 6 }}>
+        {orderedItems.map((item, index) => (
+          <li key={`oli-${index}`}>{renderInlineRichText(item)}</li>
+        ))}
+      </ol>,
+    );
+    orderedItems = [];
+  };
+
+  const flushCodeFence = () => {
+    if (!codeFence.length) return;
+    elements.push(
+      <pre key={`pre-${elements.length}`} style={{ margin: 0, padding: '14px 16px', borderRadius: 16, background: 'rgba(20, 46, 38, 0.08)', overflowX: 'auto' }}>
+        <code style={{ fontFamily: monoFont, fontSize: 13, color: 'var(--text-body)' }}>{codeFence.join('\n')}</code>
+      </pre>,
+    );
+    codeFence = [];
+  };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trimEnd();
+    const trimmed = line.trim();
+
+    if (trimmed.startsWith('```')) {
+      flushParagraph();
+      flushBulletList();
+      flushOrderedList();
+      if (inCodeFence) {
+        flushCodeFence();
+        inCodeFence = false;
+      } else {
+        inCodeFence = true;
+      }
+      continue;
+    }
+
+    if (inCodeFence) {
+      codeFence.push(rawLine);
+      continue;
+    }
+
+    if (!trimmed) {
+      flushParagraph();
+      flushBulletList();
+      flushOrderedList();
+      continue;
+    }
+
+    if (/^---+$/.test(trimmed)) {
+      flushParagraph();
+      flushBulletList();
+      flushOrderedList();
+      elements.push(<hr key={`hr-${elements.length}`} style={{ width: '100%', border: 'none', borderTop: '1px solid rgba(121, 166, 148, 0.32)', margin: '2px 0' }} />);
+      continue;
+    }
+
+    const headingMatch = trimmed.match(/^(#{1,3})\s+(.+)$/);
+    if (headingMatch) {
+      flushParagraph();
+      flushBulletList();
+      flushOrderedList();
+      const level = headingMatch[1].length;
+      const content = headingMatch[2];
+      const sizes = { 1: 24, 2: 20, 3: 17 } as const;
+      elements.push(
+        <div key={`h-${elements.length}`} style={{ fontSize: sizes[level as 1 | 2 | 3], fontWeight: 700, lineHeight: 1.3, color: 'var(--text-body)' }}>
+          {renderInlineRichText(content)}
+        </div>,
+      );
+      continue;
+    }
+
+    if (trimmed.startsWith('> ')) {
+      flushParagraph();
+      flushBulletList();
+      flushOrderedList();
+      elements.push(
+        <blockquote
+          key={`quote-${elements.length}`}
+          style={{
+            margin: 0,
+            paddingLeft: 14,
+            borderLeft: '2px solid rgba(121, 166, 148, 0.58)',
+            color: 'var(--text-muted)',
+            fontStyle: 'italic',
+          }}
+        >
+          {renderInlineRichText(trimmed.slice(2))}
+        </blockquote>,
+      );
+      continue;
+    }
+
+    if (/^-\s+/.test(trimmed)) {
+      flushParagraph();
+      flushOrderedList();
+      bulletItems.push(trimmed.replace(/^-\s+/, ''));
+      continue;
+    }
+
+    if (/^\d+\.\s+/.test(trimmed)) {
+      flushParagraph();
+      flushBulletList();
+      orderedItems.push(trimmed.replace(/^\d+\.\s+/, ''));
+      continue;
+    }
+
+    flushBulletList();
+    flushOrderedList();
+    paragraph.push(trimmed);
+  }
+
+  flushParagraph();
+  flushBulletList();
+  flushOrderedList();
+  flushCodeFence();
+
+  return <div style={{ display: 'grid', gap: 12 }}>{elements}</div>;
+}
+
 function MessageBlock({ entry }: { entry: Extract<ChatThreadEntry, { type: 'user' | 'assistant' }> }) {
   const isUser = entry.type === 'user';
 
@@ -392,20 +609,45 @@ function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
           <span style={pillStyle()}>Bridge note</span>
           <span style={pillStyle()}>{message.status}</span>
         </div>
-        <div style={{ fontSize: 14, lineHeight: 1.7, color: '#8a433b', whiteSpace: 'pre-wrap' }}>{message.body}</div>
+        <div style={{ fontSize: 14, lineHeight: 1.7, color: '#8a433b' }}>{renderRichText(message.body)}</div>
       </section>
     );
   }
 
+  const isOperator = message.role === 'user';
+
   return (
-    <MessageBlock
-      entry={{
-        id: message.id,
-        type: message.role,
-        body: message.body,
-        title: message.status === 'streaming' ? 'Streaming' : undefined,
+    <div
+      style={{
+        display: 'grid',
+        justifyItems: isOperator ? 'end' : 'start',
+        gap: 12,
+        marginTop: 2,
+        marginBottom: 10,
       }}
-    />
+    >
+      <div style={{ display: 'grid', gap: 10, maxWidth: 'min(78ch, 78%)', justifyItems: isOperator ? 'end' : 'start' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent-mid)' }}>
+          {isOperator ? 'Philippe' : 'Marvin'}
+        </div>
+        <div
+          style={{
+            width: '100%',
+            borderRadius: 24,
+            padding: '14px 16px',
+            color: 'var(--text-body)',
+            fontSize: 15,
+            lineHeight: 1.8,
+            textAlign: 'left',
+            background: isOperator ? 'rgba(236, 244, 240, 0.72)' : 'rgba(248, 244, 238, 0.74)',
+            border: '1px solid rgba(200, 195, 188, 0.24)',
+          }}
+        >
+          {renderRichText(message.body)}
+        </div>
+        {message.status === 'streaming' ? <div style={{ fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Streaming</div> : null}
+      </div>
+    </div>
   );
 }
 
@@ -522,10 +764,10 @@ export function MissionControlChatSurface({
   const liveCanSend = Boolean(live?.canSend);
   const liveSendState = live?.sendState ?? 'idle';
   const liveSendError = live?.sendError ?? null;
-  const liveRunId = live?.activeRunId ?? null;
   const [composerValue, setComposerValue] = useState('');
   const [composerError, setComposerError] = useState<string | null>(null);
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+  const [bridgeEventsOpen, setBridgeEventsOpen] = useState(false);
   const [topControlMenu, setTopControlMenu] = useState<TopControlMenu>(null);
   const [modelSwitchError, setModelSwitchError] = useState<string | null>(null);
   const [modelSwitchBusy, setModelSwitchBusy] = useState(false);
@@ -535,6 +777,7 @@ export function MissionControlChatSurface({
   const [pendingModelLabel, setPendingModelLabel] = useState<string | null>(null);
   const [pendingEffortLabel, setPendingEffortLabel] = useState<EffortMenuOption | null>(null);
   const statusDropdownRef = useRef<HTMLDivElement | null>(null);
+  const bridgeEventsRef = useRef<HTMLDivElement | null>(null);
   const topControlMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -544,6 +787,9 @@ export function MissionControlChatSurface({
       }
       if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target as Node)) {
         setStatusDropdownOpen(false);
+      }
+      if (bridgeEventsRef.current && !bridgeEventsRef.current.contains(event.target as Node)) {
+        setBridgeEventsOpen(false);
       }
       if (topControlMenuRef.current && !topControlMenuRef.current.contains(event.target as Node)) {
         setTopControlMenu(null);
@@ -691,11 +937,8 @@ export function MissionControlChatSurface({
     }
   }
 
-  async function handleComposerSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function submitComposerPrompt(nextPrompt: string) {
     if (!live?.sendPrompt) return;
-
-    const nextPrompt = composerValue.trim();
     if (!nextPrompt) return;
 
     try {
@@ -707,8 +950,24 @@ export function MissionControlChatSurface({
     }
   }
 
+  async function handleComposerSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await submitComposerPrompt(composerValue.trim());
+  }
+
+  async function handleNewSession() {
+    await submitComposerPrompt('/new');
+  }
+
+  function handleComposerKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key !== 'Enter') return;
+    if (event.shiftKey) return;
+    event.preventDefault();
+    void submitComposerPrompt(composerValue.trim());
+  }
+
   return (
-    <div style={{ display: 'grid', gap: 16 }}>
+    <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 12, minHeight: '100%', height: '100%' }}>
       <section
         style={{
           border: '1px solid rgba(200, 195, 188, 0.42)',
@@ -718,8 +977,9 @@ export function MissionControlChatSurface({
           padding: '14px 16px',
           display: 'grid',
           gap: 10,
-          position: 'relative',
-          zIndex: 2,
+          position: 'sticky',
+          top: 12,
+          zIndex: 12,
         }}
       >
         {/* Row 1: WS + Session status (left) / Refresh, Stop, Context Meter (right) */}
@@ -1013,6 +1273,8 @@ export function MissionControlChatSurface({
           padding: 18,
           display: 'grid',
           gap: 14,
+          minHeight: 0,
+          overflow: 'auto',
         }}
       >
         {model.thread.map((entry) =>
@@ -1031,104 +1293,111 @@ export function MissionControlChatSurface({
         <section style={{ border: '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: 'rgba(255, 255, 255, 0.84)', padding: 16, display: 'grid', gap: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)' }}>Live bridge session</div>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <span style={pillStyle({ active: sessionState === 'connected' })}>{`session ${sessionState}`}</span>
-              <span style={pillStyle({ active: liveSendState === 'streaming' })}>{`send ${liveSendState}`}</span>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
               <span style={pillStyle()}>{liveTargetLabel}</span>
-              {liveRunId ? <span style={pillStyle()}>{`run ${shortKey(liveRunId)}`}</span> : null}
+              <div ref={bridgeEventsRef} style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  onClick={() => setBridgeEventsOpen((value) => !value)}
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: '50%',
+                    border: '1px solid rgba(200, 195, 188, 0.38)',
+                    background: 'rgba(255, 255, 255, 0.76)',
+                    color: 'var(--text-body)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 13,
+                  }}
+                  title="Recent bridge events"
+                >
+                  ⓘ
+                </button>
+                {bridgeEventsOpen ? (
+                  <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, width: 'min(360px, 92vw)', border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 10, display: 'grid', gap: 8, zIndex: 20 }}>
+                    <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Recent bridge events</div>
+                    {liveEvents.length > 0 ? (
+                      liveEvents.slice().reverse().map((eventItem) => <LiveEventBlock key={eventItem.id} event={eventItem} />)
+                    ) : (
+                      <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>
+                        No bridge events observed yet beyond the connection handshake.
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
-          <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-            {liveTargetSession
-              ? 'Mission Control now sends to one visible runtime session over the same-origin WS bridge and renders only the live events/messages that come back from the gateway.'
-              : 'Mission Control has a live bridge, but there is no visible runtime session key to target yet.'}
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.5fr) minmax(280px, 1fr)', gap: 14 }}>
-            <div style={{ display: 'grid', gap: 12 }}>
-              {liveMessages.length > 0 ? (
-                liveMessages.map((message) => <LiveMessageBlock key={message.id} message={message} />)
-              ) : (
-                <div style={{ ...innerPanelStyle(), padding: 16, fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-                  No live transcript yet. Send one prompt after the gateway session is connected to this target: <span style={{ fontFamily: monoFont }}>{liveTargetLabel}</span>.
-                </div>
-              )}
-            </div>
-            <div style={{ display: 'grid', gap: 12 }}>
-              <div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Recent bridge events</div>
-              {liveEvents.length > 0 ? (
-                liveEvents
-                  .slice()
-                  .reverse()
-                  .map((eventItem) => <LiveEventBlock key={eventItem.id} event={eventItem} />)
-              ) : (
-                <div style={{ ...innerPanelStyle(), padding: 16, fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-                  No gateway events have been observed yet beyond the connection handshake.
-                </div>
-              )}
-            </div>
+          <div style={{ display: 'grid', gap: 18 }}>
+            {liveMessages.length > 0 ? (
+              liveMessages.map((message) => <LiveMessageBlock key={message.id} message={message} />)
+            ) : (
+              <div style={{ padding: '6px 2px', fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8 }}>
+                No live transcript yet. Send one prompt after the gateway session is connected to this target: <span style={{ fontFamily: monoFont }}>{liveTargetLabel}</span>.
+              </div>
+            )}
           </div>
         </section>
-
-        <form onSubmit={handleComposerSubmit} style={{ border: '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: 'rgba(255, 255, 255, 0.84)', padding: 16, display: 'grid', gap: 12 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)' }}>Composer</div>
-            <span style={pillStyle({ active: sessionState === 'connected' })}>
-              {sessionState === 'connected' ? 'Gateway session live' : 'Bridge waiting'}
-            </span>
-          </div>
-          <textarea
-            value={composerValue}
-            onChange={(event) => setComposerValue(event.target.value)}
-            disabled={!liveTargetSession || sessionState !== 'connected' || liveSendState === 'sending' || liveSendState === 'streaming'}
-            placeholder={
-              sessionState === 'connected'
-                ? liveTargetSession
-                  ? `Send one real prompt to ${liveTargetLabel}.`
-                  : 'A connected bridge still needs one visible runtime session key before Mission Control can send.'
-                : 'Composer unlocks after the real gateway session connects.'
-            }
-            aria-label="Composer"
-            style={{
-              width: '100%',
-              minHeight: 104,
-              resize: 'vertical',
-              borderRadius: 16,
-              border: '1px solid rgba(200, 195, 188, 0.32)',
-              background: 'rgba(250, 248, 245, 0.9)',
-              padding: '14px 16px',
-              color: 'var(--text-muted)',
-              lineHeight: 1.7,
-            }}
-          />
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-            <div style={{ fontSize: 12, color: 'var(--text-muted)', maxWidth: 720 }}>
-              {composerError || liveSendError || effectiveBridgeError
-                ? composerError || liveSendError || `Last refresh error: ${effectiveBridgeError}`
-                : sessionState === 'connected'
-                  ? liveTargetSession
-                    ? `This sends one real \`chat.send\` RPC to ${liveTargetLabel}. Mission Control does not claim full parity with the main chat UI: it only shows the basic messages and events that arrive on this bridge.`
-                    : 'The gateway session is live, but Mission Control still needs one visible runtime session key before it can issue a real prompt.'
-                  : summary.runtimeBridge.auth.gatewaySessionAuthConfigured
-                    ? 'Transport is negotiating a real gateway session when the sidecar is reachable. Send stays disabled until that real session connects.'
-                    : 'Transport can open the sidecar, but a real gateway connect requires MISSION_CONTROL_GATEWAY_AUTH_TOKEN in the preview environment.'}
-            </div>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <button type="submit" disabled={!liveCanSend || composerValue.trim().length === 0} style={actionButtonStyle(liveCanSend && composerValue.trim().length > 0, true)}>
-                {liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting on response...' : 'Send prompt'}
-              </button>
-              {model.controlHref ? (
-                <a href={model.controlHref} target="_blank" rel="noopener noreferrer" style={actionButtonStyle(true)}>
-                  Open full control UI
-                </a>
-              ) : (
-                <button type="button" disabled title={model.controlGuidance} style={actionButtonStyle(false)}>
-                  Live transport unavailable here
-                </button>
-              )}
-            </div>
-          </div>
-        </form>
       </section>
+
+      <form onSubmit={handleComposerSubmit} style={{ border: '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: 'rgba(255, 255, 255, 0.9)', padding: 12, display: 'grid', gap: 8, zIndex: 11, boxShadow: '0 -8px 24px rgba(26, 61, 50, 0.08)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 12, alignItems: 'end' }}>
+            <textarea
+              value={composerValue}
+              onChange={(event) => setComposerValue(event.target.value)}
+              onKeyDown={handleComposerKeyDown}
+              rows={2}
+              disabled={!liveTargetSession || sessionState !== 'connected' || liveSendState === 'sending' || liveSendState === 'streaming'}
+              placeholder={
+                sessionState === 'connected'
+                  ? liveTargetSession
+                    ? `Send one real prompt to ${liveTargetLabel}.`
+                    : 'A connected bridge still needs one visible runtime session key before Mission Control can send.'
+                  : 'Composer unlocks after the real gateway session connects.'
+              }
+              aria-label="Composer"
+              style={{
+                width: '100%',
+                minHeight: 64,
+                maxHeight: 120,
+                resize: 'none',
+                borderRadius: 16,
+                border: '1px solid rgba(200, 195, 188, 0.32)',
+                background: 'rgba(250, 248, 245, 0.94)',
+                padding: '12px 14px',
+                color: 'var(--text-muted)',
+                lineHeight: 1.5,
+                boxSizing: 'border-box',
+              }}
+            />
+            <div style={{ display: 'grid', gap: 10, minWidth: 150 }}>
+              <button type="submit" disabled={!liveCanSend || composerValue.trim().length === 0} style={actionButtonStyle(liveCanSend && composerValue.trim().length > 0, true)}>
+                {liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
+              </button>
+              <button
+                type="button"
+                onClick={() => void handleNewSession()}
+                disabled={!liveCanSend || liveSendState === 'sending' || liveSendState === 'streaming'}
+                style={{
+                  ...actionButtonStyle(liveCanSend && liveSendState !== 'sending' && liveSendState !== 'streaming'),
+                  background: 'rgba(121, 166, 148, 0.14)',
+                  border: '1px solid rgba(121, 166, 148, 0.32)',
+                  color: liveCanSend ? '#1a3d32' : 'rgba(120, 129, 125, 0.72)',
+                }}
+              >
+                New session
+              </button>
+            </div>
+          </div>
+        {(composerError || liveSendError || effectiveBridgeError || (!liveTargetSession && sessionState === 'connected')) ? (
+          <div style={{ fontSize: 12, color: composerError || liveSendError || effectiveBridgeError ? '#9a4b43' : 'var(--text-muted)', maxWidth: 720 }}>
+            {composerError || liveSendError || (effectiveBridgeError ? `Last refresh error: ${effectiveBridgeError}` : 'The gateway session is live, but Mission Control still needs one visible runtime session key before it can issue a real prompt.')}
+          </div>
+        ) : null}
+      </form>
     </div>
   );
 }

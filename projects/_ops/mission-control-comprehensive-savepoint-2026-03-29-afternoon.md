@@ -13,6 +13,119 @@ This savepoint should be read **after**:
 
 ---
 
+## Evening Addendum — Transcript Rehydration + Composer Layout
+
+This afternoon savepoint remained the right base, but the Chat page evolved materially further during the evening session.
+
+### What changed after the afternoon savepoint
+Two substantial Chat-page areas were advanced:
+1. **Transcript rehydration/history truth** was implemented and verified
+2. **Composer/layout mechanics** were reworked into a more Gateway-like fixed workspace shape
+
+### 1. Transcript rehydration outcome
+The Chat page had been behaving like a live-only bridge surface after reloads.
+That is no longer true.
+
+#### Final working posture
+Mission Control Chat now:
+- rehydrates prior transcript history on reload
+- seeds transcript state from the persisted OpenClaw session store
+- merges hydrated history with live bridge messages instead of replacing live state
+- strips transport-envelope noise from visible hydrated messages
+
+#### Actual implementation path that worked
+The successful chain was:
+- `sessionKey` from the live target session
+- runtime-bridge route reads `/data/.openclaw/agents/main/sessions/sessions.json`
+- route resolves the real `sessionId` using the **actual live registry shape** (top-level sessionKey map, not `sessions.*`)
+- route reads the corresponding JSONL session log
+- route extracts real `message` rows and returns them as `transcriptHistory`
+- client merges that history into `live.messages`
+- hydration runs automatically once the active session key is actually known
+
+#### Bugs that were found and fixed
+1. **Wrong session-registry assumption**
+   - initial route assumed `sessions.json.sessions[sessionKey]`
+   - real runtime shape was `sessions.json[sessionKey]`
+   - result: empty transcript history every time
+2. **Client overwrite bug**
+   - hydration originally used hard replace semantics
+   - result: later refreshes could delete the just-sent user message when assistant output arrived
+   - fixed by merge + dedupe behavior
+3. **Initial-load timing bug**
+   - manual Refresh worked before automatic first-load hydration did
+   - fixed by explicit hydrate trigger when `activeSessionKey` becomes known
+4. **Visible metadata-wrapper noise**
+   - hydrated history initially showed raw wrappers like `[[reply_to_current]]`, sender metadata blocks, and timestamp envelope lines
+   - fixed by transcript-body sanitization on the server-side hydration path
+
+#### Philippe validation
+Philippe explicitly confirmed the fixes as successful:
+- initial reload hydration works
+- manual Refresh is no longer required just to see the transcript
+- raw metadata-wrapper noise is gone
+
+### 2. Composer / Chat workspace layout outcome
+After hydration was fixed, Philippe moved to the next Chat priority: making the lower Chat area feel more like a real fixed chat workspace rather than a long card with a form attached.
+
+#### Requested direction
+- remove the `Composer` title
+- remove the duplicate `Gateway session live` status chip near the composer
+- make the composer shorter, closer to a two-row Gateway-style input
+- add right-side button space instead of stretching the textarea full width
+- add a `New session` button that sends `/new`
+- allow keyboard send via Enter, with multiline still possible
+- fix the top control strip to the top of the visible Chat workspace
+- fix the composer to the bottom of the visible Chat workspace
+- let the transcript scroll in between
+- remove the normal Chat page title/underline for this page only
+- remove the long helper copy and unavailable-control text under the composer
+- later refinement: reclaim more vertical space by removing the shell’s bottom status strip on Chat only
+
+#### Final working posture
+Mission Control Chat now behaves much closer to a real operator console:
+- the normal shared page-scaffold title/header is bypassed on Chat only
+- the top Chat control rail is treated as pinned chrome
+- the middle transcript area is the main scrolling workspace
+- the Composer is compact and no longer duplicated by extra labels/status cells
+- `Send` replaces `Send prompt`
+- `New session` sends `/new`
+- Enter sends, while Shift+Enter preserves multiline entry
+- the shell bottom status strip is hidden on `/general/chat` and `/chat` only
+- the Composer was moved **out of the scroll card** into its own bottom dock region so it no longer overlays the transcript
+
+#### Important layout lesson
+The first Composer pass looked neat but was mechanically wrong because the Composer still lived inside the scroll card and the shell still reserved bottom-strip space.
+That caused:
+- weird outer-page scroll behavior near the left gutter
+- composer overlap over the transcript
+- less usable vertical room than intended
+
+The correct fix was not more local CSS hacks inside the composer block; it required:
+- Chat-route shell awareness
+- hiding the bottom status strip only on Chat
+- making the Chat surface consume the real main-pane height
+- keeping the Composer outside the scrollable transcript region
+
+#### Philippe validation
+Philippe confirmed the resulting layout was effectively the intended shape and good enough for now.
+Minor visual nuance tweaks can wait.
+
+### Files additionally touched in the evening session
+- `projects/mission-control/app/api/runtime-bridge/route.ts`
+- `projects/mission-control/hooks/useRuntimeBridge.ts`
+- `projects/mission-control/components/chat/MissionControlChatSurface.tsx`
+- `projects/mission-control/components/pages/GeneralChatPage.tsx`
+- `projects/mission-control/components/shell/AppShell.tsx`
+- `projects/mission-control/components/shell/AppShellClient.tsx`
+
+### Commit trail after the afternoon savepoint
+- `888b2d5` — `Fix Mission Control chat transcript hydration`
+- `cfd1366` — `Clean up Mission Control bridge effect deps`
+- evening Chat layout/composer pass remained uncommitted at the time Philippe left for dinner and should be committed with the continuity/doc updates from this handoff pass
+
+---
+
 ## Executive Summary
 The top section of the Mission Control **Chat** page was substantially refined and is now in a strong “good enough for now” state.
 
