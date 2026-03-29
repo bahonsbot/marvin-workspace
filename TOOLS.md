@@ -140,7 +140,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Active alias notes:
   - `codex5.4` = Marvin orchestration / higher-reasoning work
   - `codex` = coding-specialist route
-  - `codex5.4mini` = lightweight Codex orchestration
+  - `codex5.4mini` = lightweight Codex orchestration, follows the same prompt guidance as `codex5.4` unless a mini-specific guidance file is later added
   - `minimax2.7` = requires `api: "anthropic-messages"` and `baseUrl: "https://api.minimax.io/anthropic"`
 
 ### Hybrid Agent-Team v1
@@ -212,6 +212,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - `scripts/audit-log.sh` — Security action logging (text + JSONL)
 - `scripts/audit-sensitive-snapshot.sh` — Low-noise sensitive-file change detector (baseline + drift logging)
 - `scripts/check-token-age.sh` — Token expiration checker
+- `scripts/install_deterministic_timers.py` — DEPRECATED legacy user-timer installer, superseded by host-side `marvin-deterministic-scheduler.service`
 - `scripts/nightly-memory-extraction.sh` — Memory extraction cron
 - `scripts/cron_runner.py` — Script-first execution entry for migrated deterministic cron jobs
   - Usage:

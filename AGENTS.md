@@ -4,7 +4,7 @@
 Always read, in this order:
 1. `SOUL.md`
 2. `USER.md`
-3. `memory/YYYY-MM-DD.md` for today and yesterday
+3. `memory/YYYY-MM-DD.md` for today and yesterday by default; for overnight review/suppression-sensitive work, read today plus at least the previous 3 daily notes when available
 4. `SUBAGENT-POLICY.md`
 5. `AUTONOMY.md`
 6. In main/direct chat only: `MEMORY.md`
@@ -23,7 +23,7 @@ When the model switches to `openai-codex/gpt-5.4` (`codex5.4`):
 Model posture:
 - `codex5.4` = Marvin orchestration / higher-reasoning work
 - `codex` = coding-heavy delegated work
-- `codex5.4mini` = lighter Codex orchestration
+- `codex5.4mini` = lighter Codex orchestration, using the same prompt guidance as `codex5.4` unless mini-specific guidance is added later
 - `minimax2.7` = optional higher-context route, Anthropic-compatible transport required
 - If a model fails repeatedly, switch once to Codex and continue
 - `TOOLS.md` holds the fuller operational routing and transport notes
