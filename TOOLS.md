@@ -300,6 +300,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
     - Orchestrator has a real read-first integration spike, but chat embedding remains intentionally unresolved/provisional
     - **Chat direction (Mar 18-20):** Bridge-first, not embed-first. Preserve exact gateway chat behavior; avoid custom transport or pseudo-embedded replacements until route/auth/session parity is proven safe. Reference: `projects/_ops/mission-control-chat-product-decision-brief-2026-03-18.md`
     - non-interactive lint baseline added
+    - Visual identity: **FLOATING** design system — warm cream/ivory palette (#F7F2E9, #F4EEE4), forest green accents (#062E26, #0A332B, #163B31), editorial serif headlines, glass/elevated surfaces. Design tokens: `projects/mission-control/docs/FLOATING-DESIGN-SYSTEM.md`. Design handoff: `projects/mission-control/docs/FLOATING-HANDOFF.md`. (Note: design docs live in `projects/mission-control/docs/`, not root `docs/`.)
   - Adapter layer:
     - `lib/adapters/runtime.ts` — safe runtime command/file access for app routes
     - `lib/adapters/cron.ts` — cron list/run truth, including runner-log reconciliation
