@@ -237,6 +237,46 @@ function appendBounded<T>(items: T[], next: T, limit: number): T[] {
   return appended.length > limit ? appended.slice(-limit) : appended;
 }
 
+function mergeHydratedMessages(
+  current: RuntimeBridgeChatMessage[],
+  incoming: RuntimeBridgeChatMessage[],
+  sessionKey: string | null,
+): RuntimeBridgeChatMessage[] {
+  const scopedCurrent = current.filter((message) => !sessionKey || message.sessionKey === sessionKey || message.sessionKey === null);
+  const merged = [...scopedCurrent];
+
+  for (const message of incoming) {
+    const body = message.body.trim();
+    if (!body) continue;
+
+    const existingIndex = merged.findIndex((candidate) => {
+      if (candidate.id === message.id) return true;
+      return (
+        candidate.role === message.role &&
+        candidate.sessionKey === message.sessionKey &&
+        candidate.runId === message.runId &&
+        candidate.body.trim() === body
+      );
+    });
+
+    if (existingIndex >= 0) {
+      merged[existingIndex] = {
+        ...merged[existingIndex],
+        ...message,
+        body,
+      };
+      continue;
+    }
+
+    merged.push({
+      ...message,
+      body,
+    });
+  }
+
+  return merged.slice(-MAX_LIVE_MESSAGES);
+}
+
 function upsertAssistantMessage(params: {
   messages: RuntimeBridgeChatMessage[];
   sessionKey: string | null;
@@ -386,7 +426,8 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     }
 
     try {
-      const res = await fetch('/api/runtime-bridge', {
+      const sessionQuery = activeSessionKey ? `?sessionKey=${encodeURIComponent(activeSessionKey)}` : '';
+      const res = await fetch(`/api/runtime-bridge${sessionQuery}`, {
         cache: 'no-store',
         headers: {
           Accept: 'application/json',
@@ -397,10 +438,20 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         throw new Error(`Runtime bridge request failed (${res.status})`);
       }
 
-      const nextSummary = (await res.json()) as OrchestratorIntegrationSummary;
+      const payload = (await res.json()) as OrchestratorIntegrationSummary & {
+        transcriptHistory?: {
+          sessionKey?: string | null;
+          messages?: RuntimeBridgeChatMessage[];
+        };
+      };
       if (!mountedRef.current) return;
 
-      setSummary(nextSummary);
+      setSummary(payload);
+      if (payload.transcriptHistory?.sessionKey && payload.transcriptHistory.sessionKey === (activeSessionKey ?? defaultTargetSession.key)) {
+        setMessages((current) =>
+          mergeHydratedMessages(current, payload.transcriptHistory?.messages ?? [], payload.transcriptHistory?.sessionKey ?? null),
+        );
+      }
       setError(null);
     } catch (cause) {
       if (!mountedRef.current) return;
@@ -412,7 +463,12 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setLoading(false);
       setRefreshing(false);
     }
-  }, []);
+  }, [activeSessionKey, defaultTargetSession.key]);
+
+  useEffect(() => {
+    if (!activeSessionKey) return;
+    void load(true);
+  }, [activeSessionKey, load]);
 
   // Auto-refresh removed — refresh is now manual-only via bridge.refresh()
 
