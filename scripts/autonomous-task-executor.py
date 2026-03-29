@@ -627,10 +627,18 @@ def classify_execution_mode(task, parsed):
     direct_signals = ["python", "script", "automation", "workflow"]
     agent_team_signals = [
         "🔨 build", "build:", "tool", "page", "working page", "working tool",
-        "runnable utility", "diagnostics", "reporting", "review tooling",
-        "reliability", "internal utility", "workspace status", "challenge generator"
+        "runnable utility", "helper utility", "glue script", "status reporter",
+        "diagnostics", "reporting", "review tooling",
+        "reliability", "internal utility", "workspace status", "challenge generator",
+        "openclaw helper utility"
     ]
-    risky_or_excluded = ["openclaw.json", "live config mutation"]
+    risky_or_excluded = [
+        "edit openclaw.json",
+        "update openclaw.json",
+        "modify openclaw.json",
+        "touch openclaw.json",
+        "live config mutation",
+    ]
     subagent_signals = [
         "portfolio", "case-study", "case study", "content plan", "social media",
         "instagram", "motion design", "mp4", "caption", "analysis", "company",
@@ -638,11 +646,11 @@ def classify_execution_mode(task, parsed):
         "draft", "creative mvp"
     ]
 
-    if any(sig in combined for sig in direct_signals):
-        return "direct"
-
     if any(sig in combined for sig in agent_team_signals) and not any(sig in combined for sig in risky_or_excluded):
         return "agent_team"
+
+    if any(sig in combined for sig in direct_signals):
+        return "direct"
 
     if any(sig in combined for sig in subagent_signals):
         return "subagent"
