@@ -15,14 +15,15 @@
         "id": "71293857",
         "text": "[Personal] \ud83d\udcda Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
-      },
-      {
-        "id": "f4e7c253",
-        "text": "[Other] \ud83d\udd27 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "50f5f17b",
+        "text": "[Other] \ud83d\udd27 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "24fa9c1b",
@@ -56,5 +57,5 @@
       }
     ]
   },
-  "updatedAt": "2026-03-29T10:00:20.000Z"
+  "updatedAt": "2026-03-29T10:00:21.000Z"
 }
