@@ -813,6 +813,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     summary.runtimeBridge.endpoints.websocket,
     summary.runtimeBridge.endpoints.websocketBridgeToken,
     summary.runtimeBridge.endpoints.gatewaySessionToken,
+    summary.runtimeBridge.transport.websocket,
     summary.runtimeBridge.transport.websocket.browserReachability,
     summary.runtimeBridge.transport.websocket.configured,
   ]);
