@@ -247,7 +247,14 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
     - exit `1` = active spawned task exists (`ACTIVE_SPAWNED`)
     - exit `2` = queue missing/invalid or bad invocation
   - `heal-stale` — marks stale `spawned` tasks as `blocked` and prints JSON like `{"healed": 0, "queueFile": "..."}`
-  - **When to use:** use `queue_state.py` for inspection and manual healing; use `autonomy_gate.py queue` for cron preflight decisions, including the same stale-slot self-heal behavior plus run/skip decision output
+  - `scripts/queue_triage.py` — richer delegated-queue operator summary (counts, warnings, next action, blocker reasons, human or JSON output)
+    - Quick usage:
+      ```bash
+      python scripts/queue_triage.py
+      python scripts/queue_triage.py --json
+      python scripts/queue_triage.py --limit 3
+      ```
+  - **When to use:** use `queue_state.py` for inspection and manual healing; use `queue_triage.py` when you want a faster human-readable diagnosis of why the queue is idle/blocked/active; use `autonomy_gate.py queue` for cron preflight decisions, including the same stale-slot self-heal behavior plus run/skip decision output
   - **Decision table:**
 
     | Need | Use | Why |
@@ -278,6 +285,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
     - `workspace` also skips when there is no Open Backlog work or an active delegated spawned task
     - `queue` self-heals stale spawned slots, then decides based on pending delegated work
     - `improve` allows one bounded workspace improvement pass when active-hour and queue conditions are satisfied
+  - Timing note: for reminder-style cron jobs such as `autonomous-queue-wakeup`, `cron run` accepts/enqueues the run first; visible queue-state mutations happen only after the reminder is delivered to the main session and processed
 - `scripts/add-task-suggestion.py` — Add a Philippe suggestion and place it at the top of Open Backlog
 - `projects/_ops/agent-team/` — Hybrid v1 reusable internal workflow package
   - Operator entry: `START-HERE.md`

@@ -119,6 +119,17 @@ Command/tool failures and exceptions.
 **Priority:** high
 **Status:** resolved
 
+## [ERR-20260329-1012]
+
+**What failed:** Morning Meeting triage initially treated stale or not-yet-delivered cron state as a fresh live failure
+**Error:** I presented `signal-accuracy-review` as an active problem on a Sunday before accounting for its weekday-only schedule, and later I treated a forced `autonomous-queue-wakeup` run as broken because I checked `executor-subagent-queue.json` before the reminder-style job had actually landed in-session and been processed
+**Context:** Mar 29 Morning Meeting + autonomy queue debugging after investigating the queued helper-utility task
+**Suggested fix:** before declaring a cron issue live, verify the schedule calendar and whether the current day/run should have produced fresh state; for reminder-style cron jobs triggered via `cron run`, remember that acceptance/enqueue happens before the session processes the reminder, so queue/state files may lag until the reminder arrives
+**Resolution:** Resolved operationally on 2026-03-29 by re-evaluating the weekday-only schedule, processing the delivered queue reminder correctly, and documenting the cron delivery-model lesson in daily memory/TOOLS
+
+**Priority:** medium
+**Status:** resolved
+
 
 ## [ERR-20260320-1916]
 
