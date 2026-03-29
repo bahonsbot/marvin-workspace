@@ -137,6 +137,46 @@ export interface OrchestratorIntegrationSummary {
   integrationMode: 'hybrid-reuse';
   chatEmbeddingStatus: 'not-implemented' | 'embedded-reuse';
   honestyNotes: string[];
+  runtimeBridge: {
+    descriptorVersion: 'v2';
+    status: 'ready' | 'degraded' | 'unavailable';
+    mode: 'polling-handoff' | 'polling-ws-sidecar';
+    transport: {
+      kind: 'http-poll' | 'http-poll+ws-sidecar';
+      liveEvents: false;
+      wsProxySupported: boolean;
+      pollingIntervalMs: number;
+      websocket: {
+        configured: boolean;
+        browserUrl: string | null;
+        browserReachability: 'explicit' | 'loopback-only' | 'unavailable';
+      };
+    };
+    auth: {
+      strategy: 'mission-control-basic-auth';
+      sameOriginApi: true;
+      websocketBridgeToken: boolean;
+      gatewaySessionAuthConfigured: boolean;
+    };
+    capabilities: {
+      runtimeSnapshot: boolean;
+      sessionList: boolean;
+      controlHandoff: boolean;
+      composerSend: boolean;
+      stop: false;
+      reset: false;
+      eventStream: false;
+    };
+    endpoints: {
+      descriptor: string;
+      launchControl: string | null;
+      websocket: string | null;
+      websocketHealth: string | null;
+      websocketBridgeToken: string | null;
+      gatewaySessionToken: string | null;
+    };
+    limitations: string[];
+  };
   controlPath: {
     label: string;
     href: string | null;
@@ -166,6 +206,7 @@ export interface OrchestratorIntegrationSummary {
     recent: Array<{
       key: string;
       model: string | null;
+      thinkingLevel?: string | null;
       kind: string;
       ageMs: number | null;
       updatedAt: string | null;

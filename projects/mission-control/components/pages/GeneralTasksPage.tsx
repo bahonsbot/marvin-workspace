@@ -10,7 +10,7 @@ export default async function TasksPage() {
   return (
     <PageScaffold
       title="Tasks"
-      description="Multi-board workspace for active work. Switch between boards to see different task domains."
+      titleVariant="system"
     >
       <TasksBoardSwitcher
         autonomousColumns={board.columns}

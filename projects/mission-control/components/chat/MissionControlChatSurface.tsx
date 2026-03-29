@@ -448,45 +448,37 @@ function shortKey(value: string): string {
   return `${value.slice(0, 14)}...${value.slice(-10)}`;
 }
 
-type ControlAgentOption = {
+type TopControlMenu = 'agent' | 'model' | 'effort' | null;
+
+type AgentMenuOption = {
   id: string;
   label: string;
   note?: string;
-  placeholder?: boolean;
+  disabled?: boolean;
 };
 
-type ControlModelOption = {
+type ModelMenuOption = {
   id: 'codex5.4' | 'codex' | 'minimax2.7' | 'qwenplus';
   label: string;
   command: string;
 };
 
-type ControlEffort = 'low' | 'medium' | 'high' | 'xhigh';
-
-const AGENT_OPTIONS: ControlAgentOption[] = [
+const agentMenuOptions: AgentMenuOption[] = [
   { id: 'marvin', label: 'Marvin' },
-  { id: 'rafa', label: 'Rafa', note: 'Planned seat', placeholder: true },
-  { id: 'sloane', label: 'Sloane', note: 'Planned seat', placeholder: true },
-  { id: 'pico', label: 'Pico', note: 'Planned seat', placeholder: true },
+  { id: 'rafa', label: 'Rafa', note: 'Planned seat', disabled: true },
+  { id: 'sloane', label: 'Sloane', note: 'Planned seat', disabled: true },
+  { id: 'pico', label: 'Pico', note: 'Planned seat', disabled: true },
 ];
 
-const MODEL_OPTIONS: ControlModelOption[] = [
+const modelMenuOptions: ModelMenuOption[] = [
   { id: 'codex5.4', label: 'gpt-5.4', command: '/model codex5.4' },
   { id: 'codex', label: 'codex-5.3', command: '/model codex' },
   { id: 'minimax2.7', label: 'minimax-2.7', command: '/model minimax2.7' },
   { id: 'qwenplus', label: 'qwen3.5-plus', command: '/model qwenplus' },
 ];
 
-const EFFORT_OPTIONS: ControlEffort[] = ['low', 'medium', 'high', 'xhigh'];
-
-function normalizeModelSelection(label: string | null): ControlModelOption['id'] {
-  const value = (label ?? '').toLowerCase();
-  if (value.includes('gpt-5.4') || value.includes('codex5.4')) return 'codex5.4';
-  if (value.includes('5.3') || value.includes('gpt-5.3') || value.includes('codex')) return 'codex';
-  if (value.includes('minimax') || value.includes('m2.7')) return 'minimax2.7';
-  if (value.includes('qwen')) return 'qwenplus';
-  return 'codex5.4';
-}
+const effortMenuOptions = ['low', 'medium', 'high', 'xhigh'] as const;
+type EffortMenuOption = (typeof effortMenuOptions)[number];
 
 function formatAge(ageMs: number | null): string {
   if (ageMs === null || Number.isNaN(ageMs)) return 'freshness unavailable';
@@ -534,14 +526,16 @@ export function MissionControlChatSurface({
   const [composerValue, setComposerValue] = useState('');
   const [composerError, setComposerError] = useState<string | null>(null);
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
-  const [openControlMenu, setOpenControlMenu] = useState<'agent' | 'model' | 'effort' | null>(null);
-  const [selectedAgent, setSelectedAgent] = useState('Marvin');
-  const [selectedModel, setSelectedModel] = useState<ControlModelOption['id']>(() => normalizeModelSelection(model.modelLabel));
-  const [selectedEffort, setSelectedEffort] = useState<ControlEffort>('low');
-  const [controlError, setControlError] = useState<string | null>(null);
-  const [controlBusy, setControlBusy] = useState<'agent' | 'model' | 'effort' | 'reset' | null>(null);
+  const [topControlMenu, setTopControlMenu] = useState<TopControlMenu>(null);
+  const [modelSwitchError, setModelSwitchError] = useState<string | null>(null);
+  const [modelSwitchBusy, setModelSwitchBusy] = useState(false);
+  const [effortSwitchBusy, setEffortSwitchBusy] = useState(false);
+  const [optimisticModelLabel, setOptimisticModelLabel] = useState<string | null>(null);
+  const [lastRequestedEffort, setLastRequestedEffort] = useState<EffortMenuOption | null>(null);
+  const [pendingModelLabel, setPendingModelLabel] = useState<string | null>(null);
+  const [pendingEffortLabel, setPendingEffortLabel] = useState<EffortMenuOption | null>(null);
   const statusDropdownRef = useRef<HTMLDivElement | null>(null);
-  const controlMenuRef = useRef<HTMLDivElement | null>(null);
+  const topControlMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     function onPointerDown(event: MouseEvent) {
@@ -551,8 +545,8 @@ export function MissionControlChatSurface({
       if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target as Node)) {
         setStatusDropdownOpen(false);
       }
-      if (controlMenuRef.current && !controlMenuRef.current.contains(event.target as Node)) {
-        setOpenControlMenu(null);
+      if (topControlMenuRef.current && !topControlMenuRef.current.contains(event.target as Node)) {
+        setTopControlMenu(null);
       }
     }
 
@@ -560,70 +554,142 @@ export function MissionControlChatSurface({
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, []);
 
-  useEffect(() => {
-    setSelectedModel(normalizeModelSelection(model.modelLabel));
-  }, [model.modelLabel]);
+  const runtimeModelLabel = model.modelLabel.includes('gpt-5.4')
+    ? 'gpt-5.4'
+    : model.modelLabel.toLowerCase().includes('qwen')
+      ? 'qwen3.5-plus'
+      : model.modelLabel.toLowerCase().includes('minimax')
+        ? 'minimax-2.7'
+        : model.modelLabel.toLowerCase().includes('codex') || model.modelLabel.toLowerCase().includes('5.3')
+          ? 'codex-5.3'
+          : model.modelLabel;
+  const modelMenuLabel = optimisticModelLabel ?? pendingModelLabel ?? runtimeModelLabel;
+  const xhighCapable = modelMenuLabel === 'gpt-5.4' || modelMenuLabel === 'codex-5.3';
+  const boundedThinkCapable = modelMenuLabel === 'minimax-2.7' || modelMenuLabel === 'qwen3.5-plus';
+  const effortInteractive = xhighCapable || boundedThinkCapable;
+  const availableEffortOptions = xhighCapable ? effortMenuOptions : boundedThinkCapable ? effortMenuOptions.filter((level) => level !== 'xhigh') : [];
+  const confirmedEffortLabel = model.effortLabel && model.effortLabel !== 'Not exposed yet' ? model.effortLabel : null;
+  const effortMenuLabel = effortInteractive
+    ? pendingEffortLabel
+      ? `Last requested: ${pendingEffortLabel}`
+      : lastRequestedEffort
+        ? `Last requested: ${lastRequestedEffort}`
+        : confirmedEffortLabel
+          ? confirmedEffortLabel
+          : 'Last requested: low'
+    : 'Last requested: low';
+  const visibleModelMenuOptions = modelMenuOptions.filter((option) => option.label !== modelMenuLabel);
 
-  useEffect(() => {
-    if (model.agentLabel) {
-      setSelectedAgent(model.agentLabel);
-    }
-  }, [model.agentLabel]);
+  const lastRealAgentRef = useRef(model.agentLabel !== 'Mission Control' ? model.agentLabel : 'Marvin');
+  const lastRealModelRef = useRef(model.modelLabel.toLowerCase() !== 'runtime controlled' ? model.modelLabel : 'MiniMax-M2.7');
 
-  async function sendControlPrompt(prompt: string, kind: 'model' | 'effort' | 'reset') {
-    if (!live?.sendPrompt || sessionState !== 'connected') {
-      setControlError('Connect the bridge session first before changing runtime controls.');
-      return false;
+  if (model.agentLabel && model.agentLabel !== 'Mission Control') {
+    lastRealAgentRef.current = model.agentLabel;
+  }
+  if (model.modelLabel && model.modelLabel.toLowerCase() !== 'runtime controlled') {
+    lastRealModelRef.current = model.modelLabel;
+  }
+
+  const displayAgentLabel = model.agentLabel === 'Mission Control' ? lastRealAgentRef.current : model.agentLabel;
+  const displayModelLabel = model.modelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : model.modelLabel;
+
+  async function handleModelSwitch(option: ModelMenuOption) {
+    if (!live?.sendPrompt) {
+      setModelSwitchError('Live bridge is unavailable for model switching right now.');
+      return;
     }
+
+    const previousLabel = modelMenuLabel;
+    const previousEffort = lastRequestedEffort;
+    setTopControlMenu(null);
+    setOptimisticModelLabel(option.label);
+    setPendingModelLabel(option.label);
+    setLastRequestedEffort(null);
+    setPendingEffortLabel(null);
+    setModelSwitchBusy(true);
+    setModelSwitchError(null);
 
     try {
-      setControlBusy(kind);
-      setControlError(null);
-      await live.sendPrompt(prompt);
+      await live.sendPrompt(option.command);
       void bridge?.refresh();
-      return true;
     } catch (cause) {
-      setControlError(cause instanceof Error ? cause.message : 'Mission Control could not apply that control change.');
-      return false;
+      setOptimisticModelLabel(previousLabel);
+      setPendingModelLabel(null);
+      setLastRequestedEffort(previousEffort);
+      setPendingEffortLabel(previousEffort);
+      setModelSwitchError(cause instanceof Error ? cause.message : 'Mission Control could not switch models.');
     } finally {
-      setControlBusy(null);
+      setModelSwitchBusy(false);
     }
   }
 
-  async function handleModelSelect(option: ControlModelOption) {
-    if (option.id === selectedModel) return;
-    const ok = await sendControlPrompt(option.command, 'model');
-    if (!ok) return;
-    setSelectedModel(option.id);
-    if (option.id !== 'codex5.4') {
-      setSelectedEffort('low');
+  async function handleEffortSwitch(option: EffortMenuOption) {
+    if (!effortInteractive || !live?.sendPrompt) return;
+
+    const previousEffort = lastRequestedEffort;
+    setTopControlMenu(null);
+    setLastRequestedEffort(option);
+    setPendingEffortLabel(option);
+    setEffortSwitchBusy(true);
+    setModelSwitchError(null);
+
+    try {
+      await live.sendPrompt(`/think:${option}`);
+      void bridge?.refresh();
+    } catch (cause) {
+      setLastRequestedEffort(previousEffort);
+      setPendingEffortLabel(previousEffort);
+      setModelSwitchError(cause instanceof Error ? cause.message : 'Mission Control could not change effort.');
+    } finally {
+      setEffortSwitchBusy(false);
     }
-    setOpenControlMenu(null);
   }
 
-  async function handleEffortSelect(level: ControlEffort) {
-    if (selectedModel !== 'codex5.4' || level === selectedEffort) return;
-    const ok = await sendControlPrompt(`/level ${level}`, 'effort');
-    if (!ok) return;
-    setSelectedEffort(level);
-    setOpenControlMenu(null);
-  }
+  useEffect(() => {
+    if (pendingModelLabel && runtimeModelLabel === pendingModelLabel) {
+      setOptimisticModelLabel(null);
+      setPendingModelLabel(null);
+    }
+  }, [pendingModelLabel, runtimeModelLabel]);
+
+  useEffect(() => {
+    if (!confirmedEffortLabel) return;
+    const normalizedConfirmed = confirmedEffortLabel.toLowerCase();
+    if (pendingEffortLabel && normalizedConfirmed === pendingEffortLabel) {
+      setPendingEffortLabel(null);
+      setLastRequestedEffort(null);
+      return;
+    }
+    if (!pendingEffortLabel && lastRequestedEffort && normalizedConfirmed === lastRequestedEffort) {
+      setLastRequestedEffort(null);
+    }
+  }, [confirmedEffortLabel, lastRequestedEffort, pendingEffortLabel]);
 
   async function handleResetToDefaults() {
-    setSelectedAgent('Marvin');
-    setOpenControlMenu(null);
-    if (selectedModel !== 'minimax2.7') {
-      const ok = await sendControlPrompt('/model minimax2.7', 'reset');
-      if (!ok) return;
+    setTopControlMenu(null);
+    setOptimisticModelLabel('minimax-2.7');
+    setPendingModelLabel('minimax-2.7');
+    setLastRequestedEffort('low');
+    setPendingEffortLabel('low');
+    if (!live?.sendPrompt) {
+      window.location.reload();
+      return;
     }
-    setSelectedModel('minimax2.7');
-    setSelectedEffort('low');
+    try {
+      setModelSwitchBusy(true);
+      setEffortSwitchBusy(true);
+      setModelSwitchError(null);
+      await live.sendPrompt('/model minimax2.7');
+      await new Promise((resolve) => window.setTimeout(resolve, 500));
+      await live.sendPrompt('/think:low');
+      void bridge?.refresh();
+    } catch {
+      window.location.reload();
+    } finally {
+      setModelSwitchBusy(false);
+      setEffortSwitchBusy(false);
+    }
   }
-
-  const activeModelOption = MODEL_OPTIONS.find((option) => option.id === selectedModel) ?? MODEL_OPTIONS[0];
-  const visibleModelOptions = MODEL_OPTIONS.filter((option) => option.id !== selectedModel);
-  const effortInteractive = selectedModel === 'codex5.4';
-  const effortDisplayLabel = effortInteractive ? selectedEffort : 'Standard';
 
   async function handleComposerSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -770,35 +836,26 @@ export function MissionControlChatSurface({
         </div>
 
         {/* Row 2: SESSION/AGENT / MODEL / EFFORT / RESET / RECENT SESSIONS */}
-        <div ref={controlMenuRef} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div ref={topControlMenuRef} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ position: 'relative' }}>
             <button
               type="button"
-              onClick={() => setOpenControlMenu((current) => (current === 'agent' ? null : 'agent'))}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 138, textAlign: 'left', cursor: 'pointer' }}
+              onClick={() => setTopControlMenu((current) => (current === 'agent' ? null : 'agent'))}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 148, textAlign: 'left', cursor: 'pointer' }}
             >
               <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Session / Agent</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{selectedAgent}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{displayAgentLabel}</div>
                 <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>▾</span>
               </div>
             </button>
-            {openControlMenu === 'agent' ? (
+            {topControlMenu === 'agent' ? (
               <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
-                {AGENT_OPTIONS.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    disabled={option.placeholder}
-                    onClick={() => {
-                      setSelectedAgent(option.label);
-                      setOpenControlMenu(null);
-                    }}
-                    style={{ border: 'none', borderRadius: 12, background: option.label === selectedAgent ? 'rgba(212, 231, 221, 0.7)' : 'transparent', padding: '10px 12px', textAlign: 'left', cursor: option.placeholder ? 'not-allowed' : 'pointer', opacity: option.placeholder ? 0.62 : 1, display: 'grid', gap: 2 }}
-                  >
+                {agentMenuOptions.map((option) => (
+                  <div key={option.id} style={{ borderRadius: 12, background: option.label === displayAgentLabel ? 'rgba(212, 231, 221, 0.66)' : 'transparent', padding: '10px 12px', display: 'grid', gap: 2, opacity: option.disabled ? 0.62 : 1 }}>
                     <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{option.label}</span>
                     {option.note ? <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.note}</span> : null}
-                  </button>
+                  </div>
                 ))}
               </div>
             ) : null}
@@ -806,24 +863,25 @@ export function MissionControlChatSurface({
           <div style={{ position: 'relative' }}>
             <button
               type="button"
-              onClick={() => setOpenControlMenu((current) => (current === 'model' ? null : 'model'))}
-              disabled={controlBusy !== null}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 138, textAlign: 'left', cursor: controlBusy !== null ? 'progress' : 'pointer' }}
+              onClick={() => setTopControlMenu((current) => (current === 'model' ? null : 'model'))}
+              disabled={modelSwitchBusy}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 148, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
             >
               <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Model</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{activeModelOption.label}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{optimisticModelLabel ?? displayModelLabel}</div>
                 <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>▾</span>
               </div>
             </button>
-            {openControlMenu === 'model' ? (
+            {topControlMenu === 'model' ? (
               <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
-                {visibleModelOptions.map((option) => (
+                {visibleModelMenuOptions.map((option) => (
                   <button
                     key={option.id}
                     type="button"
-                    onClick={() => void handleModelSelect(option)}
-                    style={{ border: 'none', borderRadius: 12, background: 'transparent', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', display: 'grid', gap: 2 }}
+                    onClick={() => void handleModelSwitch(option)}
+                    disabled={modelSwitchBusy}
+                    style={{ border: 'none', borderRadius: 12, padding: '10px 12px', display: 'grid', gap: 2, textAlign: 'left', background: 'transparent', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.76 : 1 }}
                   >
                     <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{option.label}</span>
                     <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.command}</span>
@@ -835,27 +893,28 @@ export function MissionControlChatSurface({
           <div style={{ position: 'relative' }}>
             <button
               type="button"
-              onClick={() => effortInteractive && setOpenControlMenu((current) => (current === 'effort' ? null : 'effort'))}
-              disabled={!effortInteractive || controlBusy !== null}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 138, textAlign: 'left', cursor: effortInteractive && controlBusy === null ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.78 }}
+              onClick={() => effortInteractive && setTopControlMenu((current) => (current === 'effort' ? null : 'effort'))}
+              disabled={!effortInteractive || effortSwitchBusy}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 148, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
             >
               <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Effort</div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', textTransform: 'capitalize' }}>{effortDisplayLabel}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{effortMenuLabel}</div>
                 <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{effortInteractive ? '▾' : '—'}</span>
               </div>
             </button>
-            {openControlMenu === 'effort' ? (
+            {topControlMenu === 'effort' ? (
               <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
-                {EFFORT_OPTIONS.filter((level) => level !== selectedEffort).map((level) => (
+                {availableEffortOptions.filter((label) => label !== lastRequestedEffort).map((label) => (
                   <button
-                    key={level}
+                    key={label}
                     type="button"
-                    onClick={() => void handleEffortSelect(level)}
-                    style={{ border: 'none', borderRadius: 12, background: 'transparent', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', display: 'grid', gap: 2 }}
+                    onClick={() => void handleEffortSwitch(label)}
+                    disabled={effortSwitchBusy}
+                    style={{ border: 'none', borderRadius: 12, padding: '10px 12px', display: 'grid', gap: 2, textAlign: 'left', background: 'transparent', cursor: effortSwitchBusy ? 'progress' : 'pointer', opacity: effortSwitchBusy ? 0.76 : 1 }}
                   >
-                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', textTransform: 'capitalize' }}>{level}</span>
-                    <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{`/level ${level}`}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', textTransform: 'capitalize' }}>{label}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{`/think:${label}`}</span>
                   </button>
                 ))}
               </div>
@@ -863,14 +922,14 @@ export function MissionControlChatSurface({
           </div>
           <button
             type="button"
-            onClick={() => void handleResetToDefaults()}
-            title="Reset to defaults: Marvin / MiniMax-M2.7 / low when GPT-5.4 is active"
+            onClick={handleResetToDefaults}
+            title="Reset to defaults: Marvin / MiniMax-M2.7 / None"
             style={{
               ...actionButtonStyle(true),
               border: '1px solid rgba(200, 195, 188, 0.46)',
               background: 'rgba(255, 255, 255, 0.78)',
               color: 'var(--text-body)',
-              cursor: controlBusy === null ? 'pointer' : 'progress',
+              cursor: 'pointer',
               padding: '10px 14px',
               fontSize: 11,
               fontWeight: 700,
@@ -878,7 +937,7 @@ export function MissionControlChatSurface({
               letterSpacing: '0.04em',
             }}
           >
-            {controlBusy === 'reset' ? 'Resetting…' : 'Reset'}
+            Reset
           </button>
           <div ref={sessionsRef} style={{ position: 'relative', marginLeft: 'auto' }}>
             <button
@@ -938,9 +997,9 @@ export function MissionControlChatSurface({
             ) : null}
           </div>
         </div>
-        {controlError ? (
+        {modelSwitchError ? (
           <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6, paddingLeft: 4 }}>
-            {controlError}
+            {modelSwitchError}
           </div>
         ) : null}
       </section>

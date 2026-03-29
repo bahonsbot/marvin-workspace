@@ -395,3 +395,36 @@ Command/tool failures and exceptions.
   3. Websocket proxies must not pass reserved close codes (`1005`, `1006`, etc.) into `ws.close(...)`; normalize to actually valid close codes or the proxy process will crash and surface as misleading 502s.
   4. For sidecar -> gateway hops, explicit upstream `Origin` may be necessary; browser allowlisting alone may not fix origin rejection if the gateway validates the upstream websocket origin separately.
   5. After gateway restarts, the Mission Control preview stack can split-brain: preview proxy/sidecar may remain up while the internal Next server is down, producing 502s that are preview-stack failures, not app-code failures.
+
+## [ERR-20260329-1234]
+
+**What failed:** first live wiring pass for Mission Control Chat top controls
+**Error:** browser hit `Application error: a client-side exception has occurred` after wiring Agent / Model / Effort controls all at once
+**Context:** Mar 29 Mission Control Chat top-section iteration after the title/layout cleanup
+**Suggested fix:** reintroduce risky control behavior incrementally: first UI-only dropdown shells, then model switching only, then effort switching, then reset hardening; do not wire multiple live control paths at once on this surface
+**Resolution:** Fixed on 2026-03-29 by backing out the aggressive control wiring, restoring stability, and reintroducing controls in smaller verified steps
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260329-1240]
+
+**What failed:** Mission Control preview restart after UI build
+**Error:** helper start path hit `EADDRINUSE` on 3005/3006/3007, leaving stale processes and mismatched runtime/assets that surfaced as browser instability and misleading app failures
+**Context:** Mar 29 Chat-top iteration during repeated preview rebuilds
+**Suggested fix:** after meaningful Mission Control UI changes, do a real stop/build/start cycle and verify all three layers (Next, proxy, WS sidecar); do not assume a helper exit means the preview stack is clean
+**Resolution:** Resolved operationally on 2026-03-29 by repeatedly using the preview runbook scripts and verifying `http://127.0.0.1:3005/general/chat` returns 200 after restart
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260329-1545]
+
+**What failed:** top-strip model/effort confirmation behavior under auto-refresh
+**Error:** auto-refresh could overwrite pending model/effort state with stale intermediate summary data, causing temporary regressions like old model labels or fake fallback effort labels until manual refresh or a later readback cycle corrected the UI
+**Context:** Mar 29 Mission Control Chat top-control hardening after live testing across Codex, MiniMax, and Qwen model/thinking transitions
+**Suggested fix:** keep explicit pending model/effort state and only clear it when runtime readback confirms the requested target; do not let intermediate auto-refresh summaries trample pending state too early
+**Resolution:** Fixed on 2026-03-29 by adding pending confirmation gates and by carrying `thinkingLevel` from `openclaw status --json` through the Mission Control adapter/surface path
+
+**Priority:** high
+**Status:** resolved

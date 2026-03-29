@@ -17,6 +17,33 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260329-1620]
+
+**Trigger:** Philippe corrected the Mission Control Chat effort-control command format and the supported thinking-level matrix after live testing.
+**What was wrong:** I initially tried to wire thinking changes with the wrong command shape and carried false assumptions about which models exposed explicit thinking levels versus a fake `Standard` state.
+**Lesson:** For Mission Control Chat controls, use `/think:<level>` for thinking changes. Treat the current exposed model matrix as: `gpt-5.4` + `codex-5.3` support `low / medium / high / xhigh`, while `MiniMax-M2.7` + `qwen3.5-plus` support `low / medium / high`. In the top control strip, prefer truthful pending labels like `Last requested: ...` over vague fallback labels such as `Standard`.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260329-1303]
+
+**Trigger:** Philippe explicitly said not to modify `auth-profiles.json` without permission after I tried to recover runtime OAuth too aggressively.
+**What was wrong:** I crossed from diagnosis into control-plane mutation on a sensitive auth file without approval.
+**Lesson:** Never edit `~/.openclaw/agents/main/agent/auth-profiles.json` without Philippe’s explicit permission. For runtime OAuth issues, inspect, explain, and propose first; if action is approved, prefer the supported command path rather than direct file edits.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260327-2217]
+
+**Trigger:** Philippe reviewed the first Mission Control Chat pass after the evening snapshot rollback and said the page felt like a stack of soft-colored cards rather than a real chat surface.
+**What was wrong:** I let normal conversation inherit boxed/card treatment, left explanatory subtitle copy in place, gave Sessions too much layout weight, allowed raw metadata wrappers to leak into visible messages, and did not yet shape the page like a true fixed-height scrolling chat surface with personal participant treatment.
+**Lesson:** For Mission Control Chat, keep the main conversation as one unified chat surface. Reserve bubbles/boxes for Thinking and Tools output only. Remove unnecessary explanatory subtitle copy, keep session selection compact, prefer a fixed-height internally scrolling chat area, strip raw metadata/timestamp wrappers from visible message bodies, include a proper input area, and make participants feel more personal than generic `ASSISTANT` / `USER`.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260327-1409]
 
 **Trigger:** During Mission Control auth cleanup, host-side ownership advice assumed `node:node` would exist on the host because the container runtime used `node`, but Philippe correctly surfaced that the host had no such user and the relevant ownership baseline there was `root`.

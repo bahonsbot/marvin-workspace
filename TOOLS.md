@@ -164,6 +164,8 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - Login command: `codex login --device-auth` (device code flow works best)
   - Tokens stored in `~/.codex/`
 - **Important distinction:** Codex CLI auth is separate from the main OpenClaw dashboard/orchestrator runtime, which resolves its Codex identity from `/data/.openclaw/agents/main/agent/auth-profiles.json` via `openai-codex:default`
+  - Runtime OAuth refresh command: `openclaw models auth login --provider openai-codex --set-default`
+  - Rule: do not edit `auth-profiles.json` directly unless Philippe explicitly approves it
 - **Current posture:** dual-home Codex CLI wrapper experiments were removed; do not assume `/data/codex-work-home` or `/data/codex-personal-home` exist. Runtime account switching for the main OpenClaw path is a Philippe-only manual runbook, not a normal CLI flow.
 - **Runbook:** `docs/runbooks/openai-codex-runtime-account-switch.md`
 - **Git repo required:** Codex refuses to run outside a git repository
