@@ -410,6 +410,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const socketRef = useRef<WebSocket | null>(null);
   const pendingRef = useRef<Record<string, PendingRequest>>({});
   const pendingTimeoutsRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const lastSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
 
   const defaultTargetSession = useMemo(() => chooseTargetSession(summary), [summary]);
   const liveTargetSession = useMemo<RuntimeBridgeLiveSessionTarget>(() => {
@@ -533,6 +534,20 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     if (!activeSessionKey) return;
     void load(true);
   }, [activeSessionKey, load]);
+
+  useEffect(() => {
+    if (lastSessionStateRef.current === session.state) return;
+    if (lastSessionStateRef.current !== 'unavailable') {
+      console.info('[mission-control-runtime] session state', {
+        from: lastSessionStateRef.current,
+        to: session.state,
+        detail: session.detail,
+        wsState,
+        lastEvent: session.lastEvent,
+      });
+    }
+    lastSessionStateRef.current = session.state;
+  }, [session.detail, session.lastEvent, session.state, wsState]);
 
   // Auto-refresh removed — refresh is now manual-only via bridge.refresh()
 

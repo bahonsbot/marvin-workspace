@@ -380,11 +380,19 @@ function ToolGroupBlock({ rows }: { rows: ToolGroupRow[] }) {
   const visibleRows = latestRows.filter((row) => !isLowSignalExecTool(row.tool));
   const [open, setOpen] = useState(true);
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const hasEverBeenActiveRef = useRef(false);
   const time = visibleRows[visibleRows.length - 1]?.event.at ?? rows[rows.length - 1]?.event.at ?? Date.now();
   const hasActiveWork = visibleRows.some((row) => row.tool.phase === 'start' || row.tool.phase === 'update');
 
   useEffect(() => {
-    setOpen(hasActiveWork);
+    if (hasActiveWork) {
+      hasEverBeenActiveRef.current = true;
+      setOpen(true);
+      return;
+    }
+    if (hasEverBeenActiveRef.current) {
+      setOpen(false);
+    }
   }, [hasActiveWork]);
 
   if (visibleRows.length === 0) return null;
