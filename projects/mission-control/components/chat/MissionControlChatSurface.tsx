@@ -1323,11 +1323,11 @@ export function MissionControlChatSurface({
       <section
         ref={transcriptScrollRef}
         style={{
-          border: '1px solid rgba(200, 195, 188, 0.42)',
-          borderRadius: 22,
-          background: 'linear-gradient(180deg, rgba(255, 253, 251, 0.94) 0%, rgba(247, 242, 236, 0.96) 100%)',
-          boxShadow: '0 14px 34px rgba(26, 61, 50, 0.08)',
-          padding: 18,
+          border: 'none',
+          borderRadius: 0,
+          background: 'transparent',
+          boxShadow: 'none',
+          padding: '6px 0',
           display: 'grid',
           gap: 14,
           minHeight: 0,
