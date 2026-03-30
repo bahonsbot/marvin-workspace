@@ -550,15 +550,13 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         return;
       }
 
-      if (chatState === 'error' || chatState === 'aborted') {
+      if (chatState === 'error') {
         const problem =
           typeof payload?.errorMessage === 'string'
             ? payload.errorMessage
             : typeof payload?.error === 'string'
               ? payload.error
-              : chatState === 'aborted'
-                ? 'Chat run aborted.'
-                : 'Gateway chat run failed.';
+              : 'Gateway chat run failed.';
         setSendState('error');
         setSendError(problem);
         setMessages((current) =>
@@ -575,7 +573,31 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
             MAX_LIVE_MESSAGES,
           ),
         );
-        // Also refresh on error/abort to keep snapshot in sync
+        // Also refresh on error to keep snapshot in sync
+        void load(true);
+        return;
+      }
+
+      if (chatState === 'aborted') {
+        setSendState('idle');
+        setSendError(null);
+        setActiveRunId(null);
+        setEvents((current) =>
+          appendBounded(
+            current,
+            {
+              id: generateId('mc-event'),
+              name: 'chat.aborted',
+              detail: 'Chat run aborted.',
+              sessionKey: eventSessionKey ?? liveTargetSession.key,
+              runId: eventRunId,
+              seq: typeof payload?.seq === 'number' ? payload.seq : null,
+              at: Date.now(),
+            },
+            MAX_LIVE_EVENTS,
+          ),
+        );
+        // Refresh after abort so snapshot stays aligned, but do not surface it as a fatal UI error.
         void load(true);
       }
     },
