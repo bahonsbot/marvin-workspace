@@ -2,46 +2,54 @@
   "board": {
     "todo": [
       {
-        "id": "873f553c",
-        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "id": "b532aa94",
+        "text": "[Personal] \ud83c\udf81 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
         "column": "todo"
       },
       {
-        "id": "5678617b",
-        "text": "[Other] 🔧 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "1960113e",
+        "text": "[Career] \ud83d\udcda Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
         "column": "todo"
       },
       {
-        "id": "6c0ef225",
-        "text": "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
-        "column": "todo"
-      },
-      {
-        "id": "33f6a03e",
-        "text": "[Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
-        "column": "todo"
-      },
-      {
-        "id": "b4699bbe",
-        "text": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "71293857",
+        "text": "[Personal] \ud83d\udcda Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       }
     ],
     "inprogress": [],
     "done": [
       {
-        "id": "b999c42d",
-        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "done",
-        "outputPath": "projects/automation/fix-identify-one-repetitive-workspace-workflow-that-wastes-time-excludin.md"
+        "id": "24fa9c1b",
+        "text": "(2026-03-24) [Career] \ud83d\udcdd Draft: 3 Instagram content angles tied to After Effects motion design project \u2192 projects/portfolio/content-plan-ae-motion-design.md",
+        "column": "done"
       },
       {
-        "id": "2336a7e5",
-        "text": "[Other] 🔧 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "done",
-        "outputPath": "projects/automation/fix-build-one-small-automation-utility-that-addresses-one-specific-docum.md"
+        "id": "5498edbf",
+        "text": "(2026-03-24) [Other] \ud83d\udd27 Fix: OpenClaw helper utility generation improved; daily-task-generator now produces concrete script deliverables",
+        "column": "done"
+      },
+      {
+        "id": "90367ec6",
+        "text": "(2026-03-24) [Career] \ud83d\udd28 Build: daily creative challenge generator \u2192 projects/creative-challenges/index.html + README.md",
+        "column": "done"
+      },
+      {
+        "id": "0f7d3b41",
+        "text": "(2026-03-24) [Career] \ud83d\ude80 Launch: portfolio case-study draft \u2192 projects/portfolio/case-studies/motion-design-loop.md",
+        "column": "done"
+      },
+      {
+        "id": "44306735",
+        "text": "(2026-03-24) [Trading] \ud83d\udd27 Fix: safe improvement in trading-bot workspace \u2192 bot-support-spec-health-snapshot-reporter-2026-03-16.md",
+        "column": "done"
+      },
+      {
+        "id": "32a9a711",
+        "text": "(2026-03-24) [Personal] \ud83d\udcda Learn: Japanese study pack (greetings lesson) \u2192 projects/language/lesson-01-greetings.md",
+        "column": "done"
       }
     ]
   },
-  "updatedAt": "2026-03-30T01:03:45.843Z"
+  "updatedAt": "2026-03-30T10:00:13.000Z"
 }
