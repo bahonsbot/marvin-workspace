@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Daily Loop</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: #111827;
+      background: #f9fafb;
+      line-height: 1.4;
+    }
+    body { margin: 0; padding: 24px; }
+    .wrap { max-width: 760px; margin: 0 auto; background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; }
+    h1 { margin-top: 0; }
+    h2 { margin-bottom: 8px; }
+    .muted { color: #6b7280; }
+    .step { padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; margin: 14px 0; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .pill { background: #eef2ff; color: #3730a3; border-radius: 999px; padding: 4px 10px; font-size: 13px; }
+    button { border: 1px solid #d1d5db; background: #111827; color: white; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+    button.secondary { background: white; color: #111827; }
+    textarea { width: 100%; min-height: 90px; border-radius: 8px; border: 1px solid #d1d5db; padding: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .question { margin-bottom: 10px; }
+    .result { font-weight: 600; margin-top: 10px; }
+    details { margin-top: 10px; }
+    code { background: #f3f4f6; padding: 1px 5px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Python Daily Loop (10–15 min)</h1>
+    <p class="muted">Usage: open this file in your browser each day, complete all 3 steps, then click <b>Mark today complete</b>.</p>
+
+    <div class="row" style="margin-bottom: 10px;">
+      <span class="pill" id="todayLabel"></span>
+      <span class="pill" id="streakLabel"></span>
+      <span class="pill" id="lastDoneLabel"></span>
+    </div>
+
+    <section class="step">
+      <h2>Step 1. Recall (2 min)</h2>
+      <p id="recallPrompt"></p>
+      <textarea id="recallBox" placeholder="Write from memory. Keep it short."></textarea>
+    </section>
+
+    <section class="step">
+      <h2>Step 2. Quick quiz (5 min)</h2>
+      <form id="quizForm"></form>
+      <button type="button" id="gradeBtn">Grade quiz</button>
+      <div class="result" id="quizResult"></div>
+    </section>
+
+    <section class="step">
+      <h2>Step 3. Tiny coding rep (5–8 min)</h2>
+      <p id="codeTask"></p>
+      <textarea id="codeAttempt" placeholder="Write your solution here (pseudo-code or real Python)."></textarea>
+      <details>
+        <summary>Show one sample solution</summary>
+        <pre id="sampleSolution" style="white-space: pre-wrap;"></pre>
+      </details>
+    </section>
+
+    <div class="row">
+      <button type="button" id="completeBtn">Mark today complete</button>
+      <button type="button" class="secondary" id="resetBtn">Reset streak</button>
+    </div>
+  </main>
+
+  <script>
+    const dailySet = [
+      {
+        recall: "Explain the difference between a list and a tuple in Python. Give one practical use case for each.",
+        quiz: [
+          { q: "What is printed by: len('hello')", options: ["4", "5", "6"], a: 1 },
+          { q: "Which creates an empty dictionary?", options: ["{}", "[]", "()"], a: 0 },
+          { q: "What does x += 1 do?", options: ["Decreases x", "Increases x by 1", "Resets x to 1"], a: 1 }
+        ],
+        task: "Write a function `is_even(n)` that returns True if n is even, otherwise False.",
+        sample: "def is_even(n):\n    return n % 2 == 0"
+      },
+      {
+        recall: "In your own words, what is a Python dictionary, and why is key-based lookup useful?",
+        quiz: [
+          { q: "How do you access value of key 'age' in dict d?", options: ["d.age", "d['age']", "d( age )"], a: 1 },
+          { q: "What happens if you access a missing key with d['x']?", options: ["Returns None", "Raises KeyError", "Creates key"], a: 1 },
+          { q: "Best method to get a default for missing key?", options: ["d.default('x',0)", "d.get('x',0)", "d.value('x',0)"], a: 1 }
+        ],
+        task: "Given a list of numbers, return a dictionary with keys 'count' and 'sum'.",
+        sample: "def stats(nums):\n    return {'count': len(nums), 'sum': sum(nums)}"
+      },
+      {
+        recall: "Describe a `for` loop and a `while` loop. When would you pick each?",
+        quiz: [
+          { q: "Which loop is best when iterating over a known list?", options: ["for", "while", "recursion only"], a: 0 },
+          { q: "What does `break` do?", options: ["Skips to next iteration", "Ends current loop", "Ends program"], a: 1 },
+          { q: "`continue` means:", options: ["Stop the loop", "Skip to next iteration", "Repeat previous line"], a: 1 }
+        ],
+        task: "Write a function that returns the first number > 10 from a list, or None if not found.",
+        sample: "def first_gt_10(nums):\n    for n in nums:\n        if n > 10:\n            return n\n    return None"
+      }
+    ];
+
+    function dateOnly(d) {
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    }
+
+    function asISO(d) {
+      return d.toISOString().slice(0, 10);
+    }
+
+    const today = dateOnly(new Date());
+    const dayIndex = Math.floor(today.getTime() / 86400000) % dailySet.length;
+    const data = dailySet[dayIndex];
+
+    document.getElementById('todayLabel').textContent = `Today: ${today.toLocaleDateString()}`;
+    document.getElementById('recallPrompt').textContent = data.recall;
+    document.getElementById('codeTask').textContent = data.task;
+    document.getElementById('sampleSolution').textContent = data.sample;
+
+    const quizForm = document.getElementById('quizForm');
+    data.quiz.forEach((item, i) => {
+      const block = document.createElement('div');
+      block.className = 'question';
+      block.innerHTML = `<p><b>Q${i + 1}.</b> ${item.q}</p>`;
+      item.options.forEach((opt, j) => {
+        const id = `q${i}_${j}`;
+        const row = document.createElement('label');
+        row.style.display = 'block';
+        row.innerHTML = `<input type="radio" name="q${i}" id="${id}" value="${j}"> ${opt}`;
+        block.appendChild(row);
+      });
+      quizForm.appendChild(block);
+    });
+
+    document.getElementById('gradeBtn').addEventListener('click', () => {
+      let score = 0;
+      data.quiz.forEach((item, i) => {
+        const chosen = quizForm.querySelector(`input[name="q${i}"]:checked`);
+        if (chosen && Number(chosen.value) === item.a) score++;
+      });
+      document.getElementById('quizResult').textContent = `Score: ${score}/${data.quiz.length}`;
+    });
+
+    const streakKey = 'pythonDailyLoop.streak';
+    const lastDoneKey = 'pythonDailyLoop.lastDone';
+
+    function renderProgress() {
+      const streak = Number(localStorage.getItem(streakKey) || 0);
+      const lastDone = localStorage.getItem(lastDoneKey);
+      document.getElementById('streakLabel').textContent = `Streak: ${streak} day(s)`;
+      document.getElementById('lastDoneLabel').textContent = `Last done: ${lastDone || 'never'}`;
+    }
+
+    document.getElementById('completeBtn').addEventListener('click', () => {
+      const lastDone = localStorage.getItem(lastDoneKey);
+      const todayIso = asISO(today);
+      if (lastDone === todayIso) {
+        alert('Already marked complete for today. Nice consistency.');
+        return;
+      }
+
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayIso = asISO(yesterday);
+
+      let streak = Number(localStorage.getItem(streakKey) || 0);
+      streak = (lastDone === yesterdayIso) ? streak + 1 : 1;
+
+      localStorage.setItem(streakKey, String(streak));
+      localStorage.setItem(lastDoneKey, todayIso);
+      renderProgress();
+      alert('Daily loop completed.');
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      localStorage.removeItem(streakKey);
+      localStorage.removeItem(lastDoneKey);
+      renderProgress();
+    });
+
+    renderProgress();
+  </script>
+</body>
+</html>

@@ -22,14 +22,16 @@
 
 ---
 
+
+
+## In Progress
+
+
 ## Open Backlog
 
-- [Trading] 📚 Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts | Why: Understanding company financials is required for informed trading decisions | Proof: Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice | Unlocks: Unlocks later analysis tasks based on real followed companies once the watchlist is defined
-- [Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial
-- [Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development
+- - [Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial
 - [Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation
 
----
 
 ## Done
 
