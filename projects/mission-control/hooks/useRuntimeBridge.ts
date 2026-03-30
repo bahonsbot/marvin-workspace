@@ -49,6 +49,17 @@ export type RuntimeBridgeChatMessage = {
   sessionKey: string | null;
   runId: string | null;
   status: 'pending' | 'streaming' | 'final' | 'error';
+  at: number;
+};
+
+export type RuntimeBridgeToolEvent = {
+  stream: 'tool';
+  phase: 'start' | 'update' | 'result';
+  name: string;
+  toolCallId: string | null;
+  args: Record<string, unknown> | null;
+  meta: string | null;
+  isError: boolean;
 };
 
 export type RuntimeBridgeLiveEvent = {
@@ -59,6 +70,7 @@ export type RuntimeBridgeLiveEvent = {
   runId: string | null;
   seq: number | null;
   at: number;
+  tool: RuntimeBridgeToolEvent | null;
 };
 
 type RuntimeBridgeSendState = 'idle' | 'sending' | 'streaming' | 'error';
@@ -214,6 +226,33 @@ function extractFinalChatText(payload: Record<string, unknown>): string {
   return extractTextFromContentBlocks(payload.content);
 }
 
+function summarizeToolTarget(name: string, args: Record<string, unknown> | null, meta: string | null): string {
+  const filePath = typeof args?.file_path === 'string' ? args.file_path : typeof args?.path === 'string' ? args.path : null;
+  const command = typeof args?.command === 'string' ? args.command : null;
+  if ((name === 'read' || name === 'write' || name === 'edit') && filePath) return filePath.split('/').pop() || filePath;
+  if (name === 'exec' && command) return command;
+  return meta || name;
+}
+
+function extractToolEvent(payload: Record<string, unknown> | null): RuntimeBridgeToolEvent | null {
+  if (!payload) return null;
+  if (payload.stream !== 'tool') return null;
+  const data = asRecord(payload.data);
+  if (!data) return null;
+  const name = typeof data.name === 'string' ? data.name : null;
+  const phase = typeof data.phase === 'string' ? data.phase : null;
+  if (!name || (phase !== 'start' && phase !== 'update' && phase !== 'result')) return null;
+  return {
+    stream: 'tool',
+    phase,
+    name,
+    toolCallId: typeof data.toolCallId === 'string' ? data.toolCallId : null,
+    args: asRecord(data.args),
+    meta: typeof data.meta === 'string' ? data.meta : null,
+    isError: Boolean(data.isError),
+  };
+}
+
 function describeGatewayEvent(name: string | null, payload: Record<string, unknown> | null): string {
   if (!name) return 'Unnamed gateway event';
   if (name === 'connect.challenge') return 'Gateway challenge received.';
@@ -223,6 +262,20 @@ function describeGatewayEvent(name: string | null, payload: Record<string, unkno
     return sessionKey ? `Chat ${state} for ${shortenSessionKey(sessionKey)}.` : `Chat ${state}.`;
   }
   if (name === 'agent') {
+    const tool = extractToolEvent(payload);
+    if (tool) {
+      const target = summarizeToolTarget(tool.name, tool.args, tool.meta);
+      if (tool.phase === 'start') return `${tool.name} started: ${target}`;
+      if (tool.phase === 'update') return `${tool.name} running: ${target}`;
+      return tool.isError ? `${tool.name} failed: ${target}` : `${tool.name} completed: ${target}`;
+    }
+    const stream = typeof payload?.stream === 'string' ? payload.stream : null;
+    if (stream === 'lifecycle') {
+      const data = asRecord(payload?.data);
+      const phase = typeof data?.phase === 'string' ? data.phase : 'update';
+      return `Run ${phase}.`;
+    }
+    if (stream === 'assistant') return 'Assistant streaming update.';
     const state =
       typeof payload?.state === 'string'
         ? payload.state
@@ -273,6 +326,7 @@ function mergeHydratedMessages(
     merged.push({
       ...message,
       body,
+      at: typeof message.at === 'number' ? message.at : Date.now(),
     });
   }
 
@@ -306,6 +360,7 @@ function upsertAssistantMessage(params: {
         sessionKey,
         runId,
         status,
+        at: Date.now(),
       },
       MAX_LIVE_MESSAGES,
     );
@@ -327,6 +382,7 @@ function upsertAssistantMessage(params: {
           body: nextBody,
           runId: runId ?? message.runId,
           status,
+          at: Date.now(),
         }
       : message,
   );
@@ -498,6 +554,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
             runId: eventRunId,
             seq: typeof message.seq === 'number' ? message.seq : null,
             at: Date.now(),
+            tool: extractToolEvent(payload),
           },
           MAX_LIVE_EVENTS,
         ),
@@ -569,6 +626,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               sessionKey: eventSessionKey ?? liveTargetSession.key,
               runId: eventRunId,
               status: 'error',
+              at: Date.now(),
             },
             MAX_LIVE_MESSAGES,
           ),
@@ -593,6 +651,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               runId: eventRunId,
               seq: typeof payload?.seq === 'number' ? payload.seq : null,
               at: Date.now(),
+              tool: null,
             },
             MAX_LIVE_EVENTS,
           ),
@@ -873,6 +932,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
             sessionKey,
             runId: null,
             status: 'final',
+            at: Date.now(),
           },
           MAX_LIVE_MESSAGES,
         ),
@@ -899,6 +959,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               runId,
               seq: null,
               at: Date.now(),
+              tool: null,
             },
             MAX_LIVE_EVENTS,
           ),
@@ -918,6 +979,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               sessionKey,
               runId: null,
               status: 'error',
+              at: Date.now(),
             },
             MAX_LIVE_MESSAGES,
           ),
@@ -953,6 +1015,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
             runId: null,
             seq: null,
             at: Date.now(),
+            tool: null,
           },
           MAX_LIVE_EVENTS,
         ),
