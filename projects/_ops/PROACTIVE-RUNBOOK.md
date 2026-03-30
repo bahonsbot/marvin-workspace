@@ -1,17 +1,19 @@
 # Proactive Execution Runbook
 
-> **DEPRECATED** — Content has been superseded.
+> **Status:** Supporting runbook, not the primary policy source.
 > - **Canonical proactive execution policy:** `AUTONOMY.md`
+> - **Delegation policy:** `SUBAGENT-POLICY.md`
 > - **Skill:** `skills/proactive-execution/SKILL.md`
 > - **Autonomy gate:** `scripts/autonomy_gate.py`
 > - **Daily task generation:** `scripts/daily-task-generator.py`
 > - **Skill assessment:** `scripts/skill-level-check.py` + `config/skill-profile.json`
 >
-> This file is retained for reference only. Do not use it as your primary source.
+> This file still contains useful supporting context, examples, and older implementation detail.
+> Use it as a companion reference, but follow `AUTONOMY.md` first when policy or execution rules conflict.
 
 ---
 
-*Original content below (out of date — do not act on without verifying against canonical sources above.)*
+*Supporting reference content below. Verify against canonical sources above before treating any section as active policy.*
 
 ---
 
