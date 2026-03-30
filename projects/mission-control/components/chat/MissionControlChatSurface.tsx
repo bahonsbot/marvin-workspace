@@ -368,7 +368,16 @@ function ToolDetailBlock({ row }: { row: ToolGroupRow }) {
 }
 
 function ToolGroupBlock({ rows }: { rows: ToolGroupRow[] }) {
-  const visibleRows = rows.filter((row) => !isLowSignalExecTool(row.tool));
+  const latestRowsMap = new Map<string, ToolGroupRow>();
+  for (const row of rows) {
+    const key = row.tool.toolCallId ?? row.id;
+    const existing = latestRowsMap.get(key);
+    if (!existing || existing.event.at <= row.event.at) {
+      latestRowsMap.set(key, row);
+    }
+  }
+  const latestRows = Array.from(latestRowsMap.values()).sort((a, b) => a.event.at - b.event.at);
+  const visibleRows = latestRows.filter((row) => !isLowSignalExecTool(row.tool));
   const [open, setOpen] = useState(true);
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const time = visibleRows[visibleRows.length - 1]?.event.at ?? rows[rows.length - 1]?.event.at ?? Date.now();
