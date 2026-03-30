@@ -493,14 +493,14 @@ function renderRichText(body: string): React.ReactNode {
       continue;
     }
 
-    const headingMatch = trimmed.match(/^(#{1,3})\s+(.+)$/);
+    const headingMatch = trimmed.match(/^(#{1,6})\s+(.+)$/);
     if (headingMatch) {
       flushParagraph();
       flushBulletList();
       flushOrderedList();
       const level = headingMatch[1].length;
       const content = headingMatch[2];
-      const sizes = { 1: 24, 2: 20, 3: 17 } as const;
+      const sizes = { 1: 24, 2: 20, 3: 17, 4: 16, 5: 15, 6: 14 } as const;
       elements.push(
         <div key={`h-${elements.length}`} style={{ fontSize: sizes[level as 1 | 2 | 3], fontWeight: 700, lineHeight: 1.3, color: 'var(--text-body)' }}>
           {renderInlineRichText(content)}
@@ -776,6 +776,8 @@ export function MissionControlChatSurface({
   const [lastRequestedEffort, setLastRequestedEffort] = useState<EffortMenuOption | null>(null);
   const [pendingModelLabel, setPendingModelLabel] = useState<string | null>(null);
   const [pendingEffortLabel, setPendingEffortLabel] = useState<EffortMenuOption | null>(null);
+  const [isNearTranscriptBottom, setIsNearTranscriptBottom] = useState(true);
+  const [showJumpToLatest, setShowJumpToLatest] = useState(false);
   const statusDropdownRef = useRef<HTMLDivElement | null>(null);
   const bridgeEventsRef = useRef<HTMLDivElement | null>(null);
   const topControlMenuRef = useRef<HTMLDivElement | null>(null);
@@ -982,13 +984,36 @@ export function MissionControlChatSurface({
 
   useEffect(() => {
     const container = transcriptScrollRef.current;
+    if (!container) return;
+
+    const updateBottomState = () => {
+      const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+      const nearBottom = distanceFromBottom < 96;
+      setIsNearTranscriptBottom(nearBottom);
+      if (nearBottom) {
+        setShowJumpToLatest(false);
+      }
+    };
+
+    updateBottomState();
+    container.addEventListener('scroll', updateBottomState, { passive: true });
+    return () => container.removeEventListener('scroll', updateBottomState);
+  }, []);
+
+  useEffect(() => {
+    const container = transcriptScrollRef.current;
     const bottom = transcriptBottomRef.current;
     if (!container || !bottom) return;
 
     requestAnimationFrame(() => {
-      bottom.scrollIntoView({ block: 'end' });
+      if (isNearTranscriptBottom) {
+        bottom.scrollIntoView({ block: 'end' });
+        setShowJumpToLatest(false);
+      } else {
+        setShowJumpToLatest(true);
+      }
     });
-  }, [model.thread, liveMessages, liveEvents, liveSendState]);
+  }, [isNearTranscriptBottom, model.thread.length, liveMessages.length, liveEvents.length, liveSendState]);
 
   return (
     <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 12, minHeight: '100%', height: '100%' }}>
@@ -1246,7 +1271,7 @@ export function MissionControlChatSurface({
               }}
             >
               <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Recent Sessions</span>
-              <span style={pillStyle()}>{model.recentSessions.length}</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)', lineHeight: 1 }}>{model.recentSessions.length}</span>
             </button>
             {sessionsOpen ? (
               <div
@@ -1374,6 +1399,20 @@ export function MissionControlChatSurface({
               </div>
             )}
           </div>
+          {showJumpToLatest ? (
+            <div style={{ position: 'sticky', bottom: 10, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  transcriptBottomRef.current?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+                  setShowJumpToLatest(false);
+                }}
+                style={{ pointerEvents: 'auto', border: '1px solid rgba(121, 166, 148, 0.28)', borderRadius: 999, background: 'rgba(255, 253, 251, 0.96)', color: 'var(--text-body)', boxShadow: '0 10px 26px rgba(26, 61, 50, 0.12)', padding: '8px 14px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+              >
+                Jump to latest ↓
+              </button>
+            </div>
+          ) : null}
         </section>
         <div ref={transcriptBottomRef} style={{ height: 1, width: '100%' }} />
       </section>

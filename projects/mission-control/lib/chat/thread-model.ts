@@ -107,10 +107,15 @@ function formatAge(ageMs: number | null): string {
 function derivePrimarySession(summary: OrchestratorIntegrationSummary): SessionView | null {
   const sessions = summary.sessionContext.recent;
   if (sessions.length === 0) return null;
+
+  const mainDirect = sessions.find((session) => session.key.includes('agent:main:main') || session.kind === 'direct');
+  if (mainDirect) return mainDirect;
+
   if (summary.runtime.defaultAgentId) {
     const match = sessions.find((session) => session.key.includes(summary.runtime.defaultAgentId as string));
     if (match) return match;
   }
+
   return sessions[0] ?? null;
 }
 
@@ -283,7 +288,7 @@ export function buildChatSurfaceModel(summary: OrchestratorIntegrationSummary): 
     agentLabel,
     sessionLabel: shortSessionKey(primarySession?.key ?? summary.runtime.defaultAgentId),
     modelLabel: primarySession?.model ?? summary.runtime.gateway.version ?? 'Runtime controlled',
-    effortLabel: primarySession?.thinkingLevel ?? 'Runtime-controlled',
+    effortLabel: primarySession?.thinkingLevel ?? summary.sessionContext.recent.find((session) => session.kind === 'direct' && session.thinkingLevel)?.thinkingLevel ?? summary.sessionContext.recent.find((session) => session.thinkingLevel)?.thinkingLevel ?? 'Last requested: low',
     runtimeStatus,
     runtimeTone: summary.runtime.health.ok && summary.runtime.gateway.reachable ? 'ok' : 'warn',
     contextPercent,

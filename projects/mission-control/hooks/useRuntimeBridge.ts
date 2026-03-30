@@ -349,6 +349,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
   const [activeSessionKey, setActiveSessionKey] = useState<string | null>(() => chooseTargetSession(initialSummary).key);
   const mountedRef = useRef(true);
+  const hydratedSessionKeyRef = useRef<string | null>(null);
   const instanceIdRef = useRef(getOrCreateInstanceId());
   const socketRef = useRef<WebSocket | null>(null);
   const pendingRef = useRef<Record<string, PendingRequest>>({});
@@ -450,9 +451,14 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
 
       setSummary(payload);
       if (payload.transcriptHistory?.sessionKey && payload.transcriptHistory.sessionKey === (activeSessionKey ?? defaultTargetSession.key)) {
-        setMessages((current) =>
-          mergeHydratedMessages(current, payload.transcriptHistory?.messages ?? [], payload.transcriptHistory?.sessionKey ?? null),
-        );
+        const hydratedSessionKey = payload.transcriptHistory.sessionKey ?? null;
+        const shouldHydrate = messages.length === 0 || hydratedSessionKeyRef.current !== hydratedSessionKey;
+        if (shouldHydrate) {
+          hydratedSessionKeyRef.current = hydratedSessionKey;
+          setMessages((current) =>
+            mergeHydratedMessages(current, payload.transcriptHistory?.messages ?? [], payload.transcriptHistory?.sessionKey ?? null),
+          );
+        }
       }
       setError(null);
     } catch (cause) {
@@ -465,7 +471,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setLoading(false);
       setRefreshing(false);
     }
-  }, [activeSessionKey, defaultTargetSession.key]);
+  }, [activeSessionKey, defaultTargetSession.key, messages.length]);
 
   useEffect(() => {
     if (!activeSessionKey) return;
