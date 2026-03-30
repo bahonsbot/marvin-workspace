@@ -422,7 +422,67 @@ function ToolGroupBlock({ rows, keepOpen }: { rows: ToolGroupRow[]; keepOpen: bo
   );
 }
 
+function composerIconButtonStyle(active: boolean): CSSProperties {
+  return {
+    width: 40,
+    height: 40,
+    borderRadius: 999,
+    border: `1px solid ${active ? 'rgba(121, 166, 148, 0.34)' : 'rgba(200, 195, 188, 0.26)'}`,
+    background: active ? 'rgba(121, 166, 148, 0.16)' : 'rgba(250, 248, 245, 0.92)',
+    color: active ? '#163b31' : 'var(--text-muted)',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: active ? 'pointer' : 'not-allowed',
+    boxShadow: active ? '0 8px 18px rgba(26, 61, 50, 0.08)' : 'none',
+    transition: 'all 140ms ease',
+  };
+}
+
+function CopyIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function SendIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M21 3 10 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M21 3 14 21l-4-7-7-4 18-7Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function NewSessionIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M8 10h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M8 14h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M12 3c5 0 9 3.58 9 8s-4 8-9 8a10.6 10.6 0 0 1-4-.77L3 21l1.55-4.12A7.4 7.4 0 0 1 3 11c0-4.42 4.03-8 9-8Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M18.5 5.5v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M16.5 7.5h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function MicIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M6 11a6 6 0 0 0 12 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M12 17v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M9 21h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
+  const [copied, setCopied] = useState(false);
+
   if (message.role === 'system') {
     return (
       <section
@@ -457,8 +517,40 @@ function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
       }}
     >
       <div style={{ display: 'grid', gap: 10, maxWidth: 'min(78ch, 78%)', justifyItems: isOperator ? 'end' : 'start' }}>
-        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent-mid)' }}>
-          {isOperator ? 'Philippe' : 'Marvin'}
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent-mid)' }}>
+            {isOperator ? 'Philippe' : 'Marvin'}
+          </div>
+          {!isOperator ? (
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(message.body);
+                  setCopied(true);
+                  window.setTimeout(() => setCopied(false), 1400);
+                } catch {
+                  setCopied(false);
+                }
+              }}
+              aria-label="Copy message"
+              title={copied ? 'Copied' : 'Copy'}
+              style={{
+                border: '1px solid rgba(200, 195, 188, 0.28)',
+                background: 'rgba(255, 255, 255, 0.72)',
+                color: copied ? '#163b31' : 'var(--text-muted)',
+                borderRadius: 999,
+                minWidth: 34,
+                height: 34,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              <CopyIcon />
+            </button>
+          ) : null}
         </div>
         <div
           style={{
@@ -1304,22 +1396,34 @@ export function MissionControlChatSurface({
                 boxSizing: 'border-box',
               }}
             />
-            <div style={{ display: 'grid', gap: 10, minWidth: 150 }}>
-              <button type="submit" disabled={!liveCanSend || composerValue.trim().length === 0} style={actionButtonStyle(liveCanSend && composerValue.trim().length > 0, true)}>
-                {liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', paddingBottom: 2 }}>
+              <button
+                type="button"
+                disabled
+                aria-label="Voice input coming later"
+                title="Voice input coming later"
+                style={composerIconButtonStyle(false)}
+              >
+                <MicIcon />
               </button>
               <button
                 type="button"
                 onClick={() => void handleNewSession()}
                 disabled={!liveCanSend || liveSendState === 'sending' || liveSendState === 'streaming'}
-                style={{
-                  ...actionButtonStyle(liveCanSend && liveSendState !== 'sending' && liveSendState !== 'streaming'),
-                  background: 'rgba(121, 166, 148, 0.14)',
-                  border: '1px solid rgba(121, 166, 148, 0.32)',
-                  color: liveCanSend ? '#1a3d32' : 'rgba(120, 129, 125, 0.72)',
-                }}
+                aria-label="New session"
+                title="New session"
+                style={composerIconButtonStyle(liveCanSend && liveSendState !== 'sending' && liveSendState !== 'streaming')}
               >
-                New session
+                <NewSessionIcon />
+              </button>
+              <button
+                type="submit"
+                disabled={!liveCanSend || composerValue.trim().length === 0}
+                aria-label={liveSendState === 'sending' ? 'Sending' : liveSendState === 'streaming' ? 'Waiting' : 'Send'}
+                title={liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
+                style={composerIconButtonStyle(liveCanSend && composerValue.trim().length > 0)}
+              >
+                <SendIcon />
               </button>
             </div>
           </div>
