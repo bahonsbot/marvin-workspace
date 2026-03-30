@@ -480,6 +480,34 @@ function MicIcon() {
   );
 }
 
+function copyTextToClipboard(text: string): boolean {
+  try {
+    if (typeof navigator !== 'undefined' && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // fall through to legacy path
+  }
+
+  try {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', 'true');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    textarea.style.pointerEvents = 'none';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
 function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
   const [copied, setCopied] = useState(false);
 
@@ -524,14 +552,10 @@ function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
           {!isOperator ? (
             <button
               type="button"
-              onClick={async () => {
-                try {
-                  await navigator.clipboard.writeText(message.body);
-                  setCopied(true);
-                  window.setTimeout(() => setCopied(false), 1400);
-                } catch {
-                  setCopied(false);
-                }
+              onClick={() => {
+                const ok = copyTextToClipboard(message.body);
+                setCopied(ok);
+                window.setTimeout(() => setCopied(false), 1400);
               }}
               aria-label="Copy message"
               title={copied ? 'Copied' : 'Copy'}
