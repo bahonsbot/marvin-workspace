@@ -14,7 +14,8 @@ export function AppShellClient({
 }) {
   const pathname = usePathname();
   const hideBottomStrip = pathname === '/general/chat' || pathname === '/chat';
-  const isChatRoute = hideBottomStrip;
+  const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/crons', '/general/memory', '/general/files']);
+  const isCompactTopRoute = compactTopRoutes.has(pathname);
 
   return (
     <div style={{ minHeight: '100vh', height: '100vh', overflow: 'hidden' }}>
@@ -30,7 +31,7 @@ export function AppShellClient({
             height: '100%',
           }}
         >
-          <main className="app-shell-main" style={{ minHeight: 0, overflow: 'hidden', padding: isChatRoute ? '14px 32px 12px' : undefined }}>{children}</main>
+          <main className="app-shell-main" style={{ minHeight: 0, overflow: 'hidden', padding: isCompactTopRoute ? '14px 32px 12px' : undefined }}>{children}</main>
           {hideBottomStrip ? null : bottomStrip}
         </div>
       </div>

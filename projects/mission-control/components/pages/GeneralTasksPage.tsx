@@ -11,6 +11,7 @@ export default async function TasksPage() {
     <PageScaffold
       title="Tasks"
       titleVariant="system"
+      hideHeader
     >
       <TasksBoardSwitcher
         autonomousColumns={board.columns}

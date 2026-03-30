@@ -278,6 +278,7 @@ export default async function CronPage({ searchParams }: { searchParams?: CronPa
       <PageScaffold
         title="Crons"
         titleVariant="system"
+        hideHeader
       >
         <div style={{ display: 'grid', gap: 20 }}>
           <div className="floating-pill-row">

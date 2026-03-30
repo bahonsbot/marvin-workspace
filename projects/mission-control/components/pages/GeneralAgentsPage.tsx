@@ -663,7 +663,7 @@ export default async function AgentsPage() {
     .slice(0, 12);
 
   return (
-    <PageScaffold title="Agents" titleVariant="system">
+    <PageScaffold title="Agents" titleVariant="system" hideHeader>
       <div style={{ display: 'grid', gap: 22 }}>
         <section
           style={{

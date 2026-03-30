@@ -7,12 +7,14 @@ export function PageScaffold({
   children,
   titleVariant = 'default',
   descriptionVariant = 'default',
+  hideHeader = false,
 }: {
   title: string;
   description?: string;
   children?: ReactNode;
   titleVariant?: 'default' | 'editorial' | 'system';
   descriptionVariant?: 'default' | 'quote';
+  hideHeader?: boolean;
 }) {
   const editorial = titleVariant === 'editorial';
   const system = titleVariant === 'system';
@@ -56,59 +58,61 @@ export function PageScaffold({
     : {};
 
   return (
-    <section style={{ display: 'grid', gap: editorial ? 28 : system ? 26 : 18 }}>
-      <header
-        style={{
-          display: 'grid',
-          gap: editorial ? 18 : system ? 14 : 10,
-          paddingTop: editorial ? 18 : system ? 22 : 0,
-          paddingBottom: editorial ? 14 : system ? 24 : 0,
-          justifyItems: editorial || system ? 'center' : 'start',
-          textAlign: editorial || system ? 'center' : 'left',
-        }}
-      >
-        <div
+    <section style={{ display: 'grid', gap: hideHeader ? 0 : editorial ? 28 : system ? 26 : 18 }}>
+      {hideHeader ? null : (
+        <header
           style={{
             display: 'grid',
-            gap: editorial ? 14 : system ? 10 : 8,
-            maxWidth: editorial ? 760 : system ? 980 : 860,
-            width: '100%',
+            gap: editorial ? 18 : system ? 14 : 10,
+            paddingTop: editorial ? 18 : system ? 22 : 0,
+            paddingBottom: editorial ? 14 : system ? 24 : 0,
             justifyItems: editorial || system ? 'center' : 'start',
+            textAlign: editorial || system ? 'center' : 'left',
           }}
         >
-          <h1 style={titleStyle}>{title}</h1>
-          {system ? (
-            <div aria-hidden="true" style={underlineStyle} />
-          ) : quoteDescription ? (
-            <div
-              aria-hidden="true"
-              style={{
-                width: 'min(300px, 64vw)',
-                maxWidth: 300,
-                height: 1,
-                marginTop: 10,
-                marginBottom: 10,
-                borderRadius: 999,
-                background: 'linear-gradient(90deg, rgba(121, 166, 148, 0) 0%, rgba(121, 166, 148, 0.42) 16%, rgba(121, 166, 148, 0.62) 50%, rgba(121, 166, 148, 0.42) 84%, rgba(121, 166, 148, 0) 100%)',
-                opacity: 0.95,
-              }}
-            />
-          ) : description ? (
-            <p
-              style={{
-                margin: 0,
-                color: 'var(--muted)',
-                fontSize: editorial ? 16 : 15,
-                lineHeight: 1.7,
-                maxWidth: editorial ? 720 : 860,
-                fontStyle: 'normal',
-              }}
-            >
-              {description}
-            </p>
-          ) : null}
-        </div>
-      </header>
+          <div
+            style={{
+              display: 'grid',
+              gap: editorial ? 14 : system ? 10 : 8,
+              maxWidth: editorial ? 760 : system ? 980 : 860,
+              width: '100%',
+              justifyItems: editorial || system ? 'center' : 'start',
+            }}
+          >
+            <h1 style={titleStyle}>{title}</h1>
+            {system ? (
+              <div aria-hidden="true" style={underlineStyle} />
+            ) : quoteDescription ? (
+              <div
+                aria-hidden="true"
+                style={{
+                  width: 'min(300px, 64vw)',
+                  maxWidth: 300,
+                  height: 1,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  borderRadius: 999,
+                  background: 'linear-gradient(90deg, rgba(121, 166, 148, 0) 0%, rgba(121, 166, 148, 0.42) 16%, rgba(121, 166, 148, 0.62) 50%, rgba(121, 166, 148, 0.42) 84%, rgba(121, 166, 148, 0) 100%)',
+                  opacity: 0.95,
+                }}
+              />
+            ) : description ? (
+              <p
+                style={{
+                  margin: 0,
+                  color: 'var(--muted)',
+                  fontSize: editorial ? 16 : 15,
+                  lineHeight: 1.7,
+                  maxWidth: editorial ? 720 : 860,
+                  fontStyle: 'normal',
+                }}
+              >
+                {description}
+              </p>
+            ) : null}
+          </div>
+        </header>
+      )}
       <div
         className="page-scaffold-panel"
         style={{

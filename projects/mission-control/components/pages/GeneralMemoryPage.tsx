@@ -41,6 +41,7 @@ export default async function MemoryPage({ searchParams }: { searchParams?: Memo
       <PageScaffold
         title="Memory"
         titleVariant="system"
+        hideHeader
       >
         <div id="memory-top" className="general-two-col-layout">
           <MemoryRail currentSection={selected.section} />

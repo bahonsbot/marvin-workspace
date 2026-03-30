@@ -25,6 +25,7 @@ export default async function FilesPage({ searchParams }: { searchParams?: Files
       <PageScaffold
         title="Files"
         titleVariant="system"
+        hideHeader
       >
         <div className="general-two-col-layout">
           <FilesRail roots={listing.roots} currentPath={listing.directory.path} />
