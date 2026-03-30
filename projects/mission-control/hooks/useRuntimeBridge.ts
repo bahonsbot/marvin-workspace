@@ -103,6 +103,7 @@ export type RuntimeBridgeState = {
   session: RuntimeBridgeSessionSnapshot;
   live: RuntimeBridgeLiveState;
   refresh: () => Promise<void>;
+  switchSession: (sessionKey: string) => Promise<void>;
 };
 
 type PendingRequest = {
@@ -1074,6 +1075,16 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       abortPrompt,
     },
     refresh: async () => {
+      await load(true);
+    },
+    switchSession: async (sessionKey: string) => {
+      hydratedSessionKeyRef.current = sessionKey;
+      setActiveSessionKey(sessionKey);
+      setMessages([]);
+      setEvents([]);
+      setSendError(null);
+      setSendState('idle');
+      setActiveRunId(null);
       await load(true);
     },
   };

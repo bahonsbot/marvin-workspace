@@ -1355,19 +1355,32 @@ export function MissionControlChatSurface({
                 }}
               >
                 {model.recentSessions.length > 0 ? (
-                  model.recentSessions.slice(0, 6).map((session) => (
-                    <div key={session.key} style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.78)', padding: 12, display: 'grid', gap: 8 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center' }}>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)' }}>{session.key.includes('builder') ? 'Builder' : session.key.includes('reviewer') ? 'Reviewer' : session.kind}</span>
-                        <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{formatAge(session.ageMs)}</span>
-                      </div>
-                      <div style={{ fontFamily: monoFont, fontSize: 11, color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{session.key}</div>
-                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                        <span style={pillStyle()}>{session.model ?? 'runtime controlled'}</span>
-                        <span style={pillStyle()}>{session.tokenUsage?.percentUsed != null ? `${session.tokenUsage.percentUsed}% ctx` : 'ctx unknown'}</span>
-                      </div>
-                    </div>
-                  ))
+                  model.recentSessions.slice(0, 6).map((session) => {
+                    const isActive = session.key === liveTargetSession;
+                    return (
+                      <button
+                        key={session.key}
+                        type="button"
+                        onClick={() => {
+                          setSessionsOpen(false);
+                          if (session.key !== liveTargetSession) {
+                            void bridge?.switchSession(session.key);
+                          }
+                        }}
+                        style={{ border: `1px solid ${isActive ? 'rgba(121, 166, 148, 0.42)' : 'rgba(200, 195, 188, 0.34)'}`, borderRadius: 14, background: isActive ? 'rgba(212, 231, 221, 0.52)' : 'rgba(255, 255, 255, 0.78)', padding: 12, display: 'grid', gap: 8, textAlign: 'left', cursor: 'pointer' }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center' }}>
+                          <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)' }}>{session.key.includes('builder') ? 'Builder' : session.key.includes('reviewer') ? 'Reviewer' : session.kind}</span>
+                          <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{isActive ? 'Current' : formatAge(session.ageMs)}</span>
+                        </div>
+                        <div style={{ fontFamily: monoFont, fontSize: 11, color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{session.key}</div>
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                          <span style={pillStyle()}>{session.model ?? 'runtime controlled'}</span>
+                          <span style={pillStyle()}>{session.tokenUsage?.percentUsed != null ? `${session.tokenUsage.percentUsed}% ctx` : 'ctx unknown'}</span>
+                        </div>
+                      </button>
+                    );
+                  })
                 ) : (
                   <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>
                     No recent sessions were exposed by the adapter in this environment.
