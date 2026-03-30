@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from 'react';
 import type { CSSProperties } from 'react';
 import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent, RuntimeBridgeToolEvent, RuntimeBridgeState } from '@/hooks/useRuntimeBridge';
 import { buildChatSurfaceModel } from '@/lib/chat/thread-model';
@@ -480,6 +480,14 @@ function MicIcon() {
   );
 }
 
+function PaperclipIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M21.44 11.05 12 20.5a6 6 0 1 1-8.49-8.49l10.6-10.61a4 4 0 1 1 5.66 5.66L8.46 18.36a2 2 0 1 1-2.83-2.82l9.2-9.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 function copyTextToClipboard(text: string): boolean {
   try {
     if (typeof navigator !== 'undefined' && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
@@ -711,6 +719,9 @@ export function MissionControlChatSurface({
   const liveSendError = live?.sendError ?? null;
   const [composerValue, setComposerValue] = useState('');
   const [composerError, setComposerError] = useState<string | null>(null);
+  const [attachedFiles, setAttachedFiles] = useState<Array<{ name: string; path: string; size: number; mimeType: string }>>([]);
+  const [uploadBusy, setUploadBusy] = useState(false);
+  const [isDraggingFiles, setIsDraggingFiles] = useState(false);
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
   const [bridgeEventsOpen, setBridgeEventsOpen] = useState(false);
   const [topControlMenu, setTopControlMenu] = useState<TopControlMenu>(null);
@@ -884,14 +895,41 @@ export function MissionControlChatSurface({
     }
   }
 
+  async function uploadSelectedFiles(fileList: FileList | File[]) {
+    const files = Array.from(fileList);
+    if (files.length === 0) return;
+    setUploadBusy(true);
+    setComposerError(null);
+    try {
+      const formData = new FormData();
+      files.forEach((file) => formData.append('files', file));
+      const response = await fetch('/api/files/upload', { method: 'POST', body: formData });
+      const payload = (await response.json()) as { uploaded?: Array<{ name: string; path: string; size: number; mimeType: string }>; error?: string };
+      if (!response.ok || !payload.uploaded) {
+        throw new Error(payload.error || 'Upload failed.');
+      }
+      setAttachedFiles((current) => [...current, ...payload.uploaded!]);
+    } catch (cause) {
+      setComposerError(cause instanceof Error ? cause.message : 'Mission Control could not upload the selected files.');
+    } finally {
+      setUploadBusy(false);
+    }
+  }
+
   async function submitComposerPrompt(nextPrompt: string) {
     if (!live?.sendPrompt) return;
-    if (!nextPrompt) return;
+    if (!nextPrompt && attachedFiles.length === 0) return;
+
+    const attachmentNote = attachedFiles.length
+      ? `\n\nAttached files uploaded to workspace:\n${attachedFiles.map((file) => `- ${file.path}`).join('\n')}`
+      : '';
+    const finalPrompt = `${nextPrompt}${attachmentNote}`.trim();
 
     try {
       setComposerError(null);
-      await live.sendPrompt(nextPrompt);
+      await live.sendPrompt(finalPrompt);
       setComposerValue('');
+      setAttachedFiles([]);
     } catch (cause) {
       setComposerError(cause instanceof Error ? cause.message : 'Mission Control could not send the prompt.');
     }
@@ -924,8 +962,27 @@ export function MissionControlChatSurface({
     void submitComposerPrompt(composerValue.trim());
   }
 
+  function handleComposerDragOver(event: DragEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsDraggingFiles(true);
+  }
+
+  function handleComposerDragLeave(event: DragEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsDraggingFiles(false);
+  }
+
+  function handleComposerDrop(event: DragEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsDraggingFiles(false);
+    if (event.dataTransfer.files.length > 0) {
+      void uploadSelectedFiles(event.dataTransfer.files);
+    }
+  }
+
   const transcriptScrollRef = useRef<HTMLDivElement | null>(null);
   const transcriptBottomRef = useRef<HTMLDivElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const container = transcriptScrollRef.current;
@@ -1390,7 +1447,30 @@ export function MissionControlChatSurface({
         <div ref={transcriptBottomRef} style={{ height: 1, width: '100%' }} />
       </section>
 
-      <form onSubmit={handleComposerSubmit} style={{ border: '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: 'rgba(255, 255, 255, 0.9)', padding: 12, display: 'grid', gap: 8, zIndex: 11, boxShadow: '0 -8px 24px rgba(26, 61, 50, 0.08)' }}>
+      <form onSubmit={handleComposerSubmit} onDragOver={handleComposerDragOver} onDragLeave={handleComposerDragLeave} onDrop={handleComposerDrop} style={{ border: isDraggingFiles ? '1px solid rgba(121, 166, 148, 0.54)' : '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: isDraggingFiles ? 'rgba(244, 249, 246, 0.96)' : 'rgba(255, 255, 255, 0.9)', padding: 12, display: 'grid', gap: 8, zIndex: 11, boxShadow: '0 -8px 24px rgba(26, 61, 50, 0.08)' }}>
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            onChange={(event) => {
+              if (event.target.files?.length) {
+                void uploadSelectedFiles(event.target.files);
+                event.target.value = '';
+              }
+            }}
+            style={{ display: 'none' }}
+          />
+          {attachedFiles.length > 0 ? (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {attachedFiles.map((file) => (
+                <div key={`${file.path}-${file.name}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, border: '1px solid rgba(200, 195, 188, 0.28)', background: 'rgba(250, 248, 245, 0.92)', fontSize: 12, color: 'var(--text-muted)' }}>
+                  <span style={{ fontFamily: monoFont }}>{file.name}</span>
+                  <button type="button" onClick={() => setAttachedFiles((current) => current.filter((entry) => entry.path !== file.path))} style={{ border: 'none', background: 'transparent', color: 'var(--text-ghost)', cursor: 'pointer', padding: 0, fontSize: 14, lineHeight: 1 }}>×</button>
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {isDraggingFiles ? <div style={{ fontSize: 12, color: '#163b31', padding: '2px 2px 0' }}>Drop files here to upload them into <span style={{ fontFamily: monoFont }}>uploads/mission-control/</span>.</div> : null}
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 12, alignItems: 'end' }}>
             <textarea
               value={composerValue}
@@ -1423,6 +1503,16 @@ export function MissionControlChatSurface({
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', paddingBottom: 2 }}>
               <button
                 type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadBusy}
+                aria-label="Add attachment"
+                title={uploadBusy ? 'Uploading...' : 'Add attachment'}
+                style={composerIconButtonStyle(!uploadBusy)}
+              >
+                <PaperclipIcon />
+              </button>
+              <button
+                type="button"
                 disabled
                 aria-label="Voice input coming later"
                 title="Voice input coming later"
@@ -1442,10 +1532,10 @@ export function MissionControlChatSurface({
               </button>
               <button
                 type="submit"
-                disabled={!liveCanSend || composerValue.trim().length === 0}
+                disabled={!liveCanSend || (composerValue.trim().length === 0 && attachedFiles.length === 0)}
                 aria-label={liveSendState === 'sending' ? 'Sending' : liveSendState === 'streaming' ? 'Waiting' : 'Send'}
                 title={liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
-                style={composerIconButtonStyle(liveCanSend && composerValue.trim().length > 0)}
+                style={composerIconButtonStyle(liveCanSend && (composerValue.trim().length > 0 || attachedFiles.length > 0))}
               >
                 <SendIcon />
               </button>
