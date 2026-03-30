@@ -163,7 +163,7 @@ export interface OrchestratorIntegrationSummary {
       sessionList: boolean;
       controlHandoff: boolean;
       composerSend: boolean;
-      stop: false;
+      stop: boolean;
       reset: false;
       eventStream: false;
     };

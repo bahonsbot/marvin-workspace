@@ -959,12 +959,36 @@ export function MissionControlChatSurface({
     await submitComposerPrompt('/new');
   }
 
+  async function handleStop() {
+    if (!live?.abortPrompt) return;
+
+    try {
+      setComposerError(null);
+      await live.abortPrompt();
+    } catch (cause) {
+      setComposerError(cause instanceof Error ? cause.message : 'Mission Control could not stop the active response.');
+    }
+  }
+
   function handleComposerKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key !== 'Enter') return;
     if (event.shiftKey) return;
     event.preventDefault();
     void submitComposerPrompt(composerValue.trim());
   }
+
+  const transcriptScrollRef = useRef<HTMLDivElement | null>(null);
+  const transcriptBottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = transcriptScrollRef.current;
+    const bottom = transcriptBottomRef.current;
+    if (!container || !bottom) return;
+
+    requestAnimationFrame(() => {
+      bottom.scrollIntoView({ block: 'end' });
+    });
+  }, [model.thread, liveMessages, liveEvents, liveSendState]);
 
   return (
     <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 12, minHeight: '100%', height: '100%' }}>
@@ -974,11 +998,11 @@ export function MissionControlChatSurface({
           borderRadius: 24,
           background: 'linear-gradient(135deg, rgba(255, 253, 251, 0.94) 0%, rgba(245, 240, 235, 0.92) 54%, rgba(233, 244, 238, 0.88) 100%)',
           boxShadow: '0 14px 38px rgba(26, 61, 50, 0.08)',
-          padding: '14px 16px',
+          padding: '10px 16px',
           display: 'grid',
           gap: 10,
           position: 'sticky',
-          top: 12,
+          top: 4,
           zIndex: 12,
         }}
       >
@@ -1081,7 +1105,13 @@ export function MissionControlChatSurface({
                 {bridgeRefreshing ? 'Refreshing…' : 'Refresh'}
               </button>
             ) : null}
-            <button type="button" disabled title="Stop is not wired to runtime from Mission Control yet." style={{ ...actionButtonStyle(false), border: '1px solid rgba(200, 195, 188, 0.46)', background: 'rgba(255, 255, 255, 0.78)', color: 'var(--text-muted)', padding: '8px 12px', fontSize: 11 }}>
+            <button
+              type="button"
+              onClick={() => void handleStop()}
+              disabled={!live?.canAbort}
+              title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a Mission Control chat response is active.'}
+              style={{ ...actionButtonStyle(Boolean(live?.canAbort)), border: '1px solid rgba(200, 195, 188, 0.46)', background: 'rgba(255, 255, 255, 0.78)', color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)', padding: '8px 12px', fontSize: 11 }}
+            >
               Stop
             </button>
             {/* Context Meter inline */}
@@ -1101,13 +1131,13 @@ export function MissionControlChatSurface({
             <button
               type="button"
               onClick={() => setTopControlMenu((current) => (current === 'agent' ? null : 'agent'))}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 148, textAlign: 'left', cursor: 'pointer' }}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minWidth: 188, minHeight: 32, textAlign: 'left', cursor: 'pointer' }}
             >
-              <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Session / Agent</div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{displayAgentLabel}</div>
-                <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>▾</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Session / Agent</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{displayAgentLabel}</div>
               </div>
+              <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
             </button>
             {topControlMenu === 'agent' ? (
               <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
@@ -1125,13 +1155,13 @@ export function MissionControlChatSurface({
               type="button"
               onClick={() => setTopControlMenu((current) => (current === 'model' ? null : 'model'))}
               disabled={modelSwitchBusy}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 148, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minWidth: 188, minHeight: 32, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
             >
-              <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Model</div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{optimisticModelLabel ?? displayModelLabel}</div>
-                <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>▾</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Model</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{optimisticModelLabel ?? displayModelLabel}</div>
               </div>
+              <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
             </button>
             {topControlMenu === 'model' ? (
               <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
@@ -1155,13 +1185,13 @@ export function MissionControlChatSurface({
               type="button"
               onClick={() => effortInteractive && setTopControlMenu((current) => (current === 'effort' ? null : 'effort'))}
               disabled={!effortInteractive || effortSwitchBusy}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '10px 12px', display: 'grid', gap: 4, minWidth: 148, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minWidth: 188, minHeight: 32, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
             >
-              <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Effort</div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{effortMenuLabel}</div>
-                <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{effortInteractive ? '▾' : '—'}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Effort</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{effortMenuLabel}</div>
               </div>
+              <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>{effortInteractive ? '▾' : '—'}</span>
             </button>
             {topControlMenu === 'effort' ? (
               <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
@@ -1190,7 +1220,7 @@ export function MissionControlChatSurface({
               background: 'rgba(255, 255, 255, 0.78)',
               color: 'var(--text-body)',
               cursor: 'pointer',
-              padding: '10px 14px',
+              padding: '8px 14px',
               fontSize: 11,
               fontWeight: 700,
               textTransform: 'uppercase',
@@ -1207,10 +1237,11 @@ export function MissionControlChatSurface({
                 border: '1px solid rgba(200, 195, 188, 0.34)',
                 borderRadius: 14,
                 background: 'rgba(255, 255, 255, 0.7)',
-                padding: '10px 12px',
+                padding: '8px 12px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
+                minHeight: 32,
                 cursor: 'pointer',
               }}
             >
@@ -1265,6 +1296,7 @@ export function MissionControlChatSurface({
       </section>
 
       <section
+        ref={transcriptScrollRef}
         style={{
           border: '1px solid rgba(200, 195, 188, 0.42)',
           borderRadius: 22,
@@ -1275,6 +1307,8 @@ export function MissionControlChatSurface({
           gap: 14,
           minHeight: 0,
           overflow: 'auto',
+          overflowAnchor: 'none',
+          scrollPaddingBottom: 12,
         }}
       >
         {model.thread.map((entry) =>
@@ -1341,6 +1375,7 @@ export function MissionControlChatSurface({
             )}
           </div>
         </section>
+        <div ref={transcriptBottomRef} style={{ height: 1, width: '100%' }} />
       </section>
 
       <form onSubmit={handleComposerSubmit} style={{ border: '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: 'rgba(255, 255, 255, 0.9)', padding: 12, display: 'grid', gap: 8, zIndex: 11, boxShadow: '0 -8px 24px rgba(26, 61, 50, 0.08)' }}>

@@ -71,12 +71,14 @@ type RuntimeBridgeLiveSessionTarget = {
 type RuntimeBridgeLiveState = {
   targetSession: RuntimeBridgeLiveSessionTarget;
   canSend: boolean;
+  canAbort: boolean;
   sendState: RuntimeBridgeSendState;
   sendError: string | null;
   activeRunId: string | null;
   messages: RuntimeBridgeChatMessage[];
   events: RuntimeBridgeLiveEvent[];
   sendPrompt: (prompt: string) => Promise<void>;
+  abortPrompt: () => Promise<void>;
 };
 
 export type RuntimeBridgeState = {
@@ -898,6 +900,42 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     [liveTargetSession.key, rpc, session.state],
   );
 
+  const abortPrompt = useCallback(async () => {
+    const sessionKey = liveTargetSession.key;
+    if (session.state !== 'connected') {
+      throw new Error('Mission Control can only stop while the gateway session is connected.');
+    }
+    if (!sessionKey) {
+      throw new Error('No visible runtime session is available for Mission Control to stop.');
+    }
+
+    try {
+      await rpc('chat.abort', { sessionKey });
+      setSendError(null);
+      setSendState('idle');
+      setActiveRunId(null);
+      setEvents((current) =>
+        appendBounded(
+          current,
+          {
+            id: generateId('mc-event'),
+            name: 'chat.abort',
+            detail: 'chat.abort requested.',
+            sessionKey,
+            runId: null,
+            seq: null,
+            at: Date.now(),
+          },
+          MAX_LIVE_EVENTS,
+        ),
+      );
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : 'Mission Control could not stop the active response.';
+      setSendError(message);
+      throw cause;
+    }
+  }, [liveTargetSession.key, rpc, session.state]);
+
   return {
     summary,
     loading,
@@ -909,12 +947,14 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     live: {
       targetSession: liveTargetSession,
       canSend: session.state === 'connected' && Boolean(liveTargetSession.key) && sendState !== 'sending' && sendState !== 'streaming',
+      canAbort: session.state === 'connected' && Boolean(liveTargetSession.key) && (sendState === 'sending' || sendState === 'streaming' || Boolean(activeRunId)),
       sendState,
       sendError,
       activeRunId,
       messages,
       events,
       sendPrompt,
+      abortPrompt,
     },
     refresh: async () => {
       await load(true);

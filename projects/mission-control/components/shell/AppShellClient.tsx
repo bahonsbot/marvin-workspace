@@ -14,6 +14,7 @@ export function AppShellClient({
 }) {
   const pathname = usePathname();
   const hideBottomStrip = pathname === '/general/chat' || pathname === '/chat';
+  const isChatRoute = hideBottomStrip;
 
   return (
     <div style={{ minHeight: '100vh', height: '100vh', overflow: 'hidden' }}>
@@ -29,7 +30,7 @@ export function AppShellClient({
             height: '100%',
           }}
         >
-          <main className="app-shell-main" style={{ minHeight: 0, overflow: 'hidden' }}>{children}</main>
+          <main className="app-shell-main" style={{ minHeight: 0, overflow: 'hidden', padding: isChatRoute ? '14px 32px 12px' : undefined }}>{children}</main>
           {hideBottomStrip ? null : bottomStrip}
         </div>
       </div>

@@ -142,7 +142,7 @@ function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['contro
       sessionList: true,
       controlHandoff: Boolean(controlPath.href),
       composerSend: sidecar.configured && gatewaySessionAuthConfigured,
-      stop: false,
+      stop: sidecar.configured && gatewaySessionAuthConfigured,
       reset: false,
       eventStream: false,
     },
