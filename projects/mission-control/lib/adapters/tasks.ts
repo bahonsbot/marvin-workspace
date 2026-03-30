@@ -90,7 +90,7 @@ function parseCompletedEntries(tasksLog: string): number {
 
 function taskToBoardTask(task: MCAutoTask): BoardTask {
   let column: BoardTask['column'];
-  if (task.status === 'in-progress') column = 'inprogress';
+  if (task.status === 'in-progress' || task.status === 'review') column = 'inprogress';
   else if (task.status === 'done') column = 'done';
   else column = 'todo';
 

@@ -22,6 +22,7 @@ type Task = {
     agentTarget?: string;
     sourceType?: string;
     runStatus?: string;
+    feedback?: string[];
   };
 };
 
@@ -334,7 +335,15 @@ function SyncBadge({ state }: { state: 'unknown' | 'ok' | 'drift' }) {
   return <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: st.bg, padding: '6px 12px', borderRadius: 999 }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: st.dot }} /><span style={{ color: st.text, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' }}>{st.label}</span></div>;
 }
 
-function AutonomousTaskDrawer({ task, onClose, onExecute, executing }: { task: Task | null; onClose: () => void; onExecute: (task: Task) => Promise<void>; executing: boolean; }) {
+function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, busy }: { task: Task | null; onClose: () => void; onExecute: (task: Task) => Promise<void>; onApprove: (task: Task) => Promise<void>; onReject: (task: Task, note: string) => Promise<void>; busy: boolean; }) {
+  const [rejectNote, setRejectNote] = useState('');
+  const canExecute = task?.column === 'todo';
+  const canReview = task?.meta?.runStatus === 'done' && task?.column !== 'done';
+
+  useEffect(() => {
+    setRejectNote('');
+  }, [task?.id]);
+
   if (!task) return null;
   return (
     <div onClick={e => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15, 31, 25, 0.32)', display: 'flex', justifyContent: 'flex-end' }}>
@@ -347,7 +356,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, executing }: { task: T
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#7a7a7a', padding: 4, lineHeight: 1 }}>✕</button>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(212, 231, 221, 0.8)', fontSize: 11, fontWeight: 700, color: '#3c6658', textTransform: 'uppercase' }}>{task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : 'Done'}</span>
+          <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(212, 231, 221, 0.8)', fontSize: 11, fontWeight: 700, color: '#3c6658', textTransform: 'uppercase' }}>{task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress / Review' : 'Done'}</span>
           {task.meta?.priority ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255, 245, 234, 0.9)', fontSize: 11, fontWeight: 700, color: '#b26a1f', textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}
           {task.meta?.agentTarget ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(200,195,188,0.5)', fontSize: 11, fontWeight: 700, color: '#5f655f', textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}
           {task.meta?.sourceType ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(200,195,188,0.5)', fontSize: 11, fontWeight: 700, color: '#5f655f', textTransform: 'uppercase' }}>{task.meta.sourceType}</span> : null}
@@ -355,9 +364,17 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, executing }: { task: T
         {task.detail.why ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Description</div><div style={{ fontSize: 14, lineHeight: 1.7, color: '#37413d' }}>{task.detail.why}</div></section> : null}
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.45)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{task.meta?.runStatus ?? 'Not started'}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{task.detail.completed ?? 'No run summary yet.'}</div></div></section>
         {(task.detail.proof || task.detail.unlocks) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Scope details</div><div style={{ display: 'grid', gap: 8, fontSize: 13, lineHeight: 1.65, color: '#37413d' }}>{task.detail.proof ? <div><strong>Proof:</strong> {task.detail.proof}</div> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
+        {task.meta?.feedback?.length ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Feedback</div><div style={{ display: 'grid', gap: 8 }}>{task.meta.feedback.map((note, index) => <div key={`${task.id}-fb-${index}`} style={{ border: '1px solid rgba(200,195,188,0.4)', borderRadius: 12, padding: '10px 12px', background: 'rgba(255,255,255,0.78)', fontSize: 12, color: '#5f655f', lineHeight: 1.6 }}>{note}</div>)}</div></section> : null}
+        {canReview ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Review note</div><textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Why are you rejecting this task?" rows={3} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none', width: '100%', boxSizing: 'border-box', resize: 'vertical', fontFamily: 'inherit' }} /></section> : null}
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', paddingTop: 8 }}>
           <button onClick={onClose} style={{ padding: '10px 16px', borderRadius: 12, border: '1px solid rgba(200,195,188,0.5)', background: 'transparent', color: '#7a7a7a', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>Close</button>
-          {(task.column === 'todo') && <button onClick={() => void onExecute(task)} disabled={executing} style={{ padding: '10px 16px', borderRadius: 12, border: 'none', background: executing ? 'rgba(200,195,188,0.5)' : '#0f1f19', color: '#fff', cursor: executing ? 'progress' : 'pointer', fontSize: 13, fontWeight: 700 }}>{executing ? 'Starting…' : 'Execute'}</button>}
+          {canReview ? (
+            <>
+              <button onClick={() => void onReject(task, rejectNote.trim() || 'Rejected without note.')} disabled={busy} style={{ padding: '10px 16px', borderRadius: 12, border: '1px solid rgba(214, 129, 129, 0.45)', background: 'rgba(255, 245, 245, 0.95)', color: '#a44f4f', cursor: busy ? 'progress' : 'pointer', fontSize: 13, fontWeight: 700 }}>Reject</button>
+              <button onClick={() => void onApprove(task)} disabled={busy} style={{ padding: '10px 16px', borderRadius: 12, border: 'none', background: busy ? 'rgba(200,195,188,0.5)' : '#0f1f19', color: '#fff', cursor: busy ? 'progress' : 'pointer', fontSize: 13, fontWeight: 700 }}>{busy ? 'Saving…' : 'Approve'}</button>
+            </>
+          ) : null}
+          {canExecute ? <button onClick={() => void onExecute(task)} disabled={busy} style={{ padding: '10px 16px', borderRadius: 12, border: 'none', background: busy ? 'rgba(200,195,188,0.5)' : '#0f1f19', color: '#fff', cursor: busy ? 'progress' : 'pointer', fontSize: 13, fontWeight: 700 }}>{busy ? 'Starting…' : 'Execute'}</button> : null}
         </div>
       </div>
     </div>
@@ -397,7 +414,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   const [autoRefreshBusy, setAutoRefreshBusy] = useState(false);
   const [autoRefreshNote, setAutoRefreshNote] = useState<string | null>(null);
   const [selectedAutoTask, setSelectedAutoTask] = useState<Task | null>(null);
-  const [autoExecuteBusy, setAutoExecuteBusy] = useState(false);
+  const [autoActionBusy, setAutoActionBusy] = useState(false);
 
   useEffect(() => { setAutoColumns(autonomousColumns); }, [autonomousColumns]);
   useEffect(() => { localStorage.setItem(LS_PERSONAL, JSON.stringify(personalBoard)); }, [personalBoard]);
@@ -427,7 +444,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   }, [refreshAutonomousBoard]);
 
   const executeAutonomousTask = useCallback(async (task: Task) => {
-    setAutoExecuteBusy(true);
+    setAutoActionBusy(true);
     try {
       const res = await fetch(`/api/tasks/autonomous/${task.id}/execute`, { method: 'POST' });
       if (!res.ok) {
@@ -444,11 +461,45 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
           text: t.title,
           column: t.status === 'in-progress' ? 'inprogress' : t.status === 'done' ? 'done' : 'todo',
           detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(t.run?.summary ? { completed: t.run.summary } : {}), ...(t.run?.result ? { proof: t.run.result } : {}) },
-          meta: { priority: t.priority, agentTarget: t.agentTarget, sourceType: t.sourceType, runStatus: t.run?.status ?? 'running' },
+          meta: { priority: t.priority, agentTarget: t.agentTarget, sourceType: t.sourceType, runStatus: t.run?.status ?? 'running', feedback: Array.isArray(t.feedback) ? t.feedback.map((item: { note?: string }) => item.note).filter(Boolean) : [] },
         });
       }
     } finally {
-      setAutoExecuteBusy(false);
+      setAutoActionBusy(false);
+    }
+  }, [refreshAutonomousBoard]);
+
+  const approveAutonomousTask = useCallback(async (task: Task) => {
+    setAutoActionBusy(true);
+    try {
+      const res = await fetch(`/api/tasks/autonomous/${task.id}/approve`, { method: 'POST' });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to approve autonomous task.');
+      }
+      await refreshAutonomousBoard();
+      setSelectedAutoTask(null);
+    } finally {
+      setAutoActionBusy(false);
+    }
+  }, [refreshAutonomousBoard]);
+
+  const rejectAutonomousTask = useCallback(async (task: Task, note: string) => {
+    setAutoActionBusy(true);
+    try {
+      const res = await fetch(`/api/tasks/autonomous/${task.id}/reject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ note }),
+      });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to reject autonomous task.');
+      }
+      await refreshAutonomousBoard();
+      setSelectedAutoTask(null);
+    } finally {
+      setAutoActionBusy(false);
     }
   }, [refreshAutonomousBoard]);
 
@@ -464,7 +515,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
       <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={syncState} syncDetails={syncDetails} onOpenNewTask={() => setAutoModalOpen(true)} onRefreshImport={refreshAutonomousBoard} refreshBusy={autoRefreshBusy} refreshNote={autoRefreshNote} onOpenTask={setSelectedAutoTask} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
       <TaskModal modal={modal} onClose={() => setModal(null)} onSave={handleSave} />
       <AutonomousTaskModal open={autoModalOpen} onClose={() => setAutoModalOpen(false)} onCreate={createAutonomousTask} />
-      <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} executing={autoExecuteBusy} />
+      <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} busy={autoActionBusy} />
     </div>
   );
 }

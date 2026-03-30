@@ -483,3 +483,33 @@ export async function updateAutonomousTask(
   await saveStructuredTasks(store);
   return store.tasks[index];
 }
+
+
+export async function approveAutonomousTask(id: string): Promise<MCAutoTask | null> {
+  const task = await updateAutonomousTask(id, (current) => ({
+    ...current,
+    status: 'done',
+    chatAnnouncementSent: true,
+  }));
+  if (!task) return null;
+  await markLinkedLegacyTaskComplete(task, task.run?.summary);
+  await appendCompletionToTasksLog(task, task.artifacts[0]?.path);
+  return task;
+}
+
+export async function rejectAutonomousTask(id: string, note: string): Promise<MCAutoTask | null> {
+  return updateAutonomousTask(id, (current) => ({
+    ...current,
+    status: 'todo',
+    feedback: [
+      ...(Array.isArray(current.feedback) ? current.feedback : []),
+      { at: Date.now(), by: 'operator', note },
+    ],
+    run: current.run
+      ? {
+          ...current.run,
+          status: current.run.status === 'running' ? 'aborted' : current.run.status,
+        }
+      : undefined,
+  }));
+}
