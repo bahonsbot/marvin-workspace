@@ -17,6 +17,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260330-1044]
+
+**Trigger:** Philippe questioned the new `DEPRECATED` banner on `projects/_ops/PROACTIVE-RUNBOOK.md` and correctly pointed out that he believed it was still part of the active policy/reference set.
+**What was wrong:** I overstated the file's status. `AUTONOMY.md` is the canonical policy, but `PROACTIVE-RUNBOOK.md` still contains useful supporting guidance and should not have been framed as obsolete/dead policy.
+**Lesson:** When a newer file becomes the canonical source of truth, distinguish carefully between `canonical`, `supporting reference`, and `deprecated`. Do not mark companion runbooks as deprecated if they still provide valid context or implementation detail that active workflows may rely on.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260329-1924]
 
 **Trigger:** Philippe reviewed the first Composer/layout pass for Mission Control Chat and said it looked neat but still behaved wrong: outer-page scrolling still happened near the left gutter, the Composer hovered over the transcript, and the page still wasted bottom space because the server-status strip was present.

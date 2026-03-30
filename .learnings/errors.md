@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260330-1036]
+
+**What failed:** Morning Meeting token-expiry triage initially treated `config/token-manifest.json` as if it proved the live Codex runtime auth had expired
+**Error:** the token-age check reads manual tracking metadata from `config/token-manifest.json`, not the live runtime auth state in `/data/.openclaw/agents/main/agent/auth-profiles.json`, which created a false-positive expired-token finding for `openai-codex:default`
+**Context:** Mar 30 Morning Meeting after Philippe said he had refreshed both Codex and runway OpenAI auth recently and asked where the expiry data was coming from
+**Suggested fix:** treat `token-manifest.json` as lifecycle-tracking metadata only unless its values are freshly maintained; before surfacing auth-expiry findings as live operational issues, verify the real runtime auth store and recent usage timestamps first
+**Resolution:** Resolved on 2026-03-30 by checking the live runtime auth profile, confirming `openai-codex:default` was healthy and recently used, and updating `config/token-manifest.json` to align with reality
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260329-1833]
 
 **What failed:** first Mission Control transcript-hydration implementation
