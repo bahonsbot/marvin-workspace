@@ -17,6 +17,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260330-2307]
+
+**Trigger:** Philippe pointed out that recent `_ops` spec/audit filenames were unnecessarily long.
+**What was wrong:** I used overly verbose document filenames for Mission Control planning docs, which hurts readability and maintainability even if the filesystem technically allows it.
+**Lesson:** Keep workspace doc filenames concise and human-manageable. Prefer short, descriptive names with date suffixes over sentence-length filenames.
+
+**Priority:** medium
+**Status:** active
+
 ## [CORR-20260330-1044]
 
 **Trigger:** Philippe questioned the new `DEPRECATED` banner on `projects/_ops/PROACTIVE-RUNBOOK.md` and correctly pointed out that he believed it was still part of the active policy/reference set.
