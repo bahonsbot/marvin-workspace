@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import type { CSSProperties } from 'react';
 import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent, RuntimeBridgeState } from '@/hooks/useRuntimeBridge';
-import { buildChatSurfaceModel, type ChatArtifact, type ChatThreadEntry, type ProcessRail } from '@/lib/chat/thread-model';
+import { buildChatSurfaceModel } from '@/lib/chat/thread-model';
 import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 
 const monoFont =
@@ -68,276 +68,6 @@ function contextTone(percent: number | null) {
   if (percent >= 85) return { bar: 'linear-gradient(90deg, #cc8842 0%, #b34949 100%)', text: '#f0b08e' };
   if (percent >= 65) return { bar: 'linear-gradient(90deg, #7ba796 0%, #cc8842 100%)', text: '#e0c08b' };
   return { bar: 'linear-gradient(90deg, #7ba796 0%, #3f695b 100%)', text: '#b8d7ca' };
-}
-
-function railTone(kind: ProcessRail['kind']) {
-  return kind === 'thinking'
-    ? {
-        badge: 'rgba(171, 122, 72, 0.18)',
-        border: 'rgba(210, 170, 121, 0.26)',
-        text: '#e3c29a',
-      }
-    : {
-        badge: 'rgba(84, 134, 113, 0.18)',
-        border: 'rgba(122, 168, 149, 0.26)',
-        text: '#c9e2d7',
-      };
-}
-
-function innerPanelStyle(): CSSProperties {
-  return {
-    border: '1px solid rgba(200, 195, 188, 0.32)',
-    borderRadius: 18,
-    background: 'rgba(255, 255, 255, 0.82)',
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
-  };
-}
-
-function DiffArtifact({ artifact }: { artifact: Extract<ChatArtifact, { type: 'diff' }> }) {
-  const oldLines = artifact.oldText.split('\n');
-  const newLines = artifact.newText.split('\n');
-  const rowCount = Math.max(oldLines.length, newLines.length);
-  const removed = oldLines.filter((line) => !newLines.includes(line)).length;
-  const added = newLines.filter((line) => !oldLines.includes(line)).length;
-
-  return (
-    <article style={{ ...innerPanelStyle(), overflow: 'hidden' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '14px 16px', borderBottom: '1px solid rgba(200, 195, 188, 0.28)', background: 'rgba(250, 248, 245, 0.86)' }}>
-        <div style={{ display: 'grid', gap: 4 }}>
-          <span style={pillStyle({ active: true })}>Diff</span>
-          <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-body)' }}>{artifact.title}</div>
-          <div style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: monoFont }}>{artifact.filePath}</div>
-        </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <span style={pillStyle()}>-{removed}</span>
-          <span style={pillStyle()}>+{added}</span>
-        </div>
-      </header>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 0 }}>
-        <div style={{ borderRight: '1px solid rgba(255, 255, 255, 0.08)' }}>
-          <div style={{ padding: '10px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'rgba(190, 91, 91, 0.06)' }}>
-            {artifact.beforeLabel}
-          </div>
-          <div style={{ fontFamily: monoFont, fontSize: 12, lineHeight: 1.65 }}>
-            {Array.from({ length: rowCount }).map((_, index) => (
-              <div key={`old-${index}`} style={{ display: 'grid', gridTemplateColumns: '40px minmax(0, 1fr)', gap: 12, padding: '0 14px', background: oldLines[index] && !newLines.includes(oldLines[index]) ? 'rgba(124, 47, 47, 0.16)' : 'transparent' }}>
-                <span style={{ padding: '8px 0', color: 'var(--text-ghost)', borderRight: '1px solid rgba(200, 195, 188, 0.22)' }}>{oldLines[index] ? index + 1 : ''}</span>
-                <span style={{ padding: '8px 0', whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: 'var(--text-body)' }}>{oldLines[index] ?? ' '}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <div style={{ padding: '10px 14px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'rgba(66, 124, 93, 0.08)' }}>
-            {artifact.afterLabel}
-          </div>
-          <div style={{ fontFamily: monoFont, fontSize: 12, lineHeight: 1.65 }}>
-            {Array.from({ length: rowCount }).map((_, index) => (
-              <div key={`new-${index}`} style={{ display: 'grid', gridTemplateColumns: '40px minmax(0, 1fr)', gap: 12, padding: '0 14px', background: newLines[index] && !oldLines.includes(newLines[index]) ? 'rgba(39, 99, 70, 0.18)' : 'transparent' }}>
-                <span style={{ padding: '8px 0', color: 'var(--text-ghost)', borderRight: '1px solid rgba(200, 195, 188, 0.22)' }}>{newLines[index] ? index + 1 : ''}</span>
-                <span style={{ padding: '8px 0', whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: 'var(--text-body)' }}>{newLines[index] ?? ' '}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function FileArtifact({ artifact }: { artifact: Extract<ChatArtifact, { type: 'file' }> }) {
-  const lines = artifact.content.split('\n');
-
-  return (
-    <article style={{ ...innerPanelStyle(), overflow: 'hidden' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '14px 16px', borderBottom: '1px solid rgba(200, 195, 188, 0.28)', background: 'rgba(250, 248, 245, 0.86)' }}>
-        <div style={{ display: 'grid', gap: 4 }}>
-          <span style={pillStyle({ active: true })}>File</span>
-          <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-body)' }}>{artifact.title}</div>
-          <div style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: monoFont }}>{artifact.filePath}</div>
-        </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <span style={pillStyle()}>{artifact.language}</span>
-          <span style={pillStyle()}>{lines.length} lines</span>
-        </div>
-      </header>
-      <div style={{ padding: '10px 0', fontFamily: monoFont, fontSize: 12, lineHeight: 1.7 }}>
-        {lines.map((line, index) => (
-          <div key={`${artifact.filePath}-${index}`} style={{ display: 'grid', gridTemplateColumns: '42px minmax(0, 1fr)', gap: 14, padding: '0 16px' }}>
-            <span style={{ padding: '6px 0', color: 'var(--text-ghost)', borderRight: '1px solid rgba(200, 195, 188, 0.22)' }}>{index + 1}</span>
-            <span style={{ padding: '6px 0', whiteSpace: 'pre-wrap', wordBreak: 'break-word', color: 'var(--text-body)' }}>{line || ' '}</span>
-          </div>
-        ))}
-      </div>
-    </article>
-  );
-}
-
-function ChartArtifact({ artifact }: { artifact: Extract<ChatArtifact, { type: 'chart' }> }) {
-  const width = 420;
-  const height = 180;
-  const padding = 18;
-  const maxValue = artifact.points.length > 0 ? Math.max(...artifact.points.map((point) => point.value), 100) : 100;
-  const step = artifact.points.length > 1 ? (width - padding * 2) / (artifact.points.length - 1) : 0;
-  const path = artifact.points
-    .map((point, index) => {
-      const x = padding + step * index;
-      const y = height - padding - (point.value / maxValue) * (height - padding * 2);
-      return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
-    })
-    .join(' ');
-
-  return (
-    <article style={{ ...innerPanelStyle(), overflow: 'hidden' }}>
-      <header style={{ display: 'grid', gap: 6, padding: '14px 16px', borderBottom: '1px solid rgba(200, 195, 188, 0.28)', background: 'rgba(250, 248, 245, 0.86)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-          <span style={pillStyle({ active: true })}>Chart</span>
-          <span style={pillStyle()}>{artifact.points.length > 0 ? 'runtime fed' : 'waiting on data'}</span>
-        </div>
-        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-body)' }}>{artifact.title}</div>
-        <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>{artifact.subtitle}</div>
-      </header>
-      <div style={{ padding: 18 }}>
-        {artifact.points.length > 0 ? (
-          <div style={{ display: 'grid', gap: 12 }}>
-            <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto', borderRadius: 18, background: 'linear-gradient(180deg, rgba(250, 248, 245, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%)', border: '1px solid rgba(200, 195, 188, 0.28)' }} role="img" aria-label={artifact.title}>
-              {[0, 25, 50, 75, 100].map((tick) => {
-                const y = height - padding - (tick / maxValue) * (height - padding * 2);
-                return (
-                  <g key={tick}>
-                    <line x1={padding} x2={width - padding} y1={y} y2={y} stroke="rgba(200, 195, 188, 0.5)" strokeDasharray="4 6" />
-                    <text x={padding} y={y - 6} fill="#8f8780" fontSize="10">
-                      {tick}%
-                    </text>
-                  </g>
-                );
-              })}
-              <path d={path} fill="none" stroke="#3f695b" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-              {artifact.points.map((point, index) => {
-                const x = padding + step * index;
-                const y = height - padding - (point.value / maxValue) * (height - padding * 2);
-                return (
-                  <g key={point.label}>
-                    <circle cx={x} cy={y} r="5" fill="#fffdfb" stroke="#3f695b" strokeWidth="2.5" />
-                    <text x={x} y={height - 4} textAnchor="middle" fill="#6f6c68" fontSize="10">
-                      {point.label}
-                    </text>
-                  </g>
-                );
-              })}
-            </svg>
-          </div>
-        ) : (
-          <div style={{ ...innerPanelStyle(), padding: 18, fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>
-            {artifact.emptyLabel}
-          </div>
-        )}
-      </div>
-    </article>
-  );
-}
-
-function artifactLabel(artifact: ChatArtifact): string {
-  if (artifact.type === 'diff') return 'Diff';
-  if (artifact.type === 'file') return 'File';
-  return 'Chart';
-}
-
-function ArtifactBlock({ artifact }: { artifact: ChatArtifact }) {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <section style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 18, background: 'rgba(250, 248, 245, 0.9)', overflow: 'hidden' }}>
-      <button
-        type="button"
-        onClick={() => setOpen((value) => !value)}
-        aria-expanded={open}
-        style={{
-          width: '100%',
-          border: 'none',
-          background: 'transparent',
-          padding: '12px 14px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-          textAlign: 'left',
-          cursor: 'pointer',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <span style={pillStyle()}>{artifactLabel(artifact)}</span>
-          <span style={{ fontSize: 13, color: 'var(--text-body)', fontWeight: 600 }}>{artifact.title}</span>
-        </div>
-        <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 700 }}>{open ? 'Hide artifact' : 'Show artifact'}</span>
-      </button>
-      {open ? (
-        artifact.type === 'diff' ? <DiffArtifact artifact={artifact} /> : artifact.type === 'file' ? <FileArtifact artifact={artifact} /> : <ChartArtifact artifact={artifact} />
-      ) : null}
-    </section>
-  );
-}
-
-function ProcessRailBlock({
-  rail,
-  expanded,
-  onToggle,
-}: {
-  rail: ProcessRail;
-  expanded: boolean;
-  onToggle: () => void;
-}) {
-  const tone = railTone(rail.kind);
-  const primaryMetric = rail.metrics[0];
-
-  return (
-    <section style={{ border: '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: 'rgba(255, 255, 255, 0.82)', overflow: 'hidden' }}>
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={expanded}
-        style={{
-          width: '100%',
-          border: 'none',
-          background: 'transparent',
-          padding: '12px 14px',
-          display: 'grid',
-          gap: 8,
-          textAlign: 'left',
-          cursor: 'pointer',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            <span style={{ ...pillStyle(), background: tone.badge, border: `1px solid ${tone.border}`, color: tone.text }}>
-              {rail.title}
-            </span>
-            <span style={{ fontSize: 13, color: 'var(--text-body)', fontWeight: 600 }}>{rail.summary}</span>
-          </div>
-          <span style={{ fontSize: 12, color: 'var(--text-muted)', fontWeight: 700 }}>{expanded ? 'Hide details' : 'Show details'}</span>
-        </div>
-        {primaryMetric ? (
-          <div style={{ fontSize: 12, color: 'var(--text-ghost)', lineHeight: 1.5 }}>{primaryMetric}</div>
-        ) : null}
-      </button>
-      {expanded ? (
-        <div style={{ borderTop: '1px solid rgba(200, 195, 188, 0.24)', padding: '0 14px 14px', display: 'grid', gap: 12 }}>
-          <p style={{ margin: '14px 0 0', fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>{rail.detail}</p>
-          <div style={{ display: 'grid', gap: 10 }}>
-            {rail.items.slice(0, 2).map((item) => (
-              <div key={item.label} style={{ border: '1px solid rgba(200, 195, 188, 0.28)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.86)', padding: 14, display: 'grid', gap: 6 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)' }}>{item.label}</span>
-                </div>
-                <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.65 }}>{item.preview}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
-    </section>
-  );
 }
 
 function renderInlineRichText(text: string): React.ReactNode[] {
@@ -557,41 +287,6 @@ function renderRichText(body: string): React.ReactNode {
   return <div style={{ display: 'grid', gap: 12 }}>{elements}</div>;
 }
 
-function MessageBlock({ entry }: { entry: Extract<ChatThreadEntry, { type: 'user' | 'assistant' }> }) {
-  const isUser = entry.type === 'user';
-
-  return (
-    <section
-      style={{
-        borderRadius: 18,
-        padding: '16px 18px',
-        background: isUser ? 'rgba(255, 255, 255, 0.9)' : 'rgba(250, 248, 245, 0.88)',
-        border: '1px solid rgba(200, 195, 188, 0.32)',
-        display: 'grid',
-        gap: 14,
-      }}
-    >
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <span style={pillStyle({ active: isUser })}>{isUser ? 'Operator' : 'Mission Control'}</span>
-          {entry.title ? <span style={{ fontSize: 14, color: 'var(--text-body)', fontWeight: 700 }}>{entry.title}</span> : null}
-        </div>
-        {entry.tone === 'muted' ? <span style={pillStyle()}>Boundary note</span> : null}
-      </div>
-      <div style={{ fontSize: 15, lineHeight: 1.8, color: entry.tone === 'muted' ? 'var(--text-muted)' : 'var(--text-body)', whiteSpace: 'pre-wrap' }}>
-        {entry.body}
-      </div>
-      {entry.artifacts?.length ? (
-        <div style={{ display: 'grid', gap: 14 }}>
-          {entry.artifacts.map((artifact) => (
-            <ArtifactBlock key={`${entry.id}-${artifact.type}-${artifact.title}`} artifact={artifact} />
-          ))}
-        </div>
-      ) : null}
-    </section>
-  );
-}
-
 function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
   if (message.role === 'system') {
     return (
@@ -743,7 +438,6 @@ export function MissionControlChatSurface({
   fallbackNotice?: string;
 }) {
   const model = useMemo(() => buildChatSurfaceModel(summary), [summary]);
-  const [openRails, setOpenRails] = useState<Record<string, boolean>>({});
   const [sessionsOpen, setSessionsOpen] = useState(false);
   const sessionsRef = useRef<HTMLDivElement | null>(null);
   const contextStyles = contextTone(model.contextPercent);
@@ -1013,7 +707,7 @@ export function MissionControlChatSurface({
         setShowJumpToLatest(true);
       }
     });
-  }, [isNearTranscriptBottom, model.thread.length, liveMessages.length, liveEvents.length, liveSendState]);
+  }, [isNearTranscriptBottom, liveMessages.length, liveEvents.length, liveSendState]);
 
   return (
     <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 8, minHeight: '100%', height: '100%' }}>
@@ -1336,19 +1030,6 @@ export function MissionControlChatSurface({
           scrollPaddingBottom: 8,
         }}
       >
-        {model.thread.map((entry) =>
-          entry.type === 'rail' ? (
-            <ProcessRailBlock
-              key={entry.id}
-              rail={entry.rail}
-              expanded={Boolean(openRails[entry.id])}
-              onToggle={() => setOpenRails((current) => ({ ...current, [entry.id]: !current[entry.id] }))}
-            />
-          ) : (
-            <MessageBlock key={entry.id} entry={entry} />
-          ),
-        )}
-
         <section style={{ border: '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: 'rgba(255, 255, 255, 0.84)', padding: 16, display: 'grid', gap: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)' }}>Live bridge session</div>
