@@ -16,6 +16,26 @@ Capabilities the user wanted but don't exist.
 
 ## Recent Requests
 
+## [FEAT-20260330-1710]
+
+**Requested:** when Mission Control Chat is reopened later for polish, group nearby sequential tool actions into smarter multi-tool burst bubbles instead of many tiny `TOOLS / Used 1 tool` bubbles, and refine Composer action hierarchy so Send reads more clearly as primary while secondary icons stay quieter.
+**Why needed:** Philippe likes the new tool lane and Composer direction, but the current tool grouping can fragment the transcript and the Composer button row still feels a bit too equal-weight.
+**Complexity:** medium
+
+**Priority:** medium
+**Status:** pending / later
+
+
+## [FEAT-20260329-1741]
+
+**Requested:** investigate and, if possible, restore/clarify prior behavior where Telegram direct messages to Marvin and Gateway UI / Mission Control chat behaved like one continuing conversation/model context rather than clearly separate runtime session lanes.
+**Why needed:** the current split makes image-sharing and cross-surface collaboration much more confusing; Philippe expects to continue one conversation with the same Marvin even when moving between Telegram and Gateway/webchat.
+**Complexity:** medium-high
+
+**Priority:** medium
+**Status:** pending / later
+
+
 ## [FEAT-20260325-1743]
 
 **Requested:** add click-and-drag movement for manual Tasks boards so Personal and Projects cards can be moved between columns by dragging, not only by explicit controls

@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260330-1544]
+
+**What failed:** first live Mission Control tool-lane persistence/collapse behavior
+**Error:** newly rendered Tools groups disappeared after completion because the live event buffer was being consumed by low-value assistant delta churn, and later auto-collapse logic stayed wrong because raw `start` rows kept making finished groups appear active; fast runs also appeared collapsed immediately because first render already saw `result` state only
+**Context:** Mar 30 Mission Control Chat process-lane rollout after Philippe confirmed tool groups showed while streaming but vanished or collapsed incorrectly once the run ended
+**Suggested fix:** treat tool-lane state as a run/group model instead of raw event spam; preserve meaningful tool/chat/lifecycle events, derive per-tool-call latest state, and keep the newest completed group open rather than collapsing immediately
+**Resolution:** Resolved on 2026-03-30 in `projects/mission-control/hooks/useRuntimeBridge.ts` and `projects/mission-control/components/chat/MissionControlChatSurface.tsx`; tool groups now survive completion, derive from latest call state, and keep the newest group open
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260330-1650]
+
+**What failed:** first Mission Control assistant copy-button implementation
+**Error:** relying only on `navigator.clipboard.writeText()` caused the copy button to appear functional while copying nothing on the live preview/browser context
+**Context:** Mar 30 Chat Composer/copy-control polish after Philippe confirmed the copy icon showed up but did not actually copy message text
+**Suggested fix:** for user-facing clipboard features on preview/browser surfaces, always provide a legacy fallback path (hidden textarea + `document.execCommand('copy')`) instead of assuming async Clipboard API availability
+**Resolution:** Resolved on 2026-03-30 by adding the fallback path in `projects/mission-control/components/chat/MissionControlChatSurface.tsx`
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260330-1036]
 
 **What failed:** Morning Meeting token-expiry triage initially treated `config/token-manifest.json` as if it proved the live Codex runtime auth had expired
