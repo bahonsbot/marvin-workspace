@@ -639,7 +639,7 @@ function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
             fontSize: 15,
             lineHeight: 1.8,
             textAlign: 'left',
-            background: isOperator ? 'rgba(236, 244, 240, 0.72)' : 'rgba(255, 252, 248, 0.92)',
+            background: isOperator ? 'rgba(236, 244, 240, 0.72)' : 'rgba(250, 246, 240, 0.94)',
             border: isOperator ? '1px solid rgba(200, 195, 188, 0.24)' : '1px solid rgba(255, 255, 255, 0.92)',
           }}
         >
