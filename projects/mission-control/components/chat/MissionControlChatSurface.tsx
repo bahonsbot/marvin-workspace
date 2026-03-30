@@ -367,7 +367,7 @@ function ToolDetailBlock({ row }: { row: ToolGroupRow }) {
   );
 }
 
-function ToolGroupBlock({ rows }: { rows: ToolGroupRow[] }) {
+function ToolGroupBlock({ rows, keepOpen }: { rows: ToolGroupRow[]; keepOpen: boolean }) {
   const latestRowsMap = new Map<string, ToolGroupRow>();
   for (const row of rows) {
     const key = row.tool.toolCallId ?? row.id;
@@ -378,22 +378,13 @@ function ToolGroupBlock({ rows }: { rows: ToolGroupRow[] }) {
   }
   const latestRows = Array.from(latestRowsMap.values()).sort((a, b) => a.event.at - b.event.at);
   const visibleRows = latestRows.filter((row) => !isLowSignalExecTool(row.tool));
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(keepOpen);
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
-  const hasEverBeenActiveRef = useRef(false);
   const time = visibleRows[visibleRows.length - 1]?.event.at ?? rows[rows.length - 1]?.event.at ?? Date.now();
-  const hasActiveWork = visibleRows.some((row) => row.tool.phase === 'start' || row.tool.phase === 'update');
 
   useEffect(() => {
-    if (hasActiveWork) {
-      hasEverBeenActiveRef.current = true;
-      setOpen(true);
-      return;
-    }
-    if (hasEverBeenActiveRef.current) {
-      setOpen(false);
-    }
-  }, [hasActiveWork]);
+    setOpen(keepOpen);
+  }, [keepOpen]);
 
   if (visibleRows.length === 0) return null;
 
@@ -859,7 +850,7 @@ export function MissionControlChatSurface({
 
   const transcriptItems: Array<
     | { type: 'message'; id: string; at: number; message: RuntimeBridgeChatMessage }
-    | { type: 'tools'; id: string; at: number; rows: ToolGroupRow[] }
+    | { type: 'tools'; id: string; at: number; rows: ToolGroupRow[]; keepOpen: boolean }
   > = [];
 
   const toolGroups = new Map<string, ToolGroupRow[]>();
@@ -870,15 +861,19 @@ export function MissionControlChatSurface({
     toolGroups.set(key, group);
   }
 
-  for (const rows of toolGroups.values()) {
-    const sortedRows = rows.slice().sort((a, b) => a.event.at - b.event.at);
+  const sortedToolGroups = Array.from(toolGroups.values())
+    .map((rows) => rows.slice().sort((a, b) => a.event.at - b.event.at))
+    .sort((a, b) => (a[0]?.event.at ?? 0) - (b[0]?.event.at ?? 0));
+
+  sortedToolGroups.forEach((rows, index) => {
     transcriptItems.push({
       type: 'tools',
-      id: `tools-${sortedRows[0]?.id ?? 'group'}`,
-      at: sortedRows[0]?.event.at ?? Date.now(),
-      rows: sortedRows,
+      id: `tools-${rows[0]?.id ?? 'group'}`,
+      at: rows[0]?.event.at ?? Date.now(),
+      rows,
+      keepOpen: index === sortedToolGroups.length - 1,
     });
-  }
+  });
 
   for (const message of liveMessages) {
     transcriptItems.push({ type: 'message', id: message.id, at: message.at ?? Date.now(), message });
@@ -1251,7 +1246,9 @@ export function MissionControlChatSurface({
           <div style={{ display: 'grid', gap: 18 }}>
             {transcriptItems.length > 0 ? (
               transcriptItems.map((item) =>
-                item.type === 'message' ? <LiveMessageBlock key={item.id} message={item.message} /> : <ToolGroupBlock key={item.id} rows={item.rows} />,
+                item.type === 'message'
+                  ? <LiveMessageBlock key={item.id} message={item.message} />
+                  : <ToolGroupBlock key={item.id} rows={item.rows} keepOpen={item.keepOpen} />,
               )
             ) : (
               <div style={{ padding: '6px 2px', fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8 }}>
