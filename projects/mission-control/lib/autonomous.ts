@@ -460,3 +460,26 @@ export async function syncAutonomousTaskLinks(): Promise<{ linked: number; missi
 
   return { linked, missing, store };
 }
+
+
+export async function getAutonomousTaskById(id: string): Promise<MCAutoTask | null> {
+  const store = await loadStructuredTasks();
+  return store.tasks.find((task) => task.id === id) ?? null;
+}
+
+export async function updateAutonomousTask(
+  id: string,
+  updater: (task: MCAutoTask) => MCAutoTask,
+): Promise<MCAutoTask | null> {
+  const store = await loadStructuredTasks();
+  const index = store.tasks.findIndex((task) => task.id === id);
+  if (index === -1) return null;
+  const next = updater(store.tasks[index]);
+  store.tasks[index] = {
+    ...next,
+    updatedAt: Date.now(),
+    version: Math.max((store.tasks[index].version ?? 1) + 1, next.version ?? 1),
+  };
+  await saveStructuredTasks(store);
+  return store.tasks[index];
+}

@@ -21,6 +21,12 @@ type BoardTask = {
     unlocks?: string;
     completed?: string;
   };
+  meta?: {
+    priority?: string;
+    agentTarget?: string;
+    sourceType?: string;
+    runStatus?: string;
+  };
 };
 
 function safeIsoFromMtime(ms: number | null): string | null {
@@ -103,6 +109,12 @@ function taskToBoardTask(task: MCAutoTask): BoardTask {
     text: textParts.join(' | '),
     column,
     detail,
+    meta: {
+      priority: task.priority,
+      agentTarget: task.agentTarget,
+      sourceType: task.sourceType,
+      runStatus: task.run?.status,
+    },
   };
 }
 
