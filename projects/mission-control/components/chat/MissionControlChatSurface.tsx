@@ -306,6 +306,14 @@ function toolPreview(tool: RuntimeBridgeToolEvent): string {
   return tool.meta || tool.name;
 }
 
+function isLowSignalExecTool(tool: RuntimeBridgeToolEvent): boolean {
+  if (tool.name !== 'exec') return false;
+  const args = tool.args;
+  const command = typeof args?.command === 'string' ? args.command.trim() : '';
+  const meta = typeof tool.meta === 'string' ? tool.meta.trim() : '';
+  return !command && !meta;
+}
+
 function toolPhaseLabel(tool: RuntimeBridgeToolEvent): string {
   if (tool.phase === 'start') return 'Running';
   if (tool.phase === 'update') return 'Working';
@@ -360,21 +368,30 @@ function ToolDetailBlock({ row }: { row: ToolGroupRow }) {
 }
 
 function ToolGroupBlock({ rows }: { rows: ToolGroupRow[] }) {
+  const visibleRows = rows.filter((row) => !isLowSignalExecTool(row.tool));
   const [open, setOpen] = useState(true);
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
-  const time = rows[rows.length - 1]?.event.at ?? Date.now();
+  const time = visibleRows[visibleRows.length - 1]?.event.at ?? rows[rows.length - 1]?.event.at ?? Date.now();
+  const hasActiveWork = visibleRows.some((row) => row.tool.phase === 'start' || row.tool.phase === 'update');
+
+  useEffect(() => {
+    setOpen(hasActiveWork);
+  }, [hasActiveWork]);
+
+  if (visibleRows.length === 0) return null;
+
   return (
     <div style={{ display: 'grid', justifyItems: 'start', gap: 10, marginBottom: 10 }}>
       <section style={{ width: 'min(78ch, 78%)', border: '1px solid rgba(200, 195, 188, 0.28)', borderRadius: 22, background: 'rgba(255, 255, 255, 0.84)', overflow: 'hidden' }}>
         <button type="button" onClick={() => setOpen((v) => !v)} style={{ width: '100%', border: 'none', background: 'transparent', padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', textAlign: 'left' }}>
           <span style={{ fontSize: 12, color: 'var(--text-ghost)' }}>{open ? '▾' : '▸'}</span>
           <span style={pillStyle({ active: true })}>Tools</span>
-          <span style={{ flex: 1, fontSize: 13, color: 'var(--text-muted)' }}>Used {rows.length} tool{rows.length !== 1 ? 's' : ''}</span>
+          <span style={{ flex: 1, fontSize: 13, color: 'var(--text-muted)' }}>Used {visibleRows.length} tool{visibleRows.length !== 1 ? 's' : ''}</span>
           <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{formatEventTime(time)}</span>
         </button>
         {open ? (
           <div style={{ borderTop: '1px solid rgba(200, 195, 188, 0.18)', padding: 8, display: 'grid', gap: 6 }}>
-            {rows.map((row) => {
+            {visibleRows.map((row) => {
               const expanded = Boolean(expandedRows[row.id]);
               const canExpand = row.tool.name === 'read' || row.tool.name === 'exec' || row.tool.name === 'write' || row.tool.name === 'edit';
               return (
