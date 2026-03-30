@@ -117,7 +117,7 @@ const INSTANCE_ID_STORAGE_KEY = 'mission-control-runtime-bridge-instance-id';
 const CONNECT_PROTOCOL_VERSION = 3;
 const CONNECT_SCOPES = ['operator.admin', 'operator.read', 'operator.write', 'operator.approvals', 'operator.pairing'];
 const MAX_LIVE_MESSAGES = 24;
-const MAX_LIVE_EVENTS = 12;
+const MAX_LIVE_EVENTS = 48;
 
 function createEmptySession(
   state: RuntimeBridgeSessionState,
@@ -543,22 +543,33 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       const eventRunId = typeof payload?.runId === 'string' ? payload.runId : null;
       const eventSessionKey = typeof payload?.sessionKey === 'string' ? payload.sessionKey : null;
 
-      setEvents((current) =>
-        appendBounded(
-          current,
-          {
-            id: generateId('mc-event'),
-            name: eventName ?? 'event',
-            detail: describeGatewayEvent(eventName, payload),
-            sessionKey: eventSessionKey,
-            runId: eventRunId,
-            seq: typeof message.seq === 'number' ? message.seq : null,
-            at: Date.now(),
-            tool: extractToolEvent(payload),
-          },
-          MAX_LIVE_EVENTS,
-        ),
-      );
+      const tool = extractToolEvent(payload);
+      const agentStream = typeof payload?.stream === 'string' ? payload.stream : null;
+      const lifecycleData = asRecord(payload?.data);
+      const lifecyclePhase = typeof lifecycleData?.phase === 'string' ? lifecycleData.phase : null;
+      const shouldRecordEvent =
+        Boolean(tool) ||
+        eventName === 'chat' ||
+        (eventName === 'agent' && agentStream === 'lifecycle' && (lifecyclePhase === 'start' || lifecyclePhase === 'end'));
+
+      if (shouldRecordEvent) {
+        setEvents((current) =>
+          appendBounded(
+            current,
+            {
+              id: generateId('mc-event'),
+              name: eventName ?? 'event',
+              detail: describeGatewayEvent(eventName, payload),
+              sessionKey: eventSessionKey,
+              runId: eventRunId,
+              seq: typeof message.seq === 'number' ? message.seq : null,
+              at: Date.now(),
+              tool,
+            },
+            MAX_LIVE_EVENTS,
+          ),
+        );
+      }
 
       if (eventName !== 'chat') return;
       if (eventSessionKey && liveTargetSession.key && eventSessionKey !== liveTargetSession.key) return;
