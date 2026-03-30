@@ -13,7 +13,8 @@ export function AppShellClient({
   bottomStrip: ReactNode;
 }) {
   const pathname = usePathname();
-  const hideBottomStrip = pathname === '/general/chat' || pathname === '/chat';
+  const isChatRoute = pathname === '/general/chat' || pathname === '/chat';
+  const hideBottomStrip = isChatRoute;
   const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/crons', '/general/memory', '/general/files']);
   const isCompactTopRoute = compactTopRoutes.has(pathname);
 
@@ -31,7 +32,16 @@ export function AppShellClient({
             height: '100%',
           }}
         >
-          <main className="app-shell-main" style={{ minHeight: 0, overflow: 'hidden', padding: isCompactTopRoute ? '14px 32px 12px' : undefined }}>{children}</main>
+          <main
+            className="app-shell-main"
+            style={{
+              minHeight: 0,
+              overflow: isChatRoute ? 'hidden' : 'auto',
+              padding: isCompactTopRoute ? '14px 32px 12px' : undefined,
+            }}
+          >
+            {children}
+          </main>
           {hideBottomStrip ? null : bottomStrip}
         </div>
       </div>
