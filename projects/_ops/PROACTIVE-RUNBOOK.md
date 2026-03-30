@@ -1,5 +1,20 @@
 # Proactive Execution Runbook
 
+> **DEPRECATED** — Content has been superseded.
+> - **Canonical proactive execution policy:** `AUTONOMY.md`
+> - **Skill:** `skills/proactive-execution/SKILL.md`
+> - **Autonomy gate:** `scripts/autonomy_gate.py`
+> - **Daily task generation:** `scripts/daily-task-generator.py`
+> - **Skill assessment:** `scripts/skill-level-check.py` + `config/skill-profile.json`
+>
+> This file is retained for reference only. Do not use it as your primary source.
+
+---
+
+*Original content below (out of date — do not act on without verifying against canonical sources above.)*
+
+---
+
 ## Purpose
 
 Enable autonomous progress on open projects without replacing existing memory/framework conventions.
