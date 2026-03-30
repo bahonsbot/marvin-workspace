@@ -1,0 +1,57 @@
+{
+  "version": "1.0",
+  "description": "Token lifecycle tracking for workspace credentials",
+  "tokens": [
+    {
+      "name": "openai-codex:default",
+      "type": "oauth",
+      "provider": "openai-codex",
+      "description": "OpenAI Codex OAuth token for Codex CLI and runtime",
+      "created": "2026-01-15",
+      "expires": "2026-04-08",
+      "rotated": "2026-03-30",
+      "owner": "philippe",
+      "notes": "Live runtime auth verified healthy on 2026-03-30. Runtime expires 2026-04-08. Refresh via openclaw models auth login --provider openai-codex --set-default when needed."
+    },
+    {
+      "name": "minimax:manual",
+      "type": "api_key",
+      "provider": "minimax",
+      "description": "MiniMax API token",
+      "created": "2026-02-20",
+      "expires": null,
+      "owner": "system",
+      "notes": "No documented expiration. Monitor usage. Accepted risk as of 2026-03-30 Morning Meeting; not a current operational priority."
+    },
+    {
+      "name": "google:default",
+      "type": "api_key",
+      "provider": "google",
+      "description": "Google API key (Maps)",
+      "created": "2025-11-01",
+      "expires": null,
+      "owner": "philippe",
+      "notes": "Verify referrer/IP restrictions in Google Cloud Console periodically. Accepted risk as of 2026-03-30 Morning Meeting; not a current operational priority."
+    },
+    {
+      "name": "nexos:default",
+      "type": "api_key",
+      "provider": "nexos",
+      "description": "Nexos API key",
+      "created": "2026-03-01",
+      "expires": null,
+      "owner": "system",
+      "notes": "No documented expiration. Accepted risk as of 2026-03-30 Morning Meeting; not a current operational priority."
+    },
+    {
+      "name": "WEBHOOK_SHARED_SECRET",
+      "type": "env_secret",
+      "provider": "trading-bot",
+      "description": "HMAC shared secret for webhook authentication",
+      "created": "2026-02-01",
+      "expires": null,
+      "owner": "system",
+      "notes": "Rotate periodically. No automatic rotation mechanism exists. Accepted risk as of 2026-03-30 Morning Meeting; not a current operational priority."
+    }
+  ]
+}
