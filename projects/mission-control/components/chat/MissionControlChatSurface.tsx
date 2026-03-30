@@ -639,8 +639,8 @@ function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
             fontSize: 15,
             lineHeight: 1.8,
             textAlign: 'left',
-            background: isOperator ? 'rgba(236, 244, 240, 0.72)' : 'rgba(248, 244, 238, 0.74)',
-            border: '1px solid rgba(200, 195, 188, 0.24)',
+            background: isOperator ? 'rgba(236, 244, 240, 0.72)' : 'rgba(255, 252, 248, 0.92)',
+            border: isOperator ? '1px solid rgba(200, 195, 188, 0.24)' : '1px solid rgba(255, 255, 255, 0.92)',
           }}
         >
           {renderRichText(message.body)}
@@ -1016,7 +1016,7 @@ export function MissionControlChatSurface({
   }, [isNearTranscriptBottom, model.thread.length, liveMessages.length, liveEvents.length, liveSendState]);
 
   return (
-    <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 12, minHeight: '100%', height: '100%' }}>
+    <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 8, minHeight: '100%', height: '100%' }}>
       <section
         style={{
           border: '1px solid rgba(200, 195, 188, 0.42)',
@@ -1327,13 +1327,13 @@ export function MissionControlChatSurface({
           borderRadius: 0,
           background: 'transparent',
           boxShadow: 'none',
-          padding: '6px 0',
+          padding: '6px 0 2px',
           display: 'grid',
           gap: 14,
           minHeight: 0,
           overflow: 'auto',
           overflowAnchor: 'none',
-          scrollPaddingBottom: 12,
+          scrollPaddingBottom: 8,
         }}
       >
         {model.thread.map((entry) =>
@@ -1428,7 +1428,7 @@ export function MissionControlChatSurface({
               placeholder={
                 sessionState === 'connected'
                   ? liveTargetSession
-                    ? `Send one real prompt to ${liveTargetLabel}.`
+                    ? `Message to ${liveTargetLabel}.`
                     : 'A connected bridge still needs one visible runtime session key before Mission Control can send.'
                   : 'Composer unlocks after the real gateway session connects.'
               }
