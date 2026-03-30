@@ -293,6 +293,8 @@ type ToolGroupRow = {
   tool: RuntimeBridgeToolEvent;
 };
 
+const TOOL_BURST_WINDOW_MS = 4000;
+
 function toolLabel(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
@@ -1026,25 +1028,48 @@ export function MissionControlChatSurface({
     | { type: 'tools'; id: string; at: number; rows: ToolGroupRow[]; keepOpen: boolean }
   > = [];
 
-  const toolGroups = new Map<string, ToolGroupRow[]>();
+  const toolCallGroups = new Map<string, ToolGroupRow[]>();
   for (const row of toolRows) {
     const key = `${row.event.runId ?? 'runless'}:${row.tool.toolCallId ?? row.id}`;
-    const group = toolGroups.get(key) ?? [];
+    const group = toolCallGroups.get(key) ?? [];
     group.push(row);
-    toolGroups.set(key, group);
+    toolCallGroups.set(key, group);
   }
 
-  const sortedToolGroups = Array.from(toolGroups.values())
+  const sortedToolCallGroups = Array.from(toolCallGroups.values())
     .map((rows) => rows.slice().sort((a, b) => a.event.at - b.event.at))
     .sort((a, b) => (a[0]?.event.at ?? 0) - (b[0]?.event.at ?? 0));
 
-  sortedToolGroups.forEach((rows, index) => {
+  const toolBursts: Array<{ id: string; at: number; endAt: number; runId: string | null; rows: ToolGroupRow[] }> = [];
+
+  for (const rows of sortedToolCallGroups) {
+    const startAt = rows[0]?.event.at ?? Date.now();
+    const endAt = rows[rows.length - 1]?.event.at ?? startAt;
+    const runId = rows[0]?.event.runId ?? null;
+    const previous = toolBursts[toolBursts.length - 1];
+
+    if (previous && previous.runId === runId && startAt - previous.endAt <= TOOL_BURST_WINDOW_MS) {
+      previous.rows.push(...rows);
+      previous.endAt = Math.max(previous.endAt, endAt);
+      continue;
+    }
+
+    toolBursts.push({
+      id: `tools-${rows[0]?.id ?? 'group'}`,
+      at: startAt,
+      endAt,
+      runId,
+      rows: [...rows],
+    });
+  }
+
+  toolBursts.forEach((burst, index) => {
     transcriptItems.push({
       type: 'tools',
-      id: `tools-${rows[0]?.id ?? 'group'}`,
-      at: rows[0]?.event.at ?? Date.now(),
-      rows,
-      keepOpen: index === sortedToolGroups.length - 1,
+      id: burst.id,
+      at: burst.at,
+      rows: burst.rows,
+      keepOpen: index === toolBursts.length - 1,
     });
   });
 
