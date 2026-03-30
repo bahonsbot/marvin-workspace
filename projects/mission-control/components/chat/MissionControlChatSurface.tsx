@@ -293,7 +293,7 @@ type ToolGroupRow = {
   tool: RuntimeBridgeToolEvent;
 };
 
-const TOOL_BURST_WINDOW_MS = 4000;
+const TOOL_BURST_WINDOW_MS = 10000;
 
 function toolLabel(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
