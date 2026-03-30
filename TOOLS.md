@@ -77,6 +77,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 | autonomous-task-executor | 09:00 daily | Proactive workspace-lane execution from Open Backlog; gate-enforced via `scripts/autonomy_gate.py workspace`; missing-prerequisite tasks move to `Needs Input` | telegram (`goal-tasks`) on verified completion or focused input request |
 | autonomous-queue-wakeup | 10:15 / 14:15 / 18:15 daily | Main-session wakeup to process one queued autonomous task, max concurrency 1, with stale `spawned` self-heal; gate-enforced via `scripts/autonomy_gate.py queue` | telegram (`goal-tasks`) start + completion |
 | workspace-home-improvement | 07:30 daily | Main-session workspace-lane maintenance pass for one bounded low-risk internal improvement; gate-enforced via `scripts/autonomy_gate.py improve` | none by default; report later in Morning Meeting |
+| skill-level-check | Sun 07:00 weekly | Weekly hybrid skill assessment (test mode for objective skills, challenge mode for creative skills) | none |
 | audit-sensitive-snapshot | Sun 03:15 | Weekly sensitive-file drift snapshot via runner task | none |
 | enrichment-ab-review | Mon 10:00 | Weekly enrichment A/B review | none |
 | session-log-cleanup | 05:20 daily | Purge OpenClaw raw session log files older than 5 days from `/data/.openclaw/agents/main/sessions` | none |
@@ -89,7 +90,6 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 | entity-lifecycle-manager | Sun 05:00 weekly | Demote old life/ entities to archive | none |
 | data-manager | Sun 05:00 weekly | JSONL/log rotation (>30 days) | none |
 | dependency-update-audit | Mon 10:30 weekly | Check for outdated dependencies | none |
-| skill-level-check | Sun 07:00 weekly | Hybrid skill assessment (test + challenge mode) | none |
 | news-feed-generator | DISABLED | Superseded by RSS/Reddit monitor pipeline | none |
 
 **Cron Context-Sharing Pipeline (Market Intel):**
