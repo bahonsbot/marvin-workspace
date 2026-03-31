@@ -464,6 +464,16 @@ export async function moveLinkedLegacyTask(task: MCAutoTask, targetSection: MCAu
   await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
 }
 
+export async function rewriteLinkedLegacyTaskText(task: MCAutoTask, nextTaskText: string): Promise<void> {
+  const link = task.linkedAutonomyRef;
+  if (!link || link.kind !== 'autonomous-md') return;
+
+  const markdown = await readAutonomousMarkdown();
+  const withoutCurrent = removeLegacyTaskLine(markdown, link);
+  const nextMarkdown = insertTaskIntoSection(withoutCurrent, link.section, nextTaskText);
+  await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
+}
+
 export async function markLinkedLegacyTaskComplete(task: MCAutoTask, completionNote?: string): Promise<void> {
   const link = task.linkedAutonomyRef;
   if (!link || link.kind !== 'autonomous-md') return;

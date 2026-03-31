@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAutonomousTaskById, removeAutonomousTask, updateAutonomousTask } from '@/lib/autonomous';
+import { getAutonomousTaskById, removeAutonomousTask, rewriteLinkedLegacyTaskText, updateAutonomousTask } from '@/lib/autonomous';
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ taskId: string }> }) {
   try {
@@ -26,6 +26,15 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     if (!title) {
       return NextResponse.json({ error: 'Title is required.' }, { status: 400 });
     }
+    const existing = await getAutonomousTaskById(taskId);
+    if (!existing) {
+      return NextResponse.json({ error: 'Task not found.' }, { status: 404 });
+    }
+
+    const nextLegacyText = existing.linkedAutonomyRef?.kind === 'autonomous-md'
+      ? existing.linkedAutonomyRef.taskText.replace(existing.title, title)
+      : title;
+
     const task = await updateAutonomousTask(taskId, (current) => ({
       ...current,
       title,
@@ -33,11 +42,14 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       priority,
       agentTarget,
       linkedAutonomyRef: current.linkedAutonomyRef
-        ? { ...current.linkedAutonomyRef, taskText: title, taskTextNormalized: title.toLowerCase() }
+        ? { ...current.linkedAutonomyRef, taskText: nextLegacyText, taskTextNormalized: nextLegacyText.toLowerCase() }
         : current.linkedAutonomyRef,
     }));
     if (!task) {
       return NextResponse.json({ error: 'Task not found.' }, { status: 404 });
+    }
+    if (task.linkedAutonomyRef?.kind === 'autonomous-md') {
+      await rewriteLinkedLegacyTaskText(task, task.linkedAutonomyRef.taskText);
     }
     return NextResponse.json({ status: 'ok', task });
   } catch (error) {
