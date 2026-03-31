@@ -48,8 +48,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     if (!task) {
       return NextResponse.json({ error: 'Task not found.' }, { status: 404 });
     }
-    if (task.linkedAutonomyRef?.kind === 'autonomous-md') {
-      await rewriteLinkedLegacyTaskText(task, task.linkedAutonomyRef.taskText);
+    if (existing.linkedAutonomyRef?.kind === 'autonomous-md') {
+      await rewriteLinkedLegacyTaskText(existing.linkedAutonomyRef, nextLegacyText);
     }
     return NextResponse.json({ status: 'ok', task });
   } catch (error) {

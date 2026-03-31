@@ -394,7 +394,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   const createdAtLabel = task.meta?.createdAt ? new Date(task.meta.createdAt).toLocaleString('en-GB', { hour12: false }) : null;
 
   return (
-    <div style={{ position: 'fixed', top: 76, right: 22, width: 'min(92vw, 620px)', height: 'calc(100vh - 156px)', minHeight: '640px', maxHeight: 'calc(100vh - 156px)', zIndex: 1000, pointerEvents: 'none' }}>
+    <div style={{ position: 'fixed', top: 52, right: 22, width: 'min(92vw, 620px)', height: 'calc(100vh - 132px)', minHeight: '640px', maxHeight: 'calc(100vh - 132px)', zIndex: 1000, pointerEvents: 'none' }}>
       <div style={{ width: '100%', height: '100%', background: 'rgba(255,253,251,0.98)', border: '1px solid rgba(200, 195, 188, 0.48)', borderRadius: 26, boxShadow: '0 24px 80px rgba(0,0,0,0.12)', padding: '22px 22px 32px 22px', display: 'grid', gap: 18, alignContent: 'start', overflow: 'auto', pointerEvents: 'auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ display: 'grid', gap: 6, maxWidth: 420 }}>
