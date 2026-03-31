@@ -1,16 +1,54 @@
 {
   "tasks": [
     {
-      "id": "career-learn-pick-one-beginner-intermediate-blen",
-      "title": "- [Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
+      "id": "create-tasks-page-current-state-doc",
+      "title": "Create tasks-page current-state doc",
+      "status": "done",
+      "priority": "normal",
+      "sourceType": "generated",
+      "agentTarget": "marvin",
+      "createdAt": 1774969650544,
+      "updatedAt": 1774973824955,
+      "version": 6,
+      "columnOrder": 5,
+      "editable": true,
+      "chatAnnouncementSent": true,
+      "feedback": [],
+      "artifacts": [],
+      "linkedAutonomyRef": {
+        "kind": "autonomous-md",
+        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
+        "section": "review",
+        "taskText": "Create tasks-page current-state doc",
+        "taskTextNormalized": "create tasks-page current-state doc"
+      },
+      "sourceMeta": {
+        "generator": {
+          "createdBy": "daily-task-generator"
+        }
+      },
+      "run": {
+        "sessionKey": "mc-auto-create-tasks-page-current-state-doc-1774972972205",
+        "sessionId": "mc-auto-create-tasks-page-current-state-doc-1774972972205",
+        "runId": "50d85bce-073a-4eb7-9ad9-da91a8055069",
+        "startedAt": 1774972972154,
+        "endedAt": 1774973067952,
+        "status": "done",
+        "summary": "{ \"runId\": \"50d85bce-073a-4eb7-9ad9-da91a8055069\", \"status\": \"ok\", \"summary\": \"completed\", \"result\": { \"payloads\": [ { \"text\": \"Now I have a thorough picture. Let me write the doc.\", \"mediaUrl\": null }, { \"text\": \"**C…",
+        "result": "{\n  \"runId\": \"50d85bce-073a-4eb7-9ad9-da91a8055069\",\n  \"status\": \"ok\",\n  \"summary\": \"completed\",\n  \"result\": {\n    \"payloads\": [\n      {\n        \"text\": \"Now I have a thorough picture. Let me write the doc.\",\n        \"mediaUrl\": null\n      },\n      {\n        \"text\": \"**Created:** `projects/mission-control/docs/tasks-page-current-state.md`\\n\\nQuick summary of what's in there:\\n\\n**What works:** Autonomous board (real data, execute/approve/reject/remove wired), Personal + Projects boards (drag-and-drop, create/edit/delete), sync status indicator, import refresh, task detail drawer.\\n\\n**Key limitations flagged:**\\n- Personal/Projects are localStorage-only seeded demo data — no real backend persistence\\n- Autonomous task creation doesn't write back to `AUTONOMOUS.md` (only the import flow populates that)\\n- The 5-column autonomous board (Backlog → To Do → In Progress → Review → Done) has a naming ambiguity: \\\"To Do\\\" is actually the approved-queue lane, not a pipeline step\\n- `/tasks` is a stub route; real page is at `/general/tasks`\\n- Personal/Projects boards are visually transitional (3-column, same FLOATING tokens but less refined)\",\n        \"mediaUrl\": null\n      }\n    ],\n    \"meta\": {\n      \"durationMs\": 92560,\n      \"agentMeta\": {\n        \"sessionId\": \"mc-auto-create-tasks-page-current-state-doc-1774972972205\",\n        \"provider\": \"minimax\",\n        \"model\": \"MiniMax-M2.7\",\n        \"usage\": {\n          \"input\": 91559,\n          \"output\": 2907,\n          \"cacheRead\": 141990,\n          \"cacheWrite\": 23722,\n          \"total\": 49024\n        },\n        \"lastCallUsage\": {\n          \"input\": 25154,\n          \"output\": 205,\n          \"cacheRead\": 23665,\n          \"cacheWrite\": 0,\n          \"total\": 49024\n        },\n        \"promptTokens\": 48819\n      },\n      \"aborted\": false,\n      \"systemPromptReport\": {\n        \"source\": \"run\",\n        \"generatedAt\": 1774972975423,\n        \"sessionId\": \"mc-auto-create-tasks-page-current-state-doc-1774972972205\",\n        \"provider\": \"minimax\",\n        \"model\": \"MiniMax-M2.7\",\n        \"workspaceDir\": \"/data/.openclaw/workspace\",\n        \"bootstrapMaxChars\": 20000,\n        \"bootstrapTotalMaxChars\": 150000,\n        \"bootstrapTruncation\": {\n          \"warningMode\": \"once\",\n          \"warningShown\": true,\n          \"promptWarningSignature\": \"{\\\"bootstrapMaxChars\\\":20000,\\\"bootstrapTotalMaxChars\\\":150000,\\\"files\\\":[{\\\"path\\\":\\\"/data/.openclaw/workspace/TOOLS.md\\\",\\\"rawChars\\\":31106,\\\"injectedChars\\\":18108,\\\"causes\\\":[\\\"per-file-limit\\\"]}]}\",\n          \"warningSignaturesSeen\": [\n            \"{\\\"bootstrapMaxChars\\\":20000,\\\"bootstrapTotalMaxChars\\\":150000,\\\"files\\\":[{\\\"path\\\":\\\"/data/.openclaw/workspace/TOOLS.md\\\",\\\"rawChars\\\":31106,\\\"injectedChars\\\":18108,\\\"causes\\\":[\\\"per-file-limit\\\"]}]}\"\n          ],\n          \"truncatedFiles\": 1,\n          \"nearLimitFiles\": 1,\n          \"totalNearLimit\": false\n        },\n        \"sandbox\": {\n          \"mode\": \"off\",\n          \"sandboxed\": false\n        },\n        \"systemPrompt\": {\n          \"chars\": 85355,\n          \"projectContextChars\": 50592,\n          \"nonProjectContextChars\": 34763\n        },\n        \"injectedWorkspaceFiles\": [\n          {\n            \"name\": \"AGENTS.md\",\n            \"path\": \"/data/.openclaw/workspace/AGENTS.md\",\n            \"missing\": false,\n            \"rawChars\": 10332,\n            \"injectedChars\": 10332,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"SOUL.md\",\n            \"path\": \"/data/.openclaw/workspace/SOUL.md\",\n            \"missing\": false,\n            \"rawChars\": 1135,\n            \"injectedChars\": 1135,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"TOOLS.md\",\n            \"path\": \"/data/.openclaw/workspace/TOOLS.md\",\n            \"missing\": false,\n            \"rawChars\": 31106,\n            \"injectedChars\": 18108,\n            \"truncated\": true\n          },\n          {\n            \"name\": \"IDENTITY.md\",\n            \"path\": \"/data/.openclaw/workspace/IDENTITY.md\",\n            \"missing\": false,\n            \"rawChars\": 733,\n            \"injectedChars\": 733,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"USER.md\",\n            \"path\": \"/data/.openclaw/workspace/USER.md\",\n            \"missing\": false,\n            \"rawChars\": 997,\n            \"injectedChars\": 997,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"HEARTBEAT.md\",\n            \"path\": \"/data/.openclaw/workspace/HEARTBEAT.md\",\n            \"missing\": false,\n            \"rawChars\": 1296,\n            \"injectedChars\": 1296,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"BOOTSTRAP.md\",\n            \"path\": \"/data/.openclaw/workspace/BOOTSTRAP.md\",\n            \"missing\": false,\n            \"rawChars\": 398,\n            \"injectedChars\": 398,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"MEMORY.md\",\n            \"path\": \"/data/.openclaw/workspace/MEMORY.md\",\n            \"missing\": false,\n            \"rawChars\": 16842,\n            \"injectedChars\": 16842,\n            \"truncated\": false\n          }\n        ],\n        \"skills\": {\n          \"promptChars\": 24875,\n          \"entries\": [\n            {\n              \"name\": \"clawhub\",\n              \"blockChars\": 429\n            },\n            {\n              \"name\": \"coding-agent\",\n              \"blockChars\": 829\n            },\n            {\n              \"name\": \"gh-issues\",\n              \"blockChars\": 505\n            },\n            {\n              \"name\": \"github\",\n              \"blockChars\": 569\n            },\n            {\n              \"name\": \"healthcheck\",\n              \"blockChars\": 488\n            },\n            {\n              \"name\": \"himalaya\",\n              \"blockChars\": 380\n            },\n            {\n              \"name\": \"skill-creator\",\n              \"blockChars\": 756\n            },\n            {\n              \"name\": \"video-frames\",\n              \"blockChars\": 226\n            },\n            {\n              \"name\": \"weather\",\n              \"blockChars\": 413\n            },\n            {\n              \"name\": \"deep-research\",\n              \"blockChars\": 442\n            },\n            {\n              \"name\": \"frontend-skill\",\n              \"blockChars\": 435\n            },\n            {\n              \"name\": \"google_maps_pro\",\n              \"blockChars\": 431\n            },\n            {\n              \"name\": \"humanizer\",\n              \"blockChars\": 599\n            },\n            {\n              \"name\": \"ab-test-setup\",\n              \"blockChars\": 531\n            },\n            {\n              \"name\": \"analytics-tracking\",\n              \"blockChars\": 632\n            },\n            {\n              \"name\": \"competitor-alternatives\",\n              \"blockChars\": 785\n            },\n            {\n              \"name\": \"copy-editing\",\n              \"blockChars\": 577\n            },\n            {\n              \"name\": \"copywriting\",\n              \"blockChars\": 622\n            },\n            {\n              \"name\": \"email-sequence\",\n              \"blockChars\": 631\n            },\n            {\n              \"name\": \"form-cro\",\n              \"blockChars\": 676\n            },\n            {\n              \"name\": \"free-tool-strategy\",\n              \"blockChars\": 711\n            },\n            {\n              \"name\": \"launch-strategy\",\n              \"blockChars\": 623\n            },\n            {\n              \"name\": \"marketing-ideas\",\n              \"blockChars\": 602\n            },\n            {\n              \"name\": \"marketing-psychology\",\n              \"blockChars\": 638\n            },\n            {\n              \"name\": \"onboarding-cro\",\n              \"blockChars\": 681\n            },\n            {\n              \"name\": \"page-cro\",\n              \"blockChars\": 736\n            },\n            {\n              \"name\": \"paid-ads\",\n              \"blockChars\": 645\n            },\n            {\n              \"name\": \"paywall-upgrade-cro\",\n              \"blockChars\": 809\n            },\n            {\n              \"name\": \"popup-cro\",\n              \"blockChars\": 625\n            },\n            {\n              \"name\": \"pricing-strategy\",\n              \"blockChars\": 645\n            },\n            {\n              \"name\": \"programmatic-seo\",\n              \"blockChars\": 640\n            },\n            {\n              \"name\": \"referral-program\",\n              \"blockChars\": 601\n            },\n            {\n              \"name\": \"schema-markup\",\n              \"blockChars\": 591\n            },\n            {\n              \"name\": \"seo-audit\",\n              \"blockChars\": 598\n            },\n            {\n              \"name\": \"signup-flow-cro\",\n              \"blockChars\": 638\n            },\n            {\n              \"name\": \"social-content\",\n              \"blockChars\": 654\n            },\n            {\n              \"name\": \"my-skills\",\n              \"blockChars\": 249\n            },\n            {\n              \"name\": \"news-feeds\",\n              \"blockChars\": 255\n            },\n            {\n              \"name\": \"openclaw-agent-optimize\",\n              \"blockChars\": 584\n            },\n            {\n              \"name\": \"proactive-execution\",\n              \"blockChars\": 499\n            },\n            {\n              \"name\": \"security-review\",\n              \"blockChars\": 363\n            },\n            {\n              \"name\": \"stock-market-pro\",\n              \"blockChars\": 364\n            },\n            {\n              \"name\": \"us-stock-analysis\",\n              \"blockChars\": 673\n            }\n          ]\n        },\n        \"tools\": {\n          \"listChars\": 1763,\n          \"schemaChars\": 6490,\n          \"entries\": [\n            {\n              \"name\": \"read\",\n              \"summaryChars\": 298,\n              \"schemaChars\": 392,\n              \"propertiesCount\": 4\n            },\n            {\n              \"name\": \"edit\",\n              \"summaryChars\": 129,\n              \"schemaChars\": 591,\n              \"propertiesCount\": 6\n            },\n            {\n              \"name\": \"write\",\n              \"summaryChars\": 127,\n              \"schemaChars\": 313,\n              \"propertiesCount\": 3\n            },\n            {\n              \"name\": \"exec\",\n              \"summaryChars\": 181,\n              \"schemaChars\": 1086,\n              \"propertiesCount\": 12\n            },\n            {\n              \"name\": \"process\",\n              \"summaryChars\": 85,\n              \"schemaChars\": 961,\n              \"propertiesCount\": 12\n            },\n            {\n              \"name\": \"cron\",\n              \"summaryChars\": 2689,\n              \"schemaChars\": 690,\n              \"propertiesCount\": 13\n            },\n            {\n              \"name\": \"sessions_list\",\n              \"summaryChars\": 54,\n              \"schemaChars\": 212,\n              \"propertiesCount\": 4\n            },\n            {\n              \"name\": \"sessions_history\",\n              \"summaryChars\": 36,\n              \"schemaChars\": 161,\n              \"propertiesCount\": 3\n            },\n            {\n              \"name\": \"sessions_send\",\n              \"summaryChars\": 84,\n              \"schemaChars\": 273,\n              \"propertiesCount\": 5\n            },\n            {\n              \"name\": \"sessions_spawn\",\n              \"summaryChars\": 198,\n              \"schemaChars\": 922,\n              \"propertiesCount\": 16\n            },\n            {\n              \"name\": \"subagents\",\n              \"summaryChars\": 105,\n              \"schemaChars\": 191,\n              \"propertiesCount\": 4\n            },\n            {\n              \"name\": \"session_status\",\n              \"summaryChars\": 207,\n              \"schemaChars\": 89,\n              \"propertiesCount\": 2\n            },\n            {\n              \"name\": \"image\",\n              \"summaryChars\": 201,\n              \"schemaChars\": 342,\n              \"propertiesCount\": 6\n            },\n            {\n              \"name\": \"memory_search\",\n              \"summaryChars\": 334,\n              \"schemaChars\": 139,\n              \"propertiesCount\": 3\n            },\n            {\n              \"name\": \"memory_get\",\n              \"summaryChars\": 151,\n              \"schemaChars\": 128,\n              \"propertiesCount\": 3\n            }\n          ]\n        }\n      },\n      \"stopReason\": \"stop\"\n    }\n  }\n}"
+      }
+    },
+    {
+      "id": "add-clickable-artefact-first-rendering-for-revie",
+      "title": "Add clickable artefact-first rendering for reviewed autonomous task results",
       "status": "backlog",
       "priority": "normal",
       "sourceType": "generated",
       "agentTarget": "marvin",
-      "createdAt": 1774884473315,
-      "updatedAt": 1774884473315,
+      "createdAt": 1774974245552,
+      "updatedAt": 1774974245552,
       "version": 1,
-      "columnOrder": 0,
+      "columnOrder": 8,
       "editable": true,
       "chatAnnouncementSent": false,
       "feedback": [],
@@ -19,8 +57,8 @@
         "kind": "autonomous-md",
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
         "section": "open-backlog",
-        "taskText": "- [Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
-        "taskTextNormalized": "- [career] 📚 learn: pick one beginner-intermediate blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | why: directly builds 3d modeling and animation skill through philippe-owned practice | proof: task produces a practice brief or exercise artifact plus clear learning notes tied to blender/3d skill | unlocks: progress toward: complete one procedural modeling tutorial"
+        "taskText": "Add clickable artefact-first rendering for reviewed autonomous task results",
+        "taskTextNormalized": "add clickable artefact-first rendering for reviewed autonomous task results"
       },
       "sourceMeta": {
         "generator": {
@@ -29,16 +67,16 @@
       }
     },
     {
-      "id": "personal-learn-build-one-beginner-python-study-s",
-      "title": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
+      "id": "add-mission-control-tasks-completion-toast-chat",
+      "title": "Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs",
       "status": "backlog",
       "priority": "normal",
       "sourceType": "generated",
       "agentTarget": "marvin",
-      "createdAt": 1774884473315,
-      "updatedAt": 1774884473315,
+      "createdAt": 1774975516492,
+      "updatedAt": 1774975516492,
       "version": 1,
-      "columnOrder": 1,
+      "columnOrder": 9,
       "editable": true,
       "chatAnnouncementSent": false,
       "feedback": [],
@@ -47,36 +85,8 @@
         "kind": "autonomous-md",
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
         "section": "open-backlog",
-        "taskText": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
-        "taskTextNormalized": "[personal] 📚 learn: build one beginner python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | why: python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | proof: lesson includes explanations, read-first examples, and beginner exercises philippe can complete without advanced concepts | unlocks: progress toward: write a simple script with input validation"
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      }
-    },
-    {
-      "id": "mission-control-tighten-chat-recent-session-swit",
-      "title": "[Mission Control] Tighten Chat recent-session switching so target changes reconnect faster and more reliably after manual session selection | Why: current session-switch escape hatch works but can take too long to re-enter a connected state after switching | Proof: selecting a recent session restores the expected chat target without long reconnect lag or inconsistent bridge state | Unlocks: smoother multi-session navigation in Mission Control Chat",
-      "status": "backlog",
-      "priority": "normal",
-      "sourceType": "generated",
-      "agentTarget": "marvin",
-      "createdAt": 1774886990729,
-      "updatedAt": 1774886990729,
-      "version": 1,
-      "columnOrder": 2,
-      "editable": true,
-      "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "open-backlog",
-        "taskText": "[Mission Control] Tighten Chat recent-session switching so target changes reconnect faster and more reliably after manual session selection | Why: current session-switch escape hatch works but can take too long to re-enter a connected state after switching | Proof: selecting a recent session restores the expected chat target without long reconnect lag or inconsistent bridge state | Unlocks: smoother multi-session navigation in Mission Control Chat",
-        "taskTextNormalized": "[mission control] tighten chat recent-session switching so target changes reconnect faster and more reliably after manual session selection | why: current session-switch escape hatch works but can take too long to re-enter a connected state after switching | proof: selecting a recent session restores the expected chat target without long reconnect lag or inconsistent bridge state | unlocks: smoother multi-session navigation in mission control chat"
+        "taskText": "Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs",
+        "taskTextNormalized": "add mission control tasks completion toast / chat-style notice for finished autonomous runs"
       },
       "sourceMeta": {
         "generator": {
@@ -87,6 +97,6 @@
   ],
   "meta": {
     "schemaVersion": 1,
-    "updatedAt": 1774954304309
+    "updatedAt": 1774975516493
   }
 }
