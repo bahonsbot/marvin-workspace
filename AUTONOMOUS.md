@@ -24,16 +24,15 @@
 
 
 
+
 ## In Progress
 
 
 ## Open Backlog
-- [Mission Control] Tighten Chat recent-session switching so target changes reconnect faster and more reliably after manual session selection | Why: current session-switch escape hatch works but can take too long to re-enter a connected state after switching | Proof: selecting a recent session restores the expected chat target without long reconnect lag or inconsistent bridge state | Unlocks: smoother multi-session navigation in Mission Control Chat
-
-- - [Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial
-- [Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation
 
 
+
+- Tighten Chat recent-session switching
 ## Done
 
 - (2026-03-24) [Career] 📝 Draft: 3 Instagram content angles tied to After Effects motion design project → projects/portfolio/content-plan-ae-motion-design.md
