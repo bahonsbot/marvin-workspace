@@ -510,13 +510,12 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setSummary(payload);
       if (payload.transcriptHistory?.sessionKey && payload.transcriptHistory.sessionKey === (activeSessionKey ?? defaultTargetSession.key)) {
         const hydratedSessionKey = payload.transcriptHistory.sessionKey ?? null;
-        const shouldHydrate = messages.length === 0 || hydratedSessionKeyRef.current !== hydratedSessionKey;
-        if (shouldHydrate) {
+        setMessages((current) => {
+          const shouldHydrate = current.length === 0 || hydratedSessionKeyRef.current !== hydratedSessionKey;
+          if (!shouldHydrate) return current;
           hydratedSessionKeyRef.current = hydratedSessionKey;
-          setMessages((current) =>
-            mergeHydratedMessages(current, payload.transcriptHistory?.messages ?? [], payload.transcriptHistory?.sessionKey ?? null),
-          );
-        }
+          return mergeHydratedMessages(current, payload.transcriptHistory?.messages ?? [], payload.transcriptHistory?.sessionKey ?? null);
+        });
       }
       setError(null);
     } catch (cause) {
@@ -529,7 +528,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setLoading(false);
       setRefreshing(false);
     }
-  }, [activeSessionKey, defaultTargetSession.key, messages.length]);
+  }, [activeSessionKey, defaultTargetSession.key]);
 
   useEffect(() => {
     if (!activeSessionKey) return;
