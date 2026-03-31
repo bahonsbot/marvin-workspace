@@ -405,6 +405,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [sendError, setSendError] = useState<string | null>(null);
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
   const [activeSessionKey, setActiveSessionKey] = useState<string | null>(() => chooseTargetSession(initialSummary).key);
+  const [reconnectNonce, setReconnectNonce] = useState(0);
   const mountedRef = useRef(true);
   const hydratedSessionKeyRef = useRef<string | null>(null);
   const instanceIdRef = useRef(getOrCreateInstanceId());
@@ -412,6 +413,8 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const pendingRef = useRef<Record<string, PendingRequest>>({});
   const pendingTimeoutsRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const lastSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
+  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectAttemptRef = useRef(0);
 
   const defaultTargetSession = useMemo(() => chooseTargetSession(summary), [summary]);
   const liveTargetSession = useMemo<RuntimeBridgeLiveSessionTarget>(() => {
@@ -462,6 +465,10 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
 
     return () => {
       mountedRef.current = false;
+      if (reconnectTimerRef.current) {
+        clearTimeout(reconnectTimerRef.current);
+        reconnectTimerRef.current = null;
+      }
       rejectPending(new Error('Mission Control bridge was torn down.'));
     };
   }, [rejectPending]);
@@ -548,6 +555,27 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     }
     lastSessionStateRef.current = session.state;
   }, [session.detail, session.lastEvent, session.state, wsState]);
+
+  const scheduleReconnect = useCallback((reason: string) => {
+    if (!mountedRef.current) return;
+    if (reconnectTimerRef.current) return;
+
+    const attempt = reconnectAttemptRef.current + 1;
+    reconnectAttemptRef.current = attempt;
+    const delayMs = Math.min(1000 * 2 ** Math.min(attempt - 1, 4), 15000);
+
+    console.info('[mission-control-runtime] scheduling reconnect', {
+      reason,
+      attempt,
+      delayMs,
+    });
+
+    reconnectTimerRef.current = setTimeout(() => {
+      reconnectTimerRef.current = null;
+      if (!mountedRef.current) return;
+      setReconnectNonce((current) => current + 1);
+    }, delayMs);
+  }, []);
 
   // Auto-refresh removed — refresh is now manual-only via bridge.refresh()
 
@@ -747,8 +775,14 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
 
     socket.onopen = () => {
       if (cancelled) return;
+      reconnectAttemptRef.current = 0;
+      if (reconnectTimerRef.current) {
+        clearTimeout(reconnectTimerRef.current);
+        reconnectTimerRef.current = null;
+      }
       setWsState('open');
       setWsDetail('WS sidecar socket is open. Waiting for gateway handshake.');
+      setSendError(null);
       setSession((current) => ({
         ...current,
         state: 'waiting',
@@ -889,39 +923,50 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     socket.onerror = () => {
       if (cancelled) return;
       setWsState('error');
-      setWsDetail('Mission Control could not keep a browser socket attached to the WS sidecar.');
+      setWsDetail('Mission Control could not keep a browser socket attached to the WS sidecar. Retrying shortly.');
       setSession((current) => ({
         ...current,
         state: 'error',
-        detail: 'Transport error while negotiating or maintaining the gateway session.',
+        detail: 'Transport error while negotiating or maintaining the gateway session. Retrying shortly.',
       }));
+      scheduleReconnect('socket-error');
     };
 
     socket.onclose = (event) => {
       if (cancelled) return;
       socketRef.current = null;
+      const shouldRetry = event.code !== 1000 && event.code !== 1001;
       rejectPending(new Error('Mission Control gateway transport closed.'));
       setWsState(event.wasClean ? 'closed' : 'error');
       setWsDetail(
         event.reason
-          ? `WS sidecar closed: ${event.reason}`
+          ? `WS sidecar closed: ${event.reason}${shouldRetry ? ' Retrying…' : ''}`
           : event.wasClean
-            ? 'WS sidecar connection closed.'
-            : 'WS sidecar closed before a stable runtime session was negotiated.',
+            ? shouldRetry
+              ? 'WS sidecar connection closed. Retrying…'
+              : 'WS sidecar connection closed.'
+            : 'WS sidecar closed before a stable runtime session was negotiated. Retrying…',
       );
       setSession((current) => ({
         ...current,
         state: current.state === 'rejected' ? 'rejected' : event.wasClean ? 'closed' : 'error',
         detail: event.reason
-          ? `Gateway transport closed: ${event.reason}`
+          ? `Gateway transport closed: ${event.reason}${shouldRetry ? ' Retrying…' : ''}`
           : event.wasClean
             ? current.state === 'connected'
-              ? 'Gateway session transport closed after connect.'
-              : 'Gateway session transport closed before connect completed.'
-            : 'Gateway session transport dropped unexpectedly.',
+              ? shouldRetry
+                ? 'Gateway session transport closed after connect. Retrying…'
+                : 'Gateway session transport closed after connect.'
+              : shouldRetry
+                ? 'Gateway session transport closed before connect completed. Retrying…'
+                : 'Gateway session transport closed before connect completed.'
+            : 'Gateway session transport dropped unexpectedly. Retrying…',
       }));
       setSendState((current) => (current === 'streaming' || current === 'sending' ? 'error' : current));
       setSendError((current) => current ?? 'Bridge transport closed before the live response completed.');
+      if (shouldRetry) {
+        scheduleReconnect(`socket-close-${event.code || 'unknown'}`);
+      }
     };
 
     return () => {
@@ -931,12 +976,14 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     };
   }, [
     handleGatewayEvent,
+    reconnectNonce,
     rejectPending,
     runtimeBridgeWebsocketBaseUrl,
     runtimeBridgeWebsocketBridgeToken,
     runtimeBridgeGatewaySessionToken,
     runtimeBridgeBrowserReachability,
     runtimeBridgeWebsocketConfigured,
+    scheduleReconnect,
   ]);
 
   const sendPrompt = useCallback(
