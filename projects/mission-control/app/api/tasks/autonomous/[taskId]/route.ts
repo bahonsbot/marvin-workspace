@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAutonomousTaskById, removeAutonomousTask } from '@/lib/autonomous';
+import { getAutonomousTaskById, removeAutonomousTask, updateAutonomousTask } from '@/lib/autonomous';
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ taskId: string }> }) {
   try {
@@ -11,6 +11,37 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     return NextResponse.json({ status: 'ok', task });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to load autonomous task.';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ taskId: string }> }) {
+  try {
+    const { taskId } = await params;
+    const body = await request.json();
+    const title = typeof body?.title === 'string' ? body.title.trim() : '';
+    const description = typeof body?.description === 'string' ? body.description.trim() : '';
+    const priority = typeof body?.priority === 'string' ? body.priority : 'normal';
+    const agentTarget = typeof body?.agentTarget === 'string' ? body.agentTarget : 'marvin';
+    if (!title) {
+      return NextResponse.json({ error: 'Title is required.' }, { status: 400 });
+    }
+    const task = await updateAutonomousTask(taskId, (current) => ({
+      ...current,
+      title,
+      description: description || undefined,
+      priority,
+      agentTarget,
+      linkedAutonomyRef: current.linkedAutonomyRef
+        ? { ...current.linkedAutonomyRef, taskText: title, taskTextNormalized: title.toLowerCase() }
+        : current.linkedAutonomyRef,
+    }));
+    if (!task) {
+      return NextResponse.json({ error: 'Task not found.' }, { status: 404 });
+    }
+    return NextResponse.json({ status: 'ok', task });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to update autonomous task.';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

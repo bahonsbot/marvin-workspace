@@ -231,14 +231,14 @@ def generate_unlocks(goal_type, skill):
 
 # Task type prefixes for variety
 TASK_TYPES = [
-    ("🔨 Build:", "Build/create something"),
-    ("📊 Analyze:", "Research/analyze"),
-    ("📝 Draft:", "Write/create draft"),
-    ("🎨 Design:", "Creative work"),
-    ("⚡ Optimize:", "Improve existing"),
-    ("🚀 Launch:", "Execute/deploy"),
-    ("📚 Learn:", "Study/practice"),
-    ("🔧 Fix:", "Repair/improve"),
+    ("Build", "Build/create something"),
+    ("Analyze", "Research/analyze"),
+    ("Draft", "Write/create draft"),
+    ("Design", "Creative work"),
+    ("Optimize", "Improve existing"),
+    ("Launch", "Execute/deploy"),
+    ("Practice", "Study/practice"),
+    ("Fix", "Repair/improve"),
 ]
 
 # Beginner-appropriate task templates with skill-aware content
@@ -360,26 +360,26 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
     unlocks = generate_unlocks(goal_type, skill)
 
     if 'blender' in goal_lower:
-        task_prefix = "📚 Learn:"
-        task_desc = "pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist"
+        task_prefix = "Practice"
+        task_desc = "choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist"
     elif 'after effects' in goal_lower or 'after_effects' in goal_lower:
-        task_prefix = "📚 Learn:"
+        task_prefix = "Practice"
         task_desc = "create one After Effects practice brief focused on keyframes, easing, or a simple loop; deliverable: markdown exercise in projects/creative-practice/ with references and execution checklist"
     elif 'unreal' in goal_lower:
-        task_prefix = "📚 Learn:"
+        task_prefix = "Practice"
         task_desc = "prepare one scoped Unreal practice exercise using pre-made assets and one mechanic only; deliverable: scene brief in projects/game-dev/ with setup steps and success checklist"
     elif 'portfolio' in goal_lower:
-        task_prefix = "📊 Analyze:"
+        task_prefix = "Analyze"
         task_desc = "rank 3 portfolio directions or existing projects by creative relevance and personal ownership; deliverable: markdown shortlist in projects/portfolio/ with recommendation for what Philippe should build next"
     elif 'instagram' in goal_lower or 'social' in goal_lower:
         if not has_content_source_work():
             return None
-        task_prefix = "📝 Draft:"
+        task_prefix = "Draft"
         task_desc = "draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle"
     elif 'python' in goal_lower:
-        task_prefix = "📚 Learn:"
+        task_prefix = "Practice"
         if level == "novice":
-            task_desc = "build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises"
+            task_desc = "create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises"
             proof = "Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts"
         elif level == "beginner":
             task_desc = "create one guided Python reading-and-practice exercise on functions, loops, or lists; deliverable: markdown exercise in projects/python-learning/ plus a small starter script"
@@ -388,37 +388,37 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
             task_desc = "create one guided Python practice task that bridges reading and small real-world application; deliverable: markdown exercise in projects/python-learning/ plus starter code"
             proof = "Exercise clearly advances the next Python milestone with both comprehension and practice"
     elif 'japanese' in goal_lower:
-        task_prefix = "📚 Learn:"
+        task_prefix = "Practice"
         task_desc = "create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts"
     elif 'business analysis' in goal_lower or 'financial' in goal_lower:
-        task_prefix = "📚 Learn:"
+        task_prefix = "Practice"
         task_desc = "create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts"
         proof = "Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice"
         unlocks = "Unlocks later analysis tasks based on real followed companies once the watchlist is defined"
     elif 'equity' in goal_lower or 'futures' in goal_lower:
-        task_prefix = "🔧 Fix:"
+        task_prefix = "Fix"
         task_desc = "identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder"
         proof = "Spec targets a real bot-support improvement and avoids unsafe live-trading config changes"
         unlocks = "Unlocks a higher-quality system improvement task for the trading bots"
     elif 'trading' in goal_lower:
-        task_prefix = "📊 Analyze:"
+        task_prefix = "Analyze"
         task_desc = "prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules"
     elif 'automate' in goal_lower:
-        task_prefix = "🔧 Fix:"
+        task_prefix = "Fix"
         task_desc = "build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output"
         proof = "Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config"
     elif 'openclaw' in goal_lower:
-        task_prefix = "🔧 Fix:"
+        task_prefix = "Fix"
         task_desc = "build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note"
         proof = "Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations"
     elif 'saas' in goal_lower or 'product' in goal_lower:
-        task_prefix = "📝 Draft:"
+        task_prefix = "Draft"
         task_desc = "define one thin MVP increment with explicit scope, dependencies, and success criteria; deliverable: spec note in the relevant project folder"
     elif 'partnership' in goal_lower or 'community' in goal_lower:
-        task_prefix = "📝 Draft:"
+        task_prefix = "Draft"
         task_desc = "create a ranked outreach target list of 10 relevant people or communities; deliverable: markdown list in projects/outreach/ with rationale"
     else:
-        task_prefix = "📝 Draft:"
+        task_prefix = "Draft"
         task_desc = f"an actionable next step toward: {goal[:50]}"
 
     focus_dimension = None

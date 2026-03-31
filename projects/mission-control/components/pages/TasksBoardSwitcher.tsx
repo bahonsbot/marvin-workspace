@@ -150,6 +150,14 @@ function laneStyleData(lane: string) {
   return { icon: '🧩', text: lane, color: '#7a7a7a', bg: 'rgba(255, 255, 255, 0.6)', border: 'rgba(200, 195, 188, 0.3)' };
 }
 
+function autonomousTintForColumn(column: Task['column']) {
+  if (column === 'backlog') return { bg: 'rgba(141, 111, 77, 0.08)', border: 'rgba(141, 111, 77, 0.16)' };
+  if (column === 'todo') return { bg: 'rgba(196, 130, 58, 0.08)', border: 'rgba(196, 130, 58, 0.16)' };
+  if (column === 'inprogress') return { bg: 'rgba(121, 166, 148, 0.09)', border: 'rgba(121, 166, 148, 0.18)' };
+  if (column === 'review') return { bg: 'rgba(127, 90, 162, 0.08)', border: 'rgba(127, 90, 162, 0.17)' };
+  return { bg: 'rgba(121, 166, 148, 0.07)', border: 'rgba(121, 166, 148, 0.16)' };
+}
+
 function displaySummary(summary: string) {
   return summary.replace(/^\[[^\]]+\]\s*/, '');
 }
@@ -260,7 +268,7 @@ function TaskModal({ modal, onClose, onSave }: { modal: ModalMode; onClose: () =
   );
 }
 
-function AutonomousTaskModal({ open, onClose, onCreate }: { open: boolean; onClose: () => void; onCreate: (input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget }) => Promise<void>; }) {
+function AutonomousTaskModal({ open, mode, initialTask, onClose, onSubmit }: { open: boolean; mode: 'create' | 'edit'; initialTask?: Task | null; onClose: () => void; onSubmit: (input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget }) => Promise<void>; }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<AutoPriority>('normal');
@@ -271,19 +279,30 @@ function AutonomousTaskModal({ open, onClose, onCreate }: { open: boolean; onClo
   useEffect(() => {
     if (!open) {
       setTitle(''); setDescription(''); setPriority('normal'); setAgentTarget('marvin'); setSaving(false); setError(null);
+      return;
     }
-  }, [open]);
+    if (mode === 'edit' && initialTask) {
+      setTitle(cleanAutonomousTitle(initialTask.detail.summary));
+      setDescription(initialTask.detail.why ?? '');
+      setPriority((initialTask.meta?.priority as AutoPriority) ?? 'normal');
+      setAgentTarget((initialTask.meta?.agentTarget as AutoAgentTarget) ?? 'marvin');
+      setSaving(false);
+      setError(null);
+      return;
+    }
+    setTitle(''); setDescription(''); setPriority('normal'); setAgentTarget('marvin'); setSaving(false); setError(null);
+  }, [open, mode, initialTask]);
 
   if (!open) return null;
 
-  async function handleCreate() {
+  async function handleSubmit() {
     if (!title.trim()) return;
     setSaving(true); setError(null);
     try {
-      await onCreate({ title: title.trim(), description: description.trim() || undefined, priority, agentTarget });
+      await onSubmit({ title: title.trim(), description: description.trim() || undefined, priority, agentTarget });
       onClose();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Failed to create autonomous task.');
+      setError(cause instanceof Error ? cause.message : `Failed to ${mode === 'edit' ? 'update' : 'create'} autonomous task.`);
     } finally {
       setSaving(false);
     }
@@ -293,17 +312,17 @@ function AutonomousTaskModal({ open, onClose, onCreate }: { open: boolean; onClo
     <div onClick={e => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       <div style={{ background: '#fffdfb', borderRadius: 24, border: '1px solid rgba(200, 195, 188, 0.5)', boxShadow: '0 24px 80px rgba(0,0,0,0.18)', padding: 28, width: '100%', maxWidth: 520, display: 'grid', gap: 18 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#1a1a1a' }}>New autonomous task</h2>
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#1a1a1a' }}>{mode === 'edit' ? 'Edit autonomous task' : 'New autonomous task'}</h2>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#7a7a7a', padding: 4, lineHeight: 1 }} aria-label="Close">✕</button>
         </div>
-        <div style={{ display: 'grid', gap: 6 }}><label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Task title <span style={{ color: '#c0392b' }}>*</span></label><input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="What should Autonomous work on?" style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 14, background: '#faf8f5', color: '#1a1a1a', outline: 'none', width: '100%', boxSizing: 'border-box' }} onKeyDown={e => e.key === 'Enter' && title.trim() && handleCreate()} /></div>
+        <div style={{ display: 'grid', gap: 6 }}><label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Task title <span style={{ color: '#c0392b' }}>*</span></label><input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="What should Autonomous work on?" style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 14, background: '#faf8f5', color: '#1a1a1a', outline: 'none', width: '100%', boxSizing: 'border-box' }} onKeyDown={e => e.key === 'Enter' && title.trim() && handleSubmit()} /></div>
         <div style={{ display: 'grid', gap: 6 }}><label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Description <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: '#a8a8a8' }}>(optional)</span></label><textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="Add context or desired outcome..." rows={3} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none', width: '100%', boxSizing: 'border-box', resize: 'vertical', fontFamily: 'inherit' }} /></div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}>
           <div style={{ display: 'grid', gap: 6 }}><label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Priority</label><select value={priority} onChange={e => setPriority(e.target.value as AutoPriority)} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none' }}><option value="critical">Critical</option><option value="high">High</option><option value="normal">Normal</option><option value="low">Low</option></select></div>
           <div style={{ display: 'grid', gap: 6 }}><label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Agent</label><select value={agentTarget} onChange={e => setAgentTarget(e.target.value as AutoAgentTarget)} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none' }}><option value="marvin">Marvin</option><option value="builder">Builder</option><option value="reviewer">Reviewer</option><option value="content-creator">Content Creator</option></select></div>
         </div>
         {error ? <div style={{ fontSize: 12, color: '#b04a4a', lineHeight: 1.6 }}>{error}</div> : null}
-        <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', paddingTop: 4 }}><button onClick={onClose} style={{ padding: '10px 20px', borderRadius: 12, border: '1px solid rgba(200,195,188,0.5)', background: 'transparent', color: '#7a7a7a', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>Cancel</button><button onClick={() => void handleCreate()} disabled={!title.trim() || saving} style={{ padding: '10px 20px', borderRadius: 12, border: 'none', background: title.trim() && !saving ? '#0f1f19' : 'rgba(200,195,188,0.4)', color: title.trim() && !saving ? '#ffffff' : '#a8a8a8', cursor: title.trim() && !saving ? 'pointer' : 'not-allowed', fontSize: 13, fontWeight: 700 }}>{saving ? 'Adding…' : 'Add task'}</button></div>
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', paddingTop: 4 }}><button onClick={onClose} style={{ padding: '10px 20px', borderRadius: 12, border: '1px solid rgba(200,195,188,0.5)', background: 'transparent', color: '#7a7a7a', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>Cancel</button><button onClick={() => void handleSubmit()} disabled={!title.trim() || saving} style={{ padding: '10px 20px', borderRadius: 12, border: 'none', background: title.trim() && !saving ? '#0f1f19' : 'rgba(200,195,188,0.4)', color: title.trim() && !saving ? '#ffffff' : '#a8a8a8', cursor: title.trim() && !saving ? 'pointer' : 'not-allowed', fontSize: 13, fontWeight: 700 }}>{saving ? mode === 'edit' ? 'Saving…' : 'Adding…' : mode === 'edit' ? 'Save changes' : 'Add task'}</button></div>
       </div>
     </div>
   );
@@ -312,12 +331,13 @@ function AutonomousTaskModal({ open, onClose, onCreate }: { open: boolean; onClo
 function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, onDragEnd, onOpen, isSelected }: { task: Task; onEdit?: (task: Task) => void; onDelete?: (task: Task) => void; boardType?: 'autonomous' | 'personal' | 'projects'; isDragging?: boolean; onDragStart?: (taskId: string) => void; onDragEnd?: () => void; onOpen?: (task: Task) => void; isSelected?: boolean; }) {
   const lane = extractLane(task);
   const laneSd = laneStyleData(lane);
+  const cardTint = autonomousTintForColumn(task.column);
   const visibleSummary = boardType === 'autonomous' ? formatAutonomousSummary(task.detail.summary) : displaySummary(task.detail.summary);
   const supportText = boardType === 'autonomous' ? formatAutonomousSupport(task.detail) : task.detail.why ?? task.detail.completed ?? null;
   const isManual = boardType === 'personal' || boardType === 'projects';
   const showInspection = boardType === 'autonomous' && (task.detail.proof || task.detail.unlocks);
   return (
-    <article onClick={() => { if (boardType === 'autonomous' && onOpen) onOpen(task); }} draggable={isManual} onDragStart={event => { if (!isManual || !onDragStart) return; event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', task.id); onDragStart(task.id); }} onDragEnd={() => { if (!isManual || !onDragEnd) return; onDragEnd(); }} style={{ ...cardStyle(), padding: boardType === 'autonomous' ? 14 : 16, minHeight: boardType === 'autonomous' ? 188 : undefined, display: 'grid', gap: 10, alignContent: 'start', position: 'relative', cursor: boardType === 'autonomous' ? 'pointer' : isManual ? 'grab' : 'default', opacity: isDragging ? 0.58 : 1, transform: isDragging ? 'scale(0.985)' : 'none', background: boardType === 'autonomous' ? `linear-gradient(180deg, ${laneSd.bg} 0%, rgba(255,255,255,0.92) 24%)` : 'rgba(255, 255, 255, 0.76)', border: isSelected ? '1px solid rgba(60, 102, 88, 0.34)' : `1px solid ${boardType === 'autonomous' ? laneSd.border : 'rgba(200, 195, 188, 0.34)'}`, boxShadow: isSelected ? '0 0 0 1px rgba(60, 102, 88, 0.12), 0 10px 28px rgba(8, 25, 19, 0.08)' : '0 4px 20px rgba(0, 0, 0, 0.05)', transition: 'opacity 0.15s ease, transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease' }}>
+    <article onClick={() => { if (boardType === 'autonomous' && onOpen) onOpen(task); }} draggable={isManual} onDragStart={event => { if (!isManual || !onDragStart) return; event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', task.id); onDragStart(task.id); }} onDragEnd={() => { if (!isManual || !onDragEnd) return; onDragEnd(); }} style={{ ...cardStyle(), padding: boardType === 'autonomous' ? 14 : 16, minHeight: boardType === 'autonomous' ? 188 : undefined, display: 'grid', gap: 10, alignContent: 'start', position: 'relative', cursor: boardType === 'autonomous' ? 'pointer' : isManual ? 'grab' : 'default', opacity: isDragging ? 0.58 : 1, transform: isDragging ? 'scale(0.985)' : 'none', background: boardType === 'autonomous' ? `linear-gradient(180deg, ${cardTint.bg} 0%, rgba(255,255,255,0.94) 26%)` : 'rgba(255, 255, 255, 0.76)', border: isSelected ? '1px solid rgba(60, 102, 88, 0.34)' : `1px solid ${boardType === 'autonomous' ? cardTint.border : 'rgba(200, 195, 188, 0.34)'}`, boxShadow: isSelected ? '0 0 0 1px rgba(60, 102, 88, 0.12), 0 10px 28px rgba(8, 25, 19, 0.08)' : '0 4px 20px rgba(0, 0, 0, 0.05)', transition: 'opacity 0.15s ease, transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 8px', borderRadius: 999, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.32, color: laneSd.color, background: laneSd.bg, border: `1px solid ${laneSd.border}` }}><span>{laneSd.icon}</span><span>{laneSd.text}</span></span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{isManual && onEdit && <button onClick={() => onEdit(task)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#7a7a7a', padding: '2px 4px' }} aria-label="Edit task">✎</button>}{isManual && onDelete && <button onClick={() => onDelete(task)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#a06a6a', padding: '2px 4px' }} aria-label="Remove task">✕</button>}</div>
@@ -358,7 +378,7 @@ function CompactSyncStatus({ state, details }: { state: 'unknown' | 'ok' | 'drif
   );
 }
 
-function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, onRemove, busy }: { task: Task | null; onClose: () => void; onExecute: (task: Task) => Promise<void>; onApprove: (task: Task) => Promise<void>; onReject: (task: Task, note: string) => Promise<void>; onRemove: (task: Task) => Promise<void>; busy: boolean; }) {
+function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, onRemove, onEdit, busy }: { task: Task | null; onClose: () => void; onExecute: (task: Task) => Promise<void>; onApprove: (task: Task) => Promise<void>; onReject: (task: Task, note: string) => Promise<void>; onRemove: (task: Task) => Promise<void>; onEdit: (task: Task) => void; busy: boolean; }) {
   const [rejectNote, setRejectNote] = useState('');
   const canExecute = task?.column === 'backlog' || task?.column === 'todo';
   const canReview = task?.column === 'review' && task?.meta?.runStatus === 'done';
@@ -374,12 +394,12 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   const createdAtLabel = task.meta?.createdAt ? new Date(task.meta.createdAt).toLocaleString('en-GB', { hour12: false }) : null;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, pointerEvents: 'none' }}>
-      <div style={{ width: 'min(92vw, 820px)', maxHeight: 'min(88vh, 920px)', background: 'rgba(255,253,251,0.98)', border: '1px solid rgba(200, 195, 188, 0.48)', borderRadius: 28, boxShadow: '0 28px 90px rgba(0,0,0,0.14)', padding: 24, display: 'grid', gap: 18, alignContent: 'start', overflow: 'auto', pointerEvents: 'auto' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
-          <div style={{ display: 'grid', gap: 6, maxWidth: 620 }}>
+    <div style={{ position: 'fixed', top: 88, right: 22, bottom: 24, width: 'min(92vw, 560px)', zIndex: 1000, pointerEvents: 'none' }}>
+      <div style={{ width: '100%', height: '100%', background: 'rgba(255,253,251,0.98)', border: '1px solid rgba(200, 195, 188, 0.48)', borderRadius: 26, boxShadow: '0 24px 80px rgba(0,0,0,0.12)', padding: 22, display: 'grid', gap: 18, alignContent: 'start', overflow: 'auto', pointerEvents: 'auto' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ display: 'grid', gap: 6, maxWidth: 420 }}>
             <div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.44, color: '#8a8a8a' }}>Autonomous task</div>
-            <h2 style={{ margin: 0, fontSize: 24, lineHeight: 1.28, color: '#1a1a1a', fontWeight: 650 }}>{taskTitle}</h2>
+            <h2 style={{ margin: 0, fontSize: 20, lineHeight: 1.3, color: '#1a1a1a', fontWeight: 650 }}>{taskTitle}</h2>
           </div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, color: '#7a7a7a', padding: 2, lineHeight: 1, alignSelf: 'flex-start' }} aria-label="Close">✕</button>
         </div>
@@ -395,7 +415,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{task.detail.completed ?? 'No run summary yet.'}</div></div></section>
 
-        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}</div></div></section>
+        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}</div></div></section>
 
         {(task.detail.proof || task.detail.unlocks) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{task.detail.proof ? <div><strong>Proof:</strong> {task.detail.proof}</div> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
 
@@ -404,7 +424,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
         {canReview ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Review note</div><textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Why are you rejecting this task?" rows={3} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none', width: '100%', boxSizing: 'border-box', resize: 'vertical', fontFamily: 'inherit' }} /></section> : null}
 
         <div style={{ marginTop: 'auto', display: 'flex', gap: 10, justifyContent: 'space-between', alignItems: 'center', paddingTop: 6 }}>
-          <button onClick={() => void onRemove(task)} disabled={busy} style={{ padding: '10px 14px', borderRadius: 12, border: '1px solid rgba(214, 129, 129, 0.35)', background: 'rgba(255, 247, 247, 0.96)', color: '#a44f4f', cursor: busy ? 'progress' : 'pointer', fontSize: 12.5, fontWeight: 700 }}>Remove</button>
+          <div style={{ display: 'flex', gap: 10 }}><button onClick={() => onEdit(task)} disabled={busy} style={{ padding: '10px 14px', borderRadius: 12, border: '1px solid rgba(200,195,188,0.45)', background: 'rgba(255,255,255,0.94)', color: '#5f655f', cursor: busy ? 'progress' : 'pointer', fontSize: 12.5, fontWeight: 700 }}>Edit</button><button onClick={() => void onRemove(task)} disabled={busy} style={{ padding: '10px 14px', borderRadius: 12, border: '1px solid rgba(214, 129, 129, 0.35)', background: 'rgba(255, 247, 247, 0.96)', color: '#a44f4f', cursor: busy ? 'progress' : 'pointer', fontSize: 12.5, fontWeight: 700 }}>Remove</button></div>
           <div style={{ display: 'flex', gap: 10 }}>
             {canReview ? (
               <>
@@ -454,6 +474,8 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   const [autoColumns, setAutoColumns] = useState<Column[]>(autonomousColumns);
   const [modal, setModal] = useState<ModalMode>(null);
   const [autoModalOpen, setAutoModalOpen] = useState(false);
+  const [autoModalMode, setAutoModalMode] = useState<'create' | 'edit'>('create');
+  const [autoModalTask, setAutoModalTask] = useState<Task | null>(null);
   const [autoRefreshBusy, setAutoRefreshBusy] = useState(false);
   const [selectedAutoTask, setSelectedAutoTask] = useState<Task | null>(null);
   const [autoActionBusy, setAutoActionBusy] = useState(false);
@@ -490,6 +512,22 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(t.run?.summary ? { completed: t.run.summary } : {}), ...(t.run?.result ? { proof: t.run.result } : {}) },
     meta: { priority: t.priority, agentTarget: t.agentTarget, sourceType: t.sourceType, runStatus: t.run?.status ?? 'running', createdAt: t.createdAt, feedback: Array.isArray(t.feedback) ? t.feedback.map((item: { note?: string }) => item.note).filter((note): note is string => Boolean(note)) : [] },
   }), []);
+
+  const updateAutonomousTask = useCallback(async (taskId: string, input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; }) => {
+    const res = await fetch(`/api/tasks/autonomous/${taskId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({}));
+      throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to update autonomous task.');
+    }
+    await refreshAutonomousBoard();
+    const taskRes = await fetch(`/api/tasks/autonomous/${taskId}`, { cache: 'no-store' });
+    if (taskRes.ok) {
+      const json = await taskRes.json();
+      const hydrated = hydrateAutonomousTask(json.task);
+      setSelectedAutoTask(hydrated);
+      setAutoModalTask(hydrated);
+    }
+  }, [hydrateAutonomousTask, refreshAutonomousBoard]);
 
   const executeAutonomousTask = useCallback(async (task: Task) => {
     setAutoActionBusy(true);
@@ -568,10 +606,10 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   return (
     <div style={{ display: 'grid', gap: 14 }}>
       <div role="tablist" aria-label="Task boards" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 6px', borderRadius: 999, background: 'rgba(255, 255, 255, 0.74)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(200, 195, 188, 0.4)', width: 'fit-content', boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)', marginInline: 'auto' }}>{BOARDS.map(board => { const isActive = activeBoard === board.id; return <button key={board.id} role="tab" aria-selected={isActive} onClick={() => setActiveBoard(board.id)} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 16px', borderRadius: 999, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: isActive ? 700 : 500, transition: 'all 0.15s ease', background: isActive ? 'var(--accent-deep, #0f1f19)' : 'transparent', color: isActive ? '#ffffff' : '#7a7a7a', boxShadow: isActive ? '0 2px 8px rgba(15, 31, 25, 0.18)' : 'none' }}><span>{board.icon}</span><span>{board.label}</span></button>; })}</div>
-      <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={syncState} syncDetails={syncDetails} onOpenNewTask={() => setAutoModalOpen(true)} onRefreshImport={refreshAutonomousBoard} refreshBusy={autoRefreshBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
+      <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={syncState} syncDetails={syncDetails} onOpenNewTask={() => { setAutoModalMode('create'); setAutoModalTask(null); setAutoModalOpen(true); }} onRefreshImport={refreshAutonomousBoard} refreshBusy={autoRefreshBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
       <TaskModal modal={modal} onClose={() => setModal(null)} onSave={handleSave} />
-      <AutonomousTaskModal open={autoModalOpen} onClose={() => setAutoModalOpen(false)} onCreate={createAutonomousTask} />
-      <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} onRemove={removeAutonomousTask} busy={autoActionBusy} />
+      <AutonomousTaskModal open={autoModalOpen} mode={autoModalMode} initialTask={autoModalTask} onClose={() => { setAutoModalOpen(false); setAutoModalTask(null); }} onSubmit={async (input) => { if (autoModalMode === 'edit' && autoModalTask) { await updateAutonomousTask(autoModalTask.id, input); return; } await createAutonomousTask(input); }} />
+      <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} onRemove={removeAutonomousTask} onEdit={(task) => { setAutoModalMode('edit'); setAutoModalTask(task); setAutoModalOpen(true); }} busy={autoActionBusy} />
     </div>
   );
 }
