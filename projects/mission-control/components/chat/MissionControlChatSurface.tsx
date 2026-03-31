@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from 'react';
 import type { CSSProperties } from 'react';
 import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent, RuntimeBridgeToolEvent, RuntimeBridgeState } from '@/hooks/useRuntimeBridge';
@@ -70,6 +71,68 @@ function contextTone(percent: number | null) {
   return { bar: 'linear-gradient(90deg, #7ba796 0%, #3f695b 100%)', text: '#b8d7ca' };
 }
 
+function normalizeWorkspacePath(candidate: string): string | null {
+  const trimmed = candidate.trim();
+  const workspacePrefix = '/data/.openclaw/workspace/';
+  const normalized = trimmed.startsWith(workspacePrefix) ? trimmed.slice(workspacePrefix.length) : trimmed;
+  if (!normalized || normalized.startsWith('/') || normalized.includes('..')) return null;
+  return normalized;
+}
+
+function buildFilesHref(path: string): string {
+  const normalized = normalizeWorkspacePath(path) ?? path;
+  const parentPath = normalized.includes('/') ? normalized.slice(0, normalized.lastIndexOf('/')) : '';
+  const params = new URLSearchParams();
+  if (parentPath) params.set('path', parentPath);
+  params.set('file', normalized);
+  return `/general/files?${params.toString()}`;
+}
+
+function renderPlainTextWithFileLinks(text: string, keyPrefix: string): React.ReactNode[] {
+  const nodes: React.ReactNode[] = [];
+  const filePathPattern = /(^|[\s([{"'])((?:(?:\/data\/\.openclaw\/workspace\/)?(?:projects|docs|scripts|memory|config|skills|model-guidance|uploads|app|components|lib|public)\/[A-Za-z0-9._\-/]+\.[A-Za-z0-9._-]{1,16}))(?=$|[\s)\]}",:;!?'])/g;
+
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = filePathPattern.exec(text)) !== null) {
+    const [fullMatch, prefix, rawPath] = match;
+    const matchIndex = match.index;
+    const pathStart = matchIndex + prefix.length;
+
+    if (matchIndex > lastIndex) {
+      nodes.push(text.slice(lastIndex, matchIndex));
+    }
+
+    if (prefix) {
+      nodes.push(prefix);
+    }
+
+    const normalizedPath = normalizeWorkspacePath(rawPath);
+    if (normalizedPath) {
+      nodes.push(
+        <Link
+          key={`${keyPrefix}-file-${pathStart}`}
+          href={buildFilesHref(normalizedPath)}
+          style={{ color: 'var(--accent-strong)', textDecoration: 'underline', textUnderlineOffset: 2 }}
+        >
+          {rawPath}
+        </Link>,
+      );
+    } else {
+      nodes.push(rawPath);
+    }
+
+    lastIndex = matchIndex + fullMatch.length;
+  }
+
+  if (lastIndex < text.length) {
+    nodes.push(text.slice(lastIndex));
+  }
+
+  return nodes;
+}
+
 function renderInlineRichText(text: string): React.ReactNode[] {
   const nodes: React.ReactNode[] = [];
   const normalized = text
@@ -82,10 +145,13 @@ function renderInlineRichText(text: string): React.ReactNode[] {
   while ((match = pattern.exec(normalized)) !== null) {
     if (match.index > lastIndex) {
       nodes.push(
-        normalized
-          .slice(lastIndex, match.index)
-          .replace(/__ESCAPED_STAR__/g, '*')
-          .replace(/__ESCAPED_TICK__/g, '`'),
+        ...renderPlainTextWithFileLinks(
+          normalized
+            .slice(lastIndex, match.index)
+            .replace(/__ESCAPED_STAR__/g, '*')
+            .replace(/__ESCAPED_TICK__/g, '`'),
+          `plain-${match.index}`,
+        ),
       );
     }
     if (match[2]) {
@@ -127,7 +193,12 @@ function renderInlineRichText(text: string): React.ReactNode[] {
   }
 
   if (lastIndex < normalized.length) {
-    nodes.push(normalized.slice(lastIndex).replace(/__ESCAPED_STAR__/g, '*').replace(/__ESCAPED_TICK__/g, '`'));
+    nodes.push(
+      ...renderPlainTextWithFileLinks(
+        normalized.slice(lastIndex).replace(/__ESCAPED_STAR__/g, '*').replace(/__ESCAPED_TICK__/g, '`'),
+        `plain-tail-${lastIndex}`,
+      ),
+    );
   }
 
   return nodes;
