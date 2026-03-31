@@ -1,0 +1,92 @@
+{
+  "tasks": [
+    {
+      "id": "career-learn-pick-one-beginner-intermediate-blen",
+      "title": "- [Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
+      "status": "backlog",
+      "priority": "normal",
+      "sourceType": "generated",
+      "agentTarget": "marvin",
+      "createdAt": 1774884473315,
+      "updatedAt": 1774884473315,
+      "version": 1,
+      "columnOrder": 0,
+      "editable": true,
+      "chatAnnouncementSent": false,
+      "feedback": [],
+      "artifacts": [],
+      "linkedAutonomyRef": {
+        "kind": "autonomous-md",
+        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
+        "section": "open-backlog",
+        "taskText": "- [Career] 📚 Learn: pick one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial",
+        "taskTextNormalized": "- [career] 📚 learn: pick one beginner-intermediate blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist | why: directly builds 3d modeling and animation skill through philippe-owned practice | proof: task produces a practice brief or exercise artifact plus clear learning notes tied to blender/3d skill | unlocks: progress toward: complete one procedural modeling tutorial"
+      },
+      "sourceMeta": {
+        "generator": {
+          "createdBy": "daily-task-generator"
+        }
+      }
+    },
+    {
+      "id": "personal-learn-build-one-beginner-python-study-s",
+      "title": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
+      "status": "backlog",
+      "priority": "normal",
+      "sourceType": "generated",
+      "agentTarget": "marvin",
+      "createdAt": 1774884473315,
+      "updatedAt": 1774884473315,
+      "version": 1,
+      "columnOrder": 1,
+      "editable": true,
+      "chatAnnouncementSent": false,
+      "feedback": [],
+      "artifacts": [],
+      "linkedAutonomyRef": {
+        "kind": "autonomous-md",
+        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
+        "section": "open-backlog",
+        "taskText": "[Personal] 📚 Learn: build one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | Why: Python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | Proof: Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts | Unlocks: Progress toward: Write a simple script with input validation",
+        "taskTextNormalized": "[personal] 📚 learn: build one beginner python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises | why: python should be learned like a language: fundamentals first, then reading, guided exercises, and only then practical scripts | proof: lesson includes explanations, read-first examples, and beginner exercises philippe can complete without advanced concepts | unlocks: progress toward: write a simple script with input validation"
+      },
+      "sourceMeta": {
+        "generator": {
+          "createdBy": "daily-task-generator"
+        }
+      }
+    },
+    {
+      "id": "mission-control-tighten-chat-recent-session-swit",
+      "title": "[Mission Control] Tighten Chat recent-session switching so target changes reconnect faster and more reliably after manual session selection | Why: current session-switch escape hatch works but can take too long to re-enter a connected state after switching | Proof: selecting a recent session restores the expected chat target without long reconnect lag or inconsistent bridge state | Unlocks: smoother multi-session navigation in Mission Control Chat",
+      "status": "backlog",
+      "priority": "normal",
+      "sourceType": "generated",
+      "agentTarget": "marvin",
+      "createdAt": 1774886990729,
+      "updatedAt": 1774886990729,
+      "version": 1,
+      "columnOrder": 2,
+      "editable": true,
+      "chatAnnouncementSent": false,
+      "feedback": [],
+      "artifacts": [],
+      "linkedAutonomyRef": {
+        "kind": "autonomous-md",
+        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
+        "section": "open-backlog",
+        "taskText": "[Mission Control] Tighten Chat recent-session switching so target changes reconnect faster and more reliably after manual session selection | Why: current session-switch escape hatch works but can take too long to re-enter a connected state after switching | Proof: selecting a recent session restores the expected chat target without long reconnect lag or inconsistent bridge state | Unlocks: smoother multi-session navigation in Mission Control Chat",
+        "taskTextNormalized": "[mission control] tighten chat recent-session switching so target changes reconnect faster and more reliably after manual session selection | why: current session-switch escape hatch works but can take too long to re-enter a connected state after switching | proof: selecting a recent session restores the expected chat target without long reconnect lag or inconsistent bridge state | unlocks: smoother multi-session navigation in mission control chat"
+      },
+      "sourceMeta": {
+        "generator": {
+          "createdBy": "daily-task-generator"
+        }
+      }
+    }
+  ],
+  "meta": {
+    "schemaVersion": 1,
+    "updatedAt": 1774954304309
+  }
+}

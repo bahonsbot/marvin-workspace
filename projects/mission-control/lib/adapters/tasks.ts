@@ -26,6 +26,7 @@ type BoardTask = {
     agentTarget?: string;
     sourceType?: string;
     runStatus?: string;
+    createdAt?: number;
   };
 };
 
@@ -116,6 +117,7 @@ function taskToBoardTask(task: MCAutoTask): BoardTask {
       agentTarget: task.agentTarget,
       sourceType: task.sourceType,
       runStatus: task.run?.status,
+      createdAt: task.createdAt,
     },
   };
 }

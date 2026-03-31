@@ -95,6 +95,7 @@ export interface TaskBoardSummary {
         sourceType?: string;
         runStatus?: string;
         feedback?: string[];
+        createdAt?: number;
       };
     }>;
   }>;

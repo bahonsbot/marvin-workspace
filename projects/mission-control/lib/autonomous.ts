@@ -239,7 +239,6 @@ function findLinkedTask(store: MCAutoTaskStore, entry: LegacyTaskEntry): MCAutoT
   return store.tasks.find((task) =>
     task.linkedAutonomyRef?.kind === 'autonomous-md'
     && task.linkedAutonomyRef.sourceFile === AUTONOMOUS_PATH
-    && task.linkedAutonomyRef.section === entry.section
     && task.linkedAutonomyRef.taskTextNormalized === entry.normalizedText,
   );
 }
@@ -267,10 +266,16 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
         linked.columnOrder = nextColumnOrder(store.tasks.filter((task) => task.id !== linked.id), targetStatus);
         changed = true;
       }
-      if (linked.linkedAutonomyRef && linked.linkedAutonomyRef.taskText !== entry.text) {
-        linked.linkedAutonomyRef.taskText = entry.text;
-        linked.linkedAutonomyRef.taskTextNormalized = entry.normalizedText;
-        changed = true;
+      if (linked.linkedAutonomyRef) {
+        if (linked.linkedAutonomyRef.section !== entry.section) {
+          linked.linkedAutonomyRef.section = entry.section;
+          changed = true;
+        }
+        if (linked.linkedAutonomyRef.taskText !== entry.text) {
+          linked.linkedAutonomyRef.taskText = entry.text;
+          linked.linkedAutonomyRef.taskTextNormalized = entry.normalizedText;
+          changed = true;
+        }
       }
       if (changed) {
         linked.updatedAt = Date.now();
@@ -311,6 +316,34 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
     existingIds.add(task.id);
     store.tasks.push(task);
     imported += 1;
+  }
+
+  const dedupeMap = new Map<string, MCAutoTask>();
+  const dedupedTasks: MCAutoTask[] = [];
+  let deduped = 0;
+  for (const task of store.tasks) {
+    const normalized = task.linkedAutonomyRef?.kind === 'autonomous-md' ? task.linkedAutonomyRef.taskTextNormalized : null;
+    if (!normalized) {
+      dedupedTasks.push(task);
+      continue;
+    }
+    const existing = dedupeMap.get(normalized);
+    if (!existing) {
+      dedupeMap.set(normalized, task);
+      dedupedTasks.push(task);
+      continue;
+    }
+    const keepCurrent = (task.updatedAt ?? 0) >= (existing.updatedAt ?? 0);
+    if (keepCurrent) {
+      const replaceIndex = dedupedTasks.findIndex((candidate) => candidate.id === existing.id);
+      if (replaceIndex !== -1) dedupedTasks[replaceIndex] = task;
+      dedupeMap.set(normalized, task);
+    }
+    deduped += 1;
+  }
+  if (deduped > 0) {
+    store.tasks = dedupedTasks;
+    updated += deduped;
   }
 
   if (imported > 0 || updated > 0) {
@@ -409,17 +442,26 @@ function removeLegacyTaskLine(markdown: string, link: MCAutoLegacyLink): string 
       currentSection = parseSectionName(lines[i]);
       continue;
     }
-    if (currentSection !== link.section) continue;
     const trimmed = lines[i].trim();
     if (!trimmed.startsWith('- ')) continue;
     const text = trimmed.slice(2).trim();
-    if (normalizeLegacyTaskText(text) === link.taskTextNormalized) {
-      lines.splice(i, 1);
-      return lines.join('\n');
-    }
+    if (normalizeLegacyTaskText(text) !== link.taskTextNormalized) continue;
+    if (currentSection !== link.section && currentSection !== 'open-backlog' && currentSection !== 'in-progress' && currentSection !== 'needs-input') continue;
+    lines.splice(i, 1);
+    return lines.join('\n');
   }
 
   return markdown;
+}
+
+export async function moveLinkedLegacyTask(task: MCAutoTask, targetSection: MCAutoLegacySection): Promise<void> {
+  const link = task.linkedAutonomyRef;
+  if (!link || link.kind !== 'autonomous-md') return;
+
+  const markdown = await readAutonomousMarkdown();
+  const withoutCurrent = removeLegacyTaskLine(markdown, link);
+  const nextMarkdown = insertTaskIntoSection(withoutCurrent, targetSection, link.taskText);
+  await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
 }
 
 export async function markLinkedLegacyTaskComplete(task: MCAutoTask, completionNote?: string): Promise<void> {
@@ -473,6 +515,15 @@ export async function removeAutonomousTask(id: string): Promise<MCAutoTask | nul
   if (index === -1) return null;
 
   const [task] = store.tasks.splice(index, 1);
+
+  const normalized = task.linkedAutonomyRef?.taskTextNormalized;
+  if (normalized) {
+    store.tasks = store.tasks.filter((candidate, candidateIndex) => {
+      if (candidateIndex === index) return false;
+      return candidate.linkedAutonomyRef?.taskTextNormalized !== normalized;
+    });
+  }
+
   await saveStructuredTasks(store);
 
   const link = task.linkedAutonomyRef;

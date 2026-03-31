@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { NextRequest, NextResponse } from 'next/server';
-import { getAutonomousTaskById, updateAutonomousTask } from '@/lib/autonomous';
+import { getAutonomousTaskById, moveLinkedLegacyTask, updateAutonomousTask } from '@/lib/autonomous';
 
 const WORKSPACE_ROOT = '/data/.openclaw/workspace';
 const RUNNER_PATH = path.join(WORKSPACE_ROOT, 'projects', 'mission-control', 'scripts', 'run-autonomous-task.mjs');
@@ -22,6 +22,9 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
     const updated = await updateAutonomousTask(task.id, (current) => ({
       ...current,
       status: 'in-progress',
+      linkedAutonomyRef: current.linkedAutonomyRef
+        ? { ...current.linkedAutonomyRef, section: 'in-progress' }
+        : current.linkedAutonomyRef,
       run: {
         sessionKey: sessionId,
         sessionId,
@@ -29,6 +32,10 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
         status: 'running',
       },
     }));
+
+    if (updated) {
+      await moveLinkedLegacyTask(updated, 'in-progress');
+    }
 
     const child = spawn('node', [RUNNER_PATH, task.id], {
       cwd: WORKSPACE_ROOT,
