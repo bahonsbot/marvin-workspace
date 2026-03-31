@@ -27,11 +27,12 @@
 
 ## In Progress
 
+## Done Today
+- Create execute smoke-test JSON artifact | ✅ Done: `projects/automation/execute-smoke-test.json` — 11 cases covering needs-input, agent_team, subagent, direct, and risky-pattern blocking paths; all verified against live parser/classifier.
 
 ## Open Backlog
 - Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs
 - Add clickable artefact-first rendering for reviewed autonomous task results
-- Create execute smoke-test JSON artifact
 ## Done
 
 - (2026-03-24) [Career] 📝 Draft: 3 Instagram content angles tied to After Effects motion design project → projects/portfolio/content-plan-ae-motion-design.md
@@ -42,6 +43,7 @@
 - (2026-03-24) [Personal] 📚 Learn: Japanese study pack (greetings lesson) → projects/language/lesson-01-greetings.md
 ## Review
 - Create tasks-page current-state doc
+- Create execute smoke-test JSON artifact
 
 ## Done Today
 - Create tasks-page current-state doc | ✅ Completed: { "runId": "50d85bce-073a-4eb7-9ad9-da91a8055069", "status": "ok", "summary": "completed", "result": { "payloads": [ { "text": "Now I have a thorough picture. Let me write the doc.", "mediaUrl": null }, { "text": "**C…

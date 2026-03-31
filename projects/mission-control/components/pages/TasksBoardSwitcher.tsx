@@ -394,6 +394,8 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   const runLabel = task.meta?.runStatus ?? 'Not started';
   const taskTitle = cleanAutonomousTitle(task.detail.summary);
   const createdAtLabel = task.meta?.createdAt ? new Date(task.meta.createdAt).toLocaleString('en-GB', { hour12: false }) : null;
+  const proofPreview = task.detail.proof ? task.detail.proof.replace(/\s+/g, ' ').trim().slice(0, 280) : null;
+  const proofWasTruncated = Boolean(task.detail.proof && proofPreview && task.detail.proof.replace(/\s+/g, ' ').trim().length > proofPreview.length);
 
   return (
     <div style={{ position: 'fixed', top: 34, right: 22, width: 'min(92vw, 620px)', maxHeight: 'calc(100vh - 132px)', zIndex: 1000, pointerEvents: 'none' }}>
@@ -419,7 +421,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}</div></div></section>
 
-        {(task.detail.proof || task.detail.unlocks) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{task.detail.proof ? <div><strong>Proof:</strong> {task.detail.proof}</div> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
+        {(task.detail.proof || task.detail.unlocks) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{proofPreview ? <div><strong>Proof:</strong> {proofPreview}{proofWasTruncated ? '…' : ''}</div> : null}{task.detail.proof && proofWasTruncated ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show full output</summary><div style={{ marginTop: 8, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}>{task.detail.proof}</div></details> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
 
         {task.meta?.feedback?.length ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Feedback</div><div style={{ display: 'grid', gap: 8 }}>{task.meta.feedback.map((note, index) => <div key={`${task.id}-fb-${index}`} style={{ border: '1px solid rgba(200,195,188,0.4)', borderRadius: 12, padding: '10px 12px', background: 'rgba(255,255,255,0.78)', fontSize: 12, color: '#5f655f', lineHeight: 1.6 }}>{note}</div>)}</div></section> : null}
 
@@ -507,13 +509,17 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     await refreshAutonomousBoard();
   }, [refreshAutonomousBoard]);
 
-  const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; sourceType?: string; createdAt?: number; run?: { status?: string; summary?: string; result?: string }; feedback?: Array<{ note?: string }> }): Task => ({
-    id: t.id,
-    text: t.title,
-    column: t.status === 'backlog' ? 'backlog' : t.status === 'in-progress' ? 'inprogress' : t.status === 'review' ? 'review' : t.status === 'done' ? 'done' : 'todo',
-    detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(t.run?.summary ? { completed: t.run.summary } : {}), ...(t.run?.result ? { proof: t.run.result } : {}) },
-    meta: { priority: t.priority, agentTarget: t.agentTarget, sourceType: t.sourceType, runStatus: t.run?.status ?? 'running', createdAt: t.createdAt, feedback: Array.isArray(t.feedback) ? t.feedback.map((item: { note?: string }) => item.note).filter((note): note is string => Boolean(note)) : [] },
-  }), []);
+  const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; sourceType?: string; createdAt?: number; run?: { status?: string; summary?: string; result?: string }; feedback?: Array<{ note?: string }> }): Task => {
+    const artifactMatch = t.run?.result?.match(/(?:\/data\/\.openclaw\/workspace\/)?(projects\/mission-control\/[\w./-]+\.(?:md|json|txt))/i);
+    const artifactPath = artifactMatch?.[1];
+    return {
+      id: t.id,
+      text: t.title,
+      column: t.status === 'backlog' ? 'backlog' : t.status === 'in-progress' ? 'inprogress' : t.status === 'review' ? 'review' : t.status === 'done' ? 'done' : 'todo',
+      detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(t.run?.summary ? { completed: t.run.summary } : {}), ...(t.run?.result ? { proof: t.run.result } : {}) },
+      meta: { priority: t.priority, agentTarget: t.agentTarget, sourceType: t.sourceType, runStatus: t.run?.status ?? 'running', createdAt: t.createdAt, artifactPath, resultSummary: t.run?.summary, feedback: Array.isArray(t.feedback) ? t.feedback.map((item: { note?: string }) => item.note).filter((note): note is string => Boolean(note)) : [] },
+    };
+  }, []);
 
   const updateAutonomousTask = useCallback(async (taskId: string, input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; }) => {
     const res = await fetch(`/api/tasks/autonomous/${taskId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
