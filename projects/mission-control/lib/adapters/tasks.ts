@@ -241,11 +241,8 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
       issues.push('AUTONOMOUS.md counts unavailable');
     }
 
-    if (source.tasksLog.completedEntries !== null && source.tasksLog.completedEntries > boardCounts.done) {
-      issues.push(
-        `tasks-log has more ✅ entries (${source.tasksLog.completedEntries}) than current Done cards (${boardCounts.done}); historical drift likely`,
-      );
-    }
+    // tasks-log.md is an append-only historical completion log, not a current-state lane.
+    // Do not treat higher historical completion counts as active sync drift.
 
     const state: TaskSyncStatus['state'] = issues.length > 0 ? 'drift' : 'ok';
 

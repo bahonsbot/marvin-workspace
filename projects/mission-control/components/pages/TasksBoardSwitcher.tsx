@@ -157,7 +157,10 @@ function cleanAutonomousTitle(summary: string) {
   return displaySummary(summary)
     .replace(/^\(\d{4}-\d{2}-\d{2}\)\s*/, '')
     .replace(/^\[[^\]]+\]\s*/, '')
-    .replace(/^[-•\s]+/, '')
+    .replace(/^[^\p{L}\p{N}]+/u, '')
+    .replace(/^(learn|build|create|write|fix|review|improve|tighten|draft):\s*/i, '')
+    .replace(/^\b(career|mission control|projects|personal)\b\s*/i, '')
+    .replace(/^[-•\s:]+/, '')
     .split(/\s*[|→]|;\s*deliverable:/i)[0]
     .trim();
 }
@@ -239,7 +242,7 @@ function TaskModal({ modal, onClose, onSave }: { modal: ModalMode; onClose: () =
   }
 
   return (
-    <div onClick={e => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15, 31, 25, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+    <div onClick={e => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       <div style={{ background: '#fffdfb', borderRadius: 24, border: '1px solid rgba(200, 195, 188, 0.5)', boxShadow: '0 24px 80px rgba(0,0,0,0.18)', padding: 28, width: '100%', maxWidth: 480, display: 'grid', gap: 18 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#1a1a1a' }}>{isEdit ? 'Edit task' : 'New task'}</h2>
@@ -286,7 +289,7 @@ function AutonomousTaskModal({ open, onClose, onCreate }: { open: boolean; onClo
   }
 
   return (
-    <div onClick={e => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(15, 31, 25, 0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+    <div onClick={e => { if (e.target === e.currentTarget) onClose(); }} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
       <div style={{ background: '#fffdfb', borderRadius: 24, border: '1px solid rgba(200, 195, 188, 0.5)', boxShadow: '0 24px 80px rgba(0,0,0,0.18)', padding: 28, width: '100%', maxWidth: 520, display: 'grid', gap: 18 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#1a1a1a' }}>New autonomous task</h2>
@@ -313,7 +316,7 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
   const isManual = boardType === 'personal' || boardType === 'projects';
   const showInspection = boardType === 'autonomous' && (task.detail.proof || task.detail.unlocks);
   return (
-    <article onClick={() => { if (boardType === 'autonomous' && onOpen) onOpen(task); }} draggable={isManual} onDragStart={event => { if (!isManual || !onDragStart) return; event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', task.id); onDragStart(task.id); }} onDragEnd={() => { if (!isManual || !onDragEnd) return; onDragEnd(); }} style={{ ...cardStyle(), padding: boardType === 'autonomous' ? 14 : 16, display: 'grid', gap: 10, position: 'relative', cursor: boardType === 'autonomous' ? 'pointer' : isManual ? 'grab' : 'default', opacity: isDragging ? 0.58 : 1, transform: isDragging ? 'scale(0.985)' : 'none', border: isSelected ? '1px solid rgba(60, 102, 88, 0.34)' : '1px solid rgba(200, 195, 188, 0.34)', boxShadow: isSelected ? '0 0 0 1px rgba(60, 102, 88, 0.12), 0 10px 28px rgba(8, 25, 19, 0.08)' : '0 4px 20px rgba(0, 0, 0, 0.05)', transition: 'opacity 0.15s ease, transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease' }}>
+    <article onClick={() => { if (boardType === 'autonomous' && onOpen) onOpen(task); }} draggable={isManual} onDragStart={event => { if (!isManual || !onDragStart) return; event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', task.id); onDragStart(task.id); }} onDragEnd={() => { if (!isManual || !onDragEnd) return; onDragEnd(); }} style={{ ...cardStyle(), padding: boardType === 'autonomous' ? 14 : 16, minHeight: boardType === 'autonomous' ? 188 : undefined, display: 'grid', gap: 10, alignContent: 'start', position: 'relative', cursor: boardType === 'autonomous' ? 'pointer' : isManual ? 'grab' : 'default', opacity: isDragging ? 0.58 : 1, transform: isDragging ? 'scale(0.985)' : 'none', border: isSelected ? '1px solid rgba(60, 102, 88, 0.34)' : '1px solid rgba(200, 195, 188, 0.34)', boxShadow: isSelected ? '0 0 0 1px rgba(60, 102, 88, 0.12), 0 10px 28px rgba(8, 25, 19, 0.08)' : '0 4px 20px rgba(0, 0, 0, 0.05)', transition: 'opacity 0.15s ease, transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 8px', borderRadius: 999, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.32, color: laneSd.color, background: laneSd.bg, border: `1px solid ${laneSd.border}` }}><span>{laneSd.icon}</span><span>{laneSd.text}</span></span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{isManual && onEdit && <button onClick={() => onEdit(task)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#7a7a7a', padding: '2px 4px' }} aria-label="Edit task">✎</button>}{isManual && onDelete && <button onClick={() => onDelete(task)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#a06a6a', padding: '2px 4px' }} aria-label="Remove task">✕</button>}</div>
@@ -338,6 +341,7 @@ function ColumnView({ column, boardType, onEdit, onDelete, onDropTask, draggingT
 }
 
 function CompactSyncStatus({ state, details }: { state: 'unknown' | 'ok' | 'drift'; details: string }) {
+  const [open, setOpen] = useState(false);
   const config = state === 'ok'
     ? { label: 'Sync aligned', dot: '#3c6658', bg: 'rgba(121, 166, 148, 0.14)', text: '#3c6658' }
     : state === 'drift'
@@ -345,9 +349,10 @@ function CompactSyncStatus({ state, details }: { state: 'unknown' | 'ok' | 'drif
       : { label: 'Sync unknown', dot: '#8a8a8a', bg: 'rgba(200, 195, 188, 0.16)', text: '#7a7a7a' };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', minWidth: 0, position: 'relative' }}>
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 999, background: config.bg }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: config.dot }} /><span style={{ fontSize: 11, fontWeight: 700, color: config.text, textTransform: 'uppercase' }}>{config.label}</span></span>
-      <span style={{ fontSize: 11.5, color: '#7a7a7a', lineHeight: 1.55, minWidth: 0 }}>{details}</span>
+      <button onClick={() => setOpen((v) => !v)} aria-label="Sync details" title="Sync details" style={{ width: 22, height: 22, borderRadius: '50%', border: '1px solid rgba(200,195,188,0.45)', background: 'rgba(255,255,255,0.82)', color: '#7a7a7a', cursor: 'pointer', fontSize: 12, fontWeight: 700, lineHeight: 1 }}>i</button>
+      {open ? <div style={{ position: 'absolute', top: 32, left: 0, zIndex: 4, maxWidth: 360, border: '1px solid rgba(200,195,188,0.45)', borderRadius: 14, background: 'rgba(255,253,251,0.98)', boxShadow: '0 12px 32px rgba(0,0,0,0.08)', padding: '10px 12px', fontSize: 11.5, color: '#6f726f', lineHeight: 1.55 }}>{details}</div> : null}
     </div>
   );
 }
@@ -388,6 +393,8 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{task.detail.completed ?? 'No run summary yet.'}</div></div></section>
 
+        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Task ID</div><div style={{ marginTop: 4, fontSize: 11.5, color: '#6f726f', wordBreak: 'break-all' }}>{task.id}</div></div></div></section>
+
         {(task.detail.proof || task.detail.unlocks) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{task.detail.proof ? <div><strong>Proof:</strong> {task.detail.proof}</div> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
 
         {task.meta?.feedback?.length ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Feedback</div><div style={{ display: 'grid', gap: 8 }}>{task.meta.feedback.map((note, index) => <div key={`${task.id}-fb-${index}`} style={{ border: '1px solid rgba(200,195,188,0.4)', borderRadius: 12, padding: '10px 12px', background: 'rgba(255,255,255,0.78)', fontSize: 12, color: '#5f655f', lineHeight: 1.6 }}>{note}</div>)}</div></section> : null}
@@ -425,9 +432,8 @@ function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onR
         </div>
       </div>
       <section className="tasks-board-grid">{columns.map(col => <ColumnView key={col.id} column={col} boardType="autonomous" onOpenTask={onOpenTask} selectedTaskId={selectedTaskId} />)}</section>
-      <div style={{ ...cardStyle(), padding: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
         <CompactSyncStatus state={syncState} details={syncDetails} />
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>{[{ label: 'autonomous-tasks.json', note: 'Structured store' }, { label: 'AUTONOMOUS.md', note: 'Legacy bridge' }, { label: 'tasks-log.md', note: 'Completion history' }].map(item => <div key={item.label} style={{ border: '1px solid rgba(200, 195, 188, 0.35)', borderRadius: 999, padding: '6px 10px', background: 'rgba(255, 255, 255, 0.6)', display: 'grid', gap: 2 }}><span style={{ fontSize: 10.5, color: '#5f655f', lineHeight: 1.35 }}>{item.label}</span><span style={{ fontSize: 10.5, color: '#8a8f8a', lineHeight: 1.35 }}>{item.note}</span></div>)}</div>
       </div>
     </div>
   );
