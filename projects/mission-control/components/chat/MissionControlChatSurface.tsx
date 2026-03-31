@@ -406,12 +406,12 @@ function ToolGroupBlock({ rows, keepOpen }: { rows: ToolGroupRow[]; keepOpen: bo
               const canExpand = row.tool.name === 'read' || row.tool.name === 'exec' || row.tool.name === 'write' || row.tool.name === 'edit';
               return (
                 <div key={row.id} style={{ borderRadius: 16, background: expanded ? 'rgba(250, 248, 245, 0.82)' : 'transparent', border: expanded ? '1px solid rgba(200, 195, 188, 0.22)' : '1px solid transparent', padding: '0 2px' }}>
-                  <button type="button" onClick={() => canExpand && setExpandedRows((current) => ({ ...current, [row.id]: !current[row.id] }))} style={{ width: '100%', border: 'none', background: 'transparent', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 10, cursor: canExpand ? 'pointer' : 'default', textAlign: 'left' }}>
-                    <span style={{ width: 12, color: 'var(--text-ghost)', fontSize: 12 }}>{canExpand ? (expanded ? '▾' : '▸') : ''}</span>
-                    <span style={{ color: row.tool.isError ? '#b74c43' : '#3f695b', fontSize: 12 }}>✓</span>
-                    <span style={pillStyle()}>{toolLabel(row.tool.name)}</span>
-                    <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{toolPreview(row.tool)}</span>
-                    <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{toolPhaseLabel(row.tool)}</span>
+                  <button type="button" onClick={() => canExpand && setExpandedRows((current) => ({ ...current, [row.id]: !current[row.id] }))} style={{ width: '100%', border: 'none', background: 'transparent', padding: '10px 12px', display: 'flex', alignItems: 'flex-start', gap: 10, cursor: canExpand ? 'pointer' : 'default', textAlign: 'left' }}>
+                    <span style={{ width: 12, color: 'var(--text-ghost)', fontSize: 12, lineHeight: 1.4, paddingTop: 2 }}>{canExpand ? (expanded ? '▾' : '▸') : ''}</span>
+                    <span style={{ color: row.tool.isError ? '#b74c43' : '#3f695b', fontSize: 12, lineHeight: 1.4, paddingTop: 2 }}>✓</span>
+                    <span style={{ ...pillStyle(), flexShrink: 0 }}>{toolLabel(row.tool.name)}</span>
+                    <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.45, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}>{toolPreview(row.tool)}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0, lineHeight: 1.4, paddingTop: 2 }}>{toolPhaseLabel(row.tool)}</span>
                   </button>
                   {expanded ? <div style={{ padding: '0 12px 12px 34px' }}><ToolDetailBlock row={row} /></div> : null}
                 </div>
