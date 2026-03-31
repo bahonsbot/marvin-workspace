@@ -394,7 +394,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   const createdAtLabel = task.meta?.createdAt ? new Date(task.meta.createdAt).toLocaleString('en-GB', { hour12: false }) : null;
 
   return (
-    <div style={{ position: 'fixed', top: 76, right: 22, bottom: 12, width: 'min(92vw, 620px)', zIndex: 1000, pointerEvents: 'none' }}>
+    <div style={{ position: 'fixed', top: 76, right: 22, width: 'min(92vw, 620px)', height: 'calc(100vh - 88px)', minHeight: '720px', maxHeight: 'calc(100vh - 88px)', zIndex: 1000, pointerEvents: 'none' }}>
       <div style={{ width: '100%', height: '100%', background: 'rgba(255,253,251,0.98)', border: '1px solid rgba(200, 195, 188, 0.48)', borderRadius: 26, boxShadow: '0 24px 80px rgba(0,0,0,0.12)', padding: 22, display: 'grid', gap: 18, alignContent: 'start', overflow: 'auto', pointerEvents: 'auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ display: 'grid', gap: 6, maxWidth: 420 }}>
@@ -609,7 +609,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
       <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={syncState} syncDetails={syncDetails} onOpenNewTask={() => { setAutoModalMode('create'); setAutoModalTask(null); setAutoModalOpen(true); }} onRefreshImport={refreshAutonomousBoard} refreshBusy={autoRefreshBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
       <TaskModal modal={modal} onClose={() => setModal(null)} onSave={handleSave} />
       <AutonomousTaskModal open={autoModalOpen} mode={autoModalMode} initialTask={autoModalTask} onClose={() => { setAutoModalOpen(false); setAutoModalTask(null); }} onSubmit={async (input) => { if (autoModalMode === 'edit' && autoModalTask) { await updateAutonomousTask(autoModalTask.id, input); setAutoModalOpen(false); return; } await createAutonomousTask(input); }} />
-      {!autoModalOpen ? <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} onRemove={removeAutonomousTask} onEdit={(task) => { setAutoModalMode('edit'); setAutoModalTask(task); setAutoModalOpen(true); }} busy={autoActionBusy} /> : null}
+      <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} onRemove={removeAutonomousTask} onEdit={(task) => { setAutoModalMode('edit'); setAutoModalTask(task); setAutoModalOpen(true); }} busy={autoActionBusy} />
     </div>
   );
 }
