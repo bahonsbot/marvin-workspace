@@ -689,13 +689,20 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     [liveTargetSession.key, load],
   );
 
-  useEffect(() => {
-    const transport = summary.runtimeBridge.transport.websocket;
-    const bridgeToken = summary.runtimeBridge.endpoints.websocketBridgeToken;
-    const baseUrl = summary.runtimeBridge.endpoints.websocket;
-    const gatewaySessionToken = summary.runtimeBridge.endpoints.gatewaySessionToken;
+  const runtimeBridgeWebsocketConfigured = summary.runtimeBridge.transport.websocket.configured;
+  const runtimeBridgeBrowserReachability = summary.runtimeBridge.transport.websocket.browserReachability;
+  const runtimeBridgeWebsocketBridgeToken = summary.runtimeBridge.endpoints.websocketBridgeToken;
+  const runtimeBridgeWebsocketBaseUrl = summary.runtimeBridge.endpoints.websocket;
+  const runtimeBridgeGatewaySessionToken = summary.runtimeBridge.endpoints.gatewaySessionToken;
 
-    if (!transport.configured || !bridgeToken || !baseUrl) {
+  useEffect(() => {
+    const transportConfigured = runtimeBridgeWebsocketConfigured;
+    const browserReachability = runtimeBridgeBrowserReachability;
+    const bridgeToken = runtimeBridgeWebsocketBridgeToken;
+    const baseUrl = runtimeBridgeWebsocketBaseUrl;
+    const gatewaySessionToken = runtimeBridgeGatewaySessionToken;
+
+    if (!transportConfigured || !bridgeToken || !baseUrl) {
       socketRef.current = null;
       setWsState('unavailable');
       setWsDetail('No Mission Control WS sidecar descriptor is available for this preview.');
@@ -721,7 +728,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
 
     setWsState('connecting');
     setWsDetail(
-      transport.browserReachability === 'explicit'
+      browserReachability === 'explicit'
         ? 'Connecting to the same-origin Mission Control runtime websocket.'
         : 'Connecting to Mission Control WS sidecar.',
     );
@@ -925,12 +932,11 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   }, [
     handleGatewayEvent,
     rejectPending,
-    summary.runtimeBridge.endpoints.websocket,
-    summary.runtimeBridge.endpoints.websocketBridgeToken,
-    summary.runtimeBridge.endpoints.gatewaySessionToken,
-    summary.runtimeBridge.transport.websocket,
-    summary.runtimeBridge.transport.websocket.browserReachability,
-    summary.runtimeBridge.transport.websocket.configured,
+    runtimeBridgeWebsocketBaseUrl,
+    runtimeBridgeWebsocketBridgeToken,
+    runtimeBridgeGatewaySessionToken,
+    runtimeBridgeBrowserReachability,
+    runtimeBridgeWebsocketConfigured,
   ]);
 
   const sendPrompt = useCallback(
