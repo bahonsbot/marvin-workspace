@@ -467,6 +467,25 @@ export async function getAutonomousTaskById(id: string): Promise<MCAutoTask | nu
   return store.tasks.find((task) => task.id === id) ?? null;
 }
 
+export async function removeAutonomousTask(id: string): Promise<MCAutoTask | null> {
+  const [store, markdown] = await Promise.all([loadStructuredTasks(), readAutonomousMarkdown()]);
+  const index = store.tasks.findIndex((task) => task.id === id);
+  if (index === -1) return null;
+
+  const [task] = store.tasks.splice(index, 1);
+  await saveStructuredTasks(store);
+
+  const link = task.linkedAutonomyRef;
+  if (link?.kind === 'autonomous-md') {
+    const nextMarkdown = removeLegacyTaskLine(markdown, link);
+    if (nextMarkdown !== markdown) {
+      await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
+    }
+  }
+
+  return task;
+}
+
 export async function updateAutonomousTask(
   id: string,
   updater: (task: MCAutoTask) => MCAutoTask,
