@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260331-1258]
+
+**What failed:** Mission Control Chat live session continuity after send
+**Error:** the runtime bridge hook recreated its websocket effect after a normal user send because `load()` depended on `messages.length`, which changed callback identities upstream and tore down/rebuilt the bridge; a second churn path let summary refresh recreate the bridge/session effect even when material transport values had not changed
+**Context:** Mar 31 Mission Control Chat audit after Philippe reported that every sent message effectively kicked him out of the session until a hard reload
+**Suggested fix:** for live bridge hooks, never let transcript-length or broad summary-object churn sit in callback/effect dependencies that own websocket lifecycle; derive hydration decisions from functional state updates and narrow transport effects to stable scalar inputs only
+**Resolution:** Fixed on 2026-03-31 in `projects/mission-control/hooks/useRuntimeBridge.ts`; commits `d417389` and `1d4c3d2`
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260331-1358]
+
+**What failed:** first Mission Control chat-to-Files linkifier pass
+**Error:** file-path linking initially failed for inline-code file mentions because code rendering took precedence over plain-text linking, then the follow-up clickable-code implementation became too permissive and linked generic code-ish tokens like `read`, `exec`, and CSS property names
+**Context:** Mar 31 Mission Control Chat UX pass after Philippe asked for file mentions in chat to open the corresponding file in the Files page
+**Suggested fix:** when linkifying file references in rich text, handle inline-code file paths explicitly and gate all linking behind a strict workspace-file test: allowed workspace roots, at least one slash, and a filename-like last segment
+**Resolution:** Fixed on 2026-03-31 in `projects/mission-control/components/chat/MissionControlChatSurface.tsx`; initial link commit `596ad35`, then matcher tightened in the same file after live feedback
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260330-1544]
 
 **What failed:** first live Mission Control tool-lane persistence/collapse behavior

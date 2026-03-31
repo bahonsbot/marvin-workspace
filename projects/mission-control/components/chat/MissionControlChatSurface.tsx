@@ -79,6 +79,18 @@ function normalizeWorkspacePath(candidate: string): string | null {
   return normalized;
 }
 
+function isLikelyWorkspaceFilePath(candidate: string): boolean {
+  const normalized = normalizeWorkspacePath(candidate);
+  if (!normalized) return false;
+  if (!normalized.includes('/')) return false;
+  const allowedRoots = ['projects/', 'docs/', 'scripts/', 'memory/', 'config/', 'skills/', 'model-guidance/', 'uploads/', 'app/', 'components/', 'lib/', 'public/'];
+  if (!allowedRoots.some((root) => normalized.startsWith(root))) return false;
+  const lastSegment = normalized.slice(normalized.lastIndexOf('/') + 1);
+  if (!lastSegment || !lastSegment.includes('.')) return false;
+  if (lastSegment.startsWith('.')) return false;
+  return /^[A-Za-z0-9._-]+$/.test(lastSegment);
+}
+
 function buildFilesHref(path: string): string {
   const normalized = normalizeWorkspacePath(path) ?? path;
   const parentPath = normalized.includes('/') ? normalized.slice(0, normalized.lastIndexOf('/')) : '';
@@ -109,7 +121,7 @@ function renderPlainTextWithFileLinks(text: string, keyPrefix: string): React.Re
     }
 
     const normalizedPath = normalizeWorkspacePath(rawPath);
-    if (normalizedPath) {
+    if (normalizedPath && isLikelyWorkspaceFilePath(rawPath)) {
       nodes.push(
         <Link
           key={`${keyPrefix}-file-${pathStart}`}
@@ -167,21 +179,48 @@ function renderInlineRichText(text: string): React.ReactNode[] {
         </em>,
       );
     } else if (match[4]) {
-      nodes.push(
-        <code
-          key={`code-${match.index}`}
-          style={{
-            fontFamily: monoFont,
-            fontSize: '0.92em',
-            padding: '0.12em 0.38em',
-            borderRadius: 8,
-            background: 'rgba(20, 46, 38, 0.08)',
-            color: 'var(--text-body)',
-          }}
-        >
-          {match[4]}
-        </code>,
-      );
+      const normalizedCodePath = normalizeWorkspacePath(match[4]);
+      if (normalizedCodePath && isLikelyWorkspaceFilePath(match[4])) {
+        nodes.push(
+          <Link
+            key={`code-link-${match.index}`}
+            href={buildFilesHref(normalizedCodePath)}
+            style={{ textDecoration: 'none' }}
+          >
+            <code
+              style={{
+                fontFamily: monoFont,
+                fontSize: '0.92em',
+                padding: '0.12em 0.38em',
+                borderRadius: 8,
+                background: 'rgba(20, 46, 38, 0.08)',
+                color: 'var(--accent-strong)',
+                textDecoration: 'underline',
+                textUnderlineOffset: 2,
+                cursor: 'pointer',
+              }}
+            >
+              {match[4]}
+            </code>
+          </Link>,
+        );
+      } else {
+        nodes.push(
+          <code
+            key={`code-${match.index}`}
+            style={{
+              fontFamily: monoFont,
+              fontSize: '0.92em',
+              padding: '0.12em 0.38em',
+              borderRadius: 8,
+              background: 'rgba(20, 46, 38, 0.08)',
+              color: 'var(--text-body)',
+            }}
+          >
+            {match[4]}
+          </code>,
+        );
+      }
     } else if (match[5] && match[6]) {
       nodes.push(
         <a key={`link-${match.index}`} href={match[6]} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-strong)', textDecoration: 'underline' }}>
