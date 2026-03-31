@@ -96,6 +96,8 @@ export interface TaskBoardSummary {
         runStatus?: string;
         feedback?: string[];
         createdAt?: number;
+        artifactPath?: string;
+        resultSummary?: string;
       };
     }>;
   }>;

@@ -27,6 +27,8 @@ type BoardTask = {
     sourceType?: string;
     runStatus?: string;
     createdAt?: number;
+    artifactPath?: string;
+    resultSummary?: string;
   };
 };
 
@@ -89,6 +91,36 @@ function parseCompletedEntries(tasksLog: string): number {
     .filter((line) => line.startsWith('- ✅')).length;
 }
 
+function summarizeRunResult(result: string | undefined): { summary?: string; artifactPath?: string; proof?: string } {
+  if (!result) return {};
+
+  const artifactMatch = result.match(/(?:\/data\/\.openclaw\/workspace\/)?(projects\/mission-control\/[\w./-]+\.(?:md|json|txt))/i);
+  const artifactPath = artifactMatch?.[1];
+
+  try {
+    const parsed = JSON.parse(result);
+    const payloadTexts = Array.isArray(parsed?.result?.payloads)
+      ? parsed.result.payloads.map((payload: { text?: string }) => payload?.text).filter(Boolean)
+      : [];
+    const lastText = payloadTexts.at(-1) as string | undefined;
+    const cleanSummary = typeof lastText === 'string'
+      ? lastText.replace(/[#*_`>-]+/g, ' ').replace(/\s+/g, ' ').trim()
+      : undefined;
+    return {
+      summary: cleanSummary ? (cleanSummary.length > 180 ? `${cleanSummary.slice(0, 177).trimEnd()}…` : cleanSummary) : parsed?.summary,
+      artifactPath,
+      proof: lastText,
+    };
+  } catch {
+    const clean = result.replace(/\s+/g, ' ').trim();
+    return {
+      summary: clean.length > 180 ? `${clean.slice(0, 177).trimEnd()}…` : clean,
+      artifactPath,
+      proof: result,
+    };
+  }
+}
+
 function taskToBoardTask(task: MCAutoTask): BoardTask {
   let column: BoardTask['column'];
   if (task.status === 'backlog') column = 'backlog';
@@ -97,10 +129,12 @@ function taskToBoardTask(task: MCAutoTask): BoardTask {
   else if (task.status === 'review') column = 'review';
   else column = 'done';
 
+  const runResult = summarizeRunResult(task.run?.result);
   const detail: BoardTask['detail'] = {
     summary: task.title,
     ...(task.description ? { why: task.description } : {}),
-    ...(task.run?.summary ? { completed: task.run.summary } : {}),
+    ...(task.run?.summary || runResult.summary ? { completed: runResult.summary ?? task.run?.summary } : {}),
+    ...(runResult.proof ? { proof: runResult.proof } : {}),
   };
 
   const textParts = [task.title];
@@ -118,6 +152,8 @@ function taskToBoardTask(task: MCAutoTask): BoardTask {
       sourceType: task.sourceType,
       runStatus: task.run?.status,
       createdAt: task.createdAt,
+      artifactPath: runResult.artifactPath,
+      resultSummary: runResult.summary,
     },
   };
 }

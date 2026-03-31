@@ -24,6 +24,8 @@ type Task = {
     runStatus?: string;
     feedback?: string[];
     createdAt?: number;
+    artifactPath?: string;
+    resultSummary?: string;
   };
 };
 
@@ -394,8 +396,8 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   const createdAtLabel = task.meta?.createdAt ? new Date(task.meta.createdAt).toLocaleString('en-GB', { hour12: false }) : null;
 
   return (
-    <div style={{ position: 'fixed', top: 52, right: 22, width: 'min(92vw, 620px)', height: 'calc(100vh - 132px)', minHeight: '640px', maxHeight: 'calc(100vh - 132px)', zIndex: 1000, pointerEvents: 'none' }}>
-      <div style={{ width: '100%', height: '100%', background: 'rgba(255,253,251,0.98)', border: '1px solid rgba(200, 195, 188, 0.48)', borderRadius: 26, boxShadow: '0 24px 80px rgba(0,0,0,0.12)', padding: '22px 22px 32px 22px', display: 'grid', gap: 18, alignContent: 'start', overflow: 'auto', pointerEvents: 'auto' }}>
+    <div style={{ position: 'fixed', top: 34, right: 22, width: 'min(92vw, 620px)', maxHeight: 'calc(100vh - 132px)', zIndex: 1000, pointerEvents: 'none' }}>
+      <div style={{ width: '100%', maxHeight: 'calc(100vh - 132px)', background: 'rgba(255,253,251,0.98)', border: '1px solid rgba(200, 195, 188, 0.48)', borderRadius: 26, boxShadow: '0 24px 80px rgba(0,0,0,0.12)', padding: '22px 22px 14px 22px', display: 'grid', gap: 18, alignContent: 'start', overflowY: 'auto', overflowX: 'hidden', pointerEvents: 'auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ display: 'grid', gap: 6, maxWidth: 420 }}>
             <div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.44, color: '#8a8a8a' }}>Autonomous task</div>
@@ -413,7 +415,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         {task.detail.why ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Brief</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', fontSize: 13.5, lineHeight: 1.68, color: '#37413d' }}>{task.detail.why}</div></section> : null}
 
-        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{task.detail.completed ?? 'No run summary yet.'}</div></div></section>
+        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{task.meta?.resultSummary ?? task.detail.completed ?? 'No run summary yet.'}</div>{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{task.meta.artifactPath}</span></a> : null}</div></section>
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}</div></div></section>
 
@@ -423,7 +425,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         {canReview ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Review note</div><textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Why are you rejecting this task?" rows={3} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none', width: '100%', boxSizing: 'border-box', resize: 'vertical', fontFamily: 'inherit' }} /></section> : null}
 
-        <div style={{ marginTop: 'auto', display: 'flex', gap: 10, justifyContent: 'space-between', alignItems: 'center', paddingTop: 6 }}>
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'space-between', alignItems: 'center', paddingTop: 2 }}>
           <div style={{ display: 'flex', gap: 10 }}><button onClick={() => onEdit(task)} disabled={busy} style={{ padding: '10px 14px', borderRadius: 12, border: '1px solid rgba(200,195,188,0.45)', background: 'rgba(255,255,255,0.94)', color: '#5f655f', cursor: busy ? 'progress' : 'pointer', fontSize: 12.5, fontWeight: 700 }}>Edit</button><button onClick={() => void onRemove(task)} disabled={busy} style={{ padding: '10px 14px', borderRadius: 12, border: '1px solid rgba(214, 129, 129, 0.35)', background: 'rgba(255, 247, 247, 0.96)', color: '#a44f4f', cursor: busy ? 'progress' : 'pointer', fontSize: 12.5, fontWeight: 700 }}>Remove</button></div>
           <div style={{ display: 'flex', gap: 10 }}>
             {canReview ? (

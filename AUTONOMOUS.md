@@ -29,10 +29,9 @@
 
 
 ## Open Backlog
-
-
-
-- Tighten Chat recent-session switching
+- Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs
+- Add clickable artefact-first rendering for reviewed autonomous task results
+- Create execute smoke-test JSON artifact
 ## Done
 
 - (2026-03-24) [Career] 📝 Draft: 3 Instagram content angles tied to After Effects motion design project → projects/portfolio/content-plan-ae-motion-design.md
@@ -41,3 +40,8 @@
 - (2026-03-24) [Career] 🚀 Launch: portfolio case-study draft → projects/portfolio/case-studies/motion-design-loop.md
 - (2026-03-24) [Trading] 🔧 Fix: safe improvement in trading-bot workspace → bot-support-spec-health-snapshot-reporter-2026-03-16.md
 - (2026-03-24) [Personal] 📚 Learn: Japanese study pack (greetings lesson) → projects/language/lesson-01-greetings.md
+## Review
+- Create tasks-page current-state doc
+
+## Done Today
+- Create tasks-page current-state doc | ✅ Completed: { "runId": "50d85bce-073a-4eb7-9ad9-da91a8055069", "status": "ok", "summary": "completed", "result": { "payloads": [ { "text": "Now I have a thorough picture. Let me write the doc.", "mediaUrl": null }, { "text": "**C…
