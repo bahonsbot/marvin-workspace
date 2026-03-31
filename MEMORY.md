@@ -194,6 +194,18 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - phase 1 complete, implementation progressing
 - refs: `projects/futures-bot/PRD.md`, `projects/futures-bot/tests/`, `projects/futures-bot/src/`
 
+### Mission Control — General Domain (2026-03-31 milestone)
+- **Autonomous Tasks board is now a real five-lane workflow**: Backlog / To Do / In Progress / Review / Done
+- **Execute is proven real**: three test tasks ran end-to-end, produced artefacts, and moved correctly through the workflow
+- **Dual-source truth is the main architectural fragility**: autonomous tasks are mirrored between `data/autonomous-tasks.json` (authoritative) and `AUTONOMOUS.md` (legacy compatibility layer). Until one source becomes dominant, this split will keep producing reconciliation edge cases (duplicates, cloning, drift)
+- **Key lessons learned (2026-03-31)**:
+  - Component-level `export const dynamic` does NOT make a Next.js route dynamic — must be in the route file itself
+  - Dual-source state transitions must update BOTH sources using the pre-edit state as the removal key
+  - `tasks-log.md` is an append-only history log, NOT a current-state lane — never compare its counts against Done
+  - Long unbroken text in chat bubbles requires `overflowWrap: anywhere` + `wordBreak: break-word` directly on the bubble div
+  - Inspector should be `maxHeight`-capped content sizing, not viewport-height-slaved
+- refs: `projects/_ops/mission-control-comprehensive-savepoint-2026-04-01-night.md`, `memory/2026-03-31.md`
+
 ### Cryo Projects
 - Horizons PMS
 - Market Intel News Reader
