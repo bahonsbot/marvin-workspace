@@ -13,7 +13,7 @@ const TASKS_LOG_PATH = '/data/.openclaw/workspace/memory/tasks-log.md';
 type BoardTask = {
   id: string;
   text: string;
-  column: 'todo' | 'inprogress' | 'done';
+  column: 'backlog' | 'todo' | 'inprogress' | 'review' | 'done';
   detail: {
     summary: string;
     why?: string;
@@ -90,9 +90,11 @@ function parseCompletedEntries(tasksLog: string): number {
 
 function taskToBoardTask(task: MCAutoTask): BoardTask {
   let column: BoardTask['column'];
-  if (task.status === 'in-progress' || task.status === 'review') column = 'inprogress';
-  else if (task.status === 'done') column = 'done';
-  else column = 'todo';
+  if (task.status === 'backlog') column = 'backlog';
+  else if (task.status === 'todo') column = 'todo';
+  else if (task.status === 'in-progress') column = 'inprogress';
+  else if (task.status === 'review') column = 'review';
+  else column = 'done';
 
   const detail: BoardTask['detail'] = {
     summary: task.title,
@@ -137,7 +139,7 @@ async function loadTaskSources() {
 
   return {
     boardUpdatedAt: safeIsoFromMtime(store.meta.updatedAt),
-    columns: { todo, inProgress, done },
+    columns: { backlog: boardTasks.filter((task) => task.column === 'backlog'), todo, inProgress, review: boardTasks.filter((task) => task.column === 'review'), done },
     structured: {
       path: '/data/.openclaw/workspace/projects/mission-control/data/autonomous-tasks.json',
       taskCount: store.tasks.length,
@@ -169,6 +171,7 @@ export async function getTaskBoard(): Promise<TaskBoardSummary> {
     return {
       status: 'partial',
       columns: [
+        { id: 'backlog', title: 'Backlog', count: source.columns.backlog.length, tasks: source.columns.backlog },
         { id: 'todo', title: 'To Do', count: source.columns.todo.length, tasks: source.columns.todo },
         {
           id: 'inprogress',
@@ -176,6 +179,7 @@ export async function getTaskBoard(): Promise<TaskBoardSummary> {
           count: source.columns.inProgress.length,
           tasks: source.columns.inProgress,
         },
+        { id: 'review', title: 'Review', count: source.columns.review.length, tasks: source.columns.review },
         { id: 'done', title: 'Done', count: source.columns.done.length, tasks: source.columns.done },
       ],
       boardUpdatedAt: source.boardUpdatedAt,
@@ -205,8 +209,10 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
     const issues: string[] = [];
 
     const boardCounts = {
+      backlog: source.columns.backlog.length,
       todo: source.columns.todo.length,
       inProgress: source.columns.inProgress.length,
+      review: source.columns.review.length,
       done: source.columns.done.length,
     };
 
@@ -215,13 +221,17 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
     }
 
     if (source.autonomous.counts) {
-      const activeStructuredBacklog = source.structured.counts.backlog + source.structured.counts.todo;
-      if (activeStructuredBacklog < source.autonomous.counts.backlog) {
-        issues.push(`Structured active backlog looks smaller than AUTONOMOUS Open Backlog (${activeStructuredBacklog} < ${source.autonomous.counts.backlog})`);
+      if (source.structured.counts.backlog < source.autonomous.counts.backlog) {
+        issues.push(`Backlog count lower than AUTONOMOUS Open Backlog (structured=${source.structured.counts.backlog}, AUTONOMOUS=${source.autonomous.counts.backlog})`);
       }
       if (source.structured.counts.inProgress !== source.autonomous.counts.inProgress) {
         issues.push(
           `In Progress mismatch (structured=${source.structured.counts.inProgress}, AUTONOMOUS=${source.autonomous.counts.inProgress})`,
+        );
+      }
+      if (source.structured.counts.review !== boardCounts.review) {
+        issues.push(
+          `Review lane mismatch (structured=${source.structured.counts.review}, board=${boardCounts.review})`,
         );
       }
       if (source.structured.counts.done < source.autonomous.counts.doneToday) {
@@ -257,7 +267,9 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
               board: boardCounts,
               autonomous: {
                 backlog: source.autonomous.counts.backlog,
+                todo: source.structured.counts.todo,
                 inProgress: source.autonomous.counts.inProgress,
+                review: source.structured.counts.review,
                 doneToday: source.autonomous.counts.doneToday,
               },
             }

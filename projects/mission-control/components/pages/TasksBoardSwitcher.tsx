@@ -15,7 +15,7 @@ type TaskDetail = {
 type Task = {
   id: string;
   text: string;
-  column: 'todo' | 'inprogress' | 'done';
+  column: 'backlog' | 'todo' | 'inprogress' | 'review' | 'done';
   detail: TaskDetail;
   meta?: {
     priority?: string;
@@ -34,6 +34,7 @@ type Column = {
 };
 
 type BoardId = 'autonomous' | 'personal' | 'projects';
+type ManualTaskColumn = 'todo' | 'inprogress' | 'done';
 type AutoPriority = 'critical' | 'high' | 'normal' | 'low';
 type AutoAgentTarget = 'marvin' | 'builder' | 'reviewer' | 'content-creator';
 
@@ -129,8 +130,10 @@ function cardStyle() {
 }
 
 function columnPalette(colId: string) {
-  if (colId === 'todo') return { accent: '#c4823a', border: 'rgba(196, 130, 58, 0.22)', bg: 'linear-gradient(180deg, rgba(196, 130, 58, 0.08) 0%, rgba(255, 255, 255, 0.82) 18%)', chipBg: 'rgba(196, 130, 58, 0.12)', chipText: '#c4823a', emptyText: 'Nothing waiting in backlog.' };
+  if (colId === 'backlog') return { accent: '#8d6f4d', border: 'rgba(141, 111, 77, 0.22)', bg: 'linear-gradient(180deg, rgba(141, 111, 77, 0.08) 0%, rgba(255, 255, 255, 0.82) 18%)', chipBg: 'rgba(141, 111, 77, 0.12)', chipText: '#8d6f4d', emptyText: 'No cards parked in backlog.' };
+  if (colId === 'todo') return { accent: '#c4823a', border: 'rgba(196, 130, 58, 0.22)', bg: 'linear-gradient(180deg, rgba(196, 130, 58, 0.08) 0%, rgba(255, 255, 255, 0.82) 18%)', chipBg: 'rgba(196, 130, 58, 0.12)', chipText: '#c4823a', emptyText: 'Nothing queued for execution.' };
   if (colId === 'inprogress') return { accent: '#3c6658', border: 'rgba(121, 166, 148, 0.24)', bg: 'linear-gradient(180deg, rgba(121, 166, 148, 0.12) 0%, rgba(255, 255, 255, 0.82) 18%)', chipBg: 'rgba(121, 166, 148, 0.16)', chipText: '#3c6658', emptyText: 'No work actively in motion.' };
+  if (colId === 'review') return { accent: '#7f5aa2', border: 'rgba(127, 90, 162, 0.24)', bg: 'linear-gradient(180deg, rgba(127, 90, 162, 0.1) 0%, rgba(255, 255, 255, 0.82) 18%)', chipBg: 'rgba(127, 90, 162, 0.12)', chipText: '#7f5aa2', emptyText: 'Nothing waiting for operator review.' };
   return { accent: '#79a694', border: 'rgba(121, 166, 148, 0.22)', bg: 'linear-gradient(180deg, rgba(212, 231, 221, 0.75) 0%, rgba(255, 255, 255, 0.82) 18%)', chipBg: 'rgba(121, 166, 148, 0.14)', chipText: '#3c6658', emptyText: 'No completed cards yet.' };
 }
 
@@ -169,7 +172,7 @@ function boardTypeFromLabel(label: string): 'personal' | 'projects' {
 
 type ModalMode =
   | null
-  | { mode: 'create'; board: 'personal' | 'projects'; defaultColumn: Task['column'] }
+  | { mode: 'create'; board: 'personal' | 'projects'; defaultColumn: ManualTaskColumn }
   | { mode: 'edit'; board: 'personal' | 'projects'; task: Task };
 
 function TaskModal({ modal, onClose, onSave }: { modal: ModalMode; onClose: () => void; onSave: (board: 'personal' | 'projects', task: Task, isNew: boolean) => void }) {
@@ -177,7 +180,7 @@ function TaskModal({ modal, onClose, onSave }: { modal: ModalMode; onClose: () =
   const [summary, setSummary] = useState('');
   const [why, setWhy] = useState('');
   const [completed, setCompleted] = useState('');
-  const [column, setColumn] = useState<Task['column']>('todo');
+  const [column, setColumn] = useState<ManualTaskColumn>('todo');
 
   useEffect(() => {
     if (!modal) return;
@@ -186,7 +189,7 @@ function TaskModal({ modal, onClose, onSave }: { modal: ModalMode; onClose: () =
       setSummary(displaySummary(modal.task.detail.summary));
       setWhy(modal.task.detail.why ?? '');
       setCompleted(modal.task.detail.completed ?? '');
-      setColumn(modal.task.column);
+      setColumn(modal.task.column as ManualTaskColumn);
     } else {
       setBoard(modal.board);
       setSummary('');
@@ -311,21 +314,21 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
   );
 }
 
-function ColumnView({ column, boardType, onEdit, onDelete, onDropTask, draggingTaskId, isDropTarget, onDragEnterColumn, onDragLeaveColumn, onDragStartTask, onOpenTask }: { column: Column; boardType?: 'autonomous' | 'personal' | 'projects'; onEdit?: (task: Task) => void; onDelete?: (task: Task) => void; onDropTask?: (taskId: string, newColumn: Task['column']) => void; draggingTaskId?: string | null; isDropTarget?: boolean; onDragEnterColumn?: (columnId: Task['column']) => void; onDragLeaveColumn?: () => void; onDragStartTask?: (taskId: string, columnId: Task['column']) => void; onOpenTask?: (task: Task) => void; }) {
+function ColumnView({ column, boardType, onEdit, onDelete, onDropTask, draggingTaskId, isDropTarget, onDragEnterColumn, onDragLeaveColumn, onDragStartTask, onOpenTask }: { column: Column; boardType?: 'autonomous' | 'personal' | 'projects'; onEdit?: (task: Task) => void; onDelete?: (task: Task) => void; onDropTask?: (taskId: string, newColumn: ManualTaskColumn) => void; draggingTaskId?: string | null; isDropTarget?: boolean; onDragEnterColumn?: (columnId: ManualTaskColumn) => void; onDragLeaveColumn?: () => void; onDragStartTask?: (taskId: string, columnId: ManualTaskColumn) => void; onOpenTask?: (task: Task) => void; }) {
   const palette = columnPalette(column.id);
   const isManual = boardType === 'personal' || boardType === 'projects';
   return (
-    <section onDragOver={event => { if (!isManual || !onDropTask) return; event.preventDefault(); event.dataTransfer.dropEffect = 'move'; onDragEnterColumn?.(column.id as Task['column']); }} onDragEnter={() => { if (!isManual || !onDragEnterColumn) return; onDragEnterColumn(column.id as Task['column']); }} onDrop={event => { if (!isManual || !onDropTask) return; event.preventDefault(); const taskId = event.dataTransfer.getData('text/plain'); if (taskId) onDropTask(taskId, column.id as Task['column']); }} style={{ minWidth: 0, border: `1px solid ${isDropTarget ? `${palette.accent}66` : palette.border}`, borderRadius: 20, padding: 14, background: isDropTarget ? `linear-gradient(180deg, ${palette.accent}18 0%, rgba(255, 255, 255, 0.86) 24%)` : palette.bg, display: 'grid', gap: 12, alignContent: 'start', boxShadow: isDropTarget ? `0 0 0 1px ${palette.accent}22 inset` : 'none', transition: 'background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease' }}>
+    <section onDragOver={event => { if (!isManual || !onDropTask) return; event.preventDefault(); event.dataTransfer.dropEffect = 'move'; onDragEnterColumn?.(column.id as ManualTaskColumn); }} onDragEnter={() => { if (!isManual || !onDragEnterColumn) return; onDragEnterColumn(column.id as ManualTaskColumn); }} onDrop={event => { if (!isManual || !onDropTask) return; event.preventDefault(); const taskId = event.dataTransfer.getData('text/plain'); if (taskId) onDropTask(taskId, column.id as ManualTaskColumn); }} style={{ minWidth: 0, border: `1px solid ${isDropTarget ? `${palette.accent}66` : palette.border}`, borderRadius: 20, padding: 14, background: isDropTarget ? `linear-gradient(180deg, ${palette.accent}18 0%, rgba(255, 255, 255, 0.86) 24%)` : palette.bg, display: 'grid', gap: 12, alignContent: 'start', boxShadow: isDropTarget ? `0 0 0 1px ${palette.accent}22 inset` : 'none', transition: 'background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><span style={{ width: 9, height: 9, borderRadius: '50%', background: palette.accent, boxShadow: `0 0 16px ${palette.accent}55` }} /><h3 style={{ margin: 0, fontSize: 16, fontWeight: 500 }}>{column.title}</h3></div><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><span style={{ fontSize: 12, color: palette.chipText, background: palette.chipBg, padding: '4px 10px', borderRadius: 999, fontWeight: 600 }}>{column.count}</span></div></div>
-      {column.tasks.length === 0 ? <div style={{ border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, padding: 22, background: 'rgba(255, 255, 255, 0.48)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', textAlign: 'center', fontSize: 12, color: '#7a7a7a' }}>{palette.emptyText}</div> : <div style={{ display: 'grid', gap: 10 }}>{column.tasks.map(task => <TaskCard key={task.id} task={task} onOpen={onOpenTask} onEdit={onEdit} onDelete={onDelete} boardType={boardType} isDragging={draggingTaskId === task.id} onDragStart={isManual ? taskId => onDragStartTask?.(taskId, column.id as Task['column']) : undefined} onDragEnd={isManual ? onDragLeaveColumn : undefined} />)}</div>}
+      {column.tasks.length === 0 ? <div style={{ border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, padding: 22, background: 'rgba(255, 255, 255, 0.48)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', textAlign: 'center', fontSize: 12, color: '#7a7a7a' }}>{palette.emptyText}</div> : <div style={{ display: 'grid', gap: 10 }}>{column.tasks.map(task => <TaskCard key={task.id} task={task} onOpen={onOpenTask} onEdit={onEdit} onDelete={onDelete} boardType={boardType} isDragging={draggingTaskId === task.id} onDragStart={isManual ? taskId => onDragStartTask?.(taskId, column.id as ManualTaskColumn) : undefined} onDragEnd={isManual ? onDragLeaveColumn : undefined} />)}</div>}
     </section>
   );
 }
 
 function SummaryStrip({ columns, label, isManual }: { columns: Column[]; label: string; isManual?: boolean }) {
-  const [todo, inprogress, done] = columns;
+  const metrics = columns.map((col) => ({ col, title: col.title }));
   return (
-    <section className="tasks-summary-grid" style={{ ...cardStyle(), background: 'linear-gradient(180deg, rgba(212, 231, 221, 0.72) 0%, rgba(255, 255, 255, 0.78) 34%)' }}><div style={{ display: 'grid', gap: 10 }}><div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Board view</div><div style={{ fontSize: 22, fontWeight: 500, lineHeight: 1.25 }}>{label}</div>{isManual && <div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>Drag cards between columns to keep this board moving.</div>}</div><div className="tasks-summary-metrics">{[{ col: todo, title: 'Backlog' }, { col: inprogress, title: 'In progress' }, { col: done, title: 'Done' }].map(({ col, title }) => <div key={title} style={{ border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 14, padding: 12, background: 'rgba(255, 255, 255, 0.58)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.3, color: '#7a7a7a' }}>{title}</div><div style={{ fontSize: 26, fontWeight: 600, marginTop: 6 }}>{col?.count ?? 0}</div></div>)}</div></section>
+    <section className="tasks-summary-grid" style={{ ...cardStyle(), background: 'linear-gradient(180deg, rgba(212, 231, 221, 0.72) 0%, rgba(255, 255, 255, 0.78) 34%)' }}><div style={{ display: 'grid', gap: 10 }}><div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Board view</div><div style={{ fontSize: 22, fontWeight: 500, lineHeight: 1.25 }}>{label}</div>{isManual && <div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>Drag cards between columns to keep this board moving.</div>}</div><div className="tasks-summary-metrics">{metrics.map(({ col, title }) => <div key={title} style={{ border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 14, padding: 12, background: 'rgba(255, 255, 255, 0.58)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.3, color: '#7a7a7a' }}>{title}</div><div style={{ fontSize: 26, fontWeight: 600, marginTop: 6 }}>{col?.count ?? 0}</div></div>)}</div></section>
   );
 }
 
@@ -337,8 +340,8 @@ function SyncBadge({ state }: { state: 'unknown' | 'ok' | 'drift' }) {
 
 function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, busy }: { task: Task | null; onClose: () => void; onExecute: (task: Task) => Promise<void>; onApprove: (task: Task) => Promise<void>; onReject: (task: Task, note: string) => Promise<void>; busy: boolean; }) {
   const [rejectNote, setRejectNote] = useState('');
-  const canExecute = task?.column === 'todo';
-  const canReview = task?.meta?.runStatus === 'done' && task?.column !== 'done';
+  const canExecute = task?.column === 'backlog' || task?.column === 'todo';
+  const canReview = task?.column === 'review' && task?.meta?.runStatus === 'done';
 
   useEffect(() => {
     setRejectNote('');
@@ -356,7 +359,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, b
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#7a7a7a', padding: 4, lineHeight: 1 }}>✕</button>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(212, 231, 221, 0.8)', fontSize: 11, fontWeight: 700, color: '#3c6658', textTransform: 'uppercase' }}>{task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress / Review' : 'Done'}</span>
+          <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(212, 231, 221, 0.8)', fontSize: 11, fontWeight: 700, color: '#3c6658', textTransform: 'uppercase' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</span>
           {task.meta?.priority ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255, 245, 234, 0.9)', fontSize: 11, fontWeight: 700, color: '#b26a1f', textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}
           {task.meta?.agentTarget ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(200,195,188,0.5)', fontSize: 11, fontWeight: 700, color: '#5f655f', textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}
           {task.meta?.sourceType ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(200,195,188,0.5)', fontSize: 11, fontWeight: 700, color: '#5f655f', textTransform: 'uppercase' }}>{task.meta.sourceType}</span> : null}
@@ -386,7 +389,7 @@ function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onR
     <div style={{ display: 'grid', gap: 14 }}>
       <SummaryStrip columns={columns} label="Autonomous execution board" />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-        <div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{refreshNote ?? 'Structured store is now live behind the current Autonomous board.'}</div>
+        <div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{refreshNote ?? 'Structured store is now live behind the visible five-lane Autonomous board.'}</div>
         <div style={{ display: 'flex', gap: 10 }}>
           <button onClick={() => void onRefreshImport()} disabled={refreshBusy} style={{ padding: '10px 14px', borderRadius: 999, border: '1px solid rgba(200, 195, 188, 0.45)', background: 'rgba(255,255,255,0.84)', color: refreshBusy ? '#9a9a9a' : '#1f2f29', cursor: refreshBusy ? 'progress' : 'pointer', fontSize: 12, fontWeight: 700 }}>{refreshBusy ? 'Refreshing…' : 'Refresh import'}</button>
           <button onClick={onOpenNewTask} style={{ padding: '10px 14px', borderRadius: 999, border: 'none', background: '#0f1f19', color: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>New task</button>
@@ -398,7 +401,7 @@ function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onR
   );
 }
 
-function ManualBoardContent({ board, label, onMove, onEdit, onDelete, onCreateTask }: { board: Record<string, Column>; label: string; onMove: (board: 'personal' | 'projects', taskId: string, newColumn: Task['column']) => void; onEdit: (task: Task) => void; onDelete: (task: Task) => void; onCreateTask: (board: 'personal' | 'projects', defaultColumn: Task['column']) => void; }) {
+function ManualBoardContent({ board, label, onMove, onEdit, onDelete, onCreateTask }: { board: Record<string, Column>; label: string; onMove: (board: 'personal' | 'projects', taskId: string, newColumn: ManualTaskColumn) => void; onEdit: (task: Task) => void; onDelete: (task: Task) => void; onCreateTask: (board: 'personal' | 'projects', defaultColumn: ManualTaskColumn) => void; }) {
   const cols = columnsFromBoard(board); const boardType = boardTypeFromLabel(label); const [draggingTaskId, setDraggingTaskId] = useState<string | null>(null); const [dropColumnId, setDropColumnId] = useState<Task['column'] | null>(null);
   const clearDragState = useCallback(() => { setDraggingTaskId(null); setDropColumnId(null); }, []);
   return <div style={{ display: 'grid', gap: 14 }}><div style={{ display: 'grid', gap: 14 }}><SummaryStrip columns={cols} label={`${label} board`} isManual /><div style={{ display: 'flex', justifyContent: 'flex-end' }}><button onClick={() => onCreateTask(boardType, 'todo')} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, minWidth: 44, height: 44, padding: '0 16px', borderRadius: 999, background: '#0f1f19', color: '#ffffff', border: 'none', cursor: 'pointer', fontSize: 20, lineHeight: 1, boxShadow: '0 8px 24px rgba(15, 31, 25, 0.18)', position: 'relative', zIndex: 2 }} aria-label={`New ${label.toLowerCase()} task`} title="New task"><span style={{ transform: 'translateY(-1px)' }}>+</span></button></div></div><section className="tasks-board-grid">{cols.map(col => <ColumnView key={col.id} column={col} boardType={boardType} onEdit={onEdit} onDelete={onDelete} onDropTask={(taskId, newCol) => { onMove(boardType, taskId, newCol); clearDragState(); }} draggingTaskId={draggingTaskId} isDropTarget={dropColumnId === col.id} onDragEnterColumn={columnId => { setDropColumnId(columnId); }} onDragLeaveColumn={clearDragState} onDragStartTask={(taskId, columnId) => { setDraggingTaskId(taskId); setDropColumnId(columnId); }} />)}</section></div>;
@@ -503,10 +506,10 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     }
   }, [refreshAutonomousBoard]);
 
-  const handleMove = useCallback((board: 'personal' | 'projects', taskId: string, newColumn: Task['column']) => { const setter = board === 'personal' ? setPersonalBoard : setProjectsBoard; setter(prev => { const updated = cloneBoard(prev); let movedTask: Task | null = null; for (const colId of ['todo', 'inprogress', 'done'] as const) { const col = updated[colId]; const idx = col.tasks.findIndex(t => t.id === taskId); if (idx !== -1) { [movedTask] = col.tasks.splice(idx, 1); col.count = col.tasks.length; break; } } if (!movedTask) return prev; if (movedTask.column === newColumn) return prev; movedTask = { ...movedTask, column: newColumn }; updated[newColumn].tasks.push(movedTask); updated[newColumn].count = updated[newColumn].tasks.length; return updated; }); }, []);
-  const handleSave = useCallback((board: 'personal' | 'projects', task: Task, isNew: boolean) => { const setter = board === 'personal' ? setPersonalBoard : setProjectsBoard; setter(prev => { const updated = cloneBoard(prev); if (isNew) { updated[task.column].tasks.push(task); updated[task.column].count = updated[task.column].tasks.length; } else { for (const colId of ['todo', 'inprogress', 'done'] as const) { const col = updated[colId]; const idx = col.tasks.findIndex(t => t.id === task.id); if (idx !== -1) { col.tasks.splice(idx, 1); col.count = col.tasks.length; break; } } updated[task.column].tasks.push(task); updated[task.column].count = updated[task.column].tasks.length; } return updated; }); }, []);
+  const handleMove = useCallback((board: 'personal' | 'projects', taskId: string, newColumn: ManualTaskColumn) => { const setter = board === 'personal' ? setPersonalBoard : setProjectsBoard; setter(prev => { const updated = cloneBoard(prev); let movedTask: Task | null = null; for (const colId of ['todo', 'inprogress', 'done'] as const) { const col = updated[colId]; const idx = col.tasks.findIndex(t => t.id === taskId); if (idx !== -1) { [movedTask] = col.tasks.splice(idx, 1); col.count = col.tasks.length; break; } } if (!movedTask) return prev; if (movedTask.column === newColumn) return prev; movedTask = { ...movedTask, column: newColumn }; updated[newColumn].tasks.push(movedTask); updated[newColumn].count = updated[newColumn].tasks.length; return updated; }); }, []);
+  const handleSave = useCallback((board: 'personal' | 'projects', task: Task, isNew: boolean) => { const setter = board === 'personal' ? setPersonalBoard : setProjectsBoard; setter(prev => { const updated = cloneBoard(prev); const manualColumn = task.column as ManualTaskColumn; if (isNew) { updated[manualColumn].tasks.push(task); updated[manualColumn].count = updated[manualColumn].tasks.length; } else { for (const colId of ['todo', 'inprogress', 'done'] as const) { const col = updated[colId]; const idx = col.tasks.findIndex(t => t.id === task.id); if (idx !== -1) { col.tasks.splice(idx, 1); col.count = col.tasks.length; break; } } updated[manualColumn].tasks.push(task); updated[manualColumn].count = updated[manualColumn].tasks.length; } return updated; }); }, []);
   const handleDelete = useCallback((board: 'personal' | 'projects', taskId: string) => { const setter = board === 'personal' ? setPersonalBoard : setProjectsBoard; setter(prev => { const updated = cloneBoard(prev); for (const colId of ['todo', 'inprogress', 'done'] as const) { const col = updated[colId]; const idx = col.tasks.findIndex(t => t.id === taskId); if (idx !== -1) { col.tasks.splice(idx, 1); col.count = col.tasks.length; return updated; } } return prev; }); }, []);
-  const showNewTaskModal = (board: 'personal' | 'projects', defaultColumn: Task['column']) => setModal({ mode: 'create', board, defaultColumn });
+  const showNewTaskModal = (board: 'personal' | 'projects', defaultColumn: ManualTaskColumn) => setModal({ mode: 'create', board, defaultColumn });
   const showEditModal = (task: Task) => { const board: 'personal' | 'projects' = task.detail.summary.toLowerCase().startsWith('[projects]') ? 'projects' : 'personal'; setModal({ mode: 'edit', board, task }); };
 
   return (

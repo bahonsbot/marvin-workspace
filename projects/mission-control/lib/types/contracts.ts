@@ -81,13 +81,20 @@ export interface TaskBoardSummary {
     tasks: Array<{
       id: string;
       text: string;
-      column: 'todo' | 'inprogress' | 'done';
+      column: 'backlog' | 'todo' | 'inprogress' | 'review' | 'done';
       detail: {
         summary: string;
         why?: string;
         proof?: string;
         unlocks?: string;
         completed?: string;
+      };
+      meta?: {
+        priority?: string;
+        agentTarget?: string;
+        sourceType?: string;
+        runStatus?: string;
+        feedback?: string[];
       };
     }>;
   }>;
@@ -108,8 +115,8 @@ export interface TaskSyncStatus {
     autonomousMtime: string | null;
     tasksLogMtime: string | null;
     countComparison?: {
-      board: { todo: number; inProgress: number; done: number };
-      autonomous: { backlog: number; inProgress: number; doneToday: number };
+      board: { backlog: number; todo: number; inProgress: number; review: number; done: number };
+      autonomous: { backlog: number; todo: number; inProgress: number; review: number; doneToday: number };
     };
   };
   refreshedAt: string;
