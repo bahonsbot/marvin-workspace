@@ -23,13 +23,21 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
       ...current,
       status: 'in-progress',
       linkedAutonomyRef: current.linkedAutonomyRef
-        ? { ...current.linkedAutonomyRef, section: 'in-progress' }
+        ? {
+            ...current.linkedAutonomyRef,
+            section: 'in-progress',
+            queueLinked: false,
+            queueLabel: undefined,
+            completedOutputPath: undefined,
+          }
         : current.linkedAutonomyRef,
+      artifacts: [],
       run: {
         sessionKey: sessionId,
         sessionId,
         startedAt,
         status: 'running',
+        summary: Array.isArray(current.feedback) && current.feedback.length > 0 ? 'Retrying with feedback' : undefined,
       },
     }));
 

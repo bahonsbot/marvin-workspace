@@ -458,7 +458,14 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
       && queueCompletedAt
       && (task.updatedAt ?? 0) >= queueCompletedAt,
     );
-    const effectiveQueueEntry = taskWasRejectedAfterQueue ? undefined : queueEntry;
+    const taskHasNewerDirectRun = Boolean(
+      queueEntry
+      && task.run?.sessionKey?.startsWith('mc-auto-')
+      && task.run?.startedAt
+      && queueCompletedAt
+      && task.run.startedAt >= queueCompletedAt,
+    );
+    const effectiveQueueEntry = taskWasRejectedAfterQueue || taskHasNewerDirectRun ? undefined : queueEntry;
 
     let changed = false;
     const targetSection = effectiveQueueEntry

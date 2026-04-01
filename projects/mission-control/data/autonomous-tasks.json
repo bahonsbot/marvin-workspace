@@ -102,14 +102,19 @@
       "sourceType": "generated",
       "agentTarget": "marvin",
       "createdAt": 1775009741175,
-      "updatedAt": 1775016499953,
-      "version": 8,
+      "updatedAt": 1775017432311,
+      "version": 17,
       "columnOrder": 2,
       "editable": true,
       "chatAnnouncementSent": false,
       "feedback": [
         {
           "at": 1775014529620,
+          "by": "operator",
+          "note": "Useful first pass, but too shallow to keep. Expand it into a more actionable operator utility: include Review/In Progress/Needs Input visibility, stronger drift detection, and clearer next-action guidance before rerunning."
+        },
+        {
+          "at": 1775016779081,
           "by": "operator",
           "note": "Useful first pass, but too shallow to keep. Expand it into a more actionable operator utility: include Review/In Progress/Needs Input visibility, stronger drift detection, and clearer next-action guidance before rerunning."
         }
@@ -121,9 +126,9 @@
         "section": "needs-input",
         "taskText": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
         "taskTextNormalized": "[other] fix build one small openclaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | why: improves openclaw reliability - essential for autonomous operations | proof: script runs on a real openclaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | unlocks: progress toward: write a simple script with input validation",
-        "queueLinked": true,
-        "queueLabel": "executor-Other-202604011000",
-        "completedOutputPath": "scripts/operator_snapshot.py"
+        "queueLinked": false,
+        "queueLabel": null,
+        "completedOutputPath": null
       },
       "sourceMeta": {
         "generator": {
@@ -219,6 +224,6 @@
   ],
   "meta": {
     "schemaVersion": 1,
-    "updatedAt": 1775016499953
+    "updatedAt": 1775017432311
   }
 }
