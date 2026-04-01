@@ -106,22 +106,32 @@ if (!taskId) {
 const task = await updateTask(taskId, (current) => current);
 const sessionId = `mc-auto-${task.id}-${Date.now()}`;
 const thinking = task.priority === 'critical' || task.priority === 'high' ? 'medium' : 'low';
+const latestFeedback = Array.isArray(task.feedback) && task.feedback.length > 0
+  ? task.feedback[task.feedback.length - 1]?.note
+  : null;
+const isRetry = Boolean(task.status === 'todo' && latestFeedback);
 const message = [
   `Autonomous task: ${task.title}`,
   task.description ? `Description: ${task.description}` : null,
   `Agent target: ${task.agentTarget}`,
+  isRetry ? 'This is a retry after operator rejection. Treat the latest feedback as a required revision brief, not as optional context.' : null,
+  latestFeedback ? `Latest operator feedback to address: ${latestFeedback}` : null,
   'Work on this task directly and return a concise result summary plus any created artifact paths if applicable.',
+  isRetry ? 'Your result should clearly reflect how you addressed the feedback.' : null,
 ].filter(Boolean).join('\n');
 
 await updateTask(taskId, (current) => ({
   ...current,
   status: 'in-progress',
+  linkedAutonomyRef: current.linkedAutonomyRef
+    ? { ...current.linkedAutonomyRef, section: 'in-progress' }
+    : current.linkedAutonomyRef,
   run: {
     sessionKey: current.run?.sessionKey ?? sessionId,
     sessionId,
-    startedAt: current.run?.startedAt ?? now(),
+    startedAt: now(),
     status: 'running',
-    summary: current.run?.summary,
+    summary: isRetry ? 'Retrying with feedback' : current.run?.summary,
   },
 }));
 
@@ -154,7 +164,7 @@ try {
       startedAt: current.run?.startedAt ?? now(),
       endedAt: now(),
       status: 'done',
-      summary,
+      summary: isRetry ? `Retry complete: ${summary}` : summary,
       result: resultText,
     },
   }));
