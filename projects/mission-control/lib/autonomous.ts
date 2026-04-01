@@ -722,18 +722,33 @@ export async function approveAutonomousTask(id: string): Promise<MCAutoTask | nu
 }
 
 export async function rejectAutonomousTask(id: string, note: string): Promise<MCAutoTask | null> {
-  return updateAutonomousTask(id, (current) => ({
+  const task = await updateAutonomousTask(id, (current) => ({
     ...current,
     status: 'todo',
+    chatAnnouncementSent: false,
     feedback: [
       ...(Array.isArray(current.feedback) ? current.feedback : []),
       { at: Date.now(), by: 'operator', note },
     ],
-    run: current.run
-      ? {
-          ...current.run,
-          status: current.run.status === 'running' ? 'aborted' : current.run.status,
-        }
-      : undefined,
+    artifacts: [],
+    run: undefined,
   }));
+  if (!task) return null;
+
+  if (task.linkedAutonomyRef) {
+    task.linkedAutonomyRef.section = 'needs-input';
+    await moveLinkedLegacyTask(task, 'needs-input');
+    task.linkedAutonomyRef.section = 'needs-input';
+    await updateAutonomousTask(id, (current) => ({
+      ...current,
+      linkedAutonomyRef: current.linkedAutonomyRef
+        ? {
+            ...current.linkedAutonomyRef,
+            section: 'needs-input',
+          }
+        : current.linkedAutonomyRef,
+    }));
+  }
+
+  return getAutonomousTaskById(id);
 }

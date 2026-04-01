@@ -97,28 +97,28 @@
     {
       "id": "other-fix-build-one-small-openclaw-helper-utilit",
       "title": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
-      "status": "review",
+      "status": "todo",
       "priority": "normal",
       "sourceType": "generated",
       "agentTarget": "marvin",
       "createdAt": 1775009741175,
-      "updatedAt": 1775014020000,
-      "version": 2,
+      "updatedAt": 1775014529620,
+      "version": 3,
       "columnOrder": 0,
       "editable": true,
       "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [
+      "feedback": [
         {
-          "path": "scripts/operator_snapshot.py",
-          "kind": "file",
-          "label": "Queue output"
+          "at": 1775014529620,
+          "by": "operator",
+          "note": "Useful first pass, but too shallow to keep. Expand it into a more actionable operator utility: include Review/In Progress/Needs Input visibility, stronger drift detection, and clearer next-action guidance before rerunning."
         }
       ],
+      "artifacts": [],
       "linkedAutonomyRef": {
         "kind": "autonomous-md",
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "review",
+        "section": "needs-input",
         "taskText": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
         "taskTextNormalized": "[other] fix build one small openclaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | why: improves openclaw reliability - essential for autonomous operations | proof: script runs on a real openclaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | unlocks: progress toward: write a simple script with input validation",
         "queueLinked": true,
@@ -130,15 +130,7 @@
           "createdBy": "daily-task-generator"
         }
       },
-      "run": {
-        "sessionKey": "executor-Other-202604011000",
-        "sessionId": "executor-Other-202604011000",
-        "startedAt": 1775013300000,
-        "endedAt": 1775013480000,
-        "status": "done",
-        "summary": "Builder created operator snapshot helper; Reviewer verified artifact, live output, and non-destructive boundaries.",
-        "result": "Artifact: scripts/operator_snapshot.py"
-      }
+      "run": null
     },
     {
       "id": "trading-fix-identify-one-safe-improvement-opport",
@@ -199,6 +191,6 @@
   ],
   "meta": {
     "schemaVersion": 1,
-    "updatedAt": 1775014020000
+    "updatedAt": 1775014529620
   }
 }

@@ -51,6 +51,5 @@
 - Create tasks-page current-state doc
 - Create execute smoke-test JSON artifact
 
-- [Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation
 ## Done Today
 - Create tasks-page current-state doc | ✅ Completed: { "runId": "50d85bce-073a-4eb7-9ad9-da91a8055069", "status": "ok", "summary": "completed", "result": { "payloads": [ { "text": "Now I have a thorough picture. Let me write the doc.", "mediaUrl": null }, { "text": "**C…
