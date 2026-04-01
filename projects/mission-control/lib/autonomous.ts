@@ -207,6 +207,12 @@ function queueSummary(entry: QueueTaskEntry): string | undefined {
   return entry.note?.trim() || entry.outputPath?.trim() || undefined;
 }
 
+function parseQueueTimestamp(value?: string): number | null {
+  if (!value) return null;
+  const parsed = Date.parse(value.replace(' ', 'T'));
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
 async function ensureStoreDir(): Promise<void> {
   await fs.mkdir(path.dirname(STORE_PATH), { recursive: true });
 }
@@ -442,23 +448,35 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
     const queueEntry = queueByTask.get(link.taskTextNormalized);
     const legacyWinner = bestLegacyByNormalized.get(link.taskTextNormalized);
 
+    const queueCompletedAt = parseQueueTimestamp(queueEntry?.completedAt) ?? parseQueueTimestamp(queueEntry?.startedAt) ?? parseQueueTimestamp(queueEntry?.queuedAt);
+    const taskWasRejectedAfterQueue = Boolean(
+      queueEntry
+      && queueEntry.status === 'completed'
+      && task.status === 'todo'
+      && Array.isArray(task.feedback)
+      && task.feedback.length > 0
+      && queueCompletedAt
+      && (task.updatedAt ?? 0) >= queueCompletedAt,
+    );
+    const effectiveQueueEntry = taskWasRejectedAfterQueue ? undefined : queueEntry;
+
     let changed = false;
-    const targetSection = queueEntry
-      ? queueTargetSection(queueEntry)
+    const targetSection = effectiveQueueEntry
+      ? queueTargetSection(effectiveQueueEntry)
       : legacyWinner?.section;
     const targetStatus = targetSection ? SECTION_TO_STATUS[targetSection] : null;
 
-    if (queueEntry) {
-      if (link.queueLabel !== queueEntry.label) {
-        link.queueLabel = queueEntry.label;
+    if (effectiveQueueEntry) {
+      if (link.queueLabel !== effectiveQueueEntry.label) {
+        link.queueLabel = effectiveQueueEntry.label;
         changed = true;
       }
       if (link.queueLinked !== true) {
         link.queueLinked = true;
         changed = true;
       }
-      if (link.completedOutputPath !== queueEntry.outputPath) {
-        link.completedOutputPath = queueEntry.outputPath;
+      if (link.completedOutputPath !== effectiveQueueEntry.outputPath) {
+        link.completedOutputPath = effectiveQueueEntry.outputPath;
         changed = true;
       }
     }
@@ -475,17 +493,17 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
       changed = true;
     }
 
-    const runStatus = queueEntry ? queueRunStatus(queueEntry) : null;
-    const nextRun = runStatus && queueEntry
+    const runStatus = effectiveQueueEntry ? queueRunStatus(effectiveQueueEntry) : null;
+    const nextRun = runStatus && effectiveQueueEntry
       ? {
-          sessionKey: task.run?.sessionKey ?? queueEntry.label ?? `queue-${task.id}`,
-          sessionId: task.run?.sessionId ?? queueEntry.label ?? `queue-${task.id}`,
+          sessionKey: task.run?.sessionKey ?? effectiveQueueEntry.label ?? `queue-${task.id}`,
+          sessionId: task.run?.sessionId ?? effectiveQueueEntry.label ?? `queue-${task.id}`,
           startedAt: task.run?.startedAt ?? Date.now(),
           endedAt: runStatus === 'done' || runStatus === 'error' || runStatus === 'aborted' ? (task.run?.endedAt ?? Date.now()) : task.run?.endedAt,
           status: runStatus,
-          summary: queueSummary(queueEntry) ?? task.run?.summary,
-          result: queueEntry.outputPath ? `Artifact: ${queueEntry.outputPath}` : task.run?.result,
-          error: runStatus === 'error' ? (queueEntry.note ?? task.run?.error) : undefined,
+          summary: queueSummary(effectiveQueueEntry) ?? task.run?.summary,
+          result: effectiveQueueEntry.outputPath ? `Artifact: ${effectiveQueueEntry.outputPath}` : task.run?.result,
+          error: runStatus === 'error' ? (effectiveQueueEntry.note ?? task.run?.error) : undefined,
         }
       : task.run;
 
@@ -494,18 +512,18 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
       changed = true;
     }
 
-    if (queueEntry?.outputPath) {
-      const artifactExists = task.artifacts.some((artifact) => artifact.path === queueEntry.outputPath);
+    if (effectiveQueueEntry?.outputPath) {
+      const artifactExists = task.artifacts.some((artifact) => artifact.path === effectiveQueueEntry.outputPath);
       if (!artifactExists) {
-        task.artifacts.push({ path: queueEntry.outputPath, kind: 'file', label: 'Queue output' });
+        task.artifacts.push({ path: effectiveQueueEntry.outputPath, kind: 'file', label: 'Queue output' });
         changed = true;
       }
     }
 
-    if (queueEntry?.status === 'blocked' && queueEntry.note) {
-      const alreadyHasNote = task.feedback.some((item) => item.note === queueEntry.note);
+    if (effectiveQueueEntry?.status === 'blocked' && effectiveQueueEntry.note) {
+      const alreadyHasNote = task.feedback.some((item) => item.note === effectiveQueueEntry.note);
       if (!alreadyHasNote) {
-        task.feedback.push({ at: Date.now(), by: 'operator', note: queueEntry.note });
+        task.feedback.push({ at: Date.now(), by: 'operator', note: effectiveQueueEntry.note });
         changed = true;
       }
     }

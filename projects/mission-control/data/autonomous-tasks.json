@@ -102,8 +102,8 @@
       "sourceType": "generated",
       "agentTarget": "marvin",
       "createdAt": 1775009741175,
-      "updatedAt": 1775015514322,
-      "version": 4,
+      "updatedAt": 1775016499953,
+      "version": 8,
       "columnOrder": 2,
       "editable": true,
       "chatAnnouncementSent": false,
@@ -219,6 +219,6 @@
   ],
   "meta": {
     "schemaVersion": 1,
-    "updatedAt": 1775016000000
+    "updatedAt": 1775016499953
   }
 }
