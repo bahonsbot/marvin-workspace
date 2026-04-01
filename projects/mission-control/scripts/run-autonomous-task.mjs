@@ -7,6 +7,7 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 const workspaceRoot = '/data/.openclaw/workspace';
 const storePath = path.join(workspaceRoot, 'projects', 'mission-control', 'data', 'autonomous-tasks.json');
+const lifecycleEventsPath = path.join(workspaceRoot, 'projects', 'mission-control', 'data', 'task-lifecycle-events.json');
 const autonomyPath = path.join(workspaceRoot, 'AUTONOMOUS.md');
 const queuePath = path.join(workspaceRoot, 'memory', 'executor-subagent-queue.json');
 const tasksLogPath = path.join(workspaceRoot, 'memory', 'tasks-log.md');
@@ -135,6 +136,53 @@ async function saveStore(store) {
       : [],
   };
   await writeFile(storePath, JSON.stringify(store, null, 2) + '\n', 'utf8');
+}
+
+async function loadLifecycleEventStore() {
+  try {
+    const raw = await readFile(lifecycleEventsPath, 'utf8');
+    const parsed = JSON.parse(raw);
+    return {
+      events: Array.isArray(parsed?.events) ? parsed.events : [],
+      meta: {
+        schemaVersion: 1,
+        updatedAt: typeof parsed?.meta?.updatedAt === 'string' ? parsed.meta.updatedAt : new Date().toISOString(),
+      },
+    };
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      return {
+        events: [],
+        meta: {
+          schemaVersion: 1,
+          updatedAt: new Date().toISOString(),
+        },
+      };
+    }
+    throw error;
+  }
+}
+
+async function appendLifecycleEvent(event) {
+  const store = await loadLifecycleEventStore();
+  if (store.events.some((entry) => entry.id === event.id || entry.dedupeKey === event.dedupeKey)) {
+    return false;
+  }
+  store.events.push(event);
+  store.meta.updatedAt = new Date().toISOString();
+  await writeFile(
+    lifecycleEventsPath,
+    JSON.stringify(
+      {
+        ...store,
+        events: store.events.slice(-120),
+      },
+      null,
+      2,
+    ) + '\n',
+    'utf8',
+  );
+  return true;
 }
 
 async function updateTask(taskId, attemptId, updater) {
@@ -470,6 +518,18 @@ try {
   if (updated.linkedAutonomyRef?.kind === 'autonomous-md') {
     await moveLinkedLegacyTask(updated.linkedAutonomyRef, 'review');
   }
+  await appendLifecycleEvent({
+    id: `task.moved_to_review:${updated.id}:task.moved_to_review:${updated.id}:${attemptId}:${updated.run?.endedAt ?? now()}`,
+    dedupeKey: `task.moved_to_review:${updated.id}:${attemptId}:${updated.run?.endedAt ?? now()}`,
+    type: 'task.moved_to_review',
+    taskId: updated.id,
+    title: updated.title,
+    at: new Date(updated.run?.endedAt ?? now()).toISOString(),
+    fromStatus: 'in-progress',
+    toStatus: 'review',
+    summary,
+    artifactPath: artifacts[0]?.path,
+  });
 } catch (error) {
   if (typeof error?.stdout === 'string' && error.stdout) {
     stdout = error.stdout;
@@ -523,6 +583,18 @@ try {
     if (updated.linkedAutonomyRef?.kind === 'autonomous-md') {
       await moveLinkedLegacyTask(updated.linkedAutonomyRef, 'needs-input');
     }
+    await appendLifecycleEvent({
+      id: `task.needs_input:${updated.id}:task.needs_input:${updated.id}:${attemptId}:${updated.run?.endedAt ?? now()}`,
+      dedupeKey: `task.needs_input:${updated.id}:${attemptId}:${updated.run?.endedAt ?? now()}`,
+      type: 'task.needs_input',
+      taskId: updated.id,
+      title: updated.title,
+      at: new Date(updated.run?.endedAt ?? now()).toISOString(),
+      fromStatus: 'in-progress',
+      toStatus: 'todo',
+      summary: messageText,
+      needsInputReason: 'execution-failed',
+    });
   }
 
   process.exit(1);

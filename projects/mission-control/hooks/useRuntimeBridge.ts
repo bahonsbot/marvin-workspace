@@ -45,6 +45,7 @@ type RuntimeBridgeSessionSnapshot = {
 export type RuntimeBridgeChatMessage = {
   id: string;
   role: 'user' | 'assistant' | 'system';
+  variant?: 'bridge-note' | 'activity';
   body: string;
   sessionKey: string | null;
   runId: string | null;

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   cleanReviewText,
   normalizeAutonomousRunResult,
@@ -545,6 +546,8 @@ function ManualBoardContent({ board, label, onMove, onEdit, onDelete, onCreateTa
 }
 
 export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }: { autonomousColumns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; }) {
+  const AUTO_POLL_INTERVAL_MS = 3500;
+  const searchParams = useSearchParams();
   const [activeBoard, setActiveBoard] = useState<BoardId>('autonomous');
   const [personalBoard, setPersonalBoard] = useState<Record<string, Column>>(() => { if (typeof window === 'undefined') return seedPersonal(); try { const stored = localStorage.getItem(LS_PERSONAL); if (stored) return JSON.parse(stored); } catch {} return seedPersonal(); });
   const [projectsBoard, setProjectsBoard] = useState<Record<string, Column>>(() => { if (typeof window === 'undefined') return seedProjects(); try { const stored = localStorage.getItem(LS_PROJECTS); if (stored) return JSON.parse(stored); } catch {} return seedProjects(); });
@@ -559,6 +562,8 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   const [autoCleanupBusy, setAutoCleanupBusy] = useState(false);
   const [selectedAutoTask, setSelectedAutoTask] = useState<Task | null>(null);
   const [autoActionBusy, setAutoActionBusy] = useState(false);
+  const autoPollInFlightRef = useRef(false);
+  const deepLinkedTaskId = searchParams.get('autonomousTaskId');
 
   useEffect(() => { setAutoColumns(autonomousColumns); }, [autonomousColumns]);
   useEffect(() => { setAutoSyncState(syncState); setAutoSyncDetails(syncDetails); }, [syncState, syncDetails]);
@@ -659,21 +664,92 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     };
   }, []);
 
+  const fetchAutonomousTaskDetail = useCallback(async (taskId: string) => {
+    const taskRes = await fetch(`/api/tasks/autonomous/${taskId}`, { cache: 'no-store' });
+    if (taskRes.status === 404) return null;
+    if (!taskRes.ok) throw new Error('Task refresh failed.');
+    const json = await taskRes.json();
+    return hydrateAutonomousTask(json.task);
+  }, [hydrateAutonomousTask]);
+
+  const refreshAutonomousLiveState = useCallback(async (taskId?: string | null) => {
+    const results = await Promise.all([
+      fetchAutonomousBoard(),
+      fetchSyncStatus(),
+      taskId ? fetchAutonomousTaskDetail(taskId) : Promise.resolve(null),
+    ]);
+    const task = results[2];
+
+    if (taskId) {
+      setSelectedAutoTask(task);
+      setAutoModalTask((current) => current?.id === taskId ? task : current);
+    }
+  }, [fetchAutonomousBoard, fetchAutonomousTaskDetail, fetchSyncStatus]);
+
+  useEffect(() => {
+    if (!deepLinkedTaskId) return;
+    if (activeBoard !== 'autonomous') {
+      setActiveBoard('autonomous');
+    }
+    void fetchAutonomousTaskDetail(deepLinkedTaskId)
+      .then((task) => {
+        if (!task) return;
+        setSelectedAutoTask(task);
+      })
+      .catch((error) => {
+        console.error('Autonomous task deep link failed.', error);
+      });
+  }, [activeBoard, deepLinkedTaskId, fetchAutonomousTaskDetail]);
+
+  const hasRunningAutonomousTask = autoColumns.some((column) =>
+    column.tasks.some((task) => task.meta?.runStatus === 'running'),
+  );
+  const shouldPollAutonomousLiveState = hasRunningAutonomousTask && (activeBoard === 'autonomous' || selectedAutoTask?.meta?.runStatus === 'running');
+
+  useEffect(() => {
+    if (!shouldPollAutonomousLiveState) return;
+
+    let cancelled = false;
+
+    const poll = async () => {
+      if (autoPollInFlightRef.current) return;
+      autoPollInFlightRef.current = true;
+      try {
+        await refreshAutonomousLiveState(selectedAutoTask?.id ?? null);
+      } catch (error) {
+        console.error('Autonomous task polling failed.', error);
+      } finally {
+        autoPollInFlightRef.current = false;
+      }
+    };
+
+    void poll();
+    const interval = window.setInterval(() => {
+      if (cancelled) return;
+      void poll();
+    }, AUTO_POLL_INTERVAL_MS);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, [AUTO_POLL_INTERVAL_MS, refreshAutonomousLiveState, selectedAutoTask?.id, shouldPollAutonomousLiveState]);
+
+  useEffect(() => {
+    if (activeBoard !== 'autonomous') return;
+    void refreshAutonomousLiveState(selectedAutoTask?.id ?? null).catch((error) => {
+      console.error('Autonomous board refresh failed.', error);
+    });
+  }, [activeBoard, refreshAutonomousLiveState, selectedAutoTask?.id]);
+
   const updateAutonomousTask = useCallback(async (taskId: string, input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; }) => {
     const res = await fetch(`/api/tasks/autonomous/${taskId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
       throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to update autonomous task.');
     }
-    await fetchAutonomousBoard();
-    const taskRes = await fetch(`/api/tasks/autonomous/${taskId}`, { cache: 'no-store' });
-    if (taskRes.ok) {
-      const json = await taskRes.json();
-      const hydrated = hydrateAutonomousTask(json.task);
-      setSelectedAutoTask(hydrated);
-      setAutoModalTask(hydrated);
-    }
-  }, [fetchAutonomousBoard, hydrateAutonomousTask]);
+    await refreshAutonomousLiveState(taskId);
+  }, [refreshAutonomousLiveState]);
 
   const executeAutonomousTask = useCallback(async (task: Task) => {
     setAutoActionBusy(true);
@@ -683,16 +759,11 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
         const json = await res.json().catch(() => ({}));
         throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to start autonomous task.');
       }
-      await fetchAutonomousBoard();
-      const taskRes = await fetch(`/api/tasks/autonomous/${task.id}`, { cache: 'no-store' });
-      if (taskRes.ok) {
-        const json = await taskRes.json();
-        setSelectedAutoTask(hydrateAutonomousTask(json.task));
-      }
+      await refreshAutonomousLiveState(task.id);
     } finally {
       setAutoActionBusy(false);
     }
-  }, [fetchAutonomousBoard, hydrateAutonomousTask]);
+  }, [refreshAutonomousLiveState]);
 
   const approveAutonomousTask = useCallback(async (task: Task) => {
     setAutoActionBusy(true);

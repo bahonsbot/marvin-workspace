@@ -632,6 +632,31 @@ function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
   const [copied, setCopied] = useState(false);
 
   if (message.role === 'system') {
+    if (message.variant === 'activity') {
+      return (
+        <div style={{ display: 'grid', justifyItems: 'center', marginBottom: 10 }}>
+          <section
+            style={{
+              maxWidth: 'min(74ch, 82%)',
+              borderRadius: 999,
+              padding: '9px 14px',
+              background: 'rgba(232, 239, 235, 0.84)',
+              border: '1px solid rgba(111, 140, 126, 0.2)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 10,
+              color: '#4a5f55',
+            }}
+          >
+            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#60796d' }}>
+              Activity
+            </span>
+            <span style={{ fontSize: 13, lineHeight: 1.45 }}>{message.body}</span>
+          </section>
+        </div>
+      );
+    }
+
     return (
       <section
         style={{
@@ -807,10 +832,12 @@ function formatAge(ageMs: number | null): string {
 export function MissionControlChatSurface({
   summary,
   bridge,
+  activityMessages = [],
   fallbackNotice,
 }: {
   summary: OrchestratorIntegrationSummary;
   bridge?: RuntimeBridgeState;
+  activityMessages?: RuntimeBridgeChatMessage[];
   fallbackNotice?: string;
 }) {
   const model = useMemo(() => buildChatSurfaceModel(summary), [summary]);
@@ -829,7 +856,13 @@ export function MissionControlChatSurface({
   const live = bridge?.live;
   const liveTargetSession = live?.targetSession.key ?? null;
   const liveTargetLabel = live?.targetSession.label ?? 'No target session';
-  const liveMessages = live?.messages ?? [];
+  const liveMessages = useMemo(() => {
+    const byId = new Map<string, RuntimeBridgeChatMessage>();
+    for (const message of [...(live?.messages ?? []), ...activityMessages]) {
+      byId.set(message.id, message);
+    }
+    return Array.from(byId.values()).sort((a, b) => (a.at ?? 0) - (b.at ?? 0));
+  }, [activityMessages, live?.messages]);
   const liveEvents = live?.events ?? [];
   const liveCanSend = Boolean(live?.canSend);
   const liveSendState = live?.sendState ?? 'idle';

@@ -125,6 +125,22 @@ export interface TaskSyncStatus {
   refreshedAt: string;
 }
 
+export type TaskLifecycleEventType = 'task.moved_to_review' | 'task.needs_input';
+
+export interface TaskLifecycleEvent {
+  id: string;
+  dedupeKey: string;
+  type: TaskLifecycleEventType;
+  taskId: string;
+  title: string;
+  at: string;
+  fromStatus: 'backlog' | 'todo' | 'in-progress' | 'review' | 'done' | null;
+  toStatus: 'backlog' | 'todo' | 'in-progress' | 'review' | 'done';
+  summary?: string;
+  artifactPath?: string;
+  needsInputReason?: 'rejected' | 'execution-failed' | 'queue-blocked';
+}
+
 export interface ActivityFeed {
   status: IntegrationStatus;
   items: Array<{

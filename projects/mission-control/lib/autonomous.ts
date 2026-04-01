@@ -1,5 +1,13 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import {
+  extractAutonomousArtifactsFromResult,
+  summarizeAutonomousResult,
+} from '@/lib/autonomous-output';
+import {
+  appendTaskLifecycleEvent,
+  buildTaskLifecycleEventId,
+} from '@/lib/task-lifecycle-events';
 
 const WORKSPACE_ROOT = '/data/.openclaw/workspace';
 const AUTONOMOUS_PATH = path.join(WORKSPACE_ROOT, 'AUTONOMOUS.md');
@@ -118,6 +126,60 @@ export interface MCAutoTaskStore {
   };
 }
 
+async function emitTaskMovedToReviewEvent(input: {
+  taskId: string;
+  title: string;
+  fromStatus: MCAutoTaskStatus | null;
+  summary?: string;
+  artifactPath?: string;
+  occurredAt: number;
+  dedupeKey: string;
+}): Promise<void> {
+  await appendTaskLifecycleEvent({
+    id: buildTaskLifecycleEventId({
+      type: 'task.moved_to_review',
+      taskId: input.taskId,
+      dedupeKey: input.dedupeKey,
+    }),
+    dedupeKey: input.dedupeKey,
+    type: 'task.moved_to_review',
+    taskId: input.taskId,
+    title: input.title,
+    at: new Date(input.occurredAt).toISOString(),
+    fromStatus: input.fromStatus,
+    toStatus: 'review',
+    summary: input.summary,
+    artifactPath: input.artifactPath,
+  });
+}
+
+async function emitTaskNeedsInputEvent(input: {
+  taskId: string;
+  title: string;
+  fromStatus: MCAutoTaskStatus | null;
+  reason: MCAutoNeedsInputReason;
+  note?: string;
+  occurredAt: number;
+  dedupeKey: string;
+}): Promise<void> {
+  await appendTaskLifecycleEvent({
+    id: buildTaskLifecycleEventId({
+      type: 'task.needs_input',
+      taskId: input.taskId,
+      dedupeKey: input.dedupeKey,
+    }),
+    dedupeKey: input.dedupeKey,
+    type: 'task.needs_input',
+    taskId: input.taskId,
+    title: input.title,
+    at: new Date(input.occurredAt).toISOString(),
+    fromStatus: input.fromStatus,
+    toStatus: 'todo',
+    summary: input.note,
+    needsInputReason: input.reason,
+  });
+}
+
 export interface LegacyTaskEntry {
   section: MCAutoLegacySection;
   text: string;
@@ -202,155 +264,12 @@ export function latestMeaningfulRetryFeedback(task: Pick<MCAutoTask, 'feedback'>
     .find((entry) => isMeaningfulRetryFeedback(entry)) ?? null;
 }
 
-function cleanCandidateText(value: string): string {
-  return value
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/^[#>*`-]+/gm, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function scoreSummaryCandidate(value: string): number {
-  const text = cleanCandidateText(value);
-  if (!text) return Number.NEGATIVE_INFINITY;
-
-  let score = Math.min(text.length, 220) / 40;
-  if (text.length < 12) score -= 2;
-  if (/^(summary|result|completed|delivered|implemented|fixed|updated|created|wrote|added)\b/i.test(text)) score += 3;
-  if (/\b(completed|implemented|fixed|updated|created|added|addressed|verified|artifact)\b/i.test(text)) score += 2;
-  if (/^(warning|error|failed|failure|traceback|exception)\b/i.test(text)) score -= 5;
-  if (/[\[{].*[\]}]/.test(text)) score -= 1.5;
-  if (/\/data\/\.openclaw\/workspace\//.test(text) && text.length < 96) score -= 1;
-  return score;
-}
-
-function bestSummaryFromTextBlock(value: string): string | undefined {
-  const clean = cleanCandidateText(value);
-  if (!clean) return undefined;
-
-  const segments = value
-    .split(/\n{2,}|\n/)
-    .map((segment) => cleanCandidateText(segment))
-    .filter(Boolean);
-
-  const candidates = [clean, ...segments];
-  let best: string | undefined;
-  let bestScore = Number.NEGATIVE_INFINITY;
-
-  for (const candidate of candidates) {
-    const score = scoreSummaryCandidate(candidate);
-    if (score >= bestScore) {
-      best = candidate;
-      bestScore = score;
-    }
-  }
-
-  return best;
-}
-
-function pushSummaryCandidate(candidates: string[], value: unknown): void {
-  if (typeof value !== 'string') return;
-  const summary = bestSummaryFromTextBlock(value);
-  if (summary) candidates.push(summary);
-}
-
 export function summarizeAutonomousOutput(result: string | undefined): string | undefined {
-  if (!result) return undefined;
-
-  const candidates: string[] = [];
-  pushSummaryCandidate(candidates, result);
-
-  try {
-    const parsed = JSON.parse(result) as Record<string, unknown>;
-    if (parsed?.schema === 'mission-control-autonomous-run-v1') {
-      pushSummaryCandidate(candidates, parsed.summary);
-      pushSummaryCandidate(candidates, parsed.proof);
-      pushSummaryCandidate(candidates, parsed.rawOutput);
-    } else {
-      pushSummaryCandidate(candidates, parsed.summary);
-      pushSummaryCandidate(candidates, parsed.text);
-      pushSummaryCandidate(candidates, (parsed.response as { text?: unknown } | undefined)?.text);
-      pushSummaryCandidate(candidates, (parsed.result as { summary?: unknown } | undefined)?.summary);
-      const payloads = (parsed.result as { payloads?: Array<{ text?: unknown }> } | undefined)?.payloads;
-      if (Array.isArray(payloads)) {
-        for (const payload of payloads) {
-          pushSummaryCandidate(candidates, payload?.text);
-        }
-      }
-    }
-  } catch {}
-
-  let best: string | undefined;
-  let bestScore = Number.NEGATIVE_INFINITY;
-  for (const candidate of candidates) {
-    const score = scoreSummaryCandidate(candidate);
-    if (score >= bestScore) {
-      best = candidate;
-      bestScore = score;
-    }
-  }
-  return best;
-}
-
-function sanitizeArtifactCandidate(value: string): string {
-  return value.replace(/[),.;:!?]+$/g, '').replace(/^["'`(]+|["'`]+$/g, '').trim();
-}
-
-function toWorkspaceRelativePath(value: string): string | null {
-  if (!value) return null;
-  if (value.startsWith(`${WORKSPACE_ROOT}/`)) return value.slice(WORKSPACE_ROOT.length + 1);
-  if (/^(projects|memory|notes|tmp)\//.test(value)) return value;
-  return null;
+  return summarizeAutonomousResult(result);
 }
 
 export function extractAutonomousArtifacts(result: string | undefined): MCAutoArtifact[] {
-  if (!result) return [];
-
-  const artifacts = new Map<string, MCAutoArtifact>();
-  const addArtifact = (value: string, artifact?: Partial<MCAutoArtifact>) => {
-    const relativePath = toWorkspaceRelativePath(sanitizeArtifactCandidate(value));
-    if (!relativePath) return;
-    if (artifacts.has(relativePath)) return;
-    artifacts.set(relativePath, {
-      path: relativePath,
-      label: artifact?.label,
-      kind: artifact?.kind,
-    });
-  };
-
-  const pathPattern = /\/data\/\.openclaw\/workspace\/[^\s"'`<>]+|(?:projects|memory|notes|tmp)\/[^\s"'`<>]+/g;
-  const fromText = (value: unknown) => {
-    if (typeof value !== 'string') return;
-    const matches = value.match(pathPattern) ?? [];
-    for (const match of matches) addArtifact(match);
-  };
-
-  fromText(result);
-
-  try {
-    const parsed = JSON.parse(result) as Record<string, unknown>;
-    if (parsed?.schema === 'mission-control-autonomous-run-v1') {
-      const embeddedArtifacts = parsed.artifacts;
-      if (Array.isArray(embeddedArtifacts)) {
-        for (const entry of embeddedArtifacts) {
-          if (!entry || typeof entry !== 'object' || typeof (entry as { path?: unknown }).path !== 'string') continue;
-          addArtifact((entry as { path: string }).path, entry as Partial<MCAutoArtifact>);
-        }
-      }
-      fromText(parsed.proof);
-      fromText(parsed.rawOutput);
-    } else {
-      fromText(parsed.summary);
-      fromText(parsed.text);
-      fromText((parsed.response as { text?: unknown } | undefined)?.text);
-      const payloads = (parsed.result as { payloads?: Array<{ text?: unknown }> } | undefined)?.payloads;
-      if (Array.isArray(payloads)) {
-        for (const payload of payloads) fromText(payload?.text);
-      }
-    }
-  } catch {}
-
-  return [...artifacts.values()];
+  return extractAutonomousArtifactsFromResult(result);
 }
 
 export function parseAutonomousExecutionEnvelope(result: string | undefined): MCAutoExecutionEnvelope | null {
@@ -793,10 +712,13 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
       .filter((entry) => typeof entry.label === 'string' && entry.label.trim())
       .map((entry) => [entry.label as string, entry] as const),
   );
+  const lifecycleEvents: Array<Promise<void>> = [];
 
   for (const task of store.tasks) {
     const link = task.linkedAutonomyRef;
     if (!link || !task.run?.sourceLabel) continue;
+    const previousStatus = task.status;
+    const previousNeedsInputNote = task.needsInput?.note;
 
     const queueEntry = queueByLabel.get(task.run.sourceLabel);
     if (!queueEntry || !matchesActiveQueueRun(task, queueEntry)) continue;
@@ -842,6 +764,17 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
         task.status = 'review';
         task.columnOrder = nextColumnOrder(store.tasks.filter((candidate) => candidate.id !== task.id), 'review');
         task.needsInput = undefined;
+        lifecycleEvents.push(
+          emitTaskMovedToReviewEvent({
+            taskId: task.id,
+            title: task.title,
+            fromStatus: previousStatus,
+            summary: queueSummary(queueEntry) ?? task.run.summary,
+            artifactPath: queueEntry.outputPath,
+            occurredAt: snapshotAt,
+            dedupeKey: `task.moved_to_review:${task.id}:${task.run.attemptId}:${snapshotAt}`,
+          }),
+        );
         changed = true;
       }
       if (task.run.status !== 'done' || task.run.summary !== queueSummary(queueEntry)) {
@@ -879,6 +812,19 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
         summary: queueSummary(queueEntry) ?? task.run.summary,
         error: note,
       };
+      if (previousStatus !== 'todo' || previousNeedsInputNote !== note) {
+        lifecycleEvents.push(
+          emitTaskNeedsInputEvent({
+            taskId: task.id,
+            title: task.title,
+            fromStatus: previousStatus,
+            reason: 'queue-blocked',
+            note,
+            occurredAt: snapshotAt,
+            dedupeKey: `task.needs_input:${task.id}:${task.run.attemptId}:${snapshotAt}`,
+          }),
+        );
+      }
       changed = true;
     }
 
@@ -905,6 +851,9 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
 
   if (imported > 0 || updated > 0) {
     await saveStructuredTasks(store);
+  }
+  if (lifecycleEvents.length > 0) {
+    await Promise.all(lifecycleEvents);
   }
 
   return { imported, updated, store };
@@ -1101,12 +1050,16 @@ export async function approveAutonomousTask(id: string): Promise<MCAutoTask | nu
 }
 
 export async function rejectAutonomousTask(id: string, note: string): Promise<MCAutoTask | null> {
+  const existing = await getAutonomousTaskById(id);
+  if (!existing) return null;
+
+  const eventAt = Date.now();
   const task = await updateAutonomousTask(id, (current) => ({
     ...current,
     status: 'todo',
     needsInput: {
       reason: 'rejected',
-      at: Date.now(),
+      at: eventAt,
       note,
     },
     chatAnnouncementSent: false,
@@ -1127,7 +1080,7 @@ export async function rejectAutonomousTask(id: string, note: string): Promise<MC
     run: current.run
       ? {
           ...current.run,
-          endedAt: Date.now(),
+          endedAt: eventAt,
           status: 'rejected',
           summary: 'Rejected and waiting for a fresh execute.',
           result: undefined,
@@ -1140,6 +1093,15 @@ export async function rejectAutonomousTask(id: string, note: string): Promise<MC
   if (task.linkedAutonomyRef) {
     await moveLinkedLegacyTask(task, 'needs-input');
   }
+  await emitTaskNeedsInputEvent({
+    taskId: task.id,
+    title: task.title,
+    fromStatus: existing.status,
+    reason: 'rejected',
+    note,
+    occurredAt: eventAt,
+    dedupeKey: `task.needs_input:${task.id}:${task.run?.attemptId ?? 'rejected'}:${eventAt}`,
+  });
 
   return getAutonomousTaskById(id);
 }
