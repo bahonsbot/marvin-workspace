@@ -1,11 +1,14 @@
 import { promises as fs } from 'node:fs';
 import type { TaskBoardSummary, TaskSyncStatus } from '@/lib/types/contracts';
 import {
+  normalizeAutonomousRunResult,
+  selectPreferredArtifactPath,
+} from '@/lib/autonomous-output';
+import {
   loadStructuredTasks,
   normalizeLegacyTaskText,
   parseAutonomousExecutionEnvelope,
   readAutonomousMarkdown,
-  summarizeAutonomousOutput,
   type MCAutoTask,
 } from '@/lib/autonomous';
 
@@ -90,6 +93,20 @@ function parseAutonomousCounts(markdown: string): { backlog: number; inProgress:
   };
 }
 
+function parseDoneTodayEntries(markdown: string): string[] {
+  return markdown
+    .split('\n')
+    .reduce<{ entries: string[]; inDoneToday: boolean }>((state, line) => {
+      if (line.startsWith('## Done Today')) return { ...state, inDoneToday: true };
+      if (line.startsWith('## ')) return { ...state, inDoneToday: false };
+      if (!state.inDoneToday) return state;
+      const trimmed = line.trim();
+      if (!trimmed.startsWith('- ')) return state;
+      state.entries.push(normalizeLegacyTaskText(trimmed.slice(2)));
+      return state;
+    }, { entries: [], inDoneToday: false }).entries;
+}
+
 function parseCompletedEntries(tasksLog: string): number {
   return tasksLog
     .split('\n')
@@ -98,12 +115,16 @@ function parseCompletedEntries(tasksLog: string): number {
 }
 
 async function resolveExistingArtifactPath(paths: string[]): Promise<string | undefined> {
-  for (const path of paths) {
-    if (!path) continue;
-    const absolutePath = path.startsWith('/data/.openclaw/workspace/') ? path : `/data/.openclaw/workspace/${path}`;
+  const preferredPath = selectPreferredArtifactPath(paths.map((path) => ({ path })));
+  const orderedPaths = preferredPath ? [preferredPath, ...paths.filter((path) => path !== preferredPath)] : paths;
+
+  for (const path of orderedPaths) {
+    const candidate = selectPreferredArtifactPath([{ path }]);
+    if (!candidate) continue;
+    const absolutePath = candidate.startsWith('/data/.openclaw/workspace/') ? candidate : `/data/.openclaw/workspace/${candidate}`;
     try {
       await fs.stat(absolutePath);
-      return path.startsWith('/data/.openclaw/workspace/') ? path.replace('/data/.openclaw/workspace/', '') : path;
+      return candidate.startsWith('/data/.openclaw/workspace/') ? candidate.replace('/data/.openclaw/workspace/', '') : candidate;
     } catch {}
   }
   return undefined;
@@ -114,17 +135,16 @@ async function summarizeRunResult(task: MCAutoTask): Promise<{ summary?: string;
   if (!result) return {};
 
   const envelope = parseAutonomousExecutionEnvelope(result);
-  const summary = summarizeAutonomousOutput(result);
-  const proof = envelope?.proof ?? envelope?.rawOutput ?? result;
-  const artifactPath = await resolveExistingArtifactPath([
-    ...task.artifacts.map((artifact) => artifact.path),
-    ...(envelope?.artifacts ?? []).map((artifact) => artifact.path),
+  const normalized = normalizeAutonomousRunResult(result, [
+    ...task.artifacts.map((artifact) => ({ path: artifact.path, kind: artifact.kind, label: artifact.label })),
+    ...(envelope?.artifacts ?? []).map((artifact) => ({ path: artifact.path, kind: artifact.kind, label: artifact.label })),
   ]);
+  const artifactPath = normalized.artifactPath ? await resolveExistingArtifactPath([normalized.artifactPath]) : undefined;
 
   return {
-    summary: summary ? (summary.length > 180 ? `${summary.slice(0, 177).trimEnd()}…` : summary) : undefined,
+    summary: normalized.summary ? (normalized.summary.length > 180 ? `${normalized.summary.slice(0, 177).trimEnd()}…` : normalized.summary) : undefined,
     artifactPath,
-    proof,
+    proof: normalized.proof,
   };
 }
 
@@ -194,7 +214,19 @@ async function loadTaskSources() {
   const done = boardTasks.filter((task) => task.column === 'done');
 
   const autonomousCounts = autonomousRaw ? parseAutonomousCounts(autonomousRaw) : null;
+  const doneTodayEntries = autonomousRaw ? parseDoneTodayEntries(autonomousRaw) : [];
   const completedEntries = tasksLogRaw ? parseCompletedEntries(tasksLogRaw) : null;
+  const structuredDoneKeys = new Set(
+    store.tasks
+      .filter((task) => task.status === 'done')
+      .flatMap((task) => {
+        const keys = [normalizeLegacyTaskText(task.title)];
+        const linkedKey = task.linkedAutonomyRef?.taskTextNormalized;
+        if (linkedKey) keys.push(linkedKey);
+        return keys;
+      }),
+  );
+  const staleDoneTodayCount = doneTodayEntries.filter((entry) => !structuredDoneKeys.has(entry)).length;
 
   return {
     boardUpdatedAt: safeIsoFromMtime(store.meta.updatedAt),
@@ -214,6 +246,7 @@ async function loadTaskSources() {
       path: AUTONOMOUS_PATH,
       mtime: autonomousMtime,
       counts: autonomousCounts,
+      staleDoneTodayCount,
     },
     tasksLog: {
       path: TASKS_LOG_PATH,
@@ -293,8 +326,9 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
           `Review lane mismatch (structured=${source.structured.counts.review}, board=${boardCounts.review})`,
         );
       }
-      if (source.structured.counts.done < source.autonomous.counts.doneToday) {
-        issues.push(`Done count lower than AUTONOMOUS Done Today (structured=${source.structured.counts.done}, AUTONOMOUS=${source.autonomous.counts.doneToday})`);
+      const liveDoneToday = source.autonomous.counts.doneToday - (source.autonomous.staleDoneTodayCount ?? 0);
+      if (source.structured.counts.done < liveDoneToday) {
+        issues.push(`Done count lower than live AUTONOMOUS Done Today (structured=${source.structured.counts.done}, live=${liveDoneToday}, staleIgnored=${source.autonomous.staleDoneTodayCount ?? 0})`);
       }
     } else {
       issues.push('AUTONOMOUS.md counts unavailable');
@@ -308,6 +342,8 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
     let details = 'Structured Autonomous store and legacy autonomy files look aligned enough for current Tasks UI.';
     if (issues.length > 0) {
       details = issues.join(' ');
+    } else if ((source.autonomous.staleDoneTodayCount ?? 0) > 0) {
+      details = `Sync aligned. Ignoring ${source.autonomous.staleDoneTodayCount} stale Done Today entr${source.autonomous.staleDoneTodayCount === 1 ? 'y' : 'ies'} left in AUTONOMOUS.md after cleanup.`;
     }
 
     return {

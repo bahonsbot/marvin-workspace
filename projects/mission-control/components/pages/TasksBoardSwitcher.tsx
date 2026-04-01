@@ -1,6 +1,12 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import {
+  cleanReviewText,
+  normalizeAutonomousRunResult,
+  parseLightweightMarkdown,
+  previewReviewText,
+} from '@/lib/autonomous-output';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -187,87 +193,58 @@ function formatAutonomousSummary(summary: string) {
 function formatAutonomousSupport(detail: TaskDetail, feedback?: string[]) {
   const latestFeedback = Array.isArray(feedback) ? feedback.at(-1) : undefined;
   const source = latestFeedback ?? detail.why ?? detail.completed ?? detail.proof ?? detail.unlocks ?? '';
-  const clean = source.replace(/\s+/g, ' ').trim();
+  const clean = cleanReviewText(source)?.replace(/\s+/g, ' ').trim() ?? '';
   if (!clean) return null;
   return clean.length > 110 ? `${clean.slice(0, 107).trimEnd()}…` : clean;
 }
 
-function cleanRunResultCandidate(value: string) {
-  return value.replace(/```[\s\S]*?```/g, ' ').replace(/^[#>*`-]+/gm, ' ').replace(/\s+/g, ' ').trim();
+function DetailMarkdown({ value, tone = 'default' }: { value?: string; tone?: 'default' | 'muted' | 'feedback' }) {
+  const blocks = parseLightweightMarkdown(value);
+  if (blocks.length === 0) return null;
+
+  const paragraphColor = tone === 'muted' ? '#6f726f' : tone === 'feedback' ? '#5c476f' : '#37413d';
+  const headingColor = tone === 'feedback' ? '#6a4f87' : '#2f3834';
+
+  return (
+    <div style={{ display: 'grid', gap: 10 }}>
+      {blocks.map((block, index) => {
+        if (block.type === 'heading') {
+          return <div key={`${block.type}-${index}`} style={{ fontSize: block.level === 2 ? 12.5 : 12, fontWeight: 700, color: headingColor }}>{block.text}</div>;
+        }
+        if (block.type === 'bullet-list') {
+          return (
+            <ul key={`${block.type}-${index}`} style={{ margin: 0, paddingLeft: 18, display: 'grid', gap: 6, color: paragraphColor }}>
+              {block.items.map((item, itemIndex) => <li key={`${block.type}-${index}-${itemIndex}`}>{item}</li>)}
+            </ul>
+          );
+        }
+        if (block.type === 'code') {
+          return <pre key={`${block.type}-${index}`} style={{ margin: 0, padding: '10px 12px', borderRadius: 12, background: 'rgba(246, 244, 239, 0.96)', border: '1px solid rgba(200,195,188,0.34)', color: '#3d4541', whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word', fontSize: 11.5, lineHeight: 1.55 }}>{block.text}</pre>;
+        }
+        return <p key={`${block.type}-${index}`} style={{ margin: 0, color: paragraphColor }}>{block.text}</p>;
+      })}
+    </div>
+  );
 }
 
-function scoreRunResultCandidate(value: string) {
-  const text = cleanRunResultCandidate(value);
-  if (!text) return Number.NEGATIVE_INFINITY;
-  let score = Math.min(text.length, 220) / 40;
-  if (text.length < 12) score -= 2;
-  if (/^(summary|result|completed|delivered|implemented|fixed|updated|created|wrote|added)\b/i.test(text)) score += 3;
-  if (/\b(completed|implemented|fixed|updated|created|added|addressed|verified|artifact)\b/i.test(text)) score += 2;
-  if (/^(warning|error|failed|failure|traceback|exception)\b/i.test(text)) score -= 5;
-  return score;
-}
+function InlineDetailMarkdown({ value }: { value?: string }) {
+  const blocks = parseLightweightMarkdown(value);
+  if (blocks.length === 0) return null;
 
-function bestRunResultSummary(value?: string) {
-  if (!value) return undefined;
-
-  const candidates: string[] = [];
-  const pushCandidate = (candidate?: string) => {
-    if (!candidate) return;
-    const segments = [cleanRunResultCandidate(candidate), ...candidate.split(/\n{2,}|\n/).map(cleanRunResultCandidate)].filter(Boolean);
-    candidates.push(...segments);
-  };
-
-  pushCandidate(value);
-
-  try {
-    const parsed = JSON.parse(value);
-    if (parsed?.schema === 'mission-control-autonomous-run-v1') {
-      pushCandidate(parsed.summary);
-      pushCandidate(parsed.proof);
-      pushCandidate(parsed.rawOutput);
-    } else {
-      pushCandidate(parsed?.summary);
-      pushCandidate(parsed?.text);
-      pushCandidate(parsed?.response?.text);
-      pushCandidate(parsed?.result?.summary);
-      if (Array.isArray(parsed?.result?.payloads)) {
-        for (const payload of parsed.result.payloads) pushCandidate(payload?.text);
-      }
-    }
-  } catch {}
-
-  let best: string | undefined;
-  let bestScore = Number.NEGATIVE_INFINITY;
-  for (const candidate of candidates) {
-    const score = scoreRunResultCandidate(candidate);
-    if (score >= bestScore) {
-      best = candidate;
-      bestScore = score;
-    }
+  for (const block of blocks) {
+    if (block.type === 'paragraph' || block.type === 'heading') return <span>{block.text}</span>;
+    if (block.type === 'bullet-list' && block.items[0]) return <span>{block.items[0]}</span>;
+    if (block.type === 'code' && block.text) return <span>{block.text}</span>;
   }
-  return best;
+
+  return null;
 }
 
-function extractWorkspaceArtifactPath(paths: string[]) {
-  for (const path of paths) {
-    if (!path) continue;
-    if (path.startsWith('/data/.openclaw/workspace/')) return path.replace('/data/.openclaw/workspace/', '');
-    if (/^(projects|memory|notes|tmp)\//.test(path)) return path;
-  }
-  return undefined;
-}
-
-function extractEnvelopeArtifactPaths(value?: string) {
-  if (!value) return [] as string[];
-  try {
-    const parsed = JSON.parse(value);
-    if (parsed?.schema === 'mission-control-autonomous-run-v1' && Array.isArray(parsed?.artifacts)) {
-      return parsed.artifacts
-        .map((artifact: { path?: string }) => artifact?.path ?? '')
-        .filter(Boolean);
-    }
-  } catch {}
-  return [] as string[];
+function artifactLabel(path?: string) {
+  if (!path) return '';
+  const normalized = path.replace(/\/+$/, '');
+  const segments = normalized.split('/');
+  return segments[segments.length - 1] || normalized;
 }
 
 function boardTypeFromLabel(label: string): 'personal' | 'projects' {
@@ -438,7 +415,7 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
       <div style={{ fontSize: boardType === 'autonomous' ? 13.5 : 14, fontWeight: boardType === 'autonomous' ? 600 : 500, lineHeight: 1.45, color: '#222222' }}>{visibleSummary}</div>
       {supportText ? <div style={{ fontSize: 11.5, color: latestFeedback ? '#7f5aa2' : '#7a7a7a', lineHeight: 1.55 }}><span style={{ fontWeight: latestFeedback ? 700 : 500 }}>{latestFeedback ? 'Feedback:' : ''}</span>{latestFeedback ? ' ' : ''}{supportText}</div> : null}
       {boardType === 'autonomous' && task.meta ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>{task.meta.priority ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,245,234,0.82)', color: '#b26a1f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}{task.meta.agentTarget ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(200,195,188,0.45)', color: '#5f655f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}</div> : null}
-      {showInspection ? <details style={{ margin: 0 }}><summary style={{ cursor: 'pointer', fontSize: 11, color: '#7a7a7a', listStyle: 'none', textDecoration: 'underline', textDecorationStyle: 'dotted', width: 'fit-content' }}>Scope</summary><div style={{ marginTop: 10, fontSize: 12, color: '#7a7a7a', display: 'grid', gap: 8, lineHeight: 1.65 }}>{task.detail.proof ? <div><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Proof:</span> {task.detail.proof}</div> : null}{task.detail.unlocks ? <div><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Unlocks:</span> {task.detail.unlocks}</div> : null}</div></details> : null}
+      {showInspection ? <details style={{ margin: 0 }}><summary style={{ cursor: 'pointer', fontSize: 11, color: '#7a7a7a', listStyle: 'none', textDecoration: 'underline', textDecorationStyle: 'dotted', width: 'fit-content' }}>Scope</summary><div style={{ marginTop: 10, fontSize: 12, color: '#7a7a7a', display: 'grid', gap: 8, lineHeight: 1.65 }}>{task.detail.proof ? <div style={{ display: 'grid', gap: 4 }}><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Proof</span><InlineDetailMarkdown value={task.detail.proof} /></div> : null}{task.detail.unlocks ? <div><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Unlocks:</span> {task.detail.unlocks}</div> : null}</div></details> : null}
     </article>
   );
 }
@@ -495,8 +472,8 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
           : 'Not started';
   const taskTitle = cleanAutonomousTitle(task.detail.summary);
   const createdAtLabel = task.meta?.createdAt ? new Date(task.meta.createdAt).toLocaleString('en-GB', { hour12: false }) : null;
-  const proofPreview = task.detail.proof ? task.detail.proof.replace(/\s+/g, ' ').trim().slice(0, 280) : null;
-  const proofWasTruncated = Boolean(task.detail.proof && proofPreview && task.detail.proof.replace(/\s+/g, ' ').trim().length > proofPreview.length);
+  const proofPreview = previewReviewText(task.detail.proof, 280);
+  const runSummary = task.meta?.needsInputNote ?? task.meta?.runError ?? task.meta?.resultSummary ?? task.detail.completed;
 
   return (
     <div style={{ position: 'fixed', top: 34, right: 22, width: 'min(92vw, 620px)', maxHeight: 'calc(100vh - 132px)', zIndex: 1000, pointerEvents: 'none' }}>
@@ -518,11 +495,11 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         {task.detail.why ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Brief</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', fontSize: 13.5, lineHeight: 1.68, color: '#37413d' }}>{task.detail.why}</div></section> : null}
 
-        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{task.meta?.needsInputNote ?? task.meta?.runError ?? task.meta?.resultSummary ?? task.detail.completed ?? 'No run summary yet.'}</div>{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{task.meta.artifactPath}</span></a> : null}</div></section>
+        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{runSummary ? <DetailMarkdown value={runSummary} tone="muted" /> : 'No run summary yet.'}</div>{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{artifactLabel(task.meta.artifactPath)}</span></a> : null}</div></section>
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}{task.meta?.artifactPath ? <div style={{ gridColumn: '1 / -1' }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Output</div><a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ marginTop: 4, display: 'inline-flex', alignItems: 'center', gap: 8, color: '#2d5a4a', fontSize: 11.8, fontWeight: 700, textDecoration: 'none' }}><span>Open artefact</span><span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{task.meta.artifactPath}</span></a></div> : null}</div></div></section>
 
-        {(task.detail.proof || task.detail.unlocks || task.meta?.feedback?.length || task.meta?.needsInputNote || task.meta?.runError) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{task.meta?.needsInputNote ? <div><strong>Needs input:</strong> {task.meta.needsInputNote}</div> : null}{task.meta?.runError && task.meta.runError !== task.meta.needsInputNote ? <div><strong>Run error:</strong> {task.meta.runError}</div> : null}{task.meta?.feedback?.length ? <div style={{ display: 'grid', gap: 8 }}><strong style={{ color: '#6a4f87' }}>Latest operator feedback</strong><div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(127, 90, 162, 0.08)', border: '1px solid rgba(127, 90, 162, 0.18)', color: '#5c476f' }}>{task.meta.feedback[task.meta.feedback.length - 1]}</div>{task.meta.feedback.length > 1 ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show previous feedback</summary><div style={{ marginTop: 8, display: 'grid', gap: 8 }}>{task.meta.feedback.slice(0, -1).map((note, index) => <div key={`${task.id}-fb-prev-${index}`} style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.76)', border: '1px solid rgba(200,195,188,0.36)', color: '#5f655f' }}>{note}</div>)}</div></details> : null}</div> : null}{proofPreview ? <div><strong>Proof:</strong> {proofPreview}{proofWasTruncated ? '…' : ''}</div> : null}{task.detail.proof && proofWasTruncated ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show full output</summary><div style={{ marginTop: 8, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}>{task.detail.proof}</div></details> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
+        {(task.detail.proof || task.detail.unlocks || task.meta?.feedback?.length || task.meta?.needsInputNote || task.meta?.runError) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{task.meta?.needsInputNote ? <div style={{ display: 'grid', gap: 4 }}><strong>Needs input</strong><DetailMarkdown value={task.meta.needsInputNote} /></div> : null}{task.meta?.runError && task.meta.runError !== task.meta.needsInputNote ? <div style={{ display: 'grid', gap: 4 }}><strong>Run error</strong><DetailMarkdown value={task.meta.runError} /></div> : null}{task.meta?.feedback?.length ? <div style={{ display: 'grid', gap: 8 }}><strong style={{ color: '#6a4f87' }}>Latest operator feedback</strong><div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(127, 90, 162, 0.08)', border: '1px solid rgba(127, 90, 162, 0.18)', color: '#5c476f' }}><DetailMarkdown value={task.meta.feedback[task.meta.feedback.length - 1]} tone="feedback" /></div>{task.meta.feedback.length > 1 ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show previous feedback</summary><div style={{ marginTop: 8, display: 'grid', gap: 8 }}>{task.meta.feedback.slice(0, -1).map((note, index) => <div key={`${task.id}-fb-prev-${index}`} style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.76)', border: '1px solid rgba(200,195,188,0.36)', color: '#5f655f' }}><DetailMarkdown value={note} tone="muted" /></div>)}</div></details> : null}</div> : null}{task.detail.proof && proofPreview.truncated ? <div style={{ display: 'grid', gap: 4 }}><strong>Proof</strong><div>{proofPreview.text}</div></div> : null}{task.detail.proof && proofPreview.truncated ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show full output</summary><div style={{ marginTop: 8 }}><DetailMarkdown value={task.detail.proof} /></div></details> : null}{task.detail.proof && !proofPreview.truncated ? <div style={{ display: 'grid', gap: 4 }}><strong>Proof</strong><DetailMarkdown value={task.detail.proof} /></div> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
 
         {canReview ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Review note</div><textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Why are you rejecting this task?" rows={3} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none', width: '100%', boxSizing: 'border-box', resize: 'vertical', fontFamily: 'inherit' }} /></section> : null}
 
@@ -613,9 +590,18 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   }, [fetchAutonomousBoard]);
 
   const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; sourceType?: string; createdAt?: number; needsInput?: { reason?: string; note?: string }; run?: { status?: string; summary?: string; result?: string; error?: string }; artifacts?: Array<{ path?: string }>; feedback?: Array<{ by?: string; note?: string }> }): Task => {
-    const artifactPath = extractWorkspaceArtifactPath([
-      ...(Array.isArray(t.artifacts) ? t.artifacts.map((artifact) => artifact?.path ?? '') : []),
-      ...extractEnvelopeArtifactPaths(t.run?.result),
+    const envelopeArtifacts = (() => {
+      if (!t.run?.result) return [] as Array<{ path?: string; kind?: string }>;
+      try {
+        const parsed = JSON.parse(t.run.result);
+        return parsed?.schema === 'mission-control-autonomous-run-v1' && Array.isArray(parsed?.artifacts) ? parsed.artifacts : [];
+      } catch {
+        return [];
+      }
+    })();
+    const normalizedRun = normalizeAutonomousRunResult(t.run?.result, [
+      ...(Array.isArray(t.artifacts) ? t.artifacts : []),
+      ...envelopeArtifacts,
     ]);
     const feedback = Array.isArray(t.feedback)
       ? t.feedback
@@ -627,12 +613,13 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
       ? 'Rejected. Waiting for Execute.'
       : t.run?.status === 'error'
         ? t.needsInput?.note ?? t.run?.summary ?? t.run?.error
-        : t.run?.summary ?? bestRunResultSummary(t.run?.result);
+        : normalizedRun.summary ?? t.run?.summary;
+    const proof = normalizedRun.proof;
     return {
       id: t.id,
       text: t.title,
       column: t.status === 'backlog' ? 'backlog' : t.status === 'in-progress' ? 'inprogress' : t.status === 'review' ? 'review' : t.status === 'done' ? 'done' : 'todo',
-      detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(resultSummary ? { completed: resultSummary } : {}), ...(t.run?.result ? { proof: (() => { try { const parsed = JSON.parse(t.run.result); return parsed?.schema === 'mission-control-autonomous-run-v1' ? (parsed.proof ?? parsed.rawOutput ?? t.run?.result) : t.run.result; } catch { return t.run.result; } })() } : {}) },
+      detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(resultSummary ? { completed: resultSummary } : {}), ...(proof ? { proof } : {}) },
       meta: {
         priority: t.priority,
         agentTarget: t.agentTarget,
@@ -642,7 +629,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
         needsInputNote: t.needsInput?.note,
         runError: t.run?.error,
         createdAt: t.createdAt,
-        artifactPath,
+        artifactPath: normalizedRun.artifactPath,
         resultSummary,
         feedback,
       },
