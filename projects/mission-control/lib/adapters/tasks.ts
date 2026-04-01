@@ -26,6 +26,7 @@ type BoardTask = {
     agentTarget?: string;
     sourceType?: string;
     runStatus?: string;
+    feedback?: string[];
     createdAt?: number;
     artifactPath?: string;
     resultSummary?: string;
@@ -151,6 +152,9 @@ function taskToBoardTask(task: MCAutoTask): BoardTask {
       agentTarget: task.agentTarget,
       sourceType: task.sourceType,
       runStatus: task.run?.status,
+      feedback: Array.isArray(task.feedback)
+        ? task.feedback.map((item) => item.note).filter((note): note is string => Boolean(note))
+        : [],
       createdAt: task.createdAt,
       artifactPath: runResult.artifactPath,
       resultSummary: runResult.summary,
