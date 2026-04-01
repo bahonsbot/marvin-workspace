@@ -431,7 +431,7 @@ function ColumnView({ column, boardType, onEdit, onDelete, onDropTask, draggingT
   );
 }
 
-function CompactSyncStatus({ state, details }: { state: 'unknown' | 'ok' | 'drift'; details: string }) {
+function CompactSyncStatus({ state, details, onCleanup, cleanupBusy }: { state: 'unknown' | 'ok' | 'drift'; details: string; onCleanup: () => Promise<void>; cleanupBusy: boolean; }) {
   const [open, setOpen] = useState(false);
   const config = state === 'ok'
     ? { label: 'Sync aligned', dot: '#3c6658', bg: 'rgba(121, 166, 148, 0.14)', text: '#3c6658' }
@@ -443,6 +443,7 @@ function CompactSyncStatus({ state, details }: { state: 'unknown' | 'ok' | 'drif
     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', minWidth: 0, position: 'relative' }}>
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderRadius: 999, background: config.bg }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: config.dot }} /><span style={{ fontSize: 11, fontWeight: 700, color: config.text, textTransform: 'uppercase' }}>{config.label}</span></span>
       <button onClick={() => setOpen((v) => !v)} aria-label="Sync details" title="Sync details" style={{ width: 22, height: 22, borderRadius: '50%', border: '1px solid rgba(200,195,188,0.45)', background: 'rgba(255,255,255,0.82)', color: '#7a7a7a', cursor: 'pointer', fontSize: 12, fontWeight: 700, lineHeight: 1 }}>i</button>
+      <button onClick={() => void onCleanup()} disabled={cleanupBusy} aria-label="Clean up sync drift" title="Clean up sync drift" style={{ height: 26, padding: '0 10px', borderRadius: 999, border: '1px solid rgba(200,195,188,0.45)', background: 'rgba(255,255,255,0.82)', color: cleanupBusy ? '#9a9a9a' : '#5f655f', cursor: cleanupBusy ? 'progress' : 'pointer', fontSize: 11, fontWeight: 700, lineHeight: 1, textTransform: 'uppercase', letterSpacing: 0.04 }}>Clean up</button>
       {open ? <div style={{ position: 'absolute', top: 32, left: 0, zIndex: 4, maxWidth: 360, border: '1px solid rgba(200,195,188,0.45)', borderRadius: 14, background: 'rgba(255,253,251,0.98)', boxShadow: '0 12px 32px rgba(0,0,0,0.08)', padding: '10px 12px', fontSize: 11.5, color: '#6f726f', lineHeight: 1.55 }}>{details}</div> : null}
     </div>
   );
@@ -520,13 +521,12 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   );
 }
 
-function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onRefreshImport, refreshBusy, onOpenTask, selectedTaskId }: { columns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; onOpenNewTask: () => void; onRefreshImport: () => Promise<void>; refreshBusy: boolean; onOpenTask: (task: Task) => void; selectedTaskId: string | null; }) {
+function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onRefreshImport, onCleanupSync, refreshBusy, cleanupBusy, onOpenTask, selectedTaskId }: { columns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; onOpenNewTask: () => void; onRefreshImport: () => Promise<void>; onCleanupSync: () => Promise<void>; refreshBusy: boolean; cleanupBusy: boolean; onOpenTask: (task: Task) => void; selectedTaskId: string | null; }) {
   return (
     <div style={{ display: 'grid', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-        <div style={{ display: 'grid', gap: 4 }}>
-          <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Board view</div>
-          <div style={{ fontSize: 22, fontWeight: 560, lineHeight: 1.2 }}>Autonomous execution board</div>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+          <CompactSyncStatus state={syncState} details={syncDetails} onCleanup={onCleanupSync} cleanupBusy={cleanupBusy} />
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button onClick={() => void onRefreshImport()} disabled={refreshBusy} style={{ width: 40, height: 40, borderRadius: 999, border: '1px solid rgba(200, 195, 188, 0.45)', background: 'rgba(255,255,255,0.84)', color: refreshBusy ? '#9a9a9a' : '#1f2f29', cursor: refreshBusy ? 'progress' : 'pointer', fontSize: 15, fontWeight: 700 }} aria-label="Refresh import" title="Refresh import">↻</button>
@@ -534,9 +534,6 @@ function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onR
         </div>
       </div>
       <section className="tasks-board-grid">{columns.map(col => <ColumnView key={col.id} column={col} boardType="autonomous" onOpenTask={onOpenTask} selectedTaskId={selectedTaskId} />)}</section>
-      <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-        <CompactSyncStatus state={syncState} details={syncDetails} />
-      </div>
     </div>
   );
 }
@@ -544,7 +541,7 @@ function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onR
 function ManualBoardContent({ board, label, onMove, onEdit, onDelete, onCreateTask }: { board: Record<string, Column>; label: string; onMove: (board: 'personal' | 'projects', taskId: string, newColumn: ManualTaskColumn) => void; onEdit: (task: Task) => void; onDelete: (task: Task) => void; onCreateTask: (board: 'personal' | 'projects', defaultColumn: ManualTaskColumn) => void; }) {
   const cols = columnsFromBoard(board); const boardType = boardTypeFromLabel(label); const [draggingTaskId, setDraggingTaskId] = useState<string | null>(null); const [dropColumnId, setDropColumnId] = useState<Task['column'] | null>(null);
   const clearDragState = useCallback(() => { setDraggingTaskId(null); setDropColumnId(null); }, []);
-  return <div style={{ display: 'grid', gap: 14 }}><div style={{ display: 'grid', gap: 14 }}><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><div style={{ display: 'grid', gap: 4 }}><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Board view</div><div style={{ fontSize: 22, fontWeight: 560, lineHeight: 1.2 }}>{label} board</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>Drag cards between columns to keep this board moving.</div></div><button onClick={() => onCreateTask(boardType, 'todo')} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, minWidth: 44, height: 44, padding: '0 16px', borderRadius: 999, background: '#0f1f19', color: '#ffffff', border: 'none', cursor: 'pointer', fontSize: 20, lineHeight: 1, boxShadow: '0 8px 24px rgba(15, 31, 25, 0.18)', position: 'relative', zIndex: 2 }} aria-label={`New ${label.toLowerCase()} task`} title="New task"><span style={{ transform: 'translateY(-1px)' }}>+</span></button></div></div><section className="tasks-board-grid">{cols.map(col => <ColumnView key={col.id} column={col} boardType={boardType} onEdit={onEdit} onDelete={onDelete} onDropTask={(taskId, newCol) => { onMove(boardType, taskId, newCol); clearDragState(); }} draggingTaskId={draggingTaskId} isDropTarget={dropColumnId === col.id} onDragEnterColumn={columnId => { setDropColumnId(columnId); }} onDragLeaveColumn={clearDragState} onDragStartTask={(taskId, columnId) => { setDraggingTaskId(taskId); setDropColumnId(columnId); }} />)}</section></div>;
+  return <div style={{ display: 'grid', gap: 14 }}><div style={{ display: 'grid', gap: 14 }}><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12, flexWrap: 'wrap' }}><button onClick={() => onCreateTask(boardType, 'todo')} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, minWidth: 44, height: 44, padding: '0 16px', borderRadius: 999, background: '#0f1f19', color: '#ffffff', border: 'none', cursor: 'pointer', fontSize: 20, lineHeight: 1, boxShadow: '0 8px 24px rgba(15, 31, 25, 0.18)', position: 'relative', zIndex: 2 }} aria-label={`New ${label.toLowerCase()} task`} title="New task"><span style={{ transform: 'translateY(-1px)' }}>+</span></button></div></div><section className="tasks-board-grid" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>{cols.map(col => <ColumnView key={col.id} column={col} boardType={boardType} onEdit={onEdit} onDelete={onDelete} onDropTask={(taskId, newCol) => { onMove(boardType, taskId, newCol); clearDragState(); }} draggingTaskId={draggingTaskId} isDropTarget={dropColumnId === col.id} onDragEnterColumn={columnId => { setDropColumnId(columnId); }} onDragLeaveColumn={clearDragState} onDragStartTask={(taskId, columnId) => { setDraggingTaskId(taskId); setDropColumnId(columnId); }} />)}</section></div>;
 }
 
 export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }: { autonomousColumns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; }) {
@@ -552,15 +549,19 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   const [personalBoard, setPersonalBoard] = useState<Record<string, Column>>(() => { if (typeof window === 'undefined') return seedPersonal(); try { const stored = localStorage.getItem(LS_PERSONAL); if (stored) return JSON.parse(stored); } catch {} return seedPersonal(); });
   const [projectsBoard, setProjectsBoard] = useState<Record<string, Column>>(() => { if (typeof window === 'undefined') return seedProjects(); try { const stored = localStorage.getItem(LS_PROJECTS); if (stored) return JSON.parse(stored); } catch {} return seedProjects(); });
   const [autoColumns, setAutoColumns] = useState<Column[]>(autonomousColumns);
+  const [autoSyncState, setAutoSyncState] = useState<'unknown' | 'ok' | 'drift'>(syncState);
+  const [autoSyncDetails, setAutoSyncDetails] = useState(syncDetails);
   const [modal, setModal] = useState<ModalMode>(null);
   const [autoModalOpen, setAutoModalOpen] = useState(false);
   const [autoModalMode, setAutoModalMode] = useState<'create' | 'edit'>('create');
   const [autoModalTask, setAutoModalTask] = useState<Task | null>(null);
   const [autoRefreshBusy, setAutoRefreshBusy] = useState(false);
+  const [autoCleanupBusy, setAutoCleanupBusy] = useState(false);
   const [selectedAutoTask, setSelectedAutoTask] = useState<Task | null>(null);
   const [autoActionBusy, setAutoActionBusy] = useState(false);
 
   useEffect(() => { setAutoColumns(autonomousColumns); }, [autonomousColumns]);
+  useEffect(() => { setAutoSyncState(syncState); setAutoSyncDetails(syncDetails); }, [syncState, syncDetails]);
   useEffect(() => { localStorage.setItem(LS_PERSONAL, JSON.stringify(personalBoard)); }, [personalBoard]);
   useEffect(() => { localStorage.setItem(LS_PROJECTS, JSON.stringify(projectsBoard)); }, [projectsBoard]);
 
@@ -571,13 +572,35 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     setAutoColumns(board.columns ?? []);
   }, []);
 
+  const fetchSyncStatus = useCallback(async () => {
+    const syncRes = await fetch('/api/tasks/sync-status', { cache: 'no-store' });
+    if (!syncRes.ok) throw new Error('Sync refresh failed.');
+    const sync = await syncRes.json();
+    setAutoSyncState(sync.state ?? 'unknown');
+    setAutoSyncDetails(sync.details ?? 'Sync status unavailable.');
+  }, []);
+
   const refreshAutonomousBoard = useCallback(async () => {
     setAutoRefreshBusy(true);
     try {
       const importRes = await fetch('/api/tasks/autonomous/import', { method: 'POST' });
       if (!importRes.ok) throw new Error('Import refresh failed.');
-      await fetchAutonomousBoard();
+      await Promise.all([fetchAutonomousBoard(), fetchSyncStatus()]);
     } finally { setAutoRefreshBusy(false); }
+  }, [fetchAutonomousBoard, fetchSyncStatus]);
+
+  const cleanupAutonomousSync = useCallback(async () => {
+    setAutoCleanupBusy(true);
+    try {
+      const cleanupRes = await fetch('/api/tasks/sync-status', { method: 'POST' });
+      if (!cleanupRes.ok) throw new Error('Sync cleanup failed.');
+      const sync = await cleanupRes.json();
+      setAutoSyncState(sync.state ?? 'unknown');
+      setAutoSyncDetails(sync.cleanup?.details ? `${sync.cleanup.details} ${sync.details ?? ''}`.trim() : (sync.details ?? 'Sync status unavailable.'));
+      await fetchAutonomousBoard();
+    } finally {
+      setAutoCleanupBusy(false);
+    }
   }, [fetchAutonomousBoard]);
 
   const createAutonomousTask = useCallback(async (input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; }) => {
@@ -729,7 +752,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   return (
     <div style={{ display: 'grid', gap: 14 }}>
       <div role="tablist" aria-label="Task boards" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 6px', borderRadius: 999, background: 'rgba(255, 255, 255, 0.74)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(200, 195, 188, 0.4)', width: 'fit-content', boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)', marginInline: 'auto' }}>{BOARDS.map(board => { const isActive = activeBoard === board.id; return <button key={board.id} role="tab" aria-selected={isActive} onClick={() => setActiveBoard(board.id)} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 16px', borderRadius: 999, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: isActive ? 700 : 500, transition: 'all 0.15s ease', background: isActive ? 'var(--accent-deep, #0f1f19)' : 'transparent', color: isActive ? '#ffffff' : '#7a7a7a', boxShadow: isActive ? '0 2px 8px rgba(15, 31, 25, 0.18)' : 'none' }}><span>{board.icon}</span><span>{board.label}</span></button>; })}</div>
-      <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={syncState} syncDetails={syncDetails} onOpenNewTask={() => { setAutoModalMode('create'); setAutoModalTask(null); setAutoModalOpen(true); }} onRefreshImport={refreshAutonomousBoard} refreshBusy={autoRefreshBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
+      <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={autoSyncState} syncDetails={autoSyncDetails} onOpenNewTask={() => { setAutoModalMode('create'); setAutoModalTask(null); setAutoModalOpen(true); }} onRefreshImport={refreshAutonomousBoard} onCleanupSync={cleanupAutonomousSync} refreshBusy={autoRefreshBusy} cleanupBusy={autoCleanupBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
       <TaskModal modal={modal} onClose={() => setModal(null)} onSave={handleSave} />
       <AutonomousTaskModal open={autoModalOpen} mode={autoModalMode} initialTask={autoModalTask} onClose={() => { setAutoModalOpen(false); setAutoModalTask(null); }} onSubmit={async (input) => { if (autoModalMode === 'edit' && autoModalTask) { await updateAutonomousTask(autoModalTask.id, input); setAutoModalOpen(false); return; } await createAutonomousTask(input); }} />
       <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} onRemove={removeAutonomousTask} onEdit={(task) => { setAutoModalMode('edit'); setAutoModalTask(task); setAutoModalOpen(true); }} busy={autoActionBusy} />

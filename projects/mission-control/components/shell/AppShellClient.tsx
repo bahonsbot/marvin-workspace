@@ -14,7 +14,8 @@ export function AppShellClient({
 }) {
   const pathname = usePathname();
   const isChatRoute = pathname === '/general/chat' || pathname === '/chat';
-  const hideBottomStrip = isChatRoute;
+  const bottomStripEnabled = false;
+  const hideBottomStrip = isChatRoute || !bottomStripEnabled;
   const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/crons', '/general/memory', '/general/files']);
   const isCompactTopRoute = compactTopRoutes.has(pathname);
 

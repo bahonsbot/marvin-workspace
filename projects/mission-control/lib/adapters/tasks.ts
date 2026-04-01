@@ -107,6 +107,43 @@ function parseDoneTodayEntries(markdown: string): string[] {
     }, { entries: [], inDoneToday: false }).entries;
 }
 
+function removeStaleDoneTodayEntries(markdown: string, structuredDoneKeys: Set<string>): { markdown: string; removed: number } {
+  const lines = markdown.split('\n');
+  const nextLines: string[] = [];
+  let inDoneToday = false;
+  let removed = 0;
+
+  for (const line of lines) {
+    if (line.startsWith('## Done Today')) {
+      inDoneToday = true;
+      nextLines.push(line);
+      continue;
+    }
+    if (line.startsWith('## ')) {
+      inDoneToday = false;
+      nextLines.push(line);
+      continue;
+    }
+    if (!inDoneToday) {
+      nextLines.push(line);
+      continue;
+    }
+    const trimmed = line.trim();
+    if (!trimmed.startsWith('- ')) {
+      nextLines.push(line);
+      continue;
+    }
+    const normalized = normalizeLegacyTaskText(trimmed.slice(2));
+    if (!structuredDoneKeys.has(normalized)) {
+      removed += 1;
+      continue;
+    }
+    nextLines.push(line);
+  }
+
+  return { markdown: nextLines.join('\n'), removed };
+}
+
 function parseCompletedEntries(tasksLog: string): number {
   return tasksLog
     .split('\n')
@@ -253,6 +290,40 @@ async function loadTaskSources() {
       mtime: tasksLogMtime,
       completedEntries,
     },
+  };
+}
+
+export async function cleanupTaskSyncDrift(): Promise<{ removedDoneToday: number; details: string }> {
+  const [store, autonomousRaw] = await Promise.all([
+    loadStructuredTasks(),
+    readAutonomousMarkdown().catch(() => null),
+  ]);
+
+  if (!autonomousRaw) {
+    return { removedDoneToday: 0, details: 'AUTONOMOUS.md unavailable; nothing cleaned.' };
+  }
+
+  const structuredDoneKeys = new Set(
+    store.tasks
+      .filter((task) => task.status === 'done')
+      .flatMap((task) => {
+        const keys = [normalizeLegacyTaskText(task.title)];
+        const linkedKey = task.linkedAutonomyRef?.taskTextNormalized;
+        if (linkedKey) keys.push(linkedKey);
+        return keys;
+      }),
+  );
+
+  const cleaned = removeStaleDoneTodayEntries(autonomousRaw, structuredDoneKeys);
+  if (cleaned.removed > 0 && cleaned.markdown !== autonomousRaw) {
+    await fs.writeFile(AUTONOMOUS_PATH, cleaned.markdown, 'utf8');
+  }
+
+  return {
+    removedDoneToday: cleaned.removed,
+    details: cleaned.removed > 0
+      ? `Removed ${cleaned.removed} stale Done Today entr${cleaned.removed === 1 ? 'y' : 'ies'} from AUTONOMOUS.md.`
+      : 'No stale Done Today entries found.',
   };
 }
 
