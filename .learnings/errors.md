@@ -505,3 +505,18 @@ Command/tool failures and exceptions.
 
 **Priority:** high
 **Status:** resolved
+
+## [ERR-20260401-2230]
+
+**Context:** Mission Control feature implementation and preview verification
+**What failed:** Multiple coding passes committed cleanly inside the nested `projects/mission-control` repo, but the outer workspace still had unwrapped file changes. That created repeated moments where a feature looked finished in the subrepo yet was not fully live in the main workspace flow until an outer-workspace commit + preview restart happened.
+**Prevention:** For Mission Control work, treat nested-repo completion as intermediate only. Before telling Philippe a feature is live, always do the outer-workspace wrap, restart the preview, and perform one light verification pass against the integrated version.
+**Status:** active
+
+## [ERR-20260401-2228]
+
+**Context:** Mission Control autonomous task result normalization
+**What failed:** Artifact/result parsing was too eager and treated injected/bootstrap workspace files like `AGENTS.md`, `SOUL.md`, and `TOOLS.md` as if they were real output artifacts. It also allowed metadata-only runner envelopes to become visible review summaries or toast text.
+**Prevention:** Exclude bootstrap/context files from artifact selection, detect metadata-only runs explicitly, and never let raw runner-envelope JSON become the human-facing headline summary for Tasks/toasts.
+**Status:** active
+

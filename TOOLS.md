@@ -118,6 +118,15 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Mission Control Chat route posture:
   - `/general/chat` and `/chat` intentionally suppress the shell bottom system strip so the page can use a true fixed-workspace layout
   - the Chat page also bypasses the normal shared page-scaffold title/header so the top control rail and bottom composer dock can own the visible working area
+- Apr 1 Tasks/runtime posture:
+  - autonomous task current-state authority = `projects/mission-control/data/autonomous-tasks.json`
+  - `AUTONOMOUS.md` is legacy mirror/sync surface, not equal authority
+  - Tasks page now uses live polling only while autonomous work is actively running
+  - autonomous completion notifications now fan out to Chat activity line + top-right shell toast + subtle sound cue
+  - shell bottom status strip is intentionally disabled globally for now, not deleted as a concept
+- Mission Control repo wrap rule:
+  - `projects/mission-control` may commit cleanly inside its own nested repo while the outer workspace still has unwrapped file changes
+  - before telling Philippe a Mission Control feature is live, do outer-workspace wrap + preview restart + one light verification pass against the integrated version
 
 ### Built-in OpenClaw Skills
 - coding-agent — Delegates to Codex/Claude Code/Pi for coding tasks

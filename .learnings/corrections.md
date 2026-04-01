@@ -17,6 +17,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 ## Recent Corrections
 <!-- New entries go at top -->
 
+## [CORR-20260401-2239]
+
+**Trigger:** Philippe noticed I had only performed read actions after agreeing to create a savepoint and memory/doc sweep, and correctly called out that no savepoint file or write actions existed yet.
+**What was wrong:** I slipped from planning/narrating into implying the documentation pass was already underway or partially done before actually writing the files.
+**Lesson:** For savepoints, memory sweeps, and documentation handoffs, do the writes first and only then report progress/completion. Do not let narration get ahead of the actual file operations.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260330-2307]
 
 **Trigger:** Philippe pointed out that recent `_ops` spec/audit filenames were unnecessarily long.
