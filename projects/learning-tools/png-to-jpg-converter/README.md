@@ -8,7 +8,7 @@ A native macOS app to batch convert PNG images to JPG/JPEG with adjustable quali
 
 - **Drag & drop** PNG files directly onto the window
 - **Batch convert** any number of files at once
-- **Quality slider** — 1–100 JPEG quality (default 90)
+- **Quality slider** — 30–100 JPEG quality (default 92)
 - **Custom output folder** — choose where JPGs are saved
 - **Transparency handling** — PNG alpha composited over white background before JPEG encode
 - **Progress log** — see each file as it converts
@@ -24,12 +24,12 @@ source .venv/bin/activate
 
 # 2. Install dependencies
 pip install -r requirements.txt
-# Optional but recommended for smoother drag-and-drop on macOS:
-pip install tkinterdnd2
 
 # 3. Run
 python3 converter.py
 ```
+
+> **No external GUI library needed** — uses tkinter, which ships with macOS Python.
 
 ---
 
@@ -85,10 +85,10 @@ python setup.py py2app
 
 | Problem | Solution |
 |---|---|
-| `ModuleNotFoundError: No module named 'PySimpleGUI'` | Run `pip install PySimpleGUI Pillow` |
-| App opens but window is blank | Ensure `#!/usr/bin/env python3` is at the top; check Python path with `which python3` in Terminal |
-| Drop zone doesn't respond to drag | Click the zone to use the file browser instead |
-| Quality slider has no effect | Make sure you dragged the slider, not just clicked |
+| `ModuleNotFoundError: No module named 'PIL'` | Run `pip install Pillow` |
+| App won't launch / tkinter error | Make sure you're using the macOS system Python3 (`/usr/bin/python3`) which includes tkinter |
+| Drop zone doesn't respond to drag | Use the **Add Files…** button to browse instead |
+| Quality slider has no effect | Drag the slider handle, don't just click |
 
 ---
 
