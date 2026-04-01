@@ -4,6 +4,7 @@ import path from 'node:path';
 const WORKSPACE_ROOT = '/data/.openclaw/workspace';
 const AUTONOMOUS_PATH = path.join(WORKSPACE_ROOT, 'AUTONOMOUS.md');
 const TASKS_LOG_PATH = path.join(WORKSPACE_ROOT, 'memory', 'tasks-log.md');
+const QUEUE_PATH = path.join(WORKSPACE_ROOT, 'memory', 'executor-subagent-queue.json');
 const STORE_PATH = path.join(WORKSPACE_ROOT, 'projects', 'mission-control', 'data', 'autonomous-tasks.json');
 
 export type MCAutoTaskStatus = 'backlog' | 'todo' | 'in-progress' | 'review' | 'done';
@@ -12,7 +13,7 @@ export type MCAutoTaskSourceType = 'generated' | 'manual';
 export type MCAutoTaskAgentTarget = 'marvin' | 'builder' | 'reviewer' | 'content-creator';
 export type MCAutoRunStatus = 'running' | 'done' | 'error' | 'aborted';
 export type MCAutoFeedbackAuthor = 'operator' | `agent:${string}`;
-export type MCAutoLegacySection = 'open-backlog' | 'in-progress' | 'needs-input' | 'done' | 'done-today';
+export type MCAutoLegacySection = 'open-backlog' | 'in-progress' | 'review' | 'needs-input' | 'done' | 'done-today';
 
 export interface MCAutoRun {
   sessionKey: string;
@@ -99,9 +100,22 @@ export interface LegacyTaskEntry {
   lineIndex: number;
 }
 
+interface QueueTaskEntry {
+  task?: string;
+  label?: string;
+  status?: string;
+  note?: string;
+  outputPath?: string;
+  queuedAt?: string;
+  startedAt?: string;
+  completedAt?: string;
+  reviewStatus?: string;
+}
+
 const SECTION_TO_STATUS: Record<MCAutoLegacySection, MCAutoTaskStatus> = {
   'open-backlog': 'backlog',
   'in-progress': 'in-progress',
+  review: 'review',
   'needs-input': 'todo',
   done: 'done',
   'done-today': 'done',
@@ -110,6 +124,7 @@ const SECTION_TO_STATUS: Record<MCAutoLegacySection, MCAutoTaskStatus> = {
 const SECTION_HEADERS: Record<MCAutoLegacySection, string> = {
   'open-backlog': '## Open Backlog',
   'in-progress': '## In Progress',
+  review: '## Review',
   'needs-input': '## Needs Input',
   done: '## Done',
   'done-today': '## Done Today',
@@ -150,6 +165,46 @@ export function normalizeLegacyTaskText(value: string): string {
 
 function nowIso(): string {
   return new Date().toISOString();
+}
+
+async function loadQueueEntries(): Promise<QueueTaskEntry[]> {
+  try {
+    const raw = await fs.readFile(QUEUE_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed as QueueTaskEntry[] : [];
+  } catch {
+    return [];
+  }
+}
+
+function queueTargetSection(entry: QueueTaskEntry): MCAutoLegacySection | null {
+  switch (entry.status) {
+    case 'spawned':
+      return 'in-progress';
+    case 'completed':
+      return 'review';
+    case 'blocked':
+      return 'needs-input';
+    default:
+      return null;
+  }
+}
+
+function queueRunStatus(entry: QueueTaskEntry): MCAutoRunStatus | null {
+  switch (entry.status) {
+    case 'spawned':
+      return 'running';
+    case 'completed':
+      return 'done';
+    case 'blocked':
+      return 'error';
+    default:
+      return null;
+  }
+}
+
+function queueSummary(entry: QueueTaskEntry): string | undefined {
+  return entry.note?.trim() || entry.outputPath?.trim() || undefined;
 }
 
 async function ensureStoreDir(): Promise<void> {
@@ -200,6 +255,8 @@ function parseSectionName(header: string): MCAutoLegacySection | null {
       return 'in-progress';
     case '## Needs Input':
       return 'needs-input';
+    case '## Review':
+      return 'review';
     case '## Done':
       return 'done';
     case '## Done Today':
@@ -248,9 +305,15 @@ function nextColumnOrder(tasks: MCAutoTask[], status: MCAutoTaskStatus): number 
 }
 
 export async function importLegacyAutonomousTasks(): Promise<{ imported: number; updated: number; store: MCAutoTaskStore }> {
-  const [store, markdown] = await Promise.all([loadStructuredTasks(), readAutonomousMarkdown()]);
-  const legacyTasks = parseLegacyAutonomousTasks(markdown).filter((entry) => entry.section === 'open-backlog' || entry.section === 'in-progress');
+  const [store, markdown, queueEntries] = await Promise.all([loadStructuredTasks(), readAutonomousMarkdown(), loadQueueEntries()]);
+  const legacyTasks = parseLegacyAutonomousTasks(markdown).filter((entry) => entry.section === 'open-backlog' || entry.section === 'in-progress' || entry.section === 'review');
   const existingIds = new Set(store.tasks.map((task) => task.id));
+  let nextMarkdown = markdown;
+  const queueByTask = new Map(
+    queueEntries
+      .filter((entry) => typeof entry.task === 'string' && entry.task.trim())
+      .map((entry) => [normalizeLegacyTaskText(entry.task as string), entry] as const),
+  );
 
   let imported = 0;
   let updated = 0;
@@ -344,6 +407,88 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
   if (deduped > 0) {
     store.tasks = dedupedTasks;
     updated += deduped;
+  }
+
+  for (const task of store.tasks) {
+    const link = task.linkedAutonomyRef;
+    if (!link || link.kind !== 'autonomous-md') continue;
+
+    const queueEntry = queueByTask.get(link.taskTextNormalized);
+    if (!queueEntry) continue;
+
+    let changed = false;
+    const targetSection = queueTargetSection(queueEntry);
+    const targetStatus = targetSection ? SECTION_TO_STATUS[targetSection] : null;
+
+    if (link.queueLabel !== queueEntry.label) {
+      link.queueLabel = queueEntry.label;
+      changed = true;
+    }
+    if (link.queueLinked !== true) {
+      link.queueLinked = true;
+      changed = true;
+    }
+    if (link.completedOutputPath !== queueEntry.outputPath) {
+      link.completedOutputPath = queueEntry.outputPath;
+      changed = true;
+    }
+
+    if (targetSection && link.section !== targetSection) {
+      nextMarkdown = insertTaskIntoSection(removeLegacyTaskLine(nextMarkdown, link), targetSection, link.taskText);
+      link.section = targetSection;
+      changed = true;
+    }
+
+    if (targetStatus && task.status !== targetStatus) {
+      task.status = targetStatus;
+      task.columnOrder = nextColumnOrder(store.tasks.filter((candidate) => candidate.id !== task.id), targetStatus);
+      changed = true;
+    }
+
+    const runStatus = queueRunStatus(queueEntry);
+    const nextRun = runStatus
+      ? {
+          sessionKey: task.run?.sessionKey ?? queueEntry.label ?? `queue-${task.id}`,
+          sessionId: task.run?.sessionId ?? queueEntry.label ?? `queue-${task.id}`,
+          startedAt: task.run?.startedAt ?? Date.now(),
+          endedAt: runStatus === 'done' || runStatus === 'error' || runStatus === 'aborted' ? (task.run?.endedAt ?? Date.now()) : task.run?.endedAt,
+          status: runStatus,
+          summary: queueSummary(queueEntry) ?? task.run?.summary,
+          result: queueEntry.outputPath ? `Artifact: ${queueEntry.outputPath}` : task.run?.result,
+          error: runStatus === 'error' ? (queueEntry.note ?? task.run?.error) : undefined,
+        }
+      : task.run;
+
+    if (runStatus && JSON.stringify(nextRun) !== JSON.stringify(task.run)) {
+      task.run = nextRun;
+      changed = true;
+    }
+
+    if (queueEntry.outputPath) {
+      const artifactExists = task.artifacts.some((artifact) => artifact.path === queueEntry.outputPath);
+      if (!artifactExists) {
+        task.artifacts.push({ path: queueEntry.outputPath, kind: 'file', label: 'Queue output' });
+        changed = true;
+      }
+    }
+
+    if (queueEntry.status === 'blocked' && queueEntry.note) {
+      const alreadyHasNote = task.feedback.some((item) => item.note === queueEntry.note);
+      if (!alreadyHasNote) {
+        task.feedback.push({ at: Date.now(), by: 'operator', note: queueEntry.note });
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      task.updatedAt = Date.now();
+      task.version += 1;
+      updated += 1;
+    }
+  }
+
+  if (nextMarkdown !== markdown) {
+    await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
   }
 
   if (imported > 0 || updated > 0) {
@@ -446,7 +591,7 @@ function removeLegacyTaskLine(markdown: string, link: MCAutoLegacyLink): string 
     if (!trimmed.startsWith('- ')) continue;
     const text = trimmed.slice(2).trim();
     if (normalizeLegacyTaskText(text) !== link.taskTextNormalized) continue;
-    if (currentSection !== link.section && currentSection !== 'open-backlog' && currentSection !== 'in-progress' && currentSection !== 'needs-input') continue;
+    if (currentSection !== link.section && currentSection !== 'open-backlog' && currentSection !== 'in-progress' && currentSection !== 'review' && currentSection !== 'needs-input') continue;
     lines.splice(i, 1);
     return lines.join('\n');
   }
