@@ -60,6 +60,20 @@ class ExecutionOrchestrator:
         risk_decision: Dict[str, Any],
         source: str = "webhook",
     ) -> Dict[str, Any]:
+        # Defensive: reject non-dict signal before any attribute access
+        if not isinstance(signal, dict):
+            logger.error(f"execute() received non-dict signal type: {type(signal).__name__}")
+            return {
+                "executed": False,
+                "status": "type_error",
+                "reason": f"signal must be dict, got {type(signal).__name__}",
+                "idempotency_key": None,
+                "order_intent": None,
+                "broker_result": None,
+                "paper_only": True,
+                "audit": None,
+            }
+
         idempotency_key = self.build_idempotency_key(signal=signal, source=source)
         candidate_meta = _candidate_metadata(signal)
 

@@ -160,12 +160,6 @@ trap 'rm -f "$PID_FILE"' EXIT
 echo $$ > "$PID_FILE"
 log "PID file created: $PID_FILE"
 
-verbose() {
-    if [[ $VERBOSE -eq 1 ]]; then
-        log "VERBOSE: $*"
-    fi
-}
-
 # Extract task count from PRD
 count_tasks() {
     grep -c "^\- \[ \]" "$WORKSPACE/$PRD_FILE" 2>/dev/null || echo "0"

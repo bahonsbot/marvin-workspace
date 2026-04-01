@@ -173,5 +173,47 @@
     "lastAccessed": "2026-03-15",
     "accessCount": 1,
     "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "cron-014",
+    "fact": "Session log cleanup cron added: daily 05:20 ICT via deterministic scheduler, purges raw session files older than 5 days from /data/.openclaw/agents/main/sessions. First run deleted 71 files (48MB), reduced session storage from 89M to 43M.",
+    "category": "status",
+    "timestamp": "2026-03-20T12:24:00+07:00",
+    "source": "memory/2026-03-20.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.414734"
+  },
+  {
+    "id": "cron-015",
+    "fact": "Legacy cron cleanup: 13 obsolete disabled OpenClaw wrapper jobs removed (data-manager, entity-lifecycle-manager, pre-market-brief, reddit-monitor, weekly-test-suite, rss-feed-monitor-weekend-light, auto-signal-dispatcher, reddit-monitor-weekend-light, dependency-update-audit, audit-sensitive-snapshot, rss-feed-monitor, enrichment-ab-review, trading-daily-report). deterministic-scheduler-watchdog retained as safety net.",
+    "category": "status",
+    "timestamp": "2026-03-20T12:45:00+07:00",
+    "source": "memory/2026-03-20.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.414740"
+  },
+  {
+    "id": "cron-016",
+    "fact": "Deterministic scheduler architecture clarified: host-side script execution via scripts/deterministic_scheduler.py for runner jobs, OpenClaw cron reserved for model-backed analysis/review jobs (nightly-memory-extraction, platform-health-council, nightly-security-review, self-improvement, daily-task-generator, signal-accuracy-review, market-signal-generator).",
+    "category": "decision",
+    "timestamp": "2026-03-20T12:43:00+07:00",
+    "source": "memory/2026-03-20.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.414743"
   }
 ]

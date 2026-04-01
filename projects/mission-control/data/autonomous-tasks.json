@@ -13,21 +13,10 @@
       "columnOrder": 0,
       "editable": true,
       "chatAnnouncementSent": true,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "done-today",
-        "taskText": "Create tasks-page current-state doc",
-        "taskTextNormalized": "create tasks-page current-state doc"
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      },
       "run": {
+        "attemptId": "create-tasks-page-current-state-doc-attempt-1",
+        "attemptNumber": 1,
+        "trigger": "direct",
         "sessionKey": "mc-auto-create-tasks-page-current-state-doc-1774972972205",
         "sessionId": "mc-auto-create-tasks-page-current-state-doc-1774972972205",
         "runId": "50d85bce-073a-4eb7-9ad9-da91a8055069",
@@ -36,6 +25,22 @@
         "status": "done",
         "summary": "{ \"runId\": \"50d85bce-073a-4eb7-9ad9-da91a8055069\", \"status\": \"ok\", \"summary\": \"completed\", \"result\": { \"payloads\": [ { \"text\": \"Now I have a thorough picture. Let me write the doc.\", \"mediaUrl\": null }, { \"text\": \"**C\u2026",
         "result": "{\n  \"runId\": \"50d85bce-073a-4eb7-9ad9-da91a8055069\",\n  \"status\": \"ok\",\n  \"summary\": \"completed\",\n  \"result\": {\n    \"payloads\": [\n      {\n        \"text\": \"Now I have a thorough picture. Let me write the doc.\",\n        \"mediaUrl\": null\n      },\n      {\n        \"text\": \"**Created:** `projects/mission-control/docs/tasks-page-current-state.md`\\n\\nQuick summary of what's in there:\\n\\n**What works:** Autonomous board (real data, execute/approve/reject/remove wired), Personal + Projects boards (drag-and-drop, create/edit/delete), sync status indicator, import refresh, task detail drawer.\\n\\n**Key limitations flagged:**\\n- Personal/Projects are localStorage-only seeded demo data \u2014 no real backend persistence\\n- Autonomous task creation doesn't write back to `AUTONOMOUS.md` (only the import flow populates that)\\n- The 5-column autonomous board (Backlog \u2192 To Do \u2192 In Progress \u2192 Review \u2192 Done) has a naming ambiguity: \\\"To Do\\\" is actually the approved-queue lane, not a pipeline step\\n- `/tasks` is a stub route; real page is at `/general/tasks`\\n- Personal/Projects boards are visually transitional (3-column, same FLOATING tokens but less refined)\",\n        \"mediaUrl\": null\n      }\n    ],\n    \"meta\": {\n      \"durationMs\": 92560,\n      \"agentMeta\": {\n        \"sessionId\": \"mc-auto-create-tasks-page-current-state-doc-1774972972205\",\n        \"provider\": \"minimax\",\n        \"model\": \"MiniMax-M2.7\",\n        \"usage\": {\n          \"input\": 91559,\n          \"output\": 2907,\n          \"cacheRead\": 141990,\n          \"cacheWrite\": 23722,\n          \"total\": 49024\n        },\n        \"lastCallUsage\": {\n          \"input\": 25154,\n          \"output\": 205,\n          \"cacheRead\": 23665,\n          \"cacheWrite\": 0,\n          \"total\": 49024\n        },\n        \"promptTokens\": 48819\n      },\n      \"aborted\": false,\n      \"systemPromptReport\": {\n        \"source\": \"run\",\n        \"generatedAt\": 1774972975423,\n        \"sessionId\": \"mc-auto-create-tasks-page-current-state-doc-1774972972205\",\n        \"provider\": \"minimax\",\n        \"model\": \"MiniMax-M2.7\",\n        \"workspaceDir\": \"/data/.openclaw/workspace\",\n        \"bootstrapMaxChars\": 20000,\n        \"bootstrapTotalMaxChars\": 150000,\n        \"bootstrapTruncation\": {\n          \"warningMode\": \"once\",\n          \"warningShown\": true,\n          \"promptWarningSignature\": \"{\\\"bootstrapMaxChars\\\":20000,\\\"bootstrapTotalMaxChars\\\":150000,\\\"files\\\":[{\\\"path\\\":\\\"/data/.openclaw/workspace/TOOLS.md\\\",\\\"rawChars\\\":31106,\\\"injectedChars\\\":18108,\\\"causes\\\":[\\\"per-file-limit\\\"]}]}\",\n          \"warningSignaturesSeen\": [\n            \"{\\\"bootstrapMaxChars\\\":20000,\\\"bootstrapTotalMaxChars\\\":150000,\\\"files\\\":[{\\\"path\\\":\\\"/data/.openclaw/workspace/TOOLS.md\\\",\\\"rawChars\\\":31106,\\\"injectedChars\\\":18108,\\\"causes\\\":[\\\"per-file-limit\\\"]}]}\"\n          ],\n          \"truncatedFiles\": 1,\n          \"nearLimitFiles\": 1,\n          \"totalNearLimit\": false\n        },\n        \"sandbox\": {\n          \"mode\": \"off\",\n          \"sandboxed\": false\n        },\n        \"systemPrompt\": {\n          \"chars\": 85355,\n          \"projectContextChars\": 50592,\n          \"nonProjectContextChars\": 34763\n        },\n        \"injectedWorkspaceFiles\": [\n          {\n            \"name\": \"AGENTS.md\",\n            \"path\": \"/data/.openclaw/workspace/AGENTS.md\",\n            \"missing\": false,\n            \"rawChars\": 10332,\n            \"injectedChars\": 10332,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"SOUL.md\",\n            \"path\": \"/data/.openclaw/workspace/SOUL.md\",\n            \"missing\": false,\n            \"rawChars\": 1135,\n            \"injectedChars\": 1135,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"TOOLS.md\",\n            \"path\": \"/data/.openclaw/workspace/TOOLS.md\",\n            \"missing\": false,\n            \"rawChars\": 31106,\n            \"injectedChars\": 18108,\n            \"truncated\": true\n          },\n          {\n            \"name\": \"IDENTITY.md\",\n            \"path\": \"/data/.openclaw/workspace/IDENTITY.md\",\n            \"missing\": false,\n            \"rawChars\": 733,\n            \"injectedChars\": 733,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"USER.md\",\n            \"path\": \"/data/.openclaw/workspace/USER.md\",\n            \"missing\": false,\n            \"rawChars\": 997,\n            \"injectedChars\": 997,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"HEARTBEAT.md\",\n            \"path\": \"/data/.openclaw/workspace/HEARTBEAT.md\",\n            \"missing\": false,\n            \"rawChars\": 1296,\n            \"injectedChars\": 1296,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"BOOTSTRAP.md\",\n            \"path\": \"/data/.openclaw/workspace/BOOTSTRAP.md\",\n            \"missing\": false,\n            \"rawChars\": 398,\n            \"injectedChars\": 398,\n            \"truncated\": false\n          },\n          {\n            \"name\": \"MEMORY.md\",\n            \"path\": \"/data/.openclaw/workspace/MEMORY.md\",\n            \"missing\": false,\n            \"rawChars\": 16842,\n            \"injectedChars\": 16842,\n            \"truncated\": false\n          }\n        ],\n        \"skills\": {\n          \"promptChars\": 24875,\n          \"entries\": [\n            {\n              \"name\": \"clawhub\",\n              \"blockChars\": 429\n            },\n            {\n              \"name\": \"coding-agent\",\n              \"blockChars\": 829\n            },\n            {\n              \"name\": \"gh-issues\",\n              \"blockChars\": 505\n            },\n            {\n              \"name\": \"github\",\n              \"blockChars\": 569\n            },\n            {\n              \"name\": \"healthcheck\",\n              \"blockChars\": 488\n            },\n            {\n              \"name\": \"himalaya\",\n              \"blockChars\": 380\n            },\n            {\n              \"name\": \"skill-creator\",\n              \"blockChars\": 756\n            },\n            {\n              \"name\": \"video-frames\",\n              \"blockChars\": 226\n            },\n            {\n              \"name\": \"weather\",\n              \"blockChars\": 413\n            },\n            {\n              \"name\": \"deep-research\",\n              \"blockChars\": 442\n            },\n            {\n              \"name\": \"frontend-skill\",\n              \"blockChars\": 435\n            },\n            {\n              \"name\": \"google_maps_pro\",\n              \"blockChars\": 431\n            },\n            {\n              \"name\": \"humanizer\",\n              \"blockChars\": 599\n            },\n            {\n              \"name\": \"ab-test-setup\",\n              \"blockChars\": 531\n            },\n            {\n              \"name\": \"analytics-tracking\",\n              \"blockChars\": 632\n            },\n            {\n              \"name\": \"competitor-alternatives\",\n              \"blockChars\": 785\n            },\n            {\n              \"name\": \"copy-editing\",\n              \"blockChars\": 577\n            },\n            {\n              \"name\": \"copywriting\",\n              \"blockChars\": 622\n            },\n            {\n              \"name\": \"email-sequence\",\n              \"blockChars\": 631\n            },\n            {\n              \"name\": \"form-cro\",\n              \"blockChars\": 676\n            },\n            {\n              \"name\": \"free-tool-strategy\",\n              \"blockChars\": 711\n            },\n            {\n              \"name\": \"launch-strategy\",\n              \"blockChars\": 623\n            },\n            {\n              \"name\": \"marketing-ideas\",\n              \"blockChars\": 602\n            },\n            {\n              \"name\": \"marketing-psychology\",\n              \"blockChars\": 638\n            },\n            {\n              \"name\": \"onboarding-cro\",\n              \"blockChars\": 681\n            },\n            {\n              \"name\": \"page-cro\",\n              \"blockChars\": 736\n            },\n            {\n              \"name\": \"paid-ads\",\n              \"blockChars\": 645\n            },\n            {\n              \"name\": \"paywall-upgrade-cro\",\n              \"blockChars\": 809\n            },\n            {\n              \"name\": \"popup-cro\",\n              \"blockChars\": 625\n            },\n            {\n              \"name\": \"pricing-strategy\",\n              \"blockChars\": 645\n            },\n            {\n              \"name\": \"programmatic-seo\",\n              \"blockChars\": 640\n            },\n            {\n              \"name\": \"referral-program\",\n              \"blockChars\": 601\n            },\n            {\n              \"name\": \"schema-markup\",\n              \"blockChars\": 591\n            },\n            {\n              \"name\": \"seo-audit\",\n              \"blockChars\": 598\n            },\n            {\n              \"name\": \"signup-flow-cro\",\n              \"blockChars\": 638\n            },\n            {\n              \"name\": \"social-content\",\n              \"blockChars\": 654\n            },\n            {\n              \"name\": \"my-skills\",\n              \"blockChars\": 249\n            },\n            {\n              \"name\": \"news-feeds\",\n              \"blockChars\": 255\n            },\n            {\n              \"name\": \"openclaw-agent-optimize\",\n              \"blockChars\": 584\n            },\n            {\n              \"name\": \"proactive-execution\",\n              \"blockChars\": 499\n            },\n            {\n              \"name\": \"security-review\",\n              \"blockChars\": 363\n            },\n            {\n              \"name\": \"stock-market-pro\",\n              \"blockChars\": 364\n            },\n            {\n              \"name\": \"us-stock-analysis\",\n              \"blockChars\": 673\n            }\n          ]\n        },\n        \"tools\": {\n          \"listChars\": 1763,\n          \"schemaChars\": 6490,\n          \"entries\": [\n            {\n              \"name\": \"read\",\n              \"summaryChars\": 298,\n              \"schemaChars\": 392,\n              \"propertiesCount\": 4\n            },\n            {\n              \"name\": \"edit\",\n              \"summaryChars\": 129,\n              \"schemaChars\": 591,\n              \"propertiesCount\": 6\n            },\n            {\n              \"name\": \"write\",\n              \"summaryChars\": 127,\n              \"schemaChars\": 313,\n              \"propertiesCount\": 3\n            },\n            {\n              \"name\": \"exec\",\n              \"summaryChars\": 181,\n              \"schemaChars\": 1086,\n              \"propertiesCount\": 12\n            },\n            {\n              \"name\": \"process\",\n              \"summaryChars\": 85,\n              \"schemaChars\": 961,\n              \"propertiesCount\": 12\n            },\n            {\n              \"name\": \"cron\",\n              \"summaryChars\": 2689,\n              \"schemaChars\": 690,\n              \"propertiesCount\": 13\n            },\n            {\n              \"name\": \"sessions_list\",\n              \"summaryChars\": 54,\n              \"schemaChars\": 212,\n              \"propertiesCount\": 4\n            },\n            {\n              \"name\": \"sessions_history\",\n              \"summaryChars\": 36,\n              \"schemaChars\": 161,\n              \"propertiesCount\": 3\n            },\n            {\n              \"name\": \"sessions_send\",\n              \"summaryChars\": 84,\n              \"schemaChars\": 273,\n              \"propertiesCount\": 5\n            },\n            {\n              \"name\": \"sessions_spawn\",\n              \"summaryChars\": 198,\n              \"schemaChars\": 922,\n              \"propertiesCount\": 16\n            },\n            {\n              \"name\": \"subagents\",\n              \"summaryChars\": 105,\n              \"schemaChars\": 191,\n              \"propertiesCount\": 4\n            },\n            {\n              \"name\": \"session_status\",\n              \"summaryChars\": 207,\n              \"schemaChars\": 89,\n              \"propertiesCount\": 2\n            },\n            {\n              \"name\": \"image\",\n              \"summaryChars\": 201,\n              \"schemaChars\": 342,\n              \"propertiesCount\": 6\n            },\n            {\n              \"name\": \"memory_search\",\n              \"summaryChars\": 334,\n              \"schemaChars\": 139,\n              \"propertiesCount\": 3\n            },\n            {\n              \"name\": \"memory_get\",\n              \"summaryChars\": 151,\n              \"schemaChars\": 128,\n              \"propertiesCount\": 3\n            }\n          ]\n        }\n      },\n      \"stopReason\": \"stop\"\n    }\n  }\n}"
+      },
+      "feedback": [],
+      "artifacts": [],
+      "linkedAutonomyRef": {
+        "kind": "autonomous-md",
+        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
+        "section": "done-today",
+        "taskText": "Create tasks-page current-state doc",
+        "taskTextNormalized": "create tasks-page current-state doc",
+        "queueLinked": false,
+        "completedInTasksLog": false
+      },
+      "sourceMeta": {
+        "generator": {
+          "createdBy": "daily-task-generator"
+        }
       }
     },
     {
@@ -58,7 +63,9 @@
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
         "section": "open-backlog",
         "taskText": "Add clickable artefact-first rendering for reviewed autonomous task results",
-        "taskTextNormalized": "add clickable artefact-first rendering for reviewed autonomous task results"
+        "taskTextNormalized": "add clickable artefact-first rendering for reviewed autonomous task results",
+        "queueLinked": false,
+        "completedInTasksLog": false
       },
       "sourceMeta": {
         "generator": {
@@ -86,7 +93,9 @@
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
         "section": "open-backlog",
         "taskText": "Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs",
-        "taskTextNormalized": "add mission control tasks completion toast / chat-style notice for finished autonomous runs"
+        "taskTextNormalized": "add mission control tasks completion toast / chat-style notice for finished autonomous runs",
+        "queueLinked": false,
+        "completedInTasksLog": false
       },
       "sourceMeta": {
         "generator": {
@@ -96,17 +105,31 @@
     },
     {
       "id": "other-fix-build-one-small-openclaw-helper-utilit",
-      "title": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
-      "status": "todo",
+      "title": "Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster",
+      "description": "Useful first pass, but too shallow to keep. Expand it into a more actionable operator utility: include Review/In Progress/Needs Input visibility, stronger drift detection, and clearer next-action guidance before rerunning.",
+      "status": "done",
       "priority": "normal",
       "sourceType": "generated",
       "agentTarget": "marvin",
       "createdAt": 1775009741175,
-      "updatedAt": 1775017432311,
-      "version": 17,
-      "columnOrder": 2,
+      "updatedAt": 1775026030443,
+      "version": 28,
+      "columnOrder": 0,
       "editable": true,
       "chatAnnouncementSent": false,
+      "run": {
+        "attemptId": "other-fix-build-one-small-openclaw-helper-utilit-attempt-2",
+        "attemptNumber": 2,
+        "trigger": "direct",
+        "sessionKey": "mc-auto-other-fix-build-one-small-openclaw-helper-utilit-1775026030442",
+        "sessionId": "mc-auto-other-fix-build-one-small-openclaw-helper-utilit-1775026030442",
+        "startedAt": 1775026030442,
+        "status": "done",
+        "summary": "Retrying with operator feedback",
+        "feedbackAt": 1775020533702,
+        "feedbackNote": "Expanded utility delivered: Review/In Progress/Needs Input panels, kanban-based rejection tracking, dual-source drift detection, next-action checklist with HIGH/MEDIUM/LOW priority.",
+        "endedAt": 1775026030443
+      },
       "feedback": [
         {
           "at": 1775014529620,
@@ -117,25 +140,38 @@
           "at": 1775016779081,
           "by": "operator",
           "note": "Useful first pass, but too shallow to keep. Expand it into a more actionable operator utility: include Review/In Progress/Needs Input visibility, stronger drift detection, and clearer next-action guidance before rerunning."
+        },
+        {
+          "at": 1775019972124,
+          "by": "operator",
+          "note": "Rejected without note."
+        },
+        {
+          "at": 1775020533702,
+          "by": "operator",
+          "note": "Expanded utility delivered: Review/In Progress/Needs Input panels, kanban-based rejection tracking, dual-source drift detection, next-action checklist with HIGH/MEDIUM/LOW priority."
+        },
+        {
+          "at": 1775020632385,
+          "by": "agent:system",
+          "note": "[ACCEPTED] Execution failed: Command failed: bash -lc openclaw agent --session-id \"mc-auto-other-fix-build-one-small-openclaw-helper-utilit-1775020012258\" --message \"Autonomous task: Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster\\nDescription: Useful first pass, but too shallow to keep. Expand it into a more actionable operator utility: include Review/In Progress/Needs Input visibility, stronger drift detection, and clearer next-action guidance before rerunning.\\nAgent target: marvin\\nLatest operator feedback to address: Rejected without note.\\nWork on this task directly and return a concise result summary plus any created artifact paths if applicable.\" --thinking \"low\" --json --timeout 600\n"
         }
       ],
       "artifacts": [],
       "linkedAutonomyRef": {
         "kind": "autonomous-md",
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "needs-input",
-        "taskText": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
-        "taskTextNormalized": "[other] fix build one small openclaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | why: improves openclaw reliability - essential for autonomous operations | proof: script runs on a real openclaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | unlocks: progress toward: write a simple script with input validation",
+        "section": "in-progress",
+        "taskText": "Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster",
+        "taskTextNormalized": "fix build one small openclaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster",
         "queueLinked": false,
-        "queueLabel": null,
-        "completedOutputPath": null
+        "completedInTasksLog": false
       },
       "sourceMeta": {
         "generator": {
           "createdBy": "daily-task-generator"
         }
-      },
-      "run": null
+      }
     },
     {
       "id": "trading-fix-identify-one-safe-improvement-opport",
@@ -157,7 +193,9 @@
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
         "section": "open-backlog",
         "taskText": "[Trading] Fix identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
-        "taskTextNormalized": "[trading] fix identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | why: real market analysis and execution builds trading skill faster than passive learning | proof: spec targets a real bot-support improvement and avoids unsafe live-trading config changes | unlocks: unlocks a higher-quality system improvement task for the trading bots"
+        "taskTextNormalized": "[trading] fix identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | why: real market analysis and execution builds trading skill faster than passive learning | proof: spec targets a real bot-support improvement and avoids unsafe live-trading config changes | unlocks: unlocks a higher-quality system improvement task for the trading bots",
+        "queueLinked": false,
+        "completedInTasksLog": false
       },
       "sourceMeta": {
         "generator": {
@@ -166,16 +204,16 @@
       }
     },
     {
-      "id": "philippe-suggested-category-other-title-investig",
-      "title": "[Philippe] \ud83d\udcdd Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability \u2014 missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
+      "id": "create-a-image-conversion-app-that-runs-on-mac-o",
+      "title": "Create a image conversion app that runs on Mac OS to convert .png to .jpg files",
       "status": "backlog",
       "priority": "normal",
       "sourceType": "generated",
       "agentTarget": "marvin",
-      "createdAt": 1775010959165,
-      "updatedAt": 1775010959165,
+      "createdAt": 1775021692382,
+      "updatedAt": 1775021692382,
       "version": 1,
-      "columnOrder": 12,
+      "columnOrder": 15,
       "editable": true,
       "chatAnnouncementSent": false,
       "feedback": [],
@@ -184,36 +222,10 @@
         "kind": "autonomous-md",
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
         "section": "open-backlog",
-        "taskText": "[Philippe] \ud83d\udcdd Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability \u2014 missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
-        "taskTextNormalized": "[philippe] \ud83d\udcdd suggested: --category other --title investigate daily-task-generator backlog dropout bug --description 2026-04-01: script reported 5 tasks generated, but only 4 appear in backlog. one task ('tighten chat recent-session switching') appears to have been silently dropped during the update. investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why task generation reliability \u2014 missing tasks break trust in the autonomous workflow --proof telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks confident daily task generation without silent data loss | why: philippe-prioritized task suggestion | proof: task outcome or deliverable is clear from the task text | unlocks: direct progress on philippe's chosen priority"
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      }
-    },
-    {
-      "id": "create-execute-smoke-test-json-artifact",
-      "title": "Create execute smoke-test JSON artifact",
-      "status": "review",
-      "priority": "normal",
-      "sourceType": "generated",
-      "agentTarget": "marvin",
-      "createdAt": 1775015514322,
-      "updatedAt": 1775015514322,
-      "version": 1,
-      "columnOrder": 1,
-      "editable": true,
-      "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "review",
-        "taskText": "Create execute smoke-test JSON artifact",
-        "taskTextNormalized": "create execute smoke-test json artifact"
+        "taskText": "Create a image conversion app that runs on Mac OS to convert .png to .jpg files",
+        "taskTextNormalized": "create a image conversion app that runs on mac os to convert .png to .jpg files",
+        "queueLinked": false,
+        "completedInTasksLog": false
       },
       "sourceMeta": {
         "generator": {
@@ -223,7 +235,11 @@
     }
   ],
   "meta": {
-    "schemaVersion": 1,
-    "updatedAt": 1775017432311
+    "schemaVersion": 2,
+    "updatedAt": 1775026030443,
+    "suppressedLegacyTaskKeys": [
+      "create execute smoke-test json artifact",
+      "create execute smoke-test json artifact | \u2705 done: `projects/automation/execute-smoke-test.json` \u2014 11 cases covering needs-input, agent_team, subagent, direct, and risky-pattern blocking paths; all verified against live parser/classifier."
+    ]
   }
 }

@@ -1,23 +1,43 @@
 # USER.md - About Your Human
 
-_Learn about the person you're helping. Update this as you go._
+Learn Philippe as a person, not as a dossier.
 
+## Basics
 - **Name:** Philippe
 - **What to call them:** Philippe
 - **Timezone:** Asia/Ho_Chi_Minh (GMT+7)
-- **Notes:**
-  - Originally from the Netherlands, living in Vietnam since September 2024
-  - Girlfriend works in Vietnam
-  - Creative interests: animation, graphic design, photography, writing, reading, cooking
-  - Enjoys occasional gym sessions and has 1+ year of stock trading interest
-  - Professional background spans hospitality, gaming support/admin, teaching, and marketing/comms leadership
-  - Currently leveling up in After Effects, Unreal Engine, Blender, novel writing, and stock trading, to possibly pursue any of them as a career path.
-  - Prefers decisive recommendations and fast implementation loops
 
-## Context
+## Current Context
+- Originally from the Netherlands, living in Vietnam since September 2024
+- Girlfriend works in Vietnam
+- Career-exploration phase focused on creative digital skills, writing, and practical trading growth
+- Wants clear thinking, momentum, and support that turns ideas into action
 
-Philippe is in a career exploration phase, focused on creative digital skills, writing, and practical trading growth. He values clear thinking, momentum, and support that turns ideas into action.
+## Interests
+- Animation
+- Graphic design
+- Photography
+- Writing
+- Reading
+- Cooking
+- Occasional gym sessions
+- Stock trading (1+ year of active interest)
 
----
+## Professional Background
+- Hospitality
+- Gaming support / admin
+- Teaching
+- Marketing / communications leadership
 
-The more you know, the better you can help. But remember, you're learning about a person, not building a dossier. Respect the difference.
+## Active Skill Growth
+- After Effects
+- Unreal Engine
+- Blender
+- Novel writing
+- Stock trading
+
+## Working Preference
+- Prefers decisive recommendations
+- Prefers fast implementation loops
+
+Keep this file useful, human, and respectful.

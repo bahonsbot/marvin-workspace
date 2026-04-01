@@ -1,15 +1,11 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-const TABS = [
-  { label: 'General', href: '/' },
-  { label: 'Trading', href: '/trading' },
-];
+import { DOMAIN_TABS, getShellDomain } from './navigation';
 
 export function TopTabBar() {
   const pathname = usePathname();
-  const activeTab = TABS.find(t => t.href === pathname) ?? TABS[0];
+  const activeDomain = getShellDomain(pathname);
 
   return (
     <header
@@ -19,7 +15,7 @@ export function TopTabBar() {
         left: 0,
         right: 0,
         height: 52,
-        background: 'var(--bg-elevated)',
+        background: 'rgba(255, 253, 251, 0.88)',
         borderBottom: '1px solid var(--border)',
         display: 'flex',
         alignItems: 'center',
@@ -29,7 +25,6 @@ export function TopTabBar() {
         backdropFilter: 'blur(12px)',
       }}
     >
-      {/* App name */}
       <div
         style={{
           fontSize: 11,
@@ -43,14 +38,10 @@ export function TopTabBar() {
       >
         Mission Control
       </div>
-
-      {/* Divider */}
       <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
-
-      {/* Mode tabs */}
-      <nav style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-        {TABS.map((tab) => {
-          const isActive = tab.href === activeTab.href;
+      <nav style={{ display: 'flex', gap: 6, alignItems: 'center', marginLeft: 24 }}>
+        {DOMAIN_TABS.map((tab) => {
+          const isActive = tab.domain === activeDomain;
           return (
             <Link
               key={tab.href}
@@ -71,11 +62,7 @@ export function TopTabBar() {
           );
         })}
       </nav>
-
-      {/* Spacer */}
       <div style={{ flex: 1 }} />
-
-      {/* Right side — search icon */}
       <button
         style={{
           width: 32,
@@ -94,8 +81,6 @@ export function TopTabBar() {
       >
         ⌕
       </button>
-
-      {/* Profile avatar */}
       <div
         style={{
           width: 30,

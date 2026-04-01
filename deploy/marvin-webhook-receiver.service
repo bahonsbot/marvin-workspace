@@ -1,0 +1,18 @@
+[Unit]
+Description=Marvin Trading Webhook Receiver (inside OpenClaw container)
+After=docker.service network-online.target
+Wants=docker.service network-online.target
+Requires=docker.service
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/docker exec openclaw-ktrt-openclaw-1 bash /data/.openclaw/workspace/projects/autonomous-trading-bot/scripts/run_webhook_receiver_foreground.sh
+Restart=on-failure
+RestartSec=30
+Nice=10
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

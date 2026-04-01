@@ -1,0 +1,697 @@
+{
+  "heartbeat": {
+    "defaultAgentId": "main",
+    "agents": [
+      {
+        "agentId": "main",
+        "enabled": true,
+        "every": "60m",
+        "everyMs": 3600000
+      },
+      {
+        "agentId": "codex-personal-temp2",
+        "enabled": false,
+        "every": "disabled",
+        "everyMs": null
+      }
+    ]
+  },
+  "channelSummary": [
+    "Telegram: configured",
+    "  - default (token:config)"
+  ],
+  "queuedSystemEvents": [],
+  "sessions": {
+    "paths": [
+      "/data/.openclaw/agents/main/sessions/sessions.json",
+      "/data/.openclaw/agents/codex-personal-temp2/sessions/sessions.json"
+    ],
+    "count": 247,
+    "defaults": {
+      "model": "MiniMax-M2.5",
+      "contextTokens": 200000
+    },
+    "recent": [
+      {
+        "agentId": "main",
+        "key": "agent:main:main",
+        "kind": "direct",
+        "sessionId": "6321f046-f506-4c2a-8d11-f7b98dc16533",
+        "updatedAt": 1773734532853,
+        "age": 36213,
+        "systemSent": true,
+        "abortedLastRun": false,
+        "inputTokens": 116892,
+        "outputTokens": 2672,
+        "cacheRead": 119296,
+        "cacheWrite": 0,
+        "totalTokens": 119453,
+        "totalTokensFresh": true,
+        "remainingTokens": 80547,
+        "percentUsed": 60,
+        "model": "gpt-5.4",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:6321f046-f506-4c2a-8d11-f7b98dc16533"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:auto-signal-dispatcher",
+        "kind": "direct",
+        "sessionId": "573dd5ca-7ffe-4e01-a847-b365b04f49a7",
+        "updatedAt": 1773734400018,
+        "age": 169048,
+        "systemSent": true,
+        "inputTokens": 418,
+        "outputTokens": 156,
+        "cacheRead": 48800,
+        "cacheWrite": 249,
+        "totalTokens": 24786,
+        "totalTokensFresh": true,
+        "remainingTokens": 175214,
+        "percentUsed": 12,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:573dd5ca-7ffe-4e01-a847-b365b04f49a7"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:auto-signal-dispatcher:run:573dd5ca-7ffe-4e01-a847-b365b04f49a7",
+        "kind": "direct",
+        "sessionId": "573dd5ca-7ffe-4e01-a847-b365b04f49a7",
+        "updatedAt": 1773734400018,
+        "age": 169048,
+        "systemSent": true,
+        "inputTokens": 418,
+        "outputTokens": 156,
+        "cacheRead": 48800,
+        "cacheWrite": 249,
+        "totalTokens": 24786,
+        "totalTokensFresh": true,
+        "remainingTokens": 175214,
+        "percentUsed": 12,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:573dd5ca-7ffe-4e01-a847-b365b04f49a7"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:bc889cac-a5a9-49ec-9615-fb989935a5b2",
+        "kind": "direct",
+        "sessionId": "d5a7a37d-9a77-4129-a2ed-beca349f8b00",
+        "updatedAt": 1773733642751,
+        "age": 926315,
+        "systemSent": true,
+        "inputTokens": 32,
+        "outputTokens": 349,
+        "cacheRead": 24003,
+        "cacheWrite": 1153,
+        "totalTokens": 25188,
+        "totalTokensFresh": true,
+        "remainingTokens": 174812,
+        "percentUsed": 13,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:d5a7a37d-9a77-4129-a2ed-beca349f8b00"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:bc889cac-a5a9-49ec-9615-fb989935a5b2:run:d5a7a37d-9a77-4129-a2ed-beca349f8b00",
+        "kind": "direct",
+        "sessionId": "d5a7a37d-9a77-4129-a2ed-beca349f8b00",
+        "updatedAt": 1773733642751,
+        "age": 926315,
+        "systemSent": true,
+        "inputTokens": 32,
+        "outputTokens": 349,
+        "cacheRead": 24003,
+        "cacheWrite": 1153,
+        "totalTokens": 25188,
+        "totalTokensFresh": true,
+        "remainingTokens": 174812,
+        "percentUsed": 13,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:d5a7a37d-9a77-4129-a2ed-beca349f8b00"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:auto-signal-dispatcher:run:b854bba0-04c3-4923-b82f-4ac4932347b7",
+        "kind": "direct",
+        "sessionId": "b854bba0-04c3-4923-b82f-4ac4932347b7",
+        "updatedAt": 1773733500010,
+        "age": 1069056,
+        "systemSent": true,
+        "inputTokens": 89387,
+        "outputTokens": 2325,
+        "cacheRead": 439200,
+        "cacheWrite": 249,
+        "totalTokens": 32208,
+        "totalTokensFresh": true,
+        "remainingTokens": 167792,
+        "percentUsed": 16,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:b854bba0-04c3-4923-b82f-4ac4932347b7"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:8fdf0310-cb55-4cb9-8a1c-7d5aa3f76804",
+        "kind": "direct",
+        "sessionId": "9915f878-8cfb-48d4-b81a-5ff422212343",
+        "updatedAt": 1773733200031,
+        "age": 1369035,
+        "systemSent": true,
+        "abortedLastRun": false,
+        "inputTokens": 2090,
+        "outputTokens": 339,
+        "cacheRead": 122624,
+        "cacheWrite": 0,
+        "totalTokens": 26106,
+        "totalTokensFresh": true,
+        "remainingTokens": 173894,
+        "percentUsed": 13,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:9915f878-8cfb-48d4-b81a-5ff422212343"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:8fdf0310-cb55-4cb9-8a1c-7d5aa3f76804:run:9915f878-8cfb-48d4-b81a-5ff422212343",
+        "kind": "direct",
+        "sessionId": "9915f878-8cfb-48d4-b81a-5ff422212343",
+        "updatedAt": 1773733200031,
+        "age": 1369035,
+        "systemSent": true,
+        "abortedLastRun": false,
+        "inputTokens": 2090,
+        "outputTokens": 339,
+        "cacheRead": 122624,
+        "cacheWrite": 0,
+        "totalTokens": 26106,
+        "totalTokensFresh": true,
+        "remainingTokens": 173894,
+        "percentUsed": 13,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:9915f878-8cfb-48d4-b81a-5ff422212343"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:auto-signal-dispatcher:run:64898b80-6282-4194-a544-94a6995675cf",
+        "kind": "direct",
+        "sessionId": "64898b80-6282-4194-a544-94a6995675cf",
+        "updatedAt": 1773732600019,
+        "age": 1969047,
+        "systemSent": true,
+        "inputTokens": 429,
+        "outputTokens": 139,
+        "cacheRead": 48800,
+        "cacheWrite": 249,
+        "totalTokens": 24797,
+        "totalTokensFresh": true,
+        "remainingTokens": 175203,
+        "percentUsed": 12,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:64898b80-6282-4194-a544-94a6995675cf"
+        ]
+      },
+      {
+        "agentId": "main",
+        "key": "agent:main:cron:auto-signal-dispatcher:run:bd3c20bf-998f-4612-8564-67228571fbc4",
+        "kind": "direct",
+        "sessionId": "bd3c20bf-998f-4612-8564-67228571fbc4",
+        "updatedAt": 1773731769873,
+        "age": 2799193,
+        "systemSent": true,
+        "inputTokens": 4443,
+        "outputTokens": 542,
+        "cacheRead": 122000,
+        "cacheWrite": 249,
+        "totalTokens": 26168,
+        "totalTokensFresh": true,
+        "remainingTokens": 173832,
+        "percentUsed": 13,
+        "model": "MiniMax-M2.5",
+        "contextTokens": 200000,
+        "flags": [
+          "system",
+          "id:bd3c20bf-998f-4612-8564-67228571fbc4"
+        ]
+      }
+    ],
+    "byAgent": [
+      {
+        "agentId": "main",
+        "path": "/data/.openclaw/agents/main/sessions/sessions.json",
+        "count": 247,
+        "recent": [
+          {
+            "agentId": "main",
+            "key": "agent:main:main",
+            "kind": "direct",
+            "sessionId": "6321f046-f506-4c2a-8d11-f7b98dc16533",
+            "updatedAt": 1773734532853,
+            "age": 36213,
+            "systemSent": true,
+            "abortedLastRun": false,
+            "inputTokens": 116892,
+            "outputTokens": 2672,
+            "cacheRead": 119296,
+            "cacheWrite": 0,
+            "totalTokens": 119453,
+            "totalTokensFresh": true,
+            "remainingTokens": 80547,
+            "percentUsed": 60,
+            "model": "gpt-5.4",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:6321f046-f506-4c2a-8d11-f7b98dc16533"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:auto-signal-dispatcher",
+            "kind": "direct",
+            "sessionId": "573dd5ca-7ffe-4e01-a847-b365b04f49a7",
+            "updatedAt": 1773734400018,
+            "age": 169048,
+            "systemSent": true,
+            "inputTokens": 418,
+            "outputTokens": 156,
+            "cacheRead": 48800,
+            "cacheWrite": 249,
+            "totalTokens": 24786,
+            "totalTokensFresh": true,
+            "remainingTokens": 175214,
+            "percentUsed": 12,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:573dd5ca-7ffe-4e01-a847-b365b04f49a7"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:auto-signal-dispatcher:run:573dd5ca-7ffe-4e01-a847-b365b04f49a7",
+            "kind": "direct",
+            "sessionId": "573dd5ca-7ffe-4e01-a847-b365b04f49a7",
+            "updatedAt": 1773734400018,
+            "age": 169048,
+            "systemSent": true,
+            "inputTokens": 418,
+            "outputTokens": 156,
+            "cacheRead": 48800,
+            "cacheWrite": 249,
+            "totalTokens": 24786,
+            "totalTokensFresh": true,
+            "remainingTokens": 175214,
+            "percentUsed": 12,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:573dd5ca-7ffe-4e01-a847-b365b04f49a7"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:bc889cac-a5a9-49ec-9615-fb989935a5b2",
+            "kind": "direct",
+            "sessionId": "d5a7a37d-9a77-4129-a2ed-beca349f8b00",
+            "updatedAt": 1773733642751,
+            "age": 926315,
+            "systemSent": true,
+            "inputTokens": 32,
+            "outputTokens": 349,
+            "cacheRead": 24003,
+            "cacheWrite": 1153,
+            "totalTokens": 25188,
+            "totalTokensFresh": true,
+            "remainingTokens": 174812,
+            "percentUsed": 13,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:d5a7a37d-9a77-4129-a2ed-beca349f8b00"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:bc889cac-a5a9-49ec-9615-fb989935a5b2:run:d5a7a37d-9a77-4129-a2ed-beca349f8b00",
+            "kind": "direct",
+            "sessionId": "d5a7a37d-9a77-4129-a2ed-beca349f8b00",
+            "updatedAt": 1773733642751,
+            "age": 926315,
+            "systemSent": true,
+            "inputTokens": 32,
+            "outputTokens": 349,
+            "cacheRead": 24003,
+            "cacheWrite": 1153,
+            "totalTokens": 25188,
+            "totalTokensFresh": true,
+            "remainingTokens": 174812,
+            "percentUsed": 13,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:d5a7a37d-9a77-4129-a2ed-beca349f8b00"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:auto-signal-dispatcher:run:b854bba0-04c3-4923-b82f-4ac4932347b7",
+            "kind": "direct",
+            "sessionId": "b854bba0-04c3-4923-b82f-4ac4932347b7",
+            "updatedAt": 1773733500010,
+            "age": 1069056,
+            "systemSent": true,
+            "inputTokens": 89387,
+            "outputTokens": 2325,
+            "cacheRead": 439200,
+            "cacheWrite": 249,
+            "totalTokens": 32208,
+            "totalTokensFresh": true,
+            "remainingTokens": 167792,
+            "percentUsed": 16,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:b854bba0-04c3-4923-b82f-4ac4932347b7"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:8fdf0310-cb55-4cb9-8a1c-7d5aa3f76804",
+            "kind": "direct",
+            "sessionId": "9915f878-8cfb-48d4-b81a-5ff422212343",
+            "updatedAt": 1773733200031,
+            "age": 1369035,
+            "systemSent": true,
+            "abortedLastRun": false,
+            "inputTokens": 2090,
+            "outputTokens": 339,
+            "cacheRead": 122624,
+            "cacheWrite": 0,
+            "totalTokens": 26106,
+            "totalTokensFresh": true,
+            "remainingTokens": 173894,
+            "percentUsed": 13,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:9915f878-8cfb-48d4-b81a-5ff422212343"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:8fdf0310-cb55-4cb9-8a1c-7d5aa3f76804:run:9915f878-8cfb-48d4-b81a-5ff422212343",
+            "kind": "direct",
+            "sessionId": "9915f878-8cfb-48d4-b81a-5ff422212343",
+            "updatedAt": 1773733200031,
+            "age": 1369035,
+            "systemSent": true,
+            "abortedLastRun": false,
+            "inputTokens": 2090,
+            "outputTokens": 339,
+            "cacheRead": 122624,
+            "cacheWrite": 0,
+            "totalTokens": 26106,
+            "totalTokensFresh": true,
+            "remainingTokens": 173894,
+            "percentUsed": 13,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:9915f878-8cfb-48d4-b81a-5ff422212343"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:auto-signal-dispatcher:run:64898b80-6282-4194-a544-94a6995675cf",
+            "kind": "direct",
+            "sessionId": "64898b80-6282-4194-a544-94a6995675cf",
+            "updatedAt": 1773732600019,
+            "age": 1969047,
+            "systemSent": true,
+            "inputTokens": 429,
+            "outputTokens": 139,
+            "cacheRead": 48800,
+            "cacheWrite": 249,
+            "totalTokens": 24797,
+            "totalTokensFresh": true,
+            "remainingTokens": 175203,
+            "percentUsed": 12,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:64898b80-6282-4194-a544-94a6995675cf"
+            ]
+          },
+          {
+            "agentId": "main",
+            "key": "agent:main:cron:auto-signal-dispatcher:run:bd3c20bf-998f-4612-8564-67228571fbc4",
+            "kind": "direct",
+            "sessionId": "bd3c20bf-998f-4612-8564-67228571fbc4",
+            "updatedAt": 1773731769873,
+            "age": 2799193,
+            "systemSent": true,
+            "inputTokens": 4443,
+            "outputTokens": 542,
+            "cacheRead": 122000,
+            "cacheWrite": 249,
+            "totalTokens": 26168,
+            "totalTokensFresh": true,
+            "remainingTokens": 173832,
+            "percentUsed": 13,
+            "model": "MiniMax-M2.5",
+            "contextTokens": 200000,
+            "flags": [
+              "system",
+              "id:bd3c20bf-998f-4612-8564-67228571fbc4"
+            ]
+          }
+        ]
+      },
+      {
+        "agentId": "codex-personal-temp2",
+        "path": "/data/.openclaw/agents/codex-personal-temp2/sessions/sessions.json",
+        "count": 0,
+        "recent": []
+      }
+    ]
+  },
+  "os": {
+    "platform": "linux",
+    "arch": "x64",
+    "release": "6.8.0-101-generic",
+    "label": "linux 6.8.0-101-generic (x64)"
+  },
+  "update": {
+    "root": "/usr/local/lib/node_modules/openclaw",
+    "installKind": "package",
+    "packageManager": "pnpm",
+    "deps": {
+      "manager": "pnpm",
+      "status": "unknown",
+      "lockfilePath": "/usr/local/lib/node_modules/openclaw/pnpm-lock.yaml",
+      "markerPath": "/usr/local/lib/node_modules/openclaw/node_modules/.modules.yaml",
+      "reason": "lockfile missing"
+    },
+    "registry": {
+      "latestVersion": "2026.3.13"
+    }
+  },
+  "updateChannel": "stable",
+  "updateChannelSource": "default",
+  "memory": {
+    "agentId": "main",
+    "backend": "qmd",
+    "provider": "qmd",
+    "model": "qmd",
+    "requestedProvider": "qmd",
+    "files": 215,
+    "chunks": 215,
+    "dirty": false,
+    "workspaceDir": "/data/.openclaw/workspace",
+    "dbPath": "/data/.openclaw/agents/main/qmd/xdg-cache/qmd/index.sqlite",
+    "sources": [
+      "memory"
+    ],
+    "sourceCounts": [
+      {
+        "source": "memory",
+        "files": 215,
+        "chunks": 215
+      }
+    ],
+    "vector": {
+      "enabled": true,
+      "available": true
+    },
+    "batch": {
+      "enabled": false,
+      "failures": 0,
+      "limit": 0,
+      "wait": false,
+      "concurrency": 0,
+      "pollIntervalMs": 0,
+      "timeoutMs": 0
+    },
+    "custom": {
+      "qmd": {
+        "collections": 3,
+        "lastUpdateAt": null
+      }
+    }
+  },
+  "memoryPlugin": {
+    "enabled": true,
+    "slot": "memory-core"
+  },
+  "gateway": {
+    "mode": "local",
+    "url": "ws://127.0.0.1:18789",
+    "urlSource": "local loopback",
+    "misconfigured": false,
+    "reachable": true,
+    "connectLatencyMs": 527,
+    "self": {
+      "host": "47b9e217f1c3",
+      "ip": "172.18.0.2",
+      "version": "2026.3.8",
+      "platform": "linux 6.8.0-101-generic"
+    },
+    "error": null,
+    "authWarning": null
+  },
+  "gatewayService": {
+    "label": "systemd",
+    "installed": false,
+    "managedByOpenClaw": false,
+    "externallyManaged": false,
+    "loadedText": "disabled",
+    "runtimeShort": "unknown (Failed to connect to system scope bus via machine transport: Permission denied Failed to get properties: Transport endpoint is not connected)"
+  },
+  "nodeService": {
+    "label": "systemd",
+    "installed": false,
+    "managedByOpenClaw": false,
+    "externallyManaged": false,
+    "loadedText": "disabled",
+    "runtimeShort": "unknown (Failed to connect to system scope bus via machine transport: Permission denied Failed to get properties: Transport endpoint is not connected)"
+  },
+  "agents": {
+    "defaultId": "main",
+    "agents": [
+      {
+        "id": "main",
+        "name": "main",
+        "workspaceDir": "/data/.openclaw/workspace",
+        "bootstrapPending": false,
+        "sessionsPath": "/data/.openclaw/agents/main/sessions/sessions.json",
+        "sessionsCount": 247,
+        "lastUpdatedAt": 1773734532853,
+        "lastActiveAgeMs": 36204
+      },
+      {
+        "id": "codex-personal-temp2",
+        "name": "codex-personal-temp2",
+        "workspaceDir": "/data/.openclaw/workspace-codex-personal-temp2",
+        "bootstrapPending": false,
+        "sessionsPath": "/data/.openclaw/agents/codex-personal-temp2/sessions/sessions.json",
+        "sessionsCount": 0,
+        "lastUpdatedAt": null,
+        "lastActiveAgeMs": null
+      }
+    ],
+    "totalSessions": 247,
+    "bootstrapPendingCount": 0
+  },
+  "securityAudit": {
+    "ts": 1773734569796,
+    "summary": {
+      "critical": 1,
+      "warn": 4,
+      "info": 1
+    },
+    "findings": [
+      {
+        "checkId": "summary.attack_surface",
+        "severity": "info",
+        "title": "Attack surface summary",
+        "detail": "groups: open=0, allowlist=1\ntools.elevated: enabled\nhooks.webhooks: disabled\nhooks.internal: disabled\nbrowser control: enabled\ntrust model: personal assistant (one trusted operator boundary), not hostile multi-tenant on one shared gateway"
+      },
+      {
+        "checkId": "gateway.control_ui.host_header_origin_fallback",
+        "severity": "warn",
+        "title": "DANGEROUS: Host-header origin fallback enabled",
+        "detail": "gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback=true enables Host-header origin fallback for Control UI/WebChat websocket checks and weakens DNS rebinding protections.",
+        "remediation": "Disable gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback and configure explicit gateway.controlUi.allowedOrigins."
+      },
+      {
+        "checkId": "gateway.control_ui.insecure_auth",
+        "severity": "warn",
+        "title": "Control UI insecure auth toggle enabled",
+        "detail": "gateway.controlUi.allowInsecureAuth=true does not bypass secure context or device identity checks; only dangerouslyDisableDeviceAuth disables Control UI device identity checks.",
+        "remediation": "Disable it or switch to HTTPS (Tailscale Serve) or localhost."
+      },
+      {
+        "checkId": "gateway.control_ui.device_auth_disabled",
+        "severity": "critical",
+        "title": "DANGEROUS: Control UI device auth disabled",
+        "detail": "gateway.controlUi.dangerouslyDisableDeviceAuth=true disables device identity checks for the Control UI.",
+        "remediation": "Disable it unless you are in a short-lived break-glass scenario."
+      },
+      {
+        "checkId": "config.insecure_or_dangerous_flags",
+        "severity": "warn",
+        "title": "Insecure or dangerous config flags enabled",
+        "detail": "Detected 3 enabled flag(s): gateway.controlUi.allowInsecureAuth=true, gateway.controlUi.dangerouslyAllowHostHeaderOriginFallback=true, gateway.controlUi.dangerouslyDisableDeviceAuth=true.",
+        "remediation": "Disable these flags when not actively debugging, or keep deployment scoped to trusted/local-only networks."
+      },
+      {
+        "checkId": "security.trust_model.multi_user_heuristic",
+        "severity": "warn",
+        "title": "Potential multi-user setup detected (personal-assistant model warning)",
+        "detail": "Heuristic signals indicate this gateway may be reachable by multiple users:\n- channels.telegram.groupPolicy=\"allowlist\" with configured group targets\nRuntime/process tools are exposed without full sandboxing in at least one context.\nPotential high-impact tool exposure contexts:\n- agents.defaults (sandbox=off; runtime=[exec, process]; fs=[read, write, edit, apply_patch]; fs.workspaceOnly=false)\n- agents.list.main (sandbox=off; runtime=[exec, process]; fs=[read, write, edit, apply_patch]; fs.workspaceOnly=false)\n- agents.list.codex-personal-temp2 (sandbox=off; runtime=[exec, process]; fs=[read, write, edit, apply_patch]; fs.workspaceOnly=false)\nOpenClaw's default security model is personal-assistant (one trusted operator boundary), not hostile multi-tenant isolation on one shared gateway.",
+        "remediation": "If users may be mutually untrusted, split trust boundaries (separate gateways + credentials, ideally separate OS users/hosts). If you intentionally run shared-user access, set agents.defaults.sandbox.mode=\"all\", keep tools.fs.workspaceOnly=true, deny runtime/fs/web tools unless required, and keep personal/private identities + credentials off that runtime."
+      }
+    ]
+  },
+  "secretDiagnostics": []
+}

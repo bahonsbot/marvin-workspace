@@ -1,15 +1,5 @@
-import { PageScaffold } from '@/components/shared/PageScaffold';
-import { MarketIntelDashboard } from '@/components/market-intel/MarketIntelDashboard';
-import { getMarketIntelDashboard } from '@/lib/adapters/marketIntel';
+import { redirect } from 'next/navigation';
 
-export const dynamic = 'force-dynamic';
-
-export default async function MarketIntelPage() {
-  const dashboard = await getMarketIntelDashboard();
-
-  return (
-    <PageScaffold title="Market Intel">
-      <MarketIntelDashboard data={dashboard} />
-    </PageScaffold>
-  );
+export default function MarketIntelCompatPage() {
+  redirect('/trading/market-intel');
 }

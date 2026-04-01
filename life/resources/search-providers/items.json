@@ -1,0 +1,47 @@
+[
+  {
+    "id": "sp-001",
+    "fact": "SearXNG vs Brave search trial completed (Mar 17, 18:43-19:35 ICT): Philippe deployed SearXNG in Docker on Hostinger VPS as optional search provider alongside Brave. Trial framework: projects/_ops/searxng-vs-brave-evaluation-sheet-2026-03-17.md with 20-query comparison sheet. First 15 queries tested head-to-head. SearXNG access required repeated live-port verification after restarts/redeploys (observed ports: 32769, 32770, 32771). Mid-trial, SearXNG general engines tightened to Brave, DuckDuckGo, Startpage, Mojeek for improved quality.",
+    "category": "status",
+    "timestamp": "2026-03-17T19:35:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/_ops",
+      "resources/search-providers"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 1,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.195632"
+  },
+  {
+    "id": "sp-002",
+    "fact": "SearXNG trial result (Mar 17, 19:35 ICT): Final score across 15 queries - Brave wins: 8, SearXNG wins: 5, Ties: 2. Brave stronger for canonical docs, exact technical troubleshooting, most macro/market-research queries. SearXNG best as discovery/fallback lane, especially for Reddit/forum/community-heavy or indirect practical queries. Decision: keep Brave as primary/default search path, keep SearXNG as secondary optional comparison/fallback tool, do not promote SearXNG to primary based on this trial.",
+    "category": "decision",
+    "timestamp": "2026-03-17T19:35:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/_ops",
+      "resources/search-providers",
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 1,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.195639"
+  },
+  {
+    "id": "sp-003",
+    "fact": "SearXNG deployment note (Mar 17): JSON responses enabled by editing /etc/searxng/settings.yml inside container (search.formats: - html, - json). Persistence across future container recreation/redeploy not yet verified. Current working test pattern: http://72.60.232.55:<port>/search?q=<query>&format=json where port must be verified live (changed from 32768 to 32769 to 32771 across restarts).",
+    "category": "status",
+    "timestamp": "2026-03-17T19:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/search-providers"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 1,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.195643"
+  }
+]

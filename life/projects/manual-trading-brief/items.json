@@ -9,9 +9,24 @@
       "areas/people/philippe",
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-07",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-17",
+    "accessCount": 2,
     "source": "memory/2026-03-06.md",
     "lastUsed": "2026-03-11T20:52:31.811370"
+  },
+  {
+    "id": "mtb-002",
+    "fact": "Morning Meeting security remediation (Mar 17, 12:27 ICT): brief_generator.py hardened to refuse reading Telegram credentials from world-readable .env file (fallback path). Environment variables remain first priority; fail-closed permission warning added. Verified: projects/autonomous-trading-bot/.env is mode 600, py_compile passed.",
+    "category": "status",
+    "timestamp": "2026-03-17T12:27:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/manual-trading-brief",
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 1,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.186620"
   }
 ]

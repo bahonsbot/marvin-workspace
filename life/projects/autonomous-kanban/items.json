@@ -114,5 +114,32 @@
     "accessCount": 1,
     "source": "memory/2026-03-12.md",
     "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "ak-009",
+    "fact": "Git sync reliability fix (Mar 16): Added git pull --rebase before push in publish_kanban_board_if_changed() to prevent merge conflicts when remote has new commits. Fix applied in scripts/autonomous-task-executor.py. Resolved existing divergence with --ours strategy on board.json conflict.",
+    "category": "status",
+    "timestamp": "2026-03-16T10:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-kanban"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 2,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-17T02:00:00.000000"
+  },
+  {
+    "id": "ak-010",
+    "fact": "Autonomous Kanban generator fix (Mar 19, 22:34 ICT): See mission-control fact mc-XXX - patched scripts/daily-task-generator.py to preserve existing Open Backlog items and append fresh tasks instead of overwriting. Restored two displaced Personal backlog tasks into AUTONOMOUS.md. Durable lesson: generator/executor logic must agree on backlog age semantics; replacing backlog breaks executor's oldest-task-first behavior.",
+    "category": "lesson",
+    "timestamp": "2026-03-19T22:34:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-kanban",
+      "projects/marvin-config"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastUsed": "2026-03-22T06:00:05.409848"
   }
 ]

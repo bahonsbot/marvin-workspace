@@ -1,25 +1,25 @@
 [
   {
-    "timestamp": "2026-03-16T09:47:30.134257",
-    "baseline_count": 32,
-    "enriched_count": 50,
-    "overlap_count": 21,
-    "baseline_only_count": 8,
-    "enriched_only_count": 28,
-    "enriched_lift": 28,
+    "timestamp": "2026-04-01T14:47:28.527605",
+    "baseline_count": 13,
+    "enriched_count": 13,
+    "overlap_count": 13,
+    "baseline_only_count": 0,
+    "enriched_only_count": 0,
+    "enriched_lift": 0,
     "baseline_top5": [
-      "UK government axes flagship global health project",
-      "Florida\u2019s real estate \u2018gold rush\u2019 draws the super-rich as rising costs push othe",
-      "Zelenskyy challenges Europe over Russian oil imports",
-      "Ukraine peace talks fizzle out as Trump\u2019s focus shifts to Iran",
-      "It was unthinkable a couple of weeks ago, but could the next move by the Fed be "
+      "Blue States Are Still Facing A Mass Taxpayer Exodus Long After COVID",
+      "War risks insurers win bid to appeal UK ruling on jets lost in Russia",
+      "SAUDI ARABIA REPORTS INTERCEPTING TWO DRONES IN THE PAST FEW HOURS.",
+      "Saudi Arabia reports intercepting two drones in the past few hours.",
+      "Interpol arrest warrant requested in Congo-Brazzaville for Jean-Guy Blaise Mayol"
     ],
     "enriched_top5": [
-      "UK government axes flagship global health project",
-      "Florida\u2019s real estate \u2018gold rush\u2019 draws the super-rich as rising costs push othe",
-      "Zelenskyy challenges Europe over Russian oil imports",
-      "Ukraine peace talks fizzle out as Trump\u2019s focus shifts to Iran",
-      "It was unthinkable a couple of weeks ago, but could the next move by the Fed be "
+      "Blue States Are Still Facing A Mass Taxpayer Exodus Long After COVID",
+      "War risks insurers win bid to appeal UK ruling on jets lost in Russia",
+      "SAUDI ARABIA REPORTS INTERCEPTING TWO DRONES IN THE PAST FEW HOURS.",
+      "Saudi Arabia reports intercepting two drones in the past few hours.",
+      "Interpol arrest warrant requested in Congo-Brazzaville for Jean-Guy Blaise Mayol"
     ]
   }
 ]

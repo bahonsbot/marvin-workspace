@@ -10,8 +10,8 @@
       "projects/market-intel",
       "areas/people/philippe"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 7,
+    "lastAccessed": "2026-03-19",
+    "accessCount": 8,
     "lastUsed": "2026-03-14T18:00:00.000000"
   },
   {
@@ -23,8 +23,8 @@
     "relatedEntities": [
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 4,
+    "lastAccessed": "2026-03-19",
+    "accessCount": 5,
     "source": "memory/security/2026-03-03-security-review.md",
     "lastUsed": "2026-03-14T18:00:00.000000"
   },
@@ -37,8 +37,8 @@
     "relatedEntities": [
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
+    "lastAccessed": "2026-03-19",
+    "accessCount": 3,
     "source": "memory/2026-03-04.md",
     "lastUsed": "2026-03-14T18:00:00.000000"
   },
@@ -65,8 +65,8 @@
     "relatedEntities": [
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
+    "lastAccessed": "2026-03-19",
+    "accessCount": 3,
     "source": "memory/2026-03-05.md",
     "lastUsed": "2026-03-14T18:00:00.000000"
   },
@@ -143,5 +143,205 @@
     "accessCount": 1,
     "source": "memory/2026-03-14.md",
     "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "atb-011",
+    "fact": "Health Snapshot Reporter spec created (Mar 16): Non-execution reliability improvement for diagnostics. Spec defines read-only script to generate consolidated markdown health reports from /health endpoints, receiver/watchdog logs, and state file freshness. Enables faster incident troubleshooting without touching execution path. Output: projects/autonomous-trading-bot/notes/bot-support-spec-health-snapshot-reporter-2026-03-16.md",
+    "category": "status",
+    "timestamp": "2026-03-16T11:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 3,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-17T02:00:00.000000"
+  },
+  {
+    "id": "atb-012",
+    "fact": "Morning Meeting security remediation (Mar 17, 11:52-12:30 ICT): webhook_receiver.py patched for secret logging redaction (compound sensitive keys like webhook_shared_secret redacted, full log record redacted before write), removed ALLOW_NON_LOCALHOST_BIND override path, added _ALLOWED_ENV_KEYS whitelist for .env loading, moved missing-secret warning to startup. Log sanitization applied to webhook_decisions.jsonl (19 entries updated with redaction markers). All changes verified with py_compile.",
+    "category": "status",
+    "timestamp": "2026-03-17T12:30:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.190356"
+  },
+  {
+    "id": "atb-013",
+    "fact": "Trading-path container isolation plan (Mar 19, 14:51 ICT): Created docs/runbooks/trading-path-container-isolation-plan.md defining next architecture step after egress inventory: isolate trading/webhook path into dedicated container (marvin-trading-bot) with dedicated network boundary before hard egress enforcement. Responsibilities inside: webhook receiver, Alpaca paper execution path, trading notifications, optional trading-adjacent reporting. Responsibilities outside: core OpenClaw runtime, model-backed jobs, research/content fetching, general orchestration. Preferred first implementation: dedicated container + dedicated network + minimal env/mounts using fast workspace-mounted approach.",
+    "category": "decision",
+    "timestamp": "2026-03-19T14:51:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "projects/market-intel"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410563"
+  },
+  {
+    "id": "atb-014",
+    "fact": "Egress inventory memo drafted (Mar 19, 14:02 ICT): Created docs/runbooks/egress-inventory-memo-2026-03-19.md converting OP-010 into concrete inventory/recommendation memo. Core recommendation: use host-side nftables (preferred) or iptables with dedicated Docker/container-aware chain, start in monitor/log mode only, first enforcement slice should protect trading/webhook/Telegram paths. Full-container allowlisting too brittle as first move; biggest security value is limiting high-sensitivity outbound paths first.",
+    "category": "decision",
+    "timestamp": "2026-03-19T14:02:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "resources/security"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410568"
+  },
+  {
+    "id": "atb-015",
+    "fact": "Egress enforcement deferred (Mar 19, 14:48 ICT): Completed live nftables monitor-mode observation for container openclaw-ktrt-openclaw-1 (172.18.0.2). Confirmed destination mappings: Telegram to 149.154.166.110:443, Alpaca paper trading API to 35.194.67.18:443. Decision: hard enforce-mode egress filtering deferred because current filter target is full OpenClaw container, not isolated trading-only boundary. Enforcing deny-by-default at current container boundary would risk breaking unrelated model/runtime, GitHub/docs, and research/news traffic.",
+    "category": "decision",
+    "timestamp": "2026-03-19T14:48:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "resources/security"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410570"
+  },
+  {
+    "id": "atb-016",
+    "fact": "Endpoint observation reference added (Mar 19, 14:58 ICT): Created docs/runbooks/network-endpoint-observations.md as compact reference table for Mar 19 egress findings. Captured mappings: Telegram to 149.154.166.110:443, Alpaca paper API to 35.194.67.18:443, Alpaca live endpoint family to 35.221.23.121:443, Alpaca data endpoint family to 34.86.145.125:443, plus unclassified observed HTTPS destinations 104.18.32.47:443 and 172.64.155.209:443. Recorded as observed Mar 19 mappings, not permanent truth; future allowlist work should re-validate before enforcement.",
+    "category": "status",
+    "timestamp": "2026-03-19T14:58:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "resources/security"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastUsed": "2026-03-22T06:00:05.410572"
+  },
+  {
+    "id": "atb-017",
+    "fact": "Trading-path implementation proposal (Mar 19, 15:00 ICT): Created docs/runbooks/trading-path-container-implementation-proposal.md turning higher-level isolation design into approval-ready implementation proposal. Proposal shape: dedicated container marvin-trading-bot, first implementation style workspace-mounted dedicated container on its own bridge network, dedicated env file projects/autonomous-trading-bot/.env.runtime-trading, proposed new files Dockerfile.trading, docker-compose.trading.yml, .env.runtime-trading.example, and cutover runbook with cutover and rollback checklists.",
+    "category": "status",
+    "timestamp": "2026-03-19T15:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410575"
+  },
+  {
+    "id": "atb-018",
+    "fact": "Trading container scaffold package created (Mar 19, 15:01 ICT): Added projects/autonomous-trading-bot/Dockerfile.trading, docker-compose.trading.yml, .env.runtime-trading.example, and docs/runbooks/trading-path-container-cutover.md. Python modules for webhook/broker/report paths compile cleanly. Scaffold is review-ready for manual validation. Important caveat: shadow container binds 127.0.0.1:18000:8000 to avoid collision with live mixed-container receiver on 8000; context dependency mounts corrected to match code's actual expected paths for market-intel and market-intel-news-reader; added Docker healthcheck to compose scaffold.",
+    "category": "status",
+    "timestamp": "2026-03-19T15:01:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410577"
+  },
+  {
+    "id": "atb-019",
+    "fact": "Trading container docs + learnings updated (Mar 19, 16:35 ICT): Updated docs/runbooks/trading-path-container-cutover.md with real Mar 19 shadow-validation findings. Updated docs/runbooks/trading-path-container-implementation-proposal.md with prototype findings and constraints. Logged reusable lesson to .learnings/errors.md. Key learned constraints: first shadow validation succeeded via direct docker run not compose, WEBHOOK_HOST must stay local (127.0.0.1) because receiver intentionally rejects non-local bind hosts, copied host-side compose files can mislead when they still reference in-container absolute paths, missing in-container curl is tooling gap not proof of receiver failure.",
+    "category": "lesson",
+    "timestamp": "2026-03-19T16:35:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410579"
+  },
+  {
+    "id": "atb-020",
+    "fact": "Shadow runtime validation succeeded (Mar 19, 16:45 ICT): Updated trading container runbooks to record that shadow runtime itself was validated successfully via direct docker run. Validated: isolated container boot success, receiver stays up in shadow mode on 127.0.0.1:18000, WEBHOOK_HOST=127.0.0.1 is required, PAPER_EXECUTE=false safe-mode shadow launch works. Pending next step: inspect auth scheme and prepare one exact signed webhook test command for future validation.",
+    "category": "status",
+    "timestamp": "2026-03-19T16:45:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410581"
+  },
+  {
+    "id": "atb-021",
+    "fact": "Signed shadow webhook validation succeeded (Mar 19, 16:53 ICT): Verified correctly signed webhook request against isolated trading container from inside container namespace. Updated runbooks to reflect application/auth path is now validated. Validated result: STATUS 200, decision log entry written successfully, paper_only: true, paper_execute: false, execution.status: dry_run. Important interpretation: isolated trading container design is now meaningfully validated; remaining ingress issue appears to be host-mapped shadow transport/path behavior, not application logic failure.",
+    "category": "status",
+    "timestamp": "2026-03-19T16:53:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410583"
+  },
+  {
+    "id": "atb-022",
+    "fact": "Context-parity shadow validation succeeded (Mar 19, 16:57 ICT): Copied projects/market-intel/data into host shadow image build context, rebuilt isolated trading shadow image and reran signed internal webhook validation. Validated result: STATUS 200, signed request logged successfully under strategy marker shadow-signed-test-context-parity, Market Intel context sources all present (signals_enriched_shadow: true, tracked_signals: true, signal_ab_comparison: true), context summary populated with real values (ab_enriched_lift=29, high_confidence_signal_count=48, severity=high), warnings cleared, safe shadow mode preserved. Conclusion: isolated trading-path container prototype is now meaningfully validated for boot, auth, decision logging, and core Market Intel context parity.",
+    "category": "status",
+    "timestamp": "2026-03-19T16:57:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "projects/market-intel"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410585"
+  },
+  {
+    "id": "atb-023",
+    "fact": "Guarded container bind override added (Mar 19, 17:03 ICT): Added guarded bind override to projects/autonomous-trading-bot/src/webhook_receiver.py allowing 0.0.0.0 only when ALLOW_CONTAINER_BIND=true. Default safety posture remains localhost-only. Updated .env.runtime-trading.example and trading container runbooks accordingly. Why: internal signed webhook validation succeeded proving application/auth path works, but host-published ingress via 127.0.0.1:18000 reset because Docker port-forwarding cannot reach service bound only to container loopback. Guarded override is simplest safe way to finish ingress validation without weakening default posture everywhere.",
+    "category": "decision",
+    "timestamp": "2026-03-19T17:03:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410587"
+  },
+  {
+    "id": "atb-024",
+    "fact": "Final shadow ingress validation succeeded via host network (Mar 19, 17:11 ICT): Completed final shadow ingress validation using host networking instead of Docker port publishing. Validated end-to-end shadow path: container ran with --network host, WEBHOOK_HOST=127.0.0.1, WEBHOOK_PORT=18000, signed host-side webhook returned STATUS 200, decision log entry written successfully, safe dry-run posture preserved (paper_only=true, paper_execute=false, execution.status=dry_run). Conclusion: isolated trading-path container is now validated end-to-end for shadow path on this VPS/runtime; Docker -p 127.0.0.1:18000:8000 forwarding was unreliable here; host networking was successful validation path.",
+    "category": "status",
+    "timestamp": "2026-03-19T17:11:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.410589"
   }
 ]

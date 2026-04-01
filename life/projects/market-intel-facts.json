@@ -8,9 +8,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 3,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-25",
+    "accessCount": 5,
+    "lastUsed": "2026-03-25T01:00:00.000000"
   },
   {
     "id": "mi-002",
@@ -21,9 +21,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 3,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-25",
+    "accessCount": 5,
+    "lastUsed": "2026-03-25T01:00:00.000000"
   },
   {
     "id": "mi-003",
@@ -35,9 +35,9 @@
       "areas/people/philippe",
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 3,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-25",
+    "accessCount": 5,
+    "lastUsed": "2026-03-25T01:00:00.000000"
   },
   {
     "id": "mi-004",
@@ -48,9 +48,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 3,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-005",
@@ -61,9 +61,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 3,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-006",
@@ -74,9 +74,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 3,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-007",
@@ -87,9 +87,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 3,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-008",
@@ -100,9 +100,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 3,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-009",
@@ -113,9 +113,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 3,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-010",
@@ -127,9 +127,9 @@
       "projects/market-intel",
       "areas/people/philippe"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 2,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 3,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-011",
@@ -140,9 +140,9 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 1,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 2,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-012",
@@ -154,9 +154,9 @@
       "projects/market-intel",
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 1,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastAccessed": "2026-03-24",
+    "accessCount": 2,
+    "lastUsed": "2026-03-24T01:00:00.000000"
   },
   {
     "id": "mi-013",
@@ -167,8 +167,268 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-14",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 2,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-014",
+    "fact": "Next-stage enhancement direction defined: (1) signal/source interaction first - direct open to source + lightweight preview surface, (2) ticker intelligence popovers second - company/ETF/commodity context with real quote data, market open/closed context. Product constraint: ticker popovers must use real quote/profile data from deliberate data-source choice, not placeholder finance data.",
+    "category": "decision",
+    "timestamp": "2026-03-20T18:32:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 3,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-015",
+    "fact": "RSS monitor parser fixed to strip inline comments from feed URLs - 6 rss.app feeds were broken because # comments were treated as part of the URL; after fix all 20 configured feeds load cleanly and 19 contribute matches",
+    "category": "bugfix",
+    "timestamp": "2026-03-22T19:31:00+07:00",
+    "status": "resolved",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/rss_monitor.py"
+    ],
+    "source": "memory/2026-03-22.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 2,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-016",
+    "fact": "Reddit monitor hardening: reduced comment enrichment pressure (fetch comments only after title/selftext relevance), lowered top comments from 3 to 2, capped posts per subreddit at 12, added rotating subreddit batches (8 per run) with scan state persistence to avoid rate limits",
+    "category": "bugfix",
+    "timestamp": "2026-03-22T19:31:00+07:00",
+    "status": "resolved",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/reddit_monitor.py"
+    ],
+    "source": "memory/2026-03-22.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 2,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-017",
+    "fact": "5 new rss.app feeds added: Deltaone, KobeissiLetter, FirstSquawk, GoogleNews_Technology, Telegram_FinancialJuice - total RSS feed count now 25",
+    "category": "status",
+    "timestamp": "2026-03-22T19:54:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "config/rss_feeds.txt"
+    ],
+    "source": "memory/2026-03-22.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 2,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-018",
+    "fact": "Feed quality audit: AP_Top surfaces stale 2019 content (replacement candidate); DW_Top reachable but not yielding meaningful alert matches",
+    "category": "evaluation",
+    "timestamp": "2026-03-22T19:31:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "config/rss_feeds.txt"
+    ],
+    "source": "memory/2026-03-22.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 2,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-019",
+    "fact": "Pattern library Wave A expansion: patterns.json expanded from 34 to 42 patterns (p035-p042 added) including Red Sea Shipping Disruption, U.S. Debt Ceiling X-Date Stress, March 2020 Treasury Dash for Cash, AI Packaging Bottleneck, AI Memory/HBM Shortage, China Critical Minerals Export Controls, Consumer Trade-Down, Ever Given/Suez Canal Blockage",
+    "category": "status",
+    "timestamp": "2026-03-23T18:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "data/patterns.json",
+      "src/signal_generator.py"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-24",
     "accessCount": 1,
-    "lastUsed": "2026-03-14T18:00:00.000000"
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-020",
+    "fact": "Cross-sector value-chain taxonomy expanded across 5 sectors: AI infrastructure (semis-design, semis-memory, semis-packaging, datacenter-networking, datacenter-power-cooling, enterprise-data, app-layer), energy infrastructure (grid-power-equipment), industrial automation (controls-robotics, machine-vision-sensing, robotics-motion), defense supply chains (munitions-propulsion, electronics-sensors, naval-shipbuilding), healthcare equipment (imaging-diagnostics, surgical-systems, tools-consumables)",
+    "category": "status",
+    "timestamp": "2026-03-23T18:38:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/value_chain_tagger.py",
+      "src/execution_candidates.py"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 1,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-021",
+    "fact": "Operator benches expanded with specific company tickers per sector: AI (NVDA, AVGO, ANET, TSM, AMD, INTC, MU, AMKR, SMCI), energy (ETN, PWR, GEV, HUBB, NRG, VST, XOM, CVX), industrial automation (ROK, EMR, CGNX, KYCCF, FANUY, ABBNY, CAT, DE), defense (RTX, LHX, NOC, LMT, HII, GD, CW), healthcare (GEHC, SMMNY, PHG, ISRG, SYK, DHR, ABT, BDX, BSX)",
+    "category": "status",
+    "timestamp": "2026-03-23T18:46:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/execution_candidates.py"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 1,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-022",
+    "fact": "Surface-candidate diversity preservation implemented in execution_candidates.py to prevent top-6 truncation from hiding weak-side names; industrial automation now surfaces CAT+DE, energy infrastructure surfaces NRG+VST, rare earths preserves TSLA+GM",
+    "category": "enhancement",
+    "timestamp": "2026-03-23T18:46:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/execution_candidates.py"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 1,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-023",
+    "fact": "Value-chain tagger quality passes: added explicit non-AI structural defaults for p001/p002/p014, tightened generic AI fallback to title/summary terms, expanded AI-layer routing (datacenter-networking, datacenter-power-cooling, enterprise-data, app-layer), added precedence logic so specific AI-layer inference overrides broad macro defaults",
+    "category": "enhancement",
+    "timestamp": "2026-03-23T18:08:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/value_chain_tagger.py"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 1,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-024",
+    "fact": "Research board created with value_chain_research.py for strongest/weakest and pair-trade candidate research; pair-trade readiness requires distinct mapped primary_instrument.symbol values (not just distinct headlines); supports cross_chain_operator_pair and operator_pool_pair styles",
+    "category": "status",
+    "timestamp": "2026-03-23T18:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "src/value_chain_research.py",
+      "projects/market-intel"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 1,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-025",
+    "fact": "Symbol/operator mapping upgraded: oil-supply → USO/XLE, war-supply-routes → SEA/ITA/USO, recession macro → SH/TLT, Nvidia AI-design → NVDA; first real operator-level pairs surfaced: XOM vs DAL (oil-supply), ZIM vs DAL (war-routes), NVDA vs INTC (AI semis-design)",
+    "category": "enhancement",
+    "timestamp": "2026-03-23T18:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/execution_candidates.py",
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 1,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-026",
+    "fact": "Live-flow observation plan created (projects/_ops/trading-live-flow-observation-plan-2026-03-23.md); recommended window: 3 days or 6-9 monitor cycles; current posture: energy/AI infrastructure live-proven, rare earths/industrial automation/defense/healthcare bench-ready",
+    "category": "decision",
+    "timestamp": "2026-03-23T18:52:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/_ops"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-24",
+    "accessCount": 1,
+    "lastUsed": "2026-03-24T01:00:00.000000"
+  },
+  {
+    "id": "mi-027",
+    "fact": "Bug fixes: sentiment-direction hint checks use token/phrase boundaries (fixed miss firing inside missile), direct company detection prefers specific operating-unit phrases over generic parent matches (Siemens Healthineers vs Siemens), routing precedence fixed so datacenter power/cooling resolves to AI-specific path before broader energy-infrastructure matcher",
+    "category": "bugfix",
+    "timestamp": "2026-03-23T18:20:00+07:00",
+    "status": "resolved",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/execution_candidates.py",
+      "src/value_chain_tagger.py"
+    ],
+    "source": "memory/2026-03-23.md",
+    "lastAccessed": "2026-03-25",
+    "accessCount": 2,
+    "lastUsed": "2026-03-25T01:00:00.000000"
+  },
+  {
+    "id": "mi-028",
+    "fact": "RSS monitor parser fixed to strip inline comments from feed URLs — 6 rss.app feeds were broken because # comments were treated as part of the URL; after fix all 20 configured feeds load cleanly",
+    "category": "bugfix",
+    "timestamp": "2026-03-22T19:31:00+07:00",
+    "status": "resolved",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/rss_monitor.py"
+    ],
+    "source": "memory/2026-03-22.md",
+    "lastAccessed": "2026-03-25",
+    "accessCount": 2,
+    "lastUsed": "2026-03-25T01:00:00.000000"
+  },
+  {
+    "id": "mi-029",
+    "fact": "Reddit monitor hardening: fetch comments only after title/selftext relevance check, lowered top comments 3→2, capped posts per subreddit at 12, added rotating subreddit batches (8 per run) with scan state persistence to avoid rate limits",
+    "category": "bugfix",
+    "timestamp": "2026-03-22T19:31:00+07:00",
+    "status": "resolved",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/reddit_monitor.py"
+    ],
+    "source": "memory/2026-03-22.md",
+    "lastAccessed": "2026-03-25",
+    "accessCount": 2,
+    "lastUsed": "2026-03-25T01:00:00.000000"
+  },
+  {
+    "id": "mi-030",
+    "fact": "5 new rss.app feeds added: Deltaone, KobeissiLetter, FirstSquawk, GoogleNews_Technology, Telegram_FinancialJuice — total RSS feed count now 25",
+    "category": "status",
+    "timestamp": "2026-03-22T19:54:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "config/rss_feeds.txt"
+    ],
+    "source": "memory/2026-03-22.md",
+    "lastAccessed": "2026-03-25",
+    "accessCount": 2,
+    "lastUsed": "2026-03-25T01:00:00.000000"
   }
 ]

@@ -26,5 +26,37 @@
     "lastAccessed": "2026-02-27",
     "accessCount": 1,
     "lastUsed": "2026-03-11T20:52:31.813151"
+  },
+  {
+    "id": "sh-003",
+    "fact": "Morning Meeting security remediation (Mar 17, 11:52-12:30 ICT): 15 security findings addressed from nightly-security-review. HIGH priority: fixed secret logging redaction in webhook_decisions.jsonl (autonomous-trading-bot), removed ALLOW_NON_LOCALHOST_BIND override (autonomous-trading-bot), removed WEBHOOK_HOST override (futures-bot). MEDIUM priority: added startup warning for missing webhook secret, hardened trade_notifier.py to refuse world-readable config, added _ALLOWED_ENV_KEYS whitelist to both webhook receivers, documented client IP logging purpose, added fcntl locking + atomic writes to autonomy_gate.py, added X-Forwarded-For validation to futures webhook receiver, hardened brief_generator.py fallback path. LOW priority: several accepted-risk findings documented (plaintext .env secrets, no unified retention policy, shell env parsing, cron environment isolation).",
+    "category": "status",
+    "timestamp": "2026-03-17T12:30:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/security-hardening",
+      "projects/autonomous-trading-bot",
+      "projects/futures-bot",
+      "projects/manual-trading-brief"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 1,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.191399"
+  },
+  {
+    "id": "sh-004",
+    "fact": "Autonomy gate queue hardening (Mar 17, 12:23 ICT): scripts/autonomy_gate.py queue mode now uses fcntl.flock for queue lock file, switched queue writes to atomic temp-file replacement, and keeps read-heal-write cycle under one lock. Prevents race conditions across concurrent processes that could cause duplicate work or stale queue state.",
+    "category": "decision",
+    "timestamp": "2026-03-17T12:23:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/security-hardening",
+      "AUTONOMY.md"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 1,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.191406"
   }
 ]

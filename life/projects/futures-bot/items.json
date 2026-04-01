@@ -94,9 +94,24 @@
     "relatedEntities": [
       "projects/futures-bot"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-17",
+    "accessCount": 2,
     "source": "memory/2026-03-14.md",
     "lastUsed": "2026-03-14T18:00:00.000000"
+  },
+  {
+    "id": "afb-008",
+    "fact": "Morning Meeting security remediation (Mar 17, 12:16-12:27 ICT): webhook_receiver.py patched to remove WEBHOOK_HOST override string, added _ALLOWED_ENV_KEYS whitelist for .env loading, added _get_client_ip() helper with trusted-proxy validation via WEBHOOK_TRUSTED_PROXIES for X-Forwarded-For handling. All changes verified with py_compile.",
+    "category": "status",
+    "timestamp": "2026-03-17T12:27:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/futures-bot",
+      "projects/security-hardening"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 1,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.190883"
   }
 ]

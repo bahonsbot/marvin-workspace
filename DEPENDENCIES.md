@@ -1,6 +1,6 @@
 # Dependency Inventory
 
-Last updated: 2026-03-09
+Last updated: 2026-03-18
 Owner: Platform Health Council follow-up (WARN-5)
 
 ## Python
@@ -20,13 +20,9 @@ Owner: Platform Health Council follow-up (WARN-5)
 - Notes: test/runtime deps are declared in-project.
 
 ### `projects/autonomous-trading-bot/`
-- **No pinned dependency file currently found** (`requirements.txt` / `pyproject.toml` missing).
-- Current state: project runs with local environment + imports in `src/`.
-- Risk: dependency drift and harder reproducibility.
-- Follow-up recommendation:
-  1) create `requirements.txt` from verified runtime deps,
-  2) pin versions after test pass,
-  3) add periodic `pip list --outdated` check.
+- File: `projects/autonomous-trading-bot/requirements.txt`
+- Current state: minimal requirements.txt present (project uses Python standard library only).
+- Notes: No external pip dependencies required for core functionality.
 
 ## Node.js
 
@@ -41,7 +37,7 @@ Owner: Platform Health Council follow-up (WARN-5)
 
 ## Inventory Gaps (tracked)
 
-1. `autonomous-trading-bot` missing first-class dependency manifest.
+1. ~~`autonomous-trading-bot` missing first-class dependency manifest.~~ (RESOLVED: minimal requirements.txt added Mar 11)
 2. No automated weekly outdated-dependency scan yet (covered by WARN-6).
 
 ## Maintenance Rule

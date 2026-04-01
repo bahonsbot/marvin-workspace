@@ -43,3 +43,8 @@ else
 fi
 
 echo "=== Extraction complete ==="
+# Refresh QMD index for core memory surfaces after nightly extraction
+if command -v qmd >/dev/null 2>&1; then
+  bash /data/.openclaw/workspace/scripts/index_memory_health.sh || true
+fi
+

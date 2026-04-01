@@ -52,11 +52,14 @@ class TelegramNotifier:
         # Try OpenClaw config
         cfg_path = workspace.parent / "openclaw.json"
         if cfg_path.exists():
-            # Verify file permissions before reading (security: prevent reading world-readable configs)
+            # Verify file permissions before reading (security: prevent reading unsafe configs)
             import stat
             file_mode = cfg_path.stat().st_mode
             if file_mode & stat.S_IROTH:  # Others can read
-                print(f"Warning: {cfg_path} is world-readable - consider chmod 600")
+                raise RuntimeError(
+                    f"Refusing to read Telegram bot token from world-readable config: {cfg_path}. "
+                    "Fix with chmod 600 or provide TELEGRAM_BOT_TOKEN via environment."
+                )
             try:
                 config = json.loads(cfg_path.read_text(encoding="utf-8"))
                 token = (

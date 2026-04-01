@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-03-15",
+  "last_updated": "2026-04-01",
   "skills": {
     "python": {
-      "date": "2026-03-15",
+      "date": "2026-04-01",
       "level": "novice",
       "score": 65.0,
       "recommendation": "keep-level",
@@ -16,7 +16,7 @@
       }
     },
     "blender": {
-      "date": "2026-03-15",
+      "date": "2026-04-01",
       "level": "beginner-intermediate",
       "score": 0.0,
       "recommendation": "keep-level",
@@ -29,20 +29,20 @@
       }
     },
     "japanese": {
-      "date": "2026-03-15",
+      "date": "2026-04-01",
       "level": "novice",
-      "score": 0.0,
+      "score": 45.0,
       "recommendation": "keep-level",
       "dimensions": {
-        "hiragana_recognition": 0,
-        "katakana_recognition": 0,
+        "hiragana_recognition": 25,
+        "katakana_recognition": 20,
         "basic_vocabulary": 0,
         "sentence_structure": 0,
         "writing_practice": 0
       }
     },
     "after_effects": {
-      "date": "2026-03-15",
+      "date": "2026-04-01",
       "level": "beginner",
       "score": 0.0,
       "recommendation": "keep-level",
@@ -55,7 +55,7 @@
       }
     },
     "unreal": {
-      "date": "2026-03-15",
+      "date": "2026-04-01",
       "level": "beginner",
       "score": 0.0,
       "recommendation": "keep-level",

@@ -1,0 +1,168 @@
+{
+  "ok": true,
+  "ts": 1773734570722,
+  "durationMs": 1071,
+  "channels": {
+    "telegram": {
+      "configured": true,
+      "running": false,
+      "lastStartAt": null,
+      "lastStopAt": null,
+      "lastError": null,
+      "tokenSource": "none",
+      "probe": {
+        "ok": true,
+        "status": null,
+        "error": null,
+        "elapsedMs": 1070,
+        "bot": {
+          "id": 7628180879,
+          "username": "bahons_bot",
+          "canJoinGroups": true,
+          "canReadAllGroupMessages": true,
+          "supportsInlineQueries": false
+        },
+        "webhook": {
+          "url": "",
+          "hasCustomCert": false
+        }
+      },
+      "lastProbeAt": 1773734570722,
+      "mode": null,
+      "accountId": "default",
+      "accounts": {
+        "default": {
+          "configured": true,
+          "running": false,
+          "lastStartAt": null,
+          "lastStopAt": null,
+          "lastError": null,
+          "tokenSource": "none",
+          "probe": {
+            "ok": true,
+            "status": null,
+            "error": null,
+            "elapsedMs": 1070,
+            "bot": {
+              "id": 7628180879,
+              "username": "bahons_bot",
+              "canJoinGroups": true,
+              "canReadAllGroupMessages": true,
+              "supportsInlineQueries": false
+            },
+            "webhook": {
+              "url": "",
+              "hasCustomCert": false
+            }
+          },
+          "lastProbeAt": 1773734570722,
+          "mode": null,
+          "accountId": "default"
+        }
+      }
+    }
+  },
+  "channelOrder": [
+    "telegram"
+  ],
+  "channelLabels": {
+    "telegram": "Telegram"
+  },
+  "heartbeatSeconds": 3600,
+  "defaultAgentId": "main",
+  "agents": [
+    {
+      "agentId": "main",
+      "name": "main",
+      "isDefault": true,
+      "heartbeat": {
+        "enabled": true,
+        "every": "60m",
+        "everyMs": 3600000,
+        "prompt": "Read HEARTBEAT.md if it exists (workspace context). Follow it strictly. Do not infer or repeat old tasks from prior chats. If nothing needs attention, reply HEARTBEAT_OK.",
+        "target": "none",
+        "ackMaxChars": 300
+      },
+      "sessions": {
+        "path": "/data/.openclaw/agents/main/sessions/sessions.json",
+        "count": 247,
+        "recent": [
+          {
+            "key": "agent:main:main",
+            "updatedAt": 1773734532853,
+            "age": 36798
+          },
+          {
+            "key": "agent:main:cron:auto-signal-dispatcher",
+            "updatedAt": 1773734400018,
+            "age": 169633
+          },
+          {
+            "key": "agent:main:cron:auto-signal-dispatcher:run:573dd5ca-7ffe-4e01-a847-b365b04f49a7",
+            "updatedAt": 1773734400018,
+            "age": 169633
+          },
+          {
+            "key": "agent:main:cron:bc889cac-a5a9-49ec-9615-fb989935a5b2",
+            "updatedAt": 1773733642751,
+            "age": 926900
+          },
+          {
+            "key": "agent:main:cron:bc889cac-a5a9-49ec-9615-fb989935a5b2:run:d5a7a37d-9a77-4129-a2ed-beca349f8b00",
+            "updatedAt": 1773733642751,
+            "age": 926900
+          }
+        ]
+      }
+    },
+    {
+      "agentId": "codex-personal-temp2",
+      "name": "codex-personal-temp2",
+      "isDefault": false,
+      "heartbeat": {
+        "enabled": false,
+        "every": "disabled",
+        "everyMs": null,
+        "prompt": "Read HEARTBEAT.md if it exists (workspace context). Follow it strictly. Do not infer or repeat old tasks from prior chats. If nothing needs attention, reply HEARTBEAT_OK.",
+        "target": "none",
+        "ackMaxChars": 300
+      },
+      "sessions": {
+        "path": "/data/.openclaw/agents/codex-personal-temp2/sessions/sessions.json",
+        "count": 0,
+        "recent": []
+      }
+    }
+  ],
+  "sessions": {
+    "path": "/data/.openclaw/agents/main/sessions/sessions.json",
+    "count": 247,
+    "recent": [
+      {
+        "key": "agent:main:main",
+        "updatedAt": 1773734532853,
+        "age": 36798
+      },
+      {
+        "key": "agent:main:cron:auto-signal-dispatcher",
+        "updatedAt": 1773734400018,
+        "age": 169633
+      },
+      {
+        "key": "agent:main:cron:auto-signal-dispatcher:run:573dd5ca-7ffe-4e01-a847-b365b04f49a7",
+        "updatedAt": 1773734400018,
+        "age": 169633
+      },
+      {
+        "key": "agent:main:cron:bc889cac-a5a9-49ec-9615-fb989935a5b2",
+        "updatedAt": 1773733642751,
+        "age": 926900
+      },
+      {
+        "key": "agent:main:cron:bc889cac-a5a9-49ec-9615-fb989935a5b2:run:d5a7a37d-9a77-4129-a2ed-beca349f8b00",
+        "updatedAt": 1773733642751,
+        "age": 926900
+      }
+    ]
+  }
+}

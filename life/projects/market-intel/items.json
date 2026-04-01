@@ -8,10 +8,10 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-06",
-    "accessCount": 6,
+    "lastAccessed": "2026-03-16",
+    "accessCount": 7,
     "source": "memory/2026-02-26.md",
-    "lastUsed": "2026-03-11T20:52:31.816794"
+    "lastUsed": "2026-03-16T14:39:00.000000"
   },
   {
     "id": "mi-002",
@@ -259,5 +259,47 @@
     "accessCount": 1,
     "source": "memory/2026-03-12.md",
     "lastUsed": "2026-03-12T18:00:00.000000"
+  },
+  {
+    "id": "mi-020",
+    "fact": "Signal review workflow hardened (Mar 16): Added projects/market-intel/docs/signal-review-workflow.md and projects/market-intel/scripts/save_signal_review.py helper. Canonical contract: tracked_signals.json = per-signal verification store, dated markdown evidence file = human audit trail, model_feedback.json = aggregate learning output regenerated from tracked reviews. Backfilled March 15 review evidence into structured evidence_pack fields for all 18 reviewed tracked signals.",
+    "category": "status",
+    "timestamp": "2026-03-16T14:39:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-16",
+    "accessCount": 1,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.194701"
+  },
+  {
+    "id": "mi-021",
+    "fact": "Accuracy tracker hardened (Mar 16): projects/market-intel/src/accuracy_tracker.py now recognizes reviewed rows consistently via review markers (verified, verified_at, evaluated_at, actual_outcome, or outcome). Duplicate reviews excluded from learning stats but reported in review summaries. Resulting state: tracked_signals.json has 20 total, 18 reviewed, 18 with evidence packs, 4 duplicates, 2 pending.",
+    "category": "status",
+    "timestamp": "2026-03-16T14:39:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-16",
+    "accessCount": 1,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.194705"
+  },
+  {
+    "id": "mi-022",
+    "fact": "Signal review workflow lesson (Mar 16): When human review quality matters for future model improvement, define a two-artifact contract and give models a helper that writes canonical structured state, instead of trusting conversational instructions alone. Real weakness was missing contract discipline between rich human review notes and machine-readable feedback loop.",
+    "category": "lesson",
+    "timestamp": "2026-03-16T14:39:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "lastAccessed": "2026-03-16",
+    "accessCount": 1,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.194707"
   }
 ]

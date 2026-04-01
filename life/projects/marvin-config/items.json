@@ -34,8 +34,8 @@
     "relatedEntities": [
       "resources/cron-jobs"
     ],
-    "lastAccessed": "2026-02-26",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
     "lastUsed": "2026-03-11T20:52:31.815603"
   },
   {
@@ -47,8 +47,8 @@
     "relatedEntities": [
       "projects/smart-auto-updater"
     ],
-    "lastAccessed": "2026-02-26",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
     "lastUsed": "2026-03-11T20:52:31.815605"
   },
   {
@@ -174,8 +174,8 @@
       "resources/cron-jobs",
       "projects/marvin-config"
     ],
-    "lastAccessed": "2026-03-08",
-    "accessCount": 4,
+    "lastAccessed": "2026-03-19",
+    "accessCount": 5,
     "source": "memory/2026-03-04.md",
     "lastUsed": "2026-03-11T20:52:31.815622"
   },
@@ -582,8 +582,8 @@
     "relatedEntities": [
       "projects/security-hardening"
     ],
-    "lastAccessed": "2026-03-14",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
     "source": "memory/2026-03-14.md",
     "lastUsed": "2026-03-14T18:00:00.000000"
   },
@@ -682,8 +682,143 @@
     "relatedEntities": [
       "projects/autonomous-kanban"
     ],
-    "lastAccessed": "2026-03-15",
-    "accessCount": 1,
+    "lastAccessed": "2026-03-17",
+    "accessCount": 2,
     "lastUsed": "2026-03-15T18:00:00.000000"
+  },
+  {
+    "id": "mc-049",
+    "fact": "OpenClaw update-prep attempt and rollback (Mar 17, 16:02-17:36 ICT): Philippe approved proactive pre-update groundwork for possible future OpenClaw upgrade, accounting for Mission Control hybrid architecture. Created checkpoint package at projects/_ops/update-checkpoints/openclaw-preupdate-2026-03-17/ with baseline artifacts and planning docs. Attempted to prepare openclaw.motiondisplay.cloud as dedicated Control UI hostname. DNS step succeeded, but host/nginx access failed - OpenClaw healthy at http://127.0.0.1:18789/ inside container but host requests reset. Tested gateway.bind change from loopback to lan (persisted but doctor warned, listener behavior unchanged). Decision: stop HTTPS/reverse-proxy attempt, defer OpenClaw update, prefer safer controlled-access posture. Rollback completed: reverted gateway.bind to loopback, disabled unfinished nginx site, confirmed openclaw.motiondisplay.cloud returns to default nginx page.",
+    "category": "decision",
+    "timestamp": "2026-03-17T17:36:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "projects/mission-control"
+    ],
+    "lastAccessed": "2026-03-17",
+    "accessCount": 1,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.193433"
+  },
+  {
+    "id": "mc-050",
+    "fact": "Memory system hardening batch (Mar 19, 17:27 ICT): Added docs/runbooks/memory-system-health.md, scripts/index_memory_health.sh to refresh QMD indexing for .learnings/* and MEMORY.md, patched scripts/nightly-memory-extraction.sh to refresh core memory indexing after nightly extraction, tightened AGENTS.md pre-task recall guidance so meaningful work explicitly checks .learnings/*, recent daily memory, and MEMORY.md, updated TOOLS.md and MEMORY.md so .learnings/* is treated as first-class memory. Why: memory recall gaps traced mainly to fragmentation and inconsistent ingestion/retrieval across daily memory, durable memory, .learnings/*, and QMD. Correction made during implementation: initial QMD helper assumed stale commands (qmd index, qmd stats) and had to be corrected to real collection-based workflow; final working setup: explicit collection marvin-workspace over /data/.openclaw/workspace, plus qmd update maintenance.",
+    "category": "decision",
+    "timestamp": "2026-03-19T17:27:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "resources/memory-system"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.412685"
+  },
+  {
+    "id": "mc-051",
+    "fact": "QMD CPU-mode semantic recall hardening (Mar 19, 18:15 ICT): Patched local QMD runtime to support QMD_LLAMA_GPU and forced local wrapper to run with QMD_LLAMA_GPU=cpu, eliminating wasted Vulkan probing on this VPS for QMD/node-llama-cpp startup. Confirmed memory recall smoke test still passes. Verified embedding progress under CPU-only mode: vector coverage increased materially during session. Documented practical host limit in docs/runbooks/qmd-cpu-mode-vps-notes.md. Observed result: indexed recall is reliable and fast enough for operational use, CPU-only embedding is viable but slow, full semantic qmd query / qmd vsearch remain significantly slower than BM25 search on this host and should be treated as selective/offline paths rather than routine low-latency recall.",
+    "category": "decision",
+    "timestamp": "2026-03-19T18:15:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "resources/memory-system"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.412691"
+  },
+  {
+    "id": "mc-052",
+    "fact": "Final QMD recall posture set (Mar 19, 20:22 ICT): Preferred recall order on this VPS is now qmd vsearch first, qmd search second, qmd query third. Reason: after larger CPU-mode embedding pass, qmd vsearch provided best speed/quality balance while qmd query remained slow heavy path. Verified state: QMD workspace collection marvin-workspace is in place and used for recall, local wrapper forces CPU mode to avoid wasted Vulkan probing, embedding coverage advanced materially during session and later reached 1088 embedded vectors, scripts/memory_recall_smoke_test.sh passes. Practical rule: default to qmd vsearch for semantic recall, fall back to qmd search for exact-match/keyword recall, reserve qmd query for deeper slower hybrid+rereank lookups.",
+    "category": "decision",
+    "timestamp": "2026-03-19T20:22:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "resources/memory-system"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.412694"
+  },
+  {
+    "id": "mc-053",
+    "fact": "MiniMax M2.7 model alias added and resolved - requires Anthropic-compatible path (api: anthropropic-messages, baseUrl: https://api.minimax.io/anthropic). Config-edit discipline reinforced: schema-first validation required, present exact diff before applying when Philippe asks to see proposed changes.",
+    "category": "decision",
+    "timestamp": "2026-03-20T20:09:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "resources/models"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.412698"
+  },
+  {
+    "id": "mc-054",
+    "fact": "codex5.4mini alias added for openai-codex/gpt-5.4-mini. Both new model aliases (codex5.4mini, minimax2.7) confirmed working end-to-end.",
+    "category": "status",
+    "timestamp": "2026-03-20T19:53:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config",
+      "resources/models"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.412701"
+  },
+  {
+    "id": "mc-055",
+    "fact": "Session log cleanup cron added: daily 05:20 ICT via deterministic scheduler, purges raw session files older than 5 days from /data/.openclaw/agents/main/sessions. First run deleted 71 files (48MB), reduced session storage from 89M to 43M.",
+    "category": "status",
+    "timestamp": "2026-03-20T12:24:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/marvin-config"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.412704"
+  },
+  {
+    "id": "mc-056",
+    "fact": "Legacy cron cleanup: 13 obsolete disabled OpenClaw wrapper jobs removed (data-manager, entity-lifecycle-manager, pre-market-brief, reddit-monitor, weekly-test-suite, rss-feed-monitor-weekend-light, auto-signal-dispatcher, reddit-monitor-weekend-light, dependency-update-audit, audit-sensitive-snapshot, rss-feed-monitor, enrichment-ab-review, trading-daily-report). deterministic-scheduler-watchdog retained as safety net.",
+    "category": "status",
+    "timestamp": "2026-03-20T12:45:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/marvin-config"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.412707"
+  },
+  {
+    "id": "mc-057",
+    "fact": "Deterministic scheduler architecture clarified: host-side script execution via scripts/deterministic_scheduler.py for runner jobs, OpenClaw cron reserved for model-backed analysis/review jobs (nightly-memory-extraction, platform-health-council, nightly-security-review, self-improvement, daily-task-generator, signal-accuracy-review, market-signal-generator).",
+    "category": "decision",
+    "timestamp": "2026-03-20T12:43:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/marvin-config"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.412711"
   }
 ]

@@ -2,7 +2,7 @@
   "_metadata": {
     "retentionPolicy": "Personal facts reviewed annually; stale facts (>2 years) flagged for review",
     "purpose": "Maintain context for AI assistant about the user",
-    "lastReview": "2026-02-27",
+    "lastReview": "2026-03-26",
     "reviewInterval": "12 months"
   },
   "facts": [
@@ -98,6 +98,152 @@
       "lastAccessed": "2026-03-05",
       "accessCount": 3,
       "lastUsed": "2026-03-11T20:52:31.819105"
+    },
+    {
+      "id": "philippe-009",
+      "fact": "Backup coverage confirmed: snapshot system + automated off-host backup exists (no local workspace backup script needed). Durable instruction: do not re-raise as open security finding just because no local backup script is present.",
+      "category": "preference",
+      "timestamp": "2026-03-20T11:28:00+07:00",
+      "source": "memory/2026-03-20.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/security-review"
+      ],
+      "lastAccessed": "2026-03-20",
+      "accessCount": 1,
+      "lastUsed": "2026-03-22T06:00:05.415417"
+    },
+    {
+      "id": "philippe-010",
+      "fact": "OAuth token behavior clarified: tokens need renewal every 10-14 days in practice, current posture is monitored-manual renewal (not unattended long-lived token reliance). Durable instruction: do not describe as long-lived-token problem unless token behavior materially changes.",
+      "category": "preference",
+      "timestamp": "2026-03-20T11:28:00+07:00",
+      "source": "memory/2026-03-20.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/security-review"
+      ],
+      "lastAccessed": "2026-03-20",
+      "accessCount": 1,
+      "lastUsed": "2026-03-22T06:00:05.415422"
+    },
+    {
+      "id": "philippe-011",
+      "fact": "File access auditing: confirmed no additional users for the time being (multi-user audit trails not a practical concern). Durable instruction: classify as INFO/operational hardening only unless host exposure increases or multiple operators introduced.",
+      "category": "preference",
+      "timestamp": "2026-03-20T11:28:00+07:00",
+      "source": "memory/2026-03-20.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/security-review"
+      ],
+      "lastAccessed": "2026-03-20",
+      "accessCount": 1,
+      "lastUsed": "2026-03-22T06:00:05.415425"
+    },
+    {
+      "id": "philippe-012",
+      "fact": "Config-edit discipline: must present exact diff before applying when Philippe asks to see proposed config changes. Do not assume custom model is valid just because alias appears to switch successfully once.",
+      "category": "preference",
+      "timestamp": "2026-03-20T19:53:00+07:00",
+      "source": "memory/2026-03-20.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/marvin-config"
+      ],
+      "lastAccessed": "2026-03-20",
+      "accessCount": 1,
+      "lastUsed": "2026-03-22T06:00:05.415428"
+    },
+    {
+      "id": "philippe-013",
+      "fact": "Steady-state preference: prefers preserving steady-state system over stacking additional hardening layers without evidence of need. Applied to strict webhook payload schema enforcement and other hardening proposals.",
+      "category": "preference",
+      "timestamp": "2026-03-20T11:28:00+07:00",
+      "source": "memory/2026-03-20.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/security-review"
+      ],
+      "lastAccessed": "2026-03-25",
+      "accessCount": 2,
+      "lastUsed": "2026-03-25T01:00:00.000000"
+    },
+    {
+      "id": "philippe-014",
+      "fact": "Nightly review suppression rule: overnight review jobs must check recent daily memory first (today + previous 3 days) and suppress recently fixed/accepted/investigated items unless concrete evidence of drift/failure/reopening",
+      "category": "preference",
+      "timestamp": "2026-03-24T12:01:00+07:00",
+      "source": "memory/2026-03-24.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/security-review",
+        "projects/platform-health-council",
+        "projects/self-improvement"
+      ],
+      "lastAccessed": "2026-03-25",
+      "accessCount": 1,
+      "lastUsed": "2026-03-25T01:00:00.000000"
+    },
+    {
+      "id": "philippe-015",
+      "fact": "Config-edit discipline: must present exact diff before applying when Philippe asks to see proposed config changes; quote exact live values from tool state after approval-gated changes",
+      "category": "preference",
+      "timestamp": "2026-03-24T13:11:00+07:00",
+      "source": "memory/2026-03-24.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/marvin-config"
+      ],
+      "lastAccessed": "2026-03-26",
+      "accessCount": 2,
+      "lastUsed": "2026-03-26T16:56:00.000000"
+    },
+    {
+      "id": "philippe-016",
+      "fact": "Mission Control build helpers: use Agent Team for implementation/review quality and Stitch MCP export as first-class bridge between Stitch design and real build",
+      "category": "preference",
+      "timestamp": "2026-03-25T14:25:00+07:00",
+      "source": "memory/2026-03-25.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/mission-control",
+        "projects/agent-team"
+      ],
+      "lastAccessed": "2026-03-26",
+      "accessCount": 1,
+      "lastUsed": "2026-03-26T16:56:00.000000"
+    },
+    {
+      "id": "philippe-017",
+      "fact": "Identity/memory storage model: SOUL.md/IDENTITY.md = stable core traits, .learnings/corrections.md = explicit behavioral shaping, MEMORY.md = durable relationship/working-style changes only; no separate identity log, no passing impressions in core files",
+      "category": "preference",
+      "timestamp": "2026-03-25T13:32:00+07:00",
+      "source": "memory/2026-03-25.md",
+      "status": "active",
+      "relatedEntities": [
+        "SOUL.md",
+        "IDENTITY.md",
+        "MEMORY.md"
+      ],
+      "lastAccessed": "2026-03-26",
+      "accessCount": 1,
+      "lastUsed": "2026-03-26T16:56:00.000000"
+    },
+    {
+      "id": "philippe-018",
+      "fact": "Morning Meeting reporting: autonomous workspace home-improvement work must be explicitly included with what changed, why, expected benefit, and rollback",
+      "category": "preference",
+      "timestamp": "2026-03-25T13:40:00+07:00",
+      "source": "memory/2026-03-25.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/morning-meeting",
+        "AUTONOMY.md"
+      ],
+      "lastAccessed": "2026-03-26",
+      "accessCount": 1,
+      "lastUsed": "2026-03-26T16:56:00.000000"
     }
   ]
 }

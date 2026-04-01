@@ -1,0 +1,16 @@
+[Unit]
+Description=Marvin Deterministic Scheduler (inside OpenClaw container)
+After=docker.service network-online.target
+Wants=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/docker exec openclaw-ktrt-openclaw-1 /usr/bin/python3 /data/.openclaw/workspace/scripts/deterministic_scheduler.py
+Restart=always
+RestartSec=10
+Nice=10
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

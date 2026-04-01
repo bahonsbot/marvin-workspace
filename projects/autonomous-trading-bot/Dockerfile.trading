@@ -1,0 +1,17 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# No external Python deps are currently required, but keep the file copied for parity.
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    if [ -s /app/requirements.txt ]; then pip install --no-cache-dir -r /app/requirements.txt || true; fi
+
+COPY . /app
+
+EXPOSE 8000
+
+CMD ["python3", "-m", "src.webhook_receiver"]

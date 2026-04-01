@@ -1,0 +1,194 @@
+[
+  {
+    "id": "cr-001",
+    "fact": "Cron script-first migration initiated (Mar 16, 2026): Deterministic cron jobs migrated to scripts/cron_runner.py to reduce token/runtime overhead. Runner provides centralized logging (memory/cron-run-log.jsonl), detail logs (memory/cron-run-details/), and lock/overlap-prevention (memory/locks/).",
+    "category": "status",
+    "timestamp": "2026-03-16T15:16:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/_ops",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.189458"
+  },
+  {
+    "id": "cr-002",
+    "fact": "Cron migration Wave 1 complete (Mar 16): entity-lifecycle-manager, dependency-update-audit, data-manager, weekly-test-suite migrated to runner path. All four tasks verified via direct runner execution with status=ok. Detail logs and report artifacts confirmed.",
+    "category": "status",
+    "timestamp": "2026-03-16T15:46:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.189473"
+  },
+  {
+    "id": "cr-003",
+    "fact": "Cron migration Wave 2A complete (Mar 16): rss-feed-monitor, rss-feed-monitor-weekend-light, reddit-monitor, reddit-monitor-weekend-light, enrichment-ab-review migrated to runner path. All five tasks verified with successful execution records in cron-run-log.jsonl.",
+    "category": "status",
+    "timestamp": "2026-03-16T16:18:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.189478"
+  },
+  {
+    "id": "cr-004",
+    "fact": "Cron migration Wave 2B complete (Mar 16): auto-signal-dispatcher migrated to runner path for consistency and centralized logging rather than token optimization. Direct verification: status=ok, exit_code=0, detail log written.",
+    "category": "status",
+    "timestamp": "2026-03-16T16:25:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/autonomous-trading-bot"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.189482"
+  },
+  {
+    "id": "cr-005",
+    "fact": "Cron migration Wave 2C complete (Mar 16): trading-daily-report and pre-market-brief migrated to runner path with thin wrappers. trading-daily-report wrapper sends output to Telegram group -1003711398278. pre-market-brief wrapper runs brief generator via workspace venv. Verification: trading-daily-report=ok, pre-market-brief=warn (non-fatal stderr noise but delivery succeeded).",
+    "category": "status",
+    "timestamp": "2026-03-16T16:43:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "projects/autonomous-trading-bot",
+      "projects/manual-trading-brief"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.189486"
+  },
+  {
+    "id": "cr-006",
+    "fact": "Lock hardening applied (Mar 16): Lock files now store both pid and /proc/<pid>/stat start ticks (pid_start_ticks). Lock validation checks both values instead of PID alone, materially reducing rare false-active lock risk without complicating runner design.",
+    "category": "decision",
+    "timestamp": "2026-03-16T15:37:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/_ops"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.189489"
+  },
+  {
+    "id": "cr-007",
+    "fact": "Model-backed cron boundary confirmed (Mar 16): Philippe explicitly agreed to keep these jobs model-backed for now: nightly-memory-extraction, platform-health-council, nightly-security-review, self-improvement, daily-task-generator. All other deterministic jobs migrated to runner path.",
+    "category": "decision",
+    "timestamp": "2026-03-16T15:19:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "resources/cron-jobs",
+      "areas/people/philippe"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.189493"
+  },
+  {
+    "id": "cr-008",
+    "fact": "Cron migration savepoint documented (Mar 16): projects/_ops/cron-savepoint-2026-03-16.md captures stable pause-point. Only remaining genuinely mixed cron job outside runner path is signal-accuracy-review (deterministic precheck + reasoning-heavy review path).",
+    "category": "status",
+    "timestamp": "2026-03-16T16:43:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/_ops",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 3,
+    "source": "memory/2026-03-16.md",
+    "lastUsed": "2026-03-18T13:03:29.189497"
+  },
+  {
+    "id": "cr-009",
+    "fact": "Duplicate runner-backed cron execution fix (Mar 17, 12:45 ICT): Root cause was non-atomic lock-file check/create in scripts/cron_runner.py allowing near-simultaneous cron invocations to both pass existence check. Fix: patched to use atomic lock creation via os.open(..., O_CREAT | O_EXCL) while retaining stale-lock recovery. Verified with forced concurrency test showing first invocation completes, second skips with 'active lock by pid=...'. Expected benefit: runner-backed cron jobs should no longer double-execute or send duplicate Telegram messages.",
+    "category": "decision",
+    "timestamp": "2026-03-17T12:45:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/_ops",
+      "resources/cron-jobs"
+    ],
+    "lastAccessed": "2026-03-19",
+    "accessCount": 2,
+    "source": "memory/2026-03-17.md",
+    "lastUsed": "2026-03-18T13:03:29.189500"
+  },
+  {
+    "id": "cr-010",
+    "fact": "Deterministic scheduler cutover complete (Mar 19, 11:18 ICT): Built host-side deterministic scheduler at scripts/deterministic_scheduler.py with control wrapper scripts/deterministic_scheduler_ctl.sh. Disabled OpenClaw agentTurn cron wrappers for 12 script-only runner-backed jobs including trading-daily-report, pre-market-brief, auto-signal-dispatcher, rss-feed-monitor, reddit-monitor, weekly-test-suite, dependency-update-audit, data-manager, entity-lifecycle-manager, audit-sensitive-snapshot, enrichment-ab-review. Added bootstrap watchdog cron (every 5 min) to restore host scheduler after container restarts. Hardened platform-health-council with 900s timeout and scheduler announce delivery.",
+    "category": "status",
+    "timestamp": "2026-03-19T11:18:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/cron-runner",
+      "resources/cron-jobs"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.409158"
+  },
+  {
+    "id": "cr-011",
+    "fact": "Reporting contract hardening (Mar 19, 13:50 ICT): Promoted trading webhook receiver to host-managed systemd service (marvin-webhook-receiver.service) with Restart=on-failure policy. Hardened model-backed reporting jobs to use scheduler delivery instead of in-run Telegram sends: nightly-security-review and self-improvement now use delivery.mode=announce. Increased nightly-memory-extraction timeout from 600s to 900s for real task-duration headroom.",
+    "category": "decision",
+    "timestamp": "2026-03-19T13:50:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/cron-runner",
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.409163"
+  },
+  {
+    "id": "cr-012",
+    "fact": "Cron health reporting cleanup (Mar 19, 13:58 ICT): Tightened platform-health-council prompt to classify findings as model-backed task issue, deterministic task issue, legacy wrapper artifact, or delivery contract issue. Added rules to avoid misclassifying Platform Health Council itself as runner-backed. Updated TOOLS.md to reflect Mar 19 control-plane state: deterministic jobs owned by host systemd scheduler, reporting jobs use scheduler announce delivery, webhook receiver has host-service runbook.",
+    "category": "decision",
+    "timestamp": "2026-03-19T13:58:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/cron-runner",
+      "resources/cron-jobs"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.409165"
+  },
+  {
+    "id": "cr-013",
+    "fact": "Deterministic scheduler bug fix (Mar 19, 22:34 ICT): Fixed duplicate runner-log entries for auto-signal-dispatcher, reddit-monitor, rss-feed-monitor caused by permission mismatch. Scheduler process ran as root while in-container control path used kill -0; permission failure made alive process look stopped, causing repeated starts. Patched deterministic_scheduler_ctl.sh and deterministic_scheduler.py to treat PID as alive if cmdline matches deterministic_scheduler.py, even when direct signal checks fail under permission boundary. Durable lesson: mixed host/container ownership paths need cmdline-based liveness fallback.",
+    "category": "lesson",
+    "timestamp": "2026-03-19T22:34:00+07:00",
+    "status": "completed",
+    "relatedEntities": [
+      "projects/cron-runner"
+    ],
+    "source": "memory/2026-03-19.md",
+    "lastAccessed": "2026-03-19",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.409168"
+  }
+]

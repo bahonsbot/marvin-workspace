@@ -1,0 +1,72 @@
+[
+  {
+    "id": "mcs-001",
+    "fact": "Memory module refinement pass applied: moved Memory lower in sidebar, removed Path field from metadata strip, removed unnecessary subtitles, changed active-state styling to higher-contrast teal, added Back to top button.",
+    "category": "status",
+    "timestamp": "2026-03-20T13:49:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.411394"
+  },
+  {
+    "id": "mcs-002",
+    "fact": "Search product architecture confirmed: Memory = browse/read memory + search inside memory files, Files = browse + preview + later embedded file search for non-memory content, standalone Search page = temporary bridge only to be retired after embedded file search exists in Files.",
+    "category": "decision",
+    "timestamp": "2026-03-20T15:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.411402"
+  },
+  {
+    "id": "mcs-003",
+    "fact": "Product boundary confirmed: Files must remain non-memory; memory search belongs in Memory, not in Files.",
+    "category": "requirement",
+    "timestamp": "2026-03-20T15:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.411404"
+  },
+  {
+    "id": "mcs-004",
+    "fact": "Product posture confirmed: Mission Control remains preview/build shell until Chat path is production-usable; existing Gateway Chat UI remains the real working chat surface for now.",
+    "category": "decision",
+    "timestamp": "2026-03-20T16:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.411406"
+  },
+  {
+    "id": "mcs-005",
+    "fact": "Chat readiness rule: do not treat Mission Control as default daily-driver chat until embedded/live chat path is reliably reachable, honest about auth/boundary conditions, and genuinely improves the experience.",
+    "category": "requirement",
+    "timestamp": "2026-03-20T16:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-03-20.md",
+    "lastAccessed": "2026-03-20",
+    "accessCount": 1,
+    "lastUsed": "2026-03-22T06:00:05.411408"
+  }
+]

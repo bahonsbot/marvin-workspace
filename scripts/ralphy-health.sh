@@ -12,37 +12,40 @@ log() {
 }
 
 # Check if any Ralph loops are running
+# Returns: 0=running/done, 1=idle, 2=stalled
 check_processes() {
     local running=0
     local stalled=0
     local done=0
     
-    # Check for running processes (adapt to your spawn method)
-    # This is a simplified version
+    # Guard: LOG_DIR must exist to do meaningful log-based checks
+    if [[ ! -d "$LOG_DIR" ]]; then
+        # No log directory yet — fall back to PID/process scan only
+        echo "status=unknown"
+        return 1
+    fi
     
     # Check log files for activity
-    if [[ -d "$LOG_DIR" ]]; then
-        local latest_log=$(ls -t "$LOG_DIR"/iteration-*.log 2>/dev/null | head -1)
+    local latest_log=$(ls -t "$LOG_DIR"/iteration-*.log 2>/dev/null | head -1)
+    
+    if [[ -n "$latest_log" ]]; then
+        local mod_time=$(stat -c %Y "$latest_log" 2>/dev/null || stat -f %m "$latest_log" 2>/dev/null)
+        local now=$(date +%s)
+        local age=$((now - mod_time))
         
-        if [[ -n "$latest_log" ]]; then
-            local mod_time=$(stat -c %Y "$latest_log" 2>/dev/null || stat -f %m "$latest_log" 2>/dev/null)
-            local now=$(date +%s)
-            local age=$((now - mod_time))
-            
-            if [[ $age -lt 300 ]]; then
-                log "Active: Latest iteration log is ${age}s old"
-                running=1
-            elif [[ $age -lt 600 ]]; then
-                log "Stalled: No activity in $age seconds"
-                stalled=1
-            fi
+        if [[ $age -lt 300 ]]; then
+            log "Active: Latest iteration log is ${age}s old"
+            running=1
+        elif [[ $age -lt 600 ]]; then
+            log "Stalled: No activity in $age seconds"
+            stalled=1
         fi
-        
-        # Check for completion
-        if grep -q "RALPHY_COMPLETE" "$LOG_DIR"/iteration-*.log 2>/dev/null; then
-            log "Done: Ralph loop completed"
-            done=1
-        fi
+    fi
+    
+    # Check for completion
+    if grep -q "RALPHY_COMPLETE" "$LOG_DIR"/iteration-*.log 2>/dev/null; then
+        log "Done: Ralph loop completed"
+        done=1
     fi
     
     # Check for notifications

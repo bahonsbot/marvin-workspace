@@ -538,7 +538,6 @@ This was done.
 Durable truth:
 - agent identity should feel real and designed
 - avatars should stay within FLOATING / Aura Concierge
-- avoid cartoonish, glossy, gamer-style, or over-illustrated directions
 - composed medallion/identity systems are the right family
 
 Tomorrow’s future-agent deeper identity pass should build on this, not revert to generic badges.

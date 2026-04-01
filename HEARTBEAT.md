@@ -1,39 +1,40 @@
 # HEARTBEAT.md
 
 ## Status
-- **Active**
+- Active
 - Poll cadence: every 60 minutes
 - Goal: quiet monitoring only
 
 ## Active Hours (messaging)
 - 09:00 - 22:00 Asia/Ho_Chi_Minh (GMT+7)
 - Outside active hours: stay silent unless urgent
+- These hours apply to heartbeat messaging only; proactive execution is governed by `AUTONOMY.md`
 
 ## Default Behavior
-- Keep heartbeat replies minimal
-- Do not broadcast routine updates to Telegram groups
-- Do not interfere with active user conversations/tasks
-- If nothing needs attention: reply `HEARTBEAT_OK`
-- Do not use heartbeat as the trigger for proactive maintenance or autonomous execution
+- keep heartbeat replies minimal
+- do not broadcast routine updates to Telegram groups
+- do not interfere with active user conversations/tasks
+- do not use heartbeat as a trigger for proactive maintenance or autonomous execution
+- if nothing needs attention: `HEARTBEAT_OK`
 
-## Heartbeat Check Loop (lightweight)
-1. Review latest daily memory notes
-2. Check open issues or blockers
-3. Run quick health checks (including trading webhook/watchdog)
-4. Surface only meaningful alerts or blockers
+## Check Loop
+1. review latest daily memory notes
+2. check open issues or blockers
+3. run quick health checks, including trading webhook/watchdog
+4. surface only meaningful alerts or blockers
 
 ## Scope Boundary
-- Heartbeat is for monitoring, not building
-- Proactive execution rules live in `AUTONOMY.md`
-- If a proactive task exists but does not require urgent attention, do not execute it from heartbeat
+- heartbeat is for monitoring, not building
+- proactive execution rules live in `AUTONOMY.md`
+- if a proactive task exists but is not urgent, do not execute it from heartbeat
 
 ## Related Runtime
 - `auto-signal-dispatcher`: every 15 minutes
-- webhook watchdog: continuous loop (60s interval)
+- webhook watchdog: continuous 60s loop
 
 ## Quiet Conditions
 Return `HEARTBEAT_OK` when:
 - outside active hours
-- no significant changes
-- user is actively engaged elsewhere
-- recent check was already completed
+- nothing significant changed
+- the user is actively engaged elsewhere
+- a recent check already covered the current state

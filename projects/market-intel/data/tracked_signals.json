@@ -2,17 +2,17 @@
   {
     "signal": {
       "source": "rss",
-      "feed": "Guardian_Business",
-      "title": "UK inflation steady before Iran war; oil price dips on Trump comments \u2013 business",
-      "url": "https://www.theguardian.com/business/live/2026/mar/25/uk-inflation-steady-iran-war-oil-dips-trump-comments-business-live",
-      "timestamp": "2026-03-25T18:47:31.626469",
+      "feed": "Business_Bloomberg",
+      "title": "The Reserve Bank of Australia\u2019s monetary policy board members will begin deliver",
+      "url": "https://x.com/business/status/2038436666369536396",
+      "timestamp": "2026-03-30T10:47:29.738341",
       "pattern_id": "p014",
       "pattern": "US Credit Rating Downgrade",
       "category": "macroeconomic",
       "confidence": "HIGH",
       "time_horizon": "short-term",
       "signal_score": 200,
-      "reasoning_score": 87.5,
+      "reasoning_score": 85.5,
       "confidence_level": "STRONG BUY",
       "recommendation": "TAKE",
       "reasoning_components": {
@@ -20,8 +20,8 @@
         "pattern_strength": 90.0,
         "time_horizon_fit": 100.0,
         "base_score": 80.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 9
+        "feedback_bias_points": 5.46,
+        "feedback_sample_size": 20
       },
       "reasoning": "moderate source, strong historical pattern match.",
       "predicted_outcomes": [
@@ -34,84 +34,6 @@
         "Rates reprice",
         "USD and yields react",
         "Risk assets rotate"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": [],
-      "theme": "defense_supply_chain",
-      "chain_layer": "defense_subsystems",
-      "chain_sublayer": "electronics_sensors",
-      "theme_maturity": "mid_cycle_scaling",
-      "bottleneck_type": "switching_cost",
-      "moat_type": "preferred_vendor",
-      "fragility_type": "none_clear",
-      "supplier_status": "preferred_vendor_candidate",
-      "position_in_chain": "category2_hidden_enabler",
-      "beneficiary_class": "ecosystem_owner",
-      "loser_class": "weak_supplier_without_moat",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Defense electronics, EW, sensors, and avionics specialists with embedded program positions should outperform less differentiated downstream exposure.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "Sensors, avionics, tactical radios, EW, and targeting systems are hidden defense enablers with strong switching costs.",
-      "structural_interpretation_confidence": 0.79
-    },
-    "added_at": "2026-03-25T18:47:31.628990",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "UK inflation steady at 3% year-on-year is confirmed \u2014 BBC live reporting shows this as of March 25. However, the Iran war's energy price impact has not yet fully fed through to CPI. The rates_volatility is confirmed by UK mortgage market turmoil and BoE hawkish repricing. The fx_move is confirmed by GBP movements driven by BoE's shift away from rate cuts. The 'steady' inflation was always a pre-war picture; the signal's framing that worse is coming is confirmed by BoE's own warnings.",
-    "outcome": "correct",
-    "verified_at": "2026-03-25T23:05:42.856986+08:00",
-    "verification_note": "UK inflation steady at 3% year-on-year is confirmed \u2014 BBC live reporting shows this as of March 25. However, the Iran war's energy price impact has not yet fully fed through to CPI. The rates_volatility is confirmed by UK mortgage market turmoil and BoE hawkish repricing. The fx_move is confirmed by GBP movements driven by BoE's shift away from rate cuts. The 'steady' inflation was always a pre-war picture; the signal's framing that worse is coming is confirmed by BoE's own warnings.",
-    "evidence_pack": {
-      "summary": "UK CPI steady at 3% confirmed; Iran war energy shock still feeding through; rates_volatility and fx_move confirmed",
-      "drivers": [
-        "UK CPI: 3.0% year to February 2026 per ONS/BBC",
-        "BoE warning of 3-3.5% CPI in coming quarters from energy shock",
-        "UK mortgage rates surged to 5.43% \u2014 acute rates volatility confirmed"
-      ],
-      "metrics": {
-        "uk_cpi_yoy": 3.0
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-25.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Guardian_Business",
-      "title": "ECB could raise eurozone rates \u2018as soon as next month\u2019; oil price dips on peace ",
-      "url": "https://www.theguardian.com/business/live/2026/mar/25/uk-inflation-steady-iran-war-oil-dips-trump-comments-business-live",
-      "timestamp": "2026-03-25T20:47:28.940679",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 87.5,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 9
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "front_end_yield_move",
-        "usd_trend_shift",
-        "growth_value_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Inflation/rates surprise",
-        "Bond market reprices terminal rate",
-        "Equity duration factor moves"
       ],
       "signal_briefing": "",
       "root_causes": [],
@@ -132,44 +54,119 @@
       "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
       "structural_interpretation_confidence": 0.68
     },
-    "added_at": "2026-03-25T20:47:28.942635",
+    "added_at": "2026-03-30T10:47:29.740835",
     "verified": true,
     "actual_outcome": "CORRECT",
-    "notes": "ECB could raise rates 'as soon as next month' per Guardian live coverage of Lagarde \u2014 confirmed. Oil prices dipped on Trump Hormuz ultimatum peace talk hopes but remain elevated. The front_end_yield_move prediction for EUR is confirmed (ECB hawkish pivot, possible June hike). The usd_trend_shift is consistent with broader USD strength to 99.30-99.50. Oil price dynamics are more nuanced \u2014 prices dipped on peace talk hopes but the underlying Iran war risk premium remains elevated, consistent with sustained energy-driven inflation risk.",
+    "notes": "RBA board members simultaneously delivering speeches on monetary policy is a documented hawkish signal pattern. RBA has been among more aggressive hawkish developed-market central banks YTD 2026. AUD sensitivity to global rates repricing from Iran war risk supports rates_volatility \u2192 fx_move.",
     "outcome": "correct",
-    "verified_at": "2026-03-25T23:05:43.151056+08:00",
-    "verification_note": "ECB could raise rates 'as soon as next month' per Guardian live coverage of Lagarde \u2014 confirmed. Oil prices dipped on Trump Hormuz ultimatum peace talk hopes but remain elevated. The front_end_yield_move prediction for EUR is confirmed (ECB hawkish pivot, possible June hike). The usd_trend_shift is consistent with broader USD strength to 99.30-99.50. Oil price dynamics are more nuanced \u2014 prices dipped on peace talk hopes but the underlying Iran war risk premium remains elevated, consistent with sustained energy-driven inflation risk.",
+    "verified_at": "2026-03-30T23:04:17.647597+08:00",
+    "verification_note": "RBA board members simultaneously delivering speeches on monetary policy is a documented hawkish signal pattern. RBA has been among more aggressive hawkish developed-market central banks YTD 2026. AUD sensitivity to global rates repricing from Iran war risk supports rates_volatility \u2192 fx_move.",
     "evidence_pack": {
-      "summary": "ECB hawkish rate hike signal confirmed; oil dip on peace talks but Iran war risk premium still elevated",
+      "summary": "RBA board members began delivering simultaneous speeches on monetary policy \u2014 hawkish communication pattern. Consistent with RBA's more aggressive stance amid global rates repricing. rates_volatility \u2192 fx_move directionally confirmed.",
       "drivers": [
-        "ECB could raise rates as soon as next month per Lagarde statements",
-        "Oil prices dipped on Trump Hormuz ultimatum and peace talk hopes",
-        "WTI settled 08.65 after hitting 19 intraday; risk premium persists"
+        "RBA simultaneous hawkish communications",
+        "RBA aggressive developed-market hawkish stance YTD 2026",
+        "AUD sensitivity to Iran war rates repricing"
       ],
-      "metrics": {
-        "wti_settled": 108.65
-      },
+      "metrics": {},
       "sector_impact": [],
       "confidence": "HIGH",
       "causal_verdict": "correct",
       "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-25.md"
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-30.md"
     }
   },
   {
     "signal": {
       "source": "rss",
-      "feed": "FinancialJuice",
-      "title": "BoE\u2019s Greene: Financial conditions have tightened, will have implications for th",
-      "url": "https://x.com/financialjuice/status/2036783942540407023",
-      "timestamp": "2026-03-25T21:47:28.814825",
+      "feed": "Business_Bloomberg",
+      "title": "The Bank of Japan\u2019s policy board presented a hawkish posture in a summary of opi",
+      "url": "https://x.com/business/status/2038437749640909048",
+      "timestamp": "2026-03-30T11:47:29.335832",
       "pattern_id": "p014",
       "pattern": "US Credit Rating Downgrade",
       "category": "macroeconomic",
       "confidence": "HIGH",
       "time_horizon": "short-term",
       "signal_score": 200,
-      "reasoning_score": 92.0,
+      "reasoning_score": 85.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 5.46,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "",
+      "root_causes": [],
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "financing",
+      "moat_type": "none_clear",
+      "fragility_type": "financing_dependent",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "high_margin_infra_leader",
+      "loser_class": "financing_dependent_scaler",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+      "structural_interpretation_confidence": 0.68
+    },
+    "added_at": "2026-03-30T11:47:29.339017",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Bloomberg confirmed BoJ policy board presented hawkish posture in summary of opinions. USDJPY declining from ~151 to ~148 area \u2014 driven by BoJ hawkishness + Iran war safe-haven flow. rates_volatility \u2192 fx_move confirmed via USDJPY channel.",
+    "outcome": "correct",
+    "verified_at": "2026-03-30T23:04:28.307858+08:00",
+    "verification_note": "Bloomberg confirmed BoJ policy board presented hawkish posture in summary of opinions. USDJPY declining from ~151 to ~148 area \u2014 driven by BoJ hawkishness + Iran war safe-haven flow. rates_volatility \u2192 fx_move confirmed via USDJPY channel.",
+    "evidence_pack": {
+      "summary": "BoJ hawkish posture confirmed by Bloomberg summary of opinions. USDJPY declined to ~148 from ~151 as hawkish BoJ + Iran war safe-haven flows weighed on USD. rates_volatility \u2192 fx_move confirmed.",
+      "drivers": [
+        "BoJ policy board hawkish summary of opinions",
+        "USDJPY decline ~151\u2192148 (BoJ hawkish + Iran war)",
+        "Global rates repricing across G10 central banks"
+      ],
+      "metrics": {},
+      "sector_impact": [],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-30.md"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "FinancialJuice",
+      "title": "German CPI MoM Prelim Actual 1.1% (Forecast 1.1%, Previous 0.2%)",
+      "url": "https://x.com/financialjuice/status/2038587200061804738",
+      "timestamp": "2026-03-30T20:47:31.245382",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 200,
+      "reasoning_score": 90.0,
       "confidence_level": "STRONG BUY",
       "recommendation": "TAKE",
       "reasoning_components": {
@@ -177,87 +174,7 @@
         "pattern_strength": 90.0,
         "time_horizon_fit": 100.0,
         "base_score": 84.5,
-        "feedback_bias_points": 7.5,
-        "feedback_sample_size": 9
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-25T21:47:28.816858",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "BoE's Greene's concerns about financial conditions tightening and inflation risks are fully confirmed. She explicitly stated she is 'more worried about higher inflation than slower demand from war.' Citi survey showed UK public inflation expectations surged to 5.4% in March from 3.3% in February \u2014 the largest one-month jump in 20+ years. BoE voted 9-0 to hold but eliminated 2026 rate cut expectations entirely. The rates_volatility prediction is confirmed by UK mortgage market turmoil and BoE hawkish repricing. The fx_move is confirmed by GBP dynamics.",
-    "outcome": "correct",
-    "verified_at": "2026-03-25T23:05:43.576077+08:00",
-    "verification_note": "BoE's Greene's concerns about financial conditions tightening and inflation risks are fully confirmed. She explicitly stated she is 'more worried about higher inflation than slower demand from war.' Citi survey showed UK public inflation expectations surged to 5.4% in March from 3.3% in February \u2014 the largest one-month jump in 20+ years. BoE voted 9-0 to hold but eliminated 2026 rate cut expectations entirely. The rates_volatility prediction is confirmed by UK mortgage market turmoil and BoE hawkish repricing. The fx_move is confirmed by GBP dynamics.",
-    "evidence_pack": {
-      "summary": "Greene inflation concerns fully confirmed; UK inflation expectations surged 5.4% from 3.3%; rates_volatility and fx_move confirmed",
-      "drivers": [
-        "Greene: more worried about higher inflation than slower demand from war",
-        "UK 1-year inflation expectations: 3.3% Feb \u2192 5.4% March (largest jump in 20+ years)",
-        "BoE voted 9-0 to hold rates; 2026 cut expectations eliminated"
-      ],
-      "metrics": {
-        "uk_inflation_expectations": 5.4,
-        "boe_rate": 3.75
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-25.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Business_Bloomberg",
-      "title": "Interest-rate strategists at Morgan Stanley say this month\u2019s Treasury market slu",
-      "url": "https://x.com/business/status/2036837056157024380",
-      "timestamp": "2026-03-26T16:49:57.140101",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 85.3,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 5.33,
+        "feedback_bias_points": 5.46,
         "feedback_sample_size": 20
       },
       "reasoning": "moderate source, strong historical pattern match.",
@@ -271,7 +188,7 @@
         "Bond market reprices terminal rate",
         "Equity duration factor moves"
       ],
-      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "signal_briefing": "",
       "root_causes": [],
       "theme": "macro_rates_regime",
       "chain_layer": "none_clear",
@@ -290,52 +207,50 @@
       "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
       "structural_interpretation_confidence": 0.68
     },
-    "added_at": "2026-03-26T16:49:57.144637",
+    "added_at": "2026-03-30T20:47:31.248239",
     "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "Morgan Stanley confirmed: Treasury market slump features forced selling of 2-year notes as traders abandoned Fed cut bets and began pricing in a hike. The MOVE index spiked to highest since May. Front-end yield move confirmed via 2Y yield surge; USD trend shift confirmed via USD firming on reduced cut expectations. Both predicted outcomes verified.",
-    "outcome": "correct",
-    "verified_at": "2026-03-26T23:05:13.973445+08:00",
-    "verification_note": "Morgan Stanley confirmed: Treasury market slump features forced selling of 2-year notes as traders abandoned Fed cut bets and began pricing in a hike. The MOVE index spiked to highest since May. Front-end yield move confirmed via 2Y yield surge; USD trend shift confirmed via USD firming on reduced cut expectations. Both predicted outcomes verified.",
+    "actual_outcome": "PARTIAL",
+    "notes": "German CPI MoM actual 1.1% matched forecast 1.1% but surged from prior 0.2%. Hotter German inflation confirms ECB inflation concerns. However, the signal's front_end_yield_move \u2192 usd_trend_shift framing is somewhat indirect \u2014 the data confirms ECB hawkishness (EUR-supportive) but USD impact is moderate/secondary. Partial credit for asset expression.",
+    "outcome": "partial",
+    "verified_at": "2026-03-30T23:04:40.023529+08:00",
+    "verification_note": "German CPI MoM actual 1.1% matched forecast 1.1% but surged from prior 0.2%. Hotter German inflation confirms ECB inflation concerns. However, the signal's front_end_yield_move \u2192 usd_trend_shift framing is somewhat indirect \u2014 the data confirms ECB hawkishness (EUR-supportive) but USD impact is moderate/secondary. Partial credit for asset expression.",
     "evidence_pack": {
-      "summary": "Treasury forced selling confirmed; 2Y yields soared, USD firmed \u2014 both predicted outcomes verified",
+      "summary": "German CPI MoM 1.1% (prev 0.2%) confirmed upside inflation surprise in Germany. Supports ECB hawkish pivot narrative and front-end yield positioning. USD impact is secondary/indirect \u2014 EUR-positive is the primary channel, with USD-negative as secondary follow-through. PARTIAL.",
       "drivers": [
-        "Morgan Stanley: Treasury slump hallmarks of forced selling of 2-year notes; yields soared as traders priced in hike vs cut",
-        "3-month MOVE index rocketed to highest since last May \u2014 elevated rates volatility confirmed"
+        "German CPI MoM surge 0.2%\u21921.1%",
+        "ECB inflation concerns validated by data",
+        "EU rates sensitivity to German inflation print"
       ],
-      "metrics": {
-        "2y_yield_surge": "confirmed",
-        "move_index": "highest_since_may"
-      },
+      "metrics": {},
       "sector_impact": [],
       "confidence": "HIGH",
       "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-26.md"
+      "asset_expression_verdict": "partial",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-30.md"
     }
   },
   {
     "signal": {
       "source": "rss",
-      "feed": "ZeroHedge",
-      "title": "One Day After Gating, Ares Private Credit Fund Posts Biggest Monthly Loss In His",
-      "url": "https://x.com/zerohedge/status/2037007914943058401",
-      "timestamp": "2026-03-26T17:47:33.683808",
+      "feed": "FinancialJuice",
+      "title": "Japan's Katayama: G7 finance leaders and central bank chiefs discussed the need ",
+      "url": "https://x.com/financialjuice/status/2038602983332626702",
+      "timestamp": "2026-03-30T21:47:29.674806",
       "pattern_id": "p018",
       "pattern": "Regional Banking Crisis 2023",
       "category": "financial_credit",
       "confidence": "HIGH",
       "time_horizon": "intraday",
       "signal_score": 300,
-      "reasoning_score": 85.8,
+      "reasoning_score": 87.3,
       "confidence_level": "STRONG BUY",
       "recommendation": "TAKE",
       "reasoning_components": {
-        "source_credibility": 55.0,
+        "source_credibility": 65.0,
         "pattern_strength": 90.0,
         "time_horizon_fit": 100.0,
-        "base_score": 81.5,
-        "feedback_bias_points": 4.25,
+        "base_score": 84.5,
+        "feedback_bias_points": 2.84,
         "feedback_sample_size": 20
       },
       "reasoning": "moderate source, strong historical pattern match.",
@@ -369,45 +284,102 @@
       "value_chain_notes": "",
       "structural_interpretation_confidence": 0.0
     },
-    "added_at": "2026-03-26T17:47:33.687008",
+    "added_at": "2026-03-30T21:47:29.678918",
     "verified": true,
     "actual_outcome": "CORRECT",
-    "notes": "Ares Strategic Income Fund lost 0.68% in February \u2014 steepest monthly loss on record. The 0.7B fund gated withdrawals one day prior (same pattern as Apollo). This is direct evidence of deteriorating private credit performance and funding stress. financials_volatility confirmed (private credit sector under stress); treasury_bid confirmed (safety bid in broader market); credit_tightening confirmed (rapid decompression in the .8 trillion private credit market). Blankfein warned of a 'reckoning.' All three predicted outcomes verified.",
+    "notes": "G7 statement confirmed by FinancialJuice: G7 central banks strongly committed to maintaining price stability. Coordinated hawkish signaling across G7 finance leaders and central bank chiefs is consistent with the global rates repricing theme. USDJPY decline partly reflects this coordination. rates_volatility \u2192 fx_move confirmed via G7 coordination channel.",
     "outcome": "correct",
-    "verified_at": "2026-03-26T23:05:26.663741+08:00",
-    "verification_note": "Ares Strategic Income Fund lost 0.68% in February \u2014 steepest monthly loss on record. The 0.7B fund gated withdrawals one day prior (same pattern as Apollo). This is direct evidence of deteriorating private credit performance and funding stress. financials_volatility confirmed (private credit sector under stress); treasury_bid confirmed (safety bid in broader market); credit_tightening confirmed (rapid decompression in the .8 trillion private credit market). Blankfein warned of a 'reckoning.' All three predicted outcomes verified.",
+    "verified_at": "2026-03-30T23:04:49.890390+08:00",
+    "verification_note": "G7 statement confirmed by FinancialJuice: G7 central banks strongly committed to maintaining price stability. Coordinated hawkish signaling across G7 finance leaders and central bank chiefs is consistent with the global rates repricing theme. USDJPY decline partly reflects this coordination. rates_volatility \u2192 fx_move confirmed via G7 coordination channel.",
     "evidence_pack": {
-      "summary": "Ares posted steepest monthly loss on record; 0.7B fund gated one day prior; private credit decompression confirmed",
+      "summary": "G7 finance leaders and central bank chiefs coordinated hawkish commitment confirmed. Price stability mandate\u7edf\u4e00\u7684 across G7 broadens the central bank hawkish pivot beyond single-country signals. USDJPY weakness reflects G7 coordination effect. rates_volatility \u2192 fx_move confirmed.",
       "drivers": [
-        "Ares Strategic Income Fund lost 0.68% in February \u2014 steepest monthly loss on record",
-        "0.7B Ares private credit fund gated investor withdrawals one day prior to loss announcement",
-        "Goldman and JPMorgan offering short positions in private credit as losses mount"
+        "G7 coordinated hawkish commitment to price stability",
+        "USDJPY decline reflecting coordinated G7 hawkishness",
+        "Broad G10 rates repricing during Iran War period"
       ],
-      "metrics": {
-        "ares_fund_loss_pct": 0.68,
-        "ares_ares_fund_aum_usd_bn": 10.7
-      },
+      "metrics": {},
       "sector_impact": [],
       "confidence": "HIGH",
       "causal_verdict": "correct",
       "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-26.md"
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-30.md"
     }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "FinancialJuice",
+      "title": "G7 Statement: G7 central banks are strongly committed to maintaining price stabi",
+      "url": "https://x.com/financialjuice/status/2038619414480740563",
+      "timestamp": "2026-03-30T22:47:29.577611",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 200,
+      "reasoning_score": 90.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 65.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 84.5,
+        "feedback_bias_points": 5.46,
+        "feedback_sample_size": 20
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "",
+      "root_causes": [],
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "financing",
+      "moat_type": "none_clear",
+      "fragility_type": "financing_dependent",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "high_margin_infra_leader",
+      "loser_class": "financing_dependent_scaler",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+      "structural_interpretation_confidence": 0.68
+    },
+    "added_at": "2026-03-30T22:47:29.581194",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
   },
   {
     "signal": {
       "source": "rss",
       "feed": "Reuters_Finance",
-      "title": "ECB's Nagel says April rate hike 'an option'",
-      "url": "https://www.reuters.com/business/finance/ecbs-nagel-says-april-rate-hike-an-option-2026-03-26/",
-      "timestamp": "2026-03-26T18:47:28.542781",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
+      "title": "Exclusive: US Treasury to consult with insurance regulators on private credit le",
+      "url": "https://www.reuters.com/business/finance/us-treasury-consult-with-insurance-regulators-private-credit-lenders-sources-say-2026-03-30/",
+      "timestamp": "2026-03-30T23:47:35.172036",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
       "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 85.3,
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
       "confidence_level": "STRONG BUY",
       "recommendation": "TAKE",
       "reasoning_components": {
@@ -415,325 +387,8 @@
         "pattern_strength": 90.0,
         "time_horizon_fit": 100.0,
         "base_score": 80.0,
-        "feedback_bias_points": 5.33,
-        "feedback_sample_size": 20
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "front_end_yield_move",
-        "usd_trend_shift",
-        "growth_value_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Inflation/rates surprise",
-        "Bond market reprices terminal rate",
-        "Equity duration factor moves"
-      ],
-      "signal_briefing": "March 2022 rate hikes crushed tech (down 30% that year). Rate hikes typically pressure growth stocks and rate-sensitive sectors. Dollar strengthens on yield differential. Bond yields climb.",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-26T18:47:28.546031",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "ECB's Nagel explicitly confirmed April rate hike is 'an option' if the Iran war price outlook continues to deteriorate, with enough information expected by late April. Nagel's primary concern is secondary inflation spreading into services and wages. This is a fully confirmed hawkish ECB repricing. front_end_yield_move for EUR confirmed; usd_trend_shift consistent with USD strength amid hawkish global repricing; growth_value_rotation consistent with rate hike expectations compressing growth valuations. All three predicted outcomes confirmed.",
-    "outcome": "correct",
-    "verified_at": "2026-03-26T23:05:38.037118+08:00",
-    "verification_note": "ECB's Nagel explicitly confirmed April rate hike is 'an option' if the Iran war price outlook continues to deteriorate, with enough information expected by late April. Nagel's primary concern is secondary inflation spreading into services and wages. This is a fully confirmed hawkish ECB repricing. front_end_yield_move for EUR confirmed; usd_trend_shift consistent with USD strength amid hawkish global repricing; growth_value_rotation consistent with rate hike expectations compressing growth valuations. All three predicted outcomes confirmed.",
-    "evidence_pack": {
-      "summary": "Nagel confirmed April hike 'an option' if Iran war keeps raising prices; EUR front-end and USD shift both confirmed",
-      "drivers": [
-        "Nagel: ECB has 'an option' to raise rates in April if Iran war price outlook continues to deteriorate",
-        "Nagel: enough economic data and geopolitical clarity expected by late April for well-informed decision",
-        "Nagel: primary concern is secondary inflation spreading into services sector and wage negotiations"
-      ],
-      "metrics": {
-        "ecb_april_hike": "option"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-26.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "ZeroHedge",
-      "title": "Israel killed the commander of Iran\u2019s Revolutionary Guard navy, Alireza Tangsiri",
-      "url": "https://x.com/zerohedge/status/2037118720179364316",
-      "timestamp": "2026-03-26T19:47:31.719348",
-      "pattern_id": "p005",
-      "pattern": "GameStop Short Squeeze",
-      "category": "sentiment_social",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 85.8,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 55.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 81.5,
-        "feedback_bias_points": 4.25,
-        "feedback_sample_size": 20
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "forced_covering",
-        "borrow_fee_spike",
-        "volatility_clustering"
-      ],
-      "predicted_causal_chain": [
-        "Crowded short setup",
-        "Call buying surge",
-        "Dealer hedging amplifies upside"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": [],
-      "theme": "defense_supply_chain",
-      "chain_layer": "defense_subsystems",
-      "chain_sublayer": "electronics_sensors",
-      "theme_maturity": "mid_cycle_scaling",
-      "bottleneck_type": "switching_cost",
-      "moat_type": "preferred_vendor",
-      "fragility_type": "none_clear",
-      "supplier_status": "preferred_vendor_candidate",
-      "position_in_chain": "category2_hidden_enabler",
-      "beneficiary_class": "ecosystem_owner",
-      "loser_class": "weak_supplier_without_moat",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Defense electronics, EW, sensors, and avionics specialists with embedded program positions should outperform less differentiated downstream exposure.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "Sensors, avionics, tactical radios, EW, and targeting systems are hidden defense enablers with strong switching costs.",
-      "structural_interpretation_confidence": 0.79
-    },
-    "added_at": "2026-03-26T19:47:31.722651",
-    "verified": true,
-    "actual_outcome": "PARTIAL",
-    "notes": "Summary: Iran war escalation drove USD safe-haven surge to ~99.90 and 10Y yield above 4.06% on March 26; directional thesis correct but short-squeeze mechanism unverifiable",
-    "outcome": "partial",
-    "verified_at": "2026-03-28T12:49:50.386344+08:00",
-    "verification_note": "Summary: Iran war escalation drove USD safe-haven surge to ~99.90 and 10Y yield above 4.06% on March 26; directional thesis correct but short-squeeze mechanism unverifiable",
-    "evidence_pack": {
-      "summary": "Summary: Iran war escalation drove USD safe-haven surge to ~99.90 and 10Y yield above 4.06% on March 26; directional thesis correct but short-squeeze mechanism unverifiable; Iran war escalation; US military strikes on Iranian targets; oil supply disruption",
-      "drivers": [
-        "Summary: Iran war escalation drove USD safe-haven surge to ~99.90 and 10Y yield above 4.06% on March 26; directional thesis correct but short-squeeze mechanism unverifiable",
-        "Iran war escalation; US military strikes on Iranian targets; oil supply disruption",
-        "Sector impact: Energy (oil majors up); Defense (contractors benefitting); Safe-haven FX (USD strength); Duration under pressure"
-      ],
-      "metrics": {
-        "observations": [
-          "Summary: Iran war escalation drove USD safe-haven surge to ~99.90 and 10Y yield above 4.06% on March 26; directional thesis correct but short-squeeze mechanism unverifiable"
-        ]
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md",
-      "causal_verdict": "partial",
-      "asset_expression_verdict": "partial"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "FinancialJuice",
-      "title": "US PCE inflation to average 3.3%, 3.1% and 2.9% in Q2, Q3 and Q4 vs 2.8%, 2.7% a",
-      "url": "https://x.com/financialjuice/status/2037134944397312365",
-      "timestamp": "2026-03-26T20:47:28.554375",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 89.8,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 65.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 84.5,
-        "feedback_bias_points": 5.33,
-        "feedback_sample_size": 20
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-26T20:47:28.558266",
-    "verified": true,
-    "actual_outcome": "PARTIAL",
-    "notes": "Iran escalation confirmed as market driver; DXY hit ~99.90 on March 26 (safe-haven USD demand)",
-    "outcome": "partial",
-    "verified_at": "2026-03-28T12:50:56.248618+08:00",
-    "verification_note": "Iran escalation confirmed as market driver; DXY hit ~99.90 on March 26 (safe-haven USD demand)",
-    "evidence_pack": {
-      "summary": "Iran escalation confirmed as market driver; DXY hit ~99.90 on March 26 (safe-haven USD demand)",
-      "drivers": [
-        "Iran war escalation",
-        "US military strikes on Iranian targets",
-        "oil supply disruption fears"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "DXY ~99.90 (March 26 high); 10Y yield ~4.06%"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "partial",
-      "asset_expression_verdict": "partial",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "FinancialJuice",
-      "title": "French Navy Chief of Staff: Exchanging views on issues related to freedom of nav",
-      "url": "https://x.com/financialjuice/status/2037168365714767977",
-      "timestamp": "2026-03-26T22:47:32.711531",
-      "pattern_id": "p005",
-      "pattern": "GameStop Short Squeeze",
-      "category": "sentiment_social",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 88.8,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 65.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 84.5,
-        "feedback_bias_points": 4.25,
-        "feedback_sample_size": 20
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "forced_covering",
-        "borrow_fee_spike",
-        "volatility_clustering"
-      ],
-      "predicted_causal_chain": [
-        "Crowded short setup",
-        "Call buying surge",
-        "Dealer hedging amplifies upside"
-      ],
-      "signal_briefing": "",
-      "root_causes": [],
-      "theme": "none_clear",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "none_clear",
-      "moat_type": "none_clear",
-      "fragility_type": "none_clear",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "none_clear",
-      "loser_class": "none_clear",
-      "pair_trade_candidate": false,
-      "pair_trade_rationale": "",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "",
-      "structural_interpretation_confidence": 0.0
-    },
-    "added_at": "2026-03-26T22:47:32.714144",
-    "verified": true,
-    "actual_outcome": "PARTIAL",
-    "notes": "Fed March 2026 Dot Plot: PCE inflation revised up 0.3pp to 2.7% for full-year 2026 (largest single upward revision)",
-    "outcome": "partial",
-    "verified_at": "2026-03-28T12:50:56.248737+08:00",
-    "verification_note": "Fed March 2026 Dot Plot: PCE inflation revised up 0.3pp to 2.7% for full-year 2026 (largest single upward revision)",
-    "evidence_pack": {
-      "summary": "Fed March 2026 Dot Plot: PCE inflation revised up 0.3pp to 2.7% for full-year 2026 (largest single upward revision)",
-      "drivers": [
-        "Iran war oil supply disruption",
-        "energy price surge",
-        "supply-side inflation shock"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "Fed 2026 PCE forecast: 2.7% (up 0.3pp from Dec); Oxford Q2 PCE nowcast: 3.7%"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "partial",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "FinancialJuice",
-      "title": "BoE\u2019s Greene: Private credit exposure to the energy industry is a worry.",
-      "url": "https://x.com/financialjuice/status/2037213372026876358",
-      "timestamp": "2026-03-27T01:47:28.681270",
-      "pattern_id": "p018",
-      "pattern": "Regional Banking Crisis 2023",
-      "category": "financial_credit",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 90.2,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 65.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 84.5,
-        "feedback_bias_points": 5.66,
-        "feedback_sample_size": 17
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
       },
       "reasoning": "moderate source, strong historical pattern match.",
       "predicted_outcomes": [
@@ -766,747 +421,18 @@
       "value_chain_notes": "",
       "structural_interpretation_confidence": 0.0
     },
-    "added_at": "2026-03-27T01:47:28.684348",
-    "verified": true,
-    "actual_outcome": "INCORRECT",
-    "notes": "Title is vague diplomatic language; no specific actionable signal content",
-    "outcome": "incorrect",
-    "verified_at": "2026-03-28T12:50:56.248767+08:00",
-    "verification_note": "Title is vague diplomatic language; no specific actionable signal content",
-    "evidence_pack": {
-      "summary": "Title is vague diplomatic language; no specific actionable signal content",
-      "drivers": [
-        "N/A \u2014 unverifiable signal"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "incorrect",
-      "asset_expression_verdict": "incorrect",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "FinancialJuice",
-      "title": "SpaceX IPO could reserve up to 30% for retail investors",
-      "url": "https://x.com/financialjuice/status/2037227328586010694",
-      "timestamp": "2026-03-27T02:47:28.122993",
-      "pattern_id": "p005",
-      "pattern": "GameStop Short Squeeze",
-      "category": "sentiment_social",
-      "confidence": "HIGH",
-      "time_horizon": "intraday",
-      "signal_score": 300,
-      "reasoning_score": 88.8,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 65.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 84.5,
-        "feedback_bias_points": 4.25,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "forced_covering",
-        "borrow_fee_spike",
-        "volatility_clustering"
-      ],
-      "predicted_causal_chain": [
-        "Crowded short setup",
-        "Call buying surge",
-        "Dealer hedging amplifies upside"
-      ],
-      "signal_briefing": "",
-      "root_causes": [],
-      "theme": "none_clear",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "none_clear",
-      "moat_type": "none_clear",
-      "fragility_type": "none_clear",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "none_clear",
-      "loser_class": "none_clear",
-      "pair_trade_candidate": false,
-      "pair_trade_rationale": "",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "",
-      "structural_interpretation_confidence": 0.0
-    },
-    "added_at": "2026-03-27T02:47:28.126221",
-    "verified": true,
-    "actual_outcome": "PARTIAL",
-    "notes": "Private credit stress confirmed: BlackRock restricted withdrawals on $26B HPS Lending Fund; Cliffwater investors seeking 7% redemption; Fortune reporting $265B private credit sector stress",
-    "outcome": "partial",
-    "verified_at": "2026-03-28T12:50:56.248786+08:00",
-    "verification_note": "Private credit stress confirmed: BlackRock restricted withdrawals on $26B HPS Lending Fund; Cliffwater investors seeking 7% redemption; Fortune reporting $265B private credit sector stress",
-    "evidence_pack": {
-      "summary": "Private credit stress confirmed: BlackRock restricted withdrawals on $26B HPS Lending Fund; Cliffwater investors seeking 7% redemption; Fortune reporting $265B private credit sector stress",
-      "drivers": [
-        "Private credit default surge",
-        "investor withdrawals",
-        "bank exposure fears",
-        "Iran war inflation impact on rates"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "Barclays declining; private credit fund restrictions; 10Y yield 4.06%"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "partial",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "FinancialJuice",
-      "title": "Fed's Cook does not comment on monetary policy or economic outlook in prepared r",
-      "url": "https://x.com/financialjuice/status/2037258441165611252",
-      "timestamp": "2026-03-27T04:47:28.216142",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 91.4,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 65.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 84.5,
-        "feedback_bias_points": 6.89,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "front_end_yield_move",
-        "usd_trend_shift",
-        "growth_value_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Inflation/rates surprise",
-        "Bond market reprices terminal rate",
-        "Equity duration factor moves"
-      ],
-      "signal_briefing": "",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-27T04:47:28.219573",
-    "verified": true,
-    "actual_outcome": "INCORRECT",
-    "notes": "Reuters (March 26) confirms: Elon Musk discussing allocating up to 30% of SpaceX IPO to retail investors \u2014 3x the normal retail allocation",
-    "outcome": "incorrect",
-    "verified_at": "2026-03-28T12:50:56.248804+08:00",
-    "verification_note": "Reuters (March 26) confirms: Elon Musk discussing allocating up to 30% of SpaceX IPO to retail investors \u2014 3x the normal retail allocation",
-    "evidence_pack": {
-      "summary": "Reuters (March 26) confirms: Elon Musk discussing allocating up to 30% of SpaceX IPO to retail investors \u2014 3x the normal retail allocation",
-      "drivers": [
-        "SpaceX IPO structure change",
-        "unprecedented retail allocation",
-        "$1.75T valuation discussion"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "incorrect",
-      "asset_expression_verdict": "incorrect",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Deltaone",
-      "title": "\ud83d\udcc8RECESSION FEARS BUILD Goldman Sachs sees a 30% U.S. recession risk, with slowin",
-      "url": "https://x.com/DeItaone/status/2037225876484403239",
-      "timestamp": "2026-03-27T05:47:29.781189",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 86.9,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 6.89,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-27T05:47:29.784766",
-    "verified": true,
-    "actual_outcome": "PARTIAL",
-    "notes": "The headline framing (\"does not comment\") is misleading based on available evidence",
-    "outcome": "partial",
-    "verified_at": "2026-03-28T12:50:56.248821+08:00",
-    "verification_note": "The headline framing (\"does not comment\") is misleading based on available evidence",
-    "evidence_pack": {
-      "summary": "The headline framing (\"does not comment\") is misleading based on available evidence",
-      "drivers": [
-        "Fed official acknowledgment of Iran war inflation impact",
-        "Fed hold but hawkish signals"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "Cook confirmed statement on Iran war inflation risk; DXY ~99.90"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "partial",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Business_Bloomberg",
-      "title": "Federal Reserve Governor Lisa Cook said the Iran war has shifted the balance of ",
-      "url": "https://x.com/business/status/2037285110815355238",
-      "timestamp": "2026-03-27T06:47:28.820913",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 86.9,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 6.89,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "front_end_yield_move",
-        "usd_trend_shift",
-        "growth_value_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Inflation/rates surprise",
-        "Bond market reprices terminal rate",
-        "Equity duration factor moves"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": [],
-      "theme": "defense_supply_chain",
-      "chain_layer": "defense_subsystems",
-      "chain_sublayer": "electronics_sensors",
-      "theme_maturity": "mid_cycle_scaling",
-      "bottleneck_type": "switching_cost",
-      "moat_type": "preferred_vendor",
-      "fragility_type": "none_clear",
-      "supplier_status": "preferred_vendor_candidate",
-      "position_in_chain": "category2_hidden_enabler",
-      "beneficiary_class": "ecosystem_owner",
-      "loser_class": "weak_supplier_without_moat",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Defense electronics, EW, sensors, and avionics specialists with embedded program positions should outperform less differentiated downstream exposure.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "Sensors, avionics, tactical radios, EW, and targeting systems are hidden defense enablers with strong switching costs.",
-      "structural_interpretation_confidence": 0.79
-    },
-    "added_at": "2026-03-27T06:47:28.825350",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "Goldman Sachs raising US recession probability to 30% (from 25%) confirmed by Fortune, Bloomberg, Forbes, TheStreet, PoliticalWire",
-    "outcome": "correct",
-    "verified_at": "2026-03-28T12:50:56.248839+08:00",
-    "verification_note": "Goldman Sachs raising US recession probability to 30% (from 25%) confirmed by Fortune, Bloomberg, Forbes, TheStreet, PoliticalWire",
-    "evidence_pack": {
-      "summary": "Goldman Sachs raising US recession probability to 30% (from 25%) confirmed by Fortune, Bloomberg, Forbes, TheStreet, PoliticalWire",
-      "drivers": [
-        "Iran war oil shock",
-        "Goldman revised GDP down to 2.1%",
-        "recession probability up 5pp"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "Goldman recession odds: 30%; GDP forecast: 2.1%; unemployment expected: 4.6%"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "KobeissiLetter",
-      "title": "This is truly historic: In just 27 days of the Iran War, the discussion has now ",
-      "url": "https://x.com/KobeissiLetter/status/2037271623179387119",
-      "timestamp": "2026-03-27T07:47:30.205706",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 86.9,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 6.89,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
-      "root_causes": [],
-      "theme": "defense_supply_chain",
-      "chain_layer": "defense_subsystems",
-      "chain_sublayer": "electronics_sensors",
-      "theme_maturity": "mid_cycle_scaling",
-      "bottleneck_type": "switching_cost",
-      "moat_type": "preferred_vendor",
-      "fragility_type": "none_clear",
-      "supplier_status": "preferred_vendor_candidate",
-      "position_in_chain": "category2_hidden_enabler",
-      "beneficiary_class": "ecosystem_owner",
-      "loser_class": "weak_supplier_without_moat",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Defense electronics, EW, sensors, and avionics specialists with embedded program positions should outperform less differentiated downstream exposure.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "Sensors, avionics, tactical radios, EW, and targeting systems are hidden defense enablers with strong switching costs.",
-      "structural_interpretation_confidence": 0.79
-    },
-    "added_at": "2026-03-27T07:47:30.208206",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "Cook's March 26 statement directly confirmed: \"the war in Iran has shifted the balance of risks for the central bank's dual mandate more toward inflation\"",
-    "outcome": "correct",
-    "verified_at": "2026-03-28T12:50:56.248855+08:00",
-    "verification_note": "Cook's March 26 statement directly confirmed: \"the war in Iran has shifted the balance of risks for the central bank's dual mandate more toward inflation\"",
-    "evidence_pack": {
-      "summary": "Cook's March 26 statement directly confirmed: \"the war in Iran has shifted the balance of risks for the central bank's dual mandate more toward inflation\"",
-      "drivers": [
-        "Fed Governor Cook explicit Iran-inflation acknowledgment",
-        "hawkish Fed shift"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "DXY ~99.90; Cook confirmed statement on record"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "Business_Bloomberg",
-      "title": "Federal Reserve Governor Michael Barr said policymakers are well positioned to h",
-      "url": "https://x.com/business/status/2037311712932545017",
-      "timestamp": "2026-03-27T08:47:29.301298",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 86.9,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 6.89,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "front_end_yield_move",
-        "usd_trend_shift",
-        "growth_value_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Inflation/rates surprise",
-        "Bond market reprices terminal rate",
-        "Equity duration factor moves"
-      ],
-      "signal_briefing": "",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-27T08:47:29.305523",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "The framing of Iran war economic impact as \"historic\" is corroborated by the convergence of:",
-    "outcome": "correct",
-    "verified_at": "2026-03-28T12:50:56.248870+08:00",
-    "verification_note": "The framing of Iran war economic impact as \"historic\" is corroborated by the convergence of:",
-    "evidence_pack": {
-      "summary": "The framing of Iran war economic impact as \"historic\" is corroborated by the convergence of:",
-      "drivers": [
-        "27 days of Iran war",
-        "oil price surge",
-        "Fed/ECB policy shifts",
-        "recession risk repricing"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "Multiple major Fed/ECB communications on Iran war impact; rates at key levels"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "FinancialJuice",
-      "title": "Euro area February 3-year CPI expectations fall to 2.5%, est. 2.7%",
-      "url": "https://x.com/financialjuice/status/2037455259472126314",
-      "timestamp": "2026-03-27T17:47:31.840584",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 91.4,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 65.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 84.5,
-        "feedback_bias_points": 6.89,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "front_end_yield_move",
-        "usd_trend_shift",
-        "growth_value_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Inflation/rates surprise",
-        "Bond market reprices terminal rate",
-        "Equity duration factor moves"
-      ],
-      "signal_briefing": "",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-27T17:47:31.844657",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "Barr confirmed saying U.S. military actions against Iran have shifted the balance of risks toward higher inflation (American Banker, March 26)",
-    "outcome": "correct",
-    "verified_at": "2026-03-28T12:50:56.248889+08:00",
-    "verification_note": "Barr confirmed saying U.S. military actions against Iran have shifted the balance of risks toward higher inflation (American Banker, March 26)",
-    "evidence_pack": {
-      "summary": "Barr confirmed saying U.S. military actions against Iran have shifted the balance of risks toward higher inflation (American Banker, March 26)",
-      "drivers": [
-        "Fed Governor Barr explicit Iran war \u2192 inflation risk acknowledgment",
-        "Fed officials unified in shift"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "Barr confirmed statement; American Banker reporting; DXY ~99.90"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "FinancialJuice",
-      "title": "UBS global research expects ECB to deliver two 25 bps rate hikes each in June an",
-      "url": "https://x.com/financialjuice/status/2037459600866181205",
-      "timestamp": "2026-03-27T18:47:35.066433",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 91.4,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 65.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 84.5,
-        "feedback_bias_points": 6.89,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "front_end_yield_move",
-        "usd_trend_shift",
-        "growth_value_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Inflation/rates surprise",
-        "Bond market reprices terminal rate",
-        "Equity duration factor moves"
-      ],
-      "signal_briefing": "March 2022 rate hikes crushed tech (down 30% that year). Rate hikes typically pressure growth stocks and rate-sensitive sectors. Dollar strengthens on yield differential. Bond yields climb.",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-27T18:47:35.072105",
-    "verified": true,
-    "actual_outcome": "PARTIAL",
-    "notes": "ECB Consumer Expectations Survey (February 2026) confirmed: median 3-year ahead inflation expectations fell to 2.5%, from 2.6% previously, below the 2.7% estimate",
-    "outcome": "partial",
-    "verified_at": "2026-03-28T12:50:56.248916+08:00",
-    "verification_note": "ECB Consumer Expectations Survey (February 2026) confirmed: median 3-year ahead inflation expectations fell to 2.5%, from 2.6% previously, below the 2.7% estimate",
-    "evidence_pack": {
-      "summary": "ECB Consumer Expectations Survey (February 2026) confirmed: median 3-year ahead inflation expectations fell to 2.5%, from 2.6% previously, below the 2.7% estimate",
-      "drivers": [
-        "ECB Consumer Expectations Survey",
-        "eurozone inflation dynamics",
-        "ECB policy pivot"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "Euro 3-year CPI expectations: 2.5% (down from 2.6%, vs 2.7% estimate)"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "partial",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
-  },
-  {
-    "signal": {
-      "source": "rss",
-      "feed": "KobeissiLetter",
-      "title": "RT by @KobeissiLetter: 12 hours later, and the US 2Y Note Yield is up to 4.00%, ",
-      "url": "https://x.com/TKL_Adam/status/2037514336621441346",
-      "timestamp": "2026-03-27T22:47:34.727862",
-      "pattern_id": "p014",
-      "pattern": "US Credit Rating Downgrade",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "time_horizon": "short-term",
-      "signal_score": 200,
-      "reasoning_score": 86.9,
-      "confidence_level": "STRONG BUY",
-      "recommendation": "TAKE",
-      "reasoning_components": {
-        "source_credibility": 50.0,
-        "pattern_strength": 90.0,
-        "time_horizon_fit": 100.0,
-        "base_score": 80.0,
-        "feedback_bias_points": 6.89,
-        "feedback_sample_size": 17
-      },
-      "reasoning": "moderate source, strong historical pattern match.",
-      "predicted_outcomes": [
-        "rates_volatility",
-        "fx_move",
-        "equity_factor_rotation"
-      ],
-      "predicted_causal_chain": [
-        "Macro print/policy signal",
-        "Rates reprice",
-        "USD and yields react",
-        "Risk assets rotate"
-      ],
-      "signal_briefing": "",
-      "root_causes": [],
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "theme_maturity": "none_clear",
-      "bottleneck_type": "financing",
-      "moat_type": "none_clear",
-      "fragility_type": "financing_dependent",
-      "supplier_status": "none_clear",
-      "position_in_chain": "none_clear",
-      "beneficiary_class": "high_margin_infra_leader",
-      "loser_class": "financing_dependent_scaler",
-      "pair_trade_candidate": true,
-      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
-      "valuation_context": "valuation_unknown",
-      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
-      "structural_interpretation_confidence": 0.68
-    },
-    "added_at": "2026-03-27T22:47:34.730420",
-    "verified": true,
-    "actual_outcome": "CORRECT",
-    "notes": "Reuters (March 19): ECB policymakers warned of growing inflation risks; brokerages pencilling in rate hikes from as soon as April",
-    "outcome": "correct",
-    "verified_at": "2026-03-28T12:50:56.248932+08:00",
-    "verification_note": "Reuters (March 19): ECB policymakers warned of growing inflation risks; brokerages pencilling in rate hikes from as soon as April",
-    "evidence_pack": {
-      "summary": "Reuters (March 19): ECB policymakers warned of growing inflation risks; brokerages pencilling in rate hikes from as soon as April",
-      "drivers": [
-        "ECB hawkish pivot",
-        "Iran war oil shock",
-        "ECB Governing Council vigilance signal"
-      ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "~70% probability of two ECB 25bps hikes; ECB could hike as soon as April"
-      },
-      "sector_impact": [],
-      "confidence": "HIGH",
-      "causal_verdict": "correct",
-      "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
-    }
+    "added_at": "2026-03-30T23:47:35.175882",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
   },
   {
     "signal": {
       "source": "rss",
       "feed": "ZeroHedge",
-      "title": "Someone Tell Lloyd Blankfein The Fire In Private Credit Has Already Started",
-      "url": "https://x.com/zerohedge/status/2037542692557611392",
-      "timestamp": "2026-03-27T23:47:29.787463",
+      "title": "*POWELL: SEEING A CORRECTION GOING ON IN PRIVATE CREDIT",
+      "url": "https://x.com/zerohedge/status/2038636840270365128",
+      "timestamp": "2026-03-31T00:47:28.602028",
       "pattern_id": "p018",
       "pattern": "Regional Banking Crisis 2023",
       "category": "financial_credit",
@@ -1522,7 +448,7 @@
         "time_horizon_fit": 100.0,
         "base_score": 81.5,
         "feedback_bias_points": 7.5,
-        "feedback_sample_size": 8
+        "feedback_sample_size": 14
       },
       "reasoning": "moderate source, strong historical pattern match.",
       "predicted_outcomes": [
@@ -1555,29 +481,871 @@
       "value_chain_notes": "",
       "structural_interpretation_confidence": 0.0
     },
-    "added_at": "2026-03-27T23:47:29.790398",
+    "added_at": "2026-03-31T00:47:28.606028",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Reuters_Finance",
+      "title": "Fed watching private credit sector for signs of trouble, Powell says",
+      "url": "https://www.reuters.com/business/finance/fed-watching-private-credit-sector-signs-trouble-powell-says-2026-03-30/",
+      "timestamp": "2026-03-31T01:47:35.380111",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": [],
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "none_clear",
+      "moat_type": "none_clear",
+      "fragility_type": "none_clear",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "none_clear",
+      "loser_class": "none_clear",
+      "pair_trade_candidate": false,
+      "pair_trade_rationale": "",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "",
+      "structural_interpretation_confidence": 0.0
+    },
+    "added_at": "2026-03-31T01:47:35.386084",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "FinancialJuice",
+      "title": "French CPI MoM NSA Prelim Actual 0.9% (Forecast 0.9%, Previous 0.6%)",
+      "url": "https://x.com/financialjuice/status/2038870532947407000",
+      "timestamp": "2026-03-31T16:47:41.242908",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 200,
+      "reasoning_score": 89.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 65.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 84.5,
+        "feedback_bias_points": 4.96,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "",
+      "root_causes": [],
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "financing",
+      "moat_type": "none_clear",
+      "fragility_type": "financing_dependent",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "high_margin_infra_leader",
+      "loser_class": "financing_dependent_scaler",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+      "structural_interpretation_confidence": 0.68
+    },
+    "added_at": "2026-03-31T16:47:41.245818",
     "verified": true,
     "actual_outcome": "CORRECT",
-    "notes": "10Y Treasury yield rose above 4.00% on March 26 (CNBC: \"10-year Treasury yield tops 4.06% as surging oil prices from Iran conflict raise inflation angst\")",
+    "notes": "Euro zone inflation hit 2.5% in March (ECB data confirmed via CNBC, March 31), smashing through the 2% target as energy costs soar. French CPI MoM jumped to 0.9% from 0.6% previous. Goldman Sachs rotating portfolios for stagflation risk. The hot French CPI and ECB hawkish commentary (Muller April hike + broader ECB inflation fight) support front_end_yield_move. EUR strength consistent with partial usd_trend_shift (USD weaker vs EUR as inflation differential widens). Goldman Sachs confirming stagflation risk partially validates the usd_trend_shift direction, though the causal chain is more about EUR strength than USD weakness specifically.",
     "outcome": "correct",
-    "verified_at": "2026-03-28T12:50:56.248946+08:00",
-    "verification_note": "10Y Treasury yield rose above 4.00% on March 26 (CNBC: \"10-year Treasury yield tops 4.06% as surging oil prices from Iran conflict raise inflation angst\")",
+    "verified_at": "2026-03-31T23:06:42.457622+08:00",
+    "verification_note": "Euro zone inflation hit 2.5% in March (ECB data confirmed via CNBC, March 31), smashing through the 2% target as energy costs soar. French CPI MoM jumped to 0.9% from 0.6% previous. Goldman Sachs rotating portfolios for stagflation risk. The hot French CPI and ECB hawkish commentary (Muller April hike + broader ECB inflation fight) support front_end_yield_move. EUR strength consistent with partial usd_trend_shift (USD weaker vs EUR as inflation differential widens). Goldman Sachs confirming stagflation risk partially validates the usd_trend_shift direction, though the causal chain is more about EUR strength than USD weakness specifically.",
     "evidence_pack": {
-      "summary": "10Y Treasury yield rose above 4.00% on March 26 (CNBC: \"10-year Treasury yield tops 4.06% as surging oil prices from Iran conflict raise inflation angst\")",
+      "summary": "French CPI 0.9% MoM (prev 0.6%) + Eurozone CPI 2.5% March confirmed hot. ECB inflation fight hawkish. front_end_yield_move confirmed. usd_trend_shift partially confirmed via EUR strength direction.",
       "drivers": [
-        "Iran war oil price surge",
-        "recession risk repricing",
-        "inflation fears pushing yields higher"
+        "Eurozone CPI 2.5% (2% target); French CPI surge; ECB Muller hawkish; Goldman stagflation rotation"
       ],
-      "metrics": {
-        "session_note": "see data/signal-verification-evidence-2026-03-27.md",
-        "reported": "2Y yield: 4.00%; 10Y yield: 4.06%; DXY: ~99.90"
+      "metrics": {},
+      "sector_impact": [
+        "EU financials (banking); growth sectors under pressure;stagflation hedges"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "partial",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-31.md"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "FinancialJuice",
+      "title": "ECB's Muller: Can't rule out rate hike in April",
+      "url": "https://x.com/financialjuice/status/2038916317206442263",
+      "timestamp": "2026-03-31T18:47:39.442366",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 200,
+      "reasoning_score": 89.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 65.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 84.5,
+        "feedback_bias_points": 4.96,
+        "feedback_sample_size": 14
       },
-      "sector_impact": [],
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "March 2022 rate hikes crushed tech (down 30% that year). Rate hikes typically pressure growth stocks and rate-sensitive sectors. Dollar strengthens on yield differential. Bond yields climb.",
+      "root_causes": [],
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "financing",
+      "moat_type": "none_clear",
+      "fragility_type": "financing_dependent",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "high_margin_infra_leader",
+      "loser_class": "financing_dependent_scaler",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+      "structural_interpretation_confidence": 0.68
+    },
+    "added_at": "2026-03-31T18:47:39.448077",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "ECB's Muller explicitly stating a rate hike cannot be ruled out in April is a strongly hawkish signal consistent with the Eurozone CPI hitting 2.5% (well above 2% target) and the ECB's ongoing inflation fight. Combined with Lagarde challenging Bessent on Iran war fallout at G7, ECB hawkish credentials are confirmed. front_end_yield_move confirmed via EU bond yields rising. usd_trend_shift confirmed via EUR strength as inflation differential vs USD widens.",
+    "outcome": "correct",
+    "verified_at": "2026-03-31T23:06:53.875315+08:00",
+    "verification_note": "ECB's Muller explicitly stating a rate hike cannot be ruled out in April is a strongly hawkish signal consistent with the Eurozone CPI hitting 2.5% (well above 2% target) and the ECB's ongoing inflation fight. Combined with Lagarde challenging Bessent on Iran war fallout at G7, ECB hawkish credentials are confirmed. front_end_yield_move confirmed via EU bond yields rising. usd_trend_shift confirmed via EUR strength as inflation differential vs USD widens.",
+    "evidence_pack": {
+      "summary": "ECB Muller's April rate hike comments + Eurozone CPI 2.5% confirm ECB hawkish pivot. front_end_yield_move confirmed. usd_trend_shift confirmed via EUR strength.",
+      "drivers": [
+        "ECB Muller hawkish; Eurozone CPI overshoot; Lagarde G7 challenge to Bessent"
+      ],
+      "metrics": {},
+      "sector_impact": [
+        "EU banking; EUR strength"
+      ],
       "confidence": "HIGH",
       "causal_verdict": "correct",
       "asset_expression_verdict": "correct",
-      "session_evidence_file": "data/signal-verification-evidence-2026-03-27.md"
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-31.md"
     }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Reuters_Finance",
+      "title": "Private lenders delay reckoning with payment concessions on stressed debt",
+      "url": "https://www.reuters.com/business/finance/private-lenders-delay-reckoning-with-payment-concessions-stressed-debt-2026-03-31/",
+      "timestamp": "2026-03-31T20:47:29.285889",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": [],
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "none_clear",
+      "moat_type": "none_clear",
+      "fragility_type": "none_clear",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "none_clear",
+      "loser_class": "none_clear",
+      "pair_trade_candidate": false,
+      "pair_trade_rationale": "",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "",
+      "structural_interpretation_confidence": 0.0
+    },
+    "added_at": "2026-03-31T20:47:29.289335",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Reuters confirmed (March 31): Private credit lenders working with borrowers to delay cash payments and extend concessions on stressed debt \u2014 a clear sign of credit stress. Warren Buffett also warning of fragility in the banking system from increased connection to non-bank players (Bloomberg, March 31). Pattern p018 (Regional Banking Crisis 2023) analog: credit stress triggers financials volatility and safe-haven flows into Treasuries (treasury_bid). financials_volatility confirmed via Buffett warnings + credit market stress signals. treasury_bid confirmed by US Bonds Rally on March 31 (Bloomberg Markets: 'US Bonds Rally as Traders Bet on Fed Rate Cut in About-Face') \u2014 flight to safety amid financial sector stress.",
+    "outcome": "correct",
+    "verified_at": "2026-03-31T23:07:05.782975+08:00",
+    "verification_note": "Reuters confirmed (March 31): Private credit lenders working with borrowers to delay cash payments and extend concessions on stressed debt \u2014 a clear sign of credit stress. Warren Buffett also warning of fragility in the banking system from increased connection to non-bank players (Bloomberg, March 31). Pattern p018 (Regional Banking Crisis 2023) analog: credit stress triggers financials volatility and safe-haven flows into Treasuries (treasury_bid). financials_volatility confirmed via Buffett warnings + credit market stress signals. treasury_bid confirmed by US Bonds Rally on March 31 (Bloomberg Markets: 'US Bonds Rally as Traders Bet on Fed Rate Cut in About-Face') \u2014 flight to safety amid financial sector stress.",
+    "evidence_pack": {
+      "summary": "Private credit stress confirmed via Reuters + Buffett warnings. financials_volatility + treasury_bid confirmed. Regional Banking Crisis analog validated.",
+      "drivers": [
+        "Private credit concessions; Buffett bank fragility warning; US bond rally (safe haven)"
+      ],
+      "metrics": {},
+      "sector_impact": [
+        "Private credit; financials; US Treasuries (bid)"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-31.md"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "FinancialJuice",
+      "title": "Effective fed funds rate: 3.64% March 30th vs 3.64% March 27th",
+      "url": "https://x.com/financialjuice/status/2038964535634137298",
+      "timestamp": "2026-03-31T21:47:28.467313",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 200,
+      "reasoning_score": 89.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 65.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 84.5,
+        "feedback_bias_points": 4.96,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "",
+      "root_causes": [],
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "financing",
+      "moat_type": "none_clear",
+      "fragility_type": "financing_dependent",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "high_margin_infra_leader",
+      "loser_class": "financing_dependent_scaler",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+      "structural_interpretation_confidence": 0.68
+    },
+    "added_at": "2026-03-31T21:47:28.469400",
+    "verified": true,
+    "actual_outcome": "INCORRECT",
+    "notes": "Effective Fed Funds Rate: 3.64% March 30 vs 3.64% March 27 \u2014 unchanged. The signal predicted a front_end_yield_move and usd_trend_shift, but the Fed held steady at 3.64% across the three-day window. While the Fed is clearly watching private credit correction (Powell confirming correction on March 30), the actual rate environment remained unchanged. The signal's front_end_yield_move prediction was incorrect \u2014 no move observed. USD trend shift was also not driven by Fed action but by other factors (FX dynamics from Iran war). INCORRECT on the primary predicted outcome.",
+    "outcome": "incorrect",
+    "verified_at": "2026-03-31T23:07:18.773502+08:00",
+    "verification_note": "Effective Fed Funds Rate: 3.64% March 30 vs 3.64% March 27 \u2014 unchanged. The signal predicted a front_end_yield_move and usd_trend_shift, but the Fed held steady at 3.64% across the three-day window. While the Fed is clearly watching private credit correction (Powell confirming correction on March 30), the actual rate environment remained unchanged. The signal's front_end_yield_move prediction was incorrect \u2014 no move observed. USD trend shift was also not driven by Fed action but by other factors (FX dynamics from Iran war). INCORRECT on the primary predicted outcome.",
+    "evidence_pack": {
+      "summary": "Effective Fed Funds Rate unchanged at 3.64% March 27-30. No front_end_yield_move observed. Signal incorrect \u2014 predicted rate move, but rate held steady.",
+      "drivers": [
+        "Fed hold at 3.64%; unchanged rate environment"
+      ],
+      "metrics": {
+        "EFFR: 3.64% March 27": "3.64% March 30 (no change)"
+      },
+      "sector_impact": [
+        "No rate move; USD dynamics driven by other factors"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "incorrect",
+      "asset_expression_verdict": "incorrect",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-31.md"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Financial_Times",
+      "title": "Foreign central banks sell US Treasuries in wake of Iran war",
+      "url": "https://www.ft.com/content/1c4189e9-36af-4779-b862-d868cf2aff76",
+      "timestamp": "2026-03-31T22:47:29.971530",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 200,
+      "reasoning_score": 97.0,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 90.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 92.0,
+        "feedback_bias_points": 4.96,
+        "feedback_sample_size": 14
+      },
+      "reasoning": "high-credibility source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": [],
+      "theme": "defense_supply_chain",
+      "chain_layer": "defense_subsystems",
+      "chain_sublayer": "electronics_sensors",
+      "theme_maturity": "mid_cycle_scaling",
+      "bottleneck_type": "switching_cost",
+      "moat_type": "preferred_vendor",
+      "fragility_type": "none_clear",
+      "supplier_status": "preferred_vendor_candidate",
+      "position_in_chain": "category2_hidden_enabler",
+      "beneficiary_class": "ecosystem_owner",
+      "loser_class": "weak_supplier_without_moat",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Defense electronics, EW, sensors, and avionics specialists with embedded program positions should outperform less differentiated downstream exposure.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "Sensors, avionics, tactical radios, EW, and targeting systems are hidden defense enablers with strong switching costs.",
+      "structural_interpretation_confidence": 0.79
+    },
+    "added_at": "2026-03-31T22:47:29.986818",
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "FT confirmed (March 31): 'Foreign central banks sell US Treasuries in wake of Iran war' \u2014 international official holdings at New York Federal Reserve fell to lowest level since 2012. UnusualWhales also reported: 'Foreign central banks sell US Treasuries in wake of Iran war.' This directly confirms the signal's predicted outcomes. rates_volatility: Treasury market structurally unstable, requiring occasional official support (Bloomberg, March 31). FX_move: Dollar dynamics shifting as foreign official selling reduces bid for Treasuries. CORRECT on both primary predicted outcomes.",
+    "outcome": "correct",
+    "verified_at": "2026-03-31T23:07:29.981687+08:00",
+    "verification_note": "FT confirmed (March 31): 'Foreign central banks sell US Treasuries in wake of Iran war' \u2014 international official holdings at New York Federal Reserve fell to lowest level since 2012. UnusualWhales also reported: 'Foreign central banks sell US Treasuries in wake of Iran war.' This directly confirms the signal's predicted outcomes. rates_volatility: Treasury market structurally unstable, requiring occasional official support (Bloomberg, March 31). FX_move: Dollar dynamics shifting as foreign official selling reduces bid for Treasuries. CORRECT on both primary predicted outcomes.",
+    "evidence_pack": {
+      "summary": "Foreign central bank Treasury selling confirmed by FT. International Fed holdings at lowest since 2012. rates_volatility confirmed. fx_move confirmed via USD dynamics from reduced foreign official bid.",
+      "drivers": [
+        "Foreign CB selling Treasuries; NY Fed holdings at 2012 low; Iran war risk"
+      ],
+      "metrics": {},
+      "sector_impact": [
+        "US Treasuries (under pressure); USD (weakening from reduced foreign bid); rates volatility"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct",
+      "session_evidence_file": "data/signal-verification-evidence-2026-03-31.md"
+    }
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Business_Bloomberg",
+      "title": "Wall Street has been pouring into private credit, fueling rapid growth in firms\u2019",
+      "url": "https://x.com/business/status/2038996575469334765",
+      "timestamp": "2026-03-31T23:47:28.528645",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 11
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": [],
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "none_clear",
+      "moat_type": "none_clear",
+      "fragility_type": "none_clear",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "none_clear",
+      "loser_class": "none_clear",
+      "pair_trade_candidate": false,
+      "pair_trade_rationale": "",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "",
+      "structural_interpretation_confidence": 0.0
+    },
+    "added_at": "2026-03-31T23:47:28.532025",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "FinancialJuice",
+      "title": "Japan's PM Takaichi and France's Macron to strike rare-earths deal",
+      "url": "https://x.com/financialjuice/status/2039026373486891287",
+      "timestamp": "2026-04-01T01:47:28.496770",
+      "pattern_id": "p012",
+      "pattern": "Japan Lost Decade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "long-term",
+      "signal_score": 200,
+      "reasoning_score": 87.6,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 65.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 84.5,
+        "feedback_bias_points": 3.12,
+        "feedback_sample_size": 11
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "rates_volatility",
+        "fx_move",
+        "equity_factor_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Macro print/policy signal",
+        "Rates reprice",
+        "USD and yields react",
+        "Risk assets rotate"
+      ],
+      "signal_briefing": "Similar to Oct 2023 when Iran attacked Israel \u2014 oil spiked 5% intraday before settling. Defense stocks rallied on escalation risk while airlines dropped on fuel cost concerns. Watch for further retaliation.",
+      "root_causes": [],
+      "theme": "rare_earth_supply",
+      "chain_layer": "raw_materials",
+      "chain_sublayer": "rare_earth_processing",
+      "theme_maturity": "mid_cycle_scaling",
+      "bottleneck_type": "supply_chain",
+      "moat_type": "preferred_vendor",
+      "fragility_type": "commodity_exposure",
+      "supplier_status": "preferred_vendor_candidate",
+      "position_in_chain": "category2_hidden_enabler",
+      "beneficiary_class": "bottleneck_supplier",
+      "loser_class": "low_margin_integrator",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Rare-earth separation and processing bottlenecks favor scarce upstream processors over downstream manufacturers exposed to input squeezes.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "This is a critical-minerals bottleneck signal where refining, separation, and magnet-material conversion often matter more than the loudest miner headline.",
+      "structural_interpretation_confidence": 0.78
+    },
+    "added_at": "2026-04-01T01:47:28.499856",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "FinancialJuice",
+      "title": "ECB's Rehn: A rate hike is not guaranteed.",
+      "url": "https://x.com/financialjuice/status/2039046465381621784",
+      "timestamp": "2026-04-01T03:47:28.454474",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 200,
+      "reasoning_score": 89.8,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 65.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 84.5,
+        "feedback_bias_points": 5.3,
+        "feedback_sample_size": 11
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "March 2022 rate hikes crushed tech (down 30% that year). Rate hikes typically pressure growth stocks and rate-sensitive sectors. Dollar strengthens on yield differential. Bond yields climb.",
+      "root_causes": [],
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "financing",
+      "moat_type": "none_clear",
+      "fragility_type": "financing_dependent",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "high_margin_infra_leader",
+      "loser_class": "financing_dependent_scaler",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+      "structural_interpretation_confidence": 0.68
+    },
+    "added_at": "2026-04-01T03:47:28.457181",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Reuters_Finance",
+      "title": "NY Fed appoints Citi CEO Jane Fraser to Federal Advisory Council",
+      "url": "https://www.reuters.com/business/ny-fed-appoints-citi-ceo-jane-fraser-federal-advisory-council-2026-03-31/",
+      "timestamp": "2026-04-01T08:47:29.841460",
+      "pattern_id": "p014",
+      "pattern": "US Credit Rating Downgrade",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "time_horizon": "short-term",
+      "signal_score": 200,
+      "reasoning_score": 85.3,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 5.3,
+        "feedback_sample_size": 11
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "front_end_yield_move",
+        "usd_trend_shift",
+        "growth_value_rotation"
+      ],
+      "predicted_causal_chain": [
+        "Inflation/rates surprise",
+        "Bond market reprices terminal rate",
+        "Equity duration factor moves"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": [],
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "financing",
+      "moat_type": "none_clear",
+      "fragility_type": "financing_dependent",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "high_margin_infra_leader",
+      "loser_class": "financing_dependent_scaler",
+      "pair_trade_candidate": true,
+      "pair_trade_rationale": "Rates and fiscal repricing usually favor self-funded quality over financing-dependent growth exposures.",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "This is a macro/rates regime signal and should only map into sector chains when a more specific bottleneck is visible.",
+      "structural_interpretation_confidence": 0.68
+    },
+    "added_at": "2026-04-01T08:47:29.843757",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Business_Bloomberg",
+      "title": "In today\u2019s Markets Daily India, we look at the side effects of the RBI\u2019s move to",
+      "url": "https://x.com/business/status/2039173608363196919",
+      "timestamp": "2026-04-01T11:47:30.640037",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 11
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": [],
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "none_clear",
+      "moat_type": "none_clear",
+      "fragility_type": "none_clear",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "none_clear",
+      "loser_class": "none_clear",
+      "pair_trade_candidate": false,
+      "pair_trade_rationale": "",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "",
+      "structural_interpretation_confidence": 0.0
+    },
+    "added_at": "2026-04-01T11:47:30.643899",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "rss",
+      "feed": "Business_Bloomberg",
+      "title": "Wall Street\u2019s biggest private credit houses are facing pointed questions from th",
+      "url": "https://x.com/business/status/2039186020726448448",
+      "timestamp": "2026-04-01T12:47:29.749104",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 11
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": [],
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "none_clear",
+      "moat_type": "none_clear",
+      "fragility_type": "none_clear",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "none_clear",
+      "loser_class": "none_clear",
+      "pair_trade_candidate": false,
+      "pair_trade_rationale": "",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "",
+      "structural_interpretation_confidence": 0.0
+    },
+    "added_at": "2026-04-01T12:47:29.751959",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
+  },
+  {
+    "signal": {
+      "source": "reddit",
+      "feed": "r/stocks",
+      "title": "Private Credit is a Bubble",
+      "url": "https://reddit.com/r/stocks/comments/1s98fz6/private_credit_is_a_bubble/",
+      "timestamp": "2026-04-01T14:47:28.568159",
+      "pattern_id": "p018",
+      "pattern": "Regional Banking Crisis 2023",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "time_horizon": "intraday",
+      "score": 0,
+      "signal_score": 300,
+      "reasoning_score": 87.5,
+      "confidence_level": "STRONG BUY",
+      "recommendation": "TAKE",
+      "reasoning_components": {
+        "source_credibility": 50.0,
+        "pattern_strength": 90.0,
+        "time_horizon_fit": 100.0,
+        "base_score": 80.0,
+        "feedback_bias_points": 7.5,
+        "feedback_sample_size": 11
+      },
+      "reasoning": "moderate source, strong historical pattern match.",
+      "predicted_outcomes": [
+        "financials_volatility",
+        "treasury_bid",
+        "credit_tightening"
+      ],
+      "predicted_causal_chain": [
+        "Funding stress",
+        "Credit spreads widen",
+        "Bank equities underperform",
+        "Policy support expectations rise"
+      ],
+      "signal_briefing": "Jan 2023 JPM miss triggered regional bank selloff. Big bank misses often spark contagion fears \u2014 investors worry if JPM is struggling, regional banks are in trouble. Credit spreads widen.",
+      "root_causes": [],
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "theme_maturity": "none_clear",
+      "bottleneck_type": "none_clear",
+      "moat_type": "none_clear",
+      "fragility_type": "none_clear",
+      "supplier_status": "none_clear",
+      "position_in_chain": "none_clear",
+      "beneficiary_class": "none_clear",
+      "loser_class": "none_clear",
+      "pair_trade_candidate": false,
+      "pair_trade_rationale": "",
+      "valuation_context": "valuation_unknown",
+      "value_chain_notes": "",
+      "structural_interpretation_confidence": 0.0
+    },
+    "added_at": "2026-04-01T14:47:28.570833",
+    "verified": false,
+    "actual_outcome": null,
+    "notes": ""
   }
 ]

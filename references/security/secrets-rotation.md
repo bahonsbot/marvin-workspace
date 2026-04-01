@@ -29,14 +29,14 @@ This policy applies to all secrets including:
 
 ## Automated Checking
 
-Use the provided `scripts/check-token-age.sh` script to monitor token age:
+Use the provided `scripts/check_token_age.py` script to monitor token age:
 
 ```bash
 # Check tokens older than default (30 days)
-./scripts/check-token-age.sh
+python3 scripts/check_token_age.py
 
 # Check tokens older than 15 days
-./scripts/check-token-age.sh 15
+python3 scripts/check_token_age.py 15
 ```
 
 The script reads token metadata from `config/token-manifest.json` (or environment-configured path) and flags any tokens exceeding the specified age threshold.
