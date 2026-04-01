@@ -32,6 +32,9 @@
 ## In Progress
 
 
+## Needs Input
+- [Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation
+
 ## Open Backlog
 
 - [Philippe] 📝 Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability — missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority
