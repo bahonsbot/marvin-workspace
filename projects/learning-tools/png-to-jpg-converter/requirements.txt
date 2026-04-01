@@ -1,0 +1,5 @@
+PySimpleGUI>=4.60
+Pillow>=10.0
+# tkinterdnd2 is optional but recommended for smoother macOS drag-and-drop:
+# pip install tkinterdnd2
+# Drag-and-drop works even without it via Tk's built-in <<DragFileList>> virtual event.
