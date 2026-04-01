@@ -104,3 +104,4 @@ Use this order:
 - `AGENTS.md` — governance lanes and approval rules
 - `AUTONOMY.md` — proactive execution policy
 - `docs/runbooks/deterministic-scheduler-host-service.md` — deterministic scheduler runtime details
+- `docs/runbooks/webhook-receiver-host-service.md` — webhook receiver host service runtime details

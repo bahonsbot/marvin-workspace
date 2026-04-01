@@ -2,22 +2,27 @@
   "board": {
     "todo": [
       {
-        "id": "7cc0c4c1",
+        "id": "2ffa4aae",
+        "text": "[Philippe] 📝 Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability — missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
+        "column": "todo"
+      },
+      {
+        "id": "c55641a6",
         "text": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
         "column": "todo"
       },
       {
-        "id": "64526ed4",
+        "id": "f90bdf5c",
         "text": "Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs",
         "column": "todo"
       },
       {
-        "id": "c0ca2414",
+        "id": "1c940873",
         "text": "Add clickable artefact-first rendering for reviewed autonomous task results",
         "column": "todo"
       },
       {
-        "id": "7f649866",
+        "id": "be6c5e63",
         "text": "[Trading] Fix identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
         "column": "todo"
       }
@@ -25,41 +30,24 @@
     "inprogress": [],
     "done": [
       {
-        "id": "24fa9c1b",
-        "text": "(2026-03-24) [Career] \ud83d\udcdd Draft: 3 Instagram content angles tied to After Effects motion design project \u2192 projects/portfolio/content-plan-ae-motion-design.md",
-        "column": "done"
+        "id": "b999c42d",
+        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "done",
+        "outputPath": "projects/automation/fix-identify-one-repetitive-workspace-workflow-that-wastes-time-excludin.md"
       },
       {
-        "id": "5498edbf",
-        "text": "(2026-03-24) [Other] \ud83d\udd27 Fix: OpenClaw helper utility generation improved; daily-task-generator now produces concrete script deliverables",
-        "column": "done"
+        "id": "2336a7e5",
+        "text": "[Other] 🔧 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "done",
+        "outputPath": "projects/automation/fix-build-one-small-automation-utility-that-addresses-one-specific-docum.md"
       },
       {
-        "id": "90367ec6",
-        "text": "(2026-03-24) [Career] \ud83d\udd28 Build: daily creative challenge generator \u2192 projects/creative-challenges/index.html + README.md",
-        "column": "done"
-      },
-      {
-        "id": "0f7d3b41",
-        "text": "(2026-03-24) [Career] \ud83d\ude80 Launch: portfolio case-study draft \u2192 projects/portfolio/case-studies/motion-design-loop.md",
-        "column": "done"
-      },
-      {
-        "id": "44306735",
-        "text": "(2026-03-24) [Trading] \ud83d\udd27 Fix: safe improvement in trading-bot workspace \u2192 bot-support-spec-health-snapshot-reporter-2026-03-16.md",
-        "column": "done"
-      },
-      {
-        "id": "32a9a711",
-        "text": "(2026-03-24) [Personal] \ud83d\udcda Learn: Japanese study pack (greetings lesson) \u2192 projects/language/lesson-01-greetings.md",
-        "column": "done"
-      },
-      {
-        "id": "fca3bc26",
-        "text": "Create tasks-page current-state doc | \u2705 Completed: { \"runId\": \"50d85bce-073a-4eb7-9ad9-da91a8055069\", \"status\": \"ok\", \"summary\": \"completed\", \"result\": { \"payloads\": [ { \"text\": \"Now I have a thorough picture. Let me write the doc.\", \"mediaUrl\": null }, { \"text\": \"**C\u2026",
-        "column": "done"
+        "id": "3215a592",
+        "text": "🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker",
+        "column": "done",
+        "outputPath": "projects/learning-tools/python-daily-loop.html"
       }
     ]
   },
-  "updatedAt": "2026-04-01T10:00:47.000Z"
+  "updatedAt": "2026-04-01T02:33:45.561Z"
 }
