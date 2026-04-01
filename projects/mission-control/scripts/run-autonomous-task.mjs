@@ -243,17 +243,39 @@ async function restoreManagedFiles(snapshot) {
   return warnings;
 }
 
+function parseJsonString(value) {
+  const trimmed = String(value || '').trim();
+  if (!trimmed || !/^[\[{]/.test(trimmed)) return null;
+  try {
+    return JSON.parse(trimmed);
+  } catch {
+    return null;
+  }
+}
+
 function cleanCandidateText(value) {
   return String(value || '')
     .replace(/```[\s\S]*?```/g, ' ')
     .replace(/^[#>*`-]+/gm, ' ')
+    .replace(/^"?(summary|result|proof|rawOutput)"?\s*:\s*/gim, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
+function isLikelyMetadataText(value) {
+  const raw = String(value || '').trim();
+  const text = cleanCandidateText(raw);
+  if (!text) return true;
+  if (/^(completed|ok|success|done|null)$/i.test(text)) return true;
+  if (/^[\[{][\s\S]*[\]}]$/.test(raw)) return true;
+  if (/"runId"\s*:/.test(raw) && /"status"\s*:/.test(raw) && /"result"\s*:/.test(raw)) return true;
+  if (/systemPromptReport|injectedWorkspaceFiles|bootstrapTruncation|agentMeta|promptTokens|warningSignaturesSeen|stopReason/.test(raw)) return true;
+  return false;
+}
+
 function scoreSummaryCandidate(value) {
   const text = cleanCandidateText(value);
-  if (!text) return Number.NEGATIVE_INFINITY;
+  if (!text || isLikelyMetadataText(value)) return Number.NEGATIVE_INFINITY;
 
   let score = Math.min(text.length, 220) / 40;
   if (text.length < 12) score -= 2;
@@ -261,6 +283,7 @@ function scoreSummaryCandidate(value) {
   if (/\b(completed|implemented|fixed|updated|created|added|addressed|verified|artifact)\b/i.test(text)) score += 2;
   if (/^(warning|error|failed|failure|traceback|exception)\b/i.test(text)) score -= 5;
   if (/\/data\/\.openclaw\/workspace\//.test(text) && text.length < 96) score -= 1;
+  if (/⚠️|✍️|<parameter name=/u.test(text)) score -= 8;
   return score;
 }
 
@@ -290,28 +313,48 @@ function bestSummaryFromTextBlock(value) {
 
 function collectSummaryCandidates(parsed, stdout) {
   const candidates = [];
-  const pushCandidate = (value) => {
-    if (typeof value !== 'string') return;
-    const summary = bestSummaryFromTextBlock(value);
-    if (summary) candidates.push(summary);
+  const visit = (value) => {
+    if (!value) return;
+    if (typeof value === 'string') {
+      const nested = parseJsonString(value);
+      if (nested) {
+        visit(nested);
+        return;
+      }
+      const summary = bestSummaryFromTextBlock(value);
+      if (summary && !isLikelyMetadataText(summary)) candidates.push(summary);
+      return;
+    }
+    if (Array.isArray(value)) {
+      for (const entry of value) visit(entry);
+      return;
+    }
+    if (typeof value !== 'object') return;
+
+    visit(value.summary);
+    visit(value.text);
+    visit(value.message);
+    visit(value.completion);
+    visit(value.content);
+    visit(value.response?.text);
+    visit(value.result?.summary);
+    visit(value.result?.text);
+    visit(value.result?.message);
+    if (Array.isArray(value.result?.payloads)) {
+      for (const payload of value.result.payloads) visit(payload?.text);
+    }
+    if (Array.isArray(value.payloads)) {
+      for (const payload of value.payloads) visit(payload?.text);
+    }
   };
 
-  pushCandidate(stdout);
-  pushCandidate(parsed?.summary);
-  pushCandidate(parsed?.text);
-  pushCandidate(parsed?.response?.text);
-  pushCandidate(parsed?.result?.summary);
-
-  if (Array.isArray(parsed?.result?.payloads)) {
-    for (const payload of parsed.result.payloads) {
-      pushCandidate(payload?.text);
-    }
-  }
+  visit(stdout);
+  visit(parsed);
 
   return candidates;
 }
 
-function summarizeExecution(parsed, stdout, warnings) {
+function summarizeExecution(parsed, stdout, warnings, artifacts = []) {
   const candidates = collectSummaryCandidates(parsed, stdout);
 
   let best = undefined;
@@ -324,7 +367,14 @@ function summarizeExecution(parsed, stdout, warnings) {
     }
   }
 
-  const baseSummary = safeSummary(best || 'Task completed.');
+  const fallbackArtifact = Array.isArray(artifacts)
+    ? artifacts.find((artifact) => artifact?.path && !/^(AGENTS\.md|SOUL\.md|TOOLS\.md|USER\.md|MEMORY\.md|HEARTBEAT\.md)$/i.test(String(artifact.path)))
+    : null;
+  const fallbackSummary = fallbackArtifact?.path
+    ? `Created output: ${fallbackArtifact.path}`
+    : 'Task completed and moved to Review.';
+
+  const baseSummary = safeSummary(best || fallbackSummary);
   return warnings.length > 0
     ? safeSummary(`${baseSummary} Managed task-state edits were ignored.`)
     : baseSummary;
@@ -476,7 +526,7 @@ try {
   restoreWarnings = await restoreManagedFiles(managedSnapshot);
 
   const artifacts = await collectArtifacts(parsed, stdout);
-  const summary = summarizeExecution(parsed, stdout, restoreWarnings);
+  const summary = summarizeExecution(parsed, stdout, restoreWarnings, artifacts);
   const sessionKey = parsed?.sessionKey ?? parsed?.session?.key ?? sessionId;
   const childSessionKey = parsed?.childSessionKey ?? parsed?.session?.childSessionKey;
   const runId = parsed?.runId ?? parsed?.run?.id;

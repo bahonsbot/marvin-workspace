@@ -3,6 +3,7 @@ import type { TaskBoardSummary, TaskSyncStatus } from '@/lib/types/contracts';
 import {
   normalizeAutonomousRunResult,
   selectPreferredArtifactPath,
+  summarizeAutonomousResult,
 } from '@/lib/autonomous-output';
 import {
   loadStructuredTasks,
@@ -194,11 +195,15 @@ async function taskToBoardTask(task: MCAutoTask): Promise<BoardTask> {
   else column = 'done';
 
   const runResult = await summarizeRunResult(task);
+  const normalizedRunSummary = summarizeAutonomousResult(task.run?.summary);
+  const completionFallback = runResult.artifactPath
+    ? `Created output: ${runResult.artifactPath}`
+    : 'Task completed and moved to Review.';
   const displaySummary = task.run?.status === 'rejected'
     ? 'Rejected. Waiting for Execute.'
     : task.run?.status === 'error'
-      ? task.needsInput?.note ?? task.run?.summary ?? task.run?.error
-      : runResult.summary ?? task.run?.summary;
+      ? task.needsInput?.note ?? normalizedRunSummary ?? task.run?.error
+      : runResult.summary ?? normalizedRunSummary ?? (task.run?.status === 'done' ? completionFallback : undefined);
   const detail: BoardTask['detail'] = {
     summary: task.title,
     ...(task.description ? { why: task.description } : {}),

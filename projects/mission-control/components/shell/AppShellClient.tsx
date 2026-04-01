@@ -7,6 +7,15 @@ import { useMissionControlRuntime } from '@/components/chat/MissionControlRuntim
 import { Sidebar } from './Sidebar';
 import { TopTabBar } from './TopTabBar';
 
+function toastSummary(event: { summary?: string; artifactPath?: string; type: string }) {
+  const raw = String(event.summary || '').trim();
+  if (raw && !/^[\[{]/.test(raw) && !/"runId"\s*:/.test(raw) && !/systemPromptReport|injectedWorkspaceFiles/.test(raw)) {
+    return raw;
+  }
+  if (event.artifactPath) return `Created output: ${event.artifactPath}`;
+  return event.type === 'task.moved_to_review' ? 'Task completed and moved to Review.' : undefined;
+}
+
 function ToastRail() {
   const router = useRouter();
   const { visibleToasts, dismissToast } = useMissionControlRuntime();
@@ -39,6 +48,8 @@ function ToastRail() {
           event.type === 'task.moved_to_review'
             ? `Autonomous task finished and moved to Review: ${event.title}`
             : `Autonomous task needs input: ${event.title}`;
+
+        const summary = toastSummary(event);
 
         return (
           <button
@@ -101,8 +112,8 @@ function ToastRail() {
                 ×
               </span>
             </div>
-            {event.summary ? (
-              <div style={{ fontSize: 12, lineHeight: 1.45, color: 'var(--text-muted)' }}>{event.summary}</div>
+            {summary ? (
+              <div style={{ fontSize: 12, lineHeight: 1.45, color: 'var(--text-muted)' }}>{summary}</div>
             ) : null}
           </button>
         );
