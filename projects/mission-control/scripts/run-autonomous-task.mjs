@@ -14,6 +14,14 @@ function safeSummary(text) {
   const clean = String(text || '').trim().replace(/\s+/g, ' ');
   return clean.length > 220 ? `${clean.slice(0, 217).trimEnd()}…` : clean;
 }
+function isMeaningfulRetryFeedback(entry) {
+  const note = String(entry?.note || '').trim();
+  if (!note) return false;
+  if (entry?.by !== 'operator') return false;
+  if (note === 'Rejected without note.') return false;
+  if (/^Execution failed:/i.test(note)) return false;
+  return true;
+}
 async function loadStore() {
   const raw = await readFile(storePath, 'utf8');
   return JSON.parse(raw);
@@ -106,9 +114,10 @@ if (!taskId) {
 const task = await updateTask(taskId, (current) => current);
 const sessionId = `mc-auto-${task.id}-${Date.now()}`;
 const thinking = task.priority === 'critical' || task.priority === 'high' ? 'medium' : 'low';
-const latestFeedback = Array.isArray(task.feedback) && task.feedback.length > 0
-  ? task.feedback[task.feedback.length - 1]?.note
+const latestFeedbackEntry = Array.isArray(task.feedback)
+  ? [...task.feedback].reverse().find(isMeaningfulRetryFeedback) ?? null
   : null;
+const latestFeedback = latestFeedbackEntry?.note ?? null;
 const isRetry = Boolean(task.status === 'todo' && latestFeedback);
 const message = [
   `Autonomous task: ${task.title}`,
@@ -177,7 +186,7 @@ try {
     ...current,
     status: 'todo',
     linkedAutonomyRef: current.linkedAutonomyRef
-      ? { ...current.linkedAutonomyRef, section: 'open-backlog' }
+      ? { ...current.linkedAutonomyRef, section: 'needs-input' }
       : current.linkedAutonomyRef,
     feedback: [
       ...(Array.isArray(current.feedback) ? current.feedback : []),
@@ -193,7 +202,7 @@ try {
     },
   }));
   if (updated.linkedAutonomyRef?.kind === 'autonomous-md') {
-    await moveLinkedLegacyTask(updated.linkedAutonomyRef, 'open-backlog');
+    await moveLinkedLegacyTask(updated.linkedAutonomyRef, 'needs-input');
   }
   process.exit(1);
 }
