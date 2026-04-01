@@ -6,6 +6,7 @@ import {
   type MCAutoTaskAgentTarget,
   type MCAutoTaskPriority,
 } from '@/lib/autonomous';
+import { normalizeAutonomousTaskModel } from '@/lib/task-models';
 
 function isPriority(value: unknown): value is MCAutoTaskPriority {
   return value === 'critical' || value === 'high' || value === 'normal' || value === 'low';
@@ -36,6 +37,7 @@ export async function POST(request: NextRequest) {
     const description = typeof body?.description === 'string' ? body.description.trim() : undefined;
     const priority = isPriority(body?.priority) ? body.priority : 'normal';
     const agentTarget = isAgentTarget(body?.agentTarget) ? body.agentTarget : 'marvin';
+    const model = normalizeAutonomousTaskModel(body?.model);
     const sourceSessionKey = typeof body?.sourceSessionKey === 'string' ? body.sourceSessionKey : undefined;
 
     if (!title) {
@@ -47,6 +49,7 @@ export async function POST(request: NextRequest) {
       description,
       priority,
       agentTarget,
+      model,
       sourceSessionKey,
     });
 

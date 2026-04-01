@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAutonomousTaskById, normalizeLegacyTaskText, removeAutonomousTask, rewriteLinkedLegacyTaskText, updateAutonomousTask } from '@/lib/autonomous';
+import { normalizeAutonomousTaskModel } from '@/lib/task-models';
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ taskId: string }> }) {
   try {
@@ -23,6 +24,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     const description = typeof body?.description === 'string' ? body.description.trim() : '';
     const priority = typeof body?.priority === 'string' ? body.priority : 'normal';
     const agentTarget = typeof body?.agentTarget === 'string' ? body.agentTarget : 'marvin';
+    const model = normalizeAutonomousTaskModel(body?.model);
     if (!title) {
       return NextResponse.json({ error: 'Title is required.' }, { status: 400 });
     }
@@ -30,6 +32,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     if (!existing) {
       return NextResponse.json({ error: 'Task not found.' }, { status: 404 });
     }
+    const hasModelField = Object.prototype.hasOwnProperty.call(body ?? {}, 'model');
 
     const nextLegacyText = existing.linkedAutonomyRef?.kind === 'autonomous-md'
       ? existing.linkedAutonomyRef.taskText.replace(existing.title, title)
@@ -41,6 +44,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       description: description || undefined,
       priority,
       agentTarget,
+      model: hasModelField ? model : current.model,
       linkedAutonomyRef: current.linkedAutonomyRef
         ? { ...current.linkedAutonomyRef, taskText: nextLegacyText, taskTextNormalized: normalizeLegacyTaskText(nextLegacyText) }
         : current.linkedAutonomyRef,

@@ -8,6 +8,12 @@ import {
   parseLightweightMarkdown,
   previewReviewText,
 } from '@/lib/autonomous-output';
+import {
+  AUTONOMOUS_TASK_MODEL_ALIASES,
+  AUTONOMOUS_TASK_MODEL_DEFAULT,
+  formatAutonomousTaskModel,
+  type AutonomousTaskModelAlias,
+} from '@/lib/task-models';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -27,6 +33,7 @@ type Task = {
   meta?: {
     priority?: string;
     agentTarget?: string;
+    model?: string;
     sourceType?: string;
     runStatus?: string;
     feedback?: string[];
@@ -50,6 +57,7 @@ type BoardId = 'autonomous' | 'personal' | 'projects';
 type ManualTaskColumn = 'todo' | 'inprogress' | 'done';
 type AutoPriority = 'critical' | 'high' | 'normal' | 'low';
 type AutoAgentTarget = 'marvin' | 'builder' | 'reviewer' | 'content-creator';
+type AutoModelValue = typeof AUTONOMOUS_TASK_MODEL_DEFAULT | AutonomousTaskModelAlias;
 
 type BoardMeta = {
   id: BoardId;
@@ -330,17 +338,18 @@ function TaskModal({ modal, onClose, onSave }: { modal: ModalMode; onClose: () =
   );
 }
 
-function AutonomousTaskModal({ open, mode, initialTask, onClose, onSubmit }: { open: boolean; mode: 'create' | 'edit'; initialTask?: Task | null; onClose: () => void; onSubmit: (input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget }) => Promise<void>; }) {
+function AutonomousTaskModal({ open, mode, initialTask, onClose, onSubmit }: { open: boolean; mode: 'create' | 'edit'; initialTask?: Task | null; onClose: () => void; onSubmit: (input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; model?: AutonomousTaskModelAlias | null; }) => Promise<void>; }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<AutoPriority>('normal');
   const [agentTarget, setAgentTarget] = useState<AutoAgentTarget>('marvin');
+  const [model, setModel] = useState<AutoModelValue>(AUTONOMOUS_TASK_MODEL_DEFAULT);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) {
-      setTitle(''); setDescription(''); setPriority('normal'); setAgentTarget('marvin'); setSaving(false); setError(null);
+      setTitle(''); setDescription(''); setPriority('normal'); setAgentTarget('marvin'); setModel(AUTONOMOUS_TASK_MODEL_DEFAULT); setSaving(false); setError(null);
       return;
     }
     if (mode === 'edit' && initialTask) {
@@ -348,11 +357,12 @@ function AutonomousTaskModal({ open, mode, initialTask, onClose, onSubmit }: { o
       setDescription(initialTask.detail.why ?? '');
       setPriority((initialTask.meta?.priority as AutoPriority) ?? 'normal');
       setAgentTarget((initialTask.meta?.agentTarget as AutoAgentTarget) ?? 'marvin');
+      setModel((initialTask.meta?.model as AutonomousTaskModelAlias) ?? AUTONOMOUS_TASK_MODEL_DEFAULT);
       setSaving(false);
       setError(null);
       return;
     }
-    setTitle(''); setDescription(''); setPriority('normal'); setAgentTarget('marvin'); setSaving(false); setError(null);
+    setTitle(''); setDescription(''); setPriority('normal'); setAgentTarget('marvin'); setModel(AUTONOMOUS_TASK_MODEL_DEFAULT); setSaving(false); setError(null);
   }, [open, mode, initialTask]);
 
   if (!open) return null;
@@ -361,7 +371,13 @@ function AutonomousTaskModal({ open, mode, initialTask, onClose, onSubmit }: { o
     if (!title.trim()) return;
     setSaving(true); setError(null);
     try {
-      await onSubmit({ title: title.trim(), description: description.trim() || undefined, priority, agentTarget });
+      await onSubmit({
+        title: title.trim(),
+        description: description.trim() || undefined,
+        priority,
+        agentTarget,
+        model: model === AUTONOMOUS_TASK_MODEL_DEFAULT ? null : model,
+      });
       onClose();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : `Failed to ${mode === 'edit' ? 'update' : 'create'} autonomous task.`);
@@ -383,6 +399,7 @@ function AutonomousTaskModal({ open, mode, initialTask, onClose, onSubmit }: { o
           <div style={{ display: 'grid', gap: 6 }}><label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Priority</label><select value={priority} onChange={e => setPriority(e.target.value as AutoPriority)} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none' }}><option value="critical">Critical</option><option value="high">High</option><option value="normal">Normal</option><option value="low">Low</option></select></div>
           <div style={{ display: 'grid', gap: 6 }}><label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Agent</label><select value={agentTarget} onChange={e => setAgentTarget(e.target.value as AutoAgentTarget)} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none' }}><option value="marvin">Marvin</option><option value="builder">Builder</option><option value="reviewer">Reviewer</option><option value="content-creator">Content Creator</option></select></div>
         </div>
+        <div style={{ display: 'grid', gap: 6 }}><label style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4, color: '#7a7a7a' }}>Model</label><select value={model} onChange={e => setModel(e.target.value as AutoModelValue)} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none' }}><option value={AUTONOMOUS_TASK_MODEL_DEFAULT}>Agent default</option>{AUTONOMOUS_TASK_MODEL_ALIASES.map((alias) => <option key={alias} value={alias}>{alias}</option>)}</select></div>
         {error ? <div style={{ fontSize: 12, color: '#b04a4a', lineHeight: 1.6 }}>{error}</div> : null}
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', paddingTop: 4 }}><button onClick={onClose} style={{ padding: '10px 20px', borderRadius: 12, border: '1px solid rgba(200,195,188,0.5)', background: 'transparent', color: '#7a7a7a', cursor: 'pointer', fontSize: 13, fontWeight: 600 }}>Cancel</button><button onClick={() => void handleSubmit()} disabled={!title.trim() || saving} style={{ padding: '10px 20px', borderRadius: 12, border: 'none', background: title.trim() && !saving ? '#0f1f19' : 'rgba(200,195,188,0.4)', color: title.trim() && !saving ? '#ffffff' : '#a8a8a8', cursor: title.trim() && !saving ? 'pointer' : 'not-allowed', fontSize: 13, fontWeight: 700 }}>{saving ? mode === 'edit' ? 'Saving…' : 'Adding…' : mode === 'edit' ? 'Save changes' : 'Add task'}</button></div>
       </div>
@@ -415,7 +432,7 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
       </div>
       <div style={{ fontSize: boardType === 'autonomous' ? 13.5 : 14, fontWeight: boardType === 'autonomous' ? 600 : 500, lineHeight: 1.45, color: '#222222' }}>{visibleSummary}</div>
       {supportText ? <div style={{ fontSize: 11.5, color: latestFeedback ? '#7f5aa2' : '#7a7a7a', lineHeight: 1.55 }}><span style={{ fontWeight: latestFeedback ? 700 : 500 }}>{latestFeedback ? 'Feedback:' : ''}</span>{latestFeedback ? ' ' : ''}{supportText}</div> : null}
-      {boardType === 'autonomous' && task.meta ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>{task.meta.priority ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,245,234,0.82)', color: '#b26a1f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}{task.meta.agentTarget ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(200,195,188,0.45)', color: '#5f655f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}</div> : null}
+      {boardType === 'autonomous' && task.meta ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>{task.meta.priority ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,245,234,0.82)', color: '#b26a1f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}{task.meta.agentTarget ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(200,195,188,0.45)', color: '#5f655f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}{task.meta.model ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.84)', border: '1px solid rgba(121,166,148,0.3)', color: '#2d5a4a', fontSize: 10, fontWeight: 700 }}>{task.meta.model}</span> : null}</div> : null}
       {showInspection ? <details style={{ margin: 0 }}><summary style={{ cursor: 'pointer', fontSize: 11, color: '#7a7a7a', listStyle: 'none', textDecoration: 'underline', textDecorationStyle: 'dotted', width: 'fit-content' }}>Scope</summary><div style={{ marginTop: 10, fontSize: 12, color: '#7a7a7a', display: 'grid', gap: 8, lineHeight: 1.65 }}>{task.detail.proof ? <div style={{ display: 'grid', gap: 4 }}><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Proof</span><InlineDetailMarkdown value={task.detail.proof} /></div> : null}{task.detail.unlocks ? <div><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Unlocks:</span> {task.detail.unlocks}</div> : null}</div></details> : null}
     </article>
   );
@@ -492,6 +509,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
           <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(212, 231, 221, 0.8)', fontSize: 10.5, fontWeight: 700, color: '#3c6658', textTransform: 'uppercase' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</span>
           {task.meta?.priority ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255, 245, 234, 0.9)', fontSize: 10.5, fontWeight: 700, color: '#b26a1f', textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}
           {task.meta?.agentTarget ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(200,195,188,0.5)', fontSize: 10.5, fontWeight: 700, color: '#5f655f', textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}
+          <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.84)', border: '1px solid rgba(121,166,148,0.3)', fontSize: 10.5, fontWeight: 700, color: '#2d5a4a' }}>{formatAutonomousTaskModel(task.meta?.model)}</span>
           {task.meta?.sourceType ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(200,195,188,0.5)', fontSize: 10.5, fontWeight: 700, color: '#5f655f', textTransform: 'uppercase' }}>{task.meta.sourceType}</span> : null}
         </div>
 
@@ -499,7 +517,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{runSummary ? <DetailMarkdown value={runSummary} tone="muted" /> : 'No run summary yet.'}</div>{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{artifactLabel(task.meta.artifactPath)}</span></a> : null}</div></section>
 
-        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}{task.meta?.artifactPath ? <div style={{ gridColumn: '1 / -1' }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Output</div><a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ marginTop: 4, display: 'inline-flex', alignItems: 'center', gap: 8, color: '#2d5a4a', fontSize: 11.8, fontWeight: 700, textDecoration: 'none' }}><span>Open artefact</span><span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{task.meta.artifactPath}</span></a></div> : null}</div></div></section>
+        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Model</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{formatAutonomousTaskModel(task.meta?.model)}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}{task.meta?.artifactPath ? <div style={{ gridColumn: '1 / -1' }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Output</div><a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ marginTop: 4, display: 'inline-flex', alignItems: 'center', gap: 8, color: '#2d5a4a', fontSize: 11.8, fontWeight: 700, textDecoration: 'none' }}><span>Open artefact</span><span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{task.meta.artifactPath}</span></a></div> : null}</div></div></section>
 
         {(task.detail.proof || task.detail.unlocks || task.meta?.feedback?.length || task.meta?.needsInputNote || task.meta?.runError) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{task.meta?.needsInputNote ? <div style={{ display: 'grid', gap: 4 }}><strong>Needs input</strong><DetailMarkdown value={task.meta.needsInputNote} /></div> : null}{task.meta?.runError && task.meta.runError !== task.meta.needsInputNote ? <div style={{ display: 'grid', gap: 4 }}><strong>Run error</strong><DetailMarkdown value={task.meta.runError} /></div> : null}{task.meta?.feedback?.length ? <div style={{ display: 'grid', gap: 8 }}><strong style={{ color: '#6a4f87' }}>Latest operator feedback</strong><div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(127, 90, 162, 0.08)', border: '1px solid rgba(127, 90, 162, 0.18)', color: '#5c476f' }}><DetailMarkdown value={task.meta.feedback[task.meta.feedback.length - 1]} tone="feedback" /></div>{task.meta.feedback.length > 1 ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show previous feedback</summary><div style={{ marginTop: 8, display: 'grid', gap: 8 }}>{task.meta.feedback.slice(0, -1).map((note, index) => <div key={`${task.id}-fb-prev-${index}`} style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.76)', border: '1px solid rgba(200,195,188,0.36)', color: '#5f655f' }}><DetailMarkdown value={note} tone="muted" /></div>)}</div></details> : null}</div> : null}{task.detail.proof && proofPreview.truncated ? <div style={{ display: 'grid', gap: 4 }}><strong>Proof</strong><div>{proofPreview.text}</div></div> : null}{task.detail.proof && proofPreview.truncated ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show full output</summary><div style={{ marginTop: 8 }}><DetailMarkdown value={task.detail.proof} /></div></details> : null}{task.detail.proof && !proofPreview.truncated ? <div style={{ display: 'grid', gap: 4 }}><strong>Proof</strong><DetailMarkdown value={task.detail.proof} /></div> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
 
@@ -608,7 +626,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     }
   }, [fetchAutonomousBoard]);
 
-  const createAutonomousTask = useCallback(async (input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; }) => {
+  const createAutonomousTask = useCallback(async (input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; model?: AutonomousTaskModelAlias | null; }) => {
     const res = await fetch('/api/tasks/autonomous', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));
@@ -617,7 +635,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     await fetchAutonomousBoard();
   }, [fetchAutonomousBoard]);
 
-  const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; sourceType?: string; createdAt?: number; needsInput?: { reason?: string; note?: string }; run?: { status?: string; summary?: string; result?: string; error?: string }; artifacts?: Array<{ path?: string }>; feedback?: Array<{ by?: string; note?: string }> }): Task => {
+  const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; model?: string; sourceType?: string; createdAt?: number; needsInput?: { reason?: string; note?: string }; run?: { status?: string; summary?: string; result?: string; error?: string }; artifacts?: Array<{ path?: string }>; feedback?: Array<{ by?: string; note?: string }> }): Task => {
     const envelopeArtifacts = (() => {
       if (!t.run?.result) return [] as Array<{ path?: string; kind?: string }>;
       try {
@@ -651,6 +669,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
       meta: {
         priority: t.priority,
         agentTarget: t.agentTarget,
+        model: t.model,
         sourceType: t.sourceType,
         runStatus: t.run?.status,
         needsInputReason: t.needsInput?.reason,
@@ -742,7 +761,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     });
   }, [activeBoard, refreshAutonomousLiveState, selectedAutoTask?.id]);
 
-  const updateAutonomousTask = useCallback(async (taskId: string, input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; }) => {
+  const updateAutonomousTask = useCallback(async (taskId: string, input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; model?: AutonomousTaskModelAlias | null; }) => {
     const res = await fetch(`/api/tasks/autonomous/${taskId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
     if (!res.ok) {
       const json = await res.json().catch(() => ({}));

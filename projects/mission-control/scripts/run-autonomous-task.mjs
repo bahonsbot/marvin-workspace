@@ -12,6 +12,7 @@ const autonomyPath = path.join(workspaceRoot, 'AUTONOMOUS.md');
 const queuePath = path.join(workspaceRoot, 'memory', 'executor-subagent-queue.json');
 const tasksLogPath = path.join(workspaceRoot, 'memory', 'tasks-log.md');
 const managedPaths = [autonomyPath, storePath, queuePath, tasksLogPath];
+const allowedModelAliases = new Set(['minimax2.7', 'qwenplus', 'codex', 'codex5.4', 'codex5.4mini', 'gemini']);
 
 function now() {
   return Date.now();
@@ -253,6 +254,10 @@ function parseJsonString(value) {
   }
 }
 
+function normalizeModelAlias(value) {
+  return typeof value === 'string' && allowedModelAliases.has(value) ? value : null;
+}
+
 function cleanCandidateText(value) {
   return String(value || '')
     .replace(/```[\s\S]*?```/g, ' ')
@@ -483,6 +488,7 @@ if (!attemptId) {
 }
 
 const sessionId = activeRun.sessionId || activeRun.sessionKey || `mc-auto-${task.id}-${Date.now()}`;
+const modelOverride = normalizeModelAlias(activeRun?.model || task.model);
 const thinking = task.priority === 'critical' || task.priority === 'high' ? 'medium' : 'low';
 const retryFeedbackEntry = Array.isArray(task.feedback)
   ? [...task.feedback].reverse().find(isMeaningfulRetryFeedback) ?? null
@@ -493,6 +499,7 @@ const message = [
   `Autonomous task: ${task.title}`,
   task.description ? `Description: ${task.description}` : null,
   `Agent target: ${task.agentTarget}`,
+  modelOverride ? `Model override: ${modelOverride}` : 'Model override: agent default',
   isRetry ? 'This is a retry after operator rejection. Treat the latest feedback as a required revision brief, not as optional context.' : null,
   latestFeedback ? `Latest operator feedback to address: ${latestFeedback}` : null,
   'You are executing work only. Do not claim authority over task state, approval, review, or completion.',
@@ -508,6 +515,18 @@ let stdout = '';
 let restoreWarnings = [];
 
 try {
+  if (modelOverride) {
+    await execFileAsync(
+      'bash',
+      ['-lc', `openclaw agent --session-id ${JSON.stringify(sessionId)} --message ${JSON.stringify(`/model ${modelOverride}`)} --json --timeout 120`],
+      {
+        cwd: workspaceRoot,
+        timeout: 140000,
+        maxBuffer: 5 * 1024 * 1024,
+      },
+    );
+  }
+
   const result = await execFileAsync(
     'bash',
     ['-lc', `openclaw agent --session-id ${JSON.stringify(sessionId)} --message ${JSON.stringify(message)} --thinking ${JSON.stringify(thinking)} --json --timeout 600`],
@@ -552,6 +571,7 @@ try {
       attemptId,
       attemptNumber: current.run?.attemptNumber ?? 1,
       trigger: current.run?.trigger ?? 'direct',
+      model: normalizeModelAlias(current.run?.model || current.model) ?? undefined,
       sessionKey,
       childSessionKey,
       sessionId,
@@ -619,6 +639,7 @@ try {
         attemptId,
         attemptNumber: current.run?.attemptNumber ?? 1,
         trigger: current.run?.trigger ?? 'direct',
+        model: normalizeModelAlias(current.run?.model || current.model) ?? undefined,
         sessionKey: current.run?.sessionKey ?? sessionId,
         sessionId,
         startedAt: current.run?.startedAt ?? now(),

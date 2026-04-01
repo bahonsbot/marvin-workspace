@@ -92,6 +92,7 @@ export interface TaskBoardSummary {
       meta?: {
         priority?: string;
         agentTarget?: string;
+        model?: string;
         sourceType?: string;
         runStatus?: string;
         feedback?: string[];

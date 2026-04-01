@@ -40,6 +40,7 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
         attemptId,
         attemptNumber,
         trigger: 'direct',
+        model: current.model,
         sessionKey: sessionId,
         sessionId,
         startedAt,

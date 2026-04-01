@@ -8,6 +8,7 @@ import {
   appendTaskLifecycleEvent,
   buildTaskLifecycleEventId,
 } from '@/lib/task-lifecycle-events';
+import { normalizeAutonomousTaskModel, type AutonomousTaskModelAlias } from '@/lib/task-models';
 
 const WORKSPACE_ROOT = '/data/.openclaw/workspace';
 const AUTONOMOUS_PATH = path.join(WORKSPACE_ROOT, 'AUTONOMOUS.md');
@@ -29,6 +30,7 @@ export interface MCAutoRun {
   attemptId: string;
   attemptNumber: number;
   trigger: MCAutoRunTrigger;
+  model?: AutonomousTaskModelAlias;
   sessionKey: string;
   childSessionKey?: string;
   sessionId?: string;
@@ -103,6 +105,7 @@ export interface MCAutoTask {
   priority: MCAutoTaskPriority;
   sourceType: MCAutoTaskSourceType;
   agentTarget: MCAutoTaskAgentTarget;
+  model?: AutonomousTaskModelAlias;
   createdAt: number;
   updatedAt: number;
   version: number;
@@ -334,6 +337,7 @@ function normalizeRun(taskId: string, value: unknown): MCAutoRun | undefined {
     attemptId: typeof run.attemptId === 'string' ? run.attemptId : `${taskId}-attempt-${attemptNumber}`,
     attemptNumber,
     trigger: run.trigger === 'queue' ? 'queue' : 'direct',
+    model: normalizeAutonomousTaskModel(run.model),
     sessionKey: run.sessionKey,
     childSessionKey: typeof run.childSessionKey === 'string' ? run.childSessionKey : undefined,
     sessionId: typeof run.sessionId === 'string' ? run.sessionId : undefined,
@@ -380,6 +384,7 @@ function normalizeTask(task: Partial<MCAutoTask>): MCAutoTask {
     priority: task.priority === 'critical' || task.priority === 'high' || task.priority === 'low' ? task.priority : 'normal',
     sourceType: task.sourceType === 'manual' ? 'manual' : 'generated',
     agentTarget: task.agentTarget === 'builder' || task.agentTarget === 'reviewer' || task.agentTarget === 'content-creator' ? task.agentTarget : 'marvin',
+    model: normalizeAutonomousTaskModel(task.model),
     createdAt: typeof task.createdAt === 'number' ? task.createdAt : Date.now(),
     updatedAt: typeof task.updatedAt === 'number' ? task.updatedAt : Date.now(),
     version: typeof task.version === 'number' ? task.version : 1,
@@ -864,6 +869,7 @@ export async function createManualAutonomousTask(input: {
   description?: string;
   priority: MCAutoTaskPriority;
   agentTarget: MCAutoTaskAgentTarget;
+  model?: AutonomousTaskModelAlias;
   sourceSessionKey?: string;
 }): Promise<MCAutoTask> {
   const [store, markdown] = await Promise.all([loadStructuredTasks(), safelyReadAutonomousMarkdown()]);
@@ -889,6 +895,7 @@ export async function createManualAutonomousTask(input: {
     priority: input.priority,
     sourceType: 'manual',
     agentTarget: input.agentTarget,
+    model: input.model,
     createdAt: now,
     updatedAt: now,
     version: 1,

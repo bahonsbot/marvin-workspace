@@ -30,6 +30,7 @@ type BoardTask = {
   meta?: {
     priority?: string;
     agentTarget?: string;
+    model?: string;
     sourceType?: string;
     runStatus?: string;
     feedback?: string[];
@@ -223,6 +224,7 @@ async function taskToBoardTask(task: MCAutoTask): Promise<BoardTask> {
     meta: {
       priority: task.priority,
       agentTarget: task.agentTarget,
+      model: task.model,
       sourceType: task.sourceType,
       runStatus: task.run?.status,
       feedback: Array.isArray(task.feedback)
