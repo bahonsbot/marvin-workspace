@@ -1,7 +1,6 @@
 import { promises as fs } from 'node:fs';
 import type { TaskBoardSummary, TaskSyncStatus } from '@/lib/types/contracts';
 import {
-  extractAutonomousArtifacts,
   loadStructuredTasks,
   normalizeLegacyTaskText,
   parseAutonomousExecutionEnvelope,
@@ -119,7 +118,7 @@ async function summarizeRunResult(task: MCAutoTask): Promise<{ summary?: string;
   const proof = envelope?.proof ?? envelope?.rawOutput ?? result;
   const artifactPath = await resolveExistingArtifactPath([
     ...task.artifacts.map((artifact) => artifact.path),
-    ...extractAutonomousArtifacts(result).map((artifact) => artifact.path),
+    ...(envelope?.artifacts ?? []).map((artifact) => artifact.path),
   ]);
 
   return {

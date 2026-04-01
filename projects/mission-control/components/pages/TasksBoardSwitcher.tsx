@@ -257,10 +257,17 @@ function extractWorkspaceArtifactPath(paths: string[]) {
   return undefined;
 }
 
-function extractArtifactPathFromRunResult(value?: string) {
-  if (!value) return undefined;
-  const matches = value.match(/\/data\/\.openclaw\/workspace\/[^\s"'`<>]+|(?:projects|memory|notes|tmp)\/[^\s"'`<>]+/g) ?? [];
-  return extractWorkspaceArtifactPath(matches.map(match => match.replace(/[),.;:!?]+$/g, '')));
+function extractEnvelopeArtifactPaths(value?: string) {
+  if (!value) return [] as string[];
+  try {
+    const parsed = JSON.parse(value);
+    if (parsed?.schema === 'mission-control-autonomous-run-v1' && Array.isArray(parsed?.artifacts)) {
+      return parsed.artifacts
+        .map((artifact: { path?: string }) => artifact?.path ?? '')
+        .filter(Boolean);
+    }
+  } catch {}
+  return [] as string[];
 }
 
 function boardTypeFromLabel(label: string): 'personal' | 'projects' {
@@ -608,7 +615,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; sourceType?: string; createdAt?: number; needsInput?: { reason?: string; note?: string }; run?: { status?: string; summary?: string; result?: string; error?: string }; artifacts?: Array<{ path?: string }>; feedback?: Array<{ by?: string; note?: string }> }): Task => {
     const artifactPath = extractWorkspaceArtifactPath([
       ...(Array.isArray(t.artifacts) ? t.artifacts.map((artifact) => artifact?.path ?? '') : []),
-      extractArtifactPathFromRunResult(t.run?.result) ?? '',
+      ...extractEnvelopeArtifactPaths(t.run?.result),
     ]);
     const feedback = Array.isArray(t.feedback)
       ? t.feedback
