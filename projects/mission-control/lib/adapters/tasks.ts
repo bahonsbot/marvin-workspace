@@ -1,9 +1,12 @@
 import { promises as fs } from 'node:fs';
 import type { TaskBoardSummary, TaskSyncStatus } from '@/lib/types/contracts';
 import {
+  extractAutonomousArtifacts,
   loadStructuredTasks,
   normalizeLegacyTaskText,
+  parseAutonomousExecutionEnvelope,
   readAutonomousMarkdown,
+  summarizeAutonomousOutput,
   type MCAutoTask,
 } from '@/lib/autonomous';
 
@@ -95,37 +98,38 @@ function parseCompletedEntries(tasksLog: string): number {
     .filter((line) => line.startsWith('- ✅')).length;
 }
 
-function summarizeRunResult(result: string | undefined): { summary?: string; artifactPath?: string; proof?: string } {
-  if (!result) return {};
-
-  const artifactMatch = result.match(/(?:\/data\/\.openclaw\/workspace\/)?(projects\/mission-control\/[\w./-]+\.(?:md|json|txt))/i);
-  const artifactPath = artifactMatch?.[1];
-
-  try {
-    const parsed = JSON.parse(result);
-    const payloadTexts = Array.isArray(parsed?.result?.payloads)
-      ? parsed.result.payloads.map((payload: { text?: string }) => payload?.text).filter(Boolean)
-      : [];
-    const lastText = payloadTexts.at(-1) as string | undefined;
-    const cleanSummary = typeof lastText === 'string'
-      ? lastText.replace(/[#*_`>-]+/g, ' ').replace(/\s+/g, ' ').trim()
-      : undefined;
-    return {
-      summary: cleanSummary ? (cleanSummary.length > 180 ? `${cleanSummary.slice(0, 177).trimEnd()}…` : cleanSummary) : parsed?.summary,
-      artifactPath,
-      proof: lastText,
-    };
-  } catch {
-    const clean = result.replace(/\s+/g, ' ').trim();
-    return {
-      summary: clean.length > 180 ? `${clean.slice(0, 177).trimEnd()}…` : clean,
-      artifactPath,
-      proof: result,
-    };
+async function resolveExistingArtifactPath(paths: string[]): Promise<string | undefined> {
+  for (const path of paths) {
+    if (!path) continue;
+    const absolutePath = path.startsWith('/data/.openclaw/workspace/') ? path : `/data/.openclaw/workspace/${path}`;
+    try {
+      await fs.stat(absolutePath);
+      return path.startsWith('/data/.openclaw/workspace/') ? path.replace('/data/.openclaw/workspace/', '') : path;
+    } catch {}
   }
+  return undefined;
 }
 
-function taskToBoardTask(task: MCAutoTask): BoardTask {
+async function summarizeRunResult(task: MCAutoTask): Promise<{ summary?: string; artifactPath?: string; proof?: string }> {
+  const result = task.run?.result;
+  if (!result) return {};
+
+  const envelope = parseAutonomousExecutionEnvelope(result);
+  const summary = summarizeAutonomousOutput(result);
+  const proof = envelope?.proof ?? envelope?.rawOutput ?? result;
+  const artifactPath = await resolveExistingArtifactPath([
+    ...task.artifacts.map((artifact) => artifact.path),
+    ...extractAutonomousArtifacts(result).map((artifact) => artifact.path),
+  ]);
+
+  return {
+    summary: summary ? (summary.length > 180 ? `${summary.slice(0, 177).trimEnd()}…` : summary) : undefined,
+    artifactPath,
+    proof,
+  };
+}
+
+async function taskToBoardTask(task: MCAutoTask): Promise<BoardTask> {
   let column: BoardTask['column'];
   if (task.status === 'backlog') column = 'backlog';
   else if (task.status === 'todo') column = 'todo';
@@ -133,7 +137,7 @@ function taskToBoardTask(task: MCAutoTask): BoardTask {
   else if (task.status === 'review') column = 'review';
   else column = 'done';
 
-  const runResult = summarizeRunResult(task.run?.result);
+  const runResult = await summarizeRunResult(task);
   const displaySummary = task.run?.status === 'rejected'
     ? 'Rejected. Waiting for Execute.'
     : task.run?.status === 'error'
@@ -185,7 +189,7 @@ async function loadTaskSources() {
     safeStatMtime(TASKS_LOG_PATH),
   ]);
 
-  const boardTasks = store.tasks.map(taskToBoardTask);
+  const boardTasks = await Promise.all(store.tasks.map((task) => taskToBoardTask(task)));
   const todo = boardTasks.filter((task) => task.column === 'todo');
   const inProgress = boardTasks.filter((task) => task.column === 'inprogress');
   const done = boardTasks.filter((task) => task.column === 'done');

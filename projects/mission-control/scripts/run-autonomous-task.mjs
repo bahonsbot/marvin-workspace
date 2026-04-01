@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, unlink, stat } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import path from 'node:path';
 import { promisify } from 'node:util';
@@ -8,6 +8,9 @@ const execFileAsync = promisify(execFile);
 const workspaceRoot = '/data/.openclaw/workspace';
 const storePath = path.join(workspaceRoot, 'projects', 'mission-control', 'data', 'autonomous-tasks.json');
 const autonomyPath = path.join(workspaceRoot, 'AUTONOMOUS.md');
+const queuePath = path.join(workspaceRoot, 'memory', 'executor-subagent-queue.json');
+const tasksLogPath = path.join(workspaceRoot, 'memory', 'tasks-log.md');
+const managedPaths = [autonomyPath, storePath, queuePath, tasksLogPath];
 
 function now() {
   return Date.now();
@@ -24,6 +27,9 @@ function isMeaningfulRetryFeedback(entry) {
   if (entry?.by !== 'operator') return false;
   if (note === 'Rejected without note.') return false;
   if (/^Execution failed:/i.test(note)) return false;
+  if (/^Imported from AUTONOMOUS\.md/i.test(note)) return false;
+  if (/^Queue execution blocked\.?$/i.test(note)) return false;
+  if (/^(approved|accepted|looks good|lgtm|done|completed|ship it|works as is)\b/i.test(note)) return false;
   return true;
 }
 
@@ -150,6 +156,214 @@ async function updateTask(taskId, attemptId, updater) {
   return store.tasks[idx];
 }
 
+async function readManagedFileSnapshot(filePath) {
+  try {
+    return {
+      path: filePath,
+      exists: true,
+      content: await readFile(filePath, 'utf8'),
+    };
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      return { path: filePath, exists: false, content: null };
+    }
+    throw error;
+  }
+}
+
+async function snapshotManagedFiles() {
+  return Promise.all(managedPaths.map((filePath) => readManagedFileSnapshot(filePath)));
+}
+
+async function restoreManagedFiles(snapshot) {
+  const warnings = [];
+
+  for (const entry of snapshot) {
+    const current = await readManagedFileSnapshot(entry.path);
+    const changed = current.exists !== entry.exists || current.content !== entry.content;
+    if (!changed) continue;
+
+    if (entry.exists) {
+      await writeFile(entry.path, entry.content, 'utf8');
+    } else if (current.exists) {
+      await unlink(entry.path);
+    }
+
+    warnings.push(`Managed task-state edit ignored: ${entry.path}`);
+  }
+
+  return warnings;
+}
+
+function cleanCandidateText(value) {
+  return String(value || '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/^[#>*`-]+/gm, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function scoreSummaryCandidate(value) {
+  const text = cleanCandidateText(value);
+  if (!text) return Number.NEGATIVE_INFINITY;
+
+  let score = Math.min(text.length, 220) / 40;
+  if (text.length < 12) score -= 2;
+  if (/^(summary|result|completed|delivered|implemented|fixed|updated|created|wrote|added)\b/i.test(text)) score += 3;
+  if (/\b(completed|implemented|fixed|updated|created|added|addressed|verified|artifact)\b/i.test(text)) score += 2;
+  if (/^(warning|error|failed|failure|traceback|exception)\b/i.test(text)) score -= 5;
+  if (/\/data\/\.openclaw\/workspace\//.test(text) && text.length < 96) score -= 1;
+  return score;
+}
+
+function bestSummaryFromTextBlock(value) {
+  const clean = cleanCandidateText(value);
+  if (!clean) return undefined;
+
+  const segments = String(value)
+    .split(/\n{2,}|\n/)
+    .map((segment) => cleanCandidateText(segment))
+    .filter(Boolean);
+
+  const candidates = [clean, ...segments];
+  let best = undefined;
+  let bestScore = Number.NEGATIVE_INFINITY;
+
+  for (const candidate of candidates) {
+    const score = scoreSummaryCandidate(candidate);
+    if (score >= bestScore) {
+      best = candidate;
+      bestScore = score;
+    }
+  }
+
+  return best;
+}
+
+function collectSummaryCandidates(parsed, stdout) {
+  const candidates = [];
+  const pushCandidate = (value) => {
+    if (typeof value !== 'string') return;
+    const summary = bestSummaryFromTextBlock(value);
+    if (summary) candidates.push(summary);
+  };
+
+  pushCandidate(stdout);
+  pushCandidate(parsed?.summary);
+  pushCandidate(parsed?.text);
+  pushCandidate(parsed?.response?.text);
+  pushCandidate(parsed?.result?.summary);
+
+  if (Array.isArray(parsed?.result?.payloads)) {
+    for (const payload of parsed.result.payloads) {
+      pushCandidate(payload?.text);
+    }
+  }
+
+  return candidates;
+}
+
+function summarizeExecution(parsed, stdout, warnings) {
+  const candidates = collectSummaryCandidates(parsed, stdout);
+
+  let best = undefined;
+  let bestScore = Number.NEGATIVE_INFINITY;
+  for (const candidate of candidates) {
+    const score = scoreSummaryCandidate(candidate);
+    if (score >= bestScore) {
+      best = candidate;
+      bestScore = score;
+    }
+  }
+
+  const baseSummary = safeSummary(best || 'Task completed.');
+  return warnings.length > 0
+    ? safeSummary(`${baseSummary} Managed task-state edits were ignored.`)
+    : baseSummary;
+}
+
+function sanitizeArtifactCandidate(value) {
+  return String(value || '')
+    .replace(/[),.;:!?]+$/g, '')
+    .replace(/^["'`(]+|["'`]+$/g, '')
+    .trim();
+}
+
+function toWorkspaceRelativePath(value) {
+  if (!value) return null;
+  if (value.startsWith(`${workspaceRoot}/`)) return value.slice(workspaceRoot.length + 1);
+  if (/^(projects|memory|notes|tmp)\//.test(value)) return value;
+  return null;
+}
+
+async function detectArtifactKind(relativePath) {
+  const absolutePath = path.isAbsolute(relativePath) ? relativePath : path.join(workspaceRoot, relativePath);
+  try {
+    const stats = await stat(absolutePath);
+    return stats.isDirectory() ? 'dir' : 'file';
+  } catch {
+    return null;
+  }
+}
+
+async function collectArtifacts(parsed, stdout) {
+  const artifactMap = new Map();
+  const pathPattern = /\/data\/\.openclaw\/workspace\/[^\s"'`<>]+|(?:projects|memory|notes|tmp)\/[^\s"'`<>]+/g;
+  const excludedPaths = new Set(managedPaths.map((filePath) => toWorkspaceRelativePath(filePath)).filter(Boolean));
+
+  const addArtifact = async (value, artifact = {}) => {
+    const relativePath = toWorkspaceRelativePath(sanitizeArtifactCandidate(value));
+    if (!relativePath || excludedPaths.has(relativePath) || artifactMap.has(relativePath)) return;
+    const kind = await detectArtifactKind(relativePath);
+    if (!kind) return;
+    artifactMap.set(relativePath, {
+      path: relativePath,
+      label: artifact.label,
+      kind: artifact.kind || kind,
+    });
+  };
+
+  const collectFromText = async (value) => {
+    if (typeof value !== 'string') return;
+    const matches = value.match(pathPattern) ?? [];
+    for (const match of matches) {
+      await addArtifact(match);
+    }
+  };
+
+  await collectFromText(stdout);
+  await collectFromText(parsed?.summary);
+  await collectFromText(parsed?.text);
+  await collectFromText(parsed?.response?.text);
+
+  if (Array.isArray(parsed?.result?.payloads)) {
+    for (const payload of parsed.result.payloads) {
+      await collectFromText(payload?.text);
+    }
+  }
+
+  return [...artifactMap.values()];
+}
+
+function buildExecutionEnvelope({ summary, warnings, artifacts, proof, rawOutput }) {
+  return JSON.stringify({
+    schema: 'mission-control-autonomous-run-v1',
+    summary,
+    warnings,
+    artifacts,
+    proof,
+    rawOutput,
+  }, null, 2);
+}
+
+function agentProofText(parsed, stdout) {
+  const payloadTexts = Array.isArray(parsed?.result?.payloads)
+    ? parsed.result.payloads.map((payload) => payload?.text).filter((value) => typeof value === 'string')
+    : [];
+  const payloadText = payloadTexts.join('\n\n');
+  return parsed?.response?.text ?? parsed?.text ?? (payloadText || stdout);
+}
+
 const taskId = process.argv[2];
 if (!taskId) {
   console.error('Missing task id');
@@ -173,9 +387,7 @@ if (!attemptId) {
 const sessionId = activeRun.sessionId || activeRun.sessionKey || `mc-auto-${task.id}-${Date.now()}`;
 const thinking = task.priority === 'critical' || task.priority === 'high' ? 'medium' : 'low';
 const retryFeedbackEntry = Array.isArray(task.feedback)
-  ? [...task.feedback]
-    .reverse()
-    .find(isMeaningfulRetryFeedback) ?? null
+  ? [...task.feedback].reverse().find(isMeaningfulRetryFeedback) ?? null
   : null;
 const latestFeedback = retryFeedbackEntry?.note ?? null;
 const isRetry = Boolean(task.status === 'in-progress' && latestFeedback);
@@ -185,12 +397,20 @@ const message = [
   `Agent target: ${task.agentTarget}`,
   isRetry ? 'This is a retry after operator rejection. Treat the latest feedback as a required revision brief, not as optional context.' : null,
   latestFeedback ? `Latest operator feedback to address: ${latestFeedback}` : null,
-  'Work on this task directly and return a concise result summary plus any created artifact paths if applicable.',
+  'You are executing work only. Do not claim authority over task state, approval, review, or completion.',
+  'Do not edit AUTONOMOUS.md, autonomous-tasks.json, queue files, or any task-system state file.',
+  'Return a concise result summary plus any created artifact paths if applicable.',
   isRetry ? 'Your result should clearly reflect how you addressed the feedback.' : null,
 ].filter(Boolean).join('\n');
 
+const managedSnapshot = await snapshotManagedFiles();
+
+let parsed = null;
+let stdout = '';
+let restoreWarnings = [];
+
 try {
-  const { stdout } = await execFileAsync(
+  const result = await execFileAsync(
     'bash',
     ['-lc', `openclaw agent --session-id ${JSON.stringify(sessionId)} --message ${JSON.stringify(message)} --thinking ${JSON.stringify(thinking)} --json --timeout 600`],
     {
@@ -200,21 +420,32 @@ try {
     },
   );
 
-  let parsed = null;
+  stdout = result.stdout;
   try {
     parsed = JSON.parse(stdout);
   } catch {}
 
-  const resultText = parsed ? JSON.stringify(parsed, null, 2) : stdout;
-  const summary = safeSummary(parsed?.response?.text ?? parsed?.text ?? stdout ?? 'Task completed.');
+  restoreWarnings = await restoreManagedFiles(managedSnapshot);
+
+  const artifacts = await collectArtifacts(parsed, stdout);
+  const summary = summarizeExecution(parsed, stdout, restoreWarnings);
   const sessionKey = parsed?.sessionKey ?? parsed?.session?.key ?? sessionId;
   const childSessionKey = parsed?.childSessionKey ?? parsed?.session?.childSessionKey;
   const runId = parsed?.runId ?? parsed?.run?.id;
+  const proof = agentProofText(parsed, stdout);
+  const resultText = buildExecutionEnvelope({
+    summary,
+    warnings: restoreWarnings,
+    artifacts,
+    proof,
+    rawOutput: stdout,
+  });
 
   const updated = await updateTask(taskId, attemptId, (current) => ({
     ...current,
     status: 'review',
     needsInput: undefined,
+    artifacts,
     linkedAutonomyRef: current.linkedAutonomyRef
       ? { ...current.linkedAutonomyRef, section: 'review' }
       : current.linkedAutonomyRef,
@@ -240,9 +471,27 @@ try {
     await moveLinkedLegacyTask(updated.linkedAutonomyRef, 'review');
   }
 } catch (error) {
+  if (typeof error?.stdout === 'string' && error.stdout) {
+    stdout = error.stdout;
+    try {
+      parsed = JSON.parse(stdout);
+    } catch {}
+  }
+  restoreWarnings = await restoreManagedFiles(managedSnapshot);
   const messageText = error instanceof Error ? error.message : 'Autonomous execution failed.';
 
   if (!/no longer active/.test(messageText)) {
+    const summary = restoreWarnings.length > 0
+      ? 'Execution failed. Managed task-state edits were ignored.'
+      : 'Execution failed. Fix input and execute again.';
+    const resultText = buildExecutionEnvelope({
+      summary,
+      warnings: restoreWarnings,
+      artifacts: [],
+      proof: stdout || undefined,
+      rawOutput: stdout || undefined,
+    });
+
     const updated = await updateTask(taskId, attemptId, (current) => ({
       ...current,
       status: 'todo',
@@ -251,6 +500,7 @@ try {
         at: now(),
         note: messageText,
       },
+      artifacts: [],
       linkedAutonomyRef: current.linkedAutonomyRef
         ? { ...current.linkedAutonomyRef, section: 'needs-input' }
         : current.linkedAutonomyRef,
@@ -264,8 +514,8 @@ try {
         startedAt: current.run?.startedAt ?? now(),
         endedAt: now(),
         status: 'error',
-        summary: 'Execution failed. Fix input and execute again.',
-        result: undefined,
+        summary,
+        result: resultText,
         error: messageText,
       },
     }));

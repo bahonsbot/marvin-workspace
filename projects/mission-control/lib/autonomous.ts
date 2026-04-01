@@ -48,6 +48,15 @@ export interface MCAutoArtifact {
   kind?: 'file' | 'dir' | 'url' | 'log';
 }
 
+export interface MCAutoExecutionEnvelope {
+  schema: 'mission-control-autonomous-run-v1';
+  summary?: string;
+  warnings?: string[];
+  artifacts?: MCAutoArtifact[];
+  proof?: string;
+  rawOutput?: string;
+}
+
 export interface MCAutoNeedsInput {
   reason: MCAutoNeedsInputReason;
   at: number;
@@ -180,6 +189,9 @@ export function isMeaningfulRetryFeedback(entry: MCAutoFeedback | null | undefin
   if (entry?.by !== 'operator') return false;
   if (note === 'Rejected without note.') return false;
   if (/^Execution failed:/i.test(note)) return false;
+  if (/^Imported from AUTONOMOUS\.md/i.test(note)) return false;
+  if (/^Queue execution blocked\.?$/i.test(note)) return false;
+  if (/^(approved|accepted|looks good|lgtm|done|completed|ship it|works as is)\b/i.test(note)) return false;
   return true;
 }
 
@@ -188,6 +200,167 @@ export function latestMeaningfulRetryFeedback(task: Pick<MCAutoTask, 'feedback'>
   return feedback
     .reverse()
     .find((entry) => isMeaningfulRetryFeedback(entry)) ?? null;
+}
+
+function cleanCandidateText(value: string): string {
+  return value
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/^[#>*`-]+/gm, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function scoreSummaryCandidate(value: string): number {
+  const text = cleanCandidateText(value);
+  if (!text) return Number.NEGATIVE_INFINITY;
+
+  let score = Math.min(text.length, 220) / 40;
+  if (text.length < 12) score -= 2;
+  if (/^(summary|result|completed|delivered|implemented|fixed|updated|created|wrote|added)\b/i.test(text)) score += 3;
+  if (/\b(completed|implemented|fixed|updated|created|added|addressed|verified|artifact)\b/i.test(text)) score += 2;
+  if (/^(warning|error|failed|failure|traceback|exception)\b/i.test(text)) score -= 5;
+  if (/[\[{].*[\]}]/.test(text)) score -= 1.5;
+  if (/\/data\/\.openclaw\/workspace\//.test(text) && text.length < 96) score -= 1;
+  return score;
+}
+
+function bestSummaryFromTextBlock(value: string): string | undefined {
+  const clean = cleanCandidateText(value);
+  if (!clean) return undefined;
+
+  const segments = value
+    .split(/\n{2,}|\n/)
+    .map((segment) => cleanCandidateText(segment))
+    .filter(Boolean);
+
+  const candidates = [clean, ...segments];
+  let best: string | undefined;
+  let bestScore = Number.NEGATIVE_INFINITY;
+
+  for (const candidate of candidates) {
+    const score = scoreSummaryCandidate(candidate);
+    if (score >= bestScore) {
+      best = candidate;
+      bestScore = score;
+    }
+  }
+
+  return best;
+}
+
+function pushSummaryCandidate(candidates: string[], value: unknown): void {
+  if (typeof value !== 'string') return;
+  const summary = bestSummaryFromTextBlock(value);
+  if (summary) candidates.push(summary);
+}
+
+export function summarizeAutonomousOutput(result: string | undefined): string | undefined {
+  if (!result) return undefined;
+
+  const candidates: string[] = [];
+  pushSummaryCandidate(candidates, result);
+
+  try {
+    const parsed = JSON.parse(result) as Record<string, unknown>;
+    if (parsed?.schema === 'mission-control-autonomous-run-v1') {
+      pushSummaryCandidate(candidates, parsed.summary);
+      pushSummaryCandidate(candidates, parsed.proof);
+      pushSummaryCandidate(candidates, parsed.rawOutput);
+    } else {
+      pushSummaryCandidate(candidates, parsed.summary);
+      pushSummaryCandidate(candidates, parsed.text);
+      pushSummaryCandidate(candidates, (parsed.response as { text?: unknown } | undefined)?.text);
+      pushSummaryCandidate(candidates, (parsed.result as { summary?: unknown } | undefined)?.summary);
+      const payloads = (parsed.result as { payloads?: Array<{ text?: unknown }> } | undefined)?.payloads;
+      if (Array.isArray(payloads)) {
+        for (const payload of payloads) {
+          pushSummaryCandidate(candidates, payload?.text);
+        }
+      }
+    }
+  } catch {}
+
+  let best: string | undefined;
+  let bestScore = Number.NEGATIVE_INFINITY;
+  for (const candidate of candidates) {
+    const score = scoreSummaryCandidate(candidate);
+    if (score >= bestScore) {
+      best = candidate;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
+function sanitizeArtifactCandidate(value: string): string {
+  return value.replace(/[),.;:!?]+$/g, '').replace(/^["'`(]+|["'`]+$/g, '').trim();
+}
+
+function toWorkspaceRelativePath(value: string): string | null {
+  if (!value) return null;
+  if (value.startsWith(`${WORKSPACE_ROOT}/`)) return value.slice(WORKSPACE_ROOT.length + 1);
+  if (/^(projects|memory|notes|tmp)\//.test(value)) return value;
+  return null;
+}
+
+export function extractAutonomousArtifacts(result: string | undefined): MCAutoArtifact[] {
+  if (!result) return [];
+
+  const artifacts = new Map<string, MCAutoArtifact>();
+  const addArtifact = (value: string, artifact?: Partial<MCAutoArtifact>) => {
+    const relativePath = toWorkspaceRelativePath(sanitizeArtifactCandidate(value));
+    if (!relativePath) return;
+    if (artifacts.has(relativePath)) return;
+    artifacts.set(relativePath, {
+      path: relativePath,
+      label: artifact?.label,
+      kind: artifact?.kind,
+    });
+  };
+
+  const pathPattern = /\/data\/\.openclaw\/workspace\/[^\s"'`<>]+|(?:projects|memory|notes|tmp)\/[^\s"'`<>]+/g;
+  const fromText = (value: unknown) => {
+    if (typeof value !== 'string') return;
+    const matches = value.match(pathPattern) ?? [];
+    for (const match of matches) addArtifact(match);
+  };
+
+  fromText(result);
+
+  try {
+    const parsed = JSON.parse(result) as Record<string, unknown>;
+    if (parsed?.schema === 'mission-control-autonomous-run-v1') {
+      const embeddedArtifacts = parsed.artifacts;
+      if (Array.isArray(embeddedArtifacts)) {
+        for (const entry of embeddedArtifacts) {
+          if (!entry || typeof entry !== 'object' || typeof (entry as { path?: unknown }).path !== 'string') continue;
+          addArtifact((entry as { path: string }).path, entry as Partial<MCAutoArtifact>);
+        }
+      }
+      fromText(parsed.proof);
+      fromText(parsed.rawOutput);
+    } else {
+      fromText(parsed.summary);
+      fromText(parsed.text);
+      fromText((parsed.response as { text?: unknown } | undefined)?.text);
+      const payloads = (parsed.result as { payloads?: Array<{ text?: unknown }> } | undefined)?.payloads;
+      if (Array.isArray(payloads)) {
+        for (const payload of payloads) fromText(payload?.text);
+      }
+    }
+  } catch {}
+
+  return [...artifacts.values()];
+}
+
+export function parseAutonomousExecutionEnvelope(result: string | undefined): MCAutoExecutionEnvelope | null {
+  if (!result) return null;
+  try {
+    const parsed = JSON.parse(result) as MCAutoExecutionEnvelope;
+    return parsed?.schema === 'mission-control-autonomous-run-v1' ? parsed : null;
+  } catch {
+    return null;
+  }
 }
 
 function nowIso(): string {
