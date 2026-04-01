@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "7cc0c4c1",
+        "text": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "todo"
+      },
+      {
         "id": "64526ed4",
         "text": "Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs",
         "column": "todo"
@@ -17,13 +22,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "27963ae3",
-        "text": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "24fa9c1b",
@@ -62,5 +61,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-01T10:00:46.000Z"
+  "updatedAt": "2026-04-01T10:00:47.000Z"
 }
