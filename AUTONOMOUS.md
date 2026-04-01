@@ -29,12 +29,13 @@
 ## Done Today
 - Create execute smoke-test JSON artifact | ✅ Done: `projects/automation/execute-smoke-test.json` — 11 cases covering needs-input, agent_team, subagent, direct, and risky-pattern blocking paths; all verified against live parser/classifier.
 
+- Create tasks-page current-state doc | ✅ Completed: projects/mission-control/docs/tasks-page-current-state.md
 ## In Progress
 
 
 ## Needs Input
-- [Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation
 
+- [Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation
 ## Open Backlog
 
 - [Philippe] 📝 Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability — missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority
@@ -51,8 +52,6 @@
 - (2026-03-24) [Trading] 🔧 Fix: safe improvement in trading-bot workspace → bot-support-spec-health-snapshot-reporter-2026-03-16.md
 - (2026-03-24) [Personal] 📚 Learn: Japanese study pack (greetings lesson) → projects/language/lesson-01-greetings.md
 ## Review
-- Create tasks-page current-state doc
-- Create execute smoke-test JSON artifact
 
+- Create execute smoke-test JSON artifact
 ## Done Today
-- Create tasks-page current-state doc | ✅ Completed: { "runId": "50d85bce-073a-4eb7-9ad9-da91a8055069", "status": "ok", "summary": "completed", "result": { "payloads": [ { "text": "Now I have a thorough picture. Let me write the doc.", "mediaUrl": null }, { "text": "**C…

@@ -300,13 +300,32 @@ function findLinkedTask(store: MCAutoTaskStore, entry: LegacyTaskEntry): MCAutoT
   );
 }
 
+function legacySectionPriority(section: MCAutoLegacySection): number {
+  switch (section) {
+    case 'done-today':
+      return 6;
+    case 'done':
+      return 5;
+    case 'review':
+      return 4;
+    case 'needs-input':
+      return 3;
+    case 'in-progress':
+      return 2;
+    case 'open-backlog':
+    default:
+      return 1;
+  }
+}
+
 function nextColumnOrder(tasks: MCAutoTask[], status: MCAutoTaskStatus): number {
   return tasks.filter((task) => task.status === status).reduce((max, task) => Math.max(max, task.columnOrder), -1) + 1;
 }
 
 export async function importLegacyAutonomousTasks(): Promise<{ imported: number; updated: number; store: MCAutoTaskStore }> {
   const [store, markdown, queueEntries] = await Promise.all([loadStructuredTasks(), readAutonomousMarkdown(), loadQueueEntries()]);
-  const legacyTasks = parseLegacyAutonomousTasks(markdown).filter((entry) => entry.section === 'open-backlog' || entry.section === 'in-progress' || entry.section === 'review');
+  const parsedLegacyTasks = parseLegacyAutonomousTasks(markdown);
+  const legacyTasks = parsedLegacyTasks.filter((entry) => entry.section === 'open-backlog' || entry.section === 'in-progress' || entry.section === 'review' || entry.section === 'needs-input');
   const existingIds = new Set(store.tasks.map((task) => task.id));
   let nextMarkdown = markdown;
   const queueByTask = new Map(
@@ -314,6 +333,13 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
       .filter((entry) => typeof entry.task === 'string' && entry.task.trim())
       .map((entry) => [normalizeLegacyTaskText(entry.task as string), entry] as const),
   );
+  const bestLegacyByNormalized = new Map<string, LegacyTaskEntry>();
+  for (const entry of parsedLegacyTasks) {
+    const existing = bestLegacyByNormalized.get(entry.normalizedText);
+    if (!existing || legacySectionPriority(entry.section) >= legacySectionPriority(existing.section)) {
+      bestLegacyByNormalized.set(entry.normalizedText, entry);
+    }
+  }
 
   let imported = 0;
   let updated = 0;
@@ -414,23 +440,27 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
     if (!link || link.kind !== 'autonomous-md') continue;
 
     const queueEntry = queueByTask.get(link.taskTextNormalized);
-    if (!queueEntry) continue;
+    const legacyWinner = bestLegacyByNormalized.get(link.taskTextNormalized);
 
     let changed = false;
-    const targetSection = queueTargetSection(queueEntry);
+    const targetSection = queueEntry
+      ? queueTargetSection(queueEntry)
+      : legacyWinner?.section;
     const targetStatus = targetSection ? SECTION_TO_STATUS[targetSection] : null;
 
-    if (link.queueLabel !== queueEntry.label) {
-      link.queueLabel = queueEntry.label;
-      changed = true;
-    }
-    if (link.queueLinked !== true) {
-      link.queueLinked = true;
-      changed = true;
-    }
-    if (link.completedOutputPath !== queueEntry.outputPath) {
-      link.completedOutputPath = queueEntry.outputPath;
-      changed = true;
+    if (queueEntry) {
+      if (link.queueLabel !== queueEntry.label) {
+        link.queueLabel = queueEntry.label;
+        changed = true;
+      }
+      if (link.queueLinked !== true) {
+        link.queueLinked = true;
+        changed = true;
+      }
+      if (link.completedOutputPath !== queueEntry.outputPath) {
+        link.completedOutputPath = queueEntry.outputPath;
+        changed = true;
+      }
     }
 
     if (targetSection && link.section !== targetSection) {
@@ -445,8 +475,8 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
       changed = true;
     }
 
-    const runStatus = queueRunStatus(queueEntry);
-    const nextRun = runStatus
+    const runStatus = queueEntry ? queueRunStatus(queueEntry) : null;
+    const nextRun = runStatus && queueEntry
       ? {
           sessionKey: task.run?.sessionKey ?? queueEntry.label ?? `queue-${task.id}`,
           sessionId: task.run?.sessionId ?? queueEntry.label ?? `queue-${task.id}`,
@@ -464,7 +494,7 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
       changed = true;
     }
 
-    if (queueEntry.outputPath) {
+    if (queueEntry?.outputPath) {
       const artifactExists = task.artifacts.some((artifact) => artifact.path === queueEntry.outputPath);
       if (!artifactExists) {
         task.artifacts.push({ path: queueEntry.outputPath, kind: 'file', label: 'Queue output' });
@@ -472,7 +502,7 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
       }
     }
 
-    if (queueEntry.status === 'blocked' && queueEntry.note) {
+    if (queueEntry?.status === 'blocked' && queueEntry.note) {
       const alreadyHasNote = task.feedback.some((item) => item.note === queueEntry.note);
       if (!alreadyHasNote) {
         task.feedback.push({ at: Date.now(), by: 'operator', note: queueEntry.note });
@@ -581,22 +611,29 @@ export async function createManualAutonomousTask(input: {
 function removeLegacyTaskLine(markdown: string, link: MCAutoLegacyLink): string {
   const lines = markdown.split('\n');
   let currentSection: MCAutoLegacySection | null = null;
+  const nextLines: string[] = [];
 
-  for (let i = 0; i < lines.length; i += 1) {
-    if (lines[i].startsWith('## ')) {
-      currentSection = parseSectionName(lines[i]);
+  for (const line of lines) {
+    if (line.startsWith('## ')) {
+      currentSection = parseSectionName(line);
+      nextLines.push(line);
       continue;
     }
-    const trimmed = lines[i].trim();
-    if (!trimmed.startsWith('- ')) continue;
+    const trimmed = line.trim();
+    if (!trimmed.startsWith('- ')) {
+      nextLines.push(line);
+      continue;
+    }
     const text = trimmed.slice(2).trim();
-    if (normalizeLegacyTaskText(text) !== link.taskTextNormalized) continue;
-    if (currentSection !== link.section && currentSection !== 'open-backlog' && currentSection !== 'in-progress' && currentSection !== 'review' && currentSection !== 'needs-input') continue;
-    lines.splice(i, 1);
-    return lines.join('\n');
+    const isMatchingTask = normalizeLegacyTaskText(text) === link.taskTextNormalized;
+    const isManagedSection = currentSection === link.section || currentSection === 'open-backlog' || currentSection === 'in-progress' || currentSection === 'review' || currentSection === 'needs-input' || currentSection === 'done' || currentSection === 'done-today';
+    if (isMatchingTask && isManagedSection) {
+      continue;
+    }
+    nextLines.push(line);
   }
 
-  return markdown;
+  return nextLines.join('\n');
 }
 
 export async function moveLinkedLegacyTask(task: MCAutoTask, targetSection: MCAutoLegacySection): Promise<void> {

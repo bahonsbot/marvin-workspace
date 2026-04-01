@@ -8,9 +8,9 @@
       "sourceType": "generated",
       "agentTarget": "marvin",
       "createdAt": 1774969650544,
-      "updatedAt": 1774973824955,
-      "version": 6,
-      "columnOrder": 5,
+      "updatedAt": 1775015514322,
+      "version": 7,
+      "columnOrder": 0,
       "editable": true,
       "chatAnnouncementSent": true,
       "feedback": [],
@@ -18,7 +18,7 @@
       "linkedAutonomyRef": {
         "kind": "autonomous-md",
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "review",
+        "section": "done-today",
         "taskText": "Create tasks-page current-state doc",
         "taskTextNormalized": "create tasks-page current-state doc"
       },
@@ -102,9 +102,9 @@
       "sourceType": "generated",
       "agentTarget": "marvin",
       "createdAt": 1775009741175,
-      "updatedAt": 1775014529620,
-      "version": 3,
-      "columnOrder": 0,
+      "updatedAt": 1775015514322,
+      "version": 4,
+      "columnOrder": 2,
       "editable": true,
       "chatAnnouncementSent": false,
       "feedback": [
@@ -187,10 +187,38 @@
           "createdBy": "daily-task-generator"
         }
       }
+    },
+    {
+      "id": "create-execute-smoke-test-json-artifact",
+      "title": "Create execute smoke-test JSON artifact",
+      "status": "review",
+      "priority": "normal",
+      "sourceType": "generated",
+      "agentTarget": "marvin",
+      "createdAt": 1775015514322,
+      "updatedAt": 1775015514322,
+      "version": 1,
+      "columnOrder": 1,
+      "editable": true,
+      "chatAnnouncementSent": false,
+      "feedback": [],
+      "artifacts": [],
+      "linkedAutonomyRef": {
+        "kind": "autonomous-md",
+        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
+        "section": "review",
+        "taskText": "Create execute smoke-test JSON artifact",
+        "taskTextNormalized": "create execute smoke-test json artifact"
+      },
+      "sourceMeta": {
+        "generator": {
+          "createdBy": "daily-task-generator"
+        }
+      }
     }
   ],
   "meta": {
     "schemaVersion": 1,
-    "updatedAt": 1775014529620
+    "updatedAt": 1775016000000
   }
 }
