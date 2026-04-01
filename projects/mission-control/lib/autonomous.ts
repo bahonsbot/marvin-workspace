@@ -11,21 +11,29 @@ export type MCAutoTaskStatus = 'backlog' | 'todo' | 'in-progress' | 'review' | '
 export type MCAutoTaskPriority = 'critical' | 'high' | 'normal' | 'low';
 export type MCAutoTaskSourceType = 'generated' | 'manual';
 export type MCAutoTaskAgentTarget = 'marvin' | 'builder' | 'reviewer' | 'content-creator';
-export type MCAutoRunStatus = 'running' | 'done' | 'error' | 'aborted';
+export type MCAutoRunStatus = 'running' | 'done' | 'error' | 'aborted' | 'rejected';
+export type MCAutoRunTrigger = 'direct' | 'queue';
 export type MCAutoFeedbackAuthor = 'operator' | `agent:${string}`;
 export type MCAutoLegacySection = 'open-backlog' | 'in-progress' | 'review' | 'needs-input' | 'done' | 'done-today';
+export type MCAutoNeedsInputReason = 'rejected' | 'execution-failed' | 'queue-blocked';
 
 export interface MCAutoRun {
+  attemptId: string;
+  attemptNumber: number;
+  trigger: MCAutoRunTrigger;
   sessionKey: string;
   childSessionKey?: string;
   sessionId?: string;
   runId?: string;
+  sourceLabel?: string;
   startedAt: number;
   endedAt?: number;
   status: MCAutoRunStatus;
   summary?: string;
   result?: string;
   error?: string;
+  feedbackAt?: number;
+  feedbackNote?: string;
 }
 
 export interface MCAutoFeedback {
@@ -38,6 +46,12 @@ export interface MCAutoArtifact {
   path: string;
   label?: string;
   kind?: 'file' | 'dir' | 'url' | 'log';
+}
+
+export interface MCAutoNeedsInput {
+  reason: MCAutoNeedsInputReason;
+  at: number;
+  note?: string;
 }
 
 export interface MCAutoLegacyLink {
@@ -79,6 +93,7 @@ export interface MCAutoTask {
   editable: boolean;
   chatAnnouncementSent: boolean;
   run?: MCAutoRun;
+  needsInput?: MCAutoNeedsInput;
   feedback: MCAutoFeedback[];
   artifacts: MCAutoArtifact[];
   linkedAutonomyRef?: MCAutoLegacyLink;
@@ -88,8 +103,9 @@ export interface MCAutoTask {
 export interface MCAutoTaskStore {
   tasks: MCAutoTask[];
   meta: {
-    schemaVersion: 1;
+    schemaVersion: 2;
     updatedAt: number;
+    suppressedLegacyTaskKeys: string[];
   };
 }
 
@@ -109,17 +125,11 @@ interface QueueTaskEntry {
   queuedAt?: string;
   startedAt?: string;
   completedAt?: string;
+  updatedAt?: string;
   reviewStatus?: string;
 }
 
-const SECTION_TO_STATUS: Record<MCAutoLegacySection, MCAutoTaskStatus> = {
-  'open-backlog': 'backlog',
-  'in-progress': 'in-progress',
-  review: 'review',
-  'needs-input': 'todo',
-  done: 'done',
-  'done-today': 'done',
-};
+const ACTIVE_LEGACY_SECTIONS: MCAutoLegacySection[] = ['open-backlog', 'in-progress', 'review', 'needs-input'];
 
 const SECTION_HEADERS: Record<MCAutoLegacySection, string> = {
   'open-backlog': '## Open Backlog',
@@ -134,8 +144,9 @@ function emptyStore(): MCAutoTaskStore {
   return {
     tasks: [],
     meta: {
-      schemaVersion: 1,
+      schemaVersion: 2,
       updatedAt: Date.now(),
+      suppressedLegacyTaskKeys: [],
     },
   };
 }
@@ -160,34 +171,192 @@ function uniqueTaskId(title: string, existingIds: Set<string>): string {
 }
 
 export function normalizeLegacyTaskText(value: string): string {
-  return value.trim().replace(/\s+/g, ' ').toLowerCase();
+  return value.trim().replace(/^[-*]\s+/, '').replace(/\s+/g, ' ').toLowerCase();
+}
+
+export function isMeaningfulRetryFeedback(entry: MCAutoFeedback | null | undefined): entry is MCAutoFeedback {
+  const note = String(entry?.note ?? '').trim();
+  if (!note) return false;
+  if (entry?.by !== 'operator') return false;
+  if (note === 'Rejected without note.') return false;
+  if (/^Execution failed:/i.test(note)) return false;
+  return true;
+}
+
+export function latestMeaningfulRetryFeedback(task: Pick<MCAutoTask, 'feedback'>): MCAutoFeedback | null {
+  const feedback = Array.isArray(task.feedback) ? [...task.feedback] : [];
+  return feedback
+    .reverse()
+    .find((entry) => isMeaningfulRetryFeedback(entry)) ?? null;
 }
 
 function nowIso(): string {
   return new Date().toISOString();
 }
 
-async function loadQueueEntries(): Promise<QueueTaskEntry[]> {
-  try {
-    const raw = await fs.readFile(QUEUE_PATH, 'utf8');
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed as QueueTaskEntry[] : [];
-  } catch {
-    return [];
+function normalizeArtifacts(value: unknown): MCAutoArtifact[] {
+  if (!Array.isArray(value)) return [];
+  const artifacts: MCAutoArtifact[] = [];
+  for (const entry of value) {
+    if (typeof entry === 'string') {
+      artifacts.push({ path: entry, kind: 'file' });
+      continue;
+    }
+    if (!entry || typeof entry !== 'object' || typeof (entry as { path?: unknown }).path !== 'string') {
+      continue;
+    }
+    const artifact = entry as MCAutoArtifact;
+    artifacts.push({
+      path: artifact.path,
+      label: artifact.label,
+      kind: artifact.kind,
+    });
   }
+  return artifacts;
 }
 
-function queueTargetSection(entry: QueueTaskEntry): MCAutoLegacySection | null {
-  switch (entry.status) {
-    case 'spawned':
-      return 'in-progress';
-    case 'completed':
-      return 'review';
-    case 'blocked':
-      return 'needs-input';
-    default:
-      return null;
+function normalizeFeedback(value: unknown): MCAutoFeedback[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((entry) => {
+      if (!entry || typeof entry !== 'object') return null;
+      const item = entry as Partial<MCAutoFeedback>;
+      if (typeof item.note !== 'string' || typeof item.by !== 'string') return null;
+      return {
+        at: typeof item.at === 'number' ? item.at : Date.now(),
+        by: item.by as MCAutoFeedbackAuthor,
+        note: item.note,
+      };
+    })
+    .filter((entry): entry is MCAutoFeedback => Boolean(entry));
+}
+
+function normalizeRun(taskId: string, value: unknown): MCAutoRun | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  const run = value as Partial<MCAutoRun> & { sessionKey?: string; startedAt?: number; status?: string };
+  if (typeof run.sessionKey !== 'string' || typeof run.startedAt !== 'number' || typeof run.status !== 'string') {
+    return undefined;
   }
+  const attemptNumber = typeof run.attemptNumber === 'number' && Number.isFinite(run.attemptNumber) ? run.attemptNumber : 1;
+  return {
+    attemptId: typeof run.attemptId === 'string' ? run.attemptId : `${taskId}-attempt-${attemptNumber}`,
+    attemptNumber,
+    trigger: run.trigger === 'queue' ? 'queue' : 'direct',
+    sessionKey: run.sessionKey,
+    childSessionKey: typeof run.childSessionKey === 'string' ? run.childSessionKey : undefined,
+    sessionId: typeof run.sessionId === 'string' ? run.sessionId : undefined,
+    runId: typeof run.runId === 'string' ? run.runId : undefined,
+    sourceLabel: typeof run.sourceLabel === 'string' ? run.sourceLabel : undefined,
+    startedAt: run.startedAt,
+    endedAt: typeof run.endedAt === 'number' ? run.endedAt : undefined,
+    status: run.status === 'done' || run.status === 'error' || run.status === 'aborted' || run.status === 'rejected'
+      ? run.status
+      : 'running',
+    summary: typeof run.summary === 'string' ? run.summary : undefined,
+    result: typeof run.result === 'string' ? run.result : undefined,
+    error: typeof run.error === 'string' ? run.error : undefined,
+    feedbackAt: typeof run.feedbackAt === 'number' ? run.feedbackAt : undefined,
+    feedbackNote: typeof run.feedbackNote === 'string' ? run.feedbackNote : undefined,
+  };
+}
+
+function normalizeNeedsInput(value: unknown): MCAutoNeedsInput | undefined {
+  if (!value || typeof value !== 'object') return undefined;
+  const needsInput = value as Partial<MCAutoNeedsInput>;
+  if (
+    needsInput.reason !== 'rejected'
+    && needsInput.reason !== 'execution-failed'
+    && needsInput.reason !== 'queue-blocked'
+  ) {
+    return undefined;
+  }
+  return {
+    reason: needsInput.reason,
+    at: typeof needsInput.at === 'number' ? needsInput.at : Date.now(),
+    note: typeof needsInput.note === 'string' ? needsInput.note : undefined,
+  };
+}
+
+function normalizeTask(task: Partial<MCAutoTask>): MCAutoTask {
+  return {
+    id: typeof task.id === 'string' ? task.id : slugify(String(task.title ?? 'task')),
+    title: typeof task.title === 'string' ? task.title : 'Untitled task',
+    description: typeof task.description === 'string' ? task.description : undefined,
+    status: task.status === 'backlog' || task.status === 'todo' || task.status === 'in-progress' || task.status === 'review' || task.status === 'done'
+      ? task.status
+      : 'backlog',
+    priority: task.priority === 'critical' || task.priority === 'high' || task.priority === 'low' ? task.priority : 'normal',
+    sourceType: task.sourceType === 'manual' ? 'manual' : 'generated',
+    agentTarget: task.agentTarget === 'builder' || task.agentTarget === 'reviewer' || task.agentTarget === 'content-creator' ? task.agentTarget : 'marvin',
+    createdAt: typeof task.createdAt === 'number' ? task.createdAt : Date.now(),
+    updatedAt: typeof task.updatedAt === 'number' ? task.updatedAt : Date.now(),
+    version: typeof task.version === 'number' ? task.version : 1,
+    columnOrder: typeof task.columnOrder === 'number' ? task.columnOrder : 0,
+    editable: task.editable !== false,
+    chatAnnouncementSent: task.chatAnnouncementSent === true,
+    run: normalizeRun(String(task.id ?? ''), task.run),
+    needsInput: normalizeNeedsInput(task.needsInput),
+    feedback: normalizeFeedback(task.feedback),
+    artifacts: normalizeArtifacts(task.artifacts),
+    linkedAutonomyRef: task.linkedAutonomyRef?.kind === 'autonomous-md'
+      ? {
+          ...task.linkedAutonomyRef,
+          queueLinked: task.linkedAutonomyRef.queueLinked === true,
+          queueLabel: typeof task.linkedAutonomyRef.queueLabel === 'string' ? task.linkedAutonomyRef.queueLabel : undefined,
+          completedInTasksLog: task.linkedAutonomyRef.completedInTasksLog === true,
+          completedOutputPath: typeof task.linkedAutonomyRef.completedOutputPath === 'string' ? task.linkedAutonomyRef.completedOutputPath : undefined,
+        }
+      : undefined,
+    sourceMeta: task.sourceMeta,
+  };
+}
+
+function taskNeedsInputSection(task: MCAutoTask): MCAutoLegacySection {
+  if (task.status === 'in-progress') return 'in-progress';
+  if (task.status === 'review') return 'review';
+  if (task.status === 'done') return 'done-today';
+  if (task.status === 'todo' && task.needsInput) return 'needs-input';
+  return 'open-backlog';
+}
+
+function nextColumnOrder(tasks: MCAutoTask[], status: MCAutoTaskStatus): number {
+  return tasks
+    .filter((task) => task.status === status)
+    .reduce((max, task) => Math.max(max, task.columnOrder), -1) + 1;
+}
+
+function addArtifact(task: MCAutoTask, artifact: MCAutoArtifact): void {
+  if (task.artifacts.some((entry) => entry.path === artifact.path)) return;
+  task.artifacts.push(artifact);
+}
+
+function ensureSuppressedKey(store: MCAutoTaskStore, normalizedText: string): void {
+  if (store.meta.suppressedLegacyTaskKeys.includes(normalizedText)) return;
+  store.meta.suppressedLegacyTaskKeys.push(normalizedText);
+}
+
+function clearSuppressedKey(store: MCAutoTaskStore, normalizedText: string): void {
+  store.meta.suppressedLegacyTaskKeys = store.meta.suppressedLegacyTaskKeys.filter((entry) => entry !== normalizedText);
+}
+
+function parseQueueTimestamp(value?: string): number | null {
+  if (!value) return null;
+  const parsed = Date.parse(value.replace(' ', 'T'));
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+function queueSnapshotAt(entry: QueueTaskEntry): number {
+  return (
+    parseQueueTimestamp(entry.completedAt)
+    ?? parseQueueTimestamp(entry.updatedAt)
+    ?? parseQueueTimestamp(entry.startedAt)
+    ?? parseQueueTimestamp(entry.queuedAt)
+    ?? Date.now()
+  );
+}
+
+function queueSummary(entry: QueueTaskEntry): string | undefined {
+  return entry.note?.trim() || entry.outputPath?.trim() || undefined;
 }
 
 function queueRunStatus(entry: QueueTaskEntry): MCAutoRunStatus | null {
@@ -203,14 +372,22 @@ function queueRunStatus(entry: QueueTaskEntry): MCAutoRunStatus | null {
   }
 }
 
-function queueSummary(entry: QueueTaskEntry): string | undefined {
-  return entry.note?.trim() || entry.outputPath?.trim() || undefined;
+function matchesActiveQueueRun(task: MCAutoTask, entry: QueueTaskEntry): boolean {
+  if (task.run?.trigger !== 'queue') return false;
+  if (!entry.label) return false;
+  if (task.run.sourceLabel === entry.label) return true;
+  if (task.linkedAutonomyRef?.queueLabel === entry.label) return true;
+  return false;
 }
 
-function parseQueueTimestamp(value?: string): number | null {
-  if (!value) return null;
-  const parsed = Date.parse(value.replace(' ', 'T'));
-  return Number.isNaN(parsed) ? null : parsed;
+async function loadQueueEntries(): Promise<QueueTaskEntry[]> {
+  try {
+    const raw = await fs.readFile(QUEUE_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed as QueueTaskEntry[] : [];
+  } catch {
+    return [];
+  }
 }
 
 async function ensureStoreDir(): Promise<void> {
@@ -221,12 +398,15 @@ export async function loadStructuredTasks(): Promise<MCAutoTaskStore> {
   await ensureStoreDir();
   try {
     const raw = await fs.readFile(STORE_PATH, 'utf8');
-    const parsed = JSON.parse(raw) as MCAutoTaskStore;
+    const parsed = JSON.parse(raw) as Partial<MCAutoTaskStore>;
     return {
-      tasks: Array.isArray(parsed.tasks) ? parsed.tasks : [],
+      tasks: Array.isArray(parsed.tasks) ? parsed.tasks.map((task) => normalizeTask(task)) : [],
       meta: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         updatedAt: parsed.meta?.updatedAt ?? Date.now(),
+        suppressedLegacyTaskKeys: Array.isArray(parsed.meta?.suppressedLegacyTaskKeys)
+          ? parsed.meta.suppressedLegacyTaskKeys.filter((entry): entry is string => typeof entry === 'string')
+          : [],
       },
     };
   } catch (error: unknown) {
@@ -240,10 +420,11 @@ export async function loadStructuredTasks(): Promise<MCAutoTaskStore> {
 export async function saveStructuredTasks(store: MCAutoTaskStore): Promise<void> {
   await ensureStoreDir();
   const next: MCAutoTaskStore = {
-    tasks: store.tasks,
+    tasks: store.tasks.map((task) => normalizeTask(task)),
     meta: {
-      schemaVersion: 1,
+      schemaVersion: 2,
       updatedAt: Date.now(),
+      suppressedLegacyTaskKeys: [...new Set(store.meta.suppressedLegacyTaskKeys)].sort(),
     },
   };
   await fs.writeFile(STORE_PATH, JSON.stringify(next, null, 2) + '\n', 'utf8');
@@ -306,253 +487,6 @@ function findLinkedTask(store: MCAutoTaskStore, entry: LegacyTaskEntry): MCAutoT
   );
 }
 
-function legacySectionPriority(section: MCAutoLegacySection): number {
-  switch (section) {
-    case 'done-today':
-      return 6;
-    case 'done':
-      return 5;
-    case 'review':
-      return 4;
-    case 'needs-input':
-      return 3;
-    case 'in-progress':
-      return 2;
-    case 'open-backlog':
-    default:
-      return 1;
-  }
-}
-
-function nextColumnOrder(tasks: MCAutoTask[], status: MCAutoTaskStatus): number {
-  return tasks.filter((task) => task.status === status).reduce((max, task) => Math.max(max, task.columnOrder), -1) + 1;
-}
-
-export async function importLegacyAutonomousTasks(): Promise<{ imported: number; updated: number; store: MCAutoTaskStore }> {
-  const [store, markdown, queueEntries] = await Promise.all([loadStructuredTasks(), readAutonomousMarkdown(), loadQueueEntries()]);
-  const parsedLegacyTasks = parseLegacyAutonomousTasks(markdown);
-  const legacyTasks = parsedLegacyTasks.filter((entry) => entry.section === 'open-backlog' || entry.section === 'in-progress' || entry.section === 'review' || entry.section === 'needs-input');
-  const existingIds = new Set(store.tasks.map((task) => task.id));
-  let nextMarkdown = markdown;
-  const queueByTask = new Map(
-    queueEntries
-      .filter((entry) => typeof entry.task === 'string' && entry.task.trim())
-      .map((entry) => [normalizeLegacyTaskText(entry.task as string), entry] as const),
-  );
-  const bestLegacyByNormalized = new Map<string, LegacyTaskEntry>();
-  for (const entry of parsedLegacyTasks) {
-    const existing = bestLegacyByNormalized.get(entry.normalizedText);
-    if (!existing || legacySectionPriority(entry.section) >= legacySectionPriority(existing.section)) {
-      bestLegacyByNormalized.set(entry.normalizedText, entry);
-    }
-  }
-
-  let imported = 0;
-  let updated = 0;
-
-  for (const entry of legacyTasks) {
-    const linked = findLinkedTask(store, entry);
-    const targetStatus = SECTION_TO_STATUS[entry.section];
-
-    if (linked) {
-      let changed = false;
-      if (linked.status !== targetStatus) {
-        linked.status = targetStatus;
-        linked.columnOrder = nextColumnOrder(store.tasks.filter((task) => task.id !== linked.id), targetStatus);
-        changed = true;
-      }
-      if (linked.linkedAutonomyRef) {
-        if (linked.linkedAutonomyRef.section !== entry.section) {
-          linked.linkedAutonomyRef.section = entry.section;
-          changed = true;
-        }
-        if (linked.linkedAutonomyRef.taskText !== entry.text) {
-          linked.linkedAutonomyRef.taskText = entry.text;
-          linked.linkedAutonomyRef.taskTextNormalized = entry.normalizedText;
-          changed = true;
-        }
-      }
-      if (changed) {
-        linked.updatedAt = Date.now();
-        linked.version += 1;
-        updated += 1;
-      }
-      continue;
-    }
-
-    const task: MCAutoTask = {
-      id: uniqueTaskId(entry.text, existingIds),
-      title: entry.text,
-      status: targetStatus,
-      priority: 'normal',
-      sourceType: 'generated',
-      agentTarget: 'marvin',
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      version: 1,
-      columnOrder: nextColumnOrder(store.tasks, targetStatus),
-      editable: true,
-      chatAnnouncementSent: false,
-      feedback: [],
-      artifacts: [],
-      linkedAutonomyRef: {
-        kind: 'autonomous-md',
-        sourceFile: AUTONOMOUS_PATH,
-        section: entry.section,
-        taskText: entry.text,
-        taskTextNormalized: entry.normalizedText,
-      },
-      sourceMeta: {
-        generator: {
-          createdBy: 'daily-task-generator',
-        },
-      },
-    };
-    existingIds.add(task.id);
-    store.tasks.push(task);
-    imported += 1;
-  }
-
-  const dedupeMap = new Map<string, MCAutoTask>();
-  const dedupedTasks: MCAutoTask[] = [];
-  let deduped = 0;
-  for (const task of store.tasks) {
-    const normalized = task.linkedAutonomyRef?.kind === 'autonomous-md' ? task.linkedAutonomyRef.taskTextNormalized : null;
-    if (!normalized) {
-      dedupedTasks.push(task);
-      continue;
-    }
-    const existing = dedupeMap.get(normalized);
-    if (!existing) {
-      dedupeMap.set(normalized, task);
-      dedupedTasks.push(task);
-      continue;
-    }
-    const keepCurrent = (task.updatedAt ?? 0) >= (existing.updatedAt ?? 0);
-    if (keepCurrent) {
-      const replaceIndex = dedupedTasks.findIndex((candidate) => candidate.id === existing.id);
-      if (replaceIndex !== -1) dedupedTasks[replaceIndex] = task;
-      dedupeMap.set(normalized, task);
-    }
-    deduped += 1;
-  }
-  if (deduped > 0) {
-    store.tasks = dedupedTasks;
-    updated += deduped;
-  }
-
-  for (const task of store.tasks) {
-    const link = task.linkedAutonomyRef;
-    if (!link || link.kind !== 'autonomous-md') continue;
-
-    const queueEntry = queueByTask.get(link.taskTextNormalized);
-    const legacyWinner = bestLegacyByNormalized.get(link.taskTextNormalized);
-
-    const queueCompletedAt = parseQueueTimestamp(queueEntry?.completedAt) ?? parseQueueTimestamp(queueEntry?.startedAt) ?? parseQueueTimestamp(queueEntry?.queuedAt);
-    const taskWasRejectedAfterQueue = Boolean(
-      queueEntry
-      && queueEntry.status === 'completed'
-      && task.status === 'todo'
-      && Array.isArray(task.feedback)
-      && task.feedback.length > 0
-      && queueCompletedAt
-      && (task.updatedAt ?? 0) >= queueCompletedAt,
-    );
-    const taskHasNewerDirectRun = Boolean(
-      queueEntry
-      && task.run?.sessionKey?.startsWith('mc-auto-')
-      && task.run?.startedAt
-      && queueCompletedAt
-      && task.run.startedAt >= queueCompletedAt,
-    );
-    const effectiveQueueEntry = taskWasRejectedAfterQueue || taskHasNewerDirectRun ? undefined : queueEntry;
-
-    let changed = false;
-    const targetSection = effectiveQueueEntry
-      ? queueTargetSection(effectiveQueueEntry)
-      : legacyWinner?.section;
-    const targetStatus = targetSection ? SECTION_TO_STATUS[targetSection] : null;
-
-    if (effectiveQueueEntry) {
-      if (link.queueLabel !== effectiveQueueEntry.label) {
-        link.queueLabel = effectiveQueueEntry.label;
-        changed = true;
-      }
-      if (link.queueLinked !== true) {
-        link.queueLinked = true;
-        changed = true;
-      }
-      if (link.completedOutputPath !== effectiveQueueEntry.outputPath) {
-        link.completedOutputPath = effectiveQueueEntry.outputPath;
-        changed = true;
-      }
-    }
-
-    if (targetSection && link.section !== targetSection) {
-      nextMarkdown = insertTaskIntoSection(removeLegacyTaskLine(nextMarkdown, link), targetSection, link.taskText);
-      link.section = targetSection;
-      changed = true;
-    }
-
-    if (targetStatus && task.status !== targetStatus) {
-      task.status = targetStatus;
-      task.columnOrder = nextColumnOrder(store.tasks.filter((candidate) => candidate.id !== task.id), targetStatus);
-      changed = true;
-    }
-
-    const runStatus = effectiveQueueEntry ? queueRunStatus(effectiveQueueEntry) : null;
-    const nextRun = runStatus && effectiveQueueEntry
-      ? {
-          sessionKey: task.run?.sessionKey ?? effectiveQueueEntry.label ?? `queue-${task.id}`,
-          sessionId: task.run?.sessionId ?? effectiveQueueEntry.label ?? `queue-${task.id}`,
-          startedAt: task.run?.startedAt ?? Date.now(),
-          endedAt: runStatus === 'done' || runStatus === 'error' || runStatus === 'aborted' ? (task.run?.endedAt ?? Date.now()) : task.run?.endedAt,
-          status: runStatus,
-          summary: queueSummary(effectiveQueueEntry) ?? task.run?.summary,
-          result: effectiveQueueEntry.outputPath ? `Artifact: ${effectiveQueueEntry.outputPath}` : task.run?.result,
-          error: runStatus === 'error' ? (effectiveQueueEntry.note ?? task.run?.error) : undefined,
-        }
-      : task.run;
-
-    if (runStatus && JSON.stringify(nextRun) !== JSON.stringify(task.run)) {
-      task.run = nextRun;
-      changed = true;
-    }
-
-    if (effectiveQueueEntry?.outputPath) {
-      const artifactExists = task.artifacts.some((artifact) => artifact.path === effectiveQueueEntry.outputPath);
-      if (!artifactExists) {
-        task.artifacts.push({ path: effectiveQueueEntry.outputPath, kind: 'file', label: 'Queue output' });
-        changed = true;
-      }
-    }
-
-    if (effectiveQueueEntry?.status === 'blocked' && effectiveQueueEntry.note) {
-      const alreadyHasNote = task.feedback.some((item) => item.note === effectiveQueueEntry.note);
-      if (!alreadyHasNote) {
-        task.feedback.push({ at: Date.now(), by: 'operator', note: effectiveQueueEntry.note });
-        changed = true;
-      }
-    }
-
-    if (changed) {
-      task.updatedAt = Date.now();
-      task.version += 1;
-      updated += 1;
-    }
-  }
-
-  if (nextMarkdown !== markdown) {
-    await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
-  }
-
-  if (imported > 0 || updated > 0) {
-    await saveStructuredTasks(store);
-  }
-
-  return { imported, updated, store };
-}
-
 function insertTaskIntoSection(markdown: string, section: MCAutoLegacySection, taskText: string): string {
   const lines = markdown.split('\n');
   const header = SECTION_HEADERS[section];
@@ -571,6 +505,238 @@ function insertTaskIntoSection(markdown: string, section: MCAutoLegacySection, t
   return lines.join('\n');
 }
 
+function removeLegacyTaskLine(markdown: string, link: MCAutoLegacyLink): string {
+  const lines = markdown.split('\n');
+  let currentSection: MCAutoLegacySection | null = null;
+  const nextLines: string[] = [];
+
+  for (const line of lines) {
+    if (line.startsWith('## ')) {
+      currentSection = parseSectionName(line);
+      nextLines.push(line);
+      continue;
+    }
+    const trimmed = line.trim();
+    if (!trimmed.startsWith('- ')) {
+      nextLines.push(line);
+      continue;
+    }
+    const text = trimmed.slice(2).trim();
+    const normalizedText = normalizeLegacyTaskText(text);
+    const completedPrefix = normalizeLegacyTaskText(`${link.taskText} | ✅`);
+    const isMatchingTask = normalizedText === link.taskTextNormalized || normalizedText.startsWith(completedPrefix);
+    const isManagedSection = currentSection === link.section
+      || currentSection === 'open-backlog'
+      || currentSection === 'in-progress'
+      || currentSection === 'review'
+      || currentSection === 'needs-input'
+      || currentSection === 'done'
+      || currentSection === 'done-today';
+    if (isMatchingTask && isManagedSection) {
+      continue;
+    }
+    nextLines.push(line);
+  }
+
+  return nextLines.join('\n');
+}
+
+async function safelyReadAutonomousMarkdown(): Promise<string | null> {
+  try {
+    return await readAutonomousMarkdown();
+  } catch {
+    return null;
+  }
+}
+
+export async function importLegacyAutonomousTasks(): Promise<{ imported: number; updated: number; store: MCAutoTaskStore }> {
+  // The structured JSON store is the only current-state authority.
+  // Import only seeds missing legacy tasks and refreshes queue-backed tasks that still match the active run identity.
+  const [store, markdown, queueEntries] = await Promise.all([
+    loadStructuredTasks(),
+    safelyReadAutonomousMarkdown(),
+    loadQueueEntries(),
+  ]);
+
+  const suppressed = new Set(store.meta.suppressedLegacyTaskKeys);
+  const parsedLegacyTasks = markdown ? parseLegacyAutonomousTasks(markdown) : [];
+  const legacyTasks = parsedLegacyTasks.filter((entry) => ACTIVE_LEGACY_SECTIONS.includes(entry.section) && !suppressed.has(entry.normalizedText));
+  const existingIds = new Set(store.tasks.map((task) => task.id));
+  let nextMarkdown = markdown;
+  let imported = 0;
+  let updated = 0;
+
+  for (const entry of legacyTasks) {
+    if (findLinkedTask(store, entry)) continue;
+
+    const status: MCAutoTaskStatus = entry.section === 'in-progress'
+      ? 'in-progress'
+      : entry.section === 'review'
+        ? 'review'
+        : entry.section === 'needs-input'
+          ? 'todo'
+          : 'backlog';
+
+    const task: MCAutoTask = {
+      id: uniqueTaskId(entry.text, existingIds),
+      title: entry.text,
+      status,
+      priority: 'normal',
+      sourceType: 'generated',
+      agentTarget: 'marvin',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      version: 1,
+      columnOrder: nextColumnOrder(store.tasks, status),
+      editable: true,
+      chatAnnouncementSent: false,
+      run: undefined,
+      needsInput: entry.section === 'needs-input'
+        ? { reason: 'queue-blocked', at: Date.now(), note: 'Imported from AUTONOMOUS.md Needs Input.' }
+        : undefined,
+      feedback: [],
+      artifacts: [],
+      linkedAutonomyRef: {
+        kind: 'autonomous-md',
+        sourceFile: AUTONOMOUS_PATH,
+        section: entry.section,
+        taskText: entry.text,
+        taskTextNormalized: entry.normalizedText,
+      },
+      sourceMeta: {
+        generator: {
+          createdBy: 'daily-task-generator',
+        },
+      },
+    };
+
+    existingIds.add(task.id);
+    store.tasks.push(task);
+    imported += 1;
+  }
+
+  const queueByLabel = new Map(
+    queueEntries
+      .filter((entry) => typeof entry.label === 'string' && entry.label.trim())
+      .map((entry) => [entry.label as string, entry] as const),
+  );
+
+  for (const task of store.tasks) {
+    const link = task.linkedAutonomyRef;
+    if (!link || !task.run?.sourceLabel) continue;
+
+    const queueEntry = queueByLabel.get(task.run.sourceLabel);
+    if (!queueEntry || !matchesActiveQueueRun(task, queueEntry)) continue;
+
+    const queueStatus = queueRunStatus(queueEntry);
+    if (!queueStatus) continue;
+
+    const snapshotAt = queueSnapshotAt(queueEntry);
+    if (task.updatedAt > snapshotAt && task.run.endedAt && task.run.endedAt >= snapshotAt) {
+      continue;
+    }
+
+    let changed = false;
+
+    if (link.queueLabel !== queueEntry.label) {
+      link.queueLabel = queueEntry.label;
+      link.queueLinked = true;
+      changed = true;
+    }
+
+    if (queueEntry.outputPath && link.completedOutputPath !== queueEntry.outputPath) {
+      link.completedOutputPath = queueEntry.outputPath;
+      addArtifact(task, { path: queueEntry.outputPath, label: 'Queue output', kind: 'file' });
+      changed = true;
+    }
+
+    if (queueStatus === 'running') {
+      if (task.status !== 'in-progress') {
+        task.status = 'in-progress';
+        task.columnOrder = nextColumnOrder(store.tasks.filter((candidate) => candidate.id !== task.id), 'in-progress');
+        task.needsInput = undefined;
+        changed = true;
+      }
+      if (task.run.status !== 'running') {
+        task.run.status = 'running';
+        task.run.summary = queueSummary(queueEntry) ?? task.run.summary;
+        changed = true;
+      }
+    }
+
+    if (queueStatus === 'done') {
+      if (task.status !== 'review') {
+        task.status = 'review';
+        task.columnOrder = nextColumnOrder(store.tasks.filter((candidate) => candidate.id !== task.id), 'review');
+        task.needsInput = undefined;
+        changed = true;
+      }
+      if (task.run.status !== 'done' || task.run.summary !== queueSummary(queueEntry)) {
+        task.run = {
+          ...task.run,
+          status: 'done',
+          endedAt: snapshotAt,
+          summary: queueSummary(queueEntry) ?? task.run.summary,
+          result: queueEntry.outputPath ? `Artifact: ${queueEntry.outputPath}` : task.run.result,
+          error: undefined,
+        };
+        changed = true;
+      }
+    }
+
+    if (queueStatus === 'error') {
+      const note = queueEntry.note?.trim() || 'Queue execution blocked.';
+      if (task.status !== 'todo') {
+        task.status = 'todo';
+        task.columnOrder = nextColumnOrder(store.tasks.filter((candidate) => candidate.id !== task.id), 'todo');
+        changed = true;
+      }
+      if (!task.needsInput || task.needsInput.reason !== 'queue-blocked' || task.needsInput.note !== note) {
+        task.needsInput = { reason: 'queue-blocked', at: snapshotAt, note };
+        changed = true;
+      }
+      if (!task.feedback.some((entry) => entry.by === 'operator' && entry.note === note)) {
+        task.feedback.push({ at: snapshotAt, by: 'operator', note });
+        changed = true;
+      }
+      task.run = {
+        ...task.run,
+        status: 'error',
+        endedAt: snapshotAt,
+        summary: queueSummary(queueEntry) ?? task.run.summary,
+        error: note,
+      };
+      changed = true;
+    }
+
+    const targetSection = taskNeedsInputSection(task);
+    if (link.section !== targetSection) {
+      const previousLink = { ...link };
+      link.section = targetSection;
+      if (nextMarkdown) {
+        nextMarkdown = insertTaskIntoSection(removeLegacyTaskLine(nextMarkdown, previousLink), targetSection, link.taskText);
+      }
+      changed = true;
+    }
+
+    if (changed) {
+      task.updatedAt = Date.now();
+      task.version += 1;
+      updated += 1;
+    }
+  }
+
+  if (nextMarkdown && markdown && nextMarkdown !== markdown) {
+    await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
+  }
+
+  if (imported > 0 || updated > 0) {
+    await saveStructuredTasks(store);
+  }
+
+  return { imported, updated, store };
+}
+
 export async function createManualAutonomousTask(input: {
   title: string;
   description?: string;
@@ -578,7 +744,7 @@ export async function createManualAutonomousTask(input: {
   agentTarget: MCAutoTaskAgentTarget;
   sourceSessionKey?: string;
 }): Promise<MCAutoTask> {
-  const [store, markdown] = await Promise.all([loadStructuredTasks(), readAutonomousMarkdown()]);
+  const [store, markdown] = await Promise.all([loadStructuredTasks(), safelyReadAutonomousMarkdown()]);
   const existingIds = new Set(store.tasks.map((task) => task.id));
   const now = Date.now();
   const normalized = normalizeLegacyTaskText(input.title);
@@ -591,18 +757,20 @@ export async function createManualAutonomousTask(input: {
     return duplicate;
   }
 
+  clearSuppressedKey(store, normalized);
+
   const task: MCAutoTask = {
     id: uniqueTaskId(input.title, existingIds),
     title: input.title,
     description: input.description,
-    status: 'todo',
+    status: 'backlog',
     priority: input.priority,
     sourceType: 'manual',
     agentTarget: input.agentTarget,
     createdAt: now,
     updatedAt: now,
     version: 1,
-    columnOrder: nextColumnOrder(store.tasks, 'todo'),
+    columnOrder: nextColumnOrder(store.tasks, 'backlog'),
     editable: true,
     chatAnnouncementSent: false,
     feedback: [],
@@ -623,49 +791,22 @@ export async function createManualAutonomousTask(input: {
   };
 
   store.tasks.push(task);
-  const nextMarkdown = insertTaskIntoSection(markdown, 'open-backlog', input.title);
+  await saveStructuredTasks(store);
 
-  await Promise.all([
-    saveStructuredTasks(store),
-    fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8'),
-  ]);
-
-  return task;
-}
-
-function removeLegacyTaskLine(markdown: string, link: MCAutoLegacyLink): string {
-  const lines = markdown.split('\n');
-  let currentSection: MCAutoLegacySection | null = null;
-  const nextLines: string[] = [];
-
-  for (const line of lines) {
-    if (line.startsWith('## ')) {
-      currentSection = parseSectionName(line);
-      nextLines.push(line);
-      continue;
-    }
-    const trimmed = line.trim();
-    if (!trimmed.startsWith('- ')) {
-      nextLines.push(line);
-      continue;
-    }
-    const text = trimmed.slice(2).trim();
-    const isMatchingTask = normalizeLegacyTaskText(text) === link.taskTextNormalized;
-    const isManagedSection = currentSection === link.section || currentSection === 'open-backlog' || currentSection === 'in-progress' || currentSection === 'review' || currentSection === 'needs-input' || currentSection === 'done' || currentSection === 'done-today';
-    if (isMatchingTask && isManagedSection) {
-      continue;
-    }
-    nextLines.push(line);
+  if (markdown) {
+    const nextMarkdown = insertTaskIntoSection(markdown, 'open-backlog', input.title);
+    await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
   }
 
-  return nextLines.join('\n');
+  return task;
 }
 
 export async function moveLinkedLegacyTask(task: MCAutoTask, targetSection: MCAutoLegacySection): Promise<void> {
   const link = task.linkedAutonomyRef;
   if (!link || link.kind !== 'autonomous-md') return;
 
-  const markdown = await readAutonomousMarkdown();
+  const markdown = await safelyReadAutonomousMarkdown();
+  if (!markdown) return;
   const withoutCurrent = removeLegacyTaskLine(markdown, link);
   const nextMarkdown = insertTaskIntoSection(withoutCurrent, targetSection, link.taskText);
   await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
@@ -674,7 +815,8 @@ export async function moveLinkedLegacyTask(task: MCAutoTask, targetSection: MCAu
 export async function rewriteLinkedLegacyTaskText(link: MCAutoLegacyLink, nextTaskText: string): Promise<void> {
   if (!link || link.kind !== 'autonomous-md') return;
 
-  const markdown = await readAutonomousMarkdown();
+  const markdown = await safelyReadAutonomousMarkdown();
+  if (!markdown) return;
   const withoutCurrent = removeLegacyTaskLine(markdown, link);
   const nextMarkdown = insertTaskIntoSection(withoutCurrent, link.section, nextTaskText);
   await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
@@ -684,7 +826,8 @@ export async function markLinkedLegacyTaskComplete(task: MCAutoTask, completionN
   const link = task.linkedAutonomyRef;
   if (!link || link.kind !== 'autonomous-md') return;
 
-  const markdown = await readAutonomousMarkdown();
+  const markdown = await safelyReadAutonomousMarkdown();
+  if (!markdown) return;
   let nextMarkdown = removeLegacyTaskLine(markdown, link);
   const completedText = completionNote ? `${task.title} | ✅ Completed: ${completionNote}` : task.title;
   nextMarkdown = insertTaskIntoSection(nextMarkdown, 'done-today', completedText);
@@ -699,8 +842,8 @@ export async function appendCompletionToTasksLog(task: MCAutoTask, outputPath?: 
 }
 
 export async function syncAutonomousTaskLinks(): Promise<{ linked: number; missing: number; store: MCAutoTaskStore }> {
-  const [store, markdown] = await Promise.all([loadStructuredTasks(), readAutonomousMarkdown()]);
-  const legacyTasks = parseLegacyAutonomousTasks(markdown);
+  const [store, markdown] = await Promise.all([loadStructuredTasks(), safelyReadAutonomousMarkdown()]);
+  const legacyTasks = markdown ? parseLegacyAutonomousTasks(markdown) : [];
 
   let linked = 0;
   let missing = 0;
@@ -719,31 +862,25 @@ export async function syncAutonomousTaskLinks(): Promise<{ linked: number; missi
   return { linked, missing, store };
 }
 
-
 export async function getAutonomousTaskById(id: string): Promise<MCAutoTask | null> {
   const store = await loadStructuredTasks();
   return store.tasks.find((task) => task.id === id) ?? null;
 }
 
 export async function removeAutonomousTask(id: string): Promise<MCAutoTask | null> {
-  const [store, markdown] = await Promise.all([loadStructuredTasks(), readAutonomousMarkdown()]);
+  const [store, markdown] = await Promise.all([loadStructuredTasks(), safelyReadAutonomousMarkdown()]);
   const index = store.tasks.findIndex((task) => task.id === id);
   if (index === -1) return null;
 
   const [task] = store.tasks.splice(index, 1);
-
-  const normalized = task.linkedAutonomyRef?.taskTextNormalized;
-  if (normalized) {
-    store.tasks = store.tasks.filter((candidate, candidateIndex) => {
-      if (candidateIndex === index) return false;
-      return candidate.linkedAutonomyRef?.taskTextNormalized !== normalized;
-    });
-  }
+  const normalized = task.linkedAutonomyRef?.taskTextNormalized ?? normalizeLegacyTaskText(task.title);
+  ensureSuppressedKey(store, normalized);
+  store.tasks = store.tasks.filter((candidate) => candidate.linkedAutonomyRef?.taskTextNormalized !== normalized);
 
   await saveStructuredTasks(store);
 
   const link = task.linkedAutonomyRef;
-  if (link?.kind === 'autonomous-md') {
+  if (link?.kind === 'autonomous-md' && markdown) {
     const nextMarkdown = removeLegacyTaskLine(markdown, link);
     if (nextMarkdown !== markdown) {
       await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
@@ -760,22 +897,29 @@ export async function updateAutonomousTask(
   const store = await loadStructuredTasks();
   const index = store.tasks.findIndex((task) => task.id === id);
   if (index === -1) return null;
-  const next = updater(store.tasks[index]);
+  const current = store.tasks[index];
+  const next = normalizeTask(updater(current));
   store.tasks[index] = {
     ...next,
     updatedAt: Date.now(),
-    version: Math.max((store.tasks[index].version ?? 1) + 1, next.version ?? 1),
+    version: Math.max((current.version ?? 1) + 1, next.version ?? 1),
   };
   await saveStructuredTasks(store);
   return store.tasks[index];
 }
 
-
 export async function approveAutonomousTask(id: string): Promise<MCAutoTask | null> {
   const task = await updateAutonomousTask(id, (current) => ({
     ...current,
     status: 'done',
+    needsInput: undefined,
     chatAnnouncementSent: true,
+    linkedAutonomyRef: current.linkedAutonomyRef
+      ? {
+          ...current.linkedAutonomyRef,
+          section: 'done-today',
+        }
+      : current.linkedAutonomyRef,
   }));
   if (!task) return null;
   await markLinkedLegacyTaskComplete(task, task.run?.summary);
@@ -787,29 +931,41 @@ export async function rejectAutonomousTask(id: string, note: string): Promise<MC
   const task = await updateAutonomousTask(id, (current) => ({
     ...current,
     status: 'todo',
+    needsInput: {
+      reason: 'rejected',
+      at: Date.now(),
+      note,
+    },
     chatAnnouncementSent: false,
     feedback: [
       ...(Array.isArray(current.feedback) ? current.feedback : []),
       { at: Date.now(), by: 'operator', note },
     ],
     artifacts: [],
-    run: undefined,
+    linkedAutonomyRef: current.linkedAutonomyRef
+      ? {
+          ...current.linkedAutonomyRef,
+          section: 'needs-input',
+          queueLinked: false,
+          queueLabel: undefined,
+          completedOutputPath: undefined,
+        }
+      : current.linkedAutonomyRef,
+    run: current.run
+      ? {
+          ...current.run,
+          endedAt: Date.now(),
+          status: 'rejected',
+          summary: 'Rejected and waiting for a fresh execute.',
+          result: undefined,
+          error: undefined,
+        }
+      : current.run,
   }));
   if (!task) return null;
 
   if (task.linkedAutonomyRef) {
-    task.linkedAutonomyRef.section = 'needs-input';
     await moveLinkedLegacyTask(task, 'needs-input');
-    task.linkedAutonomyRef.section = 'needs-input';
-    await updateAutonomousTask(id, (current) => ({
-      ...current,
-      linkedAutonomyRef: current.linkedAutonomyRef
-        ? {
-            ...current.linkedAutonomyRef,
-            section: 'needs-input',
-          }
-        : current.linkedAutonomyRef,
-    }));
   }
 
   return getAutonomousTaskById(id);

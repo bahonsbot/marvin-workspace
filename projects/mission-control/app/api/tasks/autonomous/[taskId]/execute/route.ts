@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { NextRequest, NextResponse } from 'next/server';
-import { getAutonomousTaskById, moveLinkedLegacyTask, updateAutonomousTask } from '@/lib/autonomous';
+import { getAutonomousTaskById, latestMeaningfulRetryFeedback, moveLinkedLegacyTask, updateAutonomousTask } from '@/lib/autonomous';
 
 const WORKSPACE_ROOT = '/data/.openclaw/workspace';
 const RUNNER_PATH = path.join(WORKSPACE_ROOT, 'projects', 'mission-control', 'scripts', 'run-autonomous-task.mjs');
@@ -19,9 +19,13 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
 
     const startedAt = Date.now();
     const sessionId = `mc-auto-${task.id}-${startedAt}`;
+    const attemptNumber = Math.max((task.run?.attemptNumber ?? 0) + 1, 1);
+    const attemptId = `${task.id}-attempt-${attemptNumber}`;
+    const latestFeedback = latestMeaningfulRetryFeedback(task);
     const updated = await updateAutonomousTask(task.id, (current) => ({
       ...current,
       status: 'in-progress',
+      needsInput: undefined,
       linkedAutonomyRef: current.linkedAutonomyRef
         ? {
             ...current.linkedAutonomyRef,
@@ -33,11 +37,16 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
         : current.linkedAutonomyRef,
       artifacts: [],
       run: {
+        attemptId,
+        attemptNumber,
+        trigger: 'direct',
         sessionKey: sessionId,
         sessionId,
         startedAt,
         status: 'running',
-        summary: Array.isArray(current.feedback) && current.feedback.length > 0 ? 'Retrying with feedback' : undefined,
+        summary: latestFeedback ? 'Retrying with operator feedback' : 'Execution started',
+        feedbackAt: latestFeedback?.at,
+        feedbackNote: latestFeedback?.note,
       },
     }));
 

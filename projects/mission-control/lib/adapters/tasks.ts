@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs';
 import type { TaskBoardSummary, TaskSyncStatus } from '@/lib/types/contracts';
 import {
-  importLegacyAutonomousTasks,
+  loadStructuredTasks,
   normalizeLegacyTaskText,
   readAutonomousMarkdown,
   type MCAutoTask,
@@ -27,6 +27,9 @@ type BoardTask = {
     sourceType?: string;
     runStatus?: string;
     feedback?: string[];
+    needsInputReason?: string;
+    needsInputNote?: string;
+    runError?: string;
     createdAt?: number;
     artifactPath?: string;
     resultSummary?: string;
@@ -131,10 +134,15 @@ function taskToBoardTask(task: MCAutoTask): BoardTask {
   else column = 'done';
 
   const runResult = summarizeRunResult(task.run?.result);
+  const displaySummary = task.run?.status === 'rejected'
+    ? 'Rejected. Waiting for Execute.'
+    : task.run?.status === 'error'
+      ? task.needsInput?.note ?? task.run?.summary ?? task.run?.error
+      : runResult.summary ?? task.run?.summary;
   const detail: BoardTask['detail'] = {
     summary: task.title,
     ...(task.description ? { why: task.description } : {}),
-    ...(task.run?.summary || runResult.summary ? { completed: runResult.summary ?? task.run?.summary } : {}),
+    ...(displaySummary ? { completed: displaySummary } : {}),
     ...(runResult.proof ? { proof: runResult.proof } : {}),
   };
 
@@ -153,18 +161,24 @@ function taskToBoardTask(task: MCAutoTask): BoardTask {
       sourceType: task.sourceType,
       runStatus: task.run?.status,
       feedback: Array.isArray(task.feedback)
-        ? task.feedback.map((item) => item.note).filter((note): note is string => Boolean(note))
+        ? task.feedback
+          .filter((item) => item.by === 'operator')
+          .map((item) => item.note)
+          .filter((note): note is string => Boolean(note))
         : [],
+      needsInputReason: task.needsInput?.reason,
+      needsInputNote: task.needsInput?.note,
+      runError: task.run?.error,
       createdAt: task.createdAt,
       artifactPath: runResult.artifactPath,
-      resultSummary: runResult.summary,
+      resultSummary: displaySummary,
     },
   };
 }
 
 async function loadTaskSources() {
-  const [{ store }, autonomousRaw, tasksLogRaw, autonomousMtime, tasksLogMtime] = await Promise.all([
-    importLegacyAutonomousTasks(),
+  const [store, autonomousRaw, tasksLogRaw, autonomousMtime, tasksLogMtime] = await Promise.all([
+    loadStructuredTasks(),
     readAutonomousMarkdown().catch(() => null),
     fs.readFile(TASKS_LOG_PATH, 'utf8').catch(() => null),
     safeStatMtime(AUTONOMOUS_PATH),

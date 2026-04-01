@@ -23,6 +23,9 @@ type Task = {
     sourceType?: string;
     runStatus?: string;
     feedback?: string[];
+    needsInputReason?: string;
+    needsInputNote?: string;
+    runError?: string;
     createdAt?: number;
     artifactPath?: string;
     resultSummary?: string;
@@ -337,9 +340,17 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
   const cardTint = autonomousTintForColumn(task.column);
   const visibleSummary = boardType === 'autonomous' ? formatAutonomousSummary(task.detail.summary) : displaySummary(task.detail.summary);
   const latestFeedback = task.meta?.feedback?.at(-1) ?? null;
-  const supportText = boardType === 'autonomous' ? formatAutonomousSupport(task.detail, task.meta?.feedback) : task.detail.why ?? task.detail.completed ?? null;
+  const supportText = boardType === 'autonomous'
+    ? formatAutonomousSupport(
+      {
+        ...task.detail,
+        completed: task.meta?.needsInputNote ?? task.meta?.runError ?? task.meta?.resultSummary ?? task.detail.completed,
+      },
+      task.meta?.feedback,
+    )
+    : task.detail.why ?? task.detail.completed ?? null;
   const isManual = boardType === 'personal' || boardType === 'projects';
-  const showInspection = boardType === 'autonomous' && (task.detail.proof || task.detail.unlocks || latestFeedback);
+  const showInspection = boardType === 'autonomous' && (task.detail.proof || task.detail.unlocks || latestFeedback || task.meta?.needsInputNote || task.meta?.runError);
   return (
     <article onClick={() => { if (boardType === 'autonomous' && onOpen) onOpen(task); }} draggable={isManual} onDragStart={event => { if (!isManual || !onDragStart) return; event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', task.id); onDragStart(task.id); }} onDragEnd={() => { if (!isManual || !onDragEnd) return; onDragEnd(); }} style={{ ...cardStyle(), padding: boardType === 'autonomous' ? 14 : 16, minHeight: boardType === 'autonomous' ? 188 : undefined, display: 'grid', gap: 10, alignContent: 'start', position: 'relative', cursor: boardType === 'autonomous' ? 'pointer' : isManual ? 'grab' : 'default', opacity: isDragging ? 0.58 : 1, transform: isDragging ? 'scale(0.985)' : 'none', background: boardType === 'autonomous' ? cardTint.bg : 'rgba(255, 255, 255, 0.76)', border: isSelected ? '1px solid rgba(60, 102, 88, 0.34)' : `1px solid ${boardType === 'autonomous' ? cardTint.border : 'rgba(200, 195, 188, 0.34)'}`, boxShadow: isSelected ? '0 0 0 1px rgba(60, 102, 88, 0.12), 0 10px 28px rgba(8, 25, 19, 0.08)' : '0 4px 20px rgba(0, 0, 0, 0.05)', transition: 'opacity 0.15s ease, transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
@@ -393,7 +404,17 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
   if (!task) return null;
 
-  const runLabel = task.meta?.runStatus ?? 'Not started';
+  const runLabel = task.meta?.runStatus === 'rejected'
+    ? 'Rejected'
+    : task.meta?.runStatus === 'error'
+      ? 'Needs input'
+      : task.meta?.runStatus === 'running'
+        ? 'Running'
+        : task.meta?.runStatus === 'done'
+          ? task.column === 'done'
+            ? 'Approved'
+            : 'Ready for review'
+          : 'Not started';
   const taskTitle = cleanAutonomousTitle(task.detail.summary);
   const createdAtLabel = task.meta?.createdAt ? new Date(task.meta.createdAt).toLocaleString('en-GB', { hour12: false }) : null;
   const proofPreview = task.detail.proof ? task.detail.proof.replace(/\s+/g, ' ').trim().slice(0, 280) : null;
@@ -419,11 +440,11 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         {task.detail.why ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Brief</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', fontSize: 13.5, lineHeight: 1.68, color: '#37413d' }}>{task.detail.why}</div></section> : null}
 
-        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{task.meta?.resultSummary ?? task.detail.completed ?? 'No run summary yet.'}</div>{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{task.meta.artifactPath}</span></a> : null}</div></section>
+        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{task.meta?.needsInputNote ?? task.meta?.runError ?? task.meta?.resultSummary ?? task.detail.completed ?? 'No run summary yet.'}</div>{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{task.meta.artifactPath}</span></a> : null}</div></section>
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}</div></div></section>
 
-        {(task.detail.proof || task.detail.unlocks || task.meta?.feedback?.length) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{task.meta?.feedback?.length ? <div style={{ display: 'grid', gap: 8 }}><strong style={{ color: '#6a4f87' }}>Latest feedback</strong><div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(127, 90, 162, 0.08)', border: '1px solid rgba(127, 90, 162, 0.18)', color: '#5c476f' }}>{task.meta.feedback[task.meta.feedback.length - 1]}</div>{task.meta.feedback.length > 1 ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show previous feedback</summary><div style={{ marginTop: 8, display: 'grid', gap: 8 }}>{task.meta.feedback.slice(0, -1).map((note, index) => <div key={`${task.id}-fb-prev-${index}`} style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.76)', border: '1px solid rgba(200,195,188,0.36)', color: '#5f655f' }}>{note}</div>)}</div></details> : null}</div> : null}{proofPreview ? <div><strong>Proof:</strong> {proofPreview}{proofWasTruncated ? '…' : ''}</div> : null}{task.detail.proof && proofWasTruncated ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show full output</summary><div style={{ marginTop: 8, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}>{task.detail.proof}</div></details> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
+        {(task.detail.proof || task.detail.unlocks || task.meta?.feedback?.length || task.meta?.needsInputNote || task.meta?.runError) ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Scope details</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 8, fontSize: 12.5, lineHeight: 1.62, color: '#37413d' }}>{task.meta?.needsInputNote ? <div><strong>Needs input:</strong> {task.meta.needsInputNote}</div> : null}{task.meta?.runError && task.meta.runError !== task.meta.needsInputNote ? <div><strong>Run error:</strong> {task.meta.runError}</div> : null}{task.meta?.feedback?.length ? <div style={{ display: 'grid', gap: 8 }}><strong style={{ color: '#6a4f87' }}>Latest operator feedback</strong><div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(127, 90, 162, 0.08)', border: '1px solid rgba(127, 90, 162, 0.18)', color: '#5c476f' }}>{task.meta.feedback[task.meta.feedback.length - 1]}</div>{task.meta.feedback.length > 1 ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show previous feedback</summary><div style={{ marginTop: 8, display: 'grid', gap: 8 }}>{task.meta.feedback.slice(0, -1).map((note, index) => <div key={`${task.id}-fb-prev-${index}`} style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(255,255,255,0.76)', border: '1px solid rgba(200,195,188,0.36)', color: '#5f655f' }}>{note}</div>)}</div></details> : null}</div> : null}{proofPreview ? <div><strong>Proof:</strong> {proofPreview}{proofWasTruncated ? '…' : ''}</div> : null}{task.detail.proof && proofWasTruncated ? <details><summary style={{ cursor: 'pointer', fontSize: 11.5, color: '#6f726f', width: 'fit-content' }}>Show full output</summary><div style={{ marginTop: 8, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}>{task.detail.proof}</div></details> : null}{task.detail.unlocks ? <div><strong>Unlocks:</strong> {task.detail.unlocks}</div> : null}</div></section> : null}
 
         {canReview ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Review note</div><textarea value={rejectNote} onChange={e => setRejectNote(e.target.value)} placeholder="Why are you rejecting this task?" rows={3} style={{ border: '1px solid rgba(200,195,188,0.5)', borderRadius: 12, padding: '10px 14px', fontSize: 13, background: '#faf8f5', color: '#1a1a1a', outline: 'none', width: '100%', boxSizing: 'border-box', resize: 'vertical', fontFamily: 'inherit' }} /></section> : null}
 
@@ -488,17 +509,21 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   useEffect(() => { localStorage.setItem(LS_PERSONAL, JSON.stringify(personalBoard)); }, [personalBoard]);
   useEffect(() => { localStorage.setItem(LS_PROJECTS, JSON.stringify(projectsBoard)); }, [projectsBoard]);
 
+  const fetchAutonomousBoard = useCallback(async () => {
+    const boardRes = await fetch('/api/tasks/board', { cache: 'no-store' });
+    if (!boardRes.ok) throw new Error('Board refresh failed.');
+    const board = await boardRes.json();
+    setAutoColumns(board.columns ?? []);
+  }, []);
+
   const refreshAutonomousBoard = useCallback(async () => {
     setAutoRefreshBusy(true);
     try {
       const importRes = await fetch('/api/tasks/autonomous/import', { method: 'POST' });
       if (!importRes.ok) throw new Error('Import refresh failed.');
-      const boardRes = await fetch('/api/tasks/board', { cache: 'no-store' });
-      if (!boardRes.ok) throw new Error('Board refresh failed.');
-      const board = await boardRes.json();
-      setAutoColumns(board.columns ?? []);
+      await fetchAutonomousBoard();
     } finally { setAutoRefreshBusy(false); }
-  }, []);
+  }, [fetchAutonomousBoard]);
 
   const createAutonomousTask = useCallback(async (input: { title: string; description?: string; priority: AutoPriority; agentTarget: AutoAgentTarget; }) => {
     const res = await fetch('/api/tasks/autonomous', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
@@ -506,18 +531,41 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
       const json = await res.json().catch(() => ({}));
       throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to create autonomous task.');
     }
-    await refreshAutonomousBoard();
-  }, [refreshAutonomousBoard]);
+    await fetchAutonomousBoard();
+  }, [fetchAutonomousBoard]);
 
-  const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; sourceType?: string; createdAt?: number; run?: { status?: string; summary?: string; result?: string }; feedback?: Array<{ note?: string }> }): Task => {
+  const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; sourceType?: string; createdAt?: number; needsInput?: { reason?: string; note?: string }; run?: { status?: string; summary?: string; result?: string; error?: string }; feedback?: Array<{ by?: string; note?: string }> }): Task => {
     const artifactMatch = t.run?.result?.match(/(?:\/data\/\.openclaw\/workspace\/)?(projects\/mission-control\/[\w./-]+\.(?:md|json|txt))/i);
     const artifactPath = artifactMatch?.[1];
+    const feedback = Array.isArray(t.feedback)
+      ? t.feedback
+        .filter((item: { by?: string; note?: string }) => item.by === 'operator')
+        .map((item: { note?: string }) => item.note)
+        .filter((note): note is string => Boolean(note))
+      : [];
+    const resultSummary = t.run?.status === 'rejected'
+      ? 'Rejected. Waiting for Execute.'
+      : t.run?.status === 'error'
+        ? t.needsInput?.note ?? t.run?.summary ?? t.run?.error
+        : t.run?.summary;
     return {
       id: t.id,
       text: t.title,
       column: t.status === 'backlog' ? 'backlog' : t.status === 'in-progress' ? 'inprogress' : t.status === 'review' ? 'review' : t.status === 'done' ? 'done' : 'todo',
-      detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(t.run?.summary ? { completed: t.run.summary } : {}), ...(t.run?.result ? { proof: t.run.result } : {}) },
-      meta: { priority: t.priority, agentTarget: t.agentTarget, sourceType: t.sourceType, runStatus: t.run?.status ?? 'running', createdAt: t.createdAt, artifactPath, resultSummary: t.run?.summary, feedback: Array.isArray(t.feedback) ? t.feedback.map((item: { note?: string }) => item.note).filter((note): note is string => Boolean(note)) : [] },
+      detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(resultSummary ? { completed: resultSummary } : {}), ...(t.run?.result ? { proof: t.run.result } : {}) },
+      meta: {
+        priority: t.priority,
+        agentTarget: t.agentTarget,
+        sourceType: t.sourceType,
+        runStatus: t.run?.status,
+        needsInputReason: t.needsInput?.reason,
+        needsInputNote: t.needsInput?.note,
+        runError: t.run?.error,
+        createdAt: t.createdAt,
+        artifactPath,
+        resultSummary,
+        feedback,
+      },
     };
   }, []);
 
@@ -527,7 +575,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
       const json = await res.json().catch(() => ({}));
       throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to update autonomous task.');
     }
-    await refreshAutonomousBoard();
+    await fetchAutonomousBoard();
     const taskRes = await fetch(`/api/tasks/autonomous/${taskId}`, { cache: 'no-store' });
     if (taskRes.ok) {
       const json = await taskRes.json();
@@ -535,7 +583,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
       setSelectedAutoTask(hydrated);
       setAutoModalTask(hydrated);
     }
-  }, [hydrateAutonomousTask, refreshAutonomousBoard]);
+  }, [fetchAutonomousBoard, hydrateAutonomousTask]);
 
   const executeAutonomousTask = useCallback(async (task: Task) => {
     setAutoActionBusy(true);
@@ -545,7 +593,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
         const json = await res.json().catch(() => ({}));
         throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to start autonomous task.');
       }
-      await refreshAutonomousBoard();
+      await fetchAutonomousBoard();
       const taskRes = await fetch(`/api/tasks/autonomous/${task.id}`, { cache: 'no-store' });
       if (taskRes.ok) {
         const json = await taskRes.json();
@@ -554,7 +602,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
     } finally {
       setAutoActionBusy(false);
     }
-  }, [hydrateAutonomousTask, refreshAutonomousBoard]);
+  }, [fetchAutonomousBoard, hydrateAutonomousTask]);
 
   const approveAutonomousTask = useCallback(async (task: Task) => {
     setAutoActionBusy(true);
@@ -564,12 +612,12 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
         const json = await res.json().catch(() => ({}));
         throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to approve autonomous task.');
       }
-      await refreshAutonomousBoard();
+      await fetchAutonomousBoard();
       setSelectedAutoTask(null);
     } finally {
       setAutoActionBusy(false);
     }
-  }, [refreshAutonomousBoard]);
+  }, [fetchAutonomousBoard]);
 
   const rejectAutonomousTask = useCallback(async (task: Task, note: string) => {
     setAutoActionBusy(true);
@@ -583,12 +631,12 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
         const json = await res.json().catch(() => ({}));
         throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to reject autonomous task.');
       }
-      await refreshAutonomousBoard();
+      await fetchAutonomousBoard();
       setSelectedAutoTask(null);
     } finally {
       setAutoActionBusy(false);
     }
-  }, [refreshAutonomousBoard]);
+  }, [fetchAutonomousBoard]);
 
   const removeAutonomousTask = useCallback(async (task: Task) => {
     setAutoActionBusy(true);
@@ -598,12 +646,12 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
         const json = await res.json().catch(() => ({}));
         throw new Error(typeof json?.error === 'string' ? json.error : 'Failed to remove autonomous task.');
       }
-      await refreshAutonomousBoard();
+      await fetchAutonomousBoard();
       setSelectedAutoTask(null);
     } finally {
       setAutoActionBusy(false);
     }
-  }, [refreshAutonomousBoard]);
+  }, [fetchAutonomousBoard]);
 
   const handleMove = useCallback((board: 'personal' | 'projects', taskId: string, newColumn: ManualTaskColumn) => { const setter = board === 'personal' ? setPersonalBoard : setProjectsBoard; setter(prev => { const updated = cloneBoard(prev); let movedTask: Task | null = null; for (const colId of ['todo', 'inprogress', 'done'] as const) { const col = updated[colId]; const idx = col.tasks.findIndex(t => t.id === taskId); if (idx !== -1) { [movedTask] = col.tasks.splice(idx, 1); col.count = col.tasks.length; break; } } if (!movedTask) return prev; if (movedTask.column === newColumn) return prev; movedTask = { ...movedTask, column: newColumn }; updated[newColumn].tasks.push(movedTask); updated[newColumn].count = updated[newColumn].tasks.length; return updated; }); }, []);
   const handleSave = useCallback((board: 'personal' | 'projects', task: Task, isNew: boolean) => { const setter = board === 'personal' ? setPersonalBoard : setProjectsBoard; setter(prev => { const updated = cloneBoard(prev); const manualColumn = task.column as ManualTaskColumn; if (isNew) { updated[manualColumn].tasks.push(task); updated[manualColumn].count = updated[manualColumn].tasks.length; } else { for (const colId of ['todo', 'inprogress', 'done'] as const) { const col = updated[colId]; const idx = col.tasks.findIndex(t => t.id === task.id); if (idx !== -1) { col.tasks.splice(idx, 1); col.count = col.tasks.length; break; } } updated[manualColumn].tasks.push(task); updated[manualColumn].count = updated[manualColumn].tasks.length; } return updated; }); }, []);

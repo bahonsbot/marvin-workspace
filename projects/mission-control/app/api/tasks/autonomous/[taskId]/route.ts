@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAutonomousTaskById, removeAutonomousTask, rewriteLinkedLegacyTaskText, updateAutonomousTask } from '@/lib/autonomous';
+import { getAutonomousTaskById, normalizeLegacyTaskText, removeAutonomousTask, rewriteLinkedLegacyTaskText, updateAutonomousTask } from '@/lib/autonomous';
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ taskId: string }> }) {
   try {
@@ -42,7 +42,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       priority,
       agentTarget,
       linkedAutonomyRef: current.linkedAutonomyRef
-        ? { ...current.linkedAutonomyRef, taskText: nextLegacyText, taskTextNormalized: nextLegacyText.toLowerCase() }
+        ? { ...current.linkedAutonomyRef, taskText: nextLegacyText, taskTextNormalized: normalizeLegacyTaskText(nextLegacyText) }
         : current.linkedAutonomyRef,
     }));
     if (!task) {
