@@ -88,6 +88,24 @@ type RuntimeBridgeLiveSessionTarget = {
   label: string;
 };
 
+type RuntimeBridgeDebugState = {
+  lastMergeAt: number | null;
+  currentCount: number;
+  incomingCount: number;
+  mergedCount: number;
+  duplicateGroups: Array<{
+    key: string;
+    count: number;
+    variants: Array<{
+      id: string;
+      sessionKey: string | null;
+      runId: string | null;
+      status: RuntimeBridgeChatMessage['status'];
+      at: number;
+    }>;
+  }>;
+};
+
 type RuntimeBridgeLiveState = {
   targetSession: RuntimeBridgeLiveSessionTarget;
   canSend: boolean;
@@ -98,6 +116,7 @@ type RuntimeBridgeLiveState = {
   messages: RuntimeBridgeChatMessage[];
   events: RuntimeBridgeLiveEvent[];
   notices: RuntimeBridgeTransientNotice[];
+  debug: RuntimeBridgeDebugState | null;
   sendPrompt: (prompt: string) => Promise<void>;
   abortPrompt: () => Promise<void>;
 };
@@ -535,6 +554,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [sendState, setSendState] = useState<RuntimeBridgeSendState>('idle');
   const [sendError, setSendError] = useState<string | null>(null);
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
+  const [debugState, setDebugState] = useState<RuntimeBridgeDebugState | null>(null);
   const [activeSessionKey, setActiveSessionKey] = useState<string | null>(() => chooseTargetSession(initialSummary).key);
   const [reconnectNonce, setReconnectNonce] = useState(0);
   const mountedRef = useRef(true);
@@ -672,7 +692,37 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
 
           hydratedSessionKeyRef.current = hydratedSessionKey;
           hydratedTranscriptSignatureRef.current = incomingSignature;
-          return mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
+          const merged = mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
+          if (process.env.NODE_ENV !== 'production') {
+            const groups = new Map<string, RuntimeBridgeChatMessage[]>();
+            for (const message of merged) {
+              const key = `${message.role}|${message.body}`;
+              const group = groups.get(key) ?? [];
+              group.push(message);
+              groups.set(key, group);
+            }
+            const duplicateGroups = Array.from(groups.entries())
+              .filter(([, group]) => group.length > 1)
+              .map(([key, group]) => ({
+                key,
+                count: group.length,
+                variants: group.map((message) => ({
+                  id: message.id,
+                  sessionKey: message.sessionKey,
+                  runId: message.runId,
+                  status: message.status,
+                  at: message.at,
+                })),
+              }));
+            setDebugState({
+              lastMergeAt: Date.now(),
+              currentCount: current.length,
+              incomingCount: incomingMessages.length,
+              mergedCount: merged.length,
+              duplicateGroups,
+            });
+          }
+          return merged;
         });
       }
       setError(null);
@@ -1295,6 +1345,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       messages,
       events,
       notices,
+      debug: debugState,
       sendPrompt,
       abortPrompt,
     },

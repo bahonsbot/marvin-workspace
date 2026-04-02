@@ -866,6 +866,7 @@ export function MissionControlChatSurface({
   );
   const liveEvents = live?.events ?? [];
   const liveNotices = (live?.notices ?? []) as RuntimeBridgeTransientNotice[];
+  const liveDebug = live?.debug ?? null;
   const liveCanSend = Boolean(live?.canSend);
   const liveSendState = live?.sendState ?? 'idle';
   const liveSendError = live?.sendError ?? null;
@@ -1564,6 +1565,38 @@ export function MissionControlChatSurface({
         {modelSwitchError ? (
           <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6, paddingLeft: 4 }}>
             {modelSwitchError}
+          </div>
+        ) : null}
+        {process.env.NODE_ENV !== 'production' && liveDebug ? (
+          <div
+            style={{
+              border: '1px solid rgba(154, 75, 67, 0.2)',
+              borderRadius: 14,
+              background: 'rgba(255, 246, 243, 0.86)',
+              padding: '10px 12px',
+              display: 'grid',
+              gap: 6,
+            }}
+          >
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9a4b43' }}>
+              Debug · chat hydrate
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--text-body)', display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              <span>current: <strong>{liveDebug.currentCount}</strong></span>
+              <span>incoming: <strong>{liveDebug.incomingCount}</strong></span>
+              <span>merged: <strong>{liveDebug.mergedCount}</strong></span>
+              <span>dupe groups: <strong>{liveDebug.duplicateGroups.length}</strong></span>
+            </div>
+            {liveDebug.duplicateGroups.length > 0 ? (
+              <div style={{ display: 'grid', gap: 4, fontSize: 11, color: '#7f3e37' }}>
+                {liveDebug.duplicateGroups.slice(0, 4).map((group) => (
+                  <div key={group.key} style={{ borderTop: '1px solid rgba(154,75,67,0.12)', paddingTop: 4 }}>
+                    <div style={{ fontWeight: 700 }}>{group.key.slice(0, 120)}</div>
+                    <div>{group.variants.map((variant) => `${variant.id} · ${variant.sessionKey ?? 'null'} · ${variant.runId ?? 'null'} · ${variant.status}`).join(' | ')}</div>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </div>
         ) : null}
       </section>
