@@ -23,11 +23,17 @@ type HydratedMessage = {
 function sanitizeTranscriptBody(input: string): string {
   let body = input.trim();
 
-  body = body.replace(/^\[\[\s*reply_to_current\s*\]\]\s*/i, '');
-  body = body.replace(/^\[\[\s*reply_to\s*:\s*[^\]]+\]\]\s*/i, '');
-  body = body.replace(/^Sender \(untrusted metadata\):\s*```json\s*[\s\S]*?```\s*/i, '');
-  body = body.replace(/^Sender \(untrusted metadata\):\s*\{[\s\S]*?\}\s*/i, '');
-  body = body.replace(/^\[[A-Za-z]{3} [^\]]*GMT\+\d+\]\s*/i, '');
+  let previous = '';
+  while (body !== previous) {
+    previous = body;
+
+    body = body.replace(/^\[\[\s*reply_to_current\s*\]\]\s*/i, '');
+    body = body.replace(/^\[\[\s*reply_to\s*:\s*[^\]]+\]\]\s*/i, '');
+    body = body.replace(/^(?:System:\s*\[[^\]]+\]\s*.*(?:\n|$))+?/i, '');
+    body = body.replace(/^Sender \(untrusted metadata\):\s*```json\s*[\s\S]*?```\s*/i, '');
+    body = body.replace(/^Sender \(untrusted metadata\):\s*\{[\s\S]*?\}\s*/i, '');
+    body = body.replace(/^\[[A-Za-z]{3} [^\]]*GMT\+\d+\]\s*/i, '');
+  }
 
   return body.trim();
 }
