@@ -88,24 +88,6 @@ type RuntimeBridgeLiveSessionTarget = {
   label: string;
 };
 
-type RuntimeBridgeDebugState = {
-  lastMergeAt: number | null;
-  currentCount: number;
-  incomingCount: number;
-  mergedCount: number;
-  duplicateGroups: Array<{
-    key: string;
-    count: number;
-    variants: Array<{
-      id: string;
-      sessionKey: string | null;
-      runId: string | null;
-      status: RuntimeBridgeChatMessage['status'];
-      at: number;
-    }>;
-  }>;
-};
-
 type RuntimeBridgeLiveState = {
   targetSession: RuntimeBridgeLiveSessionTarget;
   canSend: boolean;
@@ -116,7 +98,6 @@ type RuntimeBridgeLiveState = {
   messages: RuntimeBridgeChatMessage[];
   events: RuntimeBridgeLiveEvent[];
   notices: RuntimeBridgeTransientNotice[];
-  debug: RuntimeBridgeDebugState | null;
   sendPrompt: (prompt: string) => Promise<void>;
   abortPrompt: () => Promise<void>;
 };
@@ -368,22 +349,11 @@ function mergeHydratedMessages(
   incoming: RuntimeBridgeChatMessage[],
   sessionKey: string | null,
 ): RuntimeBridgeChatMessage[] {
-  const debugEnabled = process.env.NODE_ENV !== 'production';
   const scopedCurrent = current.filter((message) => !sessionKey || message.sessionKey === sessionKey || message.sessionKey === null);
   const keyed = new Map<string, RuntimeBridgeChatMessage>();
 
   const buildFallbackKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
     `${message.role}|${message.sessionKey ?? 'none'}|${message.runId ?? 'none'}|${normalizedBody}`;
-
-  const buildLooseKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
-    `${message.role}|${message.sessionKey ?? 'none'}|${normalizedBody}`;
-
-  const equivalentSession = (a: string | null | undefined, b: string | null | undefined) => {
-    if ((a ?? null) === (b ?? null)) return true;
-    if (a === 'agent:main:main' && !b) return true;
-    if (b === 'agent:main:main' && !a) return true;
-    return false;
-  };
 
   const upsert = (message: RuntimeBridgeChatMessage, source: 'current' | 'hydrated') => {
     const normalizedBody = message.body.trim();
@@ -397,23 +367,11 @@ function mergeHydratedMessages(
     };
     const idKey = normalized.id ? `id:${normalized.id}` : null;
     const fallbackKey = `body:${buildFallbackKey(normalized, normalizedBody)}`;
-    const looseKey = `loose:${buildLooseKey(normalized, normalizedBody)}`;
-    let existing = (idKey && keyed.get(idKey)) ?? keyed.get(fallbackKey) ?? keyed.get(looseKey);
-
-    if (!existing) {
-      const closeDuplicate = Array.from(new Set(keyed.values())).find((candidate) => {
-        if (candidate.role !== normalized.role) return false;
-        if (!equivalentSession(candidate.sessionKey, normalized.sessionKey)) return false;
-        if (candidate.body !== normalized.body) return false;
-        return Math.abs(candidate.at - normalized.at) <= 15000;
-      });
-      if (closeDuplicate) existing = closeDuplicate;
-    }
+    const existing = (idKey && keyed.get(idKey)) ?? keyed.get(fallbackKey);
 
     if (!existing) {
       if (idKey) keyed.set(idKey, normalized);
       keyed.set(fallbackKey, normalized);
-      keyed.set(looseKey, normalized);
       return;
     }
 
@@ -436,8 +394,6 @@ function mergeHydratedMessages(
 
     if (idKey) keyed.set(idKey, merged);
     keyed.set(fallbackKey, merged);
-    keyed.set(looseKey, merged);
-    keyed.set(`loose:${buildLooseKey(existing, existing.body)}`, merged);
     if (existing.id && existing.id !== merged.id) {
       keyed.set(`id:${existing.id}`, merged);
     }
@@ -448,38 +404,6 @@ function mergeHydratedMessages(
 
   const deduped = Array.from(new Set(keyed.values()));
   deduped.sort((a, b) => a.at - b.at || a.id.localeCompare(b.id));
-
-  if (debugEnabled && typeof window !== 'undefined') {
-    const duplicateGroups = new Map<string, RuntimeBridgeChatMessage[]>();
-    for (const message of deduped) {
-      const key = `${message.role}|${message.body}`;
-      const group = duplicateGroups.get(key) ?? [];
-      group.push(message);
-      duplicateGroups.set(key, group);
-    }
-    const suspicious = Array.from(duplicateGroups.entries())
-      .filter(([, group]) => group.length > 1)
-      .map(([key, group]) => ({
-        key,
-        count: group.length,
-        variants: group.map((message) => ({
-          id: message.id,
-          sessionKey: message.sessionKey,
-          runId: message.runId,
-          status: message.status,
-          at: message.at,
-        })),
-      }));
-    if (suspicious.length > 0) {
-      console.warn('[MissionControl][mergeHydratedMessages] duplicate survivors', {
-        sessionKey,
-        suspicious,
-        current: scopedCurrent.map((message) => ({ id: message.id, role: message.role, sessionKey: message.sessionKey, runId: message.runId, at: message.at, body: message.body })),
-        incoming: incoming.map((message) => ({ id: message.id, role: message.role, sessionKey: message.sessionKey, runId: message.runId, at: message.at, body: message.body })),
-      });
-    }
-  }
-
   return deduped.slice(-MAX_LIVE_MESSAGES);
 }
 
@@ -554,7 +478,6 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [sendState, setSendState] = useState<RuntimeBridgeSendState>('idle');
   const [sendError, setSendError] = useState<string | null>(null);
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
-  const [debugState, setDebugState] = useState<RuntimeBridgeDebugState | null>(null);
   const [activeSessionKey, setActiveSessionKey] = useState<string | null>(() => chooseTargetSession(initialSummary).key);
   const [reconnectNonce, setReconnectNonce] = useState(0);
   const mountedRef = useRef(true);
@@ -686,43 +609,12 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
           const scopedCurrent = current.filter((message) => message.sessionKey === hydratedSessionKey || message.sessionKey === null);
           const hasScopedTranscript = scopedCurrent.some((message) => message.role === 'user' || message.role === 'assistant');
           const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
-          const signatureChanged = hydratedTranscriptSignatureRef.current !== incomingSignature;
-          const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || signatureChanged || !hasScopedTranscript);
+          const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || !hasScopedTranscript);
           if (!shouldHydrate) return current;
 
           hydratedSessionKeyRef.current = hydratedSessionKey;
           hydratedTranscriptSignatureRef.current = incomingSignature;
-          const merged = mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
-          if (process.env.NODE_ENV !== 'production') {
-            const groups = new Map<string, RuntimeBridgeChatMessage[]>();
-            for (const message of merged) {
-              const key = `${message.role}|${message.body}`;
-              const group = groups.get(key) ?? [];
-              group.push(message);
-              groups.set(key, group);
-            }
-            const duplicateGroups = Array.from(groups.entries())
-              .filter(([, group]) => group.length > 1)
-              .map(([key, group]) => ({
-                key,
-                count: group.length,
-                variants: group.map((message) => ({
-                  id: message.id,
-                  sessionKey: message.sessionKey,
-                  runId: message.runId,
-                  status: message.status,
-                  at: message.at,
-                })),
-              }));
-            setDebugState({
-              lastMergeAt: Date.now(),
-              currentCount: current.length,
-              incomingCount: incomingMessages.length,
-              mergedCount: merged.length,
-              duplicateGroups,
-            });
-          }
-          return merged;
+          return mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
         });
       }
       setError(null);
@@ -1345,7 +1237,6 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       messages,
       events,
       notices,
-      debug: debugState,
       sendPrompt,
       abortPrompt,
     },
