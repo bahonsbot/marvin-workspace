@@ -355,6 +355,9 @@ function mergeHydratedMessages(
   const buildFallbackKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
     `${message.role}|${message.sessionKey ?? 'none'}|${message.runId ?? 'none'}|${normalizedBody}`;
 
+  const buildLooseKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
+    `${message.role}|${message.sessionKey ?? 'none'}|${normalizedBody}`;
+
   const upsert = (message: RuntimeBridgeChatMessage, source: 'current' | 'hydrated') => {
     const normalizedBody = message.body.trim();
     if (!normalizedBody) return;
@@ -367,11 +370,23 @@ function mergeHydratedMessages(
     };
     const idKey = normalized.id ? `id:${normalized.id}` : null;
     const fallbackKey = `body:${buildFallbackKey(normalized, normalizedBody)}`;
-    const existing = (idKey && keyed.get(idKey)) ?? keyed.get(fallbackKey);
+    const looseKey = `loose:${buildLooseKey(normalized, normalizedBody)}`;
+    let existing = (idKey && keyed.get(idKey)) ?? keyed.get(fallbackKey) ?? keyed.get(looseKey);
+
+    if (!existing) {
+      const closeDuplicate = Array.from(new Set(keyed.values())).find((candidate) => {
+        if (candidate.role !== normalized.role) return false;
+        if ((candidate.sessionKey ?? null) !== (normalized.sessionKey ?? null)) return false;
+        if (candidate.body !== normalized.body) return false;
+        return Math.abs(candidate.at - normalized.at) <= 15000;
+      });
+      if (closeDuplicate) existing = closeDuplicate;
+    }
 
     if (!existing) {
       if (idKey) keyed.set(idKey, normalized);
       keyed.set(fallbackKey, normalized);
+      keyed.set(looseKey, normalized);
       return;
     }
 
@@ -394,6 +409,8 @@ function mergeHydratedMessages(
 
     if (idKey) keyed.set(idKey, merged);
     keyed.set(fallbackKey, merged);
+    keyed.set(looseKey, merged);
+    keyed.set(`loose:${buildLooseKey(existing, existing.body)}`, merged);
     if (existing.id && existing.id !== merged.id) {
       keyed.set(`id:${existing.id}`, merged);
     }
