@@ -113,6 +113,13 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 ### Mission Control Runtime / Preview Notes
 - Savepoint naming rule: prefer concise savepoint filenames, e.g. `mc-savepoint-YYYY-MM-DD-<descriptor>.md`, over long sentence-style names
 - Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
+  - Apr 2 stabilization: `useRuntimeBridge.ts` now uses signature-based hydration guards so transcript history can rehydrate after model/thinking/session changes instead of getting stuck in a tools-only view
+- Autonomous Tasks sync posture:
+  - structured store (`projects/mission-control/data/autonomous-tasks.json`) remains current-state authority
+  - `AUTONOMOUS.md` is the legacy mirror/sync surface
+  - Apr 2 cleanup behavior: Mission Control `Clean up` now reconciles legacy task sections back to the structured board state for active legacy-linked tasks
+  - Apr 2 delete behavior: manual task removal now deletes the full multiline legacy task block from `AUTONOMOUS.md`, not just the bullet title line
+  - Apr 2 import behavior: stale legacy suppression keys should not permanently block regenerated backlog tasks from re-importing
   - registry source: `/data/.openclaw/agents/main/sessions/sessions.json`
   - important runtime truth: this file is keyed directly by `sessionKey`; do not assume a nested `sessions.*` wrapper when resolving a session
   - session logs: `/data/.openclaw/agents/main/sessions/<sessionId>.jsonl`
