@@ -222,65 +222,129 @@ function SidebarAmbientWidget() {
       </div>
       <div
         style={{
-          width: 100,
-          height: 100,
-          borderRadius: '50%',
-          display: 'grid',
-          justifyItems: 'center',
-          alignContent: 'center',
-          gap: 4,
           position: 'relative',
-          overflow: 'hidden',
-          background: theme.background,
-          border: `1px solid ${theme.rim}`,
-          backdropFilter: 'blur(18px)',
-          boxShadow: `0 18px 34px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.32) inset, 0 0 0 10px ${theme.accent}`,
-          transition: 'background 2s ease, box-shadow 2s ease, border-color 2s ease',
-          animation: 'sidebarAmbientOrbPulse 4s ease-in-out infinite',
+          width: 112,
+          height: 112,
+          display: 'grid',
+          placeItems: 'center',
         }}
       >
         <div
           aria-hidden
           style={{
             position: 'absolute',
-            inset: 10,
+            inset: -8,
             borderRadius: '50%',
-            background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.66) 0%, rgba(255,255,255,0.12) 42%, transparent 72%)`,
-            pointerEvents: 'none',
+            background: `radial-gradient(circle, ${theme.accent} 0%, rgba(255,255,255,0.06) 48%, transparent 72%)`,
+            filter: 'blur(16px)',
+            opacity: 0.9,
+            animation: 'sidebarAmbientHalo 4s ease-in-out infinite',
+            transition: 'background 2s ease',
+          }}
+        />
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 7,
+            borderRadius: '50%',
+            border: `1px solid ${theme.rim}`,
+            opacity: 0.8,
+            transform: 'scale(1.04)',
+            transition: 'border-color 2s ease, opacity 2s ease',
           }}
         />
         <div
           style={{
-            fontSize: 22,
-            fontWeight: 700,
-            lineHeight: 1,
-            letterSpacing: '-0.04em',
-            color: theme.text,
-            fontVariantNumeric: 'tabular-nums',
+            width: 96,
+            height: 96,
+            borderRadius: '50%',
+            display: 'grid',
+            justifyItems: 'center',
+            alignContent: 'center',
+            gap: 4,
             position: 'relative',
+            overflow: 'hidden',
+            background: theme.background,
+            border: `1px solid ${theme.rim}`,
+            backdropFilter: 'blur(18px)',
+            boxShadow: `0 18px 38px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.34) inset, 0 10px 24px rgba(255,255,255,0.12) inset`,
+            transition: 'background 2s ease, box-shadow 2s ease, border-color 2s ease',
+            animation: 'sidebarAmbientOrbFloat 4s ease-in-out infinite, sidebarAmbientOrbShadow 4s ease-in-out infinite',
           }}
         >
-          {timeLabel}
-        </div>
-        <div
-          style={{
-            fontSize: 15,
-            fontWeight: 500,
-            lineHeight: 1,
-            color: theme.text,
-            fontVariantNumeric: 'tabular-nums',
-            fontFamily: 'var(--font-sans)',
-            position: 'relative',
-          }}
-        >
-          {tempLabel}
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: '50%',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.08) 34%, rgba(255,255,255,0.02) 100%)',
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: 9,
+              borderRadius: '50%',
+              background: `radial-gradient(circle at 34% 26%, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.22) 26%, transparent 58%)`,
+              mixBlendMode: 'screen',
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              top: -18,
+              left: -34,
+              width: 64,
+              height: 132,
+              transform: 'rotate(22deg)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0) 100%)',
+              opacity: 0.55,
+              filter: 'blur(2px)',
+              pointerEvents: 'none',
+              animation: 'sidebarAmbientShimmer 7s ease-in-out infinite',
+            }}
+          />
+          <div
+            style={{
+              fontSize: 22,
+              fontWeight: 700,
+              lineHeight: 1,
+              letterSpacing: '-0.04em',
+              color: theme.text,
+              fontVariantNumeric: 'tabular-nums',
+              position: 'relative',
+              textShadow: '0 1px 0 rgba(255,255,255,0.35)',
+            }}
+          >
+            {timeLabel}
+          </div>
+          <div
+            style={{
+              fontSize: 15,
+              fontWeight: 500,
+              lineHeight: 1,
+              color: theme.text,
+              fontVariantNumeric: 'tabular-nums',
+              fontFamily: 'var(--font-sans)',
+              position: 'relative',
+              opacity: 0.92,
+            }}
+          >
+            {tempLabel}
+          </div>
         </div>
       </div>
       <div
         style={{
           display: 'grid',
           justifyItems: 'center',
-          gap: 3,
+          gap: 4,
           textAlign: 'center',
         }}
       >
@@ -289,14 +353,21 @@ function SidebarAmbientWidget() {
             display: 'inline-flex',
             alignItems: 'center',
             gap: 6,
-            minHeight: 14,
-            fontSize: 11,
-            lineHeight: 1.2,
+            minHeight: 18,
+            padding: '4px 9px',
+            borderRadius: 999,
+            fontSize: 10.5,
+            lineHeight: 1.1,
             color: theme.subtext,
+            background: 'rgba(255,255,255,0.38)',
+            border: '1px solid rgba(255,255,255,0.42)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.42)',
+            maxWidth: 150,
           }}
         >
-          <span style={{ fontSize: 14, lineHeight: 1, color: 'var(--accent-mid)' }}>{icon}</span>
-          <span>{conditionLabel}</span>
+          <span style={{ fontSize: 13, lineHeight: 1, color: 'var(--accent-mid)' }}>{icon}</span>
+          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{conditionLabel}</span>
         </div>
         <div
           style={{
@@ -312,14 +383,43 @@ function SidebarAmbientWidget() {
         </div>
       </div>
       <style jsx>{`
-        @keyframes sidebarAmbientOrbPulse {
+        @keyframes sidebarAmbientOrbFloat {
           0%, 100% {
             transform: translateY(0px) scale(1);
-            filter: saturate(1);
           }
           50% {
-            transform: translateY(-1px) scale(1.012);
-            filter: saturate(1.04);
+            transform: translateY(-2px) scale(1.015);
+          }
+        }
+
+        @keyframes sidebarAmbientOrbShadow {
+          0%, 100% {
+            box-shadow: 0 18px 38px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.34) inset, 0 10px 24px rgba(255,255,255,0.12) inset;
+          }
+          50% {
+            box-shadow: 0 22px 46px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.38) inset, 0 12px 28px rgba(255,255,255,0.18) inset;
+          }
+        }
+
+        @keyframes sidebarAmbientHalo {
+          0%, 100% {
+            opacity: 0.52;
+            transform: scale(0.98);
+          }
+          50% {
+            opacity: 0.9;
+            transform: scale(1.06);
+          }
+        }
+
+        @keyframes sidebarAmbientShimmer {
+          0%, 100% {
+            transform: translateX(-8px) rotate(22deg);
+            opacity: 0.12;
+          }
+          50% {
+            transform: translateX(34px) rotate(22deg);
+            opacity: 0.55;
           }
         }
       `}</style>
