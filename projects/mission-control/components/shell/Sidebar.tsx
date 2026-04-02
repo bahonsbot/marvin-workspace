@@ -30,64 +30,104 @@ type TimeSlotTheme = {
   rim: string;
   text: string;
   subtext: string;
+  horizon: string;
+  celestialCore: string;
+  celestialGlow: string;
+  sceneMode: 'sun' | 'moon';
+  starsOpacity: number;
 };
 
 const TIME_SLOT_THEMES: Record<string, TimeSlotTheme> = {
   dawn: {
-    background: 'linear-gradient(180deg, #f4ede6 0%, #f9f5f0 100%)',
-    accent: 'rgba(188, 134, 113, 0.30)',
-    shadow: 'rgba(188, 134, 113, 0.22)',
-    rim: 'rgba(214, 194, 181, 0.72)',
-    text: 'var(--accent-deep)',
-    subtext: 'rgba(73, 81, 78, 0.72)',
+    background: 'linear-gradient(180deg, #1f355f 0%, #5f6ca6 38%, #f3b47d 72%, #f7e6c6 100%)',
+    accent: 'rgba(255, 183, 122, 0.42)',
+    shadow: 'rgba(95, 94, 190, 0.32)',
+    rim: 'rgba(255, 231, 204, 0.56)',
+    text: '#fffaf2',
+    subtext: 'rgba(107, 90, 74, 0.84)',
+    horizon: 'linear-gradient(180deg, rgba(255,189,126,0) 0%, rgba(255,182,118,0.16) 52%, rgba(255,212,166,0.52) 100%)',
+    celestialCore: '#ffd993',
+    celestialGlow: 'rgba(255, 196, 116, 0.55)',
+    sceneMode: 'sun',
+    starsOpacity: 0.38,
   },
   morning: {
-    background: 'linear-gradient(180deg, #f9f5f0 0%, #f5f0eb 100%)',
-    accent: 'rgba(140, 152, 92, 0.26)',
-    shadow: 'rgba(148, 124, 64, 0.20)',
-    rim: 'rgba(224, 214, 197, 0.78)',
-    text: 'var(--accent-deep)',
-    subtext: 'rgba(72, 86, 76, 0.72)',
+    background: 'linear-gradient(180deg, #87b7ff 0%, #9fd2ff 42%, #d7efff 100%)',
+    accent: 'rgba(126, 196, 255, 0.36)',
+    shadow: 'rgba(86, 152, 214, 0.26)',
+    rim: 'rgba(240, 250, 255, 0.62)',
+    text: '#fffefb',
+    subtext: 'rgba(74, 89, 112, 0.84)',
+    horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,243,212,0.14) 58%, rgba(255,241,205,0.34) 100%)',
+    celestialCore: '#ffd86f',
+    celestialGlow: 'rgba(255, 216, 111, 0.54)',
+    sceneMode: 'sun',
+    starsOpacity: 0,
   },
   midday: {
-    background: 'linear-gradient(180deg, #f5f0eb 0%, #f0ece6 100%)',
-    accent: 'rgba(165, 156, 136, 0.22)',
-    shadow: 'rgba(108, 120, 116, 0.16)',
-    rim: 'rgba(220, 212, 201, 0.76)',
-    text: 'var(--accent-deep)',
-    subtext: 'rgba(88, 92, 92, 0.72)',
+    background: 'linear-gradient(180deg, #66b7ff 0%, #9fe1ff 48%, #def7ff 100%)',
+    accent: 'rgba(111, 202, 255, 0.38)',
+    shadow: 'rgba(69, 144, 224, 0.24)',
+    rim: 'rgba(239, 251, 255, 0.66)',
+    text: '#fffefb',
+    subtext: 'rgba(72, 98, 118, 0.84)',
+    horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,249,226,0.08) 60%, rgba(255,247,222,0.24) 100%)',
+    celestialCore: '#ffe36f',
+    celestialGlow: 'rgba(255, 227, 111, 0.58)',
+    sceneMode: 'sun',
+    starsOpacity: 0,
   },
   afternoon: {
-    background: 'linear-gradient(180deg, #f0ece6 0%, #eae6de 100%)',
-    accent: 'rgba(156, 146, 128, 0.24)',
-    shadow: 'rgba(95, 109, 103, 0.18)',
-    rim: 'rgba(214, 205, 192, 0.78)',
-    text: 'var(--accent-deep)',
-    subtext: 'rgba(83, 88, 87, 0.7)',
+    background: 'linear-gradient(180deg, #58a8f1 0%, #89c7ff 44%, #f3d7aa 100%)',
+    accent: 'rgba(115, 182, 255, 0.36)',
+    shadow: 'rgba(81, 130, 195, 0.24)',
+    rim: 'rgba(241, 236, 224, 0.58)',
+    text: '#fffefb',
+    subtext: 'rgba(99, 87, 77, 0.82)',
+    horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,209,153,0.12) 58%, rgba(243,186,117,0.36) 100%)',
+    celestialCore: '#ffd36b',
+    celestialGlow: 'rgba(255, 211, 107, 0.5)',
+    sceneMode: 'sun',
+    starsOpacity: 0,
   },
   evening: {
-    background: 'linear-gradient(180deg, #e8e0d8 0%, #ddd6cc 100%)',
-    accent: 'rgba(171, 132, 92, 0.30)',
-    shadow: 'rgba(121, 88, 58, 0.22)',
-    rim: 'rgba(203, 190, 176, 0.78)',
-    text: 'var(--accent-deep)',
-    subtext: 'rgba(89, 79, 72, 0.72)',
+    background: 'linear-gradient(180deg, #334b86 0%, #8263a8 40%, #ef9a68 74%, #f6d5ae 100%)',
+    accent: 'rgba(235, 147, 104, 0.42)',
+    shadow: 'rgba(104, 74, 150, 0.3)',
+    rim: 'rgba(248, 214, 191, 0.56)',
+    text: '#fff9f0',
+    subtext: 'rgba(107, 82, 67, 0.84)',
+    horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,170,109,0.12) 58%, rgba(247,174,112,0.46) 100%)',
+    celestialCore: '#ffbf68',
+    celestialGlow: 'rgba(255, 161, 90, 0.58)',
+    sceneMode: 'sun',
+    starsOpacity: 0.22,
   },
   night: {
-    background: 'linear-gradient(180deg, #ddd6cc 0%, #d4cdc4 100%)',
-    accent: 'rgba(109, 133, 123, 0.28)',
-    shadow: 'rgba(73, 96, 88, 0.24)',
-    rim: 'rgba(191, 186, 178, 0.78)',
-    text: 'var(--accent-deep)',
-    subtext: 'rgba(70, 83, 79, 0.74)',
+    background: 'linear-gradient(180deg, #07152e 0%, #132b5b 42%, #26437a 100%)',
+    accent: 'rgba(106, 156, 255, 0.34)',
+    shadow: 'rgba(20, 37, 78, 0.42)',
+    rim: 'rgba(163, 198, 255, 0.34)',
+    text: '#f5f9ff',
+    subtext: 'rgba(189, 208, 240, 0.82)',
+    horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(77,114,189,0.08) 54%, rgba(52,86,156,0.32) 100%)',
+    celestialCore: '#f2f7ff',
+    celestialGlow: 'rgba(183, 214, 255, 0.46)',
+    sceneMode: 'moon',
+    starsOpacity: 0.92,
   },
   lateNight: {
-    background: 'linear-gradient(180deg, #d4cdc4 0%, #c8c2ba 100%)',
-    accent: 'rgba(95, 111, 120, 0.28)',
-    shadow: 'rgba(60, 78, 89, 0.24)',
-    rim: 'rgba(178, 173, 166, 0.8)',
-    text: 'var(--accent-deep)',
-    subtext: 'rgba(68, 76, 82, 0.74)',
+    background: 'linear-gradient(180deg, #030d1f 0%, #102447 42%, #18386b 100%)',
+    accent: 'rgba(95, 132, 220, 0.34)',
+    shadow: 'rgba(11, 25, 52, 0.48)',
+    rim: 'rgba(149, 180, 238, 0.3)',
+    text: '#f4f8ff',
+    subtext: 'rgba(185, 204, 236, 0.8)',
+    horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(55,84,140,0.06) 54%, rgba(35,62,113,0.32) 100%)',
+    celestialCore: '#f7fbff',
+    celestialGlow: 'rgba(164, 195, 255, 0.42)',
+    sceneMode: 'moon',
+    starsOpacity: 1,
   },
 };
 
@@ -223,8 +263,8 @@ function SidebarAmbientWidget() {
       <div
         style={{
           position: 'relative',
-          width: 112,
-          height: 112,
+          width: 122,
+          height: 122,
           display: 'grid',
           placeItems: 'center',
         }}
@@ -233,11 +273,11 @@ function SidebarAmbientWidget() {
           aria-hidden
           style={{
             position: 'absolute',
-            inset: -8,
+            inset: -14,
             borderRadius: '50%',
-            background: `radial-gradient(circle, ${theme.accent} 0%, rgba(255,255,255,0.06) 48%, transparent 72%)`,
-            filter: 'blur(16px)',
-            opacity: 0.9,
+            background: `radial-gradient(circle, ${theme.accent} 0%, rgba(255,255,255,0.05) 42%, transparent 72%)`,
+            filter: 'blur(18px)',
+            opacity: 0.95,
             animation: 'sidebarAmbientHalo 4s ease-in-out infinite',
             transition: 'background 2s ease',
           }}
@@ -246,18 +286,18 @@ function SidebarAmbientWidget() {
           aria-hidden
           style={{
             position: 'absolute',
-            inset: 7,
+            inset: 4,
             borderRadius: '50%',
             border: `1px solid ${theme.rim}`,
-            opacity: 0.8,
-            transform: 'scale(1.04)',
+            opacity: 0.42,
+            transform: 'scale(1.05)',
             transition: 'border-color 2s ease, opacity 2s ease',
           }}
         />
         <div
           style={{
-            width: 96,
-            height: 96,
+            width: 102,
+            height: 102,
             borderRadius: '50%',
             display: 'grid',
             justifyItems: 'center',
@@ -267,8 +307,7 @@ function SidebarAmbientWidget() {
             overflow: 'hidden',
             background: theme.background,
             border: `1px solid ${theme.rim}`,
-            backdropFilter: 'blur(18px)',
-            boxShadow: `0 18px 38px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.34) inset, 0 10px 24px rgba(255,255,255,0.12) inset`,
+            boxShadow: `0 22px 46px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.14) inset`,
             transition: 'background 2s ease, box-shadow 2s ease, border-color 2s ease',
             animation: 'sidebarAmbientOrbFloat 4s ease-in-out infinite, sidebarAmbientOrbShadow 4s ease-in-out infinite',
           }}
@@ -279,7 +318,7 @@ function SidebarAmbientWidget() {
               position: 'absolute',
               inset: 0,
               borderRadius: '50%',
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.08) 34%, rgba(255,255,255,0.02) 100%)',
+              background: theme.horizon,
               pointerEvents: 'none',
             }}
           />
@@ -287,10 +326,9 @@ function SidebarAmbientWidget() {
             aria-hidden
             style={{
               position: 'absolute',
-              inset: 9,
+              inset: 0,
               borderRadius: '50%',
-              background: `radial-gradient(circle at 34% 26%, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.22) 26%, transparent 58%)`,
-              mixBlendMode: 'screen',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 44%, rgba(0,0,0,0.08) 100%)',
               pointerEvents: 'none',
             }}
           />
@@ -298,16 +336,96 @@ function SidebarAmbientWidget() {
             aria-hidden
             style={{
               position: 'absolute',
-              top: -18,
-              left: -34,
-              width: 64,
-              height: 132,
-              transform: 'rotate(22deg)',
-              background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 48%, rgba(255,255,255,0) 100%)',
-              opacity: 0.55,
-              filter: 'blur(2px)',
+              inset: 0,
+              borderRadius: '50%',
+              opacity: theme.starsOpacity,
+              transition: 'opacity 2s ease',
               pointerEvents: 'none',
-              animation: 'sidebarAmbientShimmer 7s ease-in-out infinite',
+            }}
+          >
+            {[
+              { top: '18%', left: '24%', size: 2.2, delay: '0s' },
+              { top: '26%', left: '68%', size: 1.8, delay: '1.3s' },
+              { top: '38%', left: '18%', size: 1.7, delay: '0.7s' },
+              { top: '22%', left: '52%', size: 2.4, delay: '2.1s' },
+              { top: '46%', left: '76%', size: 1.6, delay: '1.7s' },
+              { top: '56%', left: '26%', size: 1.5, delay: '2.8s' },
+            ].map((star, index) => (
+              <span
+                key={index}
+                style={{
+                  position: 'absolute',
+                  top: star.top,
+                  left: star.left,
+                  width: star.size,
+                  height: star.size,
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.95)',
+                  boxShadow: '0 0 6px rgba(255,255,255,0.9)',
+                  animation: `sidebarAmbientStarTwinkle 3.8s ease-in-out ${star.delay} infinite`,
+                }}
+              />
+            ))}
+          </div>
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              top: theme.sceneMode === 'moon' ? 20 : 22,
+              right: theme.sceneMode === 'moon' ? 22 : 24,
+              width: theme.sceneMode === 'moon' ? 24 : 28,
+              height: theme.sceneMode === 'moon' ? 24 : 28,
+              borderRadius: '50%',
+              background: theme.celestialCore,
+              boxShadow: `0 0 0 8px ${theme.celestialGlow}, 0 0 22px ${theme.celestialGlow}`,
+              transition: 'all 2s ease',
+              animation: theme.sceneMode === 'moon' ? 'sidebarAmbientMoonDrift 10s ease-in-out infinite' : 'sidebarAmbientSunGlow 5s ease-in-out infinite',
+            }}
+          >
+            {theme.sceneMode === 'moon' ? (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: -1,
+                  left: 8,
+                  width: 24,
+                  height: 24,
+                  borderRadius: '50%',
+                  background: theme.background,
+                  opacity: 0.95,
+                }}
+              />
+            ) : null}
+          </div>
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              bottom: 18,
+              left: 16,
+              width: 72,
+              height: 20,
+              borderRadius: 999,
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.04) 100%)',
+              filter: 'blur(10px)',
+              opacity: theme.sceneMode === 'moon' ? 0.18 : 0.3,
+              transform: 'rotate(-6deg)',
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '33%',
+              background: theme.sceneMode === 'moon'
+                ? 'linear-gradient(180deg, rgba(17,34,68,0.1) 0%, rgba(8,22,47,0.92) 100%)'
+                : 'linear-gradient(180deg, rgba(222,169,110,0.08) 0%, rgba(133,92,60,0.92) 100%)',
+              clipPath: 'ellipse(70% 78% at 50% 100%)',
+              pointerEvents: 'none',
             }}
           />
           <div
@@ -319,7 +437,8 @@ function SidebarAmbientWidget() {
               color: theme.text,
               fontVariantNumeric: 'tabular-nums',
               position: 'relative',
-              textShadow: '0 1px 0 rgba(255,255,255,0.35)',
+              textShadow: theme.sceneMode === 'moon' ? '0 1px 10px rgba(0,0,0,0.28)' : '0 1px 10px rgba(255,179,91,0.18)',
+              zIndex: 1,
             }}
           >
             {timeLabel}
@@ -333,7 +452,8 @@ function SidebarAmbientWidget() {
               fontVariantNumeric: 'tabular-nums',
               fontFamily: 'var(--font-sans)',
               position: 'relative',
-              opacity: 0.92,
+              opacity: 0.96,
+              zIndex: 1,
             }}
           >
             {tempLabel}
@@ -394,32 +514,52 @@ function SidebarAmbientWidget() {
 
         @keyframes sidebarAmbientOrbShadow {
           0%, 100% {
-            box-shadow: 0 18px 38px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.34) inset, 0 10px 24px rgba(255,255,255,0.12) inset;
+            box-shadow: 0 22px 46px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.14) inset;
           }
           50% {
-            box-shadow: 0 22px 46px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.38) inset, 0 12px 28px rgba(255,255,255,0.18) inset;
+            box-shadow: 0 28px 58px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.2) inset;
           }
         }
 
         @keyframes sidebarAmbientHalo {
           0%, 100% {
-            opacity: 0.52;
+            opacity: 0.56;
             transform: scale(0.98);
           }
           50% {
-            opacity: 0.9;
-            transform: scale(1.06);
+            opacity: 1;
+            transform: scale(1.08);
           }
         }
 
-        @keyframes sidebarAmbientShimmer {
+        @keyframes sidebarAmbientStarTwinkle {
           0%, 100% {
-            transform: translateX(-8px) rotate(22deg);
-            opacity: 0.12;
+            opacity: 0.35;
+            transform: scale(0.9);
           }
           50% {
-            transform: translateX(34px) rotate(22deg);
-            opacity: 0.55;
+            opacity: 1;
+            transform: scale(1.25);
+          }
+        }
+
+        @keyframes sidebarAmbientMoonDrift {
+          0%, 100% {
+            transform: translate3d(0, 0, 0);
+          }
+          50% {
+            transform: translate3d(-2px, 1px, 0);
+          }
+        }
+
+        @keyframes sidebarAmbientSunGlow {
+          0%, 100% {
+            transform: scale(1);
+            filter: saturate(1);
+          }
+          50% {
+            transform: scale(1.06);
+            filter: saturate(1.08);
           }
         }
       `}</style>
