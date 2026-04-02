@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "495632ea",
+        "text": "[Philippe] \ud83d\udcdd Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability \u2014 missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
+        "column": "todo"
+      },
+      {
         "id": "5f6ccd7c",
         "text": "Create a clean implementation plan for a more dynamic and collapsible left menu bar",
         "column": "todo"
@@ -17,13 +22,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "227a9300",
-        "text": "[Philippe] \ud83d\udcdd Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability \u2014 missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "24fa9c1b",
@@ -62,5 +61,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-02T10:00:15.000Z"
+  "updatedAt": "2026-04-02T10:00:17.000Z"
 }
