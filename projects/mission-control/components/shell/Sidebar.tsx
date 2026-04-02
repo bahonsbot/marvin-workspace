@@ -29,7 +29,7 @@ type TimeSlotTheme = {
   shadow: string;
   rim: string;
   text: string;
-  subtext: string;
+  supportText: string;
   horizon: string;
   celestialCore: string;
   celestialGlow: string;
@@ -44,7 +44,7 @@ const TIME_SLOT_THEMES: Record<string, TimeSlotTheme> = {
     shadow: 'rgba(95, 94, 190, 0.32)',
     rim: 'rgba(255, 231, 204, 0.56)',
     text: '#fffaf2',
-    subtext: 'rgba(107, 90, 74, 0.84)',
+    supportText: 'rgba(37, 39, 44, 0.82)',
     horizon: 'linear-gradient(180deg, rgba(255,189,126,0) 0%, rgba(255,182,118,0.16) 52%, rgba(255,212,166,0.52) 100%)',
     celestialCore: '#ffd993',
     celestialGlow: 'rgba(255, 196, 116, 0.55)',
@@ -57,7 +57,7 @@ const TIME_SLOT_THEMES: Record<string, TimeSlotTheme> = {
     shadow: 'rgba(86, 152, 214, 0.26)',
     rim: 'rgba(240, 250, 255, 0.62)',
     text: '#fffefb',
-    subtext: 'rgba(74, 89, 112, 0.84)',
+    supportText: 'rgba(34, 38, 44, 0.84)',
     horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,243,212,0.14) 58%, rgba(255,241,205,0.34) 100%)',
     celestialCore: '#ffd86f',
     celestialGlow: 'rgba(255, 216, 111, 0.54)',
@@ -70,7 +70,7 @@ const TIME_SLOT_THEMES: Record<string, TimeSlotTheme> = {
     shadow: 'rgba(69, 144, 224, 0.24)',
     rim: 'rgba(239, 251, 255, 0.66)',
     text: '#fffefb',
-    subtext: 'rgba(72, 98, 118, 0.84)',
+    supportText: 'rgba(34, 38, 44, 0.84)',
     horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,249,226,0.08) 60%, rgba(255,247,222,0.24) 100%)',
     celestialCore: '#ffe36f',
     celestialGlow: 'rgba(255, 227, 111, 0.58)',
@@ -83,7 +83,7 @@ const TIME_SLOT_THEMES: Record<string, TimeSlotTheme> = {
     shadow: 'rgba(81, 130, 195, 0.24)',
     rim: 'rgba(241, 236, 224, 0.58)',
     text: '#fffefb',
-    subtext: 'rgba(99, 87, 77, 0.82)',
+    supportText: 'rgba(36, 37, 40, 0.82)',
     horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,209,153,0.12) 58%, rgba(243,186,117,0.36) 100%)',
     celestialCore: '#ffd36b',
     celestialGlow: 'rgba(255, 211, 107, 0.5)',
@@ -96,7 +96,7 @@ const TIME_SLOT_THEMES: Record<string, TimeSlotTheme> = {
     shadow: 'rgba(104, 74, 150, 0.3)',
     rim: 'rgba(248, 214, 191, 0.56)',
     text: '#fff9f0',
-    subtext: 'rgba(107, 82, 67, 0.84)',
+    supportText: 'rgba(38, 36, 40, 0.84)',
     horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,170,109,0.12) 58%, rgba(247,174,112,0.46) 100%)',
     celestialCore: '#ffbf68',
     celestialGlow: 'rgba(255, 161, 90, 0.58)',
@@ -109,7 +109,7 @@ const TIME_SLOT_THEMES: Record<string, TimeSlotTheme> = {
     shadow: 'rgba(20, 37, 78, 0.42)',
     rim: 'rgba(163, 198, 255, 0.34)',
     text: '#f5f9ff',
-    subtext: 'rgba(189, 208, 240, 0.82)',
+    supportText: 'rgba(34, 38, 46, 0.86)',
     horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(77,114,189,0.08) 54%, rgba(52,86,156,0.32) 100%)',
     celestialCore: '#f2f7ff',
     celestialGlow: 'rgba(183, 214, 255, 0.46)',
@@ -122,7 +122,7 @@ const TIME_SLOT_THEMES: Record<string, TimeSlotTheme> = {
     shadow: 'rgba(11, 25, 52, 0.48)',
     rim: 'rgba(149, 180, 238, 0.3)',
     text: '#f4f8ff',
-    subtext: 'rgba(185, 204, 236, 0.8)',
+    supportText: 'rgba(34, 38, 46, 0.86)',
     horizon: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(55,84,140,0.06) 54%, rgba(35,62,113,0.32) 100%)',
     celestialCore: '#f7fbff',
     celestialGlow: 'rgba(164, 195, 255, 0.42)',
@@ -139,6 +139,68 @@ function getTimeSlot(hour: number) {
   if (hour >= 17 && hour < 20) return 'evening';
   if (hour >= 20 && hour < 23) return 'night';
   return 'lateNight';
+}
+
+function getWeatherSceneAdjustments(condition: string | null) {
+  const text = (condition ?? '').toLowerCase();
+
+  if (text.includes('thunder')) {
+    return {
+      cloudOpacity: 0.42,
+      rainOpacity: 0.2,
+      hazeOpacity: 0.16,
+      starsMultiplier: 0.45,
+      tint: 'rgba(255, 243, 167, 0.14)',
+    };
+  }
+
+  if (text.includes('rain') || text.includes('drizzle') || text.includes('showers')) {
+    return {
+      cloudOpacity: 0.38,
+      rainOpacity: 0.28,
+      hazeOpacity: 0.12,
+      starsMultiplier: 0.55,
+      tint: 'rgba(124, 161, 214, 0.18)',
+    };
+  }
+
+  if (text.includes('cloud') || text.includes('overcast')) {
+    return {
+      cloudOpacity: 0.34,
+      rainOpacity: 0,
+      hazeOpacity: 0.1,
+      starsMultiplier: 0.6,
+      tint: 'rgba(218, 226, 234, 0.16)',
+    };
+  }
+
+  if (text.includes('fog')) {
+    return {
+      cloudOpacity: 0.18,
+      rainOpacity: 0,
+      hazeOpacity: 0.22,
+      starsMultiplier: 0.2,
+      tint: 'rgba(231, 236, 242, 0.18)',
+    };
+  }
+
+  if (text.includes('snow')) {
+    return {
+      cloudOpacity: 0.16,
+      rainOpacity: 0,
+      hazeOpacity: 0.14,
+      starsMultiplier: 0.75,
+      tint: 'rgba(240, 246, 255, 0.18)',
+    };
+  }
+
+  return {
+    cloudOpacity: 0.12,
+    rainOpacity: 0,
+    hazeOpacity: 0.06,
+    starsMultiplier: 1,
+    tint: 'rgba(255,255,255,0.06)',
+  };
 }
 
 function SidebarAmbientWidget() {
@@ -237,6 +299,7 @@ function SidebarAmbientWidget() {
   const tempLabel = weather?.temperatureC != null ? `${Math.round(weather.temperatureC)}°` : '—';
   const conditionLabel = formatCondition(weather?.condition ?? null);
   const icon = weatherIcon(weather?.condition ?? null);
+  const weatherScene = useMemo(() => getWeatherSceneAdjustments(weather?.condition ?? null), [weather?.condition]);
 
   return (
     <div
@@ -248,18 +311,6 @@ function SidebarAmbientWidget() {
         position: 'relative',
       }}
     >
-      <div
-        style={{
-          fontSize: 10,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          color: theme.subtext,
-          fontWeight: 700,
-          textAlign: 'center',
-        }}
-      >
-        Hoi An, Vietnam
-      </div>
       <div
         style={{
           position: 'relative',
@@ -309,7 +360,7 @@ function SidebarAmbientWidget() {
             border: `1px solid ${theme.rim}`,
             boxShadow: `0 22px 46px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.14) inset`,
             transition: 'background 2s ease, box-shadow 2s ease, border-color 2s ease',
-            animation: 'sidebarAmbientOrbFloat 4s ease-in-out infinite, sidebarAmbientOrbShadow 4s ease-in-out infinite',
+            animation: 'sidebarAmbientOrbShadow 4s ease-in-out infinite',
           }}
         >
           <div
@@ -338,7 +389,7 @@ function SidebarAmbientWidget() {
               position: 'absolute',
               inset: 0,
               borderRadius: '50%',
-              opacity: theme.starsOpacity,
+              opacity: theme.starsOpacity * weatherScene.starsMultiplier,
               transition: 'opacity 2s ease',
               pointerEvents: 'none',
             }}
@@ -371,10 +422,10 @@ function SidebarAmbientWidget() {
             aria-hidden
             style={{
               position: 'absolute',
-              top: theme.sceneMode === 'moon' ? 20 : 22,
-              right: theme.sceneMode === 'moon' ? 22 : 24,
-              width: theme.sceneMode === 'moon' ? 24 : 28,
-              height: theme.sceneMode === 'moon' ? 24 : 28,
+              top: theme.sceneMode === 'moon' ? 18 : 20,
+              right: theme.sceneMode === 'moon' ? 18 : 22,
+              width: theme.sceneMode === 'moon' ? 18 : 26,
+              height: theme.sceneMode === 'moon' ? 18 : 26,
               borderRadius: '50%',
               background: theme.celestialCore,
               boxShadow: `0 0 0 8px ${theme.celestialGlow}, 0 0 22px ${theme.celestialGlow}`,
@@ -387,9 +438,9 @@ function SidebarAmbientWidget() {
                 style={{
                   position: 'absolute',
                   top: -1,
-                  left: 8,
-                  width: 24,
-                  height: 24,
+                  left: 6,
+                  width: 18,
+                  height: 18,
                   borderRadius: '50%',
                   background: theme.background,
                   opacity: 0.95,
@@ -410,6 +461,91 @@ function SidebarAmbientWidget() {
               filter: 'blur(10px)',
               opacity: theme.sceneMode === 'moon' ? 0.18 : 0.3,
               transform: 'rotate(-6deg)',
+              pointerEvents: 'none',
+              animation: 'sidebarAmbientInnerDrift 8s ease-in-out infinite',
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: 0,
+              borderRadius: '50%',
+              background: weatherScene.tint,
+              opacity: 0.9,
+              pointerEvents: 'none',
+              transition: 'background 2s ease, opacity 2s ease',
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              top: 34,
+              left: 18,
+              width: 42,
+              height: 14,
+              borderRadius: 999,
+              background: 'rgba(255,255,255,0.78)',
+              filter: 'blur(0.2px)',
+              opacity: weatherScene.cloudOpacity,
+              transition: 'opacity 1.2s ease',
+              animation: 'sidebarAmbientInnerDrift 11s ease-in-out infinite',
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              top: 42,
+              left: 34,
+              width: 30,
+              height: 10,
+              borderRadius: 999,
+              background: 'rgba(255,255,255,0.68)',
+              opacity: weatherScene.cloudOpacity * 0.9,
+              transition: 'opacity 1.2s ease',
+              animation: 'sidebarAmbientInnerDrift 9s ease-in-out infinite reverse',
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: 0,
+              opacity: weatherScene.rainOpacity,
+              transition: 'opacity 1.2s ease',
+              pointerEvents: 'none',
+            }}
+          >
+            {Array.from({ length: 7 }).map((_, index) => (
+              <span
+                key={index}
+                style={{
+                  position: 'absolute',
+                  top: `${52 + (index % 2) * 6}%`,
+                  left: `${18 + index * 10}%`,
+                  width: 1.5,
+                  height: 10,
+                  borderRadius: 999,
+                  background: 'rgba(207, 232, 255, 0.75)',
+                  transform: 'rotate(14deg)',
+                  animation: `sidebarAmbientRain 1.6s linear ${index * 0.18}s infinite`,
+                }}
+              />
+            ))}
+          </div>
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              inset: 8,
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 38%, transparent 72%)',
+              opacity: weatherScene.hazeOpacity,
+              transition: 'opacity 1.2s ease',
               pointerEvents: 'none',
             }}
           />
@@ -478,9 +614,9 @@ function SidebarAmbientWidget() {
             borderRadius: 999,
             fontSize: 10.5,
             lineHeight: 1.1,
-            color: theme.subtext,
-            background: 'rgba(255,255,255,0.38)',
-            border: '1px solid rgba(255,255,255,0.42)',
+            color: theme.supportText,
+            background: 'rgba(255,255,255,0.62)',
+            border: '1px solid rgba(255,255,255,0.52)',
             backdropFilter: 'blur(12px)',
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.42)',
             maxWidth: 150,
@@ -495,7 +631,7 @@ function SidebarAmbientWidget() {
             lineHeight: 1.2,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: theme.subtext,
+            color: theme.supportText,
             fontVariantNumeric: 'tabular-nums',
           }}
         >
@@ -503,15 +639,6 @@ function SidebarAmbientWidget() {
         </div>
       </div>
       <style jsx>{`
-        @keyframes sidebarAmbientOrbFloat {
-          0%, 100% {
-            transform: translateY(0px) scale(1);
-          }
-          50% {
-            transform: translateY(-2px) scale(1.015);
-          }
-        }
-
         @keyframes sidebarAmbientOrbShadow {
           0%, 100% {
             box-shadow: 0 22px 46px ${theme.shadow}, 0 0 0 1px rgba(255,255,255,0.14) inset;
@@ -560,6 +687,29 @@ function SidebarAmbientWidget() {
           50% {
             transform: scale(1.06);
             filter: saturate(1.08);
+          }
+        }
+
+        @keyframes sidebarAmbientInnerDrift {
+          0%, 100% {
+            transform: translate3d(0, 0, 0);
+          }
+          50% {
+            transform: translate3d(2px, -1px, 0);
+          }
+        }
+
+        @keyframes sidebarAmbientRain {
+          0% {
+            opacity: 0;
+            transform: translateY(-2px) rotate(14deg);
+          }
+          20% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(10px) rotate(14deg);
           }
         }
       `}</style>
