@@ -349,6 +349,7 @@ function mergeHydratedMessages(
   incoming: RuntimeBridgeChatMessage[],
   sessionKey: string | null,
 ): RuntimeBridgeChatMessage[] {
+  const debugEnabled = process.env.NODE_ENV !== 'production';
   const scopedCurrent = current.filter((message) => !sessionKey || message.sessionKey === sessionKey || message.sessionKey === null);
   const keyed = new Map<string, RuntimeBridgeChatMessage>();
 
@@ -428,6 +429,38 @@ function mergeHydratedMessages(
 
   const deduped = Array.from(new Set(keyed.values()));
   deduped.sort((a, b) => a.at - b.at || a.id.localeCompare(b.id));
+
+  if (debugEnabled && typeof window !== 'undefined') {
+    const duplicateGroups = new Map<string, RuntimeBridgeChatMessage[]>();
+    for (const message of deduped) {
+      const key = `${message.role}|${message.body}`;
+      const group = duplicateGroups.get(key) ?? [];
+      group.push(message);
+      duplicateGroups.set(key, group);
+    }
+    const suspicious = Array.from(duplicateGroups.entries())
+      .filter(([, group]) => group.length > 1)
+      .map(([key, group]) => ({
+        key,
+        count: group.length,
+        variants: group.map((message) => ({
+          id: message.id,
+          sessionKey: message.sessionKey,
+          runId: message.runId,
+          status: message.status,
+          at: message.at,
+        })),
+      }));
+    if (suspicious.length > 0) {
+      console.warn('[MissionControl][mergeHydratedMessages] duplicate survivors', {
+        sessionKey,
+        suspicious,
+        current: scopedCurrent.map((message) => ({ id: message.id, role: message.role, sessionKey: message.sessionKey, runId: message.runId, at: message.at, body: message.body })),
+        incoming: incoming.map((message) => ({ id: message.id, role: message.role, sessionKey: message.sessionKey, runId: message.runId, at: message.at, body: message.body })),
+      });
+    }
+  }
+
   return deduped.slice(-MAX_LIVE_MESSAGES);
 }
 

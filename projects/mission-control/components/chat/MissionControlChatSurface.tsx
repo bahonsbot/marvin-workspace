@@ -1229,6 +1229,27 @@ export function MissionControlChatSurface({
 
   transcriptItems.sort((a, b) => a.at - b.at);
 
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    const groups = new Map<string, Array<{ id: string; at: number; role: string; sessionKey: string | null; runId: string | null }>>();
+    for (const message of liveMessages) {
+      const key = `${message.role}|${message.body}`;
+      const group = groups.get(key) ?? [];
+      group.push({
+        id: message.id,
+        at: message.at,
+        role: message.role,
+        sessionKey: message.sessionKey,
+        runId: message.runId,
+      });
+      groups.set(key, group);
+    }
+    const duplicates = Array.from(groups.entries()).filter(([, group]) => group.length > 1);
+    if (duplicates.length > 0) {
+      console.warn('[MissionControl][ChatSurface] duplicate live messages', duplicates);
+    }
+  }, [liveMessages]);
+
   return (
     <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 8, minHeight: '100%', height: '100%' }}>
       <section
