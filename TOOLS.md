@@ -111,6 +111,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Save points / refs: `projects/_ops/cron-savepoint-2026-03-16.md`, `docs/runbooks/deterministic-scheduler-host-service.md`
 
 ### Mission Control Runtime / Preview Notes
+- Savepoint naming rule: prefer concise savepoint filenames, e.g. `mc-savepoint-YYYY-MM-DD-<descriptor>.md`, over long sentence-style names
 - Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
   - registry source: `/data/.openclaw/agents/main/sessions/sessions.json`
   - important runtime truth: this file is keyed directly by `sessionKey`; do not assume a nested `sessions.*` wrapper when resolving a session

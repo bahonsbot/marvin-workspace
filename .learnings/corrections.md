@@ -33,7 +33,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** Keep workspace doc filenames concise and human-manageable. Prefer short, descriptive names with date suffixes over sentence-length filenames.
 
 **Priority:** medium
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-02 (future filename guidance adopted in Morning Meeting; shorter savepoint naming rule approved)
 
 ## [CORR-20260330-1044]
 
@@ -42,7 +43,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** When a newer file becomes the canonical source of truth, distinguish carefully between `canonical`, `supporting reference`, and `deprecated`. Do not mark companion runbooks as deprecated if they still provide valid context or implementation detail that active workflows may rely on.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-02 (rule is documented and no repeat violation occurred)
 
 ## [CORR-20260329-1924]
 
@@ -71,7 +73,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** Never edit `~/.openclaw/agents/main/agent/auth-profiles.json` without Philippe’s explicit permission. For runtime OAuth issues, inspect, explain, and propose first; if action is approved, prefer the supported command path rather than direct file edits.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-02 (durable rule established and no repeat violations observed)
 
 ## [CORR-20260327-2217]
 
@@ -80,7 +83,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** For Mission Control Chat, keep the main conversation as one unified chat surface. Reserve bubbles/boxes for Thinking and Tools output only. Remove unnecessary explanatory subtitle copy, keep session selection compact, prefer a fixed-height internally scrolling chat area, strip raw metadata/timestamp wrappers from visible message bodies, include a proper input area, and make participants feel more personal than generic `ASSISTANT` / `USER`.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-02 (Chat surface was iterated and verified as good enough for now)
 
 ## [CORR-20260327-1409]
 
@@ -118,7 +122,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** When upgrading provisional manual boards into real interaction surfaces, remove seed IDs, internal labels, autonomous-board copy, and now-obsolete fallback controls. Placeholder scaffolding should not survive into normal user-facing board use once the intended kanban interaction exists.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-02 (manual-board cleanup landed and placeholder scaffolding was removed)
 
 ## [CORR-20260325-1425]
 
@@ -127,7 +132,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** For Mission Control build work, explicitly consider (1) Agent Team for implementation/review support and (2) Stitch MCP export as a first-class bridge between Stitch design and the real app build. Do not default to manual interpretation if those tools can reduce drift.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-02 (tooling reminders are documented and now used routinely)
 
 ## [CORR-20260325-1332]
 
@@ -425,5 +431,5 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Trigger:** Philippe reviewed the implemented Chat redesign (commit 43805ba) and said "not close to how I want it to be yet, but it's a start."
 **What this means:** The Stitch → Codex implementation captured the structural elements (bubbles, composer, greeting, layout) but didn't hit the right visual quality bar. Needs iteration.
 **Lesson:** First-pass Stitch implementations should be treated as structural proof-of-concept, not final visual quality. Budget for at least one iteration round before declaring a page "done." When Philippe says "it's a start," that means the gap between the Stitch concept and the implementation is still significant.
-**Status:** open — Chat needs a second design iteration pass
+**Status:** resolved — Chat was reworked across Mar 27-31 (FLOATING visual system, runtime bridge, UX polish) and reached "good enough for now" per Apr 1 assessment. The second iteration happened; the lesson remains active.
 **Prevention:** Set expectations with Philippe that first implementations from Stitch will need at least one review/iteration cycle before reaching the target quality.
