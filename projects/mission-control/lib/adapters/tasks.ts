@@ -146,6 +146,68 @@ function removeStaleDoneTodayEntries(markdown: string, structuredDoneKeys: Set<s
   return { markdown: nextLines.join('\n'), removed };
 }
 
+function replaceLegacySectionTasks(markdown: string, sectionHeader: string, tasks: string[]): { markdown: string; sectionFound: boolean } {
+  const lines = markdown.split('\n');
+  const headerIndex = lines.findIndex((line) => line.trim() === sectionHeader);
+  if (headerIndex === -1) {
+    return { markdown, sectionFound: false };
+  }
+
+  let sectionEndIndex = lines.length;
+  for (let i = headerIndex + 1; i < lines.length; i += 1) {
+    if (lines[i].startsWith('## ')) {
+      sectionEndIndex = i;
+      break;
+    }
+  }
+
+  const nextSectionBody = tasks.flatMap((task) => {
+    const taskLines = task.split('\n');
+    return taskLines.map((line, index) => (index === 0 ? `- ${line}` : line));
+  });
+
+  return {
+    markdown: [
+      ...lines.slice(0, headerIndex + 1),
+      ...nextSectionBody,
+      ...lines.slice(sectionEndIndex),
+    ].join('\n'),
+    sectionFound: true,
+  };
+}
+
+function buildLegacyTaskText(task: Awaited<ReturnType<typeof loadStructuredTasks>>['tasks'][number]): string {
+  const linked = task.linkedAutonomyRef?.taskText?.trim();
+  const title = task.title.trim();
+  const description = task.description?.trim();
+
+  if (linked && linked.includes('\n')) {
+    return linked;
+  }
+
+  if (description) {
+    return `${title}\n**Brief:** ${description}`;
+  }
+
+  return linked || title;
+}
+function collectLegacyLinkedSectionTasks(
+  store: Awaited<ReturnType<typeof loadStructuredTasks>>,
+  section: 'open-backlog' | 'in-progress' | 'review' | 'needs-input',
+): string[] {
+  return store.tasks
+    .filter((task) => task.linkedAutonomyRef?.kind === 'autonomous-md')
+    .filter((task) => {
+      if (section === 'open-backlog') return task.status === 'backlog';
+      if (section === 'in-progress') return task.status === 'in-progress';
+      if (section === 'review') return task.status === 'review';
+      return task.status === 'todo' && Boolean(task.needsInput);
+    })
+    .sort((a, b) => a.columnOrder - b.columnOrder)
+    .map((task) => buildLegacyTaskText(task))
+    .filter((text) => text.length > 0);
+}
+
 function parseCompletedEntries(tasksLog: string): number {
   return tasksLog
     .split('\n')
@@ -300,14 +362,14 @@ async function loadTaskSources() {
   };
 }
 
-export async function cleanupTaskSyncDrift(): Promise<{ removedDoneToday: number; details: string }> {
+export async function cleanupTaskSyncDrift(): Promise<{ removedDoneToday: number; reconciledBacklog: number; details: string }> {
   const [store, autonomousRaw] = await Promise.all([
     loadStructuredTasks(),
     readAutonomousMarkdown().catch(() => null),
   ]);
 
   if (!autonomousRaw) {
-    return { removedDoneToday: 0, details: 'AUTONOMOUS.md unavailable; nothing cleaned.' };
+    return { removedDoneToday: 0, reconciledBacklog: 0, details: 'AUTONOMOUS.md unavailable; nothing cleaned.' };
   }
 
   const structuredDoneKeys = new Set(
@@ -322,15 +384,46 @@ export async function cleanupTaskSyncDrift(): Promise<{ removedDoneToday: number
   );
 
   const cleaned = removeStaleDoneTodayEntries(autonomousRaw, structuredDoneKeys);
-  if (cleaned.removed > 0 && cleaned.markdown !== autonomousRaw) {
-    await fs.writeFile(AUTONOMOUS_PATH, cleaned.markdown, 'utf8');
+  let nextMarkdown = cleaned.markdown;
+
+  const backlogTasks = collectLegacyLinkedSectionTasks(store, 'open-backlog');
+  const inProgressTasks = collectLegacyLinkedSectionTasks(store, 'in-progress');
+  const reviewTasks = collectLegacyLinkedSectionTasks(store, 'review');
+  const needsInputTasks = collectLegacyLinkedSectionTasks(store, 'needs-input');
+
+  const backlogReconcile = replaceLegacySectionTasks(nextMarkdown, '## Open Backlog', backlogTasks);
+  nextMarkdown = backlogReconcile.markdown;
+  const inProgressReconcile = replaceLegacySectionTasks(nextMarkdown, '## In Progress', inProgressTasks);
+  nextMarkdown = inProgressReconcile.markdown;
+  const reviewReconcile = replaceLegacySectionTasks(nextMarkdown, '## Review', reviewTasks);
+  nextMarkdown = reviewReconcile.markdown;
+  const needsInputReconcile = replaceLegacySectionTasks(nextMarkdown, '## Needs Input', needsInputTasks);
+  nextMarkdown = needsInputReconcile.markdown;
+
+  if (nextMarkdown !== autonomousRaw) {
+    await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
   }
 
   return {
     removedDoneToday: cleaned.removed,
-    details: cleaned.removed > 0
-      ? `Removed ${cleaned.removed} stale Done Today entr${cleaned.removed === 1 ? 'y' : 'ies'} from AUTONOMOUS.md.`
-      : 'No stale Done Today entries found.',
+    reconciledBacklog: backlogReconcile.sectionFound ? backlogTasks.length : 0,
+    details: [
+      cleaned.removed > 0
+        ? `Removed ${cleaned.removed} stale Done Today entr${cleaned.removed === 1 ? 'y' : 'ies'}.`
+        : 'No stale Done Today entries found.',
+      backlogReconcile.sectionFound
+        ? `Reconciled Open Backlog to structured store (${backlogTasks.length} active entr${backlogTasks.length === 1 ? 'y' : 'ies'}).`
+        : 'Open Backlog section missing in AUTONOMOUS.md; skipped backlog reconciliation.',
+      inProgressReconcile.sectionFound
+        ? `Aligned In Progress (${inProgressTasks.length}).`
+        : 'In Progress section missing; skipped.',
+      reviewReconcile.sectionFound
+        ? `Aligned Review (${reviewTasks.length}).`
+        : 'Review section missing; skipped.',
+      needsInputReconcile.sectionFound
+        ? `Aligned Needs Input (${needsInputTasks.length}).`
+        : 'Needs Input section missing; skipped.',
+    ].join(' '),
   };
 }
 
@@ -391,8 +484,12 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
     }
 
     if (source.autonomous.counts) {
-      if (source.structured.counts.backlog < source.autonomous.counts.backlog) {
-        issues.push(`Backlog count lower than AUTONOMOUS Open Backlog (structured=${source.structured.counts.backlog}, AUTONOMOUS=${source.autonomous.counts.backlog})`);
+      if (source.structured.counts.backlog !== source.autonomous.counts.backlog) {
+        issues.push(
+          source.structured.counts.backlog < source.autonomous.counts.backlog
+            ? `Backlog count lower than AUTONOMOUS Open Backlog (structured=${source.structured.counts.backlog}, AUTONOMOUS=${source.autonomous.counts.backlog})`
+            : `Backlog count higher than AUTONOMOUS Open Backlog (structured=${source.structured.counts.backlog}, AUTONOMOUS=${source.autonomous.counts.backlog})`,
+        );
       }
       if (source.structured.counts.inProgress !== source.autonomous.counts.inProgress) {
         issues.push(

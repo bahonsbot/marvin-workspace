@@ -24,7 +24,7 @@ export type MCAutoRunStatus = 'running' | 'done' | 'error' | 'aborted' | 'reject
 export type MCAutoRunTrigger = 'direct' | 'queue';
 export type MCAutoFeedbackAuthor = 'operator' | `agent:${string}`;
 export type MCAutoLegacySection = 'open-backlog' | 'in-progress' | 'review' | 'needs-input' | 'done' | 'done-today';
-export type MCAutoNeedsInputReason = 'rejected' | 'execution-failed' | 'queue-blocked';
+export type MCAutoNeedsInputReason = 'rejected' | 'execution-failed' | 'queue-blocked' | 'missing-web-research-capability';
 
 export interface MCAutoRun {
   attemptId: string;
@@ -186,6 +186,7 @@ async function emitTaskNeedsInputEvent(input: {
 export interface LegacyTaskEntry {
   section: MCAutoLegacySection;
   text: string;
+  description?: string;
   normalizedText: string;
   lineIndex: number;
 }
@@ -363,6 +364,7 @@ function normalizeNeedsInput(value: unknown): MCAutoNeedsInput | undefined {
     needsInput.reason !== 'rejected'
     && needsInput.reason !== 'execution-failed'
     && needsInput.reason !== 'queue-blocked'
+    && needsInput.reason !== 'missing-web-research-capability'
   ) {
     return undefined;
   }
@@ -550,28 +552,66 @@ function parseSectionName(header: string): MCAutoLegacySection | null {
   }
 }
 
+function extractBriefDescription(taskLines: string[]): string | undefined {
+  const briefIndex = taskLines.findIndex((line) => line.trim().startsWith('**Brief:**'));
+  if (briefIndex === -1) return undefined;
+
+  const firstLine = taskLines[briefIndex].trim();
+  const inline = firstLine.replace(/^\*\*Brief:\*\*\s*/i, '').trim();
+  if (inline) {
+    return inline;
+  }
+
+  const continuation: string[] = [];
+  for (let i = briefIndex + 1; i < taskLines.length; i += 1) {
+    const candidate = taskLines[i].trim();
+    if (!candidate) continue;
+    if (candidate.startsWith('| ')) break;
+    if (/^\*\*[^*]+:\*\*/.test(candidate)) break;
+    continuation.push(candidate);
+  }
+
+  return continuation.length > 0 ? continuation.join(' ') : undefined;
+}
+
 export function parseLegacyAutonomousTasks(markdown: string): LegacyTaskEntry[] {
   const lines = markdown.split('\n');
   const tasks: LegacyTaskEntry[] = [];
   let currentSection: MCAutoLegacySection | null = null;
 
-  lines.forEach((line, index) => {
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+
     if (line.startsWith('## ')) {
       currentSection = parseSectionName(line);
-      return;
+      continue;
     }
-    if (!currentSection) return;
+    if (!currentSection) continue;
+
     const trimmed = line.trim();
-    if (!trimmed.startsWith('- ')) return;
+    if (!trimmed.startsWith('- ')) continue;
+
     const text = trimmed.slice(2).trim();
-    if (!text || text.startsWith('*(')) return;
+    if (!text || text.startsWith('*(')) continue;
+
+    const taskLines: string[] = [];
+    let cursor = index + 1;
+    while (cursor < lines.length) {
+      const nextLine = lines[cursor];
+      if (nextLine.startsWith('## ')) break;
+      if (nextLine.trim().startsWith('- ')) break;
+      taskLines.push(nextLine);
+      cursor += 1;
+    }
+
     tasks.push({
       section: currentSection,
       text,
+      description: extractBriefDescription(taskLines),
       normalizedText: normalizeLegacyTaskText(text),
       lineIndex: index,
     });
-  });
+  }
 
   return tasks;
 }
@@ -607,17 +647,20 @@ function removeLegacyTaskLine(markdown: string, link: MCAutoLegacyLink): string 
   let currentSection: MCAutoLegacySection | null = null;
   const nextLines: string[] = [];
 
-  for (const line of lines) {
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
     if (line.startsWith('## ')) {
       currentSection = parseSectionName(line);
       nextLines.push(line);
       continue;
     }
+
     const trimmed = line.trim();
     if (!trimmed.startsWith('- ')) {
       nextLines.push(line);
       continue;
     }
+
     const text = trimmed.slice(2).trim();
     const normalizedText = normalizeLegacyTaskText(text);
     const completedPrefix = normalizeLegacyTaskText(`${link.taskText} | ✅`);
@@ -629,15 +672,21 @@ function removeLegacyTaskLine(markdown: string, link: MCAutoLegacyLink): string 
       || currentSection === 'needs-input'
       || currentSection === 'done'
       || currentSection === 'done-today';
+
     if (isMatchingTask && isManagedSection) {
+      while (index + 1 < lines.length) {
+        const next = lines[index + 1];
+        if (next.startsWith('## ') || next.trim().startsWith('- ')) break;
+        index += 1;
+      }
       continue;
     }
+
     nextLines.push(line);
   }
 
   return nextLines.join('\n');
 }
-
 async function safelyReadAutonomousMarkdown(): Promise<string | null> {
   try {
     return await readAutonomousMarkdown();
@@ -657,14 +706,21 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
 
   const suppressed = new Set(store.meta.suppressedLegacyTaskKeys);
   const parsedLegacyTasks = markdown ? parseLegacyAutonomousTasks(markdown) : [];
-  const legacyTasks = parsedLegacyTasks.filter((entry) => ACTIVE_LEGACY_SECTIONS.includes(entry.section) && !suppressed.has(entry.normalizedText));
+  const legacyTasks = parsedLegacyTasks.filter((entry) => ACTIVE_LEGACY_SECTIONS.includes(entry.section));
   const existingIds = new Set(store.tasks.map((task) => task.id));
   let nextMarkdown = markdown;
   let imported = 0;
   let updated = 0;
 
   for (const entry of legacyTasks) {
-    if (findLinkedTask(store, entry)) continue;
+    if (findLinkedTask(store, entry)) {
+      clearSuppressedKey(store, entry.normalizedText);
+      continue;
+    }
+
+    if (suppressed.has(entry.normalizedText)) {
+      clearSuppressedKey(store, entry.normalizedText);
+    }
 
     const status: MCAutoTaskStatus = entry.section === 'in-progress'
       ? 'in-progress'
@@ -677,6 +733,7 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
     const task: MCAutoTask = {
       id: uniqueTaskId(entry.text, existingIds),
       title: entry.text,
+      description: entry.description,
       status,
       priority: 'normal',
       sourceType: 'generated',

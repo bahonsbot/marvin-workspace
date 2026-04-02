@@ -12,6 +12,7 @@ Behavior:
 
 import json
 import re
+import shlex
 import subprocess
 import sys
 from datetime import datetime
@@ -37,10 +38,44 @@ def save_suggestions(items):
     SUGGESTIONS_FILE.write_text(json.dumps(items, indent=2, ensure_ascii=False) + "\n")
 
 
+def parse_flag_payload(text):
+    try:
+        tokens = shlex.split(text)
+    except ValueError:
+        return None
+
+    if not tokens or not tokens[0].startswith("--"):
+        return None
+
+    fields = {}
+    current = None
+
+    for token in tokens:
+        if token.startswith("--"):
+            current = token[2:]
+            if current:
+                fields.setdefault(current, [])
+            continue
+        if current:
+            fields[current].append(token)
+
+    title = " ".join(fields.get("title", [])).strip()
+    description = " ".join(fields.get("description", [])).strip()
+
+    if title and description:
+        return title, description
+    return None
+
+
 def normalize_task(raw):
     text = raw.strip()
     if not text:
         raise ValueError("Empty suggestion")
+
+    parsed = parse_flag_payload(text) if text.startswith("--") else None
+    if parsed:
+        title, description = parsed
+        return f"[Philippe] 📝 Suggested: {title}\n**Brief:** {description}"
 
     if text.startswith("["):
         return text

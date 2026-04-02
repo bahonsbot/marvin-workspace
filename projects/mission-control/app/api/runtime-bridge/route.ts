@@ -12,11 +12,12 @@ const MAX_HISTORY_MESSAGES = 80;
 
 type HydratedMessage = {
   id: string;
-  role: 'user' | 'assistant' | 'system';
+  role: 'user' | 'assistant';
   body: string;
   status: 'final' | 'streaming' | 'error';
   sessionKey: string | null;
   runId: string | null;
+  at: number;
 };
 
 function sanitizeTranscriptBody(input: string): string {
@@ -43,6 +44,15 @@ function extractText(content: unknown): string {
     }
   }
   return sanitizeTranscriptBody(parts.join('\n').trim());
+}
+
+function toTimestamp(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string' && value.trim().length > 0) {
+    const parsed = Date.parse(value);
+    if (!Number.isNaN(parsed)) return parsed;
+  }
+  return null;
 }
 
 async function loadSessionHistory(sessionKey: string | null | undefined): Promise<HydratedMessage[]> {
@@ -78,9 +88,14 @@ async function loadSessionHistory(sessionKey: string | null | undefined): Promis
       if (!message || typeof message !== 'object') continue;
       const typedMessage = message as Record<string, unknown>;
       const role = typedMessage.role;
-      if (role !== 'user' && role !== 'assistant' && role !== 'system') continue;
+      if (role !== 'user' && role !== 'assistant') continue;
       const body = extractText(typedMessage.content);
       if (!body) continue;
+      const typedTimestamp =
+        toTimestamp((typedMessage as Record<string, unknown>).timestamp) ??
+        toTimestamp(parsed.timestamp) ??
+        Date.now();
+
       messages.push({
         id: String(parsed.id ?? `${sessionId}-${messages.length}`),
         role,
@@ -88,6 +103,7 @@ async function loadSessionHistory(sessionKey: string | null | undefined): Promis
         status: 'final',
         sessionKey,
         runId: null,
+        at: typedTimestamp,
       });
     }
 

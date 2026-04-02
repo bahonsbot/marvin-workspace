@@ -74,6 +74,13 @@ export type RuntimeBridgeLiveEvent = {
   tool: RuntimeBridgeToolEvent | null;
 };
 
+export type RuntimeBridgeTransientNotice = {
+  id: string;
+  kind: 'context-compression' | 'fallback-model';
+  message: string;
+  at: number;
+};
+
 type RuntimeBridgeSendState = 'idle' | 'sending' | 'streaming' | 'error';
 
 type RuntimeBridgeLiveSessionTarget = {
@@ -90,6 +97,7 @@ type RuntimeBridgeLiveState = {
   activeRunId: string | null;
   messages: RuntimeBridgeChatMessage[];
   events: RuntimeBridgeLiveEvent[];
+  notices: RuntimeBridgeTransientNotice[];
   sendPrompt: (prompt: string) => Promise<void>;
   abortPrompt: () => Promise<void>;
 };
@@ -120,6 +128,8 @@ const CONNECT_PROTOCOL_VERSION = 3;
 const CONNECT_SCOPES = ['operator.admin', 'operator.read', 'operator.write', 'operator.approvals', 'operator.pairing'];
 const MAX_LIVE_MESSAGES = 24;
 const MAX_LIVE_EVENTS = 48;
+const MAX_TRANSIENT_NOTICES = 6;
+const MAIN_SESSION_KEY = 'agent:main:main';
 
 function createEmptySession(
   state: RuntimeBridgeSessionState,
@@ -176,6 +186,11 @@ function shortenSessionKey(key: string | null): string {
 
 function chooseTargetSession(summary: OrchestratorIntegrationSummary): RuntimeBridgeLiveSessionTarget {
   const sessions = summary.sessionContext.recent;
+  const mainSession = sessions.find((session) => session.key === MAIN_SESSION_KEY);
+  if (mainSession) {
+    return { key: mainSession.key, label: shortenSessionKey(mainSession.key) };
+  }
+
   if (summary.runtime.defaultAgentId) {
     const defaultAgentId = summary.runtime.defaultAgentId;
     const matched = sessions.find((session) => session.key === defaultAgentId || session.key.includes(defaultAgentId));
@@ -294,45 +309,102 @@ function appendBounded<T>(items: T[], next: T, limit: number): T[] {
   return appended.length > limit ? appended.slice(-limit) : appended;
 }
 
+function detectRuntimeNotice(payload: Record<string, unknown> | null): Omit<RuntimeBridgeTransientNotice, 'id' | 'at'> | null {
+  if (!payload) return null;
+  const serialized = JSON.stringify(payload).toLowerCase();
+
+  const compressionSignal =
+    serialized.includes('context compression') ||
+    serialized.includes('context compressed') ||
+    serialized.includes('compressed context') ||
+    serialized.includes('contextcompression') ||
+    serialized.includes('compressionapplied');
+
+  if (compressionSignal) {
+    return {
+      kind: 'context-compression',
+      message: 'Context compression applied for this run.',
+    };
+  }
+
+  const fallbackSignal =
+    serialized.includes('fallback model') ||
+    serialized.includes('model fallback') ||
+    serialized.includes('fallback activated') ||
+    serialized.includes('fallbackmodel') ||
+    serialized.includes('fallbacktriggered');
+
+  if (fallbackSignal) {
+    return {
+      kind: 'fallback-model',
+      message: 'Fallback model activated for this run.',
+    };
+  }
+
+  return null;
+}
+
 function mergeHydratedMessages(
   current: RuntimeBridgeChatMessage[],
   incoming: RuntimeBridgeChatMessage[],
   sessionKey: string | null,
 ): RuntimeBridgeChatMessage[] {
   const scopedCurrent = current.filter((message) => !sessionKey || message.sessionKey === sessionKey || message.sessionKey === null);
-  const merged = [...scopedCurrent];
+  const keyed = new Map<string, RuntimeBridgeChatMessage>();
 
-  for (const message of incoming) {
-    const body = message.body.trim();
-    if (!body) continue;
+  const buildFallbackKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
+    `${message.role}|${message.sessionKey ?? 'none'}|${message.runId ?? 'none'}|${normalizedBody}`;
 
-    const existingIndex = merged.findIndex((candidate) => {
-      if (candidate.id === message.id) return true;
-      return (
-        candidate.role === message.role &&
-        candidate.sessionKey === message.sessionKey &&
-        candidate.runId === message.runId &&
-        candidate.body.trim() === body
-      );
-    });
+  const upsert = (message: RuntimeBridgeChatMessage, source: 'current' | 'hydrated') => {
+    const normalizedBody = message.body.trim();
+    if (!normalizedBody) return;
 
-    if (existingIndex >= 0) {
-      merged[existingIndex] = {
-        ...merged[existingIndex],
-        ...message,
-        body,
-      };
-      continue;
+    const normalizedAt = Number.isFinite(message.at) ? message.at : Date.now();
+    const normalized: RuntimeBridgeChatMessage = {
+      ...message,
+      body: normalizedBody,
+      at: normalizedAt,
+    };
+    const idKey = normalized.id ? `id:${normalized.id}` : null;
+    const fallbackKey = `body:${buildFallbackKey(normalized, normalizedBody)}`;
+    const existing = (idKey && keyed.get(idKey)) ?? keyed.get(fallbackKey);
+
+    if (!existing) {
+      if (idKey) keyed.set(idKey, normalized);
+      keyed.set(fallbackKey, normalized);
+      return;
     }
 
-    merged.push({
-      ...message,
-      body,
-      at: typeof message.at === 'number' ? message.at : Date.now(),
-    });
-  }
+    const incomingIsNewer = normalized.at > existing.at;
+    const incomingIsSameTime = normalized.at === existing.at;
+    const incomingWinsOnTie = incomingIsSameTime && (
+      (existing.status !== 'final' && normalized.status === 'final') || normalized.body.length > existing.body.length
+    );
+    const winner = incomingIsNewer || incomingWinsOnTie ? normalized : existing;
+    const merged: RuntimeBridgeChatMessage = {
+      ...existing,
+      ...winner,
+      status: winner.status,
+      body: winner.body,
+      at: winner.at,
+      runId: winner.runId ?? existing.runId,
+      // Prefer existing id when hydrating into a live message bucket to avoid id churn.
+      id: source === 'hydrated' ? existing.id : winner.id,
+    };
 
-  return merged.slice(-MAX_LIVE_MESSAGES);
+    if (idKey) keyed.set(idKey, merged);
+    keyed.set(fallbackKey, merged);
+    if (existing.id && existing.id !== merged.id) {
+      keyed.set(`id:${existing.id}`, merged);
+    }
+  };
+
+  for (const message of scopedCurrent) upsert(message, 'current');
+  for (const message of incoming) upsert(message, 'hydrated');
+
+  const deduped = Array.from(new Set(keyed.values()));
+  deduped.sort((a, b) => a.at - b.at || a.id.localeCompare(b.id));
+  return deduped.slice(-MAX_LIVE_MESSAGES);
 }
 
 function upsertAssistantMessage(params: {
@@ -402,6 +474,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   );
   const [messages, setMessages] = useState<RuntimeBridgeChatMessage[]>([]);
   const [events, setEvents] = useState<RuntimeBridgeLiveEvent[]>([]);
+  const [notices, setNotices] = useState<RuntimeBridgeTransientNotice[]>([]);
   const [sendState, setSendState] = useState<RuntimeBridgeSendState>('idle');
   const [sendError, setSendError] = useState<string | null>(null);
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
@@ -409,6 +482,8 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [reconnectNonce, setReconnectNonce] = useState(0);
   const mountedRef = useRef(true);
   const hydratedSessionKeyRef = useRef<string | null>(null);
+  const hydratedTranscriptSignatureRef = useRef<string | null>(null);
+  const noticeSignaturesRef = useRef<Set<string>>(new Set());
   const instanceIdRef = useRef(getOrCreateInstanceId());
   const socketRef = useRef<WebSocket | null>(null);
   const pendingRef = useRef<Record<string, PendingRequest>>({});
@@ -475,6 +550,14 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   }, [rejectPending]);
 
   useEffect(() => {
+    if (notices.length === 0) return;
+    const timer = window.setTimeout(() => {
+      setNotices((current) => current.slice(1));
+    }, 4500);
+    return () => window.clearTimeout(timer);
+  }, [notices]);
+
+  useEffect(() => {
     setSummary(initialSummary);
   }, [initialSummary]);
 
@@ -518,11 +601,21 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setSummary(payload);
       if (payload.transcriptHistory?.sessionKey && payload.transcriptHistory.sessionKey === (activeSessionKey ?? defaultTargetSession.key)) {
         const hydratedSessionKey = payload.transcriptHistory.sessionKey ?? null;
+        const incomingMessages = payload.transcriptHistory?.messages ?? [];
+        const lastIncoming = incomingMessages[incomingMessages.length - 1];
+        const incomingSignature = `${hydratedSessionKey ?? 'none'}:${incomingMessages.length}:${lastIncoming?.id ?? ''}:${lastIncoming?.body ?? ''}`;
+
         setMessages((current) => {
-          const shouldHydrate = current.length === 0 || hydratedSessionKeyRef.current !== hydratedSessionKey;
+          const scopedCurrent = current.filter((message) => message.sessionKey === hydratedSessionKey || message.sessionKey === null);
+          const hasScopedTranscript = scopedCurrent.some((message) => message.role === 'user' || message.role === 'assistant');
+          const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
+          const signatureChanged = hydratedTranscriptSignatureRef.current !== incomingSignature;
+          const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || signatureChanged || !hasScopedTranscript);
           if (!shouldHydrate) return current;
+
           hydratedSessionKeyRef.current = hydratedSessionKey;
-          return mergeHydratedMessages(current, payload.transcriptHistory?.messages ?? [], payload.transcriptHistory?.sessionKey ?? null);
+          hydratedTranscriptSignatureRef.current = incomingSignature;
+          return mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
         });
       }
       setError(null);
@@ -588,6 +681,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       const eventSessionKey = typeof payload?.sessionKey === 'string' ? payload.sessionKey : null;
 
       const tool = extractToolEvent(payload);
+      const runtimeNotice = detectRuntimeNotice(payload);
       const agentStream = typeof payload?.stream === 'string' ? payload.stream : null;
       const lifecycleData = asRecord(payload?.data);
       const lifecyclePhase = typeof lifecycleData?.phase === 'string' ? lifecycleData.phase : null;
@@ -613,6 +707,25 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
             MAX_LIVE_EVENTS,
           ),
         );
+      }
+
+      if (runtimeNotice) {
+        const signature = `${runtimeNotice.kind}:${eventSessionKey ?? 'none'}:${eventRunId ?? 'none'}:${JSON.stringify(payload)}`;
+        if (!noticeSignaturesRef.current.has(signature)) {
+          noticeSignaturesRef.current.add(signature);
+          setNotices((current) =>
+            appendBounded(
+              current,
+              {
+                id: generateId('mc-notice'),
+                kind: runtimeNotice.kind,
+                message: runtimeNotice.message,
+                at: Date.now(),
+              },
+              MAX_TRANSIENT_NOTICES,
+            ),
+          );
+        }
       }
 
       if (eventName !== 'chat') return;
@@ -1124,6 +1237,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       activeRunId,
       messages,
       events,
+      notices,
       sendPrompt,
       abortPrompt,
     },
@@ -1131,10 +1245,13 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       await load(true);
     },
     switchSession: async (sessionKey: string) => {
-      hydratedSessionKeyRef.current = sessionKey;
+      hydratedSessionKeyRef.current = null;
+      hydratedTranscriptSignatureRef.current = null;
       setActiveSessionKey(sessionKey);
       setMessages([]);
       setEvents([]);
+      setNotices([]);
+      noticeSignaturesRef.current.clear();
       setSendError(null);
       setSendState('idle');
       setActiveRunId(null);

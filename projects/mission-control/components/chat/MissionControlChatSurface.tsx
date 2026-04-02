@@ -3,7 +3,13 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from 'react';
 import type { CSSProperties } from 'react';
-import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent, RuntimeBridgeToolEvent, RuntimeBridgeState } from '@/hooks/useRuntimeBridge';
+import type {
+  RuntimeBridgeChatMessage,
+  RuntimeBridgeLiveEvent,
+  RuntimeBridgeToolEvent,
+  RuntimeBridgeTransientNotice,
+  RuntimeBridgeState,
+} from '@/hooks/useRuntimeBridge';
 import { buildChatSurfaceModel } from '@/lib/chat/thread-model';
 import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 
@@ -832,12 +838,10 @@ function formatAge(ageMs: number | null): string {
 export function MissionControlChatSurface({
   summary,
   bridge,
-  activityMessages = [],
   fallbackNotice,
 }: {
   summary: OrchestratorIntegrationSummary;
   bridge?: RuntimeBridgeState;
-  activityMessages?: RuntimeBridgeChatMessage[];
   fallbackNotice?: string;
 }) {
   const model = useMemo(() => buildChatSurfaceModel(summary), [summary]);
@@ -856,14 +860,12 @@ export function MissionControlChatSurface({
   const live = bridge?.live;
   const liveTargetSession = live?.targetSession.key ?? null;
   const liveTargetLabel = live?.targetSession.label ?? 'No target session';
-  const liveMessages = useMemo(() => {
-    const byId = new Map<string, RuntimeBridgeChatMessage>();
-    for (const message of [...(live?.messages ?? []), ...activityMessages]) {
-      byId.set(message.id, message);
-    }
-    return Array.from(byId.values()).sort((a, b) => (a.at ?? 0) - (b.at ?? 0));
-  }, [activityMessages, live?.messages]);
+  const liveMessages = useMemo(
+    () => (live?.messages ?? []).slice().sort((a, b) => (a.at ?? 0) - (b.at ?? 0)),
+    [live?.messages],
+  );
   const liveEvents = live?.events ?? [];
+  const liveNotices = (live?.notices ?? []) as RuntimeBridgeTransientNotice[];
   const liveCanSend = Boolean(live?.canSend);
   const liveSendState = live?.sendState ?? 'idle';
   const liveSendError = live?.sendError ?? null;
@@ -1603,6 +1605,27 @@ export function MissionControlChatSurface({
             </div>
           </div>
           <div style={{ display: 'grid', gap: 18 }}>
+            {liveNotices.length > 0 ? (
+              <div style={{ display: 'grid', gap: 8 }}>
+                {liveNotices.slice().reverse().map((notice) => (
+                  <div
+                    key={notice.id}
+                    style={{
+                      border: '1px solid rgba(121, 166, 148, 0.28)',
+                      borderRadius: 12,
+                      background: 'rgba(240, 248, 244, 0.9)',
+                      color: '#163b31',
+                      padding: '8px 10px',
+                      fontSize: 12,
+                      lineHeight: 1.5,
+                      fontWeight: 600,
+                    }}
+                  >
+                    SYSTEM NOTICE · {notice.message}
+                  </div>
+                ))}
+              </div>
+            ) : null}
             {transcriptItems.length > 0 ? (
               transcriptItems.map((item) =>
                 item.type === 'message'

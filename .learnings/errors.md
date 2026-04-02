@@ -522,3 +522,17 @@ Command/tool failures and exceptions.
 **Status:** resolved
 **Closed:** 2026-04-02 (artifact filtering and metadata-only handling were patched during Apr 1 stabilization work)
 
+
+## [ERR-20260402-1737]
+
+**Context:** Mission Control manual task execution with explicit model override
+**What failed:** The manual task runner attempted model selection by sending a separate `/model <alias>` message before execution, but the run still executed on the default MiniMax route. Because the runner did not validate the effective model afterward, the task could silently succeed on the wrong model.
+**Prevention:** For Mission Control task execution, treat requested model override as untrusted until validated against actual run metadata. If the effective provider/model does not match the requested override family, fail visibly instead of continuing.
+**Status:** active
+
+## [ERR-20260402-1756]
+
+**Context:** Mission Control Chat transcript hydration / merge
+**What failed:** A later hydration pass could append an older persisted transcript snapshot and then trim by array position, allowing older hydrated history to displace newer live messages. This caused visible transcript rewind/disappearance after refresh or runtime updates.
+**Prevention:** Hydrated transcript merges must be keyed, timestamp-aware, and overwrite-safe. Never rely on append-order + tail-trim for mixed live/hydrated message streams.
+**Status:** active

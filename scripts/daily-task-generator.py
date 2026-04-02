@@ -429,7 +429,42 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
             if focus_text:
                 unlocks = f"Focus on {focus_text}. {unlocks}"
 
-    task = f"[{category}] {task_prefix} {task_desc} | Why: {why} | Proof: {proof} | Unlocks: {unlocks}"
+    # Derive a SHORT title from the goal, NOT from task_desc's first clause.
+    # Title = concise summary. Brief = actionable detail.
+    def _short_title(goal, category, prefix, task_desc):
+        short_goals = {
+            "japanese": "Japanese study pack",
+            "blender": "Blender primitives exercise",
+            "after effects": "AE keyframe practice",
+            "unreal": "UE scene setup",
+            "python": "Python practice sheet",
+            "portfolio": "Portfolio direction check",
+            "instagram": "Instagram content angles",
+            "business analysis": "Business metrics lesson",
+            "equity": "Equity bot improvement",
+            "futures": "Futures bot improvement",
+            "trading": "Trading workspace improvement",
+            "automate": "Workspace automation helper",
+            "openclaw": "OpenClaw helper utility",
+        }
+        goal_l = goal.lower()
+        for key, title in short_goals.items():
+            if key in goal_l:
+                return title
+        fallback = task_desc.split(";")[0].strip()
+        for pfx in ("create one ", "identify ", "build ", "prepare ", "define ", "choose one ", "draft "):
+            if fallback.startswith(pfx):
+                fallback = fallback[len(pfx):]
+        if len(fallback) > 45:
+            fallback = fallback[:42].rsplit(" ", 1)[0] + "..."
+        return fallback.capitalize()
+
+    task_title = _short_title(goal, category, task_prefix, task_desc)
+    task = (
+        f"[{category}] {task_prefix}: {task_title}\n"
+        f"**Brief:** {task_desc}\n"
+        f"| Why: {why} | Proof: {proof} | Unlocks: {unlocks}"
+    )
     return task
 
 
@@ -717,17 +752,28 @@ def update_autonomous_file(new_tasks):
     combined = []
     seen = set()
 
-    # Preserve existing visible work first. This prevents the generator from deleting older
-    # backlog items just because a new daily batch was generated.
-    for task in suggestion_tasks + existing_backlog_tasks:
+    # Add newly generated tasks first. This ensures fresh generated tasks are never
+    # silently dropped when suggestions or existing backlog already fill NUM_TASKS.
+    for task in new_tasks:
+        if len(combined) >= NUM_TASKS:
+            break
         key = task.strip().lower()
         if key and key not in seen:
             combined.append(task)
             seen.add(key)
 
-    # Only top back up to NUM_TASKS with fresh tasks. If backlog already exceeds NUM_TASKS
-    # because of earlier runs, preserve it as-is rather than silently dropping older items.
-    for task in new_tasks:
+    # Fill remaining slots with existing backlog tasks (de-duped against new tasks).
+    # This preserves older in-flight work when there's room for it.
+    for task in existing_backlog_tasks:
+        if len(combined) >= NUM_TASKS:
+            break
+        key = task.strip().lower()
+        if key and key not in seen:
+            combined.append(task)
+            seen.add(key)
+
+    # Suggestions fill any final remaining slots.
+    for task in suggestion_tasks:
         if len(combined) >= NUM_TASKS:
             break
         key = task.strip().lower()
@@ -754,6 +800,7 @@ def update_autonomous_file(new_tasks):
     content = re.sub(r'\n## In Progress\s*\n(?=\n##|\Z)', '\n', content, flags=re.DOTALL)
 
     AUTONOMOUS_FILE.write_text(content)
+    return len(combined)
 
 
 def sync_kanban_board_json():
@@ -860,8 +907,10 @@ if __name__ == "__main__":
 
     # Update AUTONOMOUS.md with new tasks only
     if new_tasks:
-        update_autonomous_file(new_tasks)
-        print(f"Generated {len(new_tasks)} tasks and updated AUTONOMOUS.md")
+        added_count = update_autonomous_file(new_tasks)
+        print(f"Generated {len(new_tasks)} tasks → AUTONOMOUS.md backlog has {added_count} items")
+        if added_count < len(new_tasks):
+            print(f"  NOTE: {len(new_tasks) - added_count} generated task(s) deduplicated against existing backlog/suggestions")
         print("\nTasks created:")
         for i, task in enumerate(new_tasks, 1):
             # Show abbreviated version

@@ -15,6 +15,7 @@ import {
   formatAutonomousTaskModel,
   type AutonomousTaskModelAlias,
 } from '@/lib/task-models';
+import { autonomousTaskPreflight } from '@/lib/autonomous-preflight';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -430,6 +431,11 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
   const cardTint = autonomousTintForColumn(task.column);
   const visibleSummary = boardType === 'autonomous' ? formatAutonomousSummary(task.detail.summary) : displaySummary(task.detail.summary);
   const latestFeedback = task.meta?.feedback?.at(-1) ?? null;
+  const preflight = autonomousTaskPreflight({
+    title: task.detail.summary,
+    description: task.detail.why,
+    agentTarget: task.meta?.agentTarget,
+  });
   const supportText = boardType === 'autonomous'
     ? formatAutonomousSupport(
       {
@@ -449,7 +455,8 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
       </div>
       <div style={{ fontSize: boardType === 'autonomous' ? 13.5 : 14, fontWeight: boardType === 'autonomous' ? 600 : 500, lineHeight: 1.45, color: '#222222' }}>{visibleSummary}</div>
       {supportText ? <div style={{ fontSize: 11.5, color: latestFeedback ? '#7f5aa2' : '#7a7a7a', lineHeight: 1.55 }}><span style={{ fontWeight: latestFeedback ? 700 : 500 }}>{latestFeedback ? 'Feedback:' : ''}</span>{latestFeedback ? ' ' : ''}{supportText}</div> : null}
-      {boardType === 'autonomous' && task.meta ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>{task.meta.priority ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,245,234,0.82)', color: '#b26a1f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}{task.meta.agentTarget ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(200,195,188,0.45)', color: '#5f655f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}{task.meta.model ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.84)', border: '1px solid rgba(121,166,148,0.3)', color: '#2d5a4a', fontSize: 10, fontWeight: 700 }}>{task.meta.model}</span> : null}</div> : null}
+      {boardType === 'autonomous' && task.meta ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>{task.meta.priority ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,245,234,0.82)', color: '#b26a1f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}{task.meta.agentTarget ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(200,195,188,0.45)', color: '#5f655f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}{task.meta.model ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.84)', border: '1px solid rgba(121,166,148,0.3)', color: '#2d5a4a', fontSize: 10, fontWeight: 700 }}>{task.meta.model}</span> : null}{!preflight.ok ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255, 244, 224, 0.9)', border: '1px solid rgba(205, 153, 69, 0.24)', color: '#9a6112', fontSize: 10, fontWeight: 800, textTransform: 'uppercase' }}>Blocked</span> : null}</div> : null}
+      {boardType === 'autonomous' && !preflight.ok && preflight.warning ? <div style={{ display: 'grid', gap: 4, padding: '10px 11px', borderRadius: 12, background: 'rgba(255, 244, 224, 0.72)', border: '1px solid rgba(205, 153, 69, 0.22)', color: '#7d5314' }}><div style={{ fontSize: 10.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.3 }}>Execution preflight</div><div style={{ fontSize: 11.5, lineHeight: 1.5 }}>{preflight.warning}</div></div> : null}
       {showInspection ? <details style={{ margin: 0 }}><summary style={{ cursor: 'pointer', fontSize: 11, color: '#7a7a7a', listStyle: 'none', textDecoration: 'underline', textDecorationStyle: 'dotted', width: 'fit-content' }}>Scope</summary><div style={{ marginTop: 10, fontSize: 12, color: '#7a7a7a', display: 'grid', gap: 8, lineHeight: 1.65 }}>{task.detail.proof ? <div style={{ display: 'grid', gap: 4 }}><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Proof</span><InlineDetailMarkdown value={task.detail.proof} /></div> : null}{task.detail.unlocks ? <div><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Unlocks:</span> {task.detail.unlocks}</div> : null}</div></details> : null}
     </article>
   );
@@ -488,6 +495,11 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   const [rejectNote, setRejectNote] = useState('');
   const canExecute = task?.column === 'backlog' || task?.column === 'todo';
   const canReview = task?.column === 'review' && task?.meta?.runStatus === 'done';
+  const preflight = autonomousTaskPreflight({
+    title: task?.detail.summary,
+    description: task?.detail.why,
+    agentTarget: task?.meta?.agentTarget,
+  });
 
   useEffect(() => {
     setRejectNote('');
@@ -532,7 +544,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
 
         {task.detail.why ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Brief</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', fontSize: 13.5, lineHeight: 1.68, color: '#37413d' }}>{task.detail.why}</div></section> : null}
 
-        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{runSummary ? <DetailMarkdown value={runSummary} tone="muted" /> : 'No run summary yet.'}</div>{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{artifactLabel(task.meta.artifactPath)}</span></a> : null}</div></section>
+        <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{runSummary ? <DetailMarkdown value={runSummary} tone="muted" /> : 'No run summary yet.'}</div>{!preflight.ok && preflight.warning ? <div style={{ display: 'grid', gap: 6, padding: '11px 12px', borderRadius: 14, background: 'rgba(255, 244, 224, 0.82)', border: '1px solid rgba(205, 153, 69, 0.28)', color: '#7d5314' }}><strong style={{ fontSize: 12.5 }}>Execution preflight</strong><div style={{ fontSize: 12.5, lineHeight: 1.6 }}>{preflight.warning}</div></div> : null}{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{artifactLabel(task.meta.artifactPath)}</span></a> : null}</div></section>
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Metadata</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Status</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.column === 'backlog' ? 'Backlog' : task.column === 'todo' ? 'To Do' : task.column === 'inprogress' ? 'In Progress' : task.column === 'review' ? 'Review' : 'Done'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Priority</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.priority ?? 'Normal'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Agent</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.agentTarget ?? 'marvin'}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Model</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{formatAutonomousTaskModel(task.meta?.model, task.meta?.agentTarget)}</div></div><div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Source</div><div style={{ marginTop: 4, fontSize: 12.5, color: '#37413d' }}>{task.meta?.sourceType ?? 'generated'}</div></div>{createdAtLabel ? <div><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Created</div><div style={{ marginTop: 4, fontSize: 11.8, color: '#6f726f' }}>{createdAtLabel}</div></div> : null}{task.meta?.artifactPath ? <div style={{ gridColumn: '1 / -1' }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.35, color: '#9a9a9a' }}>Output</div><a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ marginTop: 4, display: 'inline-flex', alignItems: 'center', gap: 8, color: '#2d5a4a', fontSize: 11.8, fontWeight: 700, textDecoration: 'none' }}><span>Open artefact</span><span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{task.meta.artifactPath}</span></a></div> : null}</div></div></section>
 
@@ -549,7 +561,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
                 <button onClick={() => void onApprove(task)} disabled={busy} style={{ padding: '10px 16px', borderRadius: 12, border: 'none', background: busy ? 'rgba(200,195,188,0.5)' : '#0f1f19', color: '#fff', cursor: busy ? 'progress' : 'pointer', fontSize: 13, fontWeight: 700 }}>{busy ? 'Saving…' : 'Approve'}</button>
               </>
             ) : null}
-            {canExecute ? <button onClick={() => void onExecute(task)} disabled={busy} style={{ padding: '11px 18px', borderRadius: 12, border: 'none', background: busy ? 'rgba(200,195,188,0.5)' : '#0f1f19', color: '#fff', cursor: busy ? 'progress' : 'pointer', fontSize: 13, fontWeight: 800, boxShadow: busy ? 'none' : '0 10px 24px rgba(15, 31, 25, 0.18)' }}>{busy ? 'Starting…' : 'Execute'}</button> : null}
+            {canExecute ? <button onClick={() => void onExecute(task)} disabled={busy || !preflight.ok} title={!preflight.ok && preflight.warning ? preflight.warning : 'Execute'} style={{ padding: '11px 18px', borderRadius: 12, border: 'none', background: (busy || !preflight.ok) ? 'rgba(200,195,188,0.5)' : '#0f1f19', color: '#fff', cursor: (busy || !preflight.ok) ? 'not-allowed' : 'pointer', fontSize: 13, fontWeight: 800, boxShadow: (busy || !preflight.ok) ? 'none' : '0 10px 24px rgba(15, 31, 25, 0.18)' }}>{busy ? 'Starting…' : !preflight.ok ? 'Blocked' : 'Execute'}</button> : null}
           </div>
         </div>
       </div>
@@ -788,6 +800,26 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   }, [refreshAutonomousLiveState]);
 
   const executeAutonomousTask = useCallback(async (task: Task) => {
+    const preflight = autonomousTaskPreflight({
+      title: task.detail.summary,
+      description: task.detail.why,
+      agentTarget: task.meta?.agentTarget,
+    });
+    if (!preflight.ok) {
+      setSelectedAutoTask((current) => current?.id === task.id
+        ? {
+            ...current,
+            meta: {
+              ...current.meta,
+              needsInputReason: 'missing-web-research-capability',
+              needsInputNote: preflight.warning ?? current.meta?.needsInputNote,
+              runError: preflight.warning ?? current.meta?.runError,
+            },
+          }
+        : current);
+      return;
+    }
+
     setAutoActionBusy(true);
     try {
       const res = await fetch(`/api/tasks/autonomous/${task.id}/execute`, { method: 'POST' });

@@ -13,6 +13,7 @@ const queuePath = path.join(workspaceRoot, 'memory', 'executor-subagent-queue.js
 const tasksLogPath = path.join(workspaceRoot, 'memory', 'tasks-log.md');
 const managedPaths = [autonomyPath, storePath, queuePath, tasksLogPath];
 const allowedModelAliases = new Set(['minimax2.7', 'qwenplus', 'codex', 'codex5.4', 'codex5.4mini', 'gemini']);
+const noiseRootFiles = new Set(['AGENTS.md', 'SOUL.md', 'TOOLS.md', 'IDENTITY.md', 'USER.md', 'HEARTBEAT.md', 'BOOTSTRAP.md', 'MEMORY.md']);
 
 function now() {
   return Date.now();
@@ -258,6 +259,60 @@ function normalizeModelAlias(value) {
   return typeof value === 'string' && allowedModelAliases.has(value) ? value : null;
 }
 
+function isNoiseArtifactPath(value) {
+  const candidate = String(value || '').trim();
+  if (!candidate) return true;
+  if (noiseRootFiles.has(candidate)) return true;
+  return /^\.?\/?(AGENTS|SOUL|TOOLS|IDENTITY|USER|HEARTBEAT|BOOTSTRAP|MEMORY)\.md$/i.test(candidate);
+}
+
+function extractMeaningfulPayloadTexts(value, output = []) {
+  if (!value) return output;
+  if (typeof value === 'string') {
+    const text = cleanCandidateText(value);
+    if (text && !isLikelyMetadataText(value)) output.push(text);
+    return output;
+  }
+  if (Array.isArray(value)) {
+    for (const entry of value) extractMeaningfulPayloadTexts(entry, output);
+    return output;
+  }
+  if (typeof value !== 'object') return output;
+
+  extractMeaningfulPayloadTexts(value.text, output);
+  extractMeaningfulPayloadTexts(value.summary, output);
+  extractMeaningfulPayloadTexts(value.message, output);
+  extractMeaningfulPayloadTexts(value.completion, output);
+  extractMeaningfulPayloadTexts(value.content, output);
+  extractMeaningfulPayloadTexts(value.response?.text, output);
+  extractMeaningfulPayloadTexts(value.result?.summary, output);
+  extractMeaningfulPayloadTexts(value.result?.text, output);
+  extractMeaningfulPayloadTexts(value.result?.message, output);
+  extractMeaningfulPayloadTexts(value.result?.payloads, output);
+  extractMeaningfulPayloadTexts(value.payloads, output);
+  extractMeaningfulPayloadTexts(value.proof, output);
+
+  return output;
+}
+
+function modelCommandConfirmed(parsed, alias) {
+  if (!alias) return true;
+  const payloads = Array.isArray(parsed?.result?.payloads) ? parsed.result.payloads : [];
+  const texts = payloads
+    .map((payload) => (payload && typeof payload.text === 'string' ? payload.text : ''))
+    .filter(Boolean)
+    .join('\n')
+    .toLowerCase();
+  return texts.includes('model switched') && texts.includes(alias.toLowerCase());
+}
+
+function isResearchTask(task) {
+  const combined = [task?.title, task?.description, task?.agentTarget]
+    .map((value) => String(value || '').toLowerCase())
+    .join(' | ');
+  return /\bresearch\b|\binvestigate\b|\banaly[sz]e\b|\bmarket intel\b|\bdeep research\b/.test(combined);
+}
+
 function cleanCandidateText(value) {
   return String(value || '')
     .replace(/```[\s\S]*?```/g, ' ')
@@ -373,7 +428,7 @@ function summarizeExecution(parsed, stdout, warnings, artifacts = []) {
   }
 
   const fallbackArtifact = Array.isArray(artifacts)
-    ? artifacts.find((artifact) => artifact?.path && !/^(AGENTS\.md|SOUL\.md|TOOLS\.md|USER\.md|MEMORY\.md|HEARTBEAT\.md)$/i.test(String(artifact.path)))
+    ? artifacts.find((artifact) => artifact?.path && !isNoiseArtifactPath(String(artifact.path)))
     : null;
   const fallbackSummary = fallbackArtifact?.path
     ? `Created output: ${fallbackArtifact.path}`
@@ -396,6 +451,7 @@ function toWorkspaceRelativePath(value) {
   if (!value) return null;
   if (value.startsWith(`${workspaceRoot}/`)) return value.slice(workspaceRoot.length + 1);
   if (/^(projects|memory|notes|tmp)\//.test(value)) return value;
+  if (!value.includes('/') && noiseRootFiles.has(value)) return value;
   return null;
 }
 
@@ -416,7 +472,7 @@ async function collectArtifacts(parsed, stdout) {
 
   const addArtifact = async (value, artifact = {}) => {
     const relativePath = toWorkspaceRelativePath(sanitizeArtifactCandidate(value));
-    if (!relativePath || excludedPaths.has(relativePath) || artifactMap.has(relativePath)) return;
+    if (!relativePath || excludedPaths.has(relativePath) || isNoiseArtifactPath(relativePath) || artifactMap.has(relativePath)) return;
     const kind = await detectArtifactKind(relativePath);
     if (!kind) return;
     artifactMap.set(relativePath, {
@@ -495,6 +551,7 @@ const retryFeedbackEntry = Array.isArray(task.feedback)
   : null;
 const latestFeedback = retryFeedbackEntry?.note ?? null;
 const isRetry = Boolean(task.status === 'in-progress' && latestFeedback);
+const researchTask = isResearchTask(task);
 const message = [
   `Autonomous task: ${task.title}`,
   task.description ? `Description: ${task.description}` : null,
@@ -504,6 +561,8 @@ const message = [
   latestFeedback ? `Latest operator feedback to address: ${latestFeedback}` : null,
   'You are executing work only. Do not claim authority over task state, approval, review, or completion.',
   'Do not edit AUTONOMOUS.md, autonomous-tasks.json, queue files, or any task-system state file.',
+  researchTask ? 'If this is a research task, use the most specific applicable skill before writing (for example deep-research) and cite concrete sources.' : null,
+  researchTask ? 'If live web/source access is unavailable, explicitly return NEEDS_INPUT instead of presenting unsupported synthesis as factual research.' : null,
   'Return a concise result summary plus any created artifact paths if applicable.',
   isRetry ? 'Your result should clearly reflect how you addressed the feedback.' : null,
 ].filter(Boolean).join('\n');
@@ -516,7 +575,7 @@ let restoreWarnings = [];
 
 try {
   if (modelOverride) {
-    await execFileAsync(
+    const modelCommandResult = await execFileAsync(
       'bash',
       ['-lc', `openclaw agent --session-id ${JSON.stringify(sessionId)} --message ${JSON.stringify(`/model ${modelOverride}`)} --json --timeout 120`],
       {
@@ -525,6 +584,15 @@ try {
         maxBuffer: 5 * 1024 * 1024,
       },
     );
+
+    let modelCommandParsed = null;
+    try {
+      modelCommandParsed = JSON.parse(modelCommandResult.stdout || '{}');
+    } catch {}
+
+    if (!modelCommandConfirmed(modelCommandParsed, modelOverride)) {
+      throw new Error(`Execution model override was not acknowledged by runtime. Requested ${modelOverride}.`);
+    }
   }
 
   const result = await execFileAsync(
@@ -550,6 +618,19 @@ try {
   const childSessionKey = parsed?.childSessionKey ?? parsed?.session?.childSessionKey;
   const runId = parsed?.runId ?? parsed?.run?.id;
   const proof = agentProofText(parsed, stdout);
+
+  const meaningfulPayloads = extractMeaningfulPayloadTexts(parsed).concat(extractMeaningfulPayloadTexts(stdout));
+  if (artifacts.length === 0 && meaningfulPayloads.length === 0) {
+    throw new Error('Execution returned no meaningful artifact or payload.');
+  }
+
+  if (researchTask) {
+    const proofText = String(proof || '').toLowerCase();
+    if (proofText.includes('web search was unavailable') || proofText.includes('synthesized from training knowledge')) {
+      throw new Error('Research run reported unavailable live sources. Please provide source constraints or enable web-backed research tools.');
+    }
+  }
+
   const resultText = buildExecutionEnvelope({
     summary,
     warnings: restoreWarnings,

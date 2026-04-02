@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAutonomousTaskById, latestMeaningfulRetryFeedback, moveLinkedLegacyTask, updateAutonomousTask } from '@/lib/autonomous';
+import { autonomousTaskPreflight } from '@/lib/autonomous-preflight';
 
 const WORKSPACE_ROOT = '/data/.openclaw/workspace';
 const RUNNER_PATH = path.join(WORKSPACE_ROOT, 'projects', 'mission-control', 'scripts', 'run-autonomous-task.mjs');
@@ -15,6 +16,34 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
     }
     if (!(task.status === 'backlog' || task.status === 'todo')) {
       return NextResponse.json({ error: 'Task is not in an executable state.' }, { status: 409 });
+    }
+
+    const preflight = autonomousTaskPreflight({
+      title: task.title,
+      description: task.description,
+      agentTarget: task.agentTarget,
+    });
+    if (!preflight.ok) {
+      const note = preflight.warning ?? 'Task execution is blocked by a missing runtime capability.';
+      const blocked = await updateAutonomousTask(task.id, (current) => ({
+        ...current,
+        status: 'todo',
+        needsInput: {
+          reason: 'missing-web-research-capability',
+          at: Date.now(),
+          note,
+        },
+        run: current.run
+          ? {
+              ...current.run,
+              model: current.model,
+              status: 'error',
+              summary: note,
+              error: note,
+            }
+          : undefined,
+      }));
+      return NextResponse.json({ error: note, code: 'missing-web-research-capability', task: blocked }, { status: 409 });
     }
 
     const startedAt = Date.now();
