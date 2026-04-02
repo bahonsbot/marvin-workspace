@@ -7,23 +7,23 @@
         "column": "todo"
       },
       {
-        "id": "c55641a6",
-        "text": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
+        "id": "873f553c",
+        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
         "column": "todo"
       },
       {
-        "id": "f90bdf5c",
-        "text": "Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs",
+        "id": "80d8d363",
+        "text": "Create a clean implementation plan for a more dynamic and collapsible left menu bar",
         "column": "todo"
       },
       {
-        "id": "1c940873",
-        "text": "Add clickable artefact-first rendering for reviewed autonomous task results",
+        "id": "fb1e983d",
+        "text": "[Trading] Practice create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts | Why: Understanding company financials is required for informed trading decisions | Proof: Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice | Unlocks: Unlocks later analysis tasks based on real followed companies once the watchlist is defined",
         "column": "todo"
       },
       {
-        "id": "be6c5e63",
-        "text": "[Trading] Fix identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
+        "id": "36864897",
+        "text": "[Other] Draft an actionable next step toward: Create a clean implementation plan for a more dyna | Why: Makes tangible progress toward: Create a clean implementation plan for a more dyna | Proof: Task artifact exists and matches requirements | Unlocks: Advances goal progress measurably",
         "column": "todo"
       }
     ],
@@ -49,5 +49,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-01T02:33:45.561Z"
+  "updatedAt": "2026-04-02T01:00:06.966Z"
 }
