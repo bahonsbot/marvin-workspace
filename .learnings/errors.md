@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260402-2340]
+
+**What failed:** Mission Control Chat active-session transcript hydration after the April 2 hardening pass
+**Error:** repeated transcript rehydration for the already-live active thread caused delayed duplicate user/assistant turns, clone accumulation over time, and occasional transcript self-scroll jumps; wrapper-stripping/dedupe patches improved symptoms but did not fix the core problem
+**Context:** late-night Mission Control Chat regression hunt after Philippe reported that both his messages and Marvin replies reappeared a few seconds later and older turns could accumulate into many copies
+**Suggested fix:** for the active live chat thread, keep transcript hydration conservative: hydrate on session change or when no meaningful transcript exists, then rely on WS live updates for ongoing conversation instead of repeatedly re-merging history on transcript-signature changes
+**Resolution:** Fixed on 2026-04-02 in `projects/mission-control/hooks/useRuntimeBridge.ts` via commit `e162301`; Control UI wrapper stripping in `projects/mission-control/app/api/runtime-bridge/route.ts` remains a useful supporting cleanup but was not the root fix
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260331-1258]
 
 **What failed:** Mission Control Chat live session continuity after send

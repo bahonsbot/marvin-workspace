@@ -113,9 +113,9 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 ### Mission Control Runtime / Preview Notes
 - Savepoint naming rule: prefer concise savepoint filenames, e.g. `mc-savepoint-YYYY-MM-DD-<descriptor>.md`, over long sentence-style names
 - Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
-  - Apr 2 stabilization: `useRuntimeBridge.ts` now uses signature-based hydration guards so transcript history can rehydrate after model/thinking/session changes instead of getting stuck in a tools-only view
-  - Apr 2 rewind fix: hydrated transcript merge is now timestamp-aware and overwrite-safe so older persisted history cannot clobber newer live messages during later hydrate cycles
+  - Apr 2 rewind fix: hydrated transcript merge is timestamp-aware and overwrite-safe so older persisted history cannot clobber newer live messages during later hydrate cycles
   - Apr 2 UX stabilization: transient ACTIVITY/SYSTEM notices are no longer durable transcript rows; compression/fallback notices render in a transient notice channel instead, and default Chat load should prefer `agent:main:main`
+  - Apr 2 late-night regression lesson: repeated active-session transcript rehydration can cause delayed duplicate turns and transcript scroll jumps; for the active live thread, hydrate on session change/empty transcript, then prefer WS live updates over repeated signature-based history merges
 - Autonomous Tasks sync posture:
   - structured store (`projects/mission-control/data/autonomous-tasks.json`) remains current-state authority
   - `AUTONOMOUS.md` is the legacy mirror/sync surface
