@@ -2,6 +2,16 @@
   "board": {
     "todo": [
       {
+        "id": "853b70b6",
+        "text": "[Personal] Practice: create one beginner Python study sheet on variables, input/output, and simple conditionals",
+        "column": "todo"
+      },
+      {
+        "id": "e136d454",
+        "text": "[Other] 🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
+        "column": "todo"
+      },
+      {
         "id": "a3b59a53",
         "text": "[Personal] Practice: create one focused Japanese study pack from a single beginner theme",
         "column": "todo"
@@ -14,16 +24,6 @@
       {
         "id": "075dd925",
         "text": "[Trading] Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability",
-        "column": "todo"
-      },
-      {
-        "id": "6c0ef225",
-        "text": "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
-        "column": "todo"
-      },
-      {
-        "id": "80d8d363",
-        "text": "Create a clean implementation plan for a more dynamic and collapsible left menu bar",
         "column": "todo"
       }
     ],
@@ -49,5 +49,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-02T06:20:15.085Z"
+  "updatedAt": "2026-04-02T06:31:38.302Z"
 }
