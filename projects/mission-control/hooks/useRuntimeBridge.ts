@@ -358,6 +358,13 @@ function mergeHydratedMessages(
   const buildLooseKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
     `${message.role}|${message.sessionKey ?? 'none'}|${normalizedBody}`;
 
+  const equivalentSession = (a: string | null | undefined, b: string | null | undefined) => {
+    if ((a ?? null) === (b ?? null)) return true;
+    if (a === 'agent:main:main' && !b) return true;
+    if (b === 'agent:main:main' && !a) return true;
+    return false;
+  };
+
   const upsert = (message: RuntimeBridgeChatMessage, source: 'current' | 'hydrated') => {
     const normalizedBody = message.body.trim();
     if (!normalizedBody) return;
@@ -376,7 +383,7 @@ function mergeHydratedMessages(
     if (!existing) {
       const closeDuplicate = Array.from(new Set(keyed.values())).find((candidate) => {
         if (candidate.role !== normalized.role) return false;
-        if ((candidate.sessionKey ?? null) !== (normalized.sessionKey ?? null)) return false;
+        if (!equivalentSession(candidate.sessionKey, normalized.sessionKey)) return false;
         if (candidate.body !== normalized.body) return false;
         return Math.abs(candidate.at - normalized.at) <= 15000;
       });
