@@ -2,11 +2,6 @@
   "board": {
     "todo": [
       {
-        "id": "8e3a7c60",
-        "text": "[Personal] Practice: Japanese study pack",
-        "column": "todo"
-      },
-      {
         "id": "44e345e9",
         "text": "[Trading] Practice: Business metrics lesson",
         "column": "todo"
@@ -22,7 +17,13 @@
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "51b1ae1c",
+        "text": "[Personal] Practice: Japanese study pack",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "24fa9c1b",
@@ -56,5 +57,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-03T10:00:15.000Z"
+  "updatedAt": "2026-04-03T10:00:17.000Z"
 }
