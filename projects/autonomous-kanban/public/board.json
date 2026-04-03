@@ -2,28 +2,28 @@
   "board": {
     "todo": [
       {
-        "id": "4ba46c8f",
-        "text": "[Trading] Fix: Equity bot improvement",
+        "id": "d35f1b5b",
+        "text": "[Personal] Practice: Japanese study pack",
+        "column": "todo"
+      },
+      {
+        "id": "44106f89",
+        "text": "[Trading] Practice: Business metrics lesson",
+        "column": "todo"
+      },
+      {
+        "id": "321a38f2",
+        "text": "[Career] Practice: Blender primitives exercise",
+        "column": "todo"
+      },
+      {
+        "id": "6c0ef225",
+        "text": "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
         "column": "todo"
       },
       {
         "id": "b8f002ff",
         "text": "[Personal] Practice: Python practice sheet",
-        "column": "todo"
-      },
-      {
-        "id": "8e10ddd7",
-        "text": "[Other] Draft: An actionable next step toward: create a...",
-        "column": "todo"
-      },
-      {
-        "id": "3b05052c",
-        "text": "[Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
-        "column": "todo"
-      },
-      {
-        "id": "80d8d363",
-        "text": "Create a clean implementation plan for a more dynamic and collapsible left menu bar",
         "column": "todo"
       }
     ],
@@ -49,5 +49,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-02T08:56:11.678Z"
+  "updatedAt": "2026-04-03T01:00:08.036Z"
 }
