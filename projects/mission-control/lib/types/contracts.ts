@@ -230,6 +230,17 @@ export interface OrchestratorIntegrationSummary {
   sessionContext: {
     totalSessionsVisible: number | null;
     activeDirectLast5m: number;
+    roots: Array<{
+      key: string;
+      model: string | null;
+      updatedAt: string | null;
+    }>;
+    mainSession: {
+      key: string;
+      exists: boolean;
+      model: string | null;
+      updatedAt: string | null;
+    };
     recent: Array<{
       key: string;
       model: string | null;

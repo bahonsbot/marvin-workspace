@@ -41,6 +41,8 @@ function shouldReplaceSummary(
   if (!current) return true;
   if (current.refreshedAt !== incoming.refreshedAt) return true;
   if (current.sessionContext.recent.length !== incoming.sessionContext.recent.length) return true;
+  if (current.sessionContext.roots.map((session) => session.key).join('|') !== incoming.sessionContext.roots.map((session) => session.key).join('|')) return true;
+  if (current.sessionContext.mainSession.exists !== incoming.sessionContext.mainSession.exists) return true;
   if (current.runtimeBridge.status !== incoming.runtimeBridge.status) return true;
   return false;
 }

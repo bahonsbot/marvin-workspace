@@ -130,6 +130,7 @@ const MAX_LIVE_MESSAGES = 24;
 const MAX_LIVE_EVENTS = 48;
 const MAX_TRANSIENT_NOTICES = 6;
 const MAIN_SESSION_KEY = 'agent:main:main';
+const MAIN_SESSION_LABEL = shortenSessionKey(MAIN_SESSION_KEY);
 
 function createEmptySession(
   state: RuntimeBridgeSessionState,
@@ -185,22 +186,11 @@ function shortenSessionKey(key: string | null): string {
 }
 
 function chooseTargetSession(summary: OrchestratorIntegrationSummary): RuntimeBridgeLiveSessionTarget {
-  const sessions = summary.sessionContext.recent;
-  const mainSession = sessions.find((session) => session.key === MAIN_SESSION_KEY);
-  if (mainSession) {
-    return { key: mainSession.key, label: shortenSessionKey(mainSession.key) };
+  if (summary.sessionContext.mainSession.exists) {
+    return { key: MAIN_SESSION_KEY, label: MAIN_SESSION_LABEL };
   }
 
-  if (summary.runtime.defaultAgentId) {
-    const defaultAgentId = summary.runtime.defaultAgentId;
-    const matched = sessions.find((session) => session.key === defaultAgentId || session.key.includes(defaultAgentId));
-    if (matched) {
-      return { key: matched.key, label: shortenSessionKey(matched.key) };
-    }
-  }
-
-  const fallback = sessions[0]?.key ?? null;
-  return { key: fallback, label: shortenSessionKey(fallback) };
+  return { key: MAIN_SESSION_KEY, label: MAIN_SESSION_LABEL };
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -491,6 +481,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const lastSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reconnectAttemptRef = useRef(0);
+  const bootstrapMainSessionPromiseRef = useRef<Promise<void> | null>(null);
 
   const defaultTargetSession = useMemo(() => chooseTargetSession(summary), [summary]);
   const liveTargetSession = useMemo<RuntimeBridgeLiveSessionTarget>(() => {
@@ -562,13 +553,16 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   }, [initialSummary]);
 
   useEffect(() => {
-    if (summary.sessionContext.recent.length === 0) return;
-    const recentKeys = new Set(summary.sessionContext.recent.map((candidate) => candidate.key));
-    if (activeSessionKey && recentKeys.has(activeSessionKey)) return;
+    const knownKeys = new Set<string>([
+      MAIN_SESSION_KEY,
+      ...summary.sessionContext.roots.map((candidate) => candidate.key),
+      ...summary.sessionContext.recent.map((candidate) => candidate.key),
+    ]);
+    if (activeSessionKey && knownKeys.has(activeSessionKey)) return;
     if (defaultTargetSession.key) {
       setActiveSessionKey(defaultTargetSession.key);
     }
-  }, [activeSessionKey, defaultTargetSession.key, summary.sessionContext.recent]);
+  }, [activeSessionKey, defaultTargetSession.key, summary.sessionContext.recent, summary.sessionContext.roots]);
 
   const load = useCallback(async (isBackgroundRefresh: boolean) => {
     if (isBackgroundRefresh) {
@@ -609,7 +603,8 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
           const scopedCurrent = current.filter((message) => message.sessionKey === hydratedSessionKey || message.sessionKey === null);
           const hasScopedTranscript = scopedCurrent.some((message) => message.role === 'user' || message.role === 'assistant');
           const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
-          const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || !hasScopedTranscript);
+          const signatureChanged = hydratedTranscriptSignatureRef.current !== incomingSignature;
+          const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || signatureChanged || !hasScopedTranscript);
           if (!shouldHydrate) return current;
 
           hydratedSessionKeyRef.current = hydratedSessionKey;
@@ -670,7 +665,39 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     }, delayMs);
   }, []);
 
+  const ensureCanonicalMainSession = useCallback(async () => {
+    if (summary.sessionContext.mainSession.exists) return;
+
+    if (bootstrapMainSessionPromiseRef.current) {
+      await bootstrapMainSessionPromiseRef.current;
+      return;
+    }
+
+    const bootstrapPromise = (async () => {
+      await rpc('sessions.patch', { key: MAIN_SESSION_KEY });
+      if (!mountedRef.current) return;
+      setActiveSessionKey(MAIN_SESSION_KEY);
+      await load(true);
+    })();
+
+    bootstrapMainSessionPromiseRef.current = bootstrapPromise;
+    try {
+      await bootstrapPromise;
+    } finally {
+      bootstrapMainSessionPromiseRef.current = null;
+    }
+  }, [load, rpc, summary.sessionContext.mainSession.exists]);
+
   // Auto-refresh removed — refresh is now manual-only via bridge.refresh()
+
+  useEffect(() => {
+    if (session.state !== 'connected') return;
+    if (summary.sessionContext.mainSession.exists) return;
+
+    void ensureCanonicalMainSession().catch((cause) => {
+      console.error('[mission-control-runtime] failed to bootstrap canonical main session', cause);
+    });
+  }, [ensureCanonicalMainSession, session.state, summary.sessionContext.mainSession.exists]);
 
   const handleGatewayEvent = useCallback(
     (message: GatewayEventMessage) => {
@@ -1111,6 +1138,10 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         throw new Error('No visible runtime session is available for Mission Control to target.');
       }
 
+      if (sessionKey === MAIN_SESSION_KEY && !summary.sessionContext.mainSession.exists) {
+        await ensureCanonicalMainSession();
+      }
+
       setActiveSessionKey(sessionKey);
       setSendState('sending');
       setSendError(null);
@@ -1179,7 +1210,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         throw cause;
       }
     },
-    [liveTargetSession.key, rpc, session.state],
+    [ensureCanonicalMainSession, liveTargetSession.key, rpc, session.state, summary.sessionContext.mainSession.exists],
   );
 
   const abortPrompt = useCallback(async () => {

@@ -3,6 +3,7 @@ import { runJsonCommand } from '@/lib/adapters/runtime';
 import { getRuntimeBridgeSidecarDescriptor } from '@/lib/runtime-bridge-sidecar';
 
 const RUNTIME_BRIDGE_POLL_INTERVAL_MS = 15000;
+const MAIN_SESSION_KEY = 'agent:main:main';
 
 type OpenClawStatusRaw = {
   defaultAgentId?: string;
@@ -19,7 +20,6 @@ type OpenClawStatusRaw = {
       updatedAt?: number;
       age?: number;
       model?: string;
-      thinkingLevel?: string;
       percentUsed?: number | null;
       totalTokens?: number | null;
       contextTokens?: number | null;
@@ -50,6 +50,10 @@ function toIso(value?: number): string | null {
 
 function isRunSession(key?: string): boolean {
   return typeof key === 'string' && key.includes(':run:');
+}
+
+function isRootSession(key?: string): boolean {
+  return typeof key === 'string' && /^agent:[^:]+:main$/.test(key);
 }
 
 function deriveControlPath(gatewayUrl?: string | null): OrchestratorIntegrationSummary['controlPath'] {
@@ -142,7 +146,7 @@ function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['contro
       sessionList: true,
       controlHandoff: Boolean(controlPath.href),
       composerSend: sidecar.configured && gatewaySessionAuthConfigured,
-      stop: sidecar.configured && gatewaySessionAuthConfigured,
+      stop: false,
       reset: false,
       eventStream: false,
     },
@@ -171,11 +175,12 @@ function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['contro
 
 export async function readOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
   try {
-    const [statusRaw, healthRaw, sessionsRaw] = (await Promise.all([
+    const [statusRaw, healthRaw, sessionsRaw, allSessionsRaw] = (await Promise.all([
       runJsonCommand('openclaw status --json'),
       runJsonCommand('openclaw health --json'),
       runJsonCommand('openclaw sessions --all-agents --active 180 --json'),
-    ])) as [OpenClawStatusRaw, OpenClawHealthRaw, SessionsRaw];
+      runJsonCommand('openclaw sessions --all-agents --json'),
+    ])) as [OpenClawStatusRaw, OpenClawHealthRaw, SessionsRaw, SessionsRaw];
 
     const statusRecentByKey = new Map(
       (statusRaw.sessions?.recent ?? [])
@@ -192,7 +197,6 @@ export async function readOrchestratorIntegrationSummary(): Promise<Orchestrator
         return {
           key: session.key as string,
           model: session.model ?? statusSession?.model ?? null,
-          thinkingLevel: statusSession?.thinkingLevel ?? null,
           kind: session.kind ?? 'unknown',
           ageMs: typeof session.ageMs === 'number' ? session.ageMs : typeof statusSession?.age === 'number' ? statusSession.age : null,
           updatedAt: toIso(session.updatedAt ?? statusSession?.updatedAt),
@@ -209,9 +213,25 @@ export async function readOrchestratorIntegrationSummary(): Promise<Orchestrator
                     contextTokens: statusSession.contextTokens,
                     percentUsed: typeof statusSession.percentUsed === 'number' ? statusSession.percentUsed : Math.round((statusSession.totalTokens / statusSession.contextTokens) * 100),
                   }
-                : null,
+              : null,
         };
       });
+
+    const authoritativeRoots = (allSessionsRaw.sessions ?? [])
+      .filter((session) => typeof session.key === 'string')
+      .filter((session) => isRootSession(session.key))
+      .sort((left, right) => {
+        if (left.key === MAIN_SESSION_KEY) return -1;
+        if (right.key === MAIN_SESSION_KEY) return 1;
+        return (right.updatedAt ?? 0) - (left.updatedAt ?? 0);
+      })
+      .map((session) => ({
+        key: session.key as string,
+        model: session.model ?? statusRecentByKey.get(session.key as string)?.model ?? null,
+        updatedAt: toIso(session.updatedAt ?? statusRecentByKey.get(session.key as string)?.updatedAt),
+      }));
+
+    const mainSession = authoritativeRoots.find((session) => session.key === MAIN_SESSION_KEY) ?? null;
 
     const activeDirectCount = recentSessions.filter((session) => session.kind === 'direct' && typeof session.ageMs === 'number' && session.ageMs <= 5 * 60 * 1000).length;
 
@@ -248,6 +268,13 @@ export async function readOrchestratorIntegrationSummary(): Promise<Orchestrator
       sessionContext: {
         totalSessionsVisible: typeof statusRaw.sessions?.count === 'number' ? statusRaw.sessions.count : null,
         activeDirectLast5m: activeDirectCount,
+        roots: authoritativeRoots,
+        mainSession: {
+          key: MAIN_SESSION_KEY,
+          exists: Boolean(mainSession),
+          model: mainSession?.model ?? null,
+          updatedAt: mainSession?.updatedAt ?? null,
+        },
         recent: recentSessions,
       },
       integrationShape: {
@@ -286,6 +313,13 @@ export async function readOrchestratorIntegrationSummary(): Promise<Orchestrator
       sessionContext: {
         totalSessionsVisible: null,
         activeDirectLast5m: 0,
+        roots: [],
+        mainSession: {
+          key: MAIN_SESSION_KEY,
+          exists: false,
+          model: null,
+          updatedAt: null,
+        },
         recent: [],
       },
       integrationShape: {
