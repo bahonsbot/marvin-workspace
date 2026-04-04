@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "18d77cea",
+        "text": "[Trading] Fix: Futures bot improvement",
+        "column": "todo"
+      },
+      {
         "id": "8e3a7c60",
         "text": "[Personal] Practice: Japanese study pack",
         "column": "todo"
@@ -17,13 +22,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "f929860b",
-        "text": "[Trading] Fix: Futures bot improvement",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "24fa9c1b",
@@ -57,5 +56,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-04T10:00:10.000Z"
+  "updatedAt": "2026-04-04T10:00:12.000Z"
 }
