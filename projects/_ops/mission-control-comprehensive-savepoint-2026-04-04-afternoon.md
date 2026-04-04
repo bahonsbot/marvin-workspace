@@ -285,6 +285,11 @@ After that:
 - preview restart succeeded
 - root check returned expected `307 Temporary Redirect`
 
+### Final cleanup before handoff
+Two stray diffs from the wedged coding pass were explicitly restored before handoff:
+- Tasks board CSS was put back on the real five-column layout (not an accidental three-column fallback)
+- transcript sanitization in `app/api/runtime-bridge/route.ts` was restored to the stronger recursive stripping behavior
+
 ### Durable lesson
 `ws` is not optional package clutter in Mission Control.
 It is a real runtime dependency for preview-side infrastructure.
@@ -305,6 +310,7 @@ Expected verification result at root:
 Nested Mission Control repo:
 - `2b7ab49f` — `files,memory: add in-browser editing with codemirror`
 - `411f38cc` — `build: restore ws for preview proxy and sidecar`
+- `88a9f383` — `cleanup: restore tasks grid and transcript sanitizer`
 
 Outer workspace repo:
 - `7c8e1a8` — `mission-control: add in-browser file and memory editing`
