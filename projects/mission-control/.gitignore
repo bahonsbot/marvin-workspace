@@ -1,3 +1,6 @@
 # Environment files — never commit
 .preview-runtime/*.env
 .env
+
+# Runtime event logs
+data/task-lifecycle-events.json
