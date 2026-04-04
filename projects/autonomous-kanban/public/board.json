@@ -2,59 +2,52 @@
   "board": {
     "todo": [
       {
-        "id": "8e3a7c60",
+        "id": "5c2b3431",
+        "text": "[Trading] Fix: Futures bot improvement",
+        "column": "todo"
+      },
+      {
+        "id": "08499c87",
+        "text": "[Trading] 🎁 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
+        "column": "todo"
+      },
+      {
+        "id": "d35f1b5b",
         "text": "[Personal] Practice: Japanese study pack",
         "column": "todo"
       },
       {
-        "id": "44e345e9",
+        "id": "44106f89",
         "text": "[Trading] Practice: Business metrics lesson",
         "column": "todo"
       },
       {
-        "id": "5268b591",
+        "id": "321a38f2",
         "text": "[Career] Practice: Blender primitives exercise",
-        "column": "todo"
-      },
-      {
-        "id": "e299ba72",
-        "text": "[Personal] Practice: Python practice sheet",
         "column": "todo"
       }
     ],
     "inprogress": [],
     "done": [
       {
-        "id": "24fa9c1b",
-        "text": "(2026-03-24) [Career] \ud83d\udcdd Draft: 3 Instagram content angles tied to After Effects motion design project \u2192 projects/portfolio/content-plan-ae-motion-design.md",
-        "column": "done"
+        "id": "b999c42d",
+        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "done",
+        "outputPath": "projects/automation/fix-identify-one-repetitive-workspace-workflow-that-wastes-time-excludin.md"
       },
       {
-        "id": "5498edbf",
-        "text": "(2026-03-24) [Other] \ud83d\udd27 Fix: OpenClaw helper utility generation improved; daily-task-generator now produces concrete script deliverables",
-        "column": "done"
+        "id": "2336a7e5",
+        "text": "[Other] 🔧 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "done",
+        "outputPath": "projects/automation/fix-build-one-small-automation-utility-that-addresses-one-specific-docum.md"
       },
       {
-        "id": "90367ec6",
-        "text": "(2026-03-24) [Career] \ud83d\udd28 Build: daily creative challenge generator \u2192 projects/creative-challenges/index.html + README.md",
-        "column": "done"
-      },
-      {
-        "id": "0f7d3b41",
-        "text": "(2026-03-24) [Career] \ud83d\ude80 Launch: portfolio case-study draft \u2192 projects/portfolio/case-studies/motion-design-loop.md",
-        "column": "done"
-      },
-      {
-        "id": "44306735",
-        "text": "(2026-03-24) [Trading] \ud83d\udd27 Fix: safe improvement in trading-bot workspace \u2192 bot-support-spec-health-snapshot-reporter-2026-03-16.md",
-        "column": "done"
-      },
-      {
-        "id": "32a9a711",
-        "text": "(2026-03-24) [Personal] \ud83d\udcda Learn: Japanese study pack (greetings lesson) \u2192 projects/language/lesson-01-greetings.md",
-        "column": "done"
+        "id": "3215a592",
+        "text": "🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker",
+        "column": "done",
+        "outputPath": "projects/learning-tools/python-daily-loop.html"
       }
     ]
   },
-  "updatedAt": "2026-04-03T10:00:19.000Z"
+  "updatedAt": "2026-04-04T01:00:07.151Z"
 }
