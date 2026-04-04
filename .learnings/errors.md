@@ -549,3 +549,11 @@ Command/tool failures and exceptions.
 **Prevention:** Hydrated transcript merges must be keyed, timestamp-aware, and overwrite-safe. Never rely on append-order + tail-trim for mixed live/hydrated message streams.
 **Status:** resolved
 **Resolved:** 2026-04-02 late night — timestamp-aware merge in `useRuntimeBridge.ts`; overwrite-safe, older snapshots cannot rewind live state.
+
+## [ERR-20260404-1253]
+
+**Context:** Mission Control preview restart after Files/Memory editor package cleanup
+**What failed:** `ws` was briefly removed as if it were stray package noise, but Mission Control's preview-side runtime scripts (`scripts/runtime-bridge-ws-sidecar.js` and `scripts/preview-origin-proxy.js`) require it directly. Result: `next build` and `next start` could succeed while the preview helper still failed its final health check on port 3005 with `Cannot find module 'ws'` in `.preview-runtime/latest.log` / `ws-sidecar.log`.
+**Prevention:** Treat preview/sidecar scripts as first-class runtime dependencies when pruning packages. A passing Next.js app build does not prove the preview stack is healthy; verify the proxy/sidecar path too.
+**Status:** resolved
+**Resolved:** 2026-04-04 afternoon — restored `ws` dependency and reran build + preview restart successfully.

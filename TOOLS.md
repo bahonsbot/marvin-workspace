@@ -112,6 +112,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 
 ### Mission Control Runtime / Preview Notes
 - Savepoint naming rule: prefer concise savepoint filenames, e.g. `mc-savepoint-YYYY-MM-DD-<descriptor>.md`, over long sentence-style names
+- Preview runtime dependency note: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` and `projects/mission-control/scripts/preview-origin-proxy.js` require npm package `ws`; a passing Next.js build alone does not prove preview health if `ws` is missing
 - Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
   - Apr 2 rewind fix: hydrated transcript merge is timestamp-aware and overwrite-safe so older persisted history cannot clobber newer live messages during later hydrate cycles
   - Apr 2 UX stabilization: transient ACTIVITY/SYSTEM notices are no longer durable transcript rows; compression/fallback notices render in a transient notice channel instead, and default Chat load should prefer `agent:main:main`
