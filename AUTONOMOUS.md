@@ -27,22 +27,20 @@
 
 
 ## Done Today
-- [Other] 🔧 Fix: build one small OpenClaw helper utility — done: `scripts/autonomy_operator_dashboard.py` (expanded: Review/In Progress/Needs Input panels, kanban rejection tracking, dual-source drift detection, HIGH/MEDIUM/LOW next-action checklist) | operator accepted 2026-04-01
 
-- [Other] 🔧 Fix build one small OpenClaw helper utility — autonomy health check diagnostic → scripts/autonomy_health_check.py + scripts/operator_snapshot.py
-- Create execute smoke-test JSON artifact | ✅ Done: `projects/automation/execute-smoke-test.json` — 11 cases covering needs-input, agent_team, subagent, direct, and risky-pattern blocking paths; all verified against live parser/classifier.
-- Create tasks-page current-state doc | ✅ Completed: projects/mission-control/docs/tasks-page-current-state.md
-## In Progress
 
 ## Needs Input
-
+- Do each need their own workspace?
+- What is most important in these workspaces for the agent to fulfil their role as efficient as possible
+- Is it worth having dedicated agents teams, like a dev team (with a front-end developer, back-end developer, designer, and QA engineer) or a content/SEO team (with a researcher, analyst, writer, publisher, GSC tracker)?
+## In Progress
+- Research Agent workspace implementation
 ## Open Backlog
-
-- Add Mission Control Tasks completion toast / chat-style notice for finished autonomous runs
-- Add clickable artefact-first rendering for reviewed autonomous task results
-- [Trading] Fix identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots
-
-- Create a image conversion app that runs on Mac OS to convert .png to .jpg files
+- Create a clean implementation plan for a more dynamic and collapsible left menu bar
+**Brief:** The current left menu bar in Mission Control works well, but it is a bit static. Ideally we want it to be collapsible, so we can create more screen space. When collapsed, it should only show the icons (these are up for improvement too, as they don't 'mean' anything right now), and hide the text titles for each page. To make it more dynamic, perhaps it can change colour or create an outline around the page title when mouse-over, anything is possible. Create a plan to give it more of a wow-factor, while still being kinda elegant/minimalistic.
+- [Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas
+- [Personal] Practice: Python practice sheet
+**Brief:** create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises
 ## Done
 
 - (2026-03-24) [Career] 📝 Draft: 3 Instagram content angles tied to After Effects motion design project → projects/portfolio/content-plan-ae-motion-design.md
