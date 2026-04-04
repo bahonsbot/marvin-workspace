@@ -106,7 +106,7 @@ const ROSTER_AGENTS: AgentProfile[] = [
     avatarMark: 'RV',
     motif: 'prism',
     summary: 'Pressure-tests the result, catches regressions, and sharpens the work before it hardens into output.',
-    model: 'qwenplus',
+    model: 'minimax2.7',
     cardType: 'runtime',
     match: (session) => isReviewerLike(session),
   },

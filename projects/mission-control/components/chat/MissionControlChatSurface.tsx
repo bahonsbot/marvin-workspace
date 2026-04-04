@@ -802,7 +802,7 @@ type AgentMenuOption = {
 };
 
 type ModelMenuOption = {
-  id: 'codex5.4' | 'codex' | 'minimax2.7' | 'qwenplus';
+  id: 'codex5.4' | 'codex' | 'minimax2.7';
   label: string;
   command: string;
 };
@@ -818,7 +818,6 @@ const modelMenuOptions: ModelMenuOption[] = [
   { id: 'codex5.4', label: 'gpt-5.4', command: '/model codex5.4' },
   { id: 'codex', label: 'codex-5.3', command: '/model codex' },
   { id: 'minimax2.7', label: 'minimax-2.7', command: '/model minimax2.7' },
-  { id: 'qwenplus', label: 'qwen3.5-plus', command: '/model qwenplus' },
 ];
 
 const effortMenuOptions = ['low', 'medium', 'high', 'xhigh'] as const;
@@ -912,16 +911,14 @@ export function MissionControlChatSurface({
 
   const runtimeModelLabel = model.modelLabel.includes('gpt-5.4')
     ? 'gpt-5.4'
-    : model.modelLabel.toLowerCase().includes('qwen')
-      ? 'qwen3.5-plus'
-      : model.modelLabel.toLowerCase().includes('minimax')
-        ? 'minimax-2.7'
-        : model.modelLabel.toLowerCase().includes('codex') || model.modelLabel.toLowerCase().includes('5.3')
-          ? 'codex-5.3'
-          : model.modelLabel;
+    : model.modelLabel.toLowerCase().includes('minimax')
+      ? 'minimax-2.7'
+      : model.modelLabel.toLowerCase().includes('codex') || model.modelLabel.toLowerCase().includes('5.3')
+        ? 'codex-5.3'
+        : model.modelLabel;
   const modelMenuLabel = optimisticModelLabel ?? pendingModelLabel ?? runtimeModelLabel;
   const xhighCapable = modelMenuLabel === 'gpt-5.4' || modelMenuLabel === 'codex-5.3';
-  const boundedThinkCapable = modelMenuLabel === 'minimax-2.7' || modelMenuLabel === 'qwen3.5-plus';
+  const boundedThinkCapable = modelMenuLabel === 'minimax-2.7';
   const effortInteractive = xhighCapable || boundedThinkCapable;
   const availableEffortOptions = xhighCapable ? effortMenuOptions : boundedThinkCapable ? effortMenuOptions.filter((level) => level !== 'xhigh') : [];
   const confirmedEffortLabel = model.effortLabel && model.effortLabel !== 'Not exposed yet' ? model.effortLabel : null;

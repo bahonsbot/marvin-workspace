@@ -12,7 +12,7 @@ const autonomyPath = path.join(workspaceRoot, 'AUTONOMOUS.md');
 const queuePath = path.join(workspaceRoot, 'memory', 'executor-subagent-queue.json');
 const tasksLogPath = path.join(workspaceRoot, 'memory', 'tasks-log.md');
 const managedPaths = [autonomyPath, storePath, queuePath, tasksLogPath];
-const allowedModelAliases = new Set(['minimax2.7', 'qwenplus', 'codex', 'codex5.4', 'codex5.4mini', 'gemini']);
+const allowedModelAliases = new Set(['minimax2.7', 'codex', 'codex5.4', 'codex5.4mini', 'gemini']);
 const noiseRootFiles = new Set(['AGENTS.md', 'SOUL.md', 'TOOLS.md', 'IDENTITY.md', 'USER.md', 'HEARTBEAT.md', 'BOOTSTRAP.md', 'MEMORY.md']);
 
 function now() {

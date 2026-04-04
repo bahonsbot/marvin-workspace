@@ -160,7 +160,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 ### Models (Operational Routing)
 - Primary provider: Bailian
 - Default lightweight delegation: `minimax/MiniMax-M2.7`
-- Higher-reasoning delegation: `bailian/qwen3.5-plus`
+- Higher-reasoning delegation: `bailian/qwen3.5-plus` *(currently unavailable; do not route live jobs or Mission Control to it until subscription returns)*
 - Active Codex posture uses both:
   - `openai-codex/gpt-5.4` for runway / orchestration / higher-reasoning work
   - `openai-codex/gpt-5.3-codex` for coding-heavy delegated work
@@ -177,7 +177,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - **Model mapping:**
   - Marvin → codex5.4
   - Builder → codex
-  - Reviewer → qwenplus
+  - Reviewer → minimax2.7
 - **Use for:** Implementation-heavy, high-value, clearly scoped tasks
 - **Queue integration:** autonomous task classification/routing lives in `scripts/autonomous-task-executor.py`; use `agent_team` mode selectively rather than by default for all queued work
 - **Reference:** `projects/_ops/agent-team/` package
@@ -400,7 +400,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
    - Fix: `lsof -i :8000` to find culprit, or change `WEBHOOK_PORT`
 4. **Legacy Bailian MiniMax token limit:** Bailian `MiniMax-M2.5` accepts up to ~196,608 input tokens.
    - Symptom: HTTP 400 with message like `Range of input length should be [1, 196608]`
-   - Fix: Prefer `minimax/MiniMax-M2.7` for direct MiniMax routing, and use `bailian/qwen3.5-plus` for very high-context or reasoning-heavy prompts
+   - Fix: Prefer `minimax/MiniMax-M2.7` for direct MiniMax routing. `bailian/qwen3.5-plus` is currently unavailable here, so do not depend on it for live prompts until subscription returns.
 5. **MiniMax M2.7 404 on clean setup:** When 404 survives a clean provider/alias setup, it is almost always a transport/API-contract mismatch, not a credential or hostname problem.
    - Diagnostic path: read provider's official API docs → read OpenClaw provider docs → compare against current config → apply minimum transport-layer fix
    - For M2.7 specifically: use `api: "anthropic-messages"` + `baseUrl: "https://api.minimax.io/anthropic"` (not the bare `/v1` path)

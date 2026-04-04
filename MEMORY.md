@@ -28,7 +28,7 @@ For timelines and exact session history, use `memory/YYYY-MM-DD.md`.
 ## Model Baseline
 - Primary provider: Bailian
 - Default lightweight delegation: `minimax/MiniMax-M2.7`
-- Higher-reasoning delegation: `bailian/qwen3.5-plus`
+- Higher-reasoning delegation: `bailian/qwen3.5-plus` *(currently unavailable; do not route live jobs or Mission Control to it until subscription returns)*
 - Coding fallback: `openai-codex/gpt-5.3-codex`
 - Codex split is intentional:
   - `codex5.4` = Marvin orchestration / higher-reasoning work
@@ -80,7 +80,7 @@ If scope is ambiguous, ask before overengineering.
 - Preferred team mapping:
   - Marvin → `codex5.4`
   - Builder → `codex`
-  - Reviewer → `qwenplus`
+  - Reviewer → `minimax2.7`
 
 ### Search Posture
 - Brave remains the primary search path

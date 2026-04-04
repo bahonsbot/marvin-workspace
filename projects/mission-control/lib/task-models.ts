@@ -1,6 +1,5 @@
 export const AUTONOMOUS_TASK_MODEL_ALIASES = [
   'minimax2.7',
-  'qwenplus',
   'codex',
   'codex5.4',
   'codex5.4mini',
@@ -14,7 +13,7 @@ export const AUTONOMOUS_TASK_MODEL_DEFAULT = 'agent-default' as const;
 const AUTONOMOUS_AGENT_DEFAULT_MODEL: Record<string, string> = {
   marvin: 'gpt-5.4',
   builder: 'codex',
-  reviewer: 'qwenplus',
+  reviewer: 'minimax2.7',
 };
 
 export function isAutonomousTaskModelAlias(value: unknown): value is AutonomousTaskModelAlias {
