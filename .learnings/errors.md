@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260404-2243]
+
+**What failed:** Mission Control autonomous research task execution entered a false `In Progress` state with no real worker/session behind it
+**Error:** `projects/mission-control/scripts/run-autonomous-task.mjs` contained a JavaScript syntax error (`minimax2.7:` used as an unquoted object key), so the detached runner crashed immediately on load while the execute route had already marked the task as `in-progress` with `Execution started`
+**Context:** Apr 4 Mission Control autonomous web-research verification after Philippe reported a fresh research task looked stuck and MiniMax showed no token usage
+**Suggested fix:** for detached autonomous execution, do not treat task-store `running` state as proof of a live run; verify at least one concrete runtime signal (session log creation, session-registry entry, transcript growth, or model usage) and fail fast if the worker dies before real session creation. Also run `node --check` or equivalent syntax validation on edited runner scripts before relying on detached launch paths
+**Resolution:** Root cause identified and fixed on 2026-04-04 in `projects/mission-control/scripts/run-autonomous-task.mjs`; nested Mission Control repo commit `13f21391`
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260404-2140]
+
+**What failed:** Mission Control Tasks browser preflight kept warning that web research was unavailable even after backend autonomous web research had been enabled
+**Error:** the browser-side capability check only saw server-side env assumptions, so the UI emitted a false missing-capability warning while the backend/runtime path was actually configured
+**Context:** Apr 4 Mission Control Tasks follow-up after Philippe saw `This task requests web research, but the current runtime has no web-search capability configured...` on a newly created research task
+**Suggested fix:** when capability checks run in both server execution and browser preflight, mirror the env contract explicitly for the client path (for example `NEXT_PUBLIC_*`) so the UI and runtime share the same truth source
+**Resolution:** Fixed on 2026-04-04 by updating `projects/mission-control/lib/autonomous-preflight.ts` to honor `NEXT_PUBLIC_MISSION_CONTROL_WEB_RESEARCH_ENABLED` and `NEXT_PUBLIC_MISSION_CONTROL_SEARCH_PROVIDER`, and by setting those values in the real preview runtime env
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260402-2340]
 
 **What failed:** Mission Control Chat active-session transcript hydration after the April 2 hardening pass

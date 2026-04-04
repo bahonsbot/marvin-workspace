@@ -124,6 +124,8 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - Apr 2 delete behavior: manual task removal now deletes the full multiline legacy task block from `AUTONOMOUS.md`, not just the bullet title line
   - Apr 2 import behavior: stale legacy suppression keys should not permanently block regenerated backlog tasks from re-importing
   - Apr 2 manual execution behavior: if a requested model override is not actually honored, Mission Control should fail visibly instead of silently running on MiniMax/default; bootstrap/context root files must never count as reviewable artifacts
+  - Apr 4 browser/runtime parity note: if Tasks capability checks are used in both server execution and browser preflight, set both server and `NEXT_PUBLIC_*` env variants or the UI can show false missing-capability warnings even when the backend is configured; current web-research pair is `MISSION_CONTROL_WEB_RESEARCH_ENABLED` / `MISSION_CONTROL_SEARCH_PROVIDER` plus `NEXT_PUBLIC_MISSION_CONTROL_WEB_RESEARCH_ENABLED` / `NEXT_PUBLIC_MISSION_CONTROL_SEARCH_PROVIDER`
+  - Apr 4 execute-health note: `task.status = in-progress` and `run.status = running` are not enough to prove a live autonomous run; when debugging, verify session-log creation at `/data/.openclaw/agents/main/sessions/<sessionId>.jsonl`, a registry match in `/data/.openclaw/agents/main/sessions/sessions.json`, or observable transcript/model usage before assuming the worker actually started
   - registry source: `/data/.openclaw/agents/main/sessions/sessions.json`
   - important runtime truth: this file is keyed directly by `sessionKey`; do not assume a nested `sessions.*` wrapper when resolving a session
   - session logs: `/data/.openclaw/agents/main/sessions/<sessionId>.jsonl`
