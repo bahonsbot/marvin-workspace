@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { floatingInsetStyle } from '@/components/shared/floating';
 import { PageScaffold } from '@/components/shared/PageScaffold';
+import { MemoryDocumentEditor } from '@/components/memory/MemoryDocumentEditor';
 import { MemoryRail } from '@/components/memory/MemoryRail';
 import { MemoryMetaStrip } from '@/components/memory/MemoryMetaStrip';
-import { DocumentContent } from '@/components/memory/DocumentContent';
 import { BackToTopButton } from '@/components/memory/BackToTopButton';
 import { getMemoryDocument, getMemoryOverview, resolveLearningKind } from '@/lib/adapters/memory';
 import type { LearningKind, MemorySection } from '@/lib/types/contracts';
@@ -40,8 +40,8 @@ export default async function MemoryPage({ searchParams }: { searchParams?: Memo
     <div id="page-top">
       <PageScaffold
         title="Memory"
-        titleVariant="system"
-        hideHeader
+        titleVariant="editorial"
+        descriptionVariant="quote"
       >
         <div id="memory-top" className="general-two-col-layout">
           <MemoryRail currentSection={selected.section} />
@@ -108,7 +108,12 @@ export default async function MemoryPage({ searchParams }: { searchParams?: Memo
               />
             </header>
 
-            <DocumentContent content={selected.document.content} exists={selected.document.exists} />
+            <MemoryDocumentEditor
+              initialDocument={selected.document}
+              section={selected.section}
+              selectedDate={selected.selectedDate}
+              selectedLearning={selected.selectedLearning}
+            />
           </section>
         </div>
         <BackToTopButton />

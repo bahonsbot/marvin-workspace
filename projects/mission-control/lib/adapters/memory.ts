@@ -40,6 +40,8 @@ async function safeReadDocument(params: {
       title,
       kind,
       updatedAt: new Date(stat.mtimeMs).toISOString(),
+      mtimeMs: stat.mtimeMs,
+      writable: true,
       content,
       exists: true,
     };
@@ -49,6 +51,8 @@ async function safeReadDocument(params: {
       title,
       kind,
       updatedAt: null,
+      mtimeMs: null,
+      writable: true,
       content: '',
       exists: false,
     };
@@ -211,6 +215,100 @@ export async function getMemoryDocument(params: {
       filePath,
       kind: selectedLearning,
       title: `Learnings · ${target.title}`,
+    }),
+  };
+}
+
+function resolveMemoryTarget(params: {
+  section?: string | null;
+  date?: string | null;
+  learning?: string | null;
+}): {
+  section: MemorySection;
+  selectedDate: string | null;
+  selectedLearning: LearningKind | null;
+  filePath: string;
+  title: string;
+  kind: MemoryDocumentKind;
+} {
+  const section = resolveSection(params.section);
+
+  if (section === 'durable') {
+    return {
+      section,
+      selectedDate: null,
+      selectedLearning: null,
+      filePath: DURABLE_PATH,
+      title: 'Durable Memory',
+      kind: 'durable',
+    };
+  }
+
+  if (section === 'daily') {
+    const selectedDate = params.date && /^\d{4}-\d{2}-\d{2}$/.test(params.date) ? params.date : hoChiMinhToday();
+    return {
+      section,
+      selectedDate,
+      selectedLearning: null,
+      filePath: path.join(DAILY_DIR, `${selectedDate}.md`),
+      title: `Daily Memory · ${selectedDate}`,
+      kind: 'daily',
+    };
+  }
+
+  const selectedLearning = resolveLearningKind(params.learning);
+  const target = learningFileMap[selectedLearning];
+
+  return {
+    section,
+    selectedDate: null,
+    selectedLearning,
+    filePath: path.join(LEARNINGS_DIR, target.filename),
+    title: `Learnings · ${target.title}`,
+    kind: selectedLearning,
+  };
+}
+
+export async function writeMemoryDocument(params: {
+  section?: string | null;
+  date?: string | null;
+  learning?: string | null;
+  content: string;
+  expectedMtimeMs: number | null;
+}): Promise<{ section: MemorySection; selectedDate: string | null; selectedLearning: LearningKind | null; document: MemoryDocument }> {
+  const target = resolveMemoryTarget(params);
+
+  let existingStat: Awaited<ReturnType<typeof fs.stat>> | null = null;
+  try {
+    existingStat = await fs.stat(target.filePath);
+    if (!existingStat.isFile()) {
+      throw new Error('UNSUPPORTED');
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+      throw error;
+    }
+  }
+
+  if (existingStat) {
+    if (params.expectedMtimeMs == null || Math.abs(existingStat.mtimeMs - params.expectedMtimeMs) > 1) {
+      throw new Error('CONFLICT');
+    }
+  } else if (params.expectedMtimeMs != null) {
+    throw new Error('CONFLICT');
+  }
+
+  await fs.mkdir(path.dirname(target.filePath), { recursive: true });
+  await fs.writeFile(target.filePath, params.content, 'utf8');
+
+  return {
+    section: target.section,
+    selectedDate: target.selectedDate,
+    selectedLearning: target.selectedLearning,
+    document: await safeReadDocument({
+      filePath: target.filePath,
+      title: target.title,
+      kind: target.kind,
     }),
   };
 }

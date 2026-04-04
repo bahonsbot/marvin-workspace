@@ -2,8 +2,7 @@ import Link from 'next/link';
 import { floatingInsetStyle } from '@/components/shared/floating';
 import { PageScaffold } from '@/components/shared/PageScaffold';
 import { DirectoryListing } from '@/components/files/DirectoryListing';
-import { FilePreviewPanel } from '@/components/files/FilePreviewPanel';
-import { FilesMetaStrip } from '@/components/files/FilesMetaStrip';
+import { FilesPreviewSection } from '@/components/files/FilesPreviewSection';
 import { FilesRail } from '@/components/files/FilesRail';
 import { BackToTopButton } from '@/components/memory/BackToTopButton';
 import { getDirectoryListing, getFilePreview } from '@/lib/adapters/files';
@@ -24,8 +23,8 @@ export default async function FilesPage({ searchParams }: { searchParams?: Files
     <div id="page-top">
       <PageScaffold
         title="Files"
-        titleVariant="system"
-        hideHeader
+        titleVariant="editorial"
+        descriptionVariant="quote"
       >
         <div className="general-two-col-layout">
           <FilesRail roots={listing.roots} currentPath={listing.directory.path} />
@@ -65,20 +64,7 @@ export default async function FilesPage({ searchParams }: { searchParams?: Files
 
             <DirectoryListing entries={listing.entries} currentDirectory={listing.directory.path} selectedFilePath={preview?.file?.path ?? null} />
 
-            {preview?.file ? (
-              <div id="file-preview" style={{ display: 'grid', gap: 10, scrollMarginTop: 24 }}>
-                <FilesMetaStrip
-                  path={preview.file.path}
-                  kind={preview.file.kind}
-                  size={preview.file.size}
-                  updatedAt={preview.file.updatedAt}
-                  previewable={preview.file.previewable}
-                />
-                <FilePreviewPanel preview={preview} />
-              </div>
-            ) : (
-              <FilePreviewPanel preview={null} />
-            )}
+            <FilesPreviewSection initialPreview={preview} />
           </section>
         </div>
         <BackToTopButton />

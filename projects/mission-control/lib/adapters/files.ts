@@ -97,6 +97,10 @@ function isPreviewableFile(filePath: string): boolean {
   return isTextFile(filePath) || isImageFile(filePath);
 }
 
+function isWritableFile(filePath: string): boolean {
+  return isTextFile(filePath) && !isBlockedRelative(filePath);
+}
+
 function buildBreadcrumb(relativePath: string): Array<{ label: string; path: string }> {
   const normalized = normalizeRelative(relativePath);
   if (normalized === '.') return [{ label: 'root', path: '.' }];
@@ -282,6 +286,8 @@ export async function getFilePreview(requestedPath: string | null | undefined): 
       mimeType,
       size: stat.size,
       updatedAt: formatUpdatedAt(stat),
+      mtimeMs: stat.mtimeMs,
+      writable: isWritableFile(relative),
       previewable: isPreviewableFile(relative),
     } as const;
 
@@ -318,6 +324,47 @@ export async function getFilePreview(requestedPath: string | null | undefined): 
       message: 'File not found.',
     };
   }
+}
+
+export async function writeFileContent(params: {
+  requestedPath: string;
+  content: string;
+  expectedMtimeMs: number | null;
+}): Promise<{
+  path: string;
+  updatedAt: string;
+  mtimeMs: number;
+}> {
+  const normalized = normalizeRelative(params.requestedPath);
+  const absolute = toAbsolute(normalized);
+
+  if (!absolute || !isWritableFile(normalized)) {
+    throw new Error('OUT_OF_SCOPE');
+  }
+
+  let stat;
+  try {
+    stat = await fs.stat(absolute);
+  } catch {
+    throw new Error('NOT_FOUND');
+  }
+
+  if (!stat.isFile() || !isTextFile(normalized)) {
+    throw new Error('UNSUPPORTED');
+  }
+
+  if (params.expectedMtimeMs == null || Math.abs(stat.mtimeMs - params.expectedMtimeMs) > 1) {
+    throw new Error('CONFLICT');
+  }
+
+  await fs.writeFile(absolute, params.content, 'utf8');
+  const updatedStat = await fs.stat(absolute);
+
+  return {
+    path: normalized,
+    updatedAt: formatUpdatedAt(updatedStat),
+    mtimeMs: updatedStat.mtimeMs,
+  };
 }
 
 export async function resolveRawFilePath(requestedPath: string | null | undefined): Promise<{

@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
-import { AppShell } from '@/components/shell/AppShell';
 import { MissionControlRuntimeProvider } from '@/components/chat/MissionControlRuntimeProvider';
+import { AppShell } from '@/components/shell/AppShell';
 
 export const metadata: Metadata = {
   title: 'Mission Control V1',

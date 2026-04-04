@@ -455,6 +455,8 @@ export interface MemoryDocument {
   title: string;
   kind: MemoryDocumentKind;
   updatedAt: string | null;
+  mtimeMs: number | null;
+  writable: boolean;
   content: string;
   exists: boolean;
 }
@@ -517,6 +519,8 @@ export interface FilesPreview {
     kind: FilePreviewKind;
     size: number;
     updatedAt: string | null;
+    mtimeMs: number | null;
+    writable: boolean;
     previewable: boolean;
   } | null;
   textContent?: string;

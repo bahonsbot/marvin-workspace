@@ -1,6 +1,17 @@
+'use client';
+
+import type { ReactNode } from 'react';
 import type { FilesPreview } from '@/lib/types/contracts';
 
-export function FilePreviewPanel({ preview }: { preview: FilesPreview | null }) {
+export function FilePreviewPanel({
+  preview,
+  controls,
+  editor,
+}: {
+  preview: FilesPreview | null;
+  controls?: ReactNode;
+  editor?: ReactNode;
+}) {
   if (!preview || !preview.file) {
     return (
       <div
@@ -20,24 +31,39 @@ export function FilePreviewPanel({ preview }: { preview: FilesPreview | null }) 
 
   if (preview.file.kind === 'text') {
     return (
-      <pre
+      <div
         style={{
-          margin: 0,
           border: '1px solid var(--border)',
           borderRadius: 20,
-          padding: '22px 24px',
+          padding: 16,
           background: 'linear-gradient(180deg, rgba(255, 253, 251, 0.96) 0%, rgba(247, 241, 235, 0.9) 100%)',
-          color: 'var(--text-body)',
-          fontSize: 14,
-          lineHeight: 1.75,
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
-          maxHeight: 520,
-          overflow: 'auto',
+          display: 'grid',
+          gap: 14,
         }}
       >
-        {preview.textContent ?? ''}
-      </pre>
+        {controls}
+        {editor ? (
+          <div style={{ minHeight: 520, maxHeight: 680, overflow: 'hidden', borderRadius: 14, border: '1px solid rgba(200, 195, 188, 0.55)', background: 'rgba(255, 253, 251, 0.76)' }}>
+            {editor}
+          </div>
+        ) : (
+          <pre
+            style={{
+              margin: 0,
+              padding: '6px 8px',
+              color: 'var(--text-body)',
+              fontSize: 14,
+              lineHeight: 1.75,
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+              maxHeight: 520,
+              overflow: 'auto',
+            }}
+          >
+            {preview.textContent ?? ''}
+          </pre>
+        )}
+      </div>
     );
   }
 
