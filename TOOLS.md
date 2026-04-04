@@ -151,7 +151,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - my-skills
 - google_maps_pro
 - security-review
-- creative-prompts
+
 
 ### Workspace Local Skills
 - frontend-skill — verbatim OpenAI front-end skill for visually strong landing pages, websites, apps, prototypes, demos, and game UI
