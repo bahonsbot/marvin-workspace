@@ -49,7 +49,7 @@ Use this file for live setup facts, not historical logs or long retrospectives.
   4. apply/restart on the host so the allowlist change takes effect
 
 ### Infrastructure
-- Host: Hostinger VPS (`Linux 6.8.0-101-generic`)
+- Host: Hostinger VPS (`Linux 6.8.0-106-generic`)
 - Runtime: Docker (OpenClaw)
 - Workspace: `/data/.openclaw/workspace`
 - Primary operator user: `node`
