@@ -1,0 +1,196 @@
+# Mission Control Agents Operating Model
+
+Last updated: 2026-04-05
+Owner: Marvin / Philippe
+Scope: `projects/mission-control` General -> Agents page
+
+## Purpose
+
+This runbook captures the truthful mixed model behind the Mission Control Agents page so future sessions can extend or rename it without reopening the core product decision.
+
+The page is meant to answer:
+- who is the control layer
+- which operating units exist now
+- which specialist seats are intentionally staged
+- which runtime sessions are background-only
+
+It is not:
+- a mascot gallery
+- a fake multi-agent demo
+- a raw session admin console
+
+## Product model
+
+The page now uses four sections:
+
+1. `Control`
+   - `Marvin`
+   - distinct from every other roster unit
+   - represents the canonical control seat
+
+2. `Teams`
+   - `Dev Team`
+   - `Content / SEO Team`
+   - teams should read as operating units, not single-agent cards
+
+3. `Standalone Specialists`
+   - `Sportsbet Advisor`
+   - `Trading Advisor`
+   - `Language Tutor`
+   - these should read as dedicated seats
+
+4. `Quiet / Internal`
+   - cron/system/helper/background sessions
+   - visibly secondary
+
+## Naming model
+
+Stable internal ids live in:
+- `projects/mission-control/lib/agents/definitions.ts`
+
+Visible labels are separate from ids by design.
+
+Rules:
+- `Marvin` stays Marvin
+- every other visible label is a placeholder for now
+- future renaming should happen by changing labels in the definitions layer, not by rewriting matching logic or UI structure
+
+## Build model
+
+The implementation is intentionally split into:
+
+1. Definitions layer
+   - file: `projects/mission-control/lib/agents/definitions.ts`
+   - owns stable ids, labels, readiness state, team membership, and action mode
+
+2. Adapter layer
+   - file: `projects/mission-control/lib/adapters/agents.ts`
+   - reads current runtime/session truth
+   - matches sessions to definitions
+   - shapes section payloads
+   - emits health/evidence/action payloads for the page
+
+3. Presentation layer
+   - files under `projects/mission-control/components/agents/`
+   - renders control/team/specialist cards plus the quiet/internal panel
+   - should stay presentation-focused, not re-implement matching logic
+
+4. Page composition
+   - file: `projects/mission-control/components/pages/GeneralAgentsPage.tsx`
+   - composes summary + sections only
+
+## Truth model
+
+Current runtime truth is still session-driven.
+
+The page does not claim:
+- dedicated specialist workspaces
+- direct per-specialist chat routing
+- independent live health monitoring
+- proof of healthy execution from a running flag alone
+
+The page is allowed to show staged capability only when it is clearly marked as staged.
+
+### Current action policy
+
+Allowed live actions:
+- open main chat
+- open current control UI when the runtime exposes a real browser path
+- inspect real internal support lanes through the existing control surface
+
+Allowed staged/unavailable actions:
+- direct specialist seat activation
+- direct team routing that does not exist yet
+
+Not allowed:
+- buttons that imply unsupported routing is live
+- fake control surfaces
+- fake workspace launch flows
+
+## Health and evidence philosophy
+
+The contract is prepared for stronger health checks later.
+
+Each visible roster unit carries:
+- health status
+- health label
+- evidence entries
+- workspace readiness
+- chat readiness
+
+Current evidence is lightweight:
+- matched runtime session label
+- model when visible
+- last-seen timestamp
+- staged/readiness notes when no session exists
+
+Durable rule:
+- a running-looking state by itself is not sufficient proof of healthy capability
+- later monitoring can extend the same contract with stronger evidence without changing the page model
+
+## Matching model
+
+Session matching is keyword/hint based for now and intentionally centralized in the adapter.
+
+Important behavior:
+- Marvin matches the canonical main seat
+- Builder/Reviewer are represented inside `Dev Team`
+- content/editorial seats are grouped inside `Content / SEO Team`
+- unmatched cron/system/helper sessions fall into `Quiet / Internal`
+
+Future changes should prefer:
+- editing match hints in the definitions layer
+- expanding adapter evidence carefully
+
+Future changes should avoid:
+- scattering ad hoc matching logic into UI components
+
+## Rollout logic
+
+This page is intentionally a restrained intermediate step.
+
+What is live now:
+- Marvin as the distinct control layer
+- team/grouped representation
+- specialist seats visible from day one
+- quiet/internal runtime context
+- truthful action gating
+
+What is staged:
+- dedicated specialist routing
+- dedicated specialist/team workspaces
+- evidence-aware active health beyond session presence
+
+When new real capabilities land:
+
+1. update the definition for the relevant unit
+2. upgrade the adapter action/readiness output
+3. keep the visual section structure unless the product model changes
+
+## Verification philosophy
+
+For future changes to this page:
+
+1. verify labels and ids remain separated
+2. verify staged actions are still visibly staged
+3. verify quiet/internal remains visually secondary
+4. verify real runtime matching still works for Marvin and Dev Team
+5. run `npm run build` in `projects/mission-control`
+
+If build or type validation fails after page work, check generated build output first before assuming the page refactor is wrong. This repo has previously produced misleading failures from stale `.next` state.
+
+## Page model summary
+
+The correct reading order is:
+
+1. control first
+2. teams second
+3. specialist seats third
+4. quiet/internal last
+
+The correct tone is:
+- readable first
+- character second
+- truthful always
+
+If a future version starts feeling like a mascot gallery or a session dump, it has drifted off-model.
