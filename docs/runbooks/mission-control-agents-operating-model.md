@@ -49,9 +49,16 @@ Stable internal ids live in:
 
 Visible labels are separate from ids by design.
 
+Current durable names are now set as:
+- `Sudo` → Dev Team lead
+- `Vantage` → Content / SEO Team lead
+- `Johan` → Sportsbet Advisor
+- `Milou` → Trading Advisor
+- `Japin` → Language Tutor
+
 Rules:
 - `Marvin` stays Marvin
-- every other visible label is a placeholder for now
+- stable ids/slugs still remain role-based under the hood even after naming
 - future renaming should happen by changing labels in the definitions layer, not by rewriting matching logic or UI structure
 
 ## Build model
@@ -97,6 +104,7 @@ Each seeded workspace currently includes:
 - `SOUL.md`
 - `MEMORY.md`
 - `WORKSPACE.md`
+- `SKILLS.md`
 - `memory/README.md`
 - `artifacts/README.md`
 
@@ -171,6 +179,10 @@ Why identity work comes later:
 - activation first proves the operational path is real and useful
 - names, souls, and skills should only deepen seats after activation, routing truth, and workspace links are already grounded
 - this avoids decorative personality work masking fake or unsupported runtime behavior
+
+Current identity/skills posture:
+- `Sudo` and `Vantage` now have first-pass real skill assignments captured in their workspace `SKILLS.md`
+- `Johan`, `Milou`, and `Japin` now have named identity baselines, but their final skill wiring remains provisional until Philippe provides the related ClawHub skill references they are based on
 
 ### Current action policy
 
@@ -290,6 +302,14 @@ Current real intervention paths:
 - `Open latest artifact`
 - `Activate in chat` / `Open chat`
 - `Inspect in Control UI` only when the runtime exposes a real browser path
+
+## Avatar asset note
+
+When Philippe starts producing avatars, the current practical target is:
+- square PNG or WebP
+- `512×512` source size is enough for the current Mission Control use
+- `768×768` is acceptable if future reuse/cropping flexibility matters
+- keep composition centered and readable at small card sizes
 
 ## Phase 6 lightweight issue acknowledgment model
 
