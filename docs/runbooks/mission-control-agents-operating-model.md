@@ -236,7 +236,7 @@ Intervention should stay lightweight:
 - use real actions that already exist
 - show a clear first next step when an issue card has actions
 - keep secondary actions available, but do not pretend there is a full incident-management workflow
-- optional acknowledgement state is intentionally skipped for now because there is no truthful persistent incident state yet
+- lightweight acknowledgement is allowed as issue-state only; do not grow this into a ticketing workflow
 
 Current real intervention paths:
 - `Open workspace`
@@ -244,6 +244,71 @@ Current real intervention paths:
 - `Open latest artifact`
 - `Use via Marvin` / `Open main chat`
 - `Inspect in Control UI` only when the runtime exposes a real browser path
+
+## Phase 6 lightweight issue acknowledgment model
+
+Mission Control now supports a minimal issue-state layer for current Agents alerts:
+- `active`
+- `acknowledged`
+
+Purpose:
+- lets Marvin's oversight surface distinguish issues that still need action from issues already seen by a human
+- keeps issue context visible without implying a broader incident-management backend
+
+Truth boundary:
+- this state is **not** a task system, pager, or ticket queue
+- it does **not** claim assignment, ownership, SLA, comments, escalation history, or workflow automation
+- it is only a lightweight operator-facing seen/active marker attached to the current alert id
+
+Persistence contract:
+- persisted in nested Mission Control repo data file:
+  - `projects/mission-control/data/agent-issues.json`
+- contract is intentionally small:
+  - `version`
+  - `issues[alertId] = { state: "acknowledged", acknowledgedAt, updatedAt }`
+- only acknowledged state is stored; switching back to `active` removes the stored entry
+- if an alert no longer exists, any old stored entry is simply ignored until the same alert id appears again
+
+Current implementation posture:
+- persistent for this lightweight seen/active state
+- still truthful and local to Mission Control app state/data
+- not a claim of runtime-backed incident management
+
+## Current issue-state behavior
+
+Presentation rules:
+- active issues remain visually prominent
+- acknowledged issues remain visible in place, but appear softer and clearly marked as acknowledged/seen
+- Marvin can show compact active vs acknowledged counts in the right-side oversight panel without expanding the panel into a dashboard
+
+Available issue-state actions:
+- `Acknowledge`
+- `Mark active`
+
+These actions currently work through a minimal Mission Control API route:
+- `projects/mission-control/app/api/agents/issues/[issueId]/route.ts`
+
+That route only updates the local lightweight issue-state file. It does not mutate any runtime process or external system.
+
+## Marvin oversight role
+
+Marvin remains the sole visible oversight hub on the page.
+
+Current role:
+- aggregate issues from the non-Marvin seats
+- show compact active vs acknowledged issue state
+- keep acknowledged items visible so context is not lost
+- expose truthful next-step actions when intervention is needed
+
+Current intervention posture:
+- Marvin is the place where a human sees issue state and chooses the next real action
+- human intervention still happens through existing live paths:
+  - open workspace context
+  - open workspace `MEMORY.md`
+  - open latest artifact when present
+  - route through Marvin/main chat
+  - inspect Control UI when that browser path exists
+- Marvin is **not** yet acting as a workflow engine or incident commander with durable orchestration state
 
 ## First seat-specific expectation model
 
