@@ -1,6 +1,6 @@
 # Mission Control Agents Operating Model
 
-Last updated: 2026-04-05 (Phase 5 interventions)
+Last updated: 2026-04-05 (Phase 7 activation)
 Owner: Marvin / Philippe
 Scope: `projects/mission-control` General -> Agents page
 
@@ -126,6 +126,52 @@ Workspace readiness now means:
 
 Chat readiness remains separate from workspace readiness.
 
+## Phase 7 activation model
+
+Durable seats on the Agents page now expose a real chat activation path.
+
+Current routing truth:
+- `Marvin`
+  - direct to the real main session: `agent:main:main`
+- `Dev Team`
+  - Chat activation is real, but still Marvin-routed through the main session
+  - this is a seat-specific internal work mode, not a separate browser/runtime surface
+- `Content / SEO Team`
+  - Chat activation is real, but Marvin-routed through the main session
+- `Sportsbet Advisor`
+  - Chat activation is real, but Marvin-routed through the main session
+- `Trading Advisor`
+  - Chat activation is real, but Marvin-routed through the main session
+- `Language Tutor`
+  - Chat activation is real, but Marvin-routed through the main session
+
+Direct-runtime rule:
+- do not present non-Marvin durable seats as if they have independent direct runtime routing until that capability actually exists
+- the current truthful product promise is seat-specific chat mode, not separate backend runtime identity
+
+Implementation shape:
+- Agents card primary actions now route durable seats to `/general/chat?seat=<stable-seat-slug>`
+- seat slugs and activation definitions live in `projects/mission-control/lib/agents/definitions.ts`
+- chat activation resolution lives in `projects/mission-control/lib/agents/chat-activation.ts`
+- `projects/mission-control/app/general/chat/page.tsx` reads the seat query and passes the activation context into the chat runtime
+
+Chat activation contract:
+- Chat shows a compact active-seat banner above the transcript/composer area
+- banner includes:
+  - active seat label
+  - direct vs Marvin-routed truth
+  - target session truth
+  - workspace / `MEMORY.md` quick links when available
+  - a clear next step
+  - a seat-specific starter prompt action
+- if the composer is empty when a seat is activated, Mission Control prefills that starter once
+- Mission Control remains honest that the non-Marvin seat mode is contextual and Marvin-routed today
+
+Why identity work comes later:
+- activation first proves the operational path is real and useful
+- names, souls, and skills should only deepen seats after activation, routing truth, and workspace links are already grounded
+- this avoids decorative personality work masking fake or unsupported runtime behavior
+
 ### Current action policy
 
 Allowed live actions:
@@ -242,7 +288,7 @@ Current real intervention paths:
 - `Open workspace`
 - `Open MEMORY.md`
 - `Open latest artifact`
-- `Use via Marvin` / `Open main chat`
+- `Activate in chat` / `Open chat`
 - `Inspect in Control UI` only when the runtime exposes a real browser path
 
 ## Phase 6 lightweight issue acknowledgment model
