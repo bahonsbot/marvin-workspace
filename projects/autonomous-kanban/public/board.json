@@ -2,11 +2,6 @@
   "board": {
     "todo": [
       {
-        "id": "5268b591",
-        "text": "[Career] Practice: Blender primitives exercise",
-        "column": "todo"
-      },
-      {
         "id": "18d77cea",
         "text": "[Trading] Fix: Futures bot improvement",
         "column": "todo"
@@ -22,7 +17,13 @@
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "763b9bb3",
+        "text": "[Career] Practice: Blender primitives exercise",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "24fa9c1b",
@@ -56,5 +57,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-05T10:00:10.000Z"
+  "updatedAt": "2026-04-05T10:00:11.000Z"
 }
