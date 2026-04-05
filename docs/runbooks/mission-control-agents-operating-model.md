@@ -78,6 +78,7 @@ The implementation is intentionally split into:
    - file: `projects/mission-control/components/pages/GeneralAgentsPage.tsx`
    - keeps the page restrained and section-led
    - should not reintroduce an explanatory hero/stat block above the roster
+   - Agents, Files, and Memory are intentionally headerless now; do not casually re-add a page title/underline block there
 
 ## Durable workspace scaffolding
 
@@ -96,6 +97,11 @@ Each seeded workspace currently includes:
 - `MEMORY.md`
 - `WORKSPACE.md`
 - `memory/README.md`
+- `artifacts/README.md`
+
+Artifact convention:
+- real durable outputs should land under `agent-workspaces/<slug>/artifacts/`
+- placeholder files like `README.md`, `.gitkeep`, and `.keep` do **not** count as real artifacts
 
 These slugs are role-based and should stay stable even if visible labels change later.
 
@@ -148,13 +154,20 @@ Each visible roster unit carries:
 - workspace readiness
 - chat readiness
 
-Current evidence is lightweight:
+Current evidence is lightweight but now includes first-pass artifact verification:
 - matched runtime session label
 - model when visible
 - last-seen timestamp
 - workspace existence
 - expected starter-file presence / missing-file detail
+- latest verified artifact path/time when one exists
+- missing-output warning when recent non-running activity exists without a real artifact
 - staged/readiness notes when no session exists
+
+Current missing-output heuristic:
+- if a durable seat has a recent non-running session signal inside the recency window and no real artifact in its `artifacts/` folder, show an attention-state missing-output signal
+- if there is no real artifact and also no recent activity, show a calmer `awaiting first verified output` signal instead
+- a currently running session does not automatically count as missing output yet
 
 Durable rule:
 - a running-looking state by itself is not sufficient proof of healthy capability
@@ -212,6 +225,9 @@ What is live now:
 - truthful action gating
 - seeded durable workspaces for Dev Team, Content / SEO Team, Sportsbet Advisor, Trading Advisor, and Language Tutor
 - live Files-page workspace open actions for seeded seats
+- live `Open MEMORY.md` actions for seeded seats
+- live `Open latest artifact` actions when a real artifact exists
+- first-pass artifact-aware health / missing-output signaling
 
 What is staged:
 - dedicated specialist routing
