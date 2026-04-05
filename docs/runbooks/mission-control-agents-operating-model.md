@@ -79,17 +79,45 @@ The implementation is intentionally split into:
    - keeps the page restrained and section-led
    - should not reintroduce an explanatory hero/stat block above the roster
 
+## Durable workspace scaffolding
+
+Durable non-Marvin workspaces now live under:
+- `agent-workspaces/<stable-role-slug>/`
+
+Current seeded workspaces:
+- `agent-workspaces/dev-team-lead/`
+- `agent-workspaces/content-seo-team-lead/`
+- `agent-workspaces/sportsbet-advisor/`
+- `agent-workspaces/trading-advisor/`
+- `agent-workspaces/language-tutor/`
+
+Each seeded workspace currently includes:
+- `SOUL.md`
+- `MEMORY.md`
+- `WORKSPACE.md`
+- `memory/README.md`
+
+These slugs are role-based and should stay stable even if visible labels change later.
+
 ## Truth model
 
-Current runtime truth is still session-driven.
+Current runtime truth is now mixed:
+- runtime/session evidence
+- workspace scaffold evidence for durable seeded seats
 
 The page does not claim:
-- dedicated specialist workspaces
 - direct per-specialist chat routing
 - independent live health monitoring
 - proof of healthy execution from a running flag alone
 
 The page is allowed to show staged capability only when it is clearly marked as staged.
+
+Workspace readiness now means:
+- `ready`: workspace directory exists and all expected starter files are present
+- `partial`: workspace directory exists but one or more expected starter files are missing
+- `staged`: no seeded workspace exists yet
+
+Chat readiness remains separate from workspace readiness.
 
 ### Current action policy
 
@@ -97,6 +125,8 @@ Allowed live actions:
 - open main chat
 - open current control UI when the runtime exposes a real browser path
 - inspect real internal support lanes through the existing control surface
+- open a seeded workspace in Files
+- open a seeded workspace `MEMORY.md` in Files preview
 
 Allowed staged/unavailable actions:
 - direct specialist seat activation
@@ -122,6 +152,8 @@ Current evidence is lightweight:
 - matched runtime session label
 - model when visible
 - last-seen timestamp
+- workspace existence
+- expected starter-file presence / missing-file detail
 - staged/readiness notes when no session exists
 
 Durable rule:
@@ -178,11 +210,13 @@ What is live now:
 - specialist seats visible from day one
 - quiet/internal runtime context
 - truthful action gating
+- seeded durable workspaces for Dev Team, Content / SEO Team, Sportsbet Advisor, Trading Advisor, and Language Tutor
+- live Files-page workspace open actions for seeded seats
 
 What is staged:
 - dedicated specialist routing
-- dedicated specialist/team workspaces
 - evidence-aware active health beyond session presence
+- any direct specialist/team chat path beyond Marvin or current internal control behavior
 
 When new real capabilities land:
 
