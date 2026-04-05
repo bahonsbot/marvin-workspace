@@ -1,6 +1,6 @@
 # Mission Control Agents Operating Model
 
-Last updated: 2026-04-05 (Phase 4 oversight)
+Last updated: 2026-04-05 (Phase 5 interventions)
 Owner: Marvin / Philippe
 Scope: `projects/mission-control` General -> Agents page
 
@@ -77,7 +77,8 @@ The implementation is intentionally split into:
 4. Page composition
    - file: `projects/mission-control/components/pages/GeneralAgentsPage.tsx`
    - keeps the page restrained and section-led
-   - may include a compact oversight strip above the roster, but should not reintroduce a giant hero/stat block
+   - Marvin is now the only visible oversight surface on the page
+   - do not reintroduce a separate page-level oversight strip or a giant hero/stat block
    - Agents, Files, and Memory are intentionally headerless now; do not casually re-add a page title/underline block there
 
 ## Durable workspace scaffolding
@@ -133,6 +134,7 @@ Allowed live actions:
 - inspect real internal support lanes through the existing control surface
 - open a seeded workspace in Files
 - open a seeded workspace `MEMORY.md` in Files preview
+- open the latest verified artifact when one exists
 
 Allowed staged/unavailable actions:
 - direct specialist seat activation
@@ -173,24 +175,31 @@ Durable rule:
 - a running-looking state by itself is not sufficient proof of healthy capability
 - later monitoring can extend the same contract with stronger evidence without changing the page model
 
-## Phase 4 oversight model
+## Phase 5 oversight and intervention model
 
-Phase 4 adds a compact operational oversight layer without pretending Telegram fanout or a separate incident system exists yet.
+Marvin is now the sole visible oversight surface on the Agents page.
 
-New page-level behavior:
-- the Agents page now shows a restrained oversight strip above the roster
-- it summarizes:
-  - active issue count
-  - seat count needing attention
-  - Marvin's current watchdog line
-- when issues exist, it shows a short list of current actionable issues
-- when no issues exist, it stays calm and explicitly says the roster is clear
+Layout rule:
+- Marvin remains a broad full-width card
+- Marvin uses an integrated split/asymmetric layout
+- left side = Marvin identity, health, readiness, core actions, signals
+- right side = oversight summary and live issues / all-clear state
+- do not add a second oversight strip elsewhere on the page
+- do not keep a duplicate stacked `Oversight` block inside Marvin once the right-side oversight panel exists
 
-Marvin's role on the page is now special:
-- Marvin is no longer just another first card in the order
-- the Marvin seat also reflects the aggregate roster-alert truth
-- Marvin's control card now acts as the visible watchdog seat for current issues
-- if no active issues exist, Marvin should still show a calm all-clear state rather than an empty warning shell
+Current oversight summary on Marvin:
+- active issue count
+- seat count needing attention
+- roster count currently active or ready
+- quiet/internal session count
+
+When issues exist:
+- Marvin shows the current live issues in the right-side panel
+- each issue should present a lightweight next step using already-live actions only
+
+When no issues exist:
+- Marvin still shows a calm all-clear state in that same right-side panel
+- avoid empty warning shells or decorative placeholder incident UI
 
 ## Current alert triggers
 
@@ -220,6 +229,41 @@ What does **not** currently trigger an alert:
 - a currently running session by itself
 
 This keeps the page truthful: visible issues should mean there is something concrete to inspect or act on.
+
+### Intervention presentation rule
+
+Intervention should stay lightweight:
+- use real actions that already exist
+- show a clear first next step when an issue card has actions
+- keep secondary actions available, but do not pretend there is a full incident-management workflow
+- optional acknowledgement state is intentionally skipped for now because there is no truthful persistent incident state yet
+
+Current real intervention paths:
+- `Open workspace`
+- `Open MEMORY.md`
+- `Open latest artifact`
+- `Use via Marvin` / `Open main chat`
+- `Inspect in Control UI` only when the runtime exposes a real browser path
+
+## First seat-specific expectation model
+
+Role-specific output expectations now live lightly in the definitions layer:
+- file: `projects/mission-control/lib/agents/definitions.ts`
+- field: `expectedOutputs`
+
+Current expectation wording:
+- `Dev Team`: implementation note / QA handoff / build artifact
+- `Content / SEO Team`: brief / draft / report artifact
+- `Trading Advisor`: research note / signal pack / market summary
+- `Sportsbet Advisor`: angle note / matchup brief / betting research artifact
+- `Language Tutor`: lesson note / exercise / session artifact
+
+How the page uses this today:
+- artifact verification copy is less generic
+- missing-output alerts say what kind of delivery is expected
+- signal/evidence blocks can show the current expected output shape for that seat
+
+This is intentionally not a rules engine. It is lightweight wording + verification context only.
 
 ## Matching model
 
@@ -276,8 +320,9 @@ What is live now:
 - live `Open MEMORY.md` actions for seeded seats
 - live `Open latest artifact` actions when a real artifact exists
 - first-pass artifact-aware health / missing-output signaling
-- page-level oversight strip with current actionable issues
-- Marvin watchdog card that mirrors aggregate roster issues
+- Marvin as the sole visible oversight hub
+- integrated right-side Marvin oversight panel with current actionable issues or all-clear state
+- expectation-aware intervention copy for durable seats
 
 What is staged:
 - dedicated specialist routing
