@@ -84,6 +84,10 @@ Prefer these instead of ad-hoc shell commands:
 ./scripts/preview-restart.sh
 ```
 
+Current hardening note:
+- `preview-start.sh` now launches the WS sidecar, internal Next app, and preview-origin proxy in detached sessions (`setsid`) and waits for a real local health check before declaring success
+- this protects against the failure mode where preview appears briefly alive after a build/restart and then collapses into `502 Bad Gateway` because the launcher shell exited and took the children with it
+
 ### Start production-style app server
 ```bash
 npm run start -- --hostname 0.0.0.0 --port 3005
@@ -244,6 +248,15 @@ Interpretation:
 Action:
 - recover `.next` from the environment that actually owns it
 - rebuild
+
+### Case: `npm run build` passes, first preview request works briefly, then later requests become `502 Bad Gateway`
+Interpretation:
+- the preview launcher likely did not keep the stack detached/alive after the invoking shell ended, or one of the three preview processes died after startup
+
+Action:
+- inspect all three local preview processes: `next-server`, `preview-origin-proxy`, `runtime-bridge-ws-sidecar`
+- inspect `.preview-runtime/latest.log`, `.preview-runtime/next.log`, `.preview-runtime/ws-sidecar.log`
+- rerun `./scripts/preview-start.sh` and require it to pass its built-in health check before trusting the restart
 
 ### Case: `npm run build` passes, `curl 127.0.0.1:3005` fails
 Interpretation:

@@ -149,6 +149,17 @@ Command/tool failures and exceptions.
 **Priority:** medium
 **Status:** resolved
 
+## [ERR-20260405-1643]
+
+**What failed:** Mission Control preview repeatedly returned `502 Bad Gateway` shortly after apparently successful rebuild/restart cycles
+**Error:** the preview launcher used `nohup ... &` but was not detached robustly enough from the invoking shell/tool lifecycle, so the stack could appear alive for the first request and then disappear, leaving nginx/proxy with instant 502s afterward
+**Context:** Apr 5 Agents-page implementation passes when Philippe reported a repeating pattern: first load briefly worked after rebuild, then the preview died and later requests were immediate 502s
+**Suggested fix:** for assistant-triggered preview start paths, launch the WS sidecar, internal Next app, and preview-origin proxy in detached sessions (`setsid`), write PID files explicitly, and require a real local health check before reporting success
+**Resolution:** Fixed on 2026-04-05 by hardening `projects/mission-control/scripts/preview-start.sh` to use detached session launches plus startup health verification; verify persistence by checking the route again after the launching shell has already exited
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260326-2309]
 
 **What failed:** external Mission Control preview accessibility after shell-framing/status work
