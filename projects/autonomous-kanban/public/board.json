@@ -2,27 +2,22 @@
   "board": {
     "todo": [
       {
-        "id": "321a38f2",
+        "id": "5268b591",
         "text": "[Career] Practice: Blender primitives exercise",
         "column": "todo"
       },
       {
-        "id": "5c2b3431",
+        "id": "18d77cea",
         "text": "[Trading] Fix: Futures bot improvement",
         "column": "todo"
       },
       {
-        "id": "8e10ddd7",
+        "id": "5dddaa00",
         "text": "[Other] Draft: An actionable next step toward: create a...",
         "column": "todo"
       },
       {
-        "id": "6c0ef225",
-        "text": "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
-        "column": "todo"
-      },
-      {
-        "id": "80d8d363",
+        "id": "5f6ccd7c",
         "text": "Create a clean implementation plan for a more dynamic and collapsible left menu bar",
         "column": "todo"
       }
@@ -30,24 +25,36 @@
     "inprogress": [],
     "done": [
       {
-        "id": "b999c42d",
-        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "done",
-        "outputPath": "projects/automation/fix-identify-one-repetitive-workspace-workflow-that-wastes-time-excludin.md"
+        "id": "24fa9c1b",
+        "text": "(2026-03-24) [Career] \ud83d\udcdd Draft: 3 Instagram content angles tied to After Effects motion design project \u2192 projects/portfolio/content-plan-ae-motion-design.md",
+        "column": "done"
       },
       {
-        "id": "2336a7e5",
-        "text": "[Other] 🔧 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "done",
-        "outputPath": "projects/automation/fix-build-one-small-automation-utility-that-addresses-one-specific-docum.md"
+        "id": "5498edbf",
+        "text": "(2026-03-24) [Other] \ud83d\udd27 Fix: OpenClaw helper utility generation improved; daily-task-generator now produces concrete script deliverables",
+        "column": "done"
       },
       {
-        "id": "3215a592",
-        "text": "🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker",
-        "column": "done",
-        "outputPath": "projects/learning-tools/python-daily-loop.html"
+        "id": "90367ec6",
+        "text": "(2026-03-24) [Career] \ud83d\udd28 Build: daily creative challenge generator \u2192 projects/creative-challenges/index.html + README.md",
+        "column": "done"
+      },
+      {
+        "id": "0f7d3b41",
+        "text": "(2026-03-24) [Career] \ud83d\ude80 Launch: portfolio case-study draft \u2192 projects/portfolio/case-studies/motion-design-loop.md",
+        "column": "done"
+      },
+      {
+        "id": "44306735",
+        "text": "(2026-03-24) [Trading] \ud83d\udd27 Fix: safe improvement in trading-bot workspace \u2192 bot-support-spec-health-snapshot-reporter-2026-03-16.md",
+        "column": "done"
+      },
+      {
+        "id": "32a9a711",
+        "text": "(2026-03-24) [Personal] \ud83d\udcda Learn: Japanese study pack (greetings lesson) \u2192 projects/language/lesson-01-greetings.md",
+        "column": "done"
       }
     ]
   },
-  "updatedAt": "2026-04-05T01:02:19.562Z"
+  "updatedAt": "2026-04-05T10:00:10.000Z"
 }
