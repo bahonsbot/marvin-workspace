@@ -15,7 +15,6 @@ The page is meant to answer:
 - which runtime sessions are background-only
 
 It is not:
-- a mascot gallery
 - a fake multi-agent demo
 - a raw session admin console
 
@@ -77,7 +76,8 @@ The implementation is intentionally split into:
 
 4. Page composition
    - file: `projects/mission-control/components/pages/GeneralAgentsPage.tsx`
-   - composes summary + sections only
+   - keeps the page restrained and section-led
+   - should not reintroduce an explanatory hero/stat block above the roster
 
 ## Truth model
 
@@ -145,6 +145,29 @@ Future changes should prefer:
 Future changes should avoid:
 - scattering ad hoc matching logic into UI components
 
+## Visual direction refinements (Apr 5 follow-up)
+
+After the first rebuild, Philippe approved a more restrained visual direction.
+
+Durable visual rules:
+- remove the introductory roster explainer block from the top of the page
+- do not show a separate `Control` section title/subtext above Marvin if Marvin is already visually distinct
+- prefer avatar-led identity over descriptive subtext blurbs
+- team cards should include a team-avatar / grouped-mark treatment rather than explanatory paragraph copy
+- standalone specialists should include dedicated avatar space, even if the current art is placeholder-only
+- keep the page hierarchy fixed as:
+  1. Marvin
+  2. Teams
+  3. Standalone Specialists
+- teams and specialists should scale through horizontal rails, not through a growing grid that weakens hierarchy
+- additional teams/specialists should appear to the right with a visible side-scroll cue / slight right-edge peek
+- `Quiet / Internal` should remain available for runtime truth, but as a collapsed/footer-style utility strip rather than a full equal-weight content section
+
+Copy restraint rules:
+- avoid descriptive blurbs like `Reserved for...` and `Internal build lane for...` in the visible card body once avatar-led identity exists
+- keep visible text to: name, role, health/readiness, compact signals, and truthful actions
+- if a card starts reading like a product explainer, trim it back
+
 ## Rollout logic
 
 This page is intentionally a restrained intermediate step.
@@ -192,5 +215,3 @@ The correct tone is:
 - readable first
 - character second
 - truthful always
-
-If a future version starts feeling like a mascot gallery or a session dump, it has drifted off-model.
