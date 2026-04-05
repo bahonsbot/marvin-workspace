@@ -1,6 +1,6 @@
 # Mission Control Agents Operating Model
 
-Last updated: 2026-04-05
+Last updated: 2026-04-05 (Phase 4 oversight)
 Owner: Marvin / Philippe
 Scope: `projects/mission-control` General -> Agents page
 
@@ -77,7 +77,7 @@ The implementation is intentionally split into:
 4. Page composition
    - file: `projects/mission-control/components/pages/GeneralAgentsPage.tsx`
    - keeps the page restrained and section-led
-   - should not reintroduce an explanatory hero/stat block above the roster
+   - may include a compact oversight strip above the roster, but should not reintroduce a giant hero/stat block
    - Agents, Files, and Memory are intentionally headerless now; do not casually re-add a page title/underline block there
 
 ## Durable workspace scaffolding
@@ -173,6 +173,54 @@ Durable rule:
 - a running-looking state by itself is not sufficient proof of healthy capability
 - later monitoring can extend the same contract with stronger evidence without changing the page model
 
+## Phase 4 oversight model
+
+Phase 4 adds a compact operational oversight layer without pretending Telegram fanout or a separate incident system exists yet.
+
+New page-level behavior:
+- the Agents page now shows a restrained oversight strip above the roster
+- it summarizes:
+  - active issue count
+  - seat count needing attention
+  - Marvin's current watchdog line
+- when issues exist, it shows a short list of current actionable issues
+- when no issues exist, it stays calm and explicitly says the roster is clear
+
+Marvin's role on the page is now special:
+- Marvin is no longer just another first card in the order
+- the Marvin seat also reflects the aggregate roster-alert truth
+- Marvin's control card now acts as the visible watchdog seat for current issues
+- if no active issues exist, Marvin should still show a calm all-clear state rather than an empty warning shell
+
+## Current alert triggers
+
+Current alerts are derived centrally in:
+- `projects/mission-control/lib/adapters/agents.ts`
+
+The adapter currently raises actionable alerts for:
+- `Workspace partial`
+  - triggered when a seeded workspace exists but one or more expected starter files are missing
+  - typical actions: `Open workspace`, `Open MEMORY.md`
+- `Missing output after recent activity`
+  - triggered when recent non-running activity exists for a durable seat but no real artifact exists in its `artifacts/` directory
+  - placeholder files like `README.md`, `.gitkeep`, and `.keep` do not count
+  - typical actions: `Open workspace`, `Open MEMORY.md`, route back through Marvin/main chat when human follow-through is next
+- `Runtime signal needs verification`
+  - triggered when a matched session reports an `unknown` state
+  - typical actions: open main chat / Control UI / relevant workspace context depending on the seat
+
+Severity is intentionally simple:
+- `attention` for missing-output conditions
+- `warning` for weaker but real issues like partial workspace state or unknown runtime signal
+
+What does **not** currently trigger an alert:
+- calm `awaiting first verified output` states
+- staged-but-honest capability states by themselves
+- simple quietness without contradictory evidence
+- a currently running session by itself
+
+This keeps the page truthful: visible issues should mean there is something concrete to inspect or act on.
+
 ## Matching model
 
 Session matching is keyword/hint based for now and intentionally centralized in the adapter.
@@ -228,6 +276,8 @@ What is live now:
 - live `Open MEMORY.md` actions for seeded seats
 - live `Open latest artifact` actions when a real artifact exists
 - first-pass artifact-aware health / missing-output signaling
+- page-level oversight strip with current actionable issues
+- Marvin watchdog card that mirrors aggregate roster issues
 
 What is staged:
 - dedicated specialist routing
