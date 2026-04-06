@@ -17,6 +17,39 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260406-1742]
+
+**What failed:** first real Mission Control Sudo workflow test from the Chat seat selector
+**Error:** Sudo-seat composer submit still followed the generic live-chat send path, so a task intended for Sudo orchestration was sent into the normal Marvin runtime and replayed/reused unrelated Marvin-side content instead of creating a fresh Sudo orchestration run
+**Context:** Apr 6 live testing after the Phase 3 stack was declared complete enough for real workflow testing; Philippe submitted a left-sidebar implementation brief while the Sudo seat was active and got what looked like an old Marvin reply instead of a Sudo-led run
+**Suggested fix:** seat-aware Chat UI is not enough; the composer submit path must also be seat-aware. When Sudo is the active seat, normal submit/Enter should route into Sudo orchestration first, not `live.sendPrompt(...)`
+**Resolution:** Fixed on 2026-04-06 in `projects/mission-control/components/chat/MissionControlChatSurface.tsx`; nested Mission Control repo commit `2a0c4231`
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260406-1949]
+
+**What failed:** Mission Control Sudo orchestration model selection during real workflow testing
+**Error:** Sudo orchestration repeatedly blocked with `model override was not acknowledged by runtime. Requested codex5.4.` because the runner tried to force models by sending `/model ...` chat commands into synthetic execution sessions, then treated chat-style acknowledgement as runtime truth
+**Context:** Apr 6 evening after Sudo successfully intercepted composer submits but still could not reliably start its orchestration run on `codex5.4`
+**Suggested fix:** for synthetic/autonomous Mission Control runs, do not treat `/model ...` chat commands as the primary model-selection mechanism. Prefer session/run setup with the requested model baked in, then verify against returned runtime/session metadata
+**Resolution:** Interim matcher hardening landed first (`c7fa75c5`), but the real fix was the session-setup refactor on 2026-04-06 in `projects/mission-control/scripts/run-sudo-orchestration.mjs` and `scripts/run-sudo-delegation.mjs`; nested Mission Control repo commit `3672cad4`
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260406-2000]
+
+**What failed:** Mission Control Sudo orchestration decision parsing after clearing the model-selection blocker
+**Error:** the orchestration runner threw `Sudo orchestration did not return a supported decision mode` even though the model had produced a valid fenced decision payload, because the extractor naively grabbed the first JSON object in stdout/wrapper output instead of the actual decision JSON
+**Context:** Apr 6 evening while pressure-testing the first real Sudo-led task after model-setup fixes
+**Suggested fix:** for wrapped model/CLI output, do not use first-object JSON extraction. Rank candidate JSON objects by schema affinity and prefer the one that actually matches the expected decision contract (`mode`, `lanePlan`, `lanePlanSteps`, `oversight`, etc.)
+**Resolution:** Fixed on 2026-04-06 in `projects/mission-control/scripts/run-sudo-orchestration.mjs`; nested Mission Control repo commit `3b9a76c3`
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260404-2243]
 
 **What failed:** Mission Control autonomous research task execution entered a false `In Progress` state with no real worker/session behind it

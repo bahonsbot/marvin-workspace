@@ -255,3 +255,16 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - Autonomous web research pipeline is proven end-to-end (Apr 4): research packets generated, autonomous tasks complete with real artifacts, pipeline runs through the full MiniMax session lifecycle
 - Durable execution-verification lesson (Apr 4): task `in-progress` status alone is not sufficient evidence of a live run; healthy autonomous execution requires at least one concrete runtime signal (session log creation, session-registry entry, transcript growth, or model usage); without these, Mission Control should fail fast with a diagnostic
 - Durable research-query lesson (Apr 4): imperative task titles like "Do online research to..." produce poor search queries; search queries should be derived from topic + brief questions, not from task wording
+- Apr 6 Dev Team posture: Mission Control Chat now has a real seat selector (`Marvin` / `Sudo` / `Vantage`), and the Dev Team path is no longer just seat-flavored prompt theater. Current truthful architecture is:
+  - Marvin = supervision / escalation / review boundary
+  - Sudo = dev-team lead route
+  - FE / BE / QA = delegated execution lanes
+- Apr 6 Sudo workflow posture: the full Phase 3 stack exists:
+  - 3A = bounded Sudo decision layer (`direct_answer`, `ask_question`, `propose_alternative`, `delegate`)
+  - 3B = stronger sequencing, execution-plan structure, and final synthesis
+  - 3C = Marvin oversight / escalation / approval boundary
+- Apr 6 runtime lesson: for synthetic/autonomous Mission Control runs, model choice should be part of session/run setup, not a slash-command chat afterthought; brittle `/model ...` acknowledgements can create false blockers even when the intended model is conceptually correct
+- Apr 6 parsing lesson: when orchestration output is wrapped by CLI/runtime envelopes, do not trust first-object JSON extraction; prefer schema-aware candidate ranking so the decision parser selects the real task payload rather than the outer wrapper
+- Apr 6 product milestone: Sudo successfully completed the first real end-to-end Dev Team implementation run on the Mission Control sidebar redesign (`abbfb1b7`), proving the lead-and-lanes workflow is viable beyond UI theatrics
+- Apr 6 Chat cleanup posture: after the first Sudo success, a restraint-focused cleanup pass made the Sudo Chat surface clean enough for now; future reopenings should prefer operational cleanup and history handling over broad redesign
+- Apr 6 legacy-path posture: `projects/_ops/agent-team/` is now best treated as legacy workflow reference / prompt assets, not a live runnable package; useful pieces may be ported, but the Dev Team / Sudo path is the active internal multi-lane execution model
