@@ -3,17 +3,6 @@
   "description": "Token lifecycle tracking for workspace credentials",
   "tokens": [
     {
-      "name": "openai-codex:default",
-      "type": "oauth",
-      "provider": "openai-codex",
-      "description": "OpenAI Codex OAuth token for Codex CLI and runtime",
-      "created": "2026-01-15",
-      "expires": "2026-04-08",
-      "rotated": "2026-03-30",
-      "owner": "philippe",
-      "notes": "Live runtime auth verified healthy on 2026-03-30. Runtime expires 2026-04-08. Refresh via openclaw models auth login --provider openai-codex --set-default when needed."
-    },
-    {
       "name": "minimax:manual",
       "type": "api_key",
       "provider": "minimax",
