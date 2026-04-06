@@ -601,3 +601,25 @@ Command/tool failures and exceptions.
 **Prevention:** Treat preview/sidecar scripts as first-class runtime dependencies when pruning packages. A passing Next.js app build does not prove the preview stack is healthy; verify the proxy/sidecar path too.
 **Status:** resolved
 **Resolved:** 2026-04-04 afternoon — restored `ws` dependency and reran build + preview restart successfully.
+
+## [ERR-20260406-1309]
+
+**What failed:** Mission Control Skills manual tags and hidden items looked persistent but reset across browser/session/origin changes
+**Error:** `components/pages/SkillsWorkspaceClient.tsx` stored skills UI state only in browser `localStorage` (`mission-control:skills:hidden` / `mission-control:skills:tags`), so the feature had no workspace-backed truth and could silently fall back to an empty state outside the original browser context
+**Context:** Apr 6 live Mission Control Skills pass after Philippe reported the previously created manual tags and hidden items were gone and the page was back to square one
+**Suggested fix:** if Mission Control UI implies durable custom state, store it in a real workspace-backed file/API path instead of local browser state alone; use localStorage only as a migration/cache layer, not as the primary truth source
+**Resolution:** Fixed on 2026-04-06 by adding `app/api/skills/preferences/route.ts`, persisting to `projects/mission-control/data/skills-ui-state.json`, and migrating old localStorage state into the new server-backed store when appropriate
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260406-1322]
+
+**What failed:** Mission Control Skills `Read more` control only worked reliably after a skill card had already been expanded
+**Error:** the trigger lived inside the collapsed `<summary>` region of a `<details>` card, so summary-toggle behavior interfered with the independent button action while the card was still closed
+**Context:** Apr 6 immediate live follow-up after the first Skills long-summary improvement landed and Philippe reported the new button did not actually work on closed cards
+**Suggested fix:** for Mission Control surfaces using `<details>/<summary>`, do not place important independent controls inside collapsed summary regions when they must work before expansion; move the action outside the `<summary>` block or use a different card interaction model
+**Resolution:** Fixed on 2026-04-06 by moving the `Read more` / `Close summary` trigger out of the `<summary>` block and into the card body below the collapsed preview text
+
+**Priority:** medium
+**Status:** resolved
