@@ -51,7 +51,7 @@ Visible labels are separate from ids by design.
 
 Current durable names are now set as:
 - `Sudo` → Dev Team lead
-- `Vantage` → Content / SEO Team lead
+- `Vantage` → Content / SEO Team lead (Editor-in-Chief posture)
 - `Johan` → Sportsbet Advisor
 - `Milou` → Trading Advisor
 - `Japin` → Language Tutor
@@ -182,7 +182,12 @@ Why identity work comes later:
 
 Current identity/skills posture:
 - `Sudo` and `Vantage` now have first-pass real skill assignments captured in their workspace `SKILLS.md`
-- `Johan`, `Milou`, and `Japin` now have named identity baselines, but their final skill wiring remains provisional until Philippe provides the related ClawHub skill references they are based on
+- `Sudo` and `Vantage` now also have explicit internal team maps captured in `TEAM.md` and `ROLES.md`
+- `Johan`, `Milou`, and `Japin` now have finalized local source alignment using manually downloaded skill copies in `uploads/mission-control/`
+  - Johan → `uploads/mission-control/sportsbet-advisor/SKILL.md`
+  - Milou → `uploads/mission-control/trading/SKILL.md` plus `risk.md` and `legal.md`
+  - Japin → `uploads/mission-control/language-learning/SKILL.md`
+- the original ClawHub references are still preserved in workspace docs, but local uploaded copies became the practical source of truth after registry rate limiting blocked live pull/inspection
 
 ### Current action policy
 

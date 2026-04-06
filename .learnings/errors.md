@@ -160,6 +160,17 @@ Command/tool failures and exceptions.
 **Priority:** high
 **Status:** resolved
 
+## [ERR-20260405-2213]
+
+**What failed:** ClawHub live pull/inspection for the intended Johan/Milou/Japin skill packages
+**Error:** full URLs are not valid input to `clawhub install`, and subsequent slug-based installs were blocked by registry rate limiting (`Rate limit exceeded`)
+**Context:** Apr 5 Agents identity/skills pass after Philippe supplied the intended ClawHub references for sportsbet-advisor, trading, and language-learning
+**Suggested fix:** use slug-based install syntax, serialize downloads one by one, and if the registry remains rate-limited, accept manually uploaded local skill copies as the practical source of truth for alignment work
+**Resolution:** worked around the issue by using Philippe's manually uploaded local copies under `uploads/mission-control/` to finalize Johan/Milou/Japin skill posture
+
+**Priority:** medium
+**Status:** resolved via local-source fallback
+
 ## [ERR-20260326-2309]
 
 **What failed:** external Mission Control preview accessibility after shell-framing/status work
