@@ -154,6 +154,9 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - my-skills
 - google_maps_pro
 - security-review
+- news-feeds
+- proactive-execution
+- deepresearchwork
 
 
 ### Workspace Local Skills
@@ -245,7 +248,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - `scripts/ralphy-notify.sh` — Telegram notifications for ralphy
 - `scripts/audit-log.sh` — Security action logging (text + JSONL)
 - `scripts/audit-sensitive-snapshot.sh` — Low-noise sensitive-file change detector (baseline + drift logging)
-- `scripts/check-token-age.sh` — Token expiration checker
+- `scripts/check_token_age.py` — Token expiration checker (replaces deprecated `check-token-age.sh`)
 - `scripts/install_deterministic_timers.py` — DEPRECATED legacy user-timer installer, superseded by host-side `marvin-deterministic-scheduler.service`
 - `scripts/nightly-memory-extraction.sh` — Memory extraction cron
 - `scripts/cron_runner.py` — Script-first execution entry for migrated deterministic cron jobs

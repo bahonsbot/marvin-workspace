@@ -14,7 +14,13 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
-## Recent Corrections
+## [CORR-20260405-1058]
+
+**Trigger:** Self-improvement flagging AUTONOMY.md as missing a startup step
+**What was wrong:** LOW-002 reported that AGENTS.md's startup sequence was missing step 5 for AUTONOMY.md. The step is actually present in the list — it's just not numbered with a "5." prefix in the markdown. Philippe clarified AUTONOMY.md is intentionally not always read at startup.
+**Lesson:** Self-improvement should verify not just file presence and list inclusion, but also whether the rendering/numbering gap has actual functional impact vs. being a cosmetic markdown artifact before flagging as LOW.
+**Priority:** low
+**Status:** resolved
 <!-- New entries go at top -->
 
 ## [CORR-20260401-2239]
@@ -390,7 +396,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** When I say "Approval needed," I must actually wait for the decision before executing. Do not assume verification approval implies execution approval. For cron/config changes, present the fix, wait for explicit OK, then apply.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-06 (Morning Meeting verification — no repeat violation through Apr 5; approval gate confirmed solid)
 
 ## [COR-20260324-0005]
 
