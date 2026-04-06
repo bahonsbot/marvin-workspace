@@ -43,6 +43,7 @@ For timelines and exact session history, use `memory/YYYY-MM-DD.md`.
 - Detailed steps: `docs/runbooks/openai-codex-runtime-account-switch.md`
 - Treat it as a manual runbook, not a routine flow
 - Codex CLI OAuth is separate from the main OpenClaw runtime auth and may need its own account verification/refresh when Philippe switches OpenAI accounts for quota reasons
+- Token manifest note: `openai-codex:default` was removed from `config/token-manifest.json` (Apr 6) — Philippe manages Codex accounts manually on a multi-day cycle; expiry dates in the manifest were stale and causing spurious security/health findings
 
 ## Durable Preferences & Decision Rules
 
@@ -122,6 +123,10 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
   - preserve visible backlog items first
   - only top back up to the target count with fresh tasks
   - never allow script/utility tasks to count as complete via Markdown artifacts just because the deliverable mentions `projects/automation/`
+- Standing suppression baseline for overnight reviews:
+  - .env credential rotation: do not re-raise if all conditions met: mode 600, gitignored patterns, no tracked .env, no fresh secret exposure evidence
+  - reopen only on new exposure window (permission drift, committed .env, or fresh evidence)
+  - accepted-risk items report once as INFO with a baseline note, then suppress repeats unless state changes
 
 ## Telegram
 - Bot is configured and paired
@@ -246,3 +251,6 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - AGENTS startup sequence now includes `AUTONOMY.md` after `SUBAGENT-POLICY.md`
 - Trading-path egress enforcement is deferred until a dedicated isolated trading boundary exists
 - Mission Control preview is now auth-gated for non-local access, and the unauthenticated API exposure found during the Mar 27 security follow-up is considered addressed pending normal future maintenance
+- Autonomous web research pipeline is proven end-to-end (Apr 4): research packets generated, autonomous tasks complete with real artifacts, pipeline runs through the full MiniMax session lifecycle
+- Durable execution-verification lesson (Apr 4): task `in-progress` status alone is not sufficient evidence of a live run; healthy autonomous execution requires at least one concrete runtime signal (session log creation, session-registry entry, transcript growth, or model usage); without these, Mission Control should fail fast with a diagnostic
+- Durable research-query lesson (Apr 4): imperative task titles like "Do online research to..." produce poor search queries; search queries should be derived from topic + brief questions, not from task wording
