@@ -144,6 +144,9 @@ Current routing truth:
 - `Dev Team`
   - Chat activation is real, but still Marvin-routed through the main session
   - this is a seat-specific internal work mode, not a separate browser/runtime surface
+  - as of Phase 1 follow-up, Mission Control now exposes this more truthfully as a `lead route`
+  - Sudo is the intended dev-team lead context, Marvin remains the supervising runtime layer
+  - seat activation also carries explicit default runtime metadata (`model` + `thinking`) so the chat surface can apply Sudo defaults instead of relying on whatever model the top bar happened to be on
 - `Content / SEO Team`
   - Chat activation is real, but Marvin-routed through the main session
 - `Sportsbet Advisor`
@@ -168,12 +171,29 @@ Chat activation contract:
 - banner includes:
   - active seat label
   - direct vs Marvin-routed truth
+  - runtime mode truth (`Direct control`, `Lead route`, or `Seat mode`)
   - target session truth
+  - explicit seat runtime defaults (`model` + `thinking`)
   - workspace / `MEMORY.md` quick links when available
   - a clear next step
   - a seat-specific starter prompt action
+  - an `Apply seat defaults` action that changes the real runtime model/effort to the seat defaults
 - if the composer is empty when a seat is activated, Mission Control prefills that starter once
 - Mission Control remains honest that the non-Marvin seat mode is contextual and Marvin-routed today
+
+Phase 1 dev-team runtime posture:
+- `Sudo` now reads as a real lead-route context rather than generic Marvin-flavored seat text
+- default intended runtime is currently:
+  - `Sudo` → `codex5.4` + `medium`
+  - future FE / BE execution lanes are expected to use `codex`
+  - future QA lane is expected to use a lighter review route such as `minimax2.7` or `codex5.4mini`
+- the actual child-lane delegation layer is **not** live yet
+- current Phase 1 goal is truthful runtime framing plus seat-default application, not fake team execution
+
+Codex guidance note:
+- the workspace now includes `model-guidance/codex.md`
+- `AGENTS.md` instructs the `codex` route to read that guidance before coding-heavy delegated work
+- this is part of the dev-team model-routing foundation and should be treated as intentional product/runtime scaffolding, not an incidental doc addition
 
 Why identity work comes later:
 - activation first proves the operational path is real and useful
