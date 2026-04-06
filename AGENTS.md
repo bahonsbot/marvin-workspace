@@ -20,6 +20,10 @@ When the model switches to `openai-codex/gpt-5.4` (`codex5.4`):
 1. Read `model-guidance/gpt-5.4.md`
 2. Apply it for the rest of the session
 
+When the model switches to `openai-codex/gpt-5.3-codex` (`codex`):
+1. Read `model-guidance/codex.md`
+2. Apply it for the rest of the session
+
 Model posture:
 - `codex5.4` = Marvin orchestration / higher-reasoning work
 - `codex` = coding-heavy delegated work
