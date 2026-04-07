@@ -656,3 +656,11 @@ Command/tool failures and exceptions.
 
 **Priority:** medium
 **Status:** resolved
+
+## [ERR-20260407-1132]
+
+**Context:** `projects/autonomous-trading-bot/scripts/signal_accuracy_report.py`
+**What failed:** The report script instantiated `AlpacaPaperAdapter` without loading the bot project's `.env`, so paper-account position fetches returned `401 unauthorized` even though the project credentials were valid.
+**Prevention:** Standalone maintenance/report scripts that depend on broker/runtime credentials must load the same minimal env inputs as the live runtime or explicitly fail with a clear missing-env error; do not assume a parent cron/process exported them.
+**Status:** resolved
+**Resolved:** 2026-04-07 — report script now loads minimal Alpaca/PAPER env from project `.env` before broker calls.

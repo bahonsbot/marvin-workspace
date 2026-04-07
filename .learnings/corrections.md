@@ -440,3 +440,10 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** First-pass Stitch implementations should be treated as structural proof-of-concept, not final visual quality. Budget for at least one iteration round before declaring a page "done." When Philippe says "it's a start," that means the gap between the Stitch concept and the implementation is still significant.
 **Status:** resolved — Chat was reworked across Mar 27-31 (FLOATING visual system, runtime bridge, UX polish) and reached "good enough for now" per Apr 1 assessment. The second iteration happened; the lesson remains active.
 **Prevention:** Set expectations with Philippe that first implementations from Stitch will need at least one review/iteration cycle before reaching the target quality.
+
+## [COR-20260407-1030]
+
+**Correction:** treat overnight review findings as leads, not truth, until checked against current files/runtime.
+**Context:** Several Apr 7 Morning Meeting items looked actionable at first but turned out to be overstated or stale once the current docs/runtime were inspected.
+**Rule:** Before proposing a Morning Meeting fix, verify the exact current file/runtime state and distinguish: real issue, wording-only drift, accepted structure, or stale review noise.
+**Status:** active
