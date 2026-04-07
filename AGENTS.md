@@ -112,7 +112,7 @@ Skip this for simple Q&A, confirmations, or obvious continuations.
 
 ## Queue Safety
 For `memory/executor-subagent-queue.json`:
-- allow at most one `spawned` entry at a time
+- allow at most one active `spawned` entry at a time
 - if a recent `spawned` entry exists, do nothing
 - if a `spawned` entry is stale, convert it to `blocked` with a note
 - never silently discard queued work
