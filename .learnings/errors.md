@@ -664,3 +664,11 @@ Command/tool failures and exceptions.
 **Prevention:** Standalone maintenance/report scripts that depend on broker/runtime credentials must load the same minimal env inputs as the live runtime or explicitly fail with a clear missing-env error; do not assume a parent cron/process exported them.
 **Status:** resolved
 **Resolved:** 2026-04-07 — report script now loads minimal Alpaca/PAPER env from project `.env` before broker calls.
+
+## [ERR-20260407-1741]
+
+**Context:** Mission Control Sudo panel featured-run selection
+**What failed:** The Sudo panel preferred any older still-active waiting run over a newer completed run, so a finished task could appear to snap back to an earlier `Philippe needed` state.
+**Prevention:** Multi-run orchestration UIs should feature the newest run by recency and demote older unresolved runs into history; do not use generic "any active run first" selection when multiple orchestration records can coexist.
+**Status:** resolved
+**Resolved:** 2026-04-07 — Sudo panel now sorts by recency and features the newest orchestration first.

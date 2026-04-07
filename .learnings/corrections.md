@@ -447,3 +447,10 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Context:** Several Apr 7 Morning Meeting items looked actionable at first but turned out to be overstated or stale once the current docs/runtime were inspected.
 **Rule:** Before proposing a Morning Meeting fix, verify the exact current file/runtime state and distinguish: real issue, wording-only drift, accepted structure, or stale review noise.
 **Status:** active
+
+## [COR-20260407-1703]
+
+**Correction:** when Philippe says a task started from a steady state, do not blame later confusion on earlier UI churn without verifying the task's own completion/wrapping path first.
+**Context:** The STT Phase 1 Sudo run initially looked muddied by prior Mission Control changes, but Philippe clarified the task started after the UI had already stabilized.
+**Rule:** For post-run confusion, separate (a) pre-existing churn, (b) run-time implementation, and (c) completion-state presentation bugs before assigning cause.
+**Status:** active
