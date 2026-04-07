@@ -273,6 +273,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - Retention: deletes `.jsonl`, `.jsonl.deleted.*`, `.jsonl.reset.*`, and stale `.tmp` files older than 5 days
   - Preserves: `sessions.json`
   - Dry run: `python3 scripts/cron_tasks/session_log_cleanup.py --dry-run`
+- `scripts/cron_tasks/enrichment_ab_review.py` — Weekly enrichment A/B review runner for signal comparison snapshots
 - `scripts/daily-task-generator.py` — Daily autonomous task generation (08:00 ICT, 4-5 goal-aligned tasks)
   - Guardrails: no default case studies, no fake creative-output MVPs, social/content tasks require concrete source work, useful surprise MVPs allowed for tool/system/project-improvement lanes
 - `scripts/queue_state.py` — Queue helper for autonomous-task orchestration
