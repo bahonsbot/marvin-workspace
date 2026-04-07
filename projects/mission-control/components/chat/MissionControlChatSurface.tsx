@@ -1,8 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from 'react';
 import type { CSSProperties } from 'react';
+import { listPreferredChatSeatActivations, type ChatSeatActivation } from '@/lib/agents/chat-activation';
+import type {
+  SudoDelegatedRun,
+  SudoDelegationLane,
+  SudoLaneSlug,
+  SudoOrchestrationDecision,
+  SudoOversightState,
+  SudoOrchestrationRun,
+} from '@/lib/agents/sudo-delegation';
 import type {
   RuntimeBridgeChatMessage,
   RuntimeBridgeLiveEvent,
@@ -11,6 +21,7 @@ import type {
   RuntimeBridgeState,
 } from '@/hooks/useRuntimeBridge';
 import { buildChatSurfaceModel } from '@/lib/chat/thread-model';
+import { useSpeechToText } from '@/components/chat/useSpeechToText';
 import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 
 const monoFont =
@@ -796,9 +807,11 @@ type TopControlMenu = 'agent' | 'model' | 'effort' | null;
 
 type AgentMenuOption = {
   id: string;
+  seatSlug: string | null;
   label: string;
   note?: string;
-  disabled?: boolean;
+  detail?: string;
+  runtimeTag?: string;
 };
 
 type ModelMenuOption = {
@@ -806,13 +819,6 @@ type ModelMenuOption = {
   label: string;
   command: string;
 };
-
-const agentMenuOptions: AgentMenuOption[] = [
-  { id: 'marvin', label: 'Marvin' },
-  { id: 'rafa', label: 'Rafa', note: 'Planned seat', disabled: true },
-  { id: 'sloane', label: 'Sloane', note: 'Planned seat', disabled: true },
-  { id: 'pico', label: 'Pico', note: 'Planned seat', disabled: true },
-];
 
 const modelMenuOptions: ModelMenuOption[] = [
   { id: 'codex5.4', label: 'gpt-5.4', command: '/model codex5.4' },
@@ -834,15 +840,719 @@ function formatAge(ageMs: number | null): string {
   return `${Math.floor(hours / 24)}d ago`;
 }
 
+type SudoDelegationPayload = {
+  lanes?: SudoDelegationLane[];
+  runs?: SudoDelegatedRun[];
+  orchestrations?: SudoOrchestrationRun[];
+  error?: string;
+};
+
+function delegationStatusStyle(status: SudoDelegatedRun['status']): CSSProperties {
+  if (status === 'done') return pillStyle({ active: true });
+  if (status === 'error') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(181, 88, 74, 0.34)',
+      background: 'rgba(244, 224, 220, 0.88)',
+      color: '#7c2e24',
+    };
+  }
+  return {
+    ...pillStyle(),
+    border: '1px solid rgba(177, 138, 73, 0.32)',
+    background: 'rgba(247, 236, 212, 0.88)',
+    color: '#6b4d19',
+  };
+}
+
+function orchestrationStatusStyle(status: SudoOrchestrationRun['status']): CSSProperties {
+  if (status === 'done') return pillStyle({ active: true });
+  if (status === 'error') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(181, 88, 74, 0.34)',
+      background: 'rgba(244, 224, 220, 0.88)',
+      color: '#7c2e24',
+    };
+  }
+  if (status === 'waiting') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(114, 96, 31, 0.3)',
+      background: 'rgba(247, 241, 219, 0.92)',
+      color: '#5d4814',
+    };
+  }
+  return {
+    ...pillStyle(),
+    border: '1px solid rgba(177, 138, 73, 0.32)',
+    background: 'rgba(247, 236, 212, 0.88)',
+    color: '#6b4d19',
+  };
+}
+
+function decisionModeLabel(mode: SudoOrchestrationDecision['mode']): string {
+  if (mode === 'direct_answer') return 'Direct answer';
+  if (mode === 'ask_question') return 'Needs Philippe';
+  if (mode === 'propose_alternative') return 'Alternative first';
+  return 'Delegating';
+}
+
+function oversightLabel(oversight: SudoOversightState): string {
+  if (oversight.approvalNeeded || oversight.oversightLevel === 'approval') return 'Approval required';
+  if (oversight.oversightLevel === 'blocker') return 'Marvin review required';
+  return 'Marvin oversight';
+}
+
+function oversightReasonLabel(reason?: SudoOversightState['oversightReason']): string | null {
+  if (reason === 'risk') return 'Risk';
+  if (reason === 'ambiguity') return 'Ambiguity';
+  if (reason === 'conflict') return 'Conflict';
+  if (reason === 'blocked') return 'Blocked';
+  if (reason === 'tradeoff') return 'Tradeoff';
+  if (reason === 'uncertainty') return 'Uncertainty';
+  return null;
+}
+
+function oversightStyle(oversight: SudoOversightState): CSSProperties {
+  if (oversight.approvalNeeded || oversight.oversightLevel === 'approval') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(168, 131, 52, 0.34)',
+      background: 'rgba(247, 238, 210, 0.92)',
+      color: '#6b4d19',
+    };
+  }
+  if (oversight.oversightLevel === 'blocker') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(181, 88, 74, 0.34)',
+      background: 'rgba(244, 224, 220, 0.88)',
+      color: '#7c2e24',
+    };
+  }
+  return {
+    ...pillStyle(),
+    border: '1px solid rgba(96, 118, 145, 0.32)',
+    background: 'rgba(230, 236, 245, 0.9)',
+    color: '#314b66',
+  };
+}
+
+function laneLabelFromSlug(laneSlug: SudoLaneSlug, lanes: SudoDelegationLane[]) {
+  return lanes.find((lane) => lane.slug === laneSlug)?.seatLabel ?? laneSlug;
+}
+
+function laneSequenceLabel(lanePlan: SudoLaneSlug[], lanes: SudoDelegationLane[]) {
+  if (lanePlan.length === 0) return 'No lane work';
+  return lanePlan.map((laneSlug) => laneLabelFromSlug(laneSlug, lanes)).join(' -> ');
+}
+
+const SUDO_DISMISSED_RUNS_STORAGE_KEY = 'mission-control:sudo-dismissed-runs';
+
+function buildSudoReviewPrompt(run: SudoOrchestrationRun) {
+  const sequence = run.decision?.lanePlan?.length ? reviewLaneSequence(run.decision.lanePlan) : 'No lane delegation';
+  const summary = run.synthesis?.summary || run.error || run.decision?.rationale || run.promptSummary;
+  return [
+    'Review this completed Sudo run and take over from here.',
+    '',
+    `Original brief: ${run.promptSummary}`,
+    `Status: ${run.status}`,
+    `Lane sequence: ${sequence}`,
+    `Result summary: ${summary}`,
+  ].join('\n');
+}
+
+function laneLabelForReview(laneSlug: SudoLaneSlug) {
+  if (laneSlug === 'frontend') return 'Frontend Developer';
+  if (laneSlug === 'backend') return 'Backend Developer';
+  return 'QA Engineer';
+}
+
+function reviewLaneSequence(lanePlan: SudoLaneSlug[]) {
+  if (lanePlan.length === 0) return 'No lane delegation';
+  return lanePlan.map((laneSlug) => laneLabelForReview(laneSlug)).join(' -> ');
+}
+
+function isLikelyPlanPrompt(run: SudoOrchestrationRun) {
+  const text = `${run.requestedPrompt || ''}\n${run.promptSummary || ''}`.toLowerCase();
+  return /(implementation plan|plan\b|proposal|design doc|technical spec|spec\b)/.test(text);
+}
+
+function SudoRunCard({
+  run,
+  lanes,
+  childRuns,
+  featured = false,
+  showDismiss = false,
+  onDismiss,
+  onReviewWithMarvin,
+}: {
+  run: SudoOrchestrationRun;
+  lanes: SudoDelegationLane[];
+  childRuns: SudoDelegatedRun[];
+  featured?: boolean;
+  showDismiss?: boolean;
+  onDismiss?: (runId: string) => void;
+  onReviewWithMarvin?: (run: SudoOrchestrationRun) => void;
+}) {
+  const decision = run.decision;
+  const oversight = run.oversight;
+  const longDecisionText =
+    decision?.mode === 'ask_question'
+      ? decision.question
+      : decision?.mode === 'propose_alternative'
+        ? decision.suggestion
+        : decision?.mode === 'direct_answer'
+          ? decision.directAnswer
+          : undefined;
+  const laneSequence = decision ? laneSequenceLabel(decision.lanePlan, lanes) : 'Pending';
+  const completed = run.status === 'done' || run.status === 'error';
+  const planLike = isLikelyPlanPrompt(run);
+  const topSummary = run.synthesis?.summary || longDecisionText || run.error || 'Sudo is deciding how to handle this brief.';
+  const artifacts = Array.isArray(run.artifacts) ? run.artifacts.filter((artifact) => artifact?.path) : [];
+  const showPromptHint = !completed && !planLike;
+  const showRationale = Boolean(decision?.rationale) && !completed;
+  const showExecutionDetails = Boolean(
+    decision && (decision.lanePlanSteps.length > 0 || childRuns.length > 0 || (!completed && (decision.orderRationale || decision.mode !== 'direct_answer'))),
+  );
+  const showSynthesisBlock = Boolean(
+    run.synthesis && !String(run.synthesis.summary || '').trim().startsWith(String(topSummary || '').trim().slice(0, 120)),
+  );
+
+  return (
+    <div
+      style={{
+        border: featured ? '1px solid rgba(121, 166, 148, 0.32)' : '1px solid rgba(200, 195, 188, 0.28)',
+        borderRadius: featured ? 18 : 16,
+        padding: featured ? '12px 13px' : '11px 12px',
+        display: 'grid',
+        gap: 8,
+        background: featured
+          ? 'linear-gradient(135deg, rgba(255, 253, 250, 0.98) 0%, rgba(247, 251, 249, 0.98) 100%)'
+          : run.status === 'error'
+            ? 'rgba(252, 248, 246, 0.92)'
+            : 'rgba(255, 255, 255, 0.94)',
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+        <div style={{ display: 'grid', gap: 6, minWidth: 0, flex: 1 }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            <span style={orchestrationStatusStyle(run.status)}>{run.status}</span>
+            {decision ? <span style={pillStyle()}>{decisionModeLabel(decision.mode)}</span> : <span style={pillStyle()}>Deciding</span>}
+            {oversight.oversightNeeded ? <span style={oversightStyle(oversight)}>{oversightLabel(oversight)}</span> : null}
+            {decision?.lanePlan?.length ? <span style={pillStyle()}>{laneSequence}</span> : null}
+          </div>
+          <div
+            style={{
+              fontSize: 12,
+              color: 'var(--text-body)',
+              lineHeight: 1.6,
+              display: '-webkit-box',
+              WebkitLineClamp: completed ? 3 : 4,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {topSummary}
+          </div>
+          {showPromptHint ? <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>{run.promptSummary}</div> : null}
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end', alignItems: 'center' }}>
+          {completed && onReviewWithMarvin ? (
+            <button
+              type="button"
+              onClick={() => onReviewWithMarvin(run)}
+              style={{ ...actionButtonStyle(true, true), padding: '8px 11px', fontSize: 11 }}
+            >
+              Review with Marvin
+            </button>
+          ) : null}
+          {showDismiss && onDismiss ? (
+            <button
+              type="button"
+              onClick={() => onDismiss(run.id)}
+              aria-label="Dismiss this Sudo decision"
+              title="Dismiss this Sudo decision"
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: '50%',
+                border: '1px solid rgba(200, 195, 188, 0.36)',
+                background: 'rgba(255, 255, 255, 0.72)',
+                color: 'var(--text-muted)',
+                fontSize: 13,
+                cursor: 'pointer',
+              }}
+            >
+              ×
+            </button>
+          ) : null}
+          <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{formatEventTime(Date.parse(run.updatedAt))}</span>
+        </div>
+      </div>
+
+      {showRationale ? (
+        <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+          {decision?.rationale}
+        </div>
+      ) : null}
+
+      {artifacts.length > 0 ? (
+        <div
+          style={{
+            border: '1px solid rgba(121, 166, 148, 0.24)',
+            borderRadius: 14,
+            padding: '10px 11px',
+            display: 'grid',
+            gap: 8,
+            background: 'rgba(246, 251, 248, 0.92)',
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ fontSize: 11, color: '#305448', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              {planLike ? 'Plan deliverable' : 'Deliverables'}
+            </div>
+            <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{artifacts.length}</span>
+          </div>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {artifacts.map((artifact, index) => {
+              const href = artifact.kind === 'url' ? artifact.path : buildFilesHref(artifact.path);
+              const label = artifact.label || artifact.path.split('/').pop() || artifact.path;
+              return (
+                <div
+                  key={`${run.id}-artifact-${artifact.path}-${index}`}
+                  style={{
+                    border: '1px solid rgba(200, 195, 188, 0.22)',
+                    borderRadius: 12,
+                    padding: '9px 10px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    gap: 10,
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    background: '#ffffff',
+                  }}
+                >
+                  <div style={{ display: 'grid', gap: 3, minWidth: 0, flex: 1 }}>
+                    <div style={{ fontSize: 12, color: '#173128', fontWeight: 700 }}>{label}</div>
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', fontFamily: monoFont, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {artifact.path}
+                    </div>
+                  </div>
+                  <Link href={href} style={{ ...actionButtonStyle(true, true), padding: '8px 11px', fontSize: 11 }}>
+                    {planLike ? 'Open plan' : 'Open'}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+
+      {oversight.oversightNeeded ? (
+        <div
+          style={{
+            border: oversight.oversightLevel === 'blocker'
+              ? '1px solid rgba(181, 88, 74, 0.24)'
+              : oversight.approvalNeeded || oversight.oversightLevel === 'approval'
+                ? '1px solid rgba(168, 131, 52, 0.24)'
+                : '1px solid rgba(96, 118, 145, 0.24)',
+            borderRadius: 14,
+            padding: '10px 11px',
+            display: 'grid',
+            gap: 8,
+            background: oversight.oversightLevel === 'blocker'
+              ? 'rgba(252, 244, 242, 0.96)'
+              : oversight.approvalNeeded || oversight.oversightLevel === 'approval'
+                ? 'rgba(252, 248, 239, 0.96)'
+                : 'rgba(241, 245, 250, 0.96)',
+          }}
+        >
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            <span style={oversightStyle(oversight)}>{oversightLabel(oversight)}</span>
+            {oversightReasonLabel(oversight.oversightReason) ? <span style={pillStyle()}>{oversightReasonLabel(oversight.oversightReason)}</span> : null}
+            {oversight.approvalNeeded ? <span style={pillStyle()}>Blocking approval</span> : null}
+          </div>
+          <div style={{ fontSize: 12, color: '#173128', lineHeight: 1.6 }}>
+            {oversight.marvinSummary || 'Sudo surfaced a structural oversight boundary for Marvin rather than silently continuing.'}
+          </div>
+          {oversight.recommendedDecision ? (
+            <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              Recommended decision: {oversight.recommendedDecision}
+            </div>
+          ) : null}
+          {oversight.nextHumanDecision ? (
+            <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+              Next human decision: {oversight.nextHumanDecision}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      {decision && showExecutionDetails ? (
+        <details open={featured && !completed && decision.lanePlanSteps.length > 0} style={{ border: '1px solid rgba(200, 195, 188, 0.24)', borderRadius: 14, background: 'rgba(255, 252, 247, 0.92)' }}>
+          <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '10px 11px', display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' }}>
+            <span style={{ fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              {completed ? 'Execution summary' : 'Execution plan'}
+            </span>
+            <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+              {decision.lanePlanSteps.length > 0 ? `${decision.lanePlanSteps.length} steps` : laneSequence}
+            </span>
+          </summary>
+          <div style={{ padding: '0 11px 11px', display: 'grid', gap: 8 }}>
+            {decision.lanePlanSteps.length > 0 ? (
+              <div style={{ display: 'grid', gap: 8 }}>
+                {decision.lanePlanSteps.map((step) => (
+                  <div
+                    key={`${run.id}-plan-${step.order}-${step.lane}`}
+                    style={{
+                      border: '1px solid rgba(200, 195, 188, 0.22)',
+                      borderRadius: 12,
+                      padding: '9px 10px',
+                      display: 'grid',
+                      gap: 5,
+                      background: '#ffffff',
+                    }}
+                  >
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                      <span style={pillStyle()}>{`Step ${step.order}`}</span>
+                      <span style={pillStyle()}>{laneLabelFromSlug(step.lane, lanes)}</span>
+                      {step.validationFocus ? <span style={pillStyle()}>{step.validationFocus}</span> : null}
+                    </div>
+                    <div style={{ fontSize: 12, color: '#173128', lineHeight: 1.5 }}>{step.purpose || 'Lane-specific execution step.'}</div>
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                      Expected output: {step.expectedOutput || 'Lane output recorded in the child run.'}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            {!completed && decision.orderRationale ? (
+              <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                Why this order: {decision.orderRationale}
+              </div>
+            ) : null}
+          </div>
+        </details>
+      ) : null}
+
+      {childRuns.length > 0 ? (
+        <details open={featured && !completed} style={{ border: '1px solid rgba(200, 195, 188, 0.24)', borderRadius: 14, background: 'rgba(255, 253, 250, 0.9)' }}>
+          <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '10px 11px', display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' }}>
+            <span style={{ fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Child lane runs</span>
+            <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{childRuns.length}</span>
+          </summary>
+          <div style={{ padding: '0 11px 11px', display: 'grid', gap: 8 }}>
+            {childRuns.map((childRun) => (
+              <div
+                key={childRun.id}
+                style={{
+                  border: '1px solid rgba(200, 195, 188, 0.24)',
+                  borderRadius: 12,
+                  padding: '9px 10px',
+                  display: 'grid',
+                  gap: 6,
+                  background: '#ffffff',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                    <span style={delegationStatusStyle(childRun.status)}>{childRun.status}</span>
+                    <span style={pillStyle()}>{childRun.lane.seatLabel}</span>
+                    <span style={pillStyle()}>{childRun.lane.defaultModel}</span>
+                  </div>
+                  <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
+                    {childRun.orchestrationSequence ? `Step ${childRun.orchestrationSequence}` : 'Child run'}
+                  </span>
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--text-body)', lineHeight: 1.6 }}>
+                  {childRun.resultSummary || childRun.error || childRun.promptSummary}
+                </div>
+              </div>
+            ))}
+          </div>
+        </details>
+      ) : null}
+
+      {showSynthesisBlock && run.synthesis ? (
+        <div
+          style={{
+            border: '1px solid rgba(121, 166, 148, 0.24)',
+            borderRadius: 14,
+            padding: '10px 11px',
+            display: 'grid',
+            gap: 8,
+            background: 'linear-gradient(135deg, rgba(232, 242, 236, 0.84) 0%, rgba(255, 253, 250, 0.96) 100%)',
+          }}
+        >
+          <div style={{ fontSize: 11, color: '#305448', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Final synthesis</div>
+          <div style={{ fontSize: 12, color: '#173128', lineHeight: 1.6 }}>{run.synthesis.summary}</div>
+          <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>Decision: {run.synthesis.decided}</div>
+        </div>
+      ) : null}
+
+      {(longDecisionText || run.requestedPrompt) ? (
+        <details style={{ border: '1px solid rgba(200, 195, 188, 0.22)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.82)' }}>
+          <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '9px 11px', fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Full answer and brief
+          </summary>
+          <div style={{ padding: '0 11px 11px', display: 'grid', gap: 10 }}>
+            {longDecisionText ? (
+              <div style={{ display: 'grid', gap: 4 }}>
+                <div style={{ fontSize: 11, color: '#305448', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Full answer</div>
+                <div style={{ fontSize: 12, color: '#173128', lineHeight: 1.6 }}>{renderPlainTextWithFileLinks(longDecisionText, `${run.id}-full-answer`)}</div>
+              </div>
+            ) : null}
+            {run.requestedPrompt ? (
+              <div style={{ display: 'grid', gap: 4 }}>
+                <div style={{ fontSize: 11, color: '#305448', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Original brief</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6 }}>{run.requestedPrompt}</div>
+              </div>
+            ) : null}
+          </div>
+        </details>
+      ) : null}
+
+      <details style={{ border: '1px solid rgba(200, 195, 188, 0.22)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.82)' }}>
+        <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '9px 11px', fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          Technical details
+        </summary>
+        <div style={{ padding: '0 11px 11px', display: 'grid', gap: 6 }}>
+          {run.decisionSessionKey ? <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Decision session: <span style={{ fontFamily: monoFont }}>{run.decisionSessionKey}</span></div> : null}
+          {run.decisionRunId ? <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Decision run: <span style={{ fontFamily: monoFont }}>{run.decisionRunId}</span></div> : null}
+          {childRuns.map((childRun) => (
+            <div key={`${childRun.id}-tech`} style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+              {childRun.lane.seatLabel}: {childRun.childSessionKey ? <span style={{ fontFamily: monoFont }}>{childRun.childSessionKey}</span> : 'No child session id'}{childRun.runId ? ` / ${childRun.runId}` : ''}
+            </div>
+          ))}
+        </div>
+      </details>
+    </div>
+  );
+}
+
+function SudoDelegationPanel({
+  draftPrompt,
+  activePrompt,
+  sourceSessionKey,
+  orchestrationTrigger,
+  onReviewWithMarvin,
+}: {
+  draftPrompt: string;
+  activePrompt: string;
+  sourceSessionKey: string;
+  orchestrationTrigger: number;
+  onReviewWithMarvin: (run: SudoOrchestrationRun) => void;
+}) {
+  const [lanes, setLanes] = useState<SudoDelegationLane[]>([]);
+  const [orchestrations, setOrchestrations] = useState<SudoOrchestrationRun[]>([]);
+  const [runs, setRuns] = useState<SudoDelegatedRun[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshError, setRefreshError] = useState<string | null>(null);
+  const [orchestrating, setOrchestrating] = useState(false);
+  const [dismissedRunIds, setDismissedRunIds] = useState<string[]>([]);
+  const trimmedPrompt = draftPrompt.trim() || activePrompt.trim();
+  const childRunsByOrchestration = useMemo(() => {
+    const next = new Map<string, SudoDelegatedRun[]>();
+    runs.forEach((run) => {
+      if (!run.orchestrationId) return;
+      const group = next.get(run.orchestrationId) ?? [];
+      group.push(run);
+      next.set(run.orchestrationId, group);
+    });
+    next.forEach((group) => {
+      group.sort((left, right) => (left.orchestrationSequence ?? 0) - (right.orchestrationSequence ?? 0));
+    });
+    return next;
+  }, [runs]);
+  const visibleOrchestrations = useMemo(() => {
+    const filtered = orchestrations.filter((run) => !dismissedRunIds.includes(run.id));
+    return [...filtered].sort((left, right) => {
+      const rightTs = Date.parse(right.updatedAt || right.completedAt || right.requestedAt || '') || 0;
+      const leftTs = Date.parse(left.updatedAt || left.completedAt || left.requestedAt || '') || 0;
+      return rightTs - leftTs;
+    });
+  }, [dismissedRunIds, orchestrations]);
+  const featuredRun = useMemo(
+    () => visibleOrchestrations[0] ?? null,
+    [visibleOrchestrations],
+  );
+  const historicalRuns = useMemo(
+    () => visibleOrchestrations.filter((run) => run.id !== featuredRun?.id),
+    [featuredRun?.id, visibleOrchestrations],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async ({ quiet = false }: { quiet?: boolean } = {}) => {
+      if (!quiet) setLoading(true);
+      try {
+        const response = await fetch('/api/agents/sudo-orchestration', {
+          cache: 'no-store',
+          headers: { Accept: 'application/json' },
+        });
+        const payload = (await response.json()) as SudoDelegationPayload;
+        if (!response.ok) {
+          throw new Error(payload.error || `Delegation request failed (${response.status})`);
+        }
+        if (cancelled) return;
+        setLanes(Array.isArray(payload.lanes) ? payload.lanes : []);
+        setOrchestrations(Array.isArray(payload.orchestrations) ? payload.orchestrations : []);
+        setRuns(Array.isArray(payload.runs) ? payload.runs : []);
+        setRefreshError(null);
+      } catch (cause) {
+        if (cancelled) return;
+        setRefreshError(cause instanceof Error ? cause.message : 'Mission Control could not load delegated runs.');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void load();
+    const interval = window.setInterval(() => {
+      void load({ quiet: true });
+    }, 8000);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(SUDO_DISMISSED_RUNS_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as unknown;
+      if (Array.isArray(parsed)) {
+        setDismissedRunIds(parsed.filter((entry): entry is string => typeof entry === 'string'));
+      }
+    } catch {
+      // Ignore malformed local state.
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(SUDO_DISMISSED_RUNS_STORAGE_KEY, JSON.stringify(dismissedRunIds));
+  }, [dismissedRunIds]);
+
+  const handleOrchestrate = useCallback(async () => {
+    if (!trimmedPrompt) {
+      setRefreshError('Add the task brief to the composer first, then let Sudo handle it.');
+      return;
+    }
+
+    setOrchestrating(true);
+    try {
+      const response = await fetch('/api/agents/sudo-orchestration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          prompt: trimmedPrompt,
+          sourceSessionKey,
+        }),
+      });
+      const payload = (await response.json()) as { orchestration?: SudoOrchestrationRun; error?: string };
+      if (!response.ok || !payload.orchestration) {
+        throw new Error(payload.error || 'Sudo orchestration could not be started.');
+      }
+      setRefreshError(null);
+      setOrchestrations((current) => [payload.orchestration as SudoOrchestrationRun, ...current.filter((run) => run.id !== payload.orchestration?.id)].slice(0, 8));
+      setDismissedRunIds((current) => current.filter((runId) => runId !== payload.orchestration?.id));
+    } catch (cause) {
+      setRefreshError(cause instanceof Error ? cause.message : 'Sudo orchestration could not be started.');
+    } finally {
+      setOrchestrating(false);
+    }
+  }, [sourceSessionKey, trimmedPrompt]);
+
+  useEffect(() => {
+    if (orchestrationTrigger <= 0) return;
+    if (!trimmedPrompt) return;
+    void handleOrchestrate();
+  }, [handleOrchestrate, orchestrationTrigger, trimmedPrompt]);
+
+  return (
+    <section
+      style={{
+        position: 'relative',
+        zIndex: 1,
+        border: '1px solid rgba(200, 195, 188, 0.48)',
+        borderRadius: 22,
+        background: '#fffdfa',
+        boxShadow: '0 14px 30px rgba(26, 61, 50, 0.08)',
+        padding: '12px 14px',
+        display: 'grid',
+        gap: 10,
+      }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={pillStyle({ active: true })}>Sudo orchestration</span>
+        {orchestrating ? <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Sudo deciding…</span> : null}
+      </div>
+
+      <div style={{ display: 'grid', gap: 8 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#173128' }}>Sudo decisions</div>
+          {loading ? <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>Loading…</span> : null}
+        </div>
+        {featuredRun ? (
+          <SudoRunCard
+            run={featuredRun}
+            lanes={lanes}
+            childRuns={childRunsByOrchestration.get(featuredRun.id) ?? []}
+            featured
+            onReviewWithMarvin={onReviewWithMarvin}
+          />
+        ) : (
+          <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>No Sudo orchestration runs recorded yet.</div>
+        )}
+        {historicalRuns.length > 0 ? (
+          <details style={{ border: '1px solid rgba(200, 195, 188, 0.28)', borderRadius: 16, background: 'rgba(255, 255, 255, 0.84)' }}>
+            <summary style={{ cursor: 'pointer', listStyle: 'none', padding: '10px 12px', display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center' }}>
+              <div style={{ display: 'grid', gap: 3 }}>
+                <div style={{ fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>History</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{historicalRuns.length} older runs hidden by default.</div>
+              </div>
+              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{historicalRuns.length}</span>
+            </summary>
+            <div style={{ padding: '0 12px 12px', display: 'grid', gap: 8 }}>
+              {historicalRuns.map((run) => (
+                <SudoRunCard
+                  key={run.id}
+                  run={run}
+                  lanes={lanes}
+                  childRuns={childRunsByOrchestration.get(run.id) ?? []}
+                  showDismiss
+                  onDismiss={(runId) => setDismissedRunIds((current) => (current.includes(runId) ? current : [...current, runId]))}
+                  onReviewWithMarvin={onReviewWithMarvin}
+                />
+              ))}
+            </div>
+          </details>
+        ) : null}
+        {refreshError ? <div style={{ fontSize: 11, color: '#7c2e24', lineHeight: 1.5 }}>{refreshError}</div> : null}
+      </div>
+    </section>
+  );
+}
+
 export function MissionControlChatSurface({
   summary,
   bridge,
   fallbackNotice,
+  activation,
 }: {
   summary: OrchestratorIntegrationSummary;
   bridge?: RuntimeBridgeState;
   fallbackNotice?: string;
+  activation?: ChatSeatActivation | null;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const model = useMemo(() => buildChatSurfaceModel(summary), [summary]);
   const [sessionsOpen, setSessionsOpen] = useState(false);
   const sessionsRef = useRef<HTMLDivElement | null>(null);
@@ -870,21 +1580,46 @@ export function MissionControlChatSurface({
   const liveSendError = live?.sendError ?? null;
   const [composerValue, setComposerValue] = useState('');
   const [composerError, setComposerError] = useState<string | null>(null);
+  const [sudoOrchestrationTrigger, setSudoOrchestrationTrigger] = useState(0);
+  const [speechMessage, setSpeechMessage] = useState<string | null>(null);
+  const {
+    status: speechStatus,
+    error: speechError,
+    isSupported: speechSupported,
+    supportReason: speechSupportReason,
+    toggleRecording,
+  } = useSpeechToText({
+    onTranscript: (text) => {
+      setComposerValue((current) => {
+        const trimmed = text.trim();
+        if (!trimmed) return current;
+        if (!current.trim()) return trimmed;
+        const separator = current.endsWith('\n') || /\s$/.test(current) ? '' : ' ';
+        return `${current}${separator}${trimmed}`;
+      });
+      setSpeechMessage('Transcript added to composer. Edit before sending.');
+      setComposerError(null);
+    },
+  });
+  const [sudoBrief, setSudoBrief] = useState('');
   const [attachedFiles, setAttachedFiles] = useState<Array<{ name: string; path: string; size: number; mimeType: string }>>([]);
   const [uploadBusy, setUploadBusy] = useState(false);
   const [isDraggingFiles, setIsDraggingFiles] = useState(false);
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
   const [bridgeEventsOpen, setBridgeEventsOpen] = useState(false);
   const [topControlMenu, setTopControlMenu] = useState<TopControlMenu>(null);
+  const [controlsExpanded, setControlsExpanded] = useState(false);
   const [modelSwitchError, setModelSwitchError] = useState<string | null>(null);
   const [modelSwitchBusy, setModelSwitchBusy] = useState(false);
   const [effortSwitchBusy, setEffortSwitchBusy] = useState(false);
+  const [runtimeDefaultsBusy, setRuntimeDefaultsBusy] = useState(false);
   const [optimisticModelLabel, setOptimisticModelLabel] = useState<string | null>(null);
   const [lastRequestedEffort, setLastRequestedEffort] = useState<EffortMenuOption | null>(null);
   const [pendingModelLabel, setPendingModelLabel] = useState<string | null>(null);
   const [pendingEffortLabel, setPendingEffortLabel] = useState<EffortMenuOption | null>(null);
   const [isNearTranscriptBottom, setIsNearTranscriptBottom] = useState(true);
   const [showJumpToLatest, setShowJumpToLatest] = useState(false);
+  const speechButtonEnabled = speechSupported && !uploadBusy && speechStatus !== 'transcribing';
   const statusDropdownRef = useRef<HTMLDivElement | null>(null);
   const bridgeEventsRef = useRef<HTMLDivElement | null>(null);
   const topControlMenuRef = useRef<HTMLDivElement | null>(null);
@@ -908,6 +1643,18 @@ export function MissionControlChatSurface({
     document.addEventListener('mousedown', onPointerDown);
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, []);
+
+  useEffect(() => {
+    if (!speechMessage) return;
+    const timeout = window.setTimeout(() => setSpeechMessage(null), 3500);
+    return () => window.clearTimeout(timeout);
+  }, [speechMessage]);
+
+  useEffect(() => {
+    if (controlsExpanded) return;
+    setTopControlMenu(null);
+    setSessionsOpen(false);
+  }, [controlsExpanded]);
 
   const runtimeModelLabel = model.modelLabel.includes('gpt-5.4')
     ? 'gpt-5.4'
@@ -933,18 +1680,31 @@ export function MissionControlChatSurface({
     : 'Last requested: low';
   const visibleModelMenuOptions = modelMenuOptions.filter((option) => option.label !== modelMenuLabel);
 
-  const lastRealAgentRef = useRef(model.agentLabel !== 'Mission Control' ? model.agentLabel : 'Marvin');
   const lastRealModelRef = useRef(model.modelLabel.toLowerCase() !== 'runtime controlled' ? model.modelLabel : 'MiniMax-M2.7');
 
-  if (model.agentLabel && model.agentLabel !== 'Mission Control') {
-    lastRealAgentRef.current = model.agentLabel;
-  }
   if (model.modelLabel && model.modelLabel.toLowerCase() !== 'runtime controlled') {
     lastRealModelRef.current = model.modelLabel;
   }
 
-  const displayAgentLabel = model.agentLabel === 'Mission Control' ? lastRealAgentRef.current : model.agentLabel;
+  const selectedSeatLabel = activation?.label ?? 'Marvin';
+  const selectedSeatDetail = activation
+    ? activation.routing === 'direct'
+      ? 'Direct main runtime'
+      : `${activation.supervisorLabel ?? 'Marvin'}-routed ${activation.runtimeModeLabel.toLowerCase()}`
+    : 'Direct main runtime';
   const displayModelLabel = model.modelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : model.modelLabel;
+  const agentMenuOptions = useMemo<AgentMenuOption[]>(
+    () =>
+      listPreferredChatSeatActivations().map((seat) => ({
+        id: seat.seatId,
+        seatSlug: seat.seatSlug,
+        label: seat.label,
+        note: seat.role,
+        detail: seat.routing === 'direct' ? 'Direct main runtime' : `${seat.supervisorLabel ?? 'Marvin'}-routed lead seat`,
+        runtimeTag: seat.routingLabel,
+      })),
+    [],
+  );
 
   async function handleModelSwitch(option: ModelMenuOption) {
     if (!live?.sendPrompt) {
@@ -1006,6 +1766,14 @@ export function MissionControlChatSurface({
   }, [pendingModelLabel, runtimeModelLabel]);
 
   useEffect(() => {
+    if (!activation) return;
+    if (!bridge) return;
+    if (sessionState !== 'connected') return;
+    if (liveTargetSession === activation.targetSessionKey) return;
+    void bridge.switchSession(activation.targetSessionKey);
+  }, [activation, bridge, liveTargetSession, sessionState]);
+
+  useEffect(() => {
     if (!confirmedEffortLabel) return;
     const normalizedConfirmed = confirmedEffortLabel.toLowerCase();
     if (pendingEffortLabel && normalizedConfirmed === pendingEffortLabel) {
@@ -1018,12 +1786,52 @@ export function MissionControlChatSurface({
     }
   }, [confirmedEffortLabel, lastRequestedEffort, pendingEffortLabel]);
 
+  async function applyRuntimeDefaults(modelAlias: ChatSeatActivation['defaultModel'], effort: EffortMenuOption) {
+    if (!live?.sendPrompt) {
+      throw new Error('Live bridge is unavailable for runtime-default changes right now.');
+    }
+
+    const matchingModelOption = modelMenuOptions.find((option) => option.id === modelAlias);
+    const nextModelLabel = matchingModelOption?.label ?? modelAlias;
+    const previousModelLabel = modelMenuLabel;
+    const previousEffort = lastRequestedEffort;
+
+    setOptimisticModelLabel(nextModelLabel);
+    setPendingModelLabel(nextModelLabel);
+    setLastRequestedEffort(effort);
+    setPendingEffortLabel(effort);
+
+    try {
+      setModelSwitchError(null);
+      await live.sendPrompt(`/model ${modelAlias}`);
+      await new Promise((resolve) => window.setTimeout(resolve, 500));
+      await live.sendPrompt(`/think:${effort}`);
+      void bridge?.refresh();
+    } catch (cause) {
+      setOptimisticModelLabel(previousModelLabel);
+      setPendingModelLabel(null);
+      setLastRequestedEffort(previousEffort);
+      setPendingEffortLabel(previousEffort);
+      throw cause;
+    }
+  }
+
+  async function handleApplySeatDefaults() {
+    if (!activation) return;
+
+    setTopControlMenu(null);
+    setRuntimeDefaultsBusy(true);
+    try {
+      await applyRuntimeDefaults(activation.defaultModel, activation.defaultThinking);
+    } catch (cause) {
+      setModelSwitchError(cause instanceof Error ? cause.message : 'Mission Control could not apply seat defaults.');
+    } finally {
+      setRuntimeDefaultsBusy(false);
+    }
+  }
+
   async function handleResetToDefaults() {
     setTopControlMenu(null);
-    setOptimisticModelLabel('minimax-2.7');
-    setPendingModelLabel('minimax-2.7');
-    setLastRequestedEffort('low');
-    setPendingEffortLabel('low');
     if (!live?.sendPrompt) {
       window.location.reload();
       return;
@@ -1031,11 +1839,7 @@ export function MissionControlChatSurface({
     try {
       setModelSwitchBusy(true);
       setEffortSwitchBusy(true);
-      setModelSwitchError(null);
-      await live.sendPrompt('/model minimax2.7');
-      await new Promise((resolve) => window.setTimeout(resolve, 500));
-      await live.sendPrompt('/think:low');
-      void bridge?.refresh();
+      await applyRuntimeDefaults('minimax2.7', 'low');
     } catch {
       window.location.reload();
     } finally {
@@ -1066,13 +1870,27 @@ export function MissionControlChatSurface({
   }
 
   async function submitComposerPrompt(nextPrompt: string) {
-    if (!live?.sendPrompt) return;
     if (!nextPrompt && attachedFiles.length === 0) return;
 
     const attachmentNote = attachedFiles.length
       ? `\n\nAttached files uploaded to workspace:\n${attachedFiles.map((file) => `- ${file.path}`).join('\n')}`
       : '';
     const finalPrompt = `${nextPrompt}${attachmentNote}`.trim();
+
+    if (activation?.seatSlug === 'dev-team') {
+      try {
+        setComposerError(null);
+        setSudoBrief(finalPrompt);
+        setComposerValue('');
+        setAttachedFiles([]);
+        setSudoOrchestrationTrigger((current) => current + 1);
+      } catch (cause) {
+        setComposerError(cause instanceof Error ? cause.message : 'Mission Control could not hand the brief to Sudo.');
+      }
+      return;
+    }
+
+    if (!live?.sendPrompt) return;
 
     try {
       setComposerError(null);
@@ -1127,6 +1945,26 @@ export function MissionControlChatSurface({
     if (event.dataTransfer.files.length > 0) {
       void uploadSelectedFiles(event.dataTransfer.files);
     }
+  }
+
+  function handleSeatSelection(seatSlug: string | null) {
+    setTopControlMenu(null);
+
+    const params = new URLSearchParams(searchParams?.toString() ?? '');
+    if (seatSlug) {
+      params.set('seat', seatSlug);
+    } else {
+      params.delete('seat');
+    }
+
+    const nextQuery = params.toString();
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+  }
+
+  function handleSudoReviewWithMarvin(run: SudoOrchestrationRun) {
+    handleSeatSelection('marvin');
+    setComposerValue(buildSudoReviewPrompt(run));
+    setComposerError(null);
   }
 
   const transcriptScrollRef = useRef<HTMLDivElement | null>(null);
@@ -1225,6 +2063,7 @@ export function MissionControlChatSurface({
   }
 
   transcriptItems.sort((a, b) => a.at - b.at);
+  const controlsDetailsId = 'chat-surface-top-controls';
 
   return (
     <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 8, minHeight: '100%', height: '100%' }}>
@@ -1358,30 +2197,88 @@ export function MissionControlChatSurface({
                 <div style={{ width: `${model.contextPercent ?? 18}%`, minWidth: model.contextPercent === null ? 24 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
               </div>
             </div>
+            <button
+              type="button"
+              onClick={() => setControlsExpanded((current) => !current)}
+              aria-controls={controlsDetailsId}
+              aria-expanded={controlsExpanded}
+              style={{
+                border: '1px solid rgba(200, 195, 188, 0.34)',
+                borderRadius: 14,
+                background: 'rgba(255, 255, 255, 0.7)',
+                padding: '8px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                cursor: 'pointer',
+              }}
+            >
+              <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Controls</span>
+              <span style={{ fontSize: 11, color: 'var(--text-body)' }}>{controlsExpanded ? '▴' : '▾'}</span>
+            </button>
           </div>
         </div>
 
         {/* Row 2: SESSION/AGENT / MODEL / EFFORT / RESET / RECENT SESSIONS */}
-        <div ref={topControlMenuRef} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+        <details
+          id={controlsDetailsId}
+          open={controlsExpanded}
+          onToggle={(event) => setControlsExpanded((event.currentTarget as HTMLDetailsElement).open)}
+          style={{
+            border: '1px solid rgba(200, 195, 188, 0.34)',
+            borderRadius: 16,
+            background: 'rgba(255, 255, 255, 0.45)',
+            padding: '8px 10px',
+          }}
+        >
+          <summary
+            style={{
+              listStyle: 'none',
+              position: 'absolute',
+              width: 1,
+              height: 1,
+              padding: 0,
+              margin: -1,
+              overflow: 'hidden',
+              clip: 'rect(0, 0, 0, 0)',
+              whiteSpace: 'nowrap',
+              border: 0,
+            }}
+          >
+            Chat controls
+          </summary>
+          <div ref={topControlMenuRef} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ position: 'relative' }}>
             <button
               type="button"
               onClick={() => setTopControlMenu((current) => (current === 'agent' ? null : 'agent'))}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minWidth: 188, minHeight: 32, textAlign: 'left', cursor: 'pointer' }}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minWidth: 228, minHeight: 32, textAlign: 'left', cursor: 'pointer' }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-                <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Session / Agent</div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{displayAgentLabel}</div>
+              <div style={{ display: 'grid', gap: 2, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                  <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Seat</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedSeatLabel}</div>
+                </div>
+                <div style={{ fontSize: 10.5, color: 'var(--text-ghost)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedSeatDetail}</div>
               </div>
               <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
             </button>
             {topControlMenu === 'agent' ? (
-              <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
+              <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 260, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
                 {agentMenuOptions.map((option) => (
-                  <div key={option.id} style={{ borderRadius: 12, background: option.label === displayAgentLabel ? 'rgba(212, 231, 221, 0.66)' : 'transparent', padding: '10px 12px', display: 'grid', gap: 2, opacity: option.disabled ? 0.62 : 1 }}>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{option.label}</span>
-                    {option.note ? <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.note}</span> : null}
-                  </div>
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => handleSeatSelection(option.seatSlug)}
+                    style={{ border: 'none', borderRadius: 12, background: option.label === selectedSeatLabel ? 'rgba(212, 231, 221, 0.66)' : 'transparent', padding: '10px 12px', display: 'grid', gap: 4, textAlign: 'left', cursor: 'pointer' }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{option.label}</span>
+                      {option.runtimeTag ? <span style={pillStyle(option.label === selectedSeatLabel ? { active: true } : undefined)}>{option.runtimeTag}</span> : null}
+                    </div>
+                    {option.note ? <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{option.note}</span> : null}
+                    {option.detail ? <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.detail}</span> : null}
+                  </button>
                 ))}
               </div>
             ) : null}
@@ -1446,6 +2343,22 @@ export function MissionControlChatSurface({
               </div>
             ) : null}
           </div>
+          {activation ? (
+            <button
+              type="button"
+              onClick={() => void handleApplySeatDefaults()}
+              disabled={runtimeDefaultsBusy}
+              title={`Apply ${activation.label} seat defaults`}
+              style={{
+                ...actionButtonStyle(!runtimeDefaultsBusy, true),
+                padding: '8px 12px',
+                fontSize: 11,
+                cursor: runtimeDefaultsBusy ? 'progress' : 'pointer',
+              }}
+            >
+              {runtimeDefaultsBusy ? 'Applying…' : 'Apply seat defaults'}
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={handleResetToDefaults}
@@ -1536,7 +2449,8 @@ export function MissionControlChatSurface({
               </div>
             ) : null}
           </div>
-        </div>
+          </div>
+        </details>
         {modelSwitchError ? (
           <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6, paddingLeft: 4 }}>
             {modelSwitchError}
@@ -1544,14 +2458,28 @@ export function MissionControlChatSurface({
         ) : null}
       </section>
 
+      {activation?.seatSlug === 'dev-team' ? (
+        <div style={{ paddingTop: 4, paddingBottom: 2 }}>
+          <SudoDelegationPanel
+            draftPrompt={composerValue}
+            activePrompt={sudoBrief}
+            sourceSessionKey={liveTargetSession || activation.targetSessionKey}
+            orchestrationTrigger={sudoOrchestrationTrigger}
+            onReviewWithMarvin={handleSudoReviewWithMarvin}
+          />
+        </div>
+      ) : null}
+
       <section
         ref={transcriptScrollRef}
         style={{
+          position: 'relative',
+          zIndex: 0,
           border: 'none',
           borderRadius: 0,
           background: 'transparent',
           boxShadow: 'none',
-          padding: '6px 0 2px',
+          padding: '10px 0 2px',
           display: 'grid',
           gap: 14,
           minHeight: 0,
@@ -1719,10 +2647,43 @@ export function MissionControlChatSurface({
               </button>
               <button
                 type="button"
-                disabled
-                aria-label="Voice input coming later"
-                title="Voice input coming later"
-                style={composerIconButtonStyle(false)}
+                onClick={() => {
+                  setSpeechMessage(null);
+                  void toggleRecording();
+                }}
+                disabled={!speechButtonEnabled}
+                aria-label={
+                  speechStatus === 'recording'
+                    ? 'Stop recording'
+                    : speechStatus === 'transcribing'
+                      ? 'Transcribing audio'
+                      : 'Start voice input'
+                }
+                title={
+                  !speechSupported
+                    ? 'Voice input is not supported in this browser'
+                    : speechStatus === 'recording'
+                      ? 'Stop recording'
+                      : speechStatus === 'transcribing'
+                        ? 'Transcribing...'
+                        : 'Start voice input'
+                }
+                style={{
+                  ...composerIconButtonStyle(speechButtonEnabled),
+                  background:
+                    speechStatus === 'recording'
+                      ? 'rgba(183, 76, 67, 0.18)'
+                      : speechStatus === 'transcribing'
+                        ? 'rgba(121, 166, 148, 0.2)'
+                        : composerIconButtonStyle(speechButtonEnabled).background,
+                  border:
+                    speechStatus === 'recording'
+                      ? '1px solid rgba(183, 76, 67, 0.46)'
+                      : speechStatus === 'transcribing'
+                        ? '1px solid rgba(121, 166, 148, 0.42)'
+                        : composerIconButtonStyle(speechButtonEnabled).border,
+                  color: speechStatus === 'recording' ? '#8e2f26' : undefined,
+                }}
               >
                 <MicIcon />
               </button>
@@ -1738,15 +2699,34 @@ export function MissionControlChatSurface({
               </button>
               <button
                 type="submit"
-                disabled={!liveCanSend || (composerValue.trim().length === 0 && attachedFiles.length === 0)}
-                aria-label={liveSendState === 'sending' ? 'Sending' : liveSendState === 'streaming' ? 'Waiting' : 'Send'}
-                title={liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
-                style={composerIconButtonStyle(liveCanSend && (composerValue.trim().length > 0 || attachedFiles.length > 0))}
+                disabled={(!(activation?.seatSlug === 'dev-team') && !liveCanSend) || (composerValue.trim().length === 0 && attachedFiles.length === 0)}
+                aria-label={activation?.seatSlug === 'dev-team' ? 'Let Sudo handle this' : liveSendState === 'sending' ? 'Sending' : liveSendState === 'streaming' ? 'Waiting' : 'Send'}
+                title={activation?.seatSlug === 'dev-team' ? 'Let Sudo handle this' : liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
+                style={composerIconButtonStyle(((activation?.seatSlug === 'dev-team') || liveCanSend) && (composerValue.trim().length > 0 || attachedFiles.length > 0))}
               >
                 <SendIcon />
               </button>
             </div>
           </div>
+        {(!speechSupported || speechStatus === 'recording' || speechStatus === 'transcribing' || speechError || speechMessage) ? (
+          <div
+            style={{
+              fontSize: 12,
+              color: speechError ? '#9a4b43' : speechStatus === 'recording' ? '#8e2f26' : 'var(--text-muted)',
+              maxWidth: 720,
+            }}
+          >
+            {!speechSupported
+              ? (speechSupportReason || 'Voice input is not available in this browser.')
+              : speechError
+                ? `Voice input error: ${speechError}`
+                : speechStatus === 'recording'
+                  ? 'Recording… click the mic again to stop.'
+                  : speechStatus === 'transcribing'
+                    ? 'Transcribing…'
+                    : speechMessage}
+          </div>
+        ) : null}
         {(composerError || liveSendError || effectiveBridgeError || (!liveTargetSession && sessionState === 'connected')) ? (
           <div style={{ fontSize: 12, color: composerError || liveSendError || effectiveBridgeError ? '#9a4b43' : 'var(--text-muted)', maxWidth: 720 }}>
             {composerError || liveSendError || (effectiveBridgeError ? `Last refresh error: ${effectiveBridgeError}` : 'The gateway session is live, but Mission Control still needs one visible runtime session key before it can issue a real prompt.')}
