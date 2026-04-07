@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "f6c81963",
+        "text": "[Other] \ud83c\udf81 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
+        "column": "todo"
+      },
+      {
         "id": "18ab9205",
         "text": "[Trading] Fix: Equity bot improvement",
         "column": "todo"
@@ -17,13 +22,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "9694711d",
-        "text": "[Other] \ud83c\udf81 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "24fa9c1b",
@@ -57,5 +56,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-07T10:00:07.000Z"
+  "updatedAt": "2026-04-07T10:00:09.000Z"
 }
