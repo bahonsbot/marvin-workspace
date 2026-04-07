@@ -30,14 +30,8 @@
 
 
 ## Needs Input
-- Do each need their own workspace?
-- What is most important in these workspaces for the agent to fulfil their role as efficient as possible
-- Is it worth having dedicated agents teams, like a dev team (with a front-end developer, back-end developer, designer, and QA engineer) or a content/SEO team (with a researcher, analyst, writer, publisher, GSC tracker)?
 ## In Progress
-- Research Agent workspace implementation
 ## Open Backlog
-- Create a clean implementation plan for a more dynamic and collapsible left menu bar
-**Brief:** The current left menu bar in Mission Control works well, but it is a bit static. Ideally we want it to be collapsible, so we can create more screen space. When collapsed, it should only show the icons (these are up for improvement too, as they don't 'mean' anything right now), and hide the text titles for each page. To make it more dynamic, perhaps it can change colour or create an outline around the page title when mouse-over, anything is possible. Create a plan to give it more of a wow-factor, while still being kinda elegant/minimalistic.
 - [Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas
 - [Personal] Practice: Python practice sheet
 **Brief:** create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises
@@ -50,3 +44,5 @@
 - (2026-03-24) [Trading] 🔧 Fix: safe improvement in trading-bot workspace → bot-support-spec-health-snapshot-reporter-2026-03-16.md
 - (2026-03-24) [Personal] 📚 Learn: Japanese study pack (greetings lesson) → projects/language/lesson-01-greetings.md
 ## Review
+
+- (2026-04-07) [Trading] 🔧 Fix: Futures bot improvement → kept real deliverables (`scripts/signal_accuracy_report.py`, implementation plan, accuracy reports); review note: task overshot the ask by implementing the improvement instead of only producing the requested plan.
