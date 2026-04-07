@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-04-07T03:41:25Z",
+  "report_date": "2026-04-07",
+  "paper_only": true,
+  "volume": {
+    "total_signals": 0,
+    "accepted": 0,
+    "denied": 0,
+    "acceptance_rate": null
+  },
+  "execution": {
+    "submitted": 0,
+    "paper_execute": 0,
+    "blocked": 0,
+    "status_breakdown": {}
+  },
+  "by_pattern": [],
+  "by_symbol": [],
+  "by_side": {},
+  "denial_reasons": [],
+  "positions": {
+    "health": "ok",
+    "count": 0,
+    "items": []
+  },
+  "warnings": [
+    "No decision records found for 2026-04-07"
+  ],
+  "flags": []
+}

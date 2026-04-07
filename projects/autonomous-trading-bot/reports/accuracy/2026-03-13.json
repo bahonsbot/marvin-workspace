@@ -1,0 +1,86 @@
+{
+  "generated_at": "2026-04-07T03:41:26Z",
+  "report_date": "2026-03-13",
+  "paper_only": true,
+  "volume": {
+    "total_signals": 4,
+    "accepted": 4,
+    "denied": 0,
+    "acceptance_rate": 1.0
+  },
+  "execution": {
+    "submitted": 4,
+    "paper_execute": 0,
+    "blocked": 0,
+    "status_breakdown": {
+      "submitted": 4
+    }
+  },
+  "by_pattern": [
+    {
+      "pattern": "Russia-Ukraine Conflict",
+      "count": 3
+    },
+    {
+      "pattern": "COVID-19 Market Crash",
+      "count": 1
+    }
+  ],
+  "by_symbol": [
+    {
+      "symbol": "USO",
+      "signal_count": 1,
+      "has_position": false,
+      "side": "",
+      "qty": "0",
+      "avg_entry": "0.00",
+      "market_value": 0.0,
+      "unrealized_pl": 0.0,
+      "unrealized_plpc": 0.0
+    },
+    {
+      "symbol": "SH",
+      "signal_count": 1,
+      "has_position": false,
+      "side": "",
+      "qty": "0",
+      "avg_entry": "0.00",
+      "market_value": 0.0,
+      "unrealized_pl": 0.0,
+      "unrealized_plpc": 0.0
+    },
+    {
+      "symbol": "VEON",
+      "signal_count": 1,
+      "has_position": false,
+      "side": "",
+      "qty": "0",
+      "avg_entry": "0.00",
+      "market_value": 0.0,
+      "unrealized_pl": 0.0,
+      "unrealized_plpc": 0.0
+    },
+    {
+      "symbol": "ITA",
+      "signal_count": 1,
+      "has_position": false,
+      "side": "",
+      "qty": "0",
+      "avg_entry": "0.00",
+      "market_value": 0.0,
+      "unrealized_pl": 0.0,
+      "unrealized_plpc": 0.0
+    }
+  ],
+  "by_side": {
+    "buy": 4
+  },
+  "denial_reasons": [],
+  "positions": {
+    "health": "ok",
+    "count": 0,
+    "items": []
+  },
+  "warnings": [],
+  "flags": []
+}
