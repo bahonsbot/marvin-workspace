@@ -31,6 +31,11 @@ Use this file for live setup facts, not historical logs or long retrospectives.
   - pick a specific category when scope is project/person/company focused
   - local wrapper forces CPU mode (`QMD_LLAMA_GPU=cpu`) to avoid wasted Vulkan probing on this host
 
+### Search-System Scope Clarifier
+- `QMD` = workspace memory/entity recall
+- `Mission Control autonomous web research` = live web search provider, currently `searxng` via `MISSION_CONTROL_SEARCH_PROVIDER`
+- `Brave` / `SearXNG` notes in `MEMORY.md` = general search posture/preferences, not the same thing as QMD memory recall
+
 ### Telegram
 - Bot: `@bahons_bot`
 - Direct chat: paired and working
