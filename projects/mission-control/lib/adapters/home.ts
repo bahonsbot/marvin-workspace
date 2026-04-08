@@ -1,8 +1,22 @@
+import { execFile } from 'node:child_process';
+import { promises as fs } from 'node:fs';
+import { promisify } from 'node:util';
 import { cache } from 'react';
-import type { HomeSummary } from '@/lib/types/contracts';
+import type {
+  HomeMarketSignalsSummary,
+  HomeQuickAccessItem,
+  HomeSummary,
+  HomeWorkspaceHealthSummary,
+} from '@/lib/types/contracts';
 import { getCronJobs } from '@/lib/adapters/cron';
 import { getRecentActivity } from '@/lib/adapters/activity';
 import { getSessions } from '@/lib/adapters/sessions';
+
+const execFileAsync = promisify(execFile);
+
+const SIGNALS_PATH = '/data/.openclaw/workspace/projects/market-intel/data/tracked_signals.json';
+const TASKS_PATH = '/data/.openclaw/workspace/projects/mission-control/data/autonomous-tasks.json';
+const CRON_RUN_LOG_PATH = '/data/.openclaw/workspace/memory/cron-run-log.jsonl';
 
 function weatherCodeLabel(code: number | null | undefined) {
   const map: Record<number, string> = {
@@ -79,12 +93,179 @@ function getFocusLine(params: { activeSessions: number; dueCron: number; activit
   return 'Quiet surface, clean slate.';
 }
 
+type TrackedSignalRecord = {
+  signal?: {
+    confidence_level?: string;
+    title?: string;
+    timestamp?: string;
+  };
+  added_at?: string;
+};
+
+type AutonomousTaskStore = {
+  tasks?: Array<{
+    status?: string;
+    updatedAt?: number;
+    run?: {
+      endedAt?: number;
+    };
+  }>;
+};
+
+function toIsoTimestamp(value: unknown): string | null {
+  if (typeof value === 'string') {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date.toISOString();
+  }
+
+  if (typeof value === 'number') {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date.toISOString();
+  }
+
+  return null;
+}
+
+async function readAutonomousTaskStore(): Promise<AutonomousTaskStore | null> {
+  try {
+    const raw = await fs.readFile(TASKS_PATH, 'utf8');
+    return JSON.parse(raw) as AutonomousTaskStore;
+  } catch {
+    return null;
+  }
+}
+
+async function getInProgressTaskCount(): Promise<number> {
+  const store = await readAutonomousTaskStore();
+  if (!store?.tasks) return 0;
+  return store.tasks.filter((task) => task.status === 'in-progress').length;
+}
+
+export const getQuickAccessItems = cache(async function getQuickAccessItems(): Promise<HomeQuickAccessItem[]> {
+  const activeTasks = await getInProgressTaskCount();
+
+  return [
+    { href: '/general/chat', icon: '💬', label: 'Chat' },
+    { href: '/general/tasks', icon: '✅', label: 'Tasks', badge: activeTasks > 0 ? activeTasks : undefined },
+    { href: '/general/agents', icon: '🧠', label: 'Agents' },
+    { href: '/general/memory', icon: '🗂️', label: 'Memory' },
+    { href: '/general/crons', icon: '⏱️', label: 'Crons' },
+    { href: '/general/files', icon: '📁', label: 'Files' },
+    { href: '/general/skills', icon: '🛠️', label: 'Skills' },
+    { href: '/trading/signals', icon: '📈', label: 'Trading' },
+  ];
+});
+
+export const getMarketSignalsSummary = cache(async function getMarketSignalsSummary(): Promise<HomeMarketSignalsSummary> {
+  try {
+    const raw = await fs.readFile(SIGNALS_PATH, 'utf8');
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) {
+      return { total: 0, strongBuy: 0, sell: 0, latestTitle: null, latestAt: null };
+    }
+
+    const signals = parsed as TrackedSignalRecord[];
+    const total = signals.length;
+    const strongBuy = signals.filter((item) => (item.signal?.confidence_level ?? '').toUpperCase() === 'STRONG BUY').length;
+    const sell = signals.filter((item) => (item.signal?.confidence_level ?? '').toUpperCase() === 'SELL').length;
+
+    const latest = signals
+      .map((item) => ({
+        title: typeof item.signal?.title === 'string' ? item.signal.title.trim() : null,
+        at: toIsoTimestamp(item.signal?.timestamp ?? item.added_at),
+      }))
+      .filter((item) => item.at)
+      .sort((a, b) => (a.at! < b.at! ? 1 : -1))[0];
+
+    return {
+      total,
+      strongBuy,
+      sell,
+      latestTitle: latest?.title ?? null,
+      latestAt: latest?.at ?? null,
+    };
+  } catch {
+    return { total: 0, strongBuy: 0, sell: 0, latestTitle: null, latestAt: null };
+  }
+});
+
+async function getQmdCollectionCount(): Promise<number | null> {
+  try {
+    const { stdout } = await execFileAsync('bash', ['-lc', 'qmd collection list'], {
+      timeout: 6000,
+      maxBuffer: 1024 * 1024,
+    });
+    const match = stdout.match(/Collections\s*\((\d+)\)/i);
+    if (!match) return null;
+    const count = Number(match[1]);
+    return Number.isFinite(count) ? count : null;
+  } catch {
+    return null;
+  }
+}
+
+async function getLastCronRunAt(): Promise<string | null> {
+  try {
+    const raw = await fs.readFile(CRON_RUN_LOG_PATH, 'utf8');
+    const lines = raw
+      .trim()
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .slice(-120)
+      .reverse();
+
+    for (const line of lines) {
+      try {
+        const entry = JSON.parse(line) as { started_at?: string; finished_at?: string };
+        const at = toIsoTimestamp(entry.finished_at ?? entry.started_at);
+        if (at) return at;
+      } catch {
+        continue;
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+async function getLastAutonomousTaskAt(): Promise<string | null> {
+  const store = await readAutonomousTaskStore();
+  if (!store?.tasks || store.tasks.length === 0) return null;
+
+  const timestamps = store.tasks
+    .map((task) => toIsoTimestamp(task.run?.endedAt ?? task.updatedAt))
+    .filter((value): value is string => Boolean(value))
+    .sort((a, b) => (a < b ? 1 : -1));
+
+  return timestamps[0] ?? null;
+}
+
+export const getWorkspaceHealth = cache(async function getWorkspaceHealth(): Promise<HomeWorkspaceHealthSummary> {
+  const [qmdCollections, lastCronRunAt, lastAutonomousTaskAt] = await Promise.all([
+    getQmdCollectionCount(),
+    getLastCronRunAt(),
+    getLastAutonomousTaskAt(),
+  ]);
+
+  return {
+    qmdCollections,
+    lastCronRunAt,
+    lastAutonomousTaskAt,
+  };
+});
+
 export const getHomeSummary = cache(async function getHomeSummary(): Promise<HomeSummary> {
-  const [sessionsData, cronData, activityData, weather] = await Promise.all([
+  const [sessionsData, cronData, activityData, weather, quickAccess, marketSignals, workspaceHealth] = await Promise.all([
     getSessions(),
     getCronJobs(),
     getRecentActivity(),
     getWeather(),
+    getQuickAccessItems(),
+    getMarketSignalsSummary(),
+    getWorkspaceHealth(),
   ]);
 
   const sessions =
@@ -121,6 +302,9 @@ export const getHomeSummary = cache(async function getHomeSummary(): Promise<Hom
     sessions,
     cron,
     activity: activityData.items.slice(0, 10).map((item) => ({ id: item.id, message: item.message, at: item.at })),
+    quickAccess,
+    marketSignals,
+    workspaceHealth,
     ambient: {
       weather,
       greeting: getGreeting(currentDate),

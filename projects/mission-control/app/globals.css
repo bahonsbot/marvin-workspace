@@ -7,6 +7,8 @@
   --bg: #faf8f5;
   --bg-elevated: #fffdfb;
   --bg-sidebar: linear-gradient(180deg, #f5f0eb 0%, #ebe6e0 100%);
+  --bg-sidebar-hover: rgba(255, 255, 255, 0.38);
+  --bg-sidebar-active: var(--accent-surface);
   --bg-glass: rgba(255, 255, 255, 0.72);
   --bg-floating: rgba(255, 255, 255, 0.85);
 
@@ -17,6 +19,7 @@
   --accent-soft: #79a694;
   --accent-pale: #a3d0be;
   --accent-surface: #d4e7dd;
+  --accent-warm: #d4956a;
   --accent-glow: rgba(121, 166, 148, 0.2);
 
   /* Text */
@@ -24,6 +27,7 @@
   --text-body: #3d3d3d;
   --text-muted: #7a7a7a;
   --text-ghost: #a8a8a8;
+  --text-sidebar-label: #e8e2d9;
   --muted: #7a7a7a;
   --muted-strong: #3d3d3d;
   --accent: #3c6658;
@@ -98,7 +102,7 @@ main {
 
 .app-shell-grid {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-columns: var(--sidebar-width, 220px) minmax(0, 1fr);
   padding-top: 52px;
   min-height: 100vh;
 }
@@ -182,6 +186,233 @@ main {
   gap: 16px;
 }
 
+.general-home-secondary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.general-home-quick-access-section {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  display: grid;
+  gap: 14px;
+}
+
+.general-home-section-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.general-home-section-heading {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.general-home-section-kicker {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.general-home-quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.general-home-quick-access-tile {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 14px 12px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-floating);
+  background: var(--bg-floating);
+  box-shadow: var(--shadow-float);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.general-home-quick-access-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(121, 166, 148, 0.5);
+}
+
+.general-home-quick-access-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.general-home-quick-access-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-body);
+  text-align: center;
+}
+
+.general-home-quick-access-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  background: var(--accent-dark);
+  color: #fffdfb;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+.general-home-widget-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.general-home-widget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.general-home-widget-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.general-home-widget-primary {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-body);
+}
+
+.general-home-widget-meta {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.general-home-widget-subtle {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-ghost);
+}
+
+.general-home-widget-link,
+.general-home-view-all-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: flex-start;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-accent);
+  color: var(--accent-dark);
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(212, 231, 221, 0.5);
+}
+
+.general-home-signal-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+}
+
+.general-home-signal-dot-strong {
+  background: #3c6658;
+  box-shadow: 0 0 14px rgba(60, 102, 88, 0.5);
+}
+
+.general-home-signal-dot-neutral {
+  background: #79a694;
+  box-shadow: 0 0 14px rgba(121, 166, 148, 0.45);
+}
+
+.general-home-signal-dot-cautious {
+  background: #c4823a;
+  box-shadow: 0 0 14px rgba(196, 130, 58, 0.5);
+}
+
+.general-home-health-metrics {
+  display: grid;
+  gap: 8px;
+}
+
+.general-home-health-metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.general-home-health-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.general-home-health-value {
+  font-size: 12px;
+  color: var(--text-body);
+  font-weight: 700;
+}
+
+.general-home-status-pill {
+  position: relative;
+}
+
+.general-home-status-pill::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 999px;
+  border: 1px solid rgba(121, 166, 148, 0.25);
+  opacity: 0.7;
+  animation: homeStatusPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes homeStatusPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.7;
+  }
+}
+
 .agents-roster-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(280px, 1fr));
@@ -233,7 +464,7 @@ main {
 
 @media (max-width: 1280px) {
   .app-shell-grid {
-    grid-template-columns: 204px minmax(0, 1fr);
+    grid-template-columns: var(--sidebar-width, 204px) minmax(0, 1fr);
   }
 
   .app-shell-main {
@@ -243,7 +474,7 @@ main {
 
 @media (max-width: 1120px) {
   .app-shell-grid {
-    grid-template-columns: 192px minmax(0, 1fr);
+    grid-template-columns: var(--sidebar-width, 192px) minmax(0, 1fr);
   }
 
   .app-shell-main {
@@ -259,12 +490,14 @@ main {
   }
 
   .general-home-top-cards,
+  .general-home-quick-access-grid,
   .tasks-summary-metrics,
   .tasks-sync-sources {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .general-home-signal-grid,
+  .general-home-secondary-grid,
   .agents-roster-grid,
   .tasks-board-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -277,7 +510,9 @@ main {
   }
 
   .general-home-top-cards,
+  .general-home-quick-access-grid,
   .general-home-signal-grid,
+  .general-home-secondary-grid,
   .agents-roster-grid,
   .tasks-board-grid,
   .tasks-summary-metrics,

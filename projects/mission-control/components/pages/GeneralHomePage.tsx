@@ -1,4 +1,7 @@
 import Link from 'next/link';
+import { QuickAccessGrid } from '@/components/home/QuickAccessGrid';
+import { MarketSignalsWidget } from '@/components/home/MarketSignalsWidget';
+import { WorkspaceHealthWidget } from '@/components/home/WorkspaceHealthWidget';
 import { getHomeSummary } from '@/lib/adapters/home';
 
 function cardStyle() {
@@ -75,24 +78,6 @@ function AccentInfoCard({ icon, label, title, detail }: { icon: string; label: s
   );
 }
 
-function SignalPlaceholder({ title, body, accent, accentGlow }: { title: string; body: string; accent: string; accentGlow: string }) {
-  return (
-    <div style={{ ...cardStyle(), padding: 20, display: 'grid', gap: 12 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>{title}</div>
-        <span style={{ width: 9, height: 9, borderRadius: '50%', background: accent, boxShadow: `0 0 14px ${accentGlow}88` }} />
-      </div>
-      <div style={{ height: 138, borderRadius: 16, background: `linear-gradient(180deg, ${accent}14 0%, rgba(250, 248, 245, 0.6) 100%)`, border: '1px solid rgba(200, 195, 188, 0.4)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'repeating-linear-gradient(180deg, transparent, transparent 16px, rgba(200, 195, 188, 0.25) 16px, rgba(200, 195, 188, 0.25) 17px)' }} />
-        <svg viewBox="0 0 220 138" width="100%" height="100%" preserveAspectRatio="none" style={{ position: 'relative', zIndex: 1 }}>
-          <polyline fill="none" stroke={accent} strokeWidth="3" points="0,100 28,94 56,72 84,78 112,52 140,60 168,40 196,48 220,26" />
-        </svg>
-      </div>
-      <div style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.6 }}>{body}</div>
-    </div>
-  );
-}
-
 export default async function HomePage() {
   const summary = await getHomeSummary();
   const attentionItems: string[] = [];
@@ -107,7 +92,6 @@ export default async function HomePage() {
 
   return (
     <section style={{ display: 'grid', gap: 20, background: 'var(--bg)', minHeight: '100vh', padding: 24 }}>
-      {/* Greeting Banner */}
       <div
         style={{
           ...cardStyle(),
@@ -116,22 +100,35 @@ export default async function HomePage() {
         }}
       >
         <div style={{ display: 'grid', gap: 20 }}>
-          {/* Header row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
             <div style={{ color: 'var(--text-muted)', fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.3 }}>Mission Control</div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 12px', borderRadius: 999, background: tone.bg, border: `1px solid ${tone.border}`, color: tone.color, fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.3 }}>
+            <div
+              className="general-home-status-pill"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '6px 12px',
+                borderRadius: 999,
+                background: tone.bg,
+                border: `1px solid ${tone.border}`,
+                color: tone.color,
+                fontSize: 11,
+                fontWeight: 800,
+                textTransform: 'uppercase',
+                letterSpacing: 0.3,
+              }}
+            >
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: tone.dot }} />
               {summary.statusLabel}
             </div>
           </div>
 
-          {/* Greeting */}
           <div style={{ display: 'grid', gap: 8 }}>
             <div style={{ fontSize: 30, fontWeight: 800, lineHeight: 1.15, color: 'var(--text)' }}>{summary.ambient.greeting}, Philippe.</div>
             <div style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>{summary.ambient.focusLine}</div>
           </div>
 
-          {/* CTA row */}
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link
               href="/general/chat"
@@ -171,7 +168,6 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* Info cards row */}
           <div className="general-home-top-cards">
             <AccentInfoCard icon="🕒" label="Local time" title={formatFullTime()} detail="Asia/Ho_Chi_Minh" />
             <AccentInfoCard
@@ -185,11 +181,10 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* 2-column grid */}
+      <QuickAccessGrid items={summary.quickAccess} />
+
       <div className="general-home-main-grid">
-        {/* Left column */}
         <div style={{ display: 'grid', gap: 20 }}>
-          {/* Session + Cron Overview */}
           <div style={{ ...cardStyle(), padding: 24, display: 'grid', gap: 14 }}>
             <div style={{ color: 'var(--text-muted)', fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.3 }}>Right now</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}>
@@ -204,26 +199,13 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Signal Radar Cards */}
-          <div className="general-home-signal-grid">
-            <SignalPlaceholder
-              title="System rhythm"
-              body="Placeholder for a future useful trend view: sessions, cron pressure, or combined operational pulse."
-              accent="#3c6658"
-              accentGlow="rgba(60, 102, 88)"
-            />
-            <SignalPlaceholder
-              title="Work momentum"
-              body="Placeholder for a future chart tying recent activity, board movement, and useful output into one readable signal."
-              accent="#79a694"
-              accentGlow="rgba(121, 166, 148)"
-            />
+          <div className="general-home-secondary-grid">
+            <MarketSignalsWidget summary={summary.marketSignals} formatRelative={formatRelative} />
+            <WorkspaceHealthWidget summary={summary.workspaceHealth} formatRelative={formatRelative} />
           </div>
         </div>
 
-        {/* Right column */}
         <div style={{ display: 'grid', gap: 20 }}>
-          {/* Attention */}
           <div style={{ ...cardStyle(), padding: 24, display: 'grid', gap: 14 }}>
             <div>
               <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>Attention</h3>
@@ -238,11 +220,15 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Recent Activity */}
           <div style={{ ...cardStyle(), padding: 24, display: 'grid', gap: 14 }}>
-            <div>
-              <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>Recent activity</h3>
-              <p style={{ margin: '6px 0 0', color: 'var(--text-muted)', fontSize: 13 }}>Latest movement from the real workspace.</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>Recent activity</h3>
+                <p style={{ margin: '6px 0 0', color: 'var(--text-muted)', fontSize: 13 }}>Latest movement from the real workspace.</p>
+              </div>
+              <Link href="/general/chat" className="general-home-view-all-link">
+                View all
+              </Link>
             </div>
             <div style={{ display: 'grid', gap: 10 }}>
               {summary.activity.slice(0, 6).map((item) => (

@@ -1,4 +1,25 @@
-export type IntegrationStatus = 'partial' | 'stub';
+export type IntegrationStatus = 'adapter-backed' | 'partial' | 'stub';
+
+export interface HomeQuickAccessItem {
+  href: string;
+  icon: string;
+  label: string;
+  badge?: number;
+}
+
+export interface HomeMarketSignalsSummary {
+  total: number;
+  strongBuy: number;
+  sell: number;
+  latestTitle: string | null;
+  latestAt: string | null;
+}
+
+export interface HomeWorkspaceHealthSummary {
+  qmdCollections: number | null;
+  lastCronRunAt: string | null;
+  lastAutonomousTaskAt: string | null;
+}
 
 export interface HomeSummary {
   status: IntegrationStatus;
@@ -6,6 +27,9 @@ export interface HomeSummary {
   sessions: { active: number; totalVisible: number } | null;
   cron: { dueOrRunning: number; jobsVisible: number } | null;
   activity: Array<{ id: string; message: string; at: string }>;
+  quickAccess: HomeQuickAccessItem[];
+  marketSignals: HomeMarketSignalsSummary;
+  workspaceHealth: HomeWorkspaceHealthSummary;
   ambient: {
     weather: {
       location: string;
@@ -69,6 +93,48 @@ export interface CronRunsSummary {
     windowEndAt?: string | null;
     notes?: string[];
   }>;
+  refreshedAt: string;
+}
+
+export interface SkillSummary {
+  name: string;
+  description: string;
+  emoji: string | null;
+  eligible: boolean;
+  disabled: boolean;
+  blockedByAllowlist: boolean;
+  source: 'bundled' | 'workspace' | 'clawhub' | 'other';
+  sourceLabel: string;
+  rawSource: string | null;
+  bundled: boolean;
+  homepage: string | null;
+  missing: {
+    bins: string[];
+    anyBins: string[];
+    env: string[];
+    config: string[];
+    os: string[];
+  };
+  missingCount: number;
+  needsAttention: boolean;
+}
+
+export interface SkillsSummary {
+  status: IntegrationStatus;
+  workspaceDir: string;
+  managedSkillsDir: string | null;
+  skills: SkillSummary[];
+  counts: {
+    total: number;
+    active: number;
+    unavailable: number;
+    needsAttention: number;
+    bundled: number;
+    workspace: number;
+    clawhub: number;
+    other: number;
+  };
+  error?: string;
   refreshedAt: string;
 }
 
