@@ -21,6 +21,8 @@
 1. review latest daily memory notes
 2. check open issues or blockers
 3. run quick health checks, including trading webhook/watchdog
+   - for the trading bot, prefer endpoint truth (`/health` and `/health/auth`) over raw process-name checks
+   - do not alert just because a watchdog process name is missing if the health endpoint is returning OK
 4. surface only meaningful alerts or blockers
 
 ## Scope Boundary

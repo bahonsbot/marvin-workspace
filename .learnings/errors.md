@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260408-2208]
+
+**What failed:** heartbeat-style trading bot alerting produced a false positive
+**Error:** a watchdog/process-name check implied the trading bot was down, but direct health checks at `http://127.0.0.1:8000/health` and `/health/auth` were returning OK
+**Context:** Apr 8 evening, after repeated `Trading bot health check still needs attention` messages surfaced while the receiver was actually healthy
+**Suggested fix:** for trading-bot heartbeat checks, prefer endpoint truth over watchdog/process-name presence. Treat process absence alone as insufficient if `/health` is green.
+**Resolution:** Updated `HEARTBEAT.md` guidance on 2026-04-08 to use endpoint-first verification for the trading bot
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260408-1450]
 
 **What failed:** `nightly-memory-extraction` scheduled run completed scheduling but failed inside the model-backed job
