@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "01d06d72",
+        "text": "[Other] \ud83c\udf81 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
+        "column": "todo"
+      },
+      {
         "id": "18ab9205",
         "text": "[Trading] Fix: Equity bot improvement",
         "column": "todo"
@@ -22,13 +27,7 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "f58d68e2",
-        "text": "[Other] \ud83c\udf81 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "24fa9c1b",
@@ -67,5 +66,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-08T10:00:16.000Z"
+  "updatedAt": "2026-04-08T10:00:17.000Z"
 }
