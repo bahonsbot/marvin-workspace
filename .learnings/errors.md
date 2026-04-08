@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260408-1450]
+
+**What failed:** `nightly-memory-extraction` scheduled run completed scheduling but failed inside the model-backed job
+**Error:** the run attempted forbidden home-relative paths like `~/.openclaw/workspace/...` instead of `/data/.openclaw/workspace/...`, causing the extraction to fail even though the cron schedule itself was healthy
+**Context:** Morning Meeting investigation on Apr 8 after the overnight pre-check showed the extractor had not completed cleanly
+**Suggested fix:** for model-backed file-mutation jobs, make forbidden paths skip-only, allow rewrite only when the exact `/data/.openclaw/workspace/...` target is unambiguous, and require a fallback success path so one bad entity update does not kill the whole run
+**Resolution:** Fixed on 2026-04-08 by hardening the live `nightly-memory-extraction` cron prompt; daily memory update is now mandatory even if some entity updates are skipped
+
+**Priority:** medium
+**Status:** resolved
+
+## [ERR-20260408-1510]
+
+**What failed:** autonomous-kanban Done visibility for an executor-created artifact
+**Error:** the completed executor result for `scripts/cron_run_summary.py` existed in `memory/executor-subagent-queue.json`, but the Done surface depended mainly on `memory/tasks-log.md`; because the append was missed, the completion was easy to lose from the visible board history
+**Context:** Apr 8 follow-up after Philippe asked what the autonomous queue task had actually delivered and the Telegram completion existed but the deliverable was not obvious from the board/log flow
+**Suggested fix:** preserve `tasks-log.md` as durable completion history, but let the board also read verified completed executor queue entries as a fallback for visibility; backfill missed task-log rows when found
+**Resolution:** Fixed on 2026-04-08 in autonomous-kanban board readers/sync plus a backfilled `tasks-log.md` completion entry; git commit `5ceb878`
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260406-1742]
 
 **What failed:** first real Mission Control Sudo workflow test from the Chat seat selector

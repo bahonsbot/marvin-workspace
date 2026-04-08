@@ -14,6 +14,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
+## [CORR-20260408-1519]
+
+**Trigger:** Philippe warned that while fixing executor completion visibility, I must not break the existing rule where manual edit/delete actions on the Tasks board remain authoritative and automatically reconcile to `AUTONOMOUS.md`.
+**What was wrong:** This was not a live breakage yet, but it surfaced a real drift risk: queue/board visibility fixes can accidentally blur `current-state board authority` with `historical completion/queue fallback` logic.
+**Lesson:** Keep these lanes separate. The Tasks board remains the authority for manual edit/delete state changes; `AUTONOMOUS.md` is the mirror/reconciliation surface for those actions. Queue-backed completion fallback may improve visibility for executor results, but it must never override manual board state.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260405-1058]
 
 **Trigger:** Self-improvement flagging AUTONOMY.md as missing a startup step
