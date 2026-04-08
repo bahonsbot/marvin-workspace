@@ -10,16 +10,33 @@ Use these as the source prompts for the benchmark unless we intentionally revise
 Review today's conversations in the workspace. Extract durable facts only: key decisions, relationships, status changes, project updates, and people/company facts. Skip small talk and transient requests.
 
 HARD PATH RULES:
-- Every file path you read or edit must start exactly with /data/.openclaw/workspace/.
-- Never use, reference, or attempt to edit ~/.openclaw/workspace/, ~, $HOME, or any home-relative path.
-- If any candidate edit path is outside /data/.openclaw/workspace/, skip that edit and continue only with valid absolute paths.
+- Every file path you read, write, or edit must start exactly with /data/.openclaw/workspace/.
+- Never use, reference, infer, rewrite to, or attempt to edit ~/.openclaw/workspace/, ~, $HOME, or any home-relative path.
+- Before every single read/write/edit tool call, re-check the exact path string you are about to send.
+- If the path does not begin with /data/.openclaw/workspace/, do not call the tool with that path.
+- If any candidate path appears in a forbidden form, convert it to the correct /data/.openclaw/workspace/... absolute path only if the exact intended workspace path is unambiguous.
+- If the exact intended workspace path is not unambiguous, skip that edit entirely and continue.
+- Forbidden-path candidates are skip-only, never attempt-only. Do not test them, do not probe them, do not send a failing tool call.
+- If a planned life-entity update would require any forbidden or uncertain path, skip that entity update, continue the rest of the extraction, and note the skip in today's memory summary instead of failing the run.
+- The daily memory update is mandatory even if one or more entity updates are skipped.
+
+SOURCE-OF-TRUTH PATHS:
+- Daily memory file for today: /data/.openclaw/workspace/memory/YYYY-MM-DD.md
+- Entity roots allowed for updates:
+  - /data/.openclaw/workspace/life/projects/
+  - /data/.openclaw/workspace/life/areas/people/
+  - /data/.openclaw/workspace/life/areas/companies/
+  - /data/.openclaw/workspace/life/resources/
+- Do not invent any other root path.
 
 For each durable fact:
 1. Save it to the appropriate /data/.openclaw/workspace/life/ entity (projects/, areas/people/, areas/companies/, resources/)
 2. Use the atomic fact schema: fact, category, timestamp, status, relatedEntities
-3. Bump accessCount on any existing facts referenced today
+3. Bump accessCount on any existing facts referenced today when the existing entity file is at a valid allowed absolute path
 
 Also update /data/.openclaw/workspace/memory/YYYY-MM-DD.md for today's date by preserving existing content and appending or integrating new extraction notes. Do not overwrite the whole file with a fresh stub.
+
+If there are no safe entity updates, still complete the run by updating only the daily memory file with a concise extraction summary and any skipped-entity notes.
 
 Use ONLY absolute paths starting with /data/.openclaw/workspace/.
 
