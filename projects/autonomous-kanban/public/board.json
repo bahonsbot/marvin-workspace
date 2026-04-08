@@ -2,52 +2,70 @@
   "board": {
     "todo": [
       {
-        "id": "4ba46c8f",
+        "id": "18ab9205",
         "text": "[Trading] Fix: Equity bot improvement",
         "column": "todo"
       },
       {
-        "id": "5c2b3431",
+        "id": "18d77cea",
         "text": "[Trading] Fix: Futures bot improvement",
         "column": "todo"
       },
       {
-        "id": "e136d454",
-        "text": "[Other] 🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
+        "id": "f6c81963",
+        "text": "[Other] \ud83c\udf81 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
         "column": "todo"
       },
       {
-        "id": "3b05052c",
-        "text": "[Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
-        "column": "todo"
-      },
-      {
-        "id": "b8f002ff",
+        "id": "e299ba72",
         "text": "[Personal] Practice: Python practice sheet",
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "f58d68e2",
+        "text": "[Other] \ud83c\udf81 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
-        "id": "b999c42d",
-        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "done",
-        "outputPath": "projects/automation/fix-identify-one-repetitive-workspace-workflow-that-wastes-time-excludin.md"
+        "id": "24fa9c1b",
+        "text": "(2026-03-24) [Career] \ud83d\udcdd Draft: 3 Instagram content angles tied to After Effects motion design project \u2192 projects/portfolio/content-plan-ae-motion-design.md",
+        "column": "done"
       },
       {
-        "id": "2336a7e5",
-        "text": "[Other] 🔧 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
-        "column": "done",
-        "outputPath": "projects/automation/fix-build-one-small-automation-utility-that-addresses-one-specific-docum.md"
+        "id": "5498edbf",
+        "text": "(2026-03-24) [Other] \ud83d\udd27 Fix: OpenClaw helper utility generation improved; daily-task-generator now produces concrete script deliverables",
+        "column": "done"
       },
       {
-        "id": "3215a592",
-        "text": "🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker",
-        "column": "done",
-        "outputPath": "projects/learning-tools/python-daily-loop.html"
+        "id": "90367ec6",
+        "text": "(2026-03-24) [Career] \ud83d\udd28 Build: daily creative challenge generator \u2192 projects/creative-challenges/index.html + README.md",
+        "column": "done"
+      },
+      {
+        "id": "0f7d3b41",
+        "text": "(2026-03-24) [Career] \ud83d\ude80 Launch: portfolio case-study draft \u2192 projects/portfolio/case-studies/motion-design-loop.md",
+        "column": "done"
+      },
+      {
+        "id": "44306735",
+        "text": "(2026-03-24) [Trading] \ud83d\udd27 Fix: safe improvement in trading-bot workspace \u2192 bot-support-spec-health-snapshot-reporter-2026-03-16.md",
+        "column": "done"
+      },
+      {
+        "id": "32a9a711",
+        "text": "(2026-03-24) [Personal] \ud83d\udcda Learn: Japanese study pack (greetings lesson) \u2192 projects/language/lesson-01-greetings.md",
+        "column": "done"
+      },
+      {
+        "id": "5a8ab5b1",
+        "text": "Create a clean implementation plan for a collapsable top-section of the Chat page | \u2705 Completed: Plan artifact:** `projects/mission-control/docs/chat-collapsible-top-section-plan.md` What the plan covers:** **Design**: Wrap Row 2 (Seat / Model / Effort / Recent Sessions) in a native `<details open>` element. Row\u2026",
+        "column": "done"
       }
     ]
   },
-  "updatedAt": "2026-04-08T01:00:06.591Z"
+  "updatedAt": "2026-04-08T10:00:16.000Z"
 }
