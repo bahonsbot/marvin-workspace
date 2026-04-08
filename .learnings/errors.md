@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260408-1735]
+
+**What failed:** first attempted Home-page redo after Philippe’s major visual critique
+**Error:** the delegated follow-up did not produce a usable implementation summary and instead surfaced unrelated/truncated JSON data, leaving the Home page effectively unchanged despite the run claiming completion
+**Context:** Apr 8 evening after the first Home rewrite was strongly rejected and a fresh redo was requested
+**Suggested fix:** when a delegated coding run returns malformed or irrelevant output, verify repo state and actual changed files immediately instead of trusting the completion text. Treat `claimed success + nonsense payload` as failure until proven otherwise.
+**Resolution:** Verified the real repo state manually, confirmed the redo had not landed, and restarted the Home work from the true open point with a fresh implementation pass
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260408-2208]
 
 **What failed:** heartbeat-style trading bot alerting produced a false positive

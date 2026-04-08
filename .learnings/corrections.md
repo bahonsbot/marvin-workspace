@@ -14,6 +14,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
+## [CORR-20260408-1748]
+
+**Trigger:** Philippe correctly called out that the rejected Home-page rewrite was not even remotely close to the screenshot target and asked whether I had actually used the MCP export prompt.
+**What was wrong:** I let screenshot interpretation drift into a dashboard-like translation, and I was not explicit enough up front that I only had the MCP export instruction text, not actual exported Stitch assets/code. That created avoidable design drift and muddied the truth about what source material was really being used.
+**Lesson:** For Stitch-driven Mission Control work, distinguish clearly between (a) actual MCP-exported assets/code and (b) only having an export instruction or screenshot reference. Do not imply export-backed implementation when only reference imagery exists. If the visual target is still off, delete the bad composition first instead of trying to polish a widget board into an editorial page.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260408-1519]
 
 **Trigger:** Philippe warned that while fixing executor completion visibility, I must not break the existing rule where manual edit/delete actions on the Tasks board remain authoritative and automatically reconcile to `AUTONOMOUS.md`.
