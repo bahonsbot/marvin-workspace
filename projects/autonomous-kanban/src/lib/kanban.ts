@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { existsSync, promises as fs } from "node:fs";
 
 export type ColumnKey = "todo" | "inprogress" | "done";
 
@@ -19,6 +19,9 @@ const AUTONOMOUS_PATH =
 const TASK_LOG_PATH =
   process.env.TASK_LOG_FILE_PATH ??
   "/data/.openclaw/workspace/memory/tasks-log.md";
+const QUEUE_PATH =
+  process.env.EXECUTOR_QUEUE_FILE_PATH ??
+  "/data/.openclaw/workspace/memory/executor-subagent-queue.json";
 
 function slugify(text: string): string {
   return text
@@ -57,13 +60,41 @@ function readSectionBullets(md: string, heading: string): string[] {
   return tasks;
 }
 
+const WORKSPACE_ROOT = process.env.WORKSPACE_ROOT ?? "/data/.openclaw/workspace";
+
+function verifiedOutputExists(outputPath: string): boolean {
+  return outputPath
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .every((relPath) => existsSync(`${WORKSPACE_ROOT}/${relPath}`));
+}
+
 function parseCompletedTasks(md: string): string[] {
   return md
     .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => line.startsWith("- ✅"))
-    .map((line) => line.replace(/^- ✅\s*/, "").trim())
+    .map((line) => {
+      const match = line.match(/^- ✅ \[[^\]]+\](?: \[[^\]]+\])? (.+?) \| Output: (.+)$/);
+      if (!match) return "";
+      const [, text, outputPath] = match;
+      return verifiedOutputExists(outputPath.trim()) ? text.trim() : "";
+    })
     .filter(Boolean);
+}
+
+function parseCompletedQueueTasks(raw: string): string[] {
+  try {
+    const parsed = JSON.parse(raw) as Array<{ status?: string; task?: string; outputPath?: string }>;
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((entry) => entry?.status === "completed" && entry.task && entry.outputPath)
+      .filter((entry) => verifiedOutputExists(String(entry.outputPath)))
+      .map((entry) => String(entry.task).trim())
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
 }
 
 function upsertSectionBullets(md: string, heading: string, tasks: string[]): string {
@@ -107,14 +138,15 @@ function dedupeTasks(tasks: string[]): string[] {
 }
 
 export async function readBoardData(): Promise<BoardData> {
-  const [autonomousMd, logMd] = await Promise.all([
+  const [autonomousMd, logMd, queueRaw] = await Promise.all([
     fs.readFile(AUTONOMOUS_PATH, "utf8"),
-    fs.readFile(TASK_LOG_PATH, "utf8"),
+    fs.readFile(TASK_LOG_PATH, "utf8").catch(() => ""),
+    fs.readFile(QUEUE_PATH, "utf8").catch(() => "[]"),
   ]);
 
   const todo = readSectionBullets(autonomousMd, "Open Backlog");
   const inprogress = readSectionBullets(autonomousMd, "In Progress");
-  const done = parseCompletedTasks(logMd);
+  const done = dedupeTasks([...parseCompletedTasks(logMd), ...parseCompletedQueueTasks(queueRaw)]);
 
   return {
     todo: todo.map((text, index) => ({ id: toTaskId("todo", text, index), text, column: "todo" })),
