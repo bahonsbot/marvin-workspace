@@ -1,24 +1,24 @@
 [
   {
-    "timestamp": "2026-04-09T10:47:36.189333",
-    "baseline_count": 15,
-    "enriched_count": 17,
-    "overlap_count": 14,
+    "timestamp": "2026-04-09T13:47:33.218481",
+    "baseline_count": 14,
+    "enriched_count": 16,
+    "overlap_count": 13,
     "baseline_only_count": 0,
     "enriched_only_count": 2,
     "enriched_lift": 2,
     "baseline_top5": [
-      "The Korean won may rebound back to levels seen before the US-Iran war in the sec",
       "\ud83d\udd34 IRGC's Navy announces alternative shipping routes in Strait of Hormuz to avoid",
       "\"Shocking Levels Of Distress\": CMBS Delinquencies Unexpectedly Soar To Covid Hig",
       "Retail investor activity has fallen sharply amid the war: Daily net call option ",
+      "The flawed fundamentals of failing banks",
       "\u2757 IRGC's Navy announces alternative shipping routes in Strait of Hormuz to avoid"
     ],
     "enriched_top5": [
-      "The Korean won may rebound back to levels seen before the US-Iran war in the sec",
       "\ud83d\udd34 IRGC's Navy announces alternative shipping routes in Strait of Hormuz to avoid",
       "\"Shocking Levels Of Distress\": CMBS Delinquencies Unexpectedly Soar To Covid Hig",
       "Retail investor activity has fallen sharply amid the war: Daily net call option ",
+      "The flawed fundamentals of failing banks",
       "\u2757 IRGC's Navy announces alternative shipping routes in Strait of Hormuz to avoid"
     ]
   }

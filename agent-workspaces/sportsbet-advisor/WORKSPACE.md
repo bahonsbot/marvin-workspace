@@ -15,4 +15,7 @@ Role posture:
 
 Still staged:
 - direct specialist runtime
-- final skill wiring pending Philippe's ClawHub reference
+
+Current skill posture:
+- primary local specialist skill: `skills/sportsbet-advisor/SKILL.md`
+- preserved extraction source: `uploads/mission-control/sportsbet-advisor/`

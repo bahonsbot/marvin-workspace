@@ -201,13 +201,15 @@ Why identity work comes later:
 - this avoids decorative personality work masking fake or unsupported runtime behavior
 
 Current identity/skills posture:
-- `Sudo` and `Vantage` now have first-pass real skill assignments captured in their workspace `SKILLS.md`
+- `Sudo` and `Vantage` now have explicit skill assignments captured in their workspace `SKILLS.md`
+- `Vantage` currently maps to: `copywriting`, `programmatic-seo`, `seo-audit`, `copy-editing`, `social-content`, `analytics-tracking`, and `humanizer`
 - `Sudo` and `Vantage` now also have explicit internal team maps captured in `TEAM.md` and `ROLES.md`
-- `Johan`, `Milou`, and `Japin` now have finalized local source alignment using manually downloaded skill copies in `uploads/mission-control/`
-  - Johan → `uploads/mission-control/sportsbet-advisor/SKILL.md`
-  - Milou → `uploads/mission-control/trading/SKILL.md` plus `risk.md` and `legal.md`
-  - Japin → `uploads/mission-control/language-learning/SKILL.md`
-- the original ClawHub references are still preserved in workspace docs, but local uploaded copies became the practical source of truth after registry rate limiting blocked live pull/inspection
+- `Johan`, `Milou`, and `Japin` now have normalized workspace-local skill alignment based on locally extracted ClawHub packages
+  - Johan → `skills/sportsbet-advisor/SKILL.md`
+  - Milou → `skills/trading-advisor/SKILL.md` plus `references/risk.md` and `references/legal.md`
+  - Japin → `skills/language-learning/SKILL.md`
+- preserved extraction copies still exist under `uploads/mission-control/` during migration/verification, but are no longer the preferred source of truth
+- `Milou` also links to workspace-installed market-analysis skills: `stock-market-pro` and `us-stock-analysis`
 
 ### Current action policy
 

@@ -645,7 +645,14 @@ function copyTextToClipboard(text: string): boolean {
   }
 }
 
-function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
+function assistantLabelForSeat(seatSlug: string | null | undefined) {
+  if (seatSlug === 'language-tutor') return 'Japin';
+  if (seatSlug === 'trading-advisor') return 'Milou';
+  if (seatSlug === 'sportsbet-advisor') return 'Johan';
+  return 'Marvin';
+}
+
+function LiveMessageBlock({ message, assistantLabel }: { message: RuntimeBridgeChatMessage; assistantLabel: string }) {
   const [copied, setCopied] = useState(false);
 
   if (message.role === 'system') {
@@ -709,7 +716,7 @@ function LiveMessageBlock({ message }: { message: RuntimeBridgeChatMessage }) {
       <div style={{ display: 'grid', gap: 10, maxWidth: 'min(78ch, 78%)', justifyItems: isOperator ? 'end' : 'start' }}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center' }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent-mid)' }}>
-            {isOperator ? 'Philippe' : 'Marvin'}
+            {isOperator ? 'Philippe' : assistantLabel}
           </div>
           {!isOperator ? (
             <button
@@ -1688,6 +1695,7 @@ export function MissionControlChatSurface({
   }
 
   const selectedSeatLabel = activation?.label ?? 'Marvin';
+  const assistantSeatLabel = assistantLabelForSeat(activation?.seatSlug);
   const selectedSeatDetail = activation
     ? activation.routing === 'direct'
       ? `Direct runtime · ${activation.targetSessionLabel}`
@@ -2555,7 +2563,7 @@ export function MissionControlChatSurface({
             {transcriptItems.length > 0 ? (
               transcriptItems.map((item) =>
                 item.type === 'message'
-                  ? <LiveMessageBlock key={item.id} message={item.message} />
+                  ? <LiveMessageBlock key={item.id} message={item.message} assistantLabel={assistantSeatLabel} />
                   : <ToolGroupBlock key={item.id} rows={item.rows} keepOpen={item.keepOpen} />,
               )
             ) : (

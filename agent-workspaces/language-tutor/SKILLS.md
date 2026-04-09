@@ -5,8 +5,9 @@ Role: Language Tutor
 
 ## Source alignment
 Primary reference skill:
-- local copy: `uploads/mission-control/language-learning/SKILL.md`
-- source reference: `https://clawhub.ai/chipagosfinest/language-learning`
+- workspace-local skill: `skills/language-learning/SKILL.md`
+- original source reference: `https://clawhub.ai/chipagosfinest/language-learning`
+- preserved extraction source: `uploads/mission-control/language-learning/`
 
 ## Finalized skill posture
 Japin should align to the language-learning skill's broad teaching system:

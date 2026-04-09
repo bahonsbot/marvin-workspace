@@ -36,6 +36,7 @@ export type AgentDefinition = {
   label: string;
   role: string;
   summary: string;
+  arsenal?: string[];
   expectedOutputs?: string[];
   workspaceReadiness: AgentReadinessState;
   chatReadiness: AgentReadinessState;
@@ -120,6 +121,7 @@ export type AgentUnitPayload = {
   label: string;
   role: string;
   summary: string;
+  arsenal: string[];
   workspaceReadiness: AgentReadinessState;
   chatReadiness: AgentReadinessState;
   health: {
@@ -207,7 +209,8 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     kind: 'team',
     label: 'Sudo',
     role: 'Dev Team lead',
-    summary: 'Pragmatic technical lead for roadmap, architecture alignment, delegation, and release readiness across design, frontend, backend, and QA.',
+    summary: 'Dev lead that turns ideas into concrete builds. Scopes the work, splits the lanes, and keeps FE, BE, and QA from wandering off into chaos.',
+    arsenal: ['coding-agent', 'frontend-skill', 'github'],
     expectedOutputs: ['technical roadmap', 'dependency map', 'QA handoff', 'release-status update'],
     workspaceReadiness: 'ready',
     chatReadiness: 'internal-only',
@@ -291,7 +294,8 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     kind: 'team',
     label: 'Vantage',
     role: 'Content / SEO Team lead',
-    summary: 'Sharp editorial strategist who turns search signals and market context into topical-authority plans, briefs, and narrative direction.',
+    summary: 'Editorial strategist and content magician. Sees the angle, sprinkles on some creativity, and turns scattered ideas into clean content.',
+    arsenal: ['copywriting', 'programmatic-seo', 'seo-audit', 'copy-editing', 'social-content', 'analytics-tracking', 'humanizer'],
     expectedOutputs: ['editorial playbook', 'SEO brief', 'topic-priority map', 'performance summary'],
     workspaceReadiness: 'staged',
     chatReadiness: 'marvin-routed',
@@ -308,7 +312,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       defaultModel: 'codex5.4',
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
-      childSeatLabels: ['Signals Scout', 'Keyword / Gap Analyst', 'Editorial Strategist', 'Writer / Draft Publisher'],
+      childSeatLabels: ['Content Manager', 'Senior Copywriter', 'Social Media & Community Manager', 'Performance, SEO & Analytics Lead'],
       starterPrompt:
         'Activate Vantage mode. Help me turn this into a topical-authority and editorial strategy play, without pretending there is a separate direct runtime. Start by asking for audience, brand voice, objective, source material, performance context, and deadline.',
       starterLabel: 'Vantage activation starter',
@@ -324,62 +328,55 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     },
     members: [
       {
-        id: 'seat.signals',
-        label: 'Signals Scout',
-        role: 'Trend discovery',
+        id: 'seat.content-manager',
+        label: 'Content Manager',
+        role: 'Story and workflow',
         matchers: [
-          { mode: 'marker', value: 'signals-scout' },
-          { mode: 'marker', value: 'signal-scout' },
-          { mode: 'role', value: 'trend discovery' },
-          { mode: 'keyword', value: 'signals' },
-          { mode: 'keyword', value: 'trend' },
+          { mode: 'marker', value: 'content-manager' },
+          { mode: 'role', value: 'brand storytelling and workflow' },
+          { mode: 'keyword', value: 'content manager' },
+          { mode: 'keyword', value: 'brand storytelling' },
+          { mode: 'keyword', value: 'keyword lists' },
         ],
       },
       {
-        id: 'seat.keyword-gap',
-        label: 'Keyword / Gap Analyst',
-        role: 'Search opportunity mapping',
+        id: 'seat.senior-copywriter',
+        label: 'Senior Copywriter',
+        role: 'Copy and campaigns',
         matchers: [
-          { mode: 'marker', value: 'keyword-gap' },
-          { mode: 'marker', value: 'gap-analyst' },
-          { mode: 'role', value: 'search opportunity mapping' },
-          { mode: 'keyword', value: 'keyword' },
-          { mode: 'keyword', value: 'gap' },
-        ],
-      },
-      {
-        id: 'seat.editorial-strategist',
-        label: 'Editorial Strategist',
-        role: 'Angle and priority',
-        matchers: [
-          { mode: 'marker', value: 'editorial-strategist' },
-          { mode: 'role', value: 'editorial strategist' },
-          { mode: 'role', value: 'angle and priority' },
-          { mode: 'keyword', value: 'editorial' },
-        ],
-      },
-      {
-        id: 'seat.writer',
-        label: 'Writer / Draft Publisher',
-        role: 'Draft execution',
-        matchers: [
-          { mode: 'marker', value: 'writer' },
-          { mode: 'marker', value: 'draft-publisher' },
+          { mode: 'marker', value: 'senior-copywriter' },
           { mode: 'marker', value: 'copywriter' },
-          { mode: 'role', value: 'draft execution' },
-          { mode: 'keyword', value: 'draft' },
+          { mode: 'role', value: 'platform-specific writing' },
+          { mode: 'keyword', value: 'web copy' },
+          { mode: 'keyword', value: 'seo articles' },
+          { mode: 'keyword', value: 'email newsletters' },
         ],
       },
       {
-        id: 'seat.gsc',
-        label: 'GSC Performance Analyst',
-        role: 'Feedback loop',
+        id: 'seat.social-community-manager',
+        label: 'Social Media & Community Manager',
+        role: 'Social and community',
         matchers: [
-          { mode: 'marker', value: 'gsc' },
-          { mode: 'marker', value: 'search-console' },
-          { mode: 'role', value: 'feedback loop' },
-          { mode: 'keyword', value: 'gsc' },
-          { mode: 'keyword', value: 'search console' },
+          { mode: 'marker', value: 'social-community-manager' },
+          { mode: 'marker', value: 'community-manager' },
+          { mode: 'role', value: 'community and trend feedback' },
+          { mode: 'keyword', value: 'social media' },
+          { mode: 'keyword', value: 'community engagement' },
+          { mode: 'keyword', value: 'trend spotting' },
+        ],
+      },
+      {
+        id: 'seat.performance-seo-analytics',
+        label: 'Performance, SEO & Analytics Lead',
+        role: 'SEO, ads, analytics',
+        matchers: [
+          { mode: 'marker', value: 'performance-seo-analytics' },
+          { mode: 'marker', value: 'seo-analytics-lead' },
+          { mode: 'role', value: 'search, paid media, and reporting' },
+          { mode: 'keyword', value: 'technical seo' },
+          { mode: 'keyword', value: 'paid media' },
+          { mode: 'keyword', value: 'data reporting' },
+          { mode: 'keyword', value: 'converting' },
         ],
       },
     ],
@@ -391,7 +388,8 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     kind: 'specialist',
     label: 'Johan',
     role: 'Sportsbet Advisor',
-    summary: 'Analytically detached sports probability analyst focused on data-backed picks, market skepticism, and disciplined thesis-evidence-risk framing.',
+    summary: 'Sports betting analyst with no patience for hype. Weighs odds, pressure, and probability like a bookmaker with trust issues.',
+    arsenal: ['sportsbet-advisor'],
     expectedOutputs: ['pick thesis', 'matchup brief', 'probability assessment', 'betting research artifact'],
     workspaceReadiness: 'staged',
     chatReadiness: 'marvin-routed',
@@ -430,7 +428,8 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     kind: 'specialist',
     label: 'Milou',
     role: 'Trading Advisor',
-    summary: 'Disciplined technical-analysis and risk-first trading mentor focused on conditional planning, structure, and execution discipline.',
+    summary: 'Trading advisor that beats Mr.Market. Reads reports, feeds on technical analysis, sees opportunities, and keeps emotional trades away.',
+    arsenal: ['trading-advisor', 'stock-market-pro', 'us-stock-analysis'],
     expectedOutputs: ['risk framework', 'technical thesis', 'market summary', 'trade-planning note'],
     workspaceReadiness: 'staged',
     chatReadiness: 'marvin-routed',
@@ -469,7 +468,8 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     kind: 'specialist',
     label: 'Japin',
     role: 'Language Tutor',
-    summary: 'Encouraging, high-agency language mentor blending structured learning, real-world usage, and cultural context to drive fast retention.',
+    summary: 'Language tutor with a passion for teaching. Keeps lessons practical, memorable, and just uncomfortable enough to make you improve.',
+    arsenal: ['language-learning'],
     expectedOutputs: ['lesson note', 'exercise', 'homework checklist', 'session artifact'],
     workspaceReadiness: 'ready',
     chatReadiness: 'ready',

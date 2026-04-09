@@ -1,14 +1,14 @@
 {
-  "offset": 8,
+  "offset": 4,
   "last_batch": [
+    "stocks",
+    "ValueInvesting",
+    "Daytrading",
+    "Cryptocurrency",
     "wallstreetbets",
     "investing",
     "options",
-    "StockMarket",
-    "securityanalysis",
-    "economics",
-    "finance",
-    "trading"
+    "StockMarket"
   ],
-  "updated_at": "2026-04-09T02:40:19.860246Z"
+  "updated_at": "2026-04-09T06:40:00.537351Z"
 }

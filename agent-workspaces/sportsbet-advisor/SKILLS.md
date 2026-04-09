@@ -5,8 +5,9 @@ Role: Sportsbet Advisor
 
 ## Source alignment
 Primary reference skill:
-- local copy: `uploads/mission-control/sportsbet-advisor/SKILL.md`
-- source reference: `https://clawhub.ai/tvdofficial/sportsbet-advisor`
+- workspace-local skill: `skills/sportsbet-advisor/SKILL.md`
+- original source reference: `https://clawhub.ai/tvdofficial/sportsbet-advisor`
+- preserved extraction source: `uploads/mission-control/sportsbet-advisor/`
 
 ## Finalized skill posture
 Johan should align to the Sportsbet Advisor skill's core behavior:

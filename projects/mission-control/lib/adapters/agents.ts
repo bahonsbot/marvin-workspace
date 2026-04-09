@@ -770,6 +770,7 @@ function buildUnitPayload(
     label: definition.label,
     role: definition.role,
     summary: definition.summary,
+    arsenal: definition.arsenal ?? [],
     workspaceReadiness: effectiveWorkspaceReadiness,
     chatReadiness: definition.chatReadiness,
     health: {

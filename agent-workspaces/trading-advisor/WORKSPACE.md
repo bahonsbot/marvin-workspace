@@ -15,4 +15,8 @@ Role posture:
 
 Still staged:
 - direct specialist runtime
-- final skill wiring pending Philippe's ClawHub reference
+
+Current skill posture:
+- primary local trading skill: `skills/trading-advisor/SKILL.md`
+- linked workspace skills: `stock-market-pro`, `us-stock-analysis`
+- preserved extraction source: `uploads/mission-control/trading/`

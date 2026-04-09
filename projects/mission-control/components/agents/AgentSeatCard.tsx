@@ -11,21 +11,6 @@ function statePalette(status: AgentHealthStatus) {
   return { bg: 'rgba(91, 124, 116, 0.09)', border: 'rgba(91, 124, 116, 0.16)', text: '#47655c' };
 }
 
-function readinessText(value: AgentUnitPayload['workspaceReadiness']) {
-  if (value === 'ready') return 'Workspace ready';
-  if (value === 'partial') return 'Workspace partial';
-  if (value === 'marvin-routed') return 'Via Marvin';
-  if (value === 'internal-only') return 'Internal only';
-  return 'Workspace staged';
-}
-
-function chatReadinessText(value: AgentUnitPayload['chatReadiness']) {
-  if (value === 'ready') return 'Chat ready';
-  if (value === 'marvin-routed') return 'Direct chat staged';
-  if (value === 'internal-only') return 'No direct chat';
-  return 'Chat staged';
-}
-
 function alertPalette(severity: AgentAlertSeverity) {
   if (severity === 'attention') {
     return { bg: 'rgba(153, 111, 78, 0.12)', border: 'rgba(153, 111, 78, 0.24)', text: '#7a5230' };
@@ -35,12 +20,12 @@ function alertPalette(severity: AgentAlertSeverity) {
 }
 
 const AVATAR_FILE_BY_LABEL: Record<string, string> = {
-  Marvin: 'Marvin.jpeg',
-  Sudo: 'Sudo.jpeg',
-  Vantage: 'Vantage.jpeg',
-  Johan: 'Johan.jpeg',
-  Milou: 'Milou.jpeg',
-  Japin: 'Japin.jpeg',
+  Marvin: 'Marvin.png',
+  Sudo: 'Sudo.png',
+  Vantage: 'Vantage.png',
+  Johan: 'Johan.png',
+  Milou: 'Milou.png',
+  Japin: 'Japin.png',
 };
 
 function initials(label: string) {
@@ -148,12 +133,17 @@ function AvatarBlock({ item }: { item: AgentUnitPayload }) {
   return <SingleAvatar item={item} />;
 }
 
+function visibleActions(actions: AgentUnitPayload['actions']) {
+  return actions.filter((action) => action.availability === 'live' && action.href);
+}
+
 function ActionCluster({ actions }: { actions: AgentUnitPayload['actions'] }) {
-  if (actions.length === 0) return null;
+  const liveActions = visibleActions(actions);
+  if (liveActions.length === 0) return null;
 
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-      {actions.map((action) => (
+      {liveActions.map((action) => (
         <AgentActionButton key={action.id} action={action} />
       ))}
     </div>
@@ -263,18 +253,18 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 14, alignItems: 'flex-start' }}>
           <AvatarBlock item={item} />
           <div
+            title={item.health.label}
+            aria-label={`Status: ${item.health.label}`}
             style={{
-              minWidth: 104,
-              borderRadius: 18,
-              padding: '10px 12px',
-              background: palette.bg,
-              border: `1px solid ${palette.border}`,
-              textAlign: 'right',
+              width: 14,
+              height: 14,
+              borderRadius: '50%',
+              background: palette.text,
+              boxShadow: `0 0 0 4px ${palette.bg}`,
+              marginTop: 8,
+              flex: '0 0 auto',
             }}
-          >
-            <div style={{ color: palette.text, fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Health</div>
-            <div style={{ marginTop: 6, fontSize: 13, fontWeight: 700, color: '#173128', lineHeight: 1.35 }}>{item.health.label}</div>
-          </div>
+          />
         </div>
 
         <div style={{ display: 'grid', gap: 8 }}>
@@ -334,30 +324,16 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
             ) : null}
           </div>
           <h2 style={{ margin: 0, fontSize: item.kind === 'control' ? 28 : 25, lineHeight: 1.08, letterSpacing: -0.4, color: '#102b22' }}>{item.label}</h2>
-          {item.kind === 'control' ? <p style={{ margin: 0, maxWidth: 560, fontSize: 13, lineHeight: 1.6, color: '#51605a' }}>{item.summary}</p> : null}
+          <p style={{ margin: 0, maxWidth: 560, fontSize: 13, lineHeight: 1.6, color: '#51605a' }}>
+            {item.kind === 'control'
+              ? 'King of all lobsters and Philippe’s dedicated right-hand. Orchestrates, reviews, and monitors continuity across all levels.'
+              : item.summary}
+          </p>
+          {item.arsenal.length > 0 ? <div style={{ fontSize: 11.5, lineHeight: 1.55, color: '#68736d', marginTop: 2 }}>{item.arsenal.join(' · ')}</div> : null}
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-        <div style={{ ...floatingInsetStyle({ padding: '10px 12px', radius: 14, background: 'rgba(255,255,255,0.7)' }), fontSize: 12, color: '#2b473b' }}>
-          {readinessText(item.workspaceReadiness)}
-        </div>
-        <div style={{ ...floatingInsetStyle({ padding: '10px 12px', radius: 14, background: 'rgba(255,255,255,0.7)' }), fontSize: 12, color: '#2b473b' }}>
-          {chatReadinessText(item.chatReadiness)}
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gap: 10 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>Signals</div>
-        <div style={{ display: 'grid', gap: 8 }}>
-          {item.health.evidence.map((evidence) => (
-            <div key={evidence.id} style={{ ...floatingInsetStyle({ padding: '12px 14px', radius: 16, background: 'rgba(255,255,255,0.62)' }), display: 'grid', gap: 4 }}>
-              <strong style={{ fontSize: 13, color: '#183328' }}>{evidence.label}</strong>
-              <span style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5 }}>{evidence.detail}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      <div style={{ minHeight: 30 }} />
 
       <div style={{ marginTop: 'auto' }}>
         <ActionCluster actions={item.actions} />
@@ -417,22 +393,16 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gap: 7 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>
-                {visibleAlerts.length > 0 ? 'Issue flow' : 'Status'}
-              </div>
-              {visibleAlerts.length > 0 ? (
+            {visibleAlerts.length > 0 ? (
+              <div style={{ display: 'grid', gap: 7 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>Issue flow</div>
                 <div style={{ display: 'grid', gap: 7 }}>
                   {visibleAlerts.map((alert) => (
                     <AlertCard key={alert.id} alert={alert} showUnitLabel />
                   ))}
                 </div>
-              ) : (
-                <div style={{ ...floatingInsetStyle({ padding: '11px 12px', radius: 15, background: 'rgba(255,255,255,0.72)' }), display: 'grid', gap: 2 }}>
-                  <strong style={{ fontSize: 12.5, color: '#183328' }}>No active issues</strong>
-                </div>
-              )}
-            </div>
+              </div>
+            ) : null}
           </aside>
         </div>
       ) : (
@@ -441,18 +411,18 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 14, alignItems: 'flex-start' }}>
               <AvatarBlock item={item} />
               <div
+                title={item.health.label}
+                aria-label={`Status: ${item.health.label}`}
                 style={{
-                  minWidth: 104,
-                  borderRadius: 18,
-                  padding: '10px 12px',
-                  background: palette.bg,
-                  border: `1px solid ${palette.border}`,
-                  textAlign: 'right',
+                  width: 14,
+                  height: 14,
+                  borderRadius: '50%',
+                  background: palette.text,
+                  boxShadow: `0 0 0 4px ${palette.bg}`,
+                  marginTop: 8,
+                  flex: '0 0 auto',
                 }}
-              >
-                <div style={{ color: palette.text, fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Health</div>
-                <div style={{ marginTop: 6, fontSize: 13, fontWeight: 700, color: '#173128', lineHeight: 1.35 }}>{item.health.label}</div>
-              </div>
+              />
             </div>
 
             <div style={{ display: 'grid', gap: 8 }}>
@@ -512,22 +482,39 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
                 ) : null}
               </div>
               <h2 style={{ margin: 0, fontSize: 25, lineHeight: 1.08, letterSpacing: -0.4, color: '#102b22' }}>{item.label}</h2>
+              <p style={{ margin: 0, maxWidth: 560, fontSize: 13, lineHeight: 1.6, color: '#51605a' }}>{item.summary}</p>
+              {item.arsenal.length > 0 ? <div style={{ fontSize: 11.5, lineHeight: 1.55, color: '#68736d' }}>{item.arsenal.join(' · ')}</div> : null}
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            <div style={{ ...floatingInsetStyle({ padding: '10px 12px', radius: 14, background: 'rgba(255,255,255,0.7)' }), fontSize: 12, color: '#2b473b' }}>
-              {readinessText(item.workspaceReadiness)}
-            </div>
-            <div style={{ ...floatingInsetStyle({ padding: '10px 12px', radius: 14, background: 'rgba(255,255,255,0.7)' }), fontSize: 12, color: '#2b473b' }}>
-              {chatReadinessText(item.chatReadiness)}
-            </div>
-          </div>
+          <div style={{ minHeight: 30 }} />
 
           {item.members.length > 0 ? (
-            <div style={{ display: 'grid', gap: 10 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>Seats</div>
-              <div style={{ display: 'grid', gap: 10 }}>
+            <details
+              style={{
+                border: '1px solid rgba(200, 195, 188, 0.26)',
+                borderRadius: 18,
+                background: 'rgba(255,255,255,0.38)',
+                overflow: 'hidden',
+              }}
+            >
+              <summary
+                style={{
+                  listStyle: 'none',
+                  cursor: 'pointer',
+                  padding: '12px 14px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: 12,
+                }}
+              >
+                <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>
+                  Seats
+                </span>
+                <span style={{ fontSize: 11, color: '#5d675f' }}>{item.members.length} hidden by default</span>
+              </summary>
+              <div style={{ display: 'grid', gap: 10, padding: '0 14px 14px' }}>
                 {item.members.map((member) => {
                   const memberPalette = statePalette(member.status);
                   return (
@@ -556,12 +543,11 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
                           {member.role}
                         </span>
                       </div>
-                      <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5 }}>{member.detail}</div>
                     </div>
                   );
                 })}
               </div>
-            </div>
+            </details>
           ) : null}
 
           {showAlertBlock ? (
@@ -574,18 +560,6 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
               </div>
             </div>
           ) : null}
-
-          <div style={{ display: 'grid', gap: 10 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>Signals</div>
-            <div style={{ display: 'grid', gap: 8 }}>
-              {item.health.evidence.map((evidence) => (
-                <div key={evidence.id} style={{ ...floatingInsetStyle({ padding: '12px 14px', radius: 16, background: 'rgba(255,255,255,0.62)' }), display: 'grid', gap: 4 }}>
-                  <strong style={{ fontSize: 13, color: '#183328' }}>{evidence.label}</strong>
-                  <span style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5 }}>{evidence.detail}</span>
-                </div>
-              ))}
-            </div>
-          </div>
 
           <div style={{ marginTop: 'auto' }}>
             <ActionCluster actions={item.actions} />

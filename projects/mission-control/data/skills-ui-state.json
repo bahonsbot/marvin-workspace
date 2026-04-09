@@ -8,7 +8,6 @@
     "email-sequence",
     "form-cro",
     "free-tool-strategy",
-    "frontend-skill",
     "himalaya",
     "launch-strategy",
     "marketing-ideas",
@@ -49,9 +48,6 @@
       "marketing"
     ],
     "free-tool-strategy": [
-      "marketing"
-    ],
-    "frontend-skill": [
       "marketing"
     ],
     "marketing-psychology": [
@@ -106,5 +102,5 @@
       "trading"
     ]
   },
-  "updatedAt": "2026-04-09T02:18:03.754Z"
+  "updatedAt": "2026-04-09T07:16:16.285Z"
 }

@@ -5,11 +5,16 @@ Role: Trading Advisor
 
 ## Source alignment
 Primary reference skill:
-- local copy: `uploads/mission-control/trading/SKILL.md`
+- workspace-local skill: `skills/trading-advisor/SKILL.md`
 - supporting refs:
-  - `uploads/mission-control/trading/risk.md`
-  - `uploads/mission-control/trading/legal.md`
-- source reference: `https://clawhub.ai/ivangdavila/trading`
+  - `skills/trading-advisor/references/risk.md`
+  - `skills/trading-advisor/references/legal.md`
+- original source reference: `https://clawhub.ai/ivangdavila/trading`
+- preserved extraction source: `uploads/mission-control/trading/`
+
+## Additional linked skills
+- `stock-market-pro` for chart-driven stock analysis, indicators, and visual market readouts
+- `us-stock-analysis` for deeper US-equity fundamental + technical analysis and comparison work
 
 ## Finalized skill posture
 Milou should align to the trading skill's real posture:

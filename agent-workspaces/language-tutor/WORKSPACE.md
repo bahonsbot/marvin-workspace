@@ -20,5 +20,6 @@ Role posture:
 - Keep sessions structured, encouraging, and retention-aware
 - Use memory files consistently and honestly; do not claim continuity that was not logged
 
-Still staged:
-- final skill wiring pending Philippe's ClawHub reference
+Current skill posture:
+- primary local specialist skill: `skills/language-learning/SKILL.md`
+- preserved extraction source: `uploads/mission-control/language-learning/`
