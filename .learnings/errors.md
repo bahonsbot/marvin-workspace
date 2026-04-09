@@ -716,3 +716,25 @@ Command/tool failures and exceptions.
 **Prevention:** Multi-run orchestration UIs should feature the newest run by recency and demote older unresolved runs into history; do not use generic "any active run first" selection when multiple orchestration records can coexist.
 **Status:** resolved
 **Resolved:** 2026-04-07 — Sudo panel now sorts by recency and features the newest orchestration first.
+
+## [ERR-20260409-1500]
+
+**What failed:** first-use direct-specialist workspace state write for Japin / `language-tutor`
+**Error:** `ENOENT: no such file or directory, rename ...workspace-state.json.tmp-... -> ...workspace-state.json` during early specialist-seat interaction
+**Context:** Apr 9 Mission Control testing after Philippe first used Japin directly and reported a workspace-state rename failure
+**Suggested fix:** OpenClaw's workspace-state atomic-write temp filename should not rely only on `process.pid` + `Date.now()`. Add a collision-resistant random suffix (or equivalent uniqueness guarantee) before rename so same-process same-millisecond writes cannot collide.
+**Resolution:** Root cause traced on 2026-04-09 to the installed OpenClaw runtime temp-file naming logic. Mission Control itself was not the bug. Runtime hotfix was identified but not applied from this session because the installed package path was permission-blocked and host/container patch context differed.
+
+**Priority:** medium
+**Status:** pending host/runtime patch if the issue returns
+
+## [ERR-20260409-1530]
+
+**What failed:** first host-side patch instructions for an installed OpenClaw runtime file
+**Error:** the suggested patch path existed from inside the container session but not from Philippe's host terminal, causing file-not-found and command-friction while attempting a hotfix
+**Context:** Apr 9 follow-up while trying to patch the OpenClaw temp-file collision bug after tracing it in the installed package
+**Suggested fix:** For runtime/package hotfixes in this Docker-based Hostinger setup, do not give host-level patch commands until the actual container/runtime path is confirmed. Start with `docker ps`, inspect the path inside the real container, then patch in the correct namespace.
+**Resolution:** Operational lesson captured; hotfix itself was deferred once other things came up.
+
+**Priority:** medium
+**Status:** resolved as procedural lesson
