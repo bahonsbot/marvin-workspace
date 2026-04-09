@@ -8,6 +8,7 @@ const WORKSPACE_ROOT = process.env.OPENCLAW_WORKSPACE_ROOT ?? '/data/.openclaw/w
 
 const CURATED_ROOTS: Array<{ id: string; label: string; path: string }> = [
   { id: 'workspace', label: 'Workspace', path: '.' },
+  { id: 'agent-workspaces', label: 'Agent Workspaces', path: 'agent-workspaces' },
   { id: 'docs', label: 'Docs', path: 'docs' },
   { id: 'projects', label: 'Projects', path: 'projects' },
   { id: 'scripts', label: 'Scripts', path: 'scripts' },

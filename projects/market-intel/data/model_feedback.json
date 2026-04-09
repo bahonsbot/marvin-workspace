@@ -1,28 +1,43 @@
 {
-  "generated_at": "2026-03-31T23:07:29.984697",
-  "sample_size": 11,
+  "generated_at": "2026-04-08T23:05:40.293432",
+  "sample_size": 5,
   "by_category": {
-    "financial_credit": {
-      "count": 3,
+    "macroeconomic": {
+      "count": 2,
       "avg_outcome_score": 1.0,
       "bias_points": 5.0
     },
-    "macroeconomic": {
-      "count": 8,
-      "avg_outcome_score": 0.812,
-      "bias_points": 3.12
+    "financial_credit": {
+      "count": 2,
+      "avg_outcome_score": 0.0,
+      "bias_points": -5.0
+    },
+    "sentiment_social": {
+      "count": 1,
+      "avg_outcome_score": 0.0,
+      "bias_points": -5.0
     }
   },
   "by_pattern": {
-    "Regional Banking Crisis 2023": {
-      "count": 3,
+    "US Credit Rating Downgrade": {
+      "count": 2,
       "avg_outcome_score": 1.0,
       "bias_points": 5.0
     },
-    "US Credit Rating Downgrade": {
-      "count": 8,
-      "avg_outcome_score": 0.812,
-      "bias_points": 3.12
+    "Regional Banking Crisis 2023": {
+      "count": 1,
+      "avg_outcome_score": 0.0,
+      "bias_points": -5.0
+    },
+    "SVB Collapse": {
+      "count": 1,
+      "avg_outcome_score": 0.0,
+      "bias_points": -5.0
+    },
+    "GameStop Short Squeeze": {
+      "count": 1,
+      "avg_outcome_score": 0.0,
+      "bias_points": -5.0
     }
   }
 }

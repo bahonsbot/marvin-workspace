@@ -184,20 +184,10 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - `minimax2.7` = requires `api: "anthropic-messages"` and `baseUrl: "https://api.minimax.io/anthropic"`
 
 ### Hybrid Agent-Team v1 (legacy workflow reference)
-- Status: largely superseded by the live Dev Team / Sudo workflow in Mission Control
-- `projects/_ops/agent-team/` is currently a prompt/template/reference package, not a standalone runnable software package
-- Historical architecture:
-  - Marvin (orchestrator) → Builder → Reviewer
-- Historical preferred model mapping:
-  - Marvin → codex5.4
-  - Builder → codex
-  - Reviewer → minimax2.7
-- Legacy queue/history note:
-  - older autonomous-task routing references may still mention `agent_team` mode in logs/state/docs
-  - treat those as legacy context unless a current workflow explicitly uses them
-- Current posture:
-  - preserve reusable prompt/review patterns if still valuable
-  - otherwise prefer the live Dev Team / Sudo path for internal multi-lane implementation work
+- Status: legacy reference only
+- `projects/_ops/agent-team/` is a prompt/template/reference package, not a standalone runnable software package
+- Prefer the live Dev Team / Sudo path for current internal multi-lane implementation work
+- Keep older `agent_team` mentions in logs/state/docs as legacy context unless a current workflow explicitly invokes them
 - Reference path: `projects/_ops/agent-team/`
 
 ### Image Analysis

@@ -1,0 +1,930 @@
+{
+  "orchestrations": [
+    {
+      "id": "sudo-orchestration-1775635932708-dv2u9v",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Review this completed Sudo run and take over from here.\n\nOriginal brief: Sudo, improve the current Home page, following this implementation plan: projects/mission-control/docs/home-page-redesign-plan.md\nStatus: done\nLane sequence: Frontend Developer -> QA Engineer\nResult summary: Sudo completed the lane plan frontend -> qa.",
+      "promptSummary": "Review this completed Sudo run and take over from here. Original brief: Sudo, improve the current Home page, following this implementation plan: projects/mission-control/docs/ho...",
+      "status": "waiting",
+      "requestedAt": "2026-04-08T08:12:12.708Z",
+      "updatedAt": "2026-04-08T08:12:53.394Z",
+      "childRunIds": [],
+      "waitingForPhilippe": true,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": false
+      },
+      "startedAt": "2026-04-08T08:12:12.883Z",
+      "completedAt": "2026-04-08T08:12:53.393Z",
+      "decision": {
+        "mode": "ask_question",
+        "lanePlan": [],
+        "lanePlanSteps": [],
+        "rationale": "The plan is clear, but the completed run itself is not reviewable yet from the brief alone. I need the actual output before I can honestly choose between accepting, fixing, or continuing implementation.",
+        "orderRationale": "No lane should start until the produced code or verification evidence is visible, otherwise the next step would be guesswork.",
+        "expectedOutputs": [
+          "The completed diff, commit, PR, or changed file list",
+          "Any QA findings or screenshots from the finished run",
+          "A clear review target for takeover"
+        ],
+        "validationIntent": "Inspect the actual implementation against the redesign plan, then verify whether the claimed frontend and QA completion matches the shipped page behavior and remaining gaps.",
+        "completionCriteria": "I can see the completed run outputs, compare them to the redesign plan, and decide the smallest honest follow-up step.",
+        "question": "Send me the completed run output to review: either the commit/PR, the changed files, or screenshots plus QA notes. Without that, I can’t truthfully take over from a 'done' status.",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": false
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:0db3144a-4460-49c9-88ea-90670c1259f6",
+      "decisionRunId": "c0df31fe-3757-4692-83df-0804f38e2d06",
+      "synthesis": {
+        "summary": "Send me the completed run output to review: either the commit/PR, the changed files, or screenshots plus QA notes. Without that, I can’t truthfully take over from a 'done' status.",
+        "decided": "Clarification needed. The plan is clear, but the completed run itself is not reviewable yet from the brief alone. I need the actual output before I can honestly choose between accepting, fixing, or continuing implementation.",
+        "lanesRun": [],
+        "changesOrFindings": [],
+        "blockers": [],
+        "unresolvedIssues": [
+          "Send me the completed run output to review: either the commit/PR, the changed files, or screenshots plus QA notes. Without that, I can’t truthfully take over from a 'done' status."
+        ],
+        "completedAt": "2026-04-08T08:12:53.394Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": false
+        }
+      }
+    },
+    {
+      "id": "sudo-orchestration-1775635169774-yk05p8",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, improve the current Home page, following this implementation plan: projects/mission-control/docs/home-page-redesign-plan.md",
+      "promptSummary": "Sudo, improve the current Home page, following this implementation plan: projects/mission-control/docs/home-page-redesign-plan.md",
+      "status": "done",
+      "requestedAt": "2026-04-08T07:59:29.774Z",
+      "startedAt": "2026-04-08T07:59:29.815Z",
+      "completedAt": "2026-04-08T08:08:20.825Z",
+      "updatedAt": "2026-04-08T08:08:20.825Z",
+      "decision": {
+        "mode": "delegate",
+        "lanePlan": [
+          "frontend",
+          "qa"
+        ],
+        "lanePlanSteps": [
+          {
+            "lane": "frontend",
+            "order": 1,
+            "purpose": "Implement the approved Home page redesign plan in the Mission Control UI, including the new quick-access grid, live secondary widgets, layout refinements, and FLOATING-style pol...",
+            "expectedOutput": "Updated Home page components and adapters, with placeholder signal cards replaced, quick-access tiles wired in, and responsive/polish changes applied.",
+            "validationFocus": "Match the redesign plan closely while keeping runtime truth, existing data flows, and fallback states intact."
+          },
+          {
+            "lane": "qa",
+            "order": 2,
+            "purpose": "Verify the redesigned Home page renders correctly, uses real data/fallbacks honestly, and meets the plan’s core acceptance criteria across key breakpoints.",
+            "expectedOutput": "A verification pass covering layout, widget behavior, links, responsive behavior, and any regressions or follow-up fixes needed before signoff.",
+            "validationFocus": "Desktop/mobile layout, adapter safety, badge counts, empty states, and no fake/live-data mismatches."
+          }
+        ],
+        "rationale": "The brief is specific, scoped to a known repo area, and includes an implementation plan detailed enough to start execution now.",
+        "orderRationale": "Frontend must go first because the work is primarily UI and adapter integration; QA then validates the implemented page and catches regressions before completion.",
+        "expectedOutputs": [
+          "Redesigned General Home page following the documented plan",
+          "New quick-access grid and supporting tile components",
+          "Live market signals and workspace health widgets with honest fallbacks",
+          "Verified responsive behavior and regression check results"
+        ],
+        "validationIntent": "Validate against the plan, the current runtime truth, and visible behavior in the app, with emphasis on real data wiring, layout quality, and honest fallback states.",
+        "completionCriteria": "The Home page matches the redesign plan’s P0/P1 scope, builds and renders cleanly, uses real or explicit fallback data, and passes a focused QA verification without unresolved blocking regressions.",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "synthesis": {
+        "summary": "Sudo completed the lane plan frontend -> qa.",
+        "decided": "Delegated frontend -> qa because The brief is specific, scoped to a known repo area, and includes an implementation plan detailed enough to start execution now.",
+        "lanesRun": [
+          "frontend",
+          "qa"
+        ],
+        "changesOrFindings": [],
+        "blockers": [],
+        "unresolvedIssues": [],
+        "completedAt": "2026-04-08T08:08:20.824Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:c514da61-d70f-4a8f-ab99-8fe1a89a1640",
+      "decisionRunId": "60e3e441-79ec-4566-9538-79b73974ef64",
+      "childRunIds": [
+        "sudo-delegation-1775635197062-jyv65t",
+        "sudo-delegation-1775635667123-pqk0r8"
+      ],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": true
+      }
+    },
+    {
+      "id": "sudo-orchestration-1775556111685-e9rv3n",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Review this completed Sudo run and take over from here.\n\nOriginal brief: Sudo, improve the top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-collapsible-top-section-plan.md\nStatus: done\nLane sequence: Frontend Developer -> QA Engineer\nResult summary: Sudo completed the lane plan frontend -> qa.",
+      "promptSummary": "Review this completed Sudo run and take over from here. Original brief: Sudo, improve the top-section of the Chat page, following this implementation plan: projects/mission-cont...",
+      "status": "waiting",
+      "requestedAt": "2026-04-07T10:01:51.685Z",
+      "startedAt": "2026-04-07T10:01:51.792Z",
+      "completedAt": "2026-04-07T10:03:10.561Z",
+      "updatedAt": "2026-04-07T10:03:10.561Z",
+      "decision": {
+        "mode": "ask_question",
+        "lanePlan": [],
+        "lanePlanSteps": [],
+        "rationale": "I can’t honestly review or take over the completed run yet because I only have the prior brief and a done-status summary, not the actual diff, commit, PR, files changed, or QA findings.",
+        "orderRationale": "No lane work should start until the completed run artifacts are visible, otherwise review would be guesswork.",
+        "expectedOutputs": [
+          "the concrete run artifacts to review",
+          "the exact current state of the Chat top-section work",
+          "any QA findings or remaining issues from the prior run"
+        ],
+        "validationIntent": "Review the actual implementation against the plan file, inspect what changed, then decide whether the next step is acceptance, polish, bugfixing, or follow-up implementation.",
+        "completionCriteria": "Philippe provides the concrete completed-run artifacts needed for an honest review and takeover decision.",
+        "question": "Send me the actual completed-run artifacts to review: ideally the commit/branch/PR or the changed files plus the QA result. If you want, I can then inspect the implementation against projects/mission-control/docs/chat-collapsible-top-section-plan.md and decide the exact next step.",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": false
+        }
+      },
+      "synthesis": {
+        "summary": "Send me the actual completed-run artifacts to review: ideally the commit/branch/PR or the changed files plus the QA result. If you want, I can then inspect the implementation against projects/mission-control/docs/chat-collapsible-top-sec...",
+        "decided": "Clarification needed. I can’t honestly review or take over the completed run yet because I only have the prior brief and a done-status summary, not the actual diff, commit, PR, files changed, or QA findings.",
+        "lanesRun": [],
+        "changesOrFindings": [],
+        "blockers": [],
+        "unresolvedIssues": [
+          "Send me the actual completed-run artifacts to review: ideally the commit/branch/PR or the changed files plus the QA result. If you want, I can then inspect the implementation against projects/mission-control/docs/chat..."
+        ],
+        "completedAt": "2026-04-07T10:03:10.561Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:8987926f-def6-4ebc-988c-c2436e676d45",
+      "decisionRunId": "98a1c403-6a5d-47e9-bb70-971c910257b4",
+      "childRunIds": [],
+      "waitingForPhilippe": true,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": false
+      }
+    },
+    {
+      "id": "sudo-orchestration-1775555462365-f2kym2",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, improve the top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-collapsible-top-section-plan.md",
+      "promptSummary": "Sudo, improve the top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-collapsible-top-section-plan.md",
+      "status": "done",
+      "requestedAt": "2026-04-07T09:51:02.365Z",
+      "startedAt": "2026-04-07T09:51:02.405Z",
+      "completedAt": "2026-04-07T10:00:46.857Z",
+      "updatedAt": "2026-04-07T10:00:46.857Z",
+      "decision": {
+        "mode": "delegate",
+        "lanePlan": [
+          "frontend",
+          "qa"
+        ],
+        "lanePlanSteps": [
+          {
+            "lane": "frontend",
+            "order": 1,
+            "purpose": "Implement the planned collapsible top-section UI in the Chat page without changing runtime behavior or API contracts.",
+            "expectedOutput": "Updated MissionControlChatSurface.tsx with controlsExpanded state, Row 1 Controls toggle, and Row 2 wrapped in an accessible <details>/<summary> block styled to match the existi...",
+            "validationFocus": "Preserve all existing selectors, status actions, and dropdown behavior while reducing persistent vertical space."
+          },
+          {
+            "lane": "qa",
+            "order": 2,
+            "purpose": "Verify the UI behaves correctly after the frontend change.",
+            "expectedOutput": "Validation notes covering expand/collapse behavior, keyboard/accessibility behavior, dropdown interactions, and layout on narrower widths.",
+            "validationFocus": "Check no regression in status/session controls, menu interactions, or top-section layout stability."
+          }
+        ],
+        "rationale": "The brief is specific, scoped to a named file, and includes an implementation plan, so execution can start immediately.",
+        "orderRationale": "Frontend must land first because this is a single-surface UI change; QA then verifies the intended behavior and catches regressions in the existing Chat controls.",
+        "expectedOutputs": [
+          "Chat top section uses a collapsible controls area",
+          "Always-visible Row 1 keeps live status and primary actions",
+          "Verification that selectors, menus, and layout still work as expected"
+        ],
+        "validationIntent": "Validate the component-level behavior through targeted UI checks: collapsed by default, toggle expands and collapses cleanly, existing controls remain functional, and no obvious mobile or keyboard regression appears.",
+        "completionCriteria": "The Chat page top section matches the plan in MissionControlChatSurface.tsx, the controls row is collapsible behind a visible toggle, and QA confirms the interaction works without regressions.",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "synthesis": {
+        "summary": "Implemented the collapsible Chat top section from the approved plan: Row 1 stays visible, Row 2 now hides behind a Controls toggle, and QA completed the validation pass.",
+        "decided": "Delegated frontend -> qa because The brief is specific, scoped to a named file, and includes an implementation plan, so execution can start immediately.",
+        "lanesRun": [
+          "frontend",
+          "qa"
+        ],
+        "changesOrFindings": [
+          "Added controlsExpanded state to MissionControlChatSurface.tsx.",
+          "Added a visible Controls toggle in Row 1.",
+          "Wrapped Row 2 in an accessible <details>/<summary> block so selectors and recent sessions can collapse cleanly.",
+          "Auto-closes top control menus and recent sessions when the controls section collapses."
+        ],
+        "blockers": [],
+        "unresolvedIssues": [],
+        "completedAt": "2026-04-07T10:00:46.856Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:816a05ef-f0ed-407a-b16e-a1806bdc82fc",
+      "decisionRunId": "d726f848-2258-4331-9129-e1b494e6b902",
+      "childRunIds": [
+        "sudo-delegation-1775555507801-51hh7p",
+        "sudo-delegation-1775555960017-4qriv6"
+      ],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": true
+      }
+    },
+    {
+      "id": "sudo-orchestration-1775550616119-pc2xso",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, your recommendation has already been captured into an implementation plan by Marvin, and can be found here: projects/mission-control/docs/speech-to-text-implementation-plan.md. Please start phase 1.",
+      "promptSummary": "Sudo, your recommendation has already been captured into an implementation plan by Marvin, and can be found here: projects/mission-control/docs/speech-to-text-implementation-pla...",
+      "status": "done",
+      "requestedAt": "2026-04-07T08:30:16.119Z",
+      "startedAt": "2026-04-07T08:30:16.155Z",
+      "completedAt": "2026-04-07T08:49:05.934Z",
+      "updatedAt": "2026-04-07T08:49:05.934Z",
+      "decision": {
+        "mode": "delegate",
+        "lanePlan": [
+          "backend",
+          "frontend",
+          "qa"
+        ],
+        "lanePlanSteps": [
+          {
+            "lane": "backend",
+            "order": 1,
+            "purpose": "Create the phase-1 transcription boundary first so the UI can integrate against a real, validated endpoint instead of guessing request and response shapes.",
+            "expectedOutput": "A Mission Control /api/transcribe route with multipart upload handling, MIME and size validation, provider call wiring, and stable JSON response/error shape.",
+            "validationFocus": "Route auth boundary, upload validation, response contract, and non-persistent audio handling."
+          },
+          {
+            "lane": "frontend",
+            "order": 2,
+            "purpose": "Wire the existing mic button to a narrow recording state machine and connect it to the real transcription endpoint.",
+            "expectedOutput": "Mic-driven click-to-talk flow in Mission Control Chat with recording, transcribing, and error states, plus transcript insertion into the composer without auto-send.",
+            "validationFocus": "Permission handling, MediaRecorder flow, composer preservation, and graceful unsupported-browser behavior."
+          },
+          {
+            "lane": "qa",
+            "order": 3,
+            "purpose": "Verify the end-to-end phase-1 operator flow against the plan acceptance criteria before calling it done.",
+            "expectedOutput": "Validation notes covering happy path, permission denial, failed transcription, unsupported browser behavior, and transcript edit-before-send behavior.",
+            "validationFocus": "End-to-end reliability, non-destructive failures, and alignment with phase-1 non-goals."
+          }
+        ],
+        "rationale": "The brief is clear and already backed by a concrete implementation plan, so execution can start now with the smallest honest implementation sequence.",
+        "orderRationale": "Backend first defines the real STT contract, frontend then integrates against that contract, and QA closes the loop on the full click-to-talk flow.",
+        "expectedOutputs": [
+          "Working /api/transcribe backend route for Mission Control",
+          "Mic button wired to phase-1 recording and transcription UX",
+          "Verified transcript insertion into the composer with manual send preserved",
+          "Checked failure handling for permission, browser support, and transcription errors"
+        ],
+        "validationIntent": "Mission Control should validate the implemented flow against the documented phase-1 acceptance criteria and explicit non-goals using real end-to-end interaction.",
+        "completionCriteria": "Phase 1 is done when the mic button records and stops reliably, audio is transcribed through the backend route, the transcript lands in the composer for manual editing, and failure states are visible and non-destructive.",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "synthesis": {
+        "summary": "Phase 1 implementation landed: backend transcription route, chat recording hook, and mic-button integration are now in the repo. Remaining operator step: add Mission Control transcription provider credentials to preview/runtime env before live voice-input testing.",
+        "decided": "Delegated backend -> frontend -> qa because The brief is clear and already backed by a concrete implementation plan, so execution can start now with the smallest honest implementation sequence.",
+        "lanesRun": [
+          "backend",
+          "frontend",
+          "qa"
+        ],
+        "changesOrFindings": [
+          "Added /api/transcribe route with multipart upload, MIME/size validation, and stable JSON responses.",
+          "Added lib/transcribe.ts provider helper for OpenAI-compatible transcription calls.",
+          "Added useSpeechToText hook and wired the Chat mic button to recording/transcribing/error states plus transcript insertion into the composer.",
+          "Preview env still needs transcription credentials before end-to-end live testing will succeed."
+        ],
+        "blockers": [],
+        "unresolvedIssues": [
+          "MISSION_CONTROL_TRANSCRIBE_API_KEY is not configured in preview/runtime env yet."
+        ],
+        "completedAt": "2026-04-07T08:49:05.934Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:aae22afd-2fd0-479d-b06d-264dfb9fbe30",
+      "decisionRunId": "8dfa176c-a79d-4925-8a10-2405a3eaa7ac",
+      "childRunIds": [
+        "sudo-delegation-1775550646007-6oly3u",
+        "sudo-delegation-1775551007763-wwb4em",
+        "sudo-delegation-1775551284993-gyjc6s"
+      ],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": true
+      }
+    },
+    {
+      "id": "sudo-orchestration-1775545321131-yicktv",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Review this completed Sudo run and take over from here.\n\nOriginal brief: Sudo, create an implementation plan for speech-to-text integration in Mission Control. You can do a quick crawl through the Nerve repo, to see how they did it in that UI. It sho...\nStatus: done\nLane sequence: No lane delegation\nResult summary: Recommended plan: build click-to-talk speech-to-text for Mission Control Chat first, with browser recording plus backend transcription as the source of truth, and optionally add browser live preview later. Do not clone Nerve’s full voice...",
+      "promptSummary": "Review this completed Sudo run and take over from here. Original brief: Sudo, create an implementation plan for speech-to-text integration in Mission Control. You can do a quick...",
+      "status": "waiting",
+      "requestedAt": "2026-04-07T07:02:01.131Z",
+      "startedAt": "2026-04-07T07:02:01.435Z",
+      "completedAt": "2026-04-07T07:02:36.348Z",
+      "updatedAt": "2026-04-07T07:02:36.348Z",
+      "decision": {
+        "mode": "ask_question",
+        "lanePlan": [],
+        "lanePlanSteps": [],
+        "rationale": "The prior Sudo run produced a strategy recommendation, but Philippe’s requested next action is still ambiguous: review only, turn it into an implementation plan artifact, or start implementation.",
+        "orderRationale": "The smallest honest next step is to clarify the intended handoff before spawning any lane work.",
+        "expectedOutputs": [
+          "Clear decision on whether to plan, implement, or both",
+          "Scope boundary for phase 1 speech-to-text in Mission Control",
+          "Acceptance criteria for the next execution step"
+        ],
+        "validationIntent": "Validate the next step against Philippe’s chosen scope, starting point, and desired deliverable before any execution begins.",
+        "completionCriteria": "Done when Philippe confirms whether the takeover should produce a written implementation plan, start phase-1 build work, or review/refine the existing recommendation first.",
+        "question": "Do you want me to (1) turn that recommendation into a concrete implementation plan in the repo/docs, (2) start phase-1 implementation for click-to-talk speech-to-text in Mission Control Chat, or (3) first review and tighten the completed Sudo recommendation before building?",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": false
+        }
+      },
+      "synthesis": {
+        "summary": "Do you want me to (1) turn that recommendation into a concrete implementation plan in the repo/docs, (2) start phase-1 implementation for click-to-talk speech-to-text in Mission Control Chat, or (3) first review and tighten the completed...",
+        "decided": "Clarification needed. The prior Sudo run produced a strategy recommendation, but Philippe’s requested next action is still ambiguous: review only, turn it into an implementation plan artifact, or start implementation.",
+        "lanesRun": [],
+        "changesOrFindings": [],
+        "blockers": [],
+        "unresolvedIssues": [
+          "Do you want me to (1) turn that recommendation into a concrete implementation plan in the repo/docs, (2) start phase-1 implementation for click-to-talk speech-to-text in Mission Control Chat, or (3) first review and t..."
+        ],
+        "completedAt": "2026-04-07T07:02:36.348Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:167633f4-0a2a-4c25-960d-9c5d551034aa",
+      "decisionRunId": "539694b7-9237-4e0f-b1eb-b8acfe24a8ba",
+      "childRunIds": [],
+      "waitingForPhilippe": true,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": false
+      }
+    },
+    {
+      "id": "sudo-orchestration-1775545107137-r0mq49",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, create an implementation plan for speech-to-text integration in Mission Control. You can do a quick crawl through the Nerve repo, to see how they did it in that UI. It should be in your workspace in  /tmp/openclaw-nerve. You don't have to clone their setup, make your own implementation plan based on these findings towards what would work (and look) best. Note: there is already a microphone-icon next to the composer on the Chat page we can connect it to.",
+      "promptSummary": "Sudo, create an implementation plan for speech-to-text integration in Mission Control. You can do a quick crawl through the Nerve repo, to see how they did it in that UI. It sho...",
+      "status": "done",
+      "requestedAt": "2026-04-07T06:58:27.137Z",
+      "startedAt": "2026-04-07T06:58:27.180Z",
+      "completedAt": "2026-04-07T07:00:16.157Z",
+      "updatedAt": "2026-04-07T07:00:16.157Z",
+      "decision": {
+        "mode": "direct_answer",
+        "lanePlan": [],
+        "lanePlanSteps": [],
+        "rationale": "Philippe asked for an implementation plan, not execution, and the repo crawl is enough to give a concrete next step without spawning lanes.",
+        "orderRationale": "No delegation is needed yet because the brief is clear, the target surface is known, and the useful output right now is a scoped implementation plan grounded in the Nerve reference.",
+        "expectedOutputs": [
+          "A recommended STT architecture for Mission Control",
+          "A phased implementation plan tied to real Mission Control files",
+          "Nerve findings translated into what to keep, simplify, and avoid"
+        ],
+        "validationIntent": "Validate by confirming the mic button can record, transcribe, insert clean text into the composer, and fail gracefully across supported browsers before any wake-word or advanced voice UX is added.",
+        "completionCriteria": "Done when Philippe has a concrete, scoped plan for Mission Control STT with architecture, file targets, phases, and acceptance criteria.",
+        "directAnswer": "Recommended plan: build click-to-talk speech-to-text for Mission Control Chat first, with browser recording plus backend transcription as the source of truth, and optionally add browser live preview later. Do not clone Nerve’s full voice stack yet. Quick Nerve findings that matter: - Nerve has a dedicated backend STT route at `server/routes/transcribe.ts` with file-size limits, MIME validation, provider switching, and rate limiting. - Nerve’s frontend voice logic lives in `src/features/voice/useVoiceInput.ts`. It records with `MediaRecorder`, optionally listens with `SpeechRecognition`, and can fall back to `/api/transcribe`. - Nerve marks transcribed user messages with a `[voice]` prefix in `src/features/chat/InputBar.tsx` and `src/features/chat/operations/sendMessage.ts`, mainly so the UI and TTS behavior can react to voice-originated input. - Mission Control already has the exact UI insertion point: the disabled mic button in `projects/mission-control/components/chat/MissionControlChatSurface.tsx` next to the composer. Best-fit architecture for Mission Control: 1. Phase 1 should be push-to-talk only: click mic to start, click again to stop and transcribe. 2. Use `MediaRecorde...",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": false
+        }
+      },
+      "synthesis": {
+        "summary": "Recommended plan: build click-to-talk speech-to-text for Mission Control Chat first, with browser recording plus backend transcription as the source of truth, and optionally add browser live preview later. Do not clone Nerve’s full voice...",
+        "decided": "Direct answer. Philippe asked for an implementation plan, not execution, and the repo crawl is enough to give a concrete next step without spawning lanes.",
+        "lanesRun": [],
+        "changesOrFindings": [
+          "Recommended plan: build click-to-talk speech-to-text for Mission Control Chat first, with browser recording plus backend transcription as the source of truth, and optionally add browser live preview later. Do not clon..."
+        ],
+        "blockers": [],
+        "unresolvedIssues": [],
+        "completedAt": "2026-04-07T07:00:16.157Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:df6c8116-9f69-437b-aed2-27c2931fe328",
+      "decisionRunId": "53ddf978-e955-49da-82a3-58e1eb9b9e3f",
+      "childRunIds": [],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": false
+      }
+    },
+    {
+      "id": "sudo-orchestration-1775480451950-8qmezh",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "promptSummary": "Sudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "status": "done",
+      "requestedAt": "2026-04-06T13:00:51.950Z",
+      "startedAt": "2026-04-06T13:00:51.989Z",
+      "completedAt": "2026-04-06T13:07:52.027Z",
+      "updatedAt": "2026-04-06T13:07:52.027Z",
+      "decision": {
+        "mode": "delegate",
+        "lanePlan": [
+          "frontend"
+        ],
+        "lanePlanSteps": [
+          {
+            "lane": "frontend",
+            "order": 1,
+            "purpose": "Implement the approved sidebar redesign plan in the Mission Control UI, including collapse state, layout wiring, Lucide icon swap, and hover/collapsed polish.",
+            "expectedOutput": "Updated sidebar components, shell context/layout integration, styling variable additions, dependency change for lucide-react, and a working collapsed/expanded sidebar matching t...",
+            "validationFocus": "Verify collapsed-state persistence, layout shift behavior, icon rendering, hover/active states, tooltip behavior, and no regressions in General/Trading navigation."
+          }
+        ],
+        "rationale": "The brief is implementation-ready, scoped to frontend work, and the plan already defines files, phases, and out-of-scope boundaries.",
+        "orderRationale": "A single frontend lane is the smallest honest sequence because the plan is purely UI work with no backend dependency and no separate QA lane is required to begin execution.",
+        "expectedOutputs": [
+          "Sidebar redesign implemented per plan",
+          "Collapsed state persisted and reflected in shell layout",
+          "Lucide icon mapping applied across navigation",
+          "Hover, active, and collapsed tooltip polish working"
+        ],
+        "validationIntent": "Mission Control should validate with a local UI pass across expanded and collapsed states in both domains, checking persistence after reload and confirming the ambient widget/labels behave correctly when collapsed.",
+        "completionCriteria": "Done when the sidebar redesign is implemented in the specified files, behaves correctly across reloads and domain views, and the visible interaction details match the approved plan without introducing shell layout regressions.",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "synthesis": {
+        "summary": "Sudo completed the lane plan frontend.",
+        "decided": "Delegated frontend because The brief is implementation-ready, scoped to frontend work, and the plan already defines files, phases, and out-of-scope boundaries.",
+        "lanesRun": [
+          "frontend"
+        ],
+        "changesOrFindings": [],
+        "blockers": [],
+        "unresolvedIssues": [],
+        "completedAt": "2026-04-06T13:07:52.027Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:fdf5d1c1-0c4c-4a99-8c69-b57e5d621cce",
+      "decisionRunId": "9df8d32e-7571-43eb-8938-86dcb2d460b9",
+      "childRunIds": [
+        "sudo-delegation-1775480475928-dgfise"
+      ],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": true
+      }
+    },
+    {
+      "id": "sudo-orchestration-1775477167418-zdcqor",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "promptSummary": "Sudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "status": "error",
+      "requestedAt": "2026-04-06T12:06:07.418Z",
+      "startedAt": "2026-04-06T12:06:07.457Z",
+      "completedAt": "2026-04-06T12:07:12.973Z",
+      "updatedAt": "2026-04-06T12:07:12.973Z",
+      "childRunIds": [],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": true,
+        "oversightLevel": "blocker",
+        "oversightReason": "blocked",
+        "approvalNeeded": false,
+        "recommendedDecision": "Review the blocked lane result before changing the plan or marking the work complete.",
+        "blockedBy": [
+          "Sudo orchestration model override was not acknowledged by runtime. Requested codex5.4."
+        ],
+        "nextHumanDecision": "Marvin and Philippe need to decide whether to retry, change the plan, or stop.",
+        "marvinSummary": "Sudo orchestration failed before it could safely hand back control.",
+        "safeToAutoContinue": false
+      },
+      "error": "Sudo orchestration model override was not acknowledged by runtime. Requested codex5.4."
+    },
+    {
+      "id": "sudo-orchestration-1775476623311-lc9nb0",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "promptSummary": "Sudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "status": "error",
+      "requestedAt": "2026-04-06T11:57:03.311Z",
+      "startedAt": "2026-04-06T11:57:03.350Z",
+      "completedAt": "2026-04-06T11:57:58.800Z",
+      "updatedAt": "2026-04-06T11:57:58.801Z",
+      "childRunIds": [],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": true,
+        "oversightLevel": "blocker",
+        "oversightReason": "blocked",
+        "approvalNeeded": false,
+        "recommendedDecision": "Review the blocked lane result before changing the plan or marking the work complete.",
+        "blockedBy": [
+          "Sudo orchestration did not return a supported decision mode."
+        ],
+        "nextHumanDecision": "Marvin and Philippe need to decide whether to retry, change the plan, or stop.",
+        "marvinSummary": "Sudo orchestration failed before it could safely hand back control.",
+        "safeToAutoContinue": false
+      },
+      "error": "Sudo orchestration did not return a supported decision mode."
+    },
+    {
+      "id": "sudo-orchestration-1775476002190-hae6qh",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "promptSummary": "Sudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "status": "error",
+      "requestedAt": "2026-04-06T11:46:42.190Z",
+      "startedAt": "2026-04-06T11:46:42.226Z",
+      "completedAt": "2026-04-06T11:46:55.666Z",
+      "updatedAt": "2026-04-06T11:46:55.666Z",
+      "childRunIds": [],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": true,
+        "oversightLevel": "blocker",
+        "oversightReason": "blocked",
+        "approvalNeeded": false,
+        "recommendedDecision": "Review the blocked lane result before changing the plan or marking the work complete.",
+        "blockedBy": [
+          "Sudo orchestration model override was not acknowledged by runtime. Requested codex5.4."
+        ],
+        "nextHumanDecision": "Marvin and Philippe need to decide whether to retry, change the plan, or stop.",
+        "marvinSummary": "Sudo orchestration failed before it could safely hand back control.",
+        "safeToAutoContinue": false
+      },
+      "error": "Sudo orchestration model override was not acknowledged by runtime. Requested codex5.4."
+    }
+  ],
+  "runs": [
+    {
+      "id": "sudo-delegation-1775635667123-pqk0r8",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1775635169774-yk05p8",
+      "orchestrationSequence": 2,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "qa",
+        "seatLabel": "QA Engineer",
+        "role": "Verification and regression lane",
+        "defaultModel": "minimax2.7",
+        "defaultThinking": "low",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the QA Engineer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: Verification and regression lane.\nSudo plan context:\n- Step 2 of 2\n- Planned lane order: frontend -> qa\n- Step purpose: Verify the redesigned Home page renders correctly, uses real data/fallbacks honestly, and meets the plan’s core acceptance criteria across key breakpoints.\n- Expected output: A verification pass covering layout, widget behavior, links, responsive behavior, and any regressions or follow-up fixes needed before signoff.\n- Validation focus: Desktop/mobile layout, adapter safety, badge counts, empty states, and no fake/live-data mismatches.\n- Order rationale: Frontend must go first because the work is primarily UI and adapter integration; QA then validates the implemented page and catches regressions before completion.\n- Validation intent: Validate against the plan, the current runtime truth, and visible behavior in the app, with emphasis on real data wiring, layout quality, and honest fallback states.\n- Completion criteria: The Home page matches the redesign plan’s P0/P1 scope, builds and renders cleanly, uses real or explicit fallback data, and passes a focused QA verification without unresolved blocking regressions.\nPrior completed lane output:\n- Frontend Developer: completed\nTask delegated by Sudo:\nSudo, improve the current Home page, following this implementation plan: projects/mission-control/docs/home-page-redesign-plan.md",
+      "promptSummary": "You are the QA Engineer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent session...",
+      "status": "done",
+      "requestedAt": "2026-04-08T08:07:47.123Z",
+      "startedAt": "2026-04-08T08:07:47.171Z",
+      "completedAt": "2026-04-08T08:08:05.653Z",
+      "updatedAt": "2026-04-08T08:08:05.653Z",
+      "childSessionKey": "agent:main:sudo-qa:6cf332db-b3f5-445b-8e8b-91e455d65242",
+      "runId": "89488e60-5c7a-473d-b561-c93b1382dda4",
+      "resultSummary": "completed"
+    },
+    {
+      "id": "sudo-delegation-1775635197062-jyv65t",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1775635169774-yk05p8",
+      "orchestrationSequence": 1,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "frontend",
+        "seatLabel": "Frontend Developer",
+        "role": "UI implementation lane",
+        "defaultModel": "codex",
+        "defaultThinking": "medium",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the Frontend Developer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: UI implementation lane.\nSudo plan context:\n- Step 1 of 2\n- Planned lane order: frontend -> qa\n- Step purpose: Implement the approved Home page redesign plan in the Mission Control UI, including the new quick-access grid, live secondary widgets, layout refinements, and FLOATING-style pol...\n- Expected output: Updated Home page components and adapters, with placeholder signal cards replaced, quick-access tiles wired in, and responsive/polish changes applied.\n- Validation focus: Match the redesign plan closely while keeping runtime truth, existing data flows, and fallback states intact.\n- Order rationale: Frontend must go first because the work is primarily UI and adapter integration; QA then validates the implemented page and catches regressions before completion.\n- Validation intent: Validate against the plan, the current runtime truth, and visible behavior in the app, with emphasis on real data wiring, layout quality, and honest fallback states.\n- Completion criteria: The Home page matches the redesign plan’s P0/P1 scope, builds and renders cleanly, uses real or explicit fallback data, and passes a focused QA verification without unresolved blocking regressions.\nPrior completed lane output:\n- No prior lane output yet.\nTask delegated by Sudo:\nSudo, improve the current Home page, following this implementation plan: projects/mission-control/docs/home-page-redesign-plan.md",
+      "promptSummary": "You are the Frontend Developer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent...",
+      "status": "done",
+      "requestedAt": "2026-04-08T07:59:57.062Z",
+      "startedAt": "2026-04-08T07:59:57.108Z",
+      "completedAt": "2026-04-08T08:07:47.109Z",
+      "updatedAt": "2026-04-08T08:07:47.109Z",
+      "childSessionKey": "agent:main:sudo-frontend:49a9de3f-ea59-40aa-8e73-497bbeab1925",
+      "runId": "4600757f-0c6f-4738-95bb-3727ef052803",
+      "resultSummary": "completed"
+    },
+    {
+      "id": "sudo-delegation-1775555960017-4qriv6",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1775555462365-f2kym2",
+      "orchestrationSequence": 2,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "qa",
+        "seatLabel": "QA Engineer",
+        "role": "Verification and regression lane",
+        "defaultModel": "minimax2.7",
+        "defaultThinking": "low",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the QA Engineer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: Verification and regression lane.\nSudo plan context:\n- Step 2 of 2\n- Planned lane order: frontend -> qa\n- Step purpose: Verify the UI behaves correctly after the frontend change.\n- Expected output: Validation notes covering expand/collapse behavior, keyboard/accessibility behavior, dropdown interactions, and layout on narrower widths.\n- Validation focus: Check no regression in status/session controls, menu interactions, or top-section layout stability.\n- Order rationale: Frontend must land first because this is a single-surface UI change; QA then verifies the intended behavior and catches regressions in the existing Chat controls.\n- Validation intent: Validate the component-level behavior through targeted UI checks: collapsed by default, toggle expands and collapses cleanly, existing controls remain functional, and no obvious mobile or keyboard regression appears.\n- Completion criteria: The Chat page top section matches the plan in MissionControlChatSurface.tsx, the controls row is collapsible behind a visible toggle, and QA confirms the interaction works without regressions.\nPrior completed lane output:\n- Frontend Developer: completed\nTask delegated by Sudo:\nSudo, improve the top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-collapsible-top-section-plan.md",
+      "promptSummary": "You are the QA Engineer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent session...",
+      "status": "done",
+      "requestedAt": "2026-04-07T09:59:20.017Z",
+      "startedAt": "2026-04-07T09:59:20.058Z",
+      "completedAt": "2026-04-07T10:00:35.889Z",
+      "updatedAt": "2026-04-07T10:00:35.889Z",
+      "childSessionKey": "agent:main:sudo-qa:7e47e9a6-9dcc-43b4-ad59-2b32b0799484",
+      "runId": "41ee7c7a-b334-44a2-af9f-a6203d7d1784",
+      "resultSummary": "completed"
+    },
+    {
+      "id": "sudo-delegation-1775555507801-51hh7p",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1775555462365-f2kym2",
+      "orchestrationSequence": 1,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "frontend",
+        "seatLabel": "Frontend Developer",
+        "role": "UI implementation lane",
+        "defaultModel": "codex",
+        "defaultThinking": "medium",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the Frontend Developer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: UI implementation lane.\nSudo plan context:\n- Step 1 of 2\n- Planned lane order: frontend -> qa\n- Step purpose: Implement the planned collapsible top-section UI in the Chat page without changing runtime behavior or API contracts.\n- Expected output: Updated MissionControlChatSurface.tsx with controlsExpanded state, Row 1 Controls toggle, and Row 2 wrapped in an accessible <details>/<summary> block styled to match the existi...\n- Validation focus: Preserve all existing selectors, status actions, and dropdown behavior while reducing persistent vertical space.\n- Order rationale: Frontend must land first because this is a single-surface UI change; QA then verifies the intended behavior and catches regressions in the existing Chat controls.\n- Validation intent: Validate the component-level behavior through targeted UI checks: collapsed by default, toggle expands and collapses cleanly, existing controls remain functional, and no obvious mobile or keyboard regression appears.\n- Completion criteria: The Chat page top section matches the plan in MissionControlChatSurface.tsx, the controls row is collapsible behind a visible toggle, and QA confirms the interaction works without regressions.\nPrior completed lane output:\n- No prior lane output yet.\nTask delegated by Sudo:\nSudo, improve the top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-collapsible-top-section-plan.md",
+      "promptSummary": "You are the Frontend Developer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent...",
+      "status": "done",
+      "requestedAt": "2026-04-07T09:51:47.801Z",
+      "startedAt": "2026-04-07T09:51:47.836Z",
+      "completedAt": "2026-04-07T09:59:19.995Z",
+      "updatedAt": "2026-04-07T09:59:19.995Z",
+      "childSessionKey": "agent:main:sudo-frontend:56058e57-f7ee-4e2a-9a08-01f59eadd2df",
+      "runId": "8e34f4d8-5f9b-4dfe-b96e-ad0a448d5ac8",
+      "resultSummary": "completed"
+    },
+    {
+      "id": "sudo-delegation-1775551284993-gyjc6s",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1775550616119-pc2xso",
+      "orchestrationSequence": 3,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "qa",
+        "seatLabel": "QA Engineer",
+        "role": "Verification and regression lane",
+        "defaultModel": "minimax2.7",
+        "defaultThinking": "low",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the QA Engineer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: Verification and regression lane.\nSudo plan context:\n- Step 3 of 3\n- Planned lane order: backend -> frontend -> qa\n- Step purpose: Verify the end-to-end phase-1 operator flow against the plan acceptance criteria before calling it done.\n- Expected output: Validation notes covering happy path, permission denial, failed transcription, unsupported browser behavior, and transcript edit-before-send behavior.\n- Validation focus: End-to-end reliability, non-destructive failures, and alignment with phase-1 non-goals.\n- Order rationale: Backend first defines the real STT contract, frontend then integrates against that contract, and QA closes the loop on the full click-to-talk flow.\n- Validation intent: Mission Control should validate the implemented flow against the documented phase-1 acceptance criteria and explicit non-goals using real end-to-end interaction.\n- Completion criteria: Phase 1 is done when the mic button records and stops reliably, audio is transcribed through the backend route, the transcript lands in the composer for manual editing, and failure states are visible and non-destructive.\nPrior completed lane output:\n- Backend Developer: completed\n- Frontend Developer: completed\nTask delegated by Sudo:\nSudo, your recommendation has already been captured into an implementation plan by Marvin, and can be found here: projects/mission-control/docs/speech-to-text-implementation-plan.md. Please start phase 1.",
+      "promptSummary": "You are the QA Engineer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent session...",
+      "status": "done",
+      "requestedAt": "2026-04-07T08:41:24.993Z",
+      "startedAt": "2026-04-07T08:41:25.036Z",
+      "completedAt": "2026-04-07T08:48:54.886Z",
+      "updatedAt": "2026-04-07T08:48:54.886Z",
+      "childSessionKey": "agent:main:sudo-qa:84958cc3-3b57-4f48-ba1c-4f984e329cf7",
+      "runId": "1690ba17-a3d4-4d5e-9768-b78ce73bb2b7",
+      "resultSummary": "completed"
+    },
+    {
+      "id": "sudo-delegation-1775551007763-wwb4em",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1775550616119-pc2xso",
+      "orchestrationSequence": 2,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "frontend",
+        "seatLabel": "Frontend Developer",
+        "role": "UI implementation lane",
+        "defaultModel": "codex",
+        "defaultThinking": "medium",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the Frontend Developer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: UI implementation lane.\nSudo plan context:\n- Step 2 of 3\n- Planned lane order: backend -> frontend -> qa\n- Step purpose: Wire the existing mic button to a narrow recording state machine and connect it to the real transcription endpoint.\n- Expected output: Mic-driven click-to-talk flow in Mission Control Chat with recording, transcribing, and error states, plus transcript insertion into the composer without auto-send.\n- Validation focus: Permission handling, MediaRecorder flow, composer preservation, and graceful unsupported-browser behavior.\n- Order rationale: Backend first defines the real STT contract, frontend then integrates against that contract, and QA closes the loop on the full click-to-talk flow.\n- Validation intent: Mission Control should validate the implemented flow against the documented phase-1 acceptance criteria and explicit non-goals using real end-to-end interaction.\n- Completion criteria: Phase 1 is done when the mic button records and stops reliably, audio is transcribed through the backend route, the transcript lands in the composer for manual editing, and failure states are visible and non-destructive.\nPrior completed lane output:\n- Backend Developer: completed\nTask delegated by Sudo:\nSudo, your recommendation has already been captured into an implementation plan by Marvin, and can be found here: projects/mission-control/docs/speech-to-text-implementation-plan.md. Please start phase 1.",
+      "promptSummary": "You are the Frontend Developer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent...",
+      "status": "done",
+      "requestedAt": "2026-04-07T08:36:47.763Z",
+      "startedAt": "2026-04-07T08:36:47.842Z",
+      "completedAt": "2026-04-07T08:41:24.980Z",
+      "updatedAt": "2026-04-07T08:41:24.980Z",
+      "childSessionKey": "agent:main:sudo-frontend:f47107f8-d026-4c86-b5a8-db646667c2d0",
+      "runId": "bc482098-0abc-4c7d-88bb-bf07a7dcc1b1",
+      "resultSummary": "completed"
+    },
+    {
+      "id": "sudo-delegation-1775550646007-6oly3u",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1775550616119-pc2xso",
+      "orchestrationSequence": 1,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "backend",
+        "seatLabel": "Backend Developer",
+        "role": "API and server implementation lane",
+        "defaultModel": "codex",
+        "defaultThinking": "medium",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the Backend Developer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: API and server implementation lane.\nSudo plan context:\n- Step 1 of 3\n- Planned lane order: backend -> frontend -> qa\n- Step purpose: Create the phase-1 transcription boundary first so the UI can integrate against a real, validated endpoint instead of guessing request and response shapes.\n- Expected output: A Mission Control /api/transcribe route with multipart upload handling, MIME and size validation, provider call wiring, and stable JSON response/error shape.\n- Validation focus: Route auth boundary, upload validation, response contract, and non-persistent audio handling.\n- Order rationale: Backend first defines the real STT contract, frontend then integrates against that contract, and QA closes the loop on the full click-to-talk flow.\n- Validation intent: Mission Control should validate the implemented flow against the documented phase-1 acceptance criteria and explicit non-goals using real end-to-end interaction.\n- Completion criteria: Phase 1 is done when the mic button records and stops reliably, audio is transcribed through the backend route, the transcript lands in the composer for manual editing, and failure states are visible and non-destructive.\nPrior completed lane output:\n- No prior lane output yet.\nTask delegated by Sudo:\nSudo, your recommendation has already been captured into an implementation plan by Marvin, and can be found here: projects/mission-control/docs/speech-to-text-implementation-plan.md. Please start phase 1.",
+      "promptSummary": "You are the Backend Developer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent s...",
+      "status": "done",
+      "requestedAt": "2026-04-07T08:30:46.007Z",
+      "startedAt": "2026-04-07T08:30:46.041Z",
+      "completedAt": "2026-04-07T08:36:47.708Z",
+      "updatedAt": "2026-04-07T08:36:47.708Z",
+      "childSessionKey": "agent:main:sudo-backend:9ab7104d-4ddb-44ff-a068-99541b8e1e52",
+      "runId": "807ade2c-f4d1-40e1-9972-47a79e89627d",
+      "resultSummary": "completed"
+    },
+    {
+      "id": "sudo-delegation-1775480475928-dgfise",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1775480451950-8qmezh",
+      "orchestrationSequence": 1,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "frontend",
+        "seatLabel": "Frontend Developer",
+        "role": "UI implementation lane",
+        "defaultModel": "codex",
+        "defaultThinking": "medium",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the Frontend Developer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: UI implementation lane.\nSudo plan context:\n- Step 1 of 1\n- Planned lane order: frontend\n- Step purpose: Implement the approved sidebar redesign plan in the Mission Control UI, including collapse state, layout wiring, Lucide icon swap, and hover/collapsed polish.\n- Expected output: Updated sidebar components, shell context/layout integration, styling variable additions, dependency change for lucide-react, and a working collapsed/expanded sidebar matching t...\n- Validation focus: Verify collapsed-state persistence, layout shift behavior, icon rendering, hover/active states, tooltip behavior, and no regressions in General/Trading navigation.\n- Order rationale: A single frontend lane is the smallest honest sequence because the plan is purely UI work with no backend dependency and no separate QA lane is required to begin execution.\n- Validation intent: Mission Control should validate with a local UI pass across expanded and collapsed states in both domains, checking persistence after reload and confirming the ambient widget/labels behave correctly when collapsed.\n- Completion criteria: Done when the sidebar redesign is implemented in the specified files, behaves correctly across reloads and domain views, and the visible interaction details match the approved plan without introducing shell layout regressions.\nPrior completed lane output:\n- No prior lane output yet.\nTask delegated by Sudo:\nSudo, improve the left sidebar, following this implementation plan: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "promptSummary": "You are the Frontend Developer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent...",
+      "status": "done",
+      "requestedAt": "2026-04-06T13:01:15.928Z",
+      "startedAt": "2026-04-06T13:01:15.972Z",
+      "completedAt": "2026-04-06T13:07:41.133Z",
+      "updatedAt": "2026-04-06T13:07:41.133Z",
+      "childSessionKey": "agent:main:sudo-frontend:1d504dfa-8ec9-4fd7-9677-ff87669149a5",
+      "runId": "9fc0a51a-57f0-4361-a533-3408d502353a",
+      "resultSummary": "completed"
+    }
+  ],
+  "meta": {
+    "schemaVersion": 4,
+    "updatedAt": "2026-04-08T08:12:53.394Z"
+  }
+}

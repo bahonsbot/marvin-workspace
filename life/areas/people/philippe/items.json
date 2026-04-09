@@ -181,9 +181,9 @@
         "projects/platform-health-council",
         "projects/self-improvement"
       ],
-      "lastAccessed": "2026-03-25",
-      "accessCount": 1,
-      "lastUsed": "2026-03-25T01:00:00.000000"
+      "lastAccessed": "2026-04-07",
+      "accessCount": 2,
+      "lastUsed": "2026-04-07T04:30:00.000000"
     },
     {
       "id": "philippe-015",
@@ -244,6 +244,85 @@
       "lastAccessed": "2026-03-26",
       "accessCount": 1,
       "lastUsed": "2026-03-26T16:56:00.000000"
+    },
+    {
+      "id": "philippe-019",
+      "fact": "Mission Control durable agent identities locked: Sudo (Dev Team lead), Vantage (Content/SEO Editor-in-Chief), Johan (Sportsbet Advisor), Milou (Trading Advisor), Japin (Language Tutor). Avatar recommended size: 512x512 PNG/WebP (768x768 acceptable for cropping headroom). Source: memory/2026-04-05.md.",
+      "category": "status",
+      "timestamp": "2026-04-05T20:32:00+07:00",
+      "source": "memory/2026-04-05.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/mission-control",
+        "agent-workspaces/dev-team-lead",
+        "agent-workspaces/content-seo-team-lead",
+        "agent-workspaces/sportsbet-advisor",
+        "agent-workspaces/trading-advisor",
+        "agent-workspaces/language-tutor"
+      ],
+      "lastAccessed": "2026-04-05",
+      "accessCount": 1,
+      "lastUsed": "2026-04-05T20:32:00.000000"
+    },
+    {
+      "id": "philippe-020",
+      "fact": "ClawHub skill sources for Johan, Milou, Japin were resolved via manual local upload (uploads/mission-control/) after registry rate limiting blocked live CLI inspection. Original ClawHub URLs preserved as historical/source reference. Sudo/Vantage teams may gain more role-aligned skills later as team composition deepens.",
+      "category": "status",
+      "timestamp": "2026-04-05T22:35:00+07:00",
+      "source": "memory/2026-04-05.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/mission-control",
+        "uploads/mission-control"
+      ],
+      "lastAccessed": "2026-04-05",
+      "accessCount": 1,
+      "lastUsed": "2026-04-05T22:35:00.000000"
+    },
+    {
+      "id": "philippe-023",
+      "fact": "Agent-team package retirement requested by Philippe (Apr 6 evening): Hybrid Agent-Team v1 is superseded by Dev Team/Sudo workflow. Philippe explicitly asked to set up a retirement pass. Recommend archiving projects/_ops/agent-team/ and updating TOOLS.md so it is no longer framed as a live package.",
+      "category": "decision",
+      "timestamp": "2026-04-06T22:10:00+07:00",
+      "source": "memory/2026-04-06.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/mission-control",
+        "projects/agent-team"
+      ],
+      "lastAccessed": "2026-04-06",
+      "accessCount": 1,
+      "lastUsed": "2026-04-06T22:10:00.000000"
+    },
+    {
+      "id": "philippe-021",
+      "fact": "Planned future team additions: Content team may gain an Editor role; Dev team may gain an Integrator role. Vantage framed as Editor-in-Chief rather than generic strategist.",
+      "category": "decision",
+      "timestamp": "2026-04-05T21:28:00+07:00",
+      "source": "memory/2026-04-05.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/mission-control",
+        "agent-workspaces/content-seo-team-lead",
+        "agent-workspaces/dev-team-lead"
+      ],
+      "lastAccessed": "2026-04-05",
+      "accessCount": 1,
+      "lastUsed": "2026-04-05T21:28:00.000000"
+    },
+    {
+      "id": "philippe-022",
+      "fact": "Mission Control sidebar redesign plan created (Apr 5) for collapsible sidebar, Lucide icon vocabulary, hover wow-factor, elegant/minimal aesthetic. Plan artifact: projects/mission-control/docs/sidebar-redesign-plan.md.",
+      "category": "status",
+      "timestamp": "2026-04-05T13:03:00+07:00",
+      "source": "memory/2026-04-05.md",
+      "status": "active",
+      "relatedEntities": [
+        "projects/mission-control"
+      ],
+      "lastAccessed": "2026-04-05",
+      "accessCount": 1,
+      "lastUsed": "2026-04-05T13:03:00.000000"
     }
   ]
 }

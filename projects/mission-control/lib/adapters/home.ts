@@ -1,11 +1,15 @@
 import { execFile } from 'node:child_process';
 import { promises as fs } from 'node:fs';
+import os from 'node:os';
 import { promisify } from 'node:util';
 import { cache } from 'react';
 import type {
   HomeMarketSignalsSummary,
+  HomeMarketWatchHeadline,
+  HomeMarketWatchSummary,
   HomeQuickAccessItem,
   HomeSummary,
+  HomeSystemMetricsSummary,
   HomeWorkspaceHealthSummary,
 } from '@/lib/types/contracts';
 import { getCronJobs } from '@/lib/adapters/cron';
@@ -17,6 +21,20 @@ const execFileAsync = promisify(execFile);
 const SIGNALS_PATH = '/data/.openclaw/workspace/projects/market-intel/data/tracked_signals.json';
 const TASKS_PATH = '/data/.openclaw/workspace/projects/mission-control/data/autonomous-tasks.json';
 const CRON_RUN_LOG_PATH = '/data/.openclaw/workspace/memory/cron-run-log.jsonl';
+const HOME_RSS_SOURCES = [
+  '/data/.openclaw/workspace/projects/market-intel/data/news_alerts.json',
+  '/data/.openclaw/workspace/projects/market-intel/data/rss_alerts.json',
+] as const;
+const HOME_QUOTES = [
+  'Useful before beautiful. Beautiful once useful.',
+  'Clarity first, speed second, polish third.',
+  'Small honest improvements beat grand unclear plans.',
+  'Quiet systems make loud progress possible.',
+  'Keep the signal strong and the interface calm.',
+  'Reliable beats impressive when the stakes are real.',
+  'Do the obvious thing well, then stop.',
+  'Good rhythm: inspect, decide, execute, verify.',
+] as const;
 
 function weatherCodeLabel(code: number | null | undefined) {
   const map: Record<number, string> = {
@@ -243,6 +261,170 @@ async function getLastAutonomousTaskAt(): Promise<string | null> {
   return timestamps[0] ?? null;
 }
 
+type RawRssAlert = {
+  feed?: string;
+  title?: string;
+  link?: string;
+  source_type?: string;
+  timestamp?: string;
+  published?: string;
+};
+
+type RssSourceCandidate = {
+  path: string;
+  headlines: HomeMarketWatchHeadline[];
+  latestAt: string | null;
+  usableCount: number;
+};
+
+function getVietnamDateKey(now = new Date()): string {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(now);
+
+  const year = parts.find((part) => part.type === 'year')?.value ?? '1970';
+  const month = parts.find((part) => part.type === 'month')?.value ?? '01';
+  const day = parts.find((part) => part.type === 'day')?.value ?? '01';
+  return `${year}-${month}-${day}`;
+}
+
+function getDailyQuote(now = new Date()): string {
+  const dateKey = getVietnamDateKey(now);
+  const hash = Array.from(dateKey).reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return HOME_QUOTES[hash % HOME_QUOTES.length] ?? HOME_QUOTES[0];
+}
+
+function normalizeRssItems(parsed: unknown): RawRssAlert[] {
+  if (Array.isArray(parsed)) return parsed as RawRssAlert[];
+  if (parsed && typeof parsed === 'object' && Array.isArray((parsed as { alerts?: unknown }).alerts)) {
+    return (parsed as { alerts: RawRssAlert[] }).alerts;
+  }
+  return [];
+}
+
+function toHeadlineRecord(item: RawRssAlert, index: number, dedupe: Set<string>): HomeMarketWatchHeadline | null {
+  if (typeof item.title !== 'string') return null;
+  const title = item.title.trim();
+  if (!title) return null;
+
+  const sourceType = typeof item.source_type === 'string' ? item.source_type.toLowerCase() : 'rss';
+  if (sourceType && sourceType !== 'rss') return null;
+
+  const dedupeKey = title.toLowerCase();
+  if (dedupe.has(dedupeKey)) return null;
+  dedupe.add(dedupeKey);
+
+  return {
+    id: `${dedupeKey}-${index}`,
+    title,
+    source: typeof item.feed === 'string' && item.feed.trim() ? item.feed.trim() : 'RSS feed',
+    link: typeof item.link === 'string' && item.link.trim() ? item.link.trim() : null,
+    at: toIsoTimestamp(item.timestamp) ?? toIsoTimestamp(item.published),
+  };
+}
+
+async function readRssSource(path: string): Promise<RssSourceCandidate | null> {
+  try {
+    const [raw, stat] = await Promise.all([fs.readFile(path, 'utf8'), fs.stat(path)]);
+    const parsed = JSON.parse(raw) as unknown;
+    const items = normalizeRssItems(parsed);
+    const dedupe = new Set<string>();
+
+    const headlines = items
+      .map((item, index) => toHeadlineRecord(item, index, dedupe))
+      .filter((item): item is HomeMarketWatchHeadline => Boolean(item))
+      .sort((a, b) => (a.at ?? '') < (b.at ?? '') ? 1 : -1)
+      .slice(0, 10);
+
+    const latestFromHeadlines = headlines[0]?.at ?? null;
+    const latestAt = latestFromHeadlines ?? stat.mtime.toISOString();
+
+    return {
+      path,
+      headlines,
+      latestAt,
+      usableCount: headlines.length,
+    };
+  } catch {
+    return null;
+  }
+}
+
+const getMarketWatchSummary = cache(async function getMarketWatchSummary(): Promise<HomeMarketWatchSummary> {
+  const candidates = (await Promise.all(HOME_RSS_SOURCES.map((sourcePath) => readRssSource(sourcePath)))).filter(
+    (item): item is RssSourceCandidate => Boolean(item),
+  );
+
+  if (candidates.length === 0) {
+    return {
+      headlines: [],
+      sourcePath: null,
+      updatedAt: null,
+      selectionNote: 'No local RSS source was readable.',
+    };
+  }
+
+  const freshestOverall = [...candidates].sort((a, b) => (a.latestAt ?? '') < (b.latestAt ?? '') ? 1 : -1)[0];
+  const usableByFreshness = [...candidates]
+    .filter((candidate) => candidate.usableCount > 0)
+    .sort((a, b) => (a.latestAt ?? '') < (b.latestAt ?? '') ? 1 : -1);
+
+  const selected = usableByFreshness[0] ?? null;
+
+  if (!selected) {
+    return {
+      headlines: [],
+      sourcePath: freshestOverall.path,
+      updatedAt: freshestOverall.latestAt,
+      selectionNote: 'Freshest source had no usable RSS headlines.',
+    };
+  }
+
+  const selectionNote =
+    freshestOverall.usableCount === 0 && freshestOverall.path !== selected.path
+      ? `Freshest source (${freshestOverall.path}) had 0 usable RSS headlines, so fallback used ${selected.path}.`
+      : null;
+
+  return {
+    headlines: selected.headlines.slice(0, 7),
+    sourcePath: selected.path,
+    updatedAt: selected.latestAt,
+    selectionNote,
+  };
+});
+
+const getSystemMetrics = cache(async function getSystemMetrics(): Promise<HomeSystemMetricsSummary> {
+  const totalMem = os.totalmem();
+  const freeMem = os.freemem();
+  const usedMem = totalMem > 0 ? totalMem - freeMem : null;
+  const ramUsedPercent = usedMem !== null && totalMem > 0 ? Math.round((usedMem / totalMem) * 100) : null;
+
+  let diskUsedPercent: number | null = null;
+  try {
+    const stat = await fs.statfs('/data/.openclaw/workspace');
+    const total = Number(stat.blocks) * Number(stat.bsize);
+    const available = Number(stat.bavail) * Number(stat.bsize);
+    if (Number.isFinite(total) && total > 0 && Number.isFinite(available)) {
+      diskUsedPercent = Math.max(0, Math.min(100, Math.round(((total - available) / total) * 100)));
+    }
+  } catch {
+    diskUsedPercent = null;
+  }
+
+  const loadAverage1m = Number.isFinite(os.loadavg()[0]) ? Number(os.loadavg()[0].toFixed(2)) : null;
+  const uptimeSeconds = Number.isFinite(os.uptime()) ? Math.floor(os.uptime()) : null;
+
+  return {
+    ramUsedPercent,
+    diskUsedPercent,
+    loadAverage1m,
+    uptimeSeconds,
+  };
+});
+
 export const getWorkspaceHealth = cache(async function getWorkspaceHealth(): Promise<HomeWorkspaceHealthSummary> {
   const [qmdCollections, lastCronRunAt, lastAutonomousTaskAt] = await Promise.all([
     getQmdCollectionCount(),
@@ -258,15 +440,18 @@ export const getWorkspaceHealth = cache(async function getWorkspaceHealth(): Pro
 });
 
 export const getHomeSummary = cache(async function getHomeSummary(): Promise<HomeSummary> {
-  const [sessionsData, cronData, activityData, weather, quickAccess, marketSignals, workspaceHealth] = await Promise.all([
-    getSessions(),
-    getCronJobs(),
-    getRecentActivity(),
-    getWeather(),
-    getQuickAccessItems(),
-    getMarketSignalsSummary(),
-    getWorkspaceHealth(),
-  ]);
+  const [sessionsData, cronData, activityData, weather, quickAccess, marketSignals, workspaceHealth, marketWatch, system] =
+    await Promise.all([
+      getSessions(),
+      getCronJobs(),
+      getRecentActivity(),
+      getWeather(),
+      getQuickAccessItems(),
+      getMarketSignalsSummary(),
+      getWorkspaceHealth(),
+      getMarketWatchSummary(),
+      getSystemMetrics(),
+    ]);
 
   const sessions =
     sessionsData.status === 'partial'
@@ -305,6 +490,8 @@ export const getHomeSummary = cache(async function getHomeSummary(): Promise<Hom
     quickAccess,
     marketSignals,
     workspaceHealth,
+    marketWatch,
+    system,
     ambient: {
       weather,
       greeting: getGreeting(currentDate),
@@ -313,7 +500,7 @@ export const getHomeSummary = cache(async function getHomeSummary(): Promise<Hom
         dueCron: cron?.dueOrRunning ?? 0,
         activityCount: activityData.items.length,
       }),
-      quote: 'Useful before beautiful. Beautiful once useful.',
+      quote: getDailyQuote(currentDate),
     },
     refreshedAt: new Date().toISOString(),
   };

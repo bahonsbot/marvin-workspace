@@ -43,7 +43,7 @@ When you delegate, say:
 - `codex5.4` = Marvin orchestration / higher-reasoning planning
 - `codex` = default for non-trivial coding, debugging, multi-file technical work
 - `minimax/MiniMax-M2.7` = default lightweight / routine delegation route
-- `bailian/qwen3.5-plus` = heavier reasoning, synthesis, higher-context analysis
+- `bailian/qwen3.5-plus` = heavier reasoning, synthesis, higher-context analysis *(currently unavailable, do not route live)*
 - `glm-5` / `kimi-k2.5` = optional comparison or second-opinion runs, not default routes
 
 ## Quality Standard

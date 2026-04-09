@@ -1,8 +1,15 @@
 #!/usr/bin/env node
-import { readFile, writeFile, unlink, stat } from 'node:fs/promises';
+import { readFile, writeFile, unlink, stat, rm } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import path from 'node:path';
 import { promisify } from 'node:util';
+import {
+  createMissionControlSessionTarget,
+  formatModelVerificationError,
+  prepareSessionModel,
+  verifySessionModel,
+} from './lib/openclaw-session-model.mjs';
+import { renderResearchMarkdown, resolveWebResearchProvider, runWebResearch, writeResearchPacketArtifact } from './lib/web-research.mjs';
 
 const execFileAsync = promisify(execFile);
 const workspaceRoot = '/data/.openclaw/workspace';
@@ -14,6 +21,12 @@ const tasksLogPath = path.join(workspaceRoot, 'memory', 'tasks-log.md');
 const managedPaths = [autonomyPath, storePath, queuePath, tasksLogPath];
 const allowedModelAliases = new Set(['minimax2.7', 'codex', 'codex5.4', 'codex5.4mini', 'gemini']);
 const noiseRootFiles = new Set(['AGENTS.md', 'SOUL.md', 'TOOLS.md', 'IDENTITY.md', 'USER.md', 'HEARTBEAT.md', 'BOOTSTRAP.md', 'MEMORY.md']);
+const defaultAgentModelAlias = {
+  marvin: 'codex5.4',
+  builder: 'codex',
+  reviewer: 'minimax2.7',
+  'content-creator': null,
+};
 
 function now() {
   return Date.now();
@@ -34,6 +47,81 @@ function isMeaningfulRetryFeedback(entry) {
   if (/^Queue execution blocked\.?$/i.test(note)) return false;
   if (/^(approved|accepted|looks good|lgtm|done|completed|ship it|works as is)\b/i.test(note)) return false;
   return true;
+}
+
+function effectiveModelAliasForTask(task, activeRun) {
+  return normalizeModelAlias(activeRun?.model || task.model) || defaultAgentModelAlias[String(task?.agentTarget || '').trim()] || null;
+}
+
+function resolveThinkingLevel(task, activeRun) {
+  const effectiveModelAlias = effectiveModelAliasForTask(task, activeRun);
+  if (effectiveModelAlias === 'minimax2.7') return 'high';
+  return task.priority === 'critical' || task.priority === 'high' ? 'medium' : 'low';
+}
+
+function isPlanningOnlyTask(task) {
+  const text = `${task?.title || ''}\n${task?.description || ''}`.toLowerCase();
+  if (/following this implementation plan/.test(text)) return false;
+  return /(implementation plan|design doc|proposal|technical spec|execution plan)/.test(text)
+    && /(create|write|draft|prepare|produce|develop|make)/.test(text);
+}
+
+function isAllowedPlanningArtifactPath(relativePath) {
+  const normalized = String(relativePath || '').replace(/\\/g, '/').trim().toLowerCase();
+  if (!normalized) return false;
+  if (normalized.endsWith('.md')) return true;
+  return false;
+}
+
+async function snapshotRepoStatus() {
+  const result = await execFileAsync('bash', ['-lc', 'git status --porcelain=v1 -uall'], {
+    cwd: workspaceRoot,
+    maxBuffer: 2 * 1024 * 1024,
+  });
+  const entries = new Map();
+  for (const line of String(result.stdout || '').split('\n')) {
+    if (!line.trim()) continue;
+    const status = line.slice(0, 2);
+    const rawPath = line.slice(3).trim();
+    const targetPath = rawPath.includes(' -> ') ? rawPath.split(' -> ').pop().trim() : rawPath;
+    entries.set(targetPath, status);
+  }
+  return entries;
+}
+
+function newlyChangedPaths(before, after) {
+  const changed = [];
+  for (const [filePath, status] of after.entries()) {
+    if (before.get(filePath) !== status) changed.push(filePath);
+  }
+  return changed;
+}
+
+async function rollbackNewRepoChanges(paths) {
+  if (!Array.isArray(paths) || paths.length === 0) return;
+  const tracked = [];
+  for (const relativePath of paths) {
+    try {
+      await stat(path.join(workspaceRoot, relativePath));
+    } catch {
+      continue;
+    }
+    const trackedCheck = await execFileAsync('bash', ['-lc', `git ls-files --error-unmatch -- ${JSON.stringify(relativePath)}`], {
+      cwd: workspaceRoot,
+      maxBuffer: 512 * 1024,
+    }).then(() => true).catch(() => false);
+    if (trackedCheck) {
+      tracked.push(relativePath);
+    } else {
+      await rm(path.join(workspaceRoot, relativePath), { recursive: true, force: true });
+    }
+  }
+  if (tracked.length) {
+    await execFileAsync('bash', ['-lc', `git checkout -- ${tracked.map((entry) => JSON.stringify(entry)).join(' ')}`], {
+      cwd: workspaceRoot,
+      maxBuffer: 512 * 1024,
+    });
+  }
 }
 
 async function loadStore() {
@@ -295,17 +383,6 @@ function extractMeaningfulPayloadTexts(value, output = []) {
   return output;
 }
 
-function modelCommandConfirmed(parsed, alias) {
-  if (!alias) return true;
-  const payloads = Array.isArray(parsed?.result?.payloads) ? parsed.result.payloads : [];
-  const texts = payloads
-    .map((payload) => (payload && typeof payload.text === 'string' ? payload.text : ''))
-    .filter(Boolean)
-    .join('\n')
-    .toLowerCase();
-  return texts.includes('model switched') && texts.includes(alias.toLowerCase());
-}
-
 function isResearchTask(task) {
   const combined = [task?.title, task?.description, task?.agentTarget]
     .map((value) => String(value || '').toLowerCase())
@@ -543,61 +620,81 @@ if (!attemptId) {
   process.exit(1);
 }
 
-const sessionId = activeRun.sessionId || activeRun.sessionKey || `mc-auto-${task.id}-${Date.now()}`;
+const sessionTarget = createMissionControlSessionTarget({
+  agentId: 'main',
+  label: `autonomous-${task.id}`,
+  sessionId: activeRun.sessionId || activeRun.sessionKey || `mc-auto-${task.id}-${Date.now()}`,
+});
 const modelOverride = normalizeModelAlias(activeRun?.model || task.model);
-const thinking = task.priority === 'critical' || task.priority === 'high' ? 'medium' : 'low';
+const effectiveModelAlias = effectiveModelAliasForTask(task, activeRun);
+const thinking = resolveThinkingLevel(task, activeRun);
+const planningOnlyTask = isPlanningOnlyTask(task);
 const retryFeedbackEntry = Array.isArray(task.feedback)
   ? [...task.feedback].reverse().find(isMeaningfulRetryFeedback) ?? null
   : null;
 const latestFeedback = retryFeedbackEntry?.note ?? null;
 const isRetry = Boolean(task.status === 'in-progress' && latestFeedback);
 const researchTask = isResearchTask(task);
-const message = [
-  `Autonomous task: ${task.title}`,
-  task.description ? `Description: ${task.description}` : null,
-  `Agent target: ${task.agentTarget}`,
-  modelOverride ? `Model override: ${modelOverride}` : 'Model override: agent default',
-  isRetry ? 'This is a retry after operator rejection. Treat the latest feedback as a required revision brief, not as optional context.' : null,
-  latestFeedback ? `Latest operator feedback to address: ${latestFeedback}` : null,
-  'You are executing work only. Do not claim authority over task state, approval, review, or completion.',
-  'Do not edit AUTONOMOUS.md, autonomous-tasks.json, queue files, or any task-system state file.',
-  researchTask ? 'If this is a research task, use the most specific applicable skill before writing (for example deep-research) and cite concrete sources.' : null,
-  researchTask ? 'If live web/source access is unavailable, explicitly return NEEDS_INPUT instead of presenting unsupported synthesis as factual research.' : null,
-  'Return a concise result summary plus any created artifact paths if applicable.',
-  isRetry ? 'Your result should clearly reflect how you addressed the feedback.' : null,
-].filter(Boolean).join('\n');
+let researchPacket = null;
+let researchArtifactPath = null;
 
 const managedSnapshot = await snapshotManagedFiles();
+const repoStatusBefore = await snapshotRepoStatus();
 
 let parsed = null;
 let stdout = '';
 let restoreWarnings = [];
+let preparedSession = {
+  agentId: sessionTarget.agentId,
+  sessionId: sessionTarget.sessionId,
+  sessionKey: sessionTarget.sessionKey,
+};
 
 try {
-  if (modelOverride) {
-    const modelCommandResult = await execFileAsync(
-      'bash',
-      ['-lc', `openclaw agent --session-id ${JSON.stringify(sessionId)} --message ${JSON.stringify(`/model ${modelOverride}`)} --json --timeout 120`],
-      {
-        cwd: workspaceRoot,
-        timeout: 140000,
-        maxBuffer: 5 * 1024 * 1024,
-      },
-    );
-
-    let modelCommandParsed = null;
-    try {
-      modelCommandParsed = JSON.parse(modelCommandResult.stdout || '{}');
-    } catch {}
-
-    if (!modelCommandConfirmed(modelCommandParsed, modelOverride)) {
-      throw new Error(`Execution model override was not acknowledged by runtime. Requested ${modelOverride}.`);
+  if (researchTask) {
+    const provider = resolveWebResearchProvider(process.env);
+    if (!provider) {
+      throw new Error('This research task requires live web sources, but Mission Control web research is not enabled.');
     }
+    researchPacket = await runWebResearch(task, { env: process.env });
+    researchArtifactPath = path.join('projects', 'mission-control', 'docs', 'autonomous-research', `${task.id}-web-research.md`);
+    await writeResearchPacketArtifact(workspaceRoot, researchArtifactPath, renderResearchMarkdown(task, researchPacket));
   }
+
+  const message = [
+    `Autonomous task: ${task.title}`,
+    task.description ? `Description: ${task.description}` : null,
+    `Agent target: ${task.agentTarget}`,
+    modelOverride ? `Model override: ${modelOverride}` : 'Model override: agent default',
+    `Effective thinking level for this run: ${thinking}`,
+    effectiveModelAlias === 'minimax2.7' ? 'MiniMax runs must start at thinking=high from the initial execution call. Do not try to change thinking later via chat commands.' : null,
+    isRetry ? 'This is a retry after operator rejection. Treat the latest feedback as a required revision brief, not as optional context.' : null,
+    latestFeedback ? `Latest operator feedback to address: ${latestFeedback}` : null,
+    planningOnlyTask ? 'This is a planning-only task. Do not implement the change, do not modify source/runtime/config files, and do not create executable artifacts.' : null,
+    planningOnlyTask ? 'Allowed output shape: a real markdown plan/proposal/spec artifact plus a concise summary. If execution seems tempting, stop at the plan.' : null,
+    'You are executing work only. Do not claim authority over task state, approval, review, or completion.',
+    'Do not edit AUTONOMOUS.md, autonomous-tasks.json, queue files, or any task-system state file.',
+    researchTask ? 'If this is a research task, use the most specific applicable skill before writing (for example deep-research) and cite concrete sources.' : null,
+    researchTask ? `Live web research packet prepared at: ${researchArtifactPath}` : null,
+    researchTask ? `Research provider: ${researchPacket?.provider ?? 'unknown'}` : null,
+    researchTask ? 'Use the prepared packet as your primary live-source base. Cite concrete URLs from it in the deliverable and artifact.' : null,
+    researchTask ? 'If the prepared packet is insufficient, say exactly what additional source constraints are needed rather than inventing unsupported claims.' : null,
+    'Return a concise result summary plus any created artifact paths if applicable.',
+    isRetry ? 'Your result should clearly reflect how you addressed the feedback.' : null,
+  ].filter(Boolean).join('\n');
+
+  preparedSession = modelOverride
+    ? await prepareSessionModel({
+        agentId: sessionTarget.agentId,
+        sessionId: sessionTarget.sessionId,
+        sessionKey: sessionTarget.sessionKey,
+        modelAlias: modelOverride,
+      })
+    : preparedSession;
 
   const result = await execFileAsync(
     'bash',
-    ['-lc', `openclaw agent --session-id ${JSON.stringify(sessionId)} --message ${JSON.stringify(message)} --thinking ${JSON.stringify(thinking)} --json --timeout 600`],
+    ['-lc', `openclaw agent --session-id ${JSON.stringify(preparedSession.sessionId)} --message ${JSON.stringify(message)} --thinking ${JSON.stringify(thinking)} --json --timeout 600`],
     {
       cwd: workspaceRoot,
       timeout: 620000,
@@ -610,11 +707,51 @@ try {
     parsed = JSON.parse(stdout);
   } catch {}
 
+  if (modelOverride) {
+    const verification = await verifySessionModel({
+      agentId: preparedSession.agentId,
+      sessionId: preparedSession.sessionId,
+      sessionKey: preparedSession.sessionKey,
+      modelAlias: modelOverride,
+      runtimeResult: parsed,
+    });
+    if (!verification.ok) {
+      throw new Error(formatModelVerificationError('Autonomous execution model verification failed.', verification, modelOverride));
+    }
+  }
+
   restoreWarnings = await restoreManagedFiles(managedSnapshot);
 
+  const repoStatusAfter = await snapshotRepoStatus();
+  const runChangedPaths = newlyChangedPaths(repoStatusBefore, repoStatusAfter);
+  if (planningOnlyTask) {
+    const disallowedChanges = runChangedPaths.filter((relativePath) => !isAllowedPlanningArtifactPath(relativePath));
+    if (disallowedChanges.length) {
+      await rollbackNewRepoChanges(disallowedChanges);
+      throw new Error(`Planning-only task attempted non-plan changes: ${disallowedChanges.join(', ')}`);
+    }
+  }
+
   const artifacts = await collectArtifacts(parsed, stdout);
+  if (planningOnlyTask) {
+    const disallowedArtifacts = artifacts
+      .map((artifact) => artifact?.path)
+      .filter(Boolean)
+      .filter((artifactPath) => !isAllowedPlanningArtifactPath(artifactPath));
+    if (disallowedArtifacts.length) {
+      await rollbackNewRepoChanges(runChangedPaths.filter((relativePath) => disallowedArtifacts.includes(relativePath)));
+      throw new Error(`Planning-only task returned non-plan artifacts: ${disallowedArtifacts.join(', ')}`);
+    }
+  }
+  if (researchArtifactPath && !artifacts.some((artifact) => artifact?.path === researchArtifactPath)) {
+    artifacts.unshift({
+      path: researchArtifactPath,
+      label: 'web research packet',
+      kind: 'file',
+    });
+  }
   const summary = summarizeExecution(parsed, stdout, restoreWarnings, artifacts);
-  const sessionKey = parsed?.sessionKey ?? parsed?.session?.key ?? sessionId;
+  const sessionKey = parsed?.sessionKey ?? parsed?.session?.key ?? preparedSession.sessionKey;
   const childSessionKey = parsed?.childSessionKey ?? parsed?.session?.childSessionKey;
   const runId = parsed?.runId ?? parsed?.run?.id;
   const proof = agentProofText(parsed, stdout);
@@ -655,7 +792,7 @@ try {
       model: normalizeModelAlias(current.run?.model || current.model) ?? undefined,
       sessionKey,
       childSessionKey,
-      sessionId,
+      sessionId: preparedSession.sessionId,
       runId,
       startedAt: current.run?.startedAt ?? now(),
       endedAt: now(),
@@ -721,8 +858,8 @@ try {
         attemptNumber: current.run?.attemptNumber ?? 1,
         trigger: current.run?.trigger ?? 'direct',
         model: normalizeModelAlias(current.run?.model || current.model) ?? undefined,
-        sessionKey: current.run?.sessionKey ?? sessionId,
-        sessionId,
+        sessionKey: current.run?.sessionKey ?? preparedSession.sessionKey,
+        sessionId: preparedSession.sessionId,
         startedAt: current.run?.startedAt ?? now(),
         endedAt: now(),
         status: 'error',

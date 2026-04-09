@@ -430,5 +430,65 @@
     "lastAccessed": "2026-03-25",
     "accessCount": 2,
     "lastUsed": "2026-03-25T01:00:00.000000"
+  },
+  {
+    "id": "mi-031",
+    "fact": "Private credit sector stress emerged as dominant recurring signal theme on Apr 5, 2026 — multiple Reuters Finance sources triggered p018 (Regional Banking Crisis 2023 pattern), scored 86-87/100 STRONG BUY. Historical anchor: Jan 2023 JPM earnings miss triggered regional bank contagion via credit spread widening. Apr 5 runs: 19 signals (run 1, all HIGH) and 15 signals (run 2, 13 HIGH/2 MEDIUM).",
+    "category": "status",
+    "timestamp": "2026-04-05T16:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "projects/autonomous-trading-bot"
+    ],
+    "source": "memory/2026-04-05.md",
+    "lastAccessed": "2026-04-05",
+    "accessCount": 1,
+    "lastUsed": "2026-04-05T16:47:00.000000"
+  },
+  {
+    "id": "mi-032",
+    "fact": "Shadow A/B signal enrichment pipeline is live in production. Run 1 (Apr 5, 16:47 UTC): baseline 19 signals, enriched 22 signals, 3 enriched-only signals found. Run 2 (Apr 5, 17:47 UTC): baseline 15, enriched 15, 0 enriched-only. Comparison artifacts saved to data/signal_ab_comparison.json.",
+    "category": "status",
+    "timestamp": "2026-04-05T16:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/signal_generator.py"
+    ],
+    "source": "memory/2026-04-05.md",
+    "lastAccessed": "2026-04-05",
+    "accessCount": 1,
+    "lastUsed": "2026-04-05T16:47:00.000000"
+  },
+  {
+    "id": "mi-033",
+    "fact": "Multi-agent strategy research artifact created via autonomous research task. Output: projects/multi-agent-strategy/docs/multi-agent-strategy.md. Note: literal instruction-style task wording can poison web research query quality — search queries should be derived from topic + brief questions rather than imperative task wording.",
+    "category": "status",
+    "timestamp": "2026-04-04T22:58:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/multi-agent-strategy",
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-04.md",
+    "lastAccessed": "2026-04-05",
+    "accessCount": 1,
+    "lastUsed": "2026-04-05T00:00:00.000000"
+  },
+  {
+    "id": "mi-034",
+    "fact": "Market signal generation running shadow mode (Apr 6, 17:47 UTC): 20 signals generated, 0 STRONG BUY/BUY/HOLD, 14 HIGH confidence. Enriched count: 22. Top categories: macroeconomic=6, financial_credit=5, corporate=4, sentiment_social=3, geopolitical=2. Context file: memory/cron-context.json.",
+    "category": "status",
+    "timestamp": "2026-04-06T17:47:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel",
+      "src/signal_generator.py"
+    ],
+    "source": "memory/2026-04-06.md",
+    "lastAccessed": "2026-04-06",
+    "accessCount": 1,
+    "lastUsed": "2026-04-06T17:47:00.000000"
   }
 ]

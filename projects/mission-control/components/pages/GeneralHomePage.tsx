@@ -1,33 +1,11 @@
 import Link from 'next/link';
-import { QuickAccessGrid } from '@/components/home/QuickAccessGrid';
-import { MarketSignalsWidget } from '@/components/home/MarketSignalsWidget';
-import { WorkspaceHealthWidget } from '@/components/home/WorkspaceHealthWidget';
 import { getHomeSummary } from '@/lib/adapters/home';
+import { MarketWatchRefreshButton } from './MarketWatchRefreshButton';
 
-function cardStyle() {
-  return {
-    background: 'rgba(255, 255, 255, 0.72)',
-    backdropFilter: 'blur(16px)',
-    WebkitBackdropFilter: 'blur(16px)',
-    border: '1px solid rgba(200, 195, 188, 0.4)',
-    borderRadius: 24,
-    boxShadow: '0 4px 24px rgba(0, 0, 0, 0.06)',
-  } as const;
-}
-
-function cardInnerStyle() {
-  return {
-    background: 'rgba(255, 255, 255, 0.52)',
-    backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    border: '1px solid rgba(200, 195, 188, 0.4)',
-    borderRadius: 14,
-  } as const;
-}
-
-function formatRelative(at: string) {
+function formatRelative(at: string | null) {
+  if (!at) return 'unavailable';
   const date = new Date(at);
-  if (Number.isNaN(date.getTime())) return at;
+  if (Number.isNaN(date.getTime())) return 'unavailable';
 
   return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
@@ -38,21 +16,25 @@ function formatRelative(at: string) {
   }).format(date);
 }
 
-function formatFullTime() {
+function formatHeroDate() {
   return new Intl.DateTimeFormat('en-GB', {
     weekday: 'long',
     day: '2-digit',
     month: 'long',
-    hour: '2-digit',
-    minute: '2-digit',
     timeZone: 'Asia/Ho_Chi_Minh',
-  }).format(new Date());
+  })
+    .format(new Date())
+    .toUpperCase();
 }
 
-function statusTone(statusLabel: string) {
-  if (statusLabel === 'adapter-backed') return { color: '#fffdfb', bg: '#0f1f19', border: '#1a3d32', dot: '#79a694' };
-  if (statusLabel === 'partial visibility') return { color: '#fffdfb', bg: '#1a3d32', border: '#3c6658', dot: '#a3d0be' };
-  return { color: '#fffdfb', bg: '#3c6658', border: '#79a694', dot: '#c4823a' };
+function formatUptime(seconds: number | null) {
+  if (!seconds || seconds < 0) return 'n/a';
+  const days = Math.floor(seconds / 86400);
+  const hours = Math.floor((seconds % 86400) / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  if (days > 0) return `${days}d ${hours}h`;
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  return `${minutes}m`;
 }
 
 function weatherIcon(condition: string | undefined) {
@@ -65,181 +47,96 @@ function weatherIcon(condition: string | undefined) {
   return '☀️';
 }
 
-function AccentInfoCard({ icon, label, title, detail }: { icon: string; label: string; title: string; detail: string }) {
-  return (
-    <div style={{ ...cardInnerStyle(), padding: 14, display: 'grid', gap: 8 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: 20 }}>{icon}</span>
-        <div style={{ color: 'var(--text-muted)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.3 }}>{label}</div>
-      </div>
-      <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1.35, color: 'var(--text)' }}>{title}</div>
-      <div style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.55 }}>{detail}</div>
-    </div>
-  );
-}
-
 export default async function HomePage() {
   const summary = await getHomeSummary();
-  const attentionItems: string[] = [];
-
-  if (!summary.sessions) attentionItems.push('Session data unavailable.');
-  if (!summary.cron) attentionItems.push('Cron data unavailable.');
-  if ((summary.cron?.dueOrRunning ?? 0) > 0) attentionItems.push(`${summary.cron?.dueOrRunning} cron jobs are due or currently running.`);
-  if (summary.activity.length === 0) attentionItems.push('Recent activity feed is quiet or unavailable.');
-
-  const tone = statusTone(summary.statusLabel);
   const weather = summary.ambient.weather;
+  const activeTasks = summary.quickAccess.find((item) => item.href === '/general/tasks')?.badge ?? 0;
 
   return (
-    <section style={{ display: 'grid', gap: 20, background: 'var(--bg)', minHeight: '100vh', padding: 24 }}>
-      <div
-        style={{
-          ...cardStyle(),
-          padding: 28,
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(250, 248, 245, 0.88) 100%)',
-        }}
-      >
-        <div style={{ display: 'grid', gap: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-            <div style={{ color: 'var(--text-muted)', fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.3 }}>Mission Control</div>
-            <div
-              className="general-home-status-pill"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '6px 12px',
-                borderRadius: 999,
-                background: tone.bg,
-                border: `1px solid ${tone.border}`,
-                color: tone.color,
-                fontSize: 11,
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: 0.3,
-              }}
-            >
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: tone.dot }} />
-              {summary.statusLabel}
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gap: 8 }}>
-            <div style={{ fontSize: 30, fontWeight: 800, lineHeight: 1.15, color: 'var(--text)' }}>{summary.ambient.greeting}, Philippe.</div>
-            <div style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>{summary.ambient.focusLine}</div>
-          </div>
-
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <Link
-              href="/general/chat"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: 180,
-                padding: '12px 20px',
-                borderRadius: 16,
-                background: 'linear-gradient(135deg, #0f1f19 0%, #1a3d32 100%)',
-                color: '#fffdfb',
-                fontWeight: 700,
-                fontSize: 14,
-                boxShadow: '0 4px 16px rgba(15, 31, 25, 0.25)',
-              }}
-            >
-              Open Chat
-            </Link>
-            <Link
-              href="/general/agents"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: 150,
-                padding: '12px 20px',
-                borderRadius: 16,
-                border: '1px solid rgba(200, 195, 188, 0.5)',
-                background: 'rgba(255, 255, 255, 0.6)',
-                color: 'var(--text-body)',
-                fontWeight: 600,
-                fontSize: 14,
-              }}
-            >
-              View agents
-            </Link>
-          </div>
-
-          <div className="general-home-top-cards">
-            <AccentInfoCard icon="🕒" label="Local time" title={formatFullTime()} detail="Asia/Ho_Chi_Minh" />
-            <AccentInfoCard
-              icon={weatherIcon(weather?.condition)}
-              label="Weather"
-              title={weather ? `${weather.temperatureC ?? '—'}°C · ${weather.location}` : 'Weather unavailable'}
-              detail={weather ? weather.condition : 'Open-Meteo unavailable right now'}
-            />
-            <AccentInfoCard icon="✍️" label="Today&apos;s note" title={summary.ambient.quote} detail="A small anchor for the mood of the workspace." />
-          </div>
-        </div>
-      </div>
-
-      <QuickAccessGrid items={summary.quickAccess} />
-
-      <div className="general-home-main-grid">
-        <div style={{ display: 'grid', gap: 20 }}>
-          <div style={{ ...cardStyle(), padding: 24, display: 'grid', gap: 14 }}>
-            <div style={{ color: 'var(--text-muted)', fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.3 }}>Right now</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}>
-              <div style={{ ...cardInnerStyle(), padding: 16, display: 'grid', gap: 6 }}>
-                <div style={{ color: 'var(--text-muted)', fontSize: 11 }}>Active sessions</div>
-                <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)' }}>{summary.sessions?.active ?? '—'}</div>
-              </div>
-              <div style={{ ...cardInnerStyle(), padding: 16, display: 'grid', gap: 6 }}>
-                <div style={{ color: 'var(--text-muted)', fontSize: 11 }}>Cron pressure</div>
-                <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)' }}>{summary.cron?.dueOrRunning ?? '—'}</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="general-home-secondary-grid">
-            <MarketSignalsWidget summary={summary.marketSignals} formatRelative={formatRelative} />
-            <WorkspaceHealthWidget summary={summary.workspaceHealth} formatRelative={formatRelative} />
-          </div>
+    <section className="general-home-v3-shell">
+      <header className="general-home-v3-hero-grid">
+        <div className="general-home-v3-hero-main">
+          <div className="general-home-v3-date">{formatHeroDate()}</div>
+          <h1 className="general-home-v3-headline">{summary.ambient.greeting}, Philippe.</h1>
         </div>
 
-        <div style={{ display: 'grid', gap: 20 }}>
-          <div style={{ ...cardStyle(), padding: 24, display: 'grid', gap: 14 }}>
-            <div>
-              <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>Attention</h3>
-              <p style={{ margin: '6px 0 0', color: 'var(--text-muted)', fontSize: 13 }}>What deserves your eye first.</p>
-            </div>
-            <div style={{ display: 'grid', gap: 10 }}>
-              {attentionItems.map((item) => (
-                <div key={item} style={{ ...cardInnerStyle(), padding: 14, display: 'grid', gap: 4 }}>
-                  <div style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--text-body)' }}>{item}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div style={{ ...cardStyle(), padding: 24, display: 'grid', gap: 14 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+        <aside className="general-home-v3-weather-quote" aria-label="Weather and daily quote">
+          <div className="general-home-v3-weather-row">
+            <div className="general-home-v3-weather-temp">{weather?.temperatureC ?? '—'}°</div>
+            <div className="general-home-v3-weather-meta">
+              <div>{weather?.location ?? 'Location unavailable'}</div>
               <div>
-                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>Recent activity</h3>
-                <p style={{ margin: '6px 0 0', color: 'var(--text-muted)', fontSize: 13 }}>Latest movement from the real workspace.</p>
+                {weatherIcon(weather?.condition)} {weather?.condition ?? 'Weather unavailable'}
               </div>
-              <Link href="/general/chat" className="general-home-view-all-link">
-                View all
-              </Link>
-            </div>
-            <div style={{ display: 'grid', gap: 10 }}>
-              {summary.activity.slice(0, 6).map((item) => (
-                <div key={item.id} style={{ ...cardInnerStyle(), padding: 14, display: 'grid', gap: 4 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, lineHeight: 1.6, color: 'var(--text-body)' }}>{item.message}</div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: 12 }}>{formatRelative(item.at)}</div>
-                </div>
-              ))}
             </div>
           </div>
-        </div>
+          <blockquote className="general-home-v3-quote">“{summary.ambient.quote}”</blockquote>
+        </aside>
+      </header>
+
+      <section className="general-home-v3-lower-grid" aria-label="Market and current tracks">
+        <section className="general-home-v3-market" aria-label="Market watch news reader">
+          <div className="general-home-v3-market-head">
+            <h2>Market Watch</h2>
+            <MarketWatchRefreshButton />
+          </div>
+
+          {summary.marketWatch.selectionNote ? <p className="general-home-v3-market-note">{summary.marketWatch.selectionNote}</p> : null}
+
+          {summary.marketWatch.headlines.length > 0 ? (
+            <ol className="general-home-v3-news-list">
+              {summary.marketWatch.headlines.map((item) => (
+                <li key={item.id} className="general-home-v3-news-item">
+                  <div className="general-home-v3-news-kicker">
+                    <span>{item.source}</span>
+                    <span>{formatRelative(item.at)}</span>
+                  </div>
+                  {item.link ? (
+                    <a href={item.link} target="_blank" rel="noreferrer" className="general-home-v3-news-link">
+                      {item.title}
+                    </a>
+                  ) : (
+                    <div className="general-home-v3-news-link is-static">{item.title}</div>
+                  )}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="general-home-v3-news-empty">No local RSS-derived headlines are currently available in the workspace data sources.</p>
+          )}
+        </section>
+
+        <section className="general-home-v3-track-card" aria-label="Current tracks">
+          <div className="general-home-v3-track-head">Current Tracks</div>
+
+          <div className="general-home-v3-track-grid">
+            <article className="general-home-v3-track-item">
+              <h2>Workspace reliability</h2>
+              <p>Last cron run {formatRelative(summary.workspaceHealth.lastCronRunAt)}.</p>
+              <p>QMD collections: {summary.workspaceHealth.qmdCollections ?? '—'}.</p>
+            </article>
+
+            <article className="general-home-v3-track-item">
+              <h2>Autonomous lane</h2>
+              <p>{activeTasks > 0 ? `${activeTasks} active tasks in progress.` : 'No active task currently running.'}</p>
+              <p>Last task movement {formatRelative(summary.workspaceHealth.lastAutonomousTaskAt)}.</p>
+            </article>
+          </div>
+
+          <div className="general-home-v3-track-links">
+            <Link href="/general/chat">Open chat</Link>
+            <Link href="/general/tasks">Open tasks</Link>
+          </div>
+        </section>
+      </section>
+
+      <div className="general-home-v3-bottom-strip" role="status" aria-live="polite">
+        <span className="label"><span className="status-dot" aria-hidden="true" />VPS</span>
+        <span>RAM {summary.system.ramUsedPercent ?? 'n/a'}%</span>
+        <span>Disk {summary.system.diskUsedPercent ?? 'n/a'}%</span>
+        <span>Load {summary.system.loadAverage1m ?? 'n/a'}</span>
+        <span>Uptime {formatUptime(summary.system.uptimeSeconds)}</span>
+        <span>RSS {formatRelative(summary.marketWatch.updatedAt)}</span>
       </div>
     </section>
   );

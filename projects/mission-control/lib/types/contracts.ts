@@ -21,6 +21,28 @@ export interface HomeWorkspaceHealthSummary {
   lastAutonomousTaskAt: string | null;
 }
 
+export interface HomeMarketWatchHeadline {
+  id: string;
+  title: string;
+  source: string;
+  link: string | null;
+  at: string | null;
+}
+
+export interface HomeMarketWatchSummary {
+  headlines: HomeMarketWatchHeadline[];
+  sourcePath: string | null;
+  updatedAt: string | null;
+  selectionNote: string | null;
+}
+
+export interface HomeSystemMetricsSummary {
+  ramUsedPercent: number | null;
+  diskUsedPercent: number | null;
+  loadAverage1m: number | null;
+  uptimeSeconds: number | null;
+}
+
 export interface HomeSummary {
   status: IntegrationStatus;
   statusLabel: 'adapter-backed' | 'partial visibility' | 'unavailable';
@@ -30,6 +52,8 @@ export interface HomeSummary {
   quickAccess: HomeQuickAccessItem[];
   marketSignals: HomeMarketSignalsSummary;
   workspaceHealth: HomeWorkspaceHealthSummary;
+  marketWatch: HomeMarketWatchSummary;
+  system: HomeSystemMetricsSummary;
   ambient: {
     weather: {
       location: string;

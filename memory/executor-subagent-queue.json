@@ -1,10 +1,10 @@
 [
   {
-    "task": "[Career] \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+    "task": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
     "parsed": {
       "emoji": "",
       "category": "Career",
-      "title": "\ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment",
+      "title": "🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment",
       "sections": {
         "deliverable": "working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support",
         "why": "Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction",
@@ -13,7 +13,7 @@
       }
     },
     "label": "executor-Career-202603131532",
-    "instruction": "Execute this task: \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment\n\nDeliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support\nProof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment\n\nDeliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support\nProof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-03-13 15:32",
     "status": "completed",
     "executionMode": "agent_team",
@@ -23,11 +23,11 @@
     "outputPath": "projects/creative-challenges/index.html, projects/creative-challenges/README.md"
   },
   {
-    "task": "[Career] \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+    "task": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
     "parsed": {
       "emoji": "",
       "category": "Career",
-      "title": "\ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment",
+      "title": "🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment",
       "sections": {
         "deliverable": "working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support",
         "why": "Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction",
@@ -36,7 +36,7 @@
       }
     },
     "label": "executor-Career-202603141252",
-    "instruction": "Execute this task: \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment\n\nDeliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support\nProof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment\n\nDeliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support\nProof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-03-14 12:52",
     "status": "completed",
     "executionMode": "agent_team",
@@ -47,11 +47,11 @@
     "note": "Duplicate queued task detected after rollback/replay. Existing verified deliverables from 2026-03-13 were confirmed present, so the task was handled without re-running Builder/Reviewer."
   },
   {
-    "task": "[Career] \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+    "task": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
     "parsed": {
       "emoji": "",
       "category": "Career",
-      "title": "\ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment",
+      "title": "🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment",
       "sections": {
         "deliverable": "working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support",
         "why": "Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction",
@@ -60,7 +60,7 @@
       }
     },
     "label": "executor-Career-202603151001",
-    "instruction": "Execute this task: \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment\n\nDeliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support\nProof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment\n\nDeliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support\nProof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-03-15 10:01",
     "status": "completed",
     "startedAt": "2026-03-15 10:16",
@@ -71,11 +71,11 @@
     "agentTeam": true
   },
   {
-    "task": "[Career] \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+    "task": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
     "parsed": {
       "emoji": "",
       "category": "Career",
-      "title": "\ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment",
+      "title": "🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment",
       "sections": {
         "deliverable": "working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support",
         "why": "Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction",
@@ -84,7 +84,7 @@
       }
     },
     "label": "executor-Career-202603152059",
-    "instruction": "Execute this task: \ud83d\udd28 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment\n\nDeliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support\nProof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment\n\nDeliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support\nProof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-03-15 20:59",
     "status": "blocked",
     "executionMode": "agent_team",
@@ -93,11 +93,11 @@
     "note": "Duplicate queue entry suppressed because verified completed deliverables already exist"
   },
   {
-    "task": "[Trading] \ud83d\udd27 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
+    "task": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
     "parsed": {
       "emoji": "",
       "category": "Trading",
-      "title": "\ud83d\udd27 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability",
+      "title": "🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability",
       "sections": {
         "deliverable": "markdown spec in the relevant bot project notes folder",
         "why": "Real market analysis and execution builds trading skill faster than passive learning",
@@ -106,7 +106,7 @@
       }
     },
     "label": "executor-Trading-202603152122",
-    "instruction": "Execute this task: \ud83d\udd27 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability\n\nDeliverable: markdown spec in the relevant bot project notes folder\nProof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability\n\nDeliverable: markdown spec in the relevant bot project notes folder\nProof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-03-15 21:22",
     "status": "completed",
     "executionMode": "agent_team",
@@ -116,11 +116,11 @@
     "outputPath": "projects/autonomous-trading-bot/notes/bot-support-spec-health-snapshot-reporter-2026-03-16.md"
   },
   {
-    "task": "[Trading] \ud83c\udf81 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
+    "task": "[Trading] 🎁 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
     "parsed": {
       "emoji": "",
       "category": "Trading",
-      "title": "\ud83c\udf81 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility",
+      "title": "🎁 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility",
       "sections": {
         "deliverable": "build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/",
         "why": "Useful surprise MVPs should strengthen systems that support trading outcomes",
@@ -129,7 +129,7 @@
       }
     },
     "label": "executor-Trading-202603191003",
-    "instruction": "Execute this task: \ud83c\udf81 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility\n\nDeliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/\nProof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes\n\nCreate a trading brief in projects/trading-briefs/. Include:\n- 2+ specific setups with entry, invalidation, risk, and thesis\n- Current market context if relevant\n- Specific price levels where possible\n\nWrite actual analysis, not templates.",
+    "instruction": "Execute this task: 🎁 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility\n\nDeliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/\nProof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes\n\nCreate a trading brief in projects/trading-briefs/. Include:\n- 2+ specific setups with entry, invalidation, risk, and thesis\n- Current market context if relevant\n- Specific price levels where possible\n\nWrite actual analysis, not templates.",
     "queuedAt": "2026-03-19 10:03",
     "status": "completed",
     "executionMode": "agent_team",
@@ -140,11 +140,11 @@
     "reviewStatus": "pass"
   },
   {
-    "task": "[Personal] \ud83d\udcda Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
+    "task": "[Personal] 📚 Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
     "parsed": {
       "emoji": "",
       "category": "Personal",
-      "title": "\ud83d\udcda Learn: create one focused Japanese study pack from a single beginner theme",
+      "title": "📚 Learn: create one focused Japanese study pack from a single beginner theme",
       "sections": {
         "deliverable": "markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts",
         "why": "Spaced repetition with focused vocabulary and pattern practice builds usable language skill",
@@ -153,7 +153,7 @@
       }
     },
     "label": "executor-Personal-202603231000",
-    "instruction": "Execute this task: \ud83d\udcda Learn: create one focused Japanese study pack from a single beginner theme\n\nDeliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts\nProof: Deck or exercise set has complete entries and is usable for deliberate practice\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 📚 Learn: create one focused Japanese study pack from a single beginner theme\n\nDeliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts\nProof: Deck or exercise set has complete entries and is usable for deliberate practice\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-03-23 10:00",
     "status": "completed",
     "executionMode": "subagent",
@@ -163,11 +163,11 @@
     "outputPath": "projects/language/lesson-01-greetings.md"
   },
   {
-    "task": "[Trading] \ud83d\udcda Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts | Why: Understanding company financials is required for informed trading decisions | Proof: Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice | Unlocks: Unlocks later analysis tasks based on real followed companies once the watchlist is defined",
+    "task": "[Trading] 📚 Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts | Why: Understanding company financials is required for informed trading decisions | Proof: Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice | Unlocks: Unlocks later analysis tasks based on real followed companies once the watchlist is defined",
     "parsed": {
       "emoji": "",
       "category": "Trading",
-      "title": "\ud83d\udcda Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics",
+      "title": "📚 Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics",
       "sections": {
         "deliverable": "markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts",
         "why": "Understanding company financials is required for informed trading decisions",
@@ -176,7 +176,7 @@
       }
     },
     "label": "executor-Trading-202603241000",
-    "instruction": "Execute this task: \ud83d\udcda Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics\n\nDeliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts\nProof: Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice\n\nCreate a company analysis in projects/company-research/. Include:\n- Investment thesis (bull case)\n- Key risks (3+)\n- Important metrics (revenue, growth, margins, debt)\n- Conclusion with recommendation\n\nResearch a real company if possible, or create a template with realistic structure.",
+    "instruction": "Execute this task: 📚 Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics\n\nDeliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts\nProof: Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice\n\nCreate a company analysis in projects/company-research/. Include:\n- Investment thesis (bull case)\n- Key risks (3+)\n- Important metrics (revenue, growth, margins, debt)\n- Conclusion with recommendation\n\nResearch a real company if possible, or create a template with realistic structure.",
     "queuedAt": "2026-03-24 10:00",
     "status": "completed",
     "executionMode": "subagent",
@@ -186,11 +186,11 @@
     "outputPath": "projects/company-research/lesson-01-financials-basics.md"
   },
   {
-    "task": "[Other] \ud83d\udd27 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
+    "task": "[Other] 🔧 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
     "parsed": {
       "emoji": "",
       "category": "Other",
-      "title": "\ud83d\udd27 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster",
+      "title": "🔧 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster",
       "sections": {
         "deliverable": "working script in scripts/ plus short usage note",
         "why": "Improves OpenClaw reliability - essential for autonomous operations",
@@ -199,7 +199,7 @@
       }
     },
     "label": "executor-Other-202603291043",
-    "instruction": "Execute this task: \ud83d\udd27 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster\n\nDeliverable: working script in scripts/ plus short usage note\nProof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations\n\nCreate working code in scripts/. Include:\n- Working Python script with actual logic\n- Comments explaining what it does\n- Example usage if relevant\n\nWrite actual code, not templates.",
+    "instruction": "Execute this task: 🔧 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster\n\nDeliverable: working script in scripts/ plus short usage note\nProof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations\n\nCreate working code in scripts/. Include:\n- Working Python script with actual logic\n- Comments explaining what it does\n- Example usage if relevant\n\nWrite actual code, not templates.",
     "queuedAt": "2026-03-29 10:43",
     "status": "completed",
     "executionMode": "agent_team",
@@ -211,11 +211,11 @@
     "note": "Builder created queue triage utility; Reviewer verified artifact, usage, and live queue output."
   },
   {
-    "task": "[Personal] \ud83c\udf81 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
+    "task": "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
     "parsed": {
       "emoji": "",
       "category": "Personal",
-      "title": "\ud83c\udf81 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker",
+      "title": "🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker",
       "sections": {
         "deliverable": "small working tool or spec in projects/learning-tools/",
         "why": "A useful learning helper can turn practice into a repeatable daily habit",
@@ -224,7 +224,7 @@
       }
     },
     "label": "executor-Personal-202603301000",
-    "instruction": "Execute this task: \ud83c\udf81 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker\n\nDeliverable: small working tool or spec in projects/learning-tools/\nProof: Tool or spec supports one real daily exercise loop without requiring advanced setup\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker\n\nDeliverable: small working tool or spec in projects/learning-tools/\nProof: Tool or spec supports one real daily exercise loop without requiring advanced setup\n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-03-30 10:00",
     "status": "completed",
     "executionMode": "agent_team",
@@ -261,15 +261,15 @@
     "note": "Builder created operator snapshot helper; Reviewer verified artifact, live output, and non-destructive boundaries."
   },
   {
-    "task": "[Philippe] \ud83d\udcdd Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability \u2014 missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
+    "task": "[Philippe] 📝 Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability — missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
     "parsed": {
       "emoji": "",
       "category": "Philippe",
-      "title": "\ud83d\udcdd Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability \u2014 missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
+      "title": "📝 Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability — missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
       "sections": {}
     },
     "label": "executor-Philippe-202604021000",
-    "instruction": "Execute this task: \ud83d\udcdd Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability \u2014 missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority\n\nDeliverable: \nProof: \n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
+    "instruction": "Execute this task: 📝 Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability — missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority\n\nDeliverable: \nProof: \n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-04-02 10:00",
     "status": "completed",
     "executionMode": "agent_team",
@@ -277,14 +277,14 @@
     "startedAt": "2026-04-02 11:15",
     "completedAt": "2026-04-02 11:22",
     "outputPath": "scripts/daily-task-generator.py",
-    "note": "Root cause: update_autonomous_file() prepended suggestion_tasks + existing_backlog_tasks before new_tasks, consuming all NUM_TASKS slots and silently dropping all 5 generated tasks when suggestions filled the quota. Fix: reversed priority \u2014 new_tasks first, then existing backlog, then suggestions. Also added return value + visible NOTE in cron output when generated tasks are deduplicated."
+    "note": "Root cause: update_autonomous_file() prepended suggestion_tasks + existing_backlog_tasks before new_tasks, consuming all NUM_TASKS slots and silently dropping all 5 generated tasks when suggestions filled the quota. Fix: reversed priority — new_tasks first, then existing backlog, then suggestions. Also added return value + visible NOTE in cron output when generated tasks are deduplicated."
   },
   {
-    "task": "[Other] \ud83c\udf81 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
+    "task": "[Other] 🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
     "parsed": {
       "emoji": "",
       "category": "Other",
-      "title": "\ud83c\udf81 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view",
+      "title": "🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view",
       "sections": {
         "deliverable": "runnable utility in projects/automation/ or scripts/",
         "why": "A small system tool can create durable daily value without touching risky config",
@@ -293,7 +293,7 @@
       }
     },
     "label": "executor-Other-202604081000",
-    "instruction": "Execute this task: \ud83c\udf81 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view\n\nDeliverable: runnable utility in projects/automation/ or scripts/\nProof: Tool shows one genuinely useful status snapshot from local workspace data\n\nCreate working code in scripts/. Include:\n- Working Python script with actual logic\n- Comments explaining what it does\n- Example usage if relevant\n\nWrite actual code, not templates.",
+    "instruction": "Execute this task: 🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view\n\nDeliverable: runnable utility in projects/automation/ or scripts/\nProof: Tool shows one genuinely useful status snapshot from local workspace data\n\nCreate working code in scripts/. Include:\n- Working Python script with actual logic\n- Comments explaining what it does\n- Example usage if relevant\n\nWrite actual code, not templates.",
     "queuedAt": "2026-04-08 10:00",
     "status": "completed",
     "executionMode": "agent_team",
@@ -302,14 +302,14 @@
     "completedAt": "2026-04-08 11:20",
     "outputPath": "scripts/cron_run_summary.py",
     "reviewStatus": "pass",
-    "note": "Builder created cron_run_summary.py; Reviewer verified all 8 criteria pass \u2014 clean pass/fail table, --json/--limit flags, stdlib-only, non-destructive."
+    "note": "Builder created cron_run_summary.py; Reviewer verified all 8 criteria pass — clean pass/fail table, --json/--limit flags, stdlib-only, non-destructive."
   },
   {
-    "task": "[Other] \ud83d\udd27 Improve: upgrade cron_run_summary.py with practical operator filters; deliverable: extend scripts/cron_run_summary.py to support --status <csv> and --job <name-substring> plus short usage note in script help | Why: The utility is useful now, but filtering failed/warn runs or one specific job would make it materially better for daily ops | Proof: Running the script with --status error,warn and --job signal-accuracy-review narrows the output correctly on real cron data | Unlocks: Faster troubleshooting from the queue and Morning Meeting checks",
+    "task": "[Other] 🔧 Improve: upgrade cron_run_summary.py with practical operator filters; deliverable: extend scripts/cron_run_summary.py to support --status <csv> and --job <name-substring> plus short usage note in script help | Why: The utility is useful now, but filtering failed/warn runs or one specific job would make it materially better for daily ops | Proof: Running the script with --status error,warn and --job signal-accuracy-review narrows the output correctly on real cron data | Unlocks: Faster troubleshooting from the queue and Morning Meeting checks",
     "parsed": {
       "emoji": "",
       "category": "Other",
-      "title": "\ud83d\udd27 Improve: upgrade cron_run_summary.py with practical operator filters",
+      "title": "🔧 Improve: upgrade cron_run_summary.py with practical operator filters",
       "sections": {
         "deliverable": "extend scripts/cron_run_summary.py to support --status <csv> and --job <name-substring> plus short usage note in script help",
         "why": "The utility is useful now, but filtering failed/warn runs or one specific job would make it materially better for daily ops",
@@ -318,11 +318,13 @@
       }
     },
     "label": "executor-Other-202604081515",
-    "instruction": "Execute this task: \ud83d\udd27 Improve: upgrade cron_run_summary.py with practical operator filters\n\nDeliverable: extend scripts/cron_run_summary.py to support --status <csv> and --job <name-substring> plus short usage note in script help\nProof: Running the script with --status error,warn and --job signal-accuracy-review narrows the output correctly on real cron data\n\nCreate working code in scripts/. Include:\n- Working Python script update with actual logic\n- Help text explaining the new flags\n- Real filtering behavior on local cron data\n\nWrite actual code, not templates.",
+    "instruction": "Execute this task: 🔧 Improve: upgrade cron_run_summary.py with practical operator filters\n\nDeliverable: extend scripts/cron_run_summary.py to support --status <csv> and --job <name-substring> plus short usage note in script help\nProof: Running the script with --status error,warn and --job signal-accuracy-review narrows the output correctly on real cron data\n\nCreate working code in scripts/. Include:\n- Working Python script update with actual logic\n- Help text explaining the new flags\n- Real filtering behavior on local cron data\n\nWrite actual code, not templates.",
     "queuedAt": "2026-04-08 15:15",
-    "status": "pending",
+    "status": "blocked",
     "executionMode": "agent_team",
     "agentTeam": true,
-    "note": "Added manually after Philippe approved a clear next improvement for cron_run_summary.py."
+    "note": "Auto-healed stale spawned task after >2h without completion; active slot released",
+    "startedAt": "2026-04-08 15:17",
+    "updatedAt": "2026-04-08 18:17"
   }
 ]

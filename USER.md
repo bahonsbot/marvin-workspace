@@ -32,7 +32,7 @@ Learn Philippe as a person, not as a dossier.
 ## Active Skill Growth
 - After Effects
 - Unreal Engine
-- Blender
+- AI & coding
 - Novel writing
 - Stock trading
 

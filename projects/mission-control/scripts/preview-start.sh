@@ -34,13 +34,46 @@ if [[ -z "${MISSION_CONTROL_WS_SIDECAR_TOKEN:-}" ]]; then
 fi
 export MISSION_CONTROL_WS_SIDECAR_TOKEN
 
-nohup node ./scripts/runtime-bridge-ws-sidecar.js >"$RUNTIME_DIR/ws-sidecar.log" 2>&1 &
-echo $! > "$RUNTIME_DIR/ws-sidecar.pid"
+spawn_detached() {
+  local pid_file="$1"
+  local log_file="$2"
+  shift 2
 
-nohup npm run start -- --hostname "$INTERNAL_NEXT_HOST" --port "$INTERNAL_NEXT_PORT" >"$RUNTIME_DIR/next.log" 2>&1 &
-echo $! > "$RUNTIME_DIR/next.pid"
+  rm -f "$pid_file"
+  setsid "$@" </dev/null >"$log_file" 2>&1 &
+  local pid=$!
+  echo "$pid" > "$pid_file"
+}
 
-nohup node ./scripts/preview-origin-proxy.js >"$RUNTIME_DIR/latest.log" 2>&1 &
-echo $! > "$RUNTIME_DIR/latest.pid"
-sleep 1
-cat "$RUNTIME_DIR/latest.pid"
+ensure_alive() {
+  local pid_file="$1"
+  if [[ ! -f "$pid_file" ]]; then
+    return 1
+  fi
+  local pid
+  pid="$(cat "$pid_file" 2>/dev/null || true)"
+  [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null
+}
+
+spawn_detached "$RUNTIME_DIR/ws-sidecar.pid" "$RUNTIME_DIR/ws-sidecar.log" node ./scripts/runtime-bridge-ws-sidecar.js
+spawn_detached "$RUNTIME_DIR/next.pid" "$RUNTIME_DIR/next.log" npm run start -- --hostname "$INTERNAL_NEXT_HOST" --port "$INTERNAL_NEXT_PORT"
+spawn_detached "$RUNTIME_DIR/latest.pid" "$RUNTIME_DIR/latest.log" node ./scripts/preview-origin-proxy.js
+
+for _ in {1..30}; do
+  if ensure_alive "$RUNTIME_DIR/ws-sidecar.pid" && ensure_alive "$RUNTIME_DIR/next.pid" && ensure_alive "$RUNTIME_DIR/latest.pid"; then
+    if curl -fsS "http://127.0.0.1:${PREVIEW_PORT}/general/agents" >/dev/null 2>&1; then
+      cat "$RUNTIME_DIR/latest.pid"
+      exit 0
+    fi
+  fi
+  sleep 1
+done
+
+echo "preview-start: Mission Control preview failed to become healthy" >&2
+echo "--- latest.log ---" >&2
+tail -n 40 "$RUNTIME_DIR/latest.log" >&2 || true
+echo "--- next.log ---" >&2
+tail -n 40 "$RUNTIME_DIR/next.log" >&2 || true
+echo "--- ws-sidecar.log ---" >&2
+tail -n 40 "$RUNTIME_DIR/ws-sidecar.log" >&2 || true
+exit 1

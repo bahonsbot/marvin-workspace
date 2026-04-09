@@ -17,3 +17,5 @@
 2026-03-22T04:15:03+0800 | actor=system | action=sensitive_file_changed | target=/data/.openclaw/workspace/memory/cron-context.json | status=ok | details=Detected change in sensitive file
 2026-03-29T04:15:15+0800 | actor=system | action=sensitive_file_changed | target=/data/.openclaw/openclaw.json | status=ok | details=Detected change in sensitive file
 2026-03-29T04:15:15+0800 | actor=system | action=sensitive_file_changed | target=/data/.openclaw/workspace/memory/cron-context.json | status=ok | details=Detected change in sensitive file
+2026-04-05T04:15:00+0800 | actor=system | action=sensitive_file_changed | target=/data/.openclaw/openclaw.json | status=ok | details=Detected change in sensitive file
+2026-04-05T04:15:00+0800 | actor=system | action=sensitive_file_changed | target=/data/.openclaw/workspace/memory/cron-context.json | status=ok | details=Detected change in sensitive file

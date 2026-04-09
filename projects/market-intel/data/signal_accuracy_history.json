@@ -1,12 +1,12 @@
 {
-  "total_reviewed_raw": 11,
+  "total_reviewed_raw": 5,
   "duplicate_count": 0,
-  "total_verified": 11,
+  "total_verified": 5,
   "strong_buy": 0,
   "buy": 0,
-  "hold": 1,
-  "miss": 1,
-  "weighted_accuracy": 86.4,
+  "hold": 0,
+  "miss": 3,
+  "weighted_accuracy": 40.0,
   "evidence_coverage": 100.0,
-  "last_updated": "2026-03-31T23:07:29.984480"
+  "last_updated": "2026-04-08T23:05:40.293257"
 }

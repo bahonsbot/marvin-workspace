@@ -19,9 +19,9 @@
     "source": "2026-02-25",
     "status": "active",
     "relatedEntities": [],
-    "lastAccessed": "2026-03-04",
-    "accessCount": 2,
-    "lastUsed": "2026-03-11T20:52:31.817831"
+    "lastAccessed": "2026-04-07",
+    "accessCount": 3,
+    "lastUsed": "2026-04-07T09:00:00.000000"
   },
   {
     "id": "cron-003",
@@ -215,5 +215,19 @@
     "lastAccessed": "2026-03-20",
     "accessCount": 1,
     "lastUsed": "2026-03-22T06:00:05.414743"
+  },
+  {
+    "id": "cron-017",
+    "fact": "nightly-memory-extraction failed on Apr 7 because its model prompt/save path still leaked ~/.openclaw/workspace/ instead of the required /data/.openclaw/workspace/ absolute paths. Functional status is degraded until the prompt is corrected.",
+    "category": "status",
+    "timestamp": "2026-04-07T04:00:00+08:00",
+    "source": "memory/health-council/2026-04-07.md",
+    "status": "active",
+    "relatedEntities": [
+      "projects/marvin-config"
+    ],
+    "lastAccessed": "2026-04-07",
+    "accessCount": 1,
+    "lastUsed": "2026-04-07T04:00:00.000000"
   }
 ]

@@ -343,5 +343,20 @@
     "lastAccessed": "2026-03-19",
     "accessCount": 1,
     "lastUsed": "2026-03-22T06:00:05.410589"
+  },
+  {
+    "id": "atb-025",
+    "fact": "Signal accuracy reporting gap closed (Apr 7): projects/autonomous-trading-bot/scripts/signal_accuracy_report.py now generates structured daily JSON reports from webhook_decisions.jsonl and Alpaca paper positions, replacing the previous reporter stub as the concrete reporting path for signal_accuracy_review. First outputs written to reports/accuracy/2026-03-13.json and reports/accuracy/2026-04-07.json. Alpaca 401 was an env-loading bug (script not loading bot project .env), fixed on Apr 7 morning; reports now return positions.health=ok.",
+    "category": "status",
+    "timestamp": "2026-04-07T10:28:00+08:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/autonomous-trading-bot",
+      "projects/mission-control"
+    ],
+    "source": "projects/mission-control/data/autonomous-tasks.json",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 2,
+    "lastUsed": "2026-04-07T11:40:00.000000"
   }
 ]

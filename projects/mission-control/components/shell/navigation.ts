@@ -1,9 +1,27 @@
+import type { LucideIcon } from 'lucide-react';
+import {
+  Bot,
+  Brain,
+  CheckSquare,
+  Clock,
+  Eye,
+  FileBarChart,
+  FolderOpen,
+  LayoutDashboard,
+  LineChart,
+  MessageSquare,
+  Newspaper,
+  Radio,
+  TrendingUp,
+  Wand2,
+} from 'lucide-react';
+
 export type ShellDomain = 'general' | 'trading';
 
 export type NavItem = {
   label: string;
   href: string;
-  icon: string;
+  icon: LucideIcon;
   match?: (pathname: string) => boolean;
 };
 
@@ -16,22 +34,23 @@ export const DOMAIN_TABS: Array<{ label: string; href: string; domain: ShellDoma
 ];
 
 export const GENERAL_NAV_ITEMS: NavItem[] = [
-  { label: 'Home', href: '/general/home', icon: '⌂' },
-  { label: 'Chat', href: '/general/chat', icon: '◎' },
-  { label: 'Tasks', href: '/general/tasks', icon: '☑' },
-  { label: 'Agents', href: '/general/agents', icon: '◉' },
-  { label: 'Crons', href: '/general/crons', icon: '⊚' },
-  { label: 'Memory', href: '/general/memory', icon: '◈' },
-  { label: 'Files', href: '/general/files', icon: '▣' },
+  { label: 'Home', href: '/general/home', icon: LayoutDashboard },
+  { label: 'Chat', href: '/general/chat', icon: MessageSquare },
+  { label: 'Tasks', href: '/general/tasks', icon: CheckSquare },
+  { label: 'Agents', href: '/general/agents', icon: Bot },
+  { label: 'Skills', href: '/general/skills', icon: Wand2 },
+  { label: 'Crons', href: '/general/crons', icon: Clock },
+  { label: 'Memory', href: '/general/memory', icon: Brain },
+  { label: 'Files', href: '/general/files', icon: FolderOpen },
 ];
 
 export const TRADING_NAV_ITEMS: NavItem[] = [
-  { label: 'Overview', href: '/trading', icon: '◌' },
-  { label: 'Market Intel', href: '/trading/market-intel', icon: '◫' },
-  { label: 'Signals', href: '/trading/signals', icon: '⇡' },
-  { label: 'Watchlist', href: '/trading/watchlist', icon: '◍' },
-  { label: 'Bot / Dispatch', href: '/trading/bot', icon: '↗' },
-  { label: 'Reports', href: '/trading/reports', icon: '▤' },
+  { label: 'Overview', href: '/trading', icon: LineChart },
+  { label: 'Market Intel', href: '/trading/market-intel', icon: Newspaper },
+  { label: 'Signals', href: '/trading/signals', icon: TrendingUp },
+  { label: 'Watchlist', href: '/trading/watchlist', icon: Eye },
+  { label: 'Bot / Dispatch', href: '/trading/bot', icon: Radio },
+  { label: 'Reports', href: '/trading/reports', icon: FileBarChart },
 ];
 
 export function getShellDomain(pathname: string): ShellDomain {

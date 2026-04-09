@@ -1,5 +1,159 @@
 [
   {
+    "id": "mcs-006",
+    "fact": "Mission Control Phase 3 stack completed (Apr 6): Phase 3A autonomous Sudo decision modes (direct_answer/ask_question/propose_alternative/delegate), Phase 3B bounded lane sequencing + synthesis, Phase 3C Marvin oversight/escalation/approval boundaries. Full stack live for real workflow testing.",
+    "category": "status",
+    "timestamp": "2026-04-06T15:20:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-06.md",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 2,
+    "lastUsed": "2026-04-07T17:00:00.000000"
+  },
+  {
+    "id": "mcs-007",
+    "fact": "First successful real Sudo implementation run (Apr 6): Sudo orchestration + FE lane delegation produced real sidebar redesign, committed as nested repo abbfb1b7. Proof that Dev Team/Sudo workflow can take a scoped implementation plan and land a good result.",
+    "category": "evaluation",
+    "timestamp": "2026-04-06T16:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-06.md",
+    "lastAccessed": "2026-04-06",
+    "accessCount": 1,
+    "lastUsed": "2026-04-06T16:30:00.000000"
+  },
+  {
+    "id": "mcs-008",
+    "fact": "Three Sudo plumbing bugs fixed during seat integration (Apr 6): (1) Sudo seat composer submits routed to orchestration not Marvin path, (2) model selection moved from chat-based /model to session setup phase, (3) JSON parser now uses schema-aware scoring to prefer Sudo decision payload over wrapper.",
+    "category": "status",
+    "timestamp": "2026-04-06T16:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-06.md",
+    "lastAccessed": "2026-04-06",
+    "accessCount": 1,
+    "lastUsed": "2026-04-06T16:30:00.000000"
+  },
+  {
+    "id": "mcs-009",
+    "fact": "Skills preferences are now server-backed: /api/skills/preferences route + skills-ui-state.json. localStorage is migration/fallback only, not the primary store. Read more/Close summary on long skill descriptions now uses contextual pop cards.",
+    "category": "status",
+    "timestamp": "2026-04-06T13:26:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-06.md",
+    "lastAccessed": "2026-04-06",
+    "accessCount": 1,
+    "lastUsed": "2026-04-06T13:26:00.000000"
+  },
+  {
+    "id": "mcs-010",
+    "fact": "Weather widget redesign plan created (Apr 6): floating orb design concept, 100px glassmorphic circle, time-of-day colour palette with 7 slots and 2-second CSS transitions, subtle pulsing glow. Plan artifact: projects/mission-control/docs/weather-widget-implementation-plan.md.",
+    "category": "status",
+    "timestamp": "2026-04-06T00:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "autonomous-tasks/2026-04-06",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 2,
+    "lastUsed": "2026-04-07T09:00:00.000000"
+  },
+  {
+    "id": "mcs-011",
+    "fact": "STT Phase 1 completed with local Whisper port (Apr 7, 2026): Mission Control speech-to-text now supports local self-hosted transcription via @fugood/whisper.node. lib/transcribe.ts supports both openai and local providers. Preview runtime switched to local provider, base.en model downloaded to /data/.nerve/models. Voice diagnostics improved to distinguish secure-context failure, missing getUserMedia, and missing MediaRecorder (with Safari/private-mode hinting).",
+    "category": "status",
+    "timestamp": "2026-04-07T17:27:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-07.md",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 1,
+    "lastUsed": "2026-04-07T17:27:00.000000"
+  },
+  {
+    "id": "mcs-012",
+    "fact": "Sudo completion normalization (Apr 7, 2026): Sudo panel now selects newest orchestration by recency (updatedAt/completedAt/requestedAt) instead of preferring older active waiting runs. Older unresolved clarification runs no longer overshadow completed implementation runs in the Sudo panel.",
+    "category": "status",
+    "timestamp": "2026-04-07T17:41:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-07.md",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 1,
+    "lastUsed": "2026-04-07T17:41:00.000000"
+  },
+  {
+    "id": "mcs-013",
+    "fact": "Standalone specialist seats implementation plan created (Apr 7, 2026): Philippe wants standalone specialists as real direct-chat seats in the seat dropdown, using existing agent workspaces/skills rather than Marvin impersonation. Japin called out as benchmark for specialist-scoped memory/learning continuity. Plan artifact: projects/mission-control/docs/standalone-specialist-seats-implementation-plan.md.",
+    "category": "decision",
+    "timestamp": "2026-04-07T18:27:00+07:00",
+    "status": "planned",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-07.md",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 1,
+    "lastUsed": "2026-04-07T18:27:00.000000"
+  },
+  {
+    "id": "mcs-014",
+    "fact": "Mission Control web research migrated to SearXNG (Apr 7, 2026): Preview runtime now uses SearXNG at http://72.60.232.55:32768 instead of DuckDuckGo HTML. Philippe prefers SearXNG quality and already runs the service on the VPS. Provider support added to scripts/lib/web-research.mjs and lib/autonomous-preflight.ts.",
+    "category": "status",
+    "timestamp": "2026-04-07T11:32:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-07.md",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 1,
+    "lastUsed": "2026-04-07T11:32:00.000000"
+  },
+  {
+    "id": "mcs-015",
+    "fact": "Autonomous task execution hardening (Apr 7, 2026): Planning-only tasks now carry explicit no-implementation instruction and reject non-markdown execution artifacts. MiniMax task runs now start with thinking=high from the initial execution call rather than inheriting old priority-based default.",
+    "category": "status",
+    "timestamp": "2026-04-07T14:30:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-07.md",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 1,
+    "lastUsed": "2026-04-07T14:30:00.000000"
+  },
+  {
+    "id": "mcs-016",
+    "fact": "Mission Control Chat top-section wrap completed (Apr 7, 2026): Sudo orchestration panel made scrollable, redundant Sudo decisions heading removed, Chat page chrome tightened. Completed Sudo runs now surface summary-first with artifact-aware deliverable block.",
+    "category": "status",
+    "timestamp": "2026-04-07T18:06:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/mission-control"
+    ],
+    "source": "memory/2026-04-07.md",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 1,
+    "lastUsed": "2026-04-07T18:06:00.000000"
+  },
+  {
     "id": "mcs-001",
     "fact": "Memory module refinement pass applied: moved Memory lower in sidebar, removed Path field from metadata strip, removed unnecessary subtitles, changed active-state styling to higher-contrast teal, added Back to top button.",
     "category": "status",

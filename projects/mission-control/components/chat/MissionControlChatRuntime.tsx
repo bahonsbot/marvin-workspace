@@ -3,9 +3,16 @@
 import { Component, type ErrorInfo, type ReactNode, useEffect } from 'react';
 import { MissionControlChatSurface } from '@/components/chat/MissionControlChatSurface';
 import { useMissionControlRuntime } from '@/components/chat/MissionControlRuntimeProvider';
+import type { ChatSeatActivation } from '@/lib/agents/chat-activation';
 import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 
-function MissionControlChatRuntimeInner({ initialSummary }: { initialSummary: OrchestratorIntegrationSummary }) {
+function MissionControlChatRuntimeInner({
+  initialSummary,
+  activation,
+}: {
+  initialSummary: OrchestratorIntegrationSummary;
+  activation: ChatSeatActivation | null;
+}) {
   const { bridge, summary, hydrateSummary } = useMissionControlRuntime();
 
   useEffect(() => {
@@ -16,12 +23,14 @@ function MissionControlChatRuntimeInner({ initialSummary }: { initialSummary: Or
     <MissionControlChatSurface
       summary={bridge?.summary ?? summary ?? initialSummary}
       bridge={bridge ?? undefined}
+      activation={activation}
     />
   );
 }
 
 type BoundaryProps = {
   initialSummary: OrchestratorIntegrationSummary;
+  activation: ChatSeatActivation | null;
   children: ReactNode;
 };
 
@@ -55,6 +64,7 @@ class MissionControlChatErrorBoundary extends Component<BoundaryProps, BoundaryS
       return (
         <MissionControlChatSurface
           summary={this.props.initialSummary}
+          activation={this.props.activation}
           fallbackNotice={
             this.state.message
               ? `Live bridge crashed in the browser, so Mission Control fell back to the static surface: ${this.state.message}`
@@ -68,10 +78,22 @@ class MissionControlChatErrorBoundary extends Component<BoundaryProps, BoundaryS
   }
 }
 
-export function MissionControlChatRuntime({ initialSummary }: { initialSummary: OrchestratorIntegrationSummary }) {
+export function MissionControlChatRuntime({
+  initialSummary,
+  activation = null,
+}: {
+  initialSummary: OrchestratorIntegrationSummary;
+  activation?: ChatSeatActivation | null;
+}) {
   return (
-    <MissionControlChatErrorBoundary initialSummary={initialSummary}>
-      <MissionControlChatRuntimeInner initialSummary={initialSummary} />
+    <MissionControlChatErrorBoundary
+      initialSummary={initialSummary}
+      activation={activation}
+    >
+      <MissionControlChatRuntimeInner
+        initialSummary={initialSummary}
+        activation={activation}
+      />
     </MissionControlChatErrorBoundary>
   );
 }

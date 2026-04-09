@@ -41,11 +41,25 @@ export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, 
           borderBottom: '1px solid rgba(200, 195, 188, 0.55)',
           color: 'var(--text-muted)',
           fontSize: 12,
-          background: 'rgba(255, 253, 251, 0.88)',
+          background: readOnly ? 'rgba(246, 240, 234, 0.94)' : 'rgba(255, 253, 251, 0.88)',
         }}
       >
         <span style={{ fontFamily: 'var(--font-mono), SFMono-Regular, ui-monospace, monospace' }}>{filename}</span>
-        <span>{readOnly ? 'Read-only' : 'Editable'}</span>
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '4px 9px',
+            borderRadius: 999,
+            border: readOnly ? '1px solid rgba(157, 103, 55, 0.28)' : '1px solid rgba(63, 138, 113, 0.22)',
+            background: readOnly ? 'rgba(255, 247, 240, 0.9)' : 'rgba(236, 248, 242, 0.85)',
+            color: readOnly ? '#8a6338' : '#2e6a56',
+            fontWeight: 700,
+          }}
+        >
+          {readOnly ? 'Read-only' : 'Editable'}
+        </span>
       </div>
 
       <textarea
@@ -68,8 +82,8 @@ export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, 
           outline: 'none',
           resize: 'none',
           padding: '18px 20px 26px',
-          background: 'transparent',
-          color: 'var(--text-body)',
+          background: readOnly ? 'rgba(250, 246, 241, 0.75)' : 'transparent',
+          color: readOnly ? '#6d675f' : 'var(--text-body)',
           fontSize: 14,
           lineHeight: 1.7,
           fontFamily: 'var(--font-mono), SFMono-Regular, ui-monospace, monospace',

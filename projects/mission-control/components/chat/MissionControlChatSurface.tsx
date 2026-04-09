@@ -1486,6 +1486,8 @@ function SudoDelegationPanel({
         padding: '12px 14px',
         display: 'grid',
         gap: 10,
+        maxHeight: 'min(62vh, 720px)',
+        overflowY: 'auto',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -1494,8 +1496,7 @@ function SudoDelegationPanel({
       </div>
 
       <div style={{ display: 'grid', gap: 8 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: '#173128' }}>Sudo decisions</div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           {loading ? <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>Loading…</span> : null}
         </div>
         {featuredRun ? (
@@ -1689,7 +1690,7 @@ export function MissionControlChatSurface({
   const selectedSeatLabel = activation?.label ?? 'Marvin';
   const selectedSeatDetail = activation
     ? activation.routing === 'direct'
-      ? 'Direct main runtime'
+      ? `Direct runtime · ${activation.targetSessionLabel}`
       : `${activation.supervisorLabel ?? 'Marvin'}-routed ${activation.runtimeModeLabel.toLowerCase()}`
     : 'Direct main runtime';
   const displayModelLabel = model.modelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : model.modelLabel;
@@ -1700,7 +1701,7 @@ export function MissionControlChatSurface({
         seatSlug: seat.seatSlug,
         label: seat.label,
         note: seat.role,
-        detail: seat.routing === 'direct' ? 'Direct main runtime' : `${seat.supervisorLabel ?? 'Marvin'}-routed lead seat`,
+        detail: seat.routing === 'direct' ? `Direct runtime · ${seat.targetSessionLabel}` : `${seat.supervisorLabel ?? 'Marvin'}-routed lead seat`,
         runtimeTag: seat.routingLabel,
       })),
     [],

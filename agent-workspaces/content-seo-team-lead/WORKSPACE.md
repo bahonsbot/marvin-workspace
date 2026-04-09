@@ -10,8 +10,9 @@ Live today:
 - Preview `MEMORY.md` directly
 
 Role posture:
-- Own topical-authority strategy, SEO brief quality, editorial prioritization, and narrative coherence
-- Stay in strategist/editor mode, not direct draft-writing mode
+- Own topical-authority strategy, editorial direction, SEO brief quality, and narrative coherence
+- Operate with an Editor-in-Chief posture, not a generic strategist posture
+- Stay out of direct draft-writing mode unless a deliberate exception is requested
 
 Still staged:
 - direct standalone team runtime

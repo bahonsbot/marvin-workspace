@@ -32,9 +32,18 @@
 ## Needs Input
 ## In Progress
 ## Open Backlog
+
 - [Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas
+- [Career] Practice: Blender primitives exercise
+**Brief:** choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist
+| Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial
+- [Trading] Fix: Equity bot improvement
+**Brief:** identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder
+| Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots
 - [Personal] Practice: Python practice sheet
-**Brief:** create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises
+- [Trading] Fix: Equity bot improvement
+
+
 ## Done
 
 - (2026-03-24) [Career] 📝 Draft: 3 Instagram content angles tied to After Effects motion design project → projects/portfolio/content-plan-ae-motion-design.md
@@ -44,5 +53,3 @@
 - (2026-03-24) [Trading] 🔧 Fix: safe improvement in trading-bot workspace → bot-support-spec-health-snapshot-reporter-2026-03-16.md
 - (2026-03-24) [Personal] 📚 Learn: Japanese study pack (greetings lesson) → projects/language/lesson-01-greetings.md
 ## Review
-
-- (2026-04-07) [Trading] 🔧 Fix: Futures bot improvement → kept real deliverables (`scripts/signal_accuracy_report.py`, implementation plan, accuracy reports); review note: task overshot the ask by implementing the improvement instead of only producing the requested plan.

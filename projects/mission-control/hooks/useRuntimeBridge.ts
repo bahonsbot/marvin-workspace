@@ -345,6 +345,9 @@ function mergeHydratedMessages(
   const buildFallbackKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
     `${message.role}|${message.sessionKey ?? 'none'}|${message.runId ?? 'none'}|${normalizedBody}`;
 
+  const buildTimestampBucketKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
+    `${message.role}|${message.sessionKey ?? 'none'}|${Math.floor((Number.isFinite(message.at) ? message.at : Date.now()) / 30000)}|${normalizedBody}`;
+
   const upsert = (message: RuntimeBridgeChatMessage, source: 'current' | 'hydrated') => {
     const normalizedBody = message.body.trim();
     if (!normalizedBody) return;
@@ -357,11 +360,13 @@ function mergeHydratedMessages(
     };
     const idKey = normalized.id ? `id:${normalized.id}` : null;
     const fallbackKey = `body:${buildFallbackKey(normalized, normalizedBody)}`;
-    const existing = (idKey && keyed.get(idKey)) ?? keyed.get(fallbackKey);
+    const timestampBucketKey = `body-bucket:${buildTimestampBucketKey(normalized, normalizedBody)}`;
+    const existing = (idKey && keyed.get(idKey)) ?? keyed.get(fallbackKey) ?? keyed.get(timestampBucketKey);
 
     if (!existing) {
       if (idKey) keyed.set(idKey, normalized);
       keyed.set(fallbackKey, normalized);
+      keyed.set(timestampBucketKey, normalized);
       return;
     }
 
@@ -384,6 +389,7 @@ function mergeHydratedMessages(
 
     if (idKey) keyed.set(idKey, merged);
     keyed.set(fallbackKey, merged);
+    keyed.set(timestampBucketKey, merged);
     if (existing.id && existing.id !== merged.id) {
       keyed.set(`id:${existing.id}`, merged);
     }
@@ -472,7 +478,6 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [reconnectNonce, setReconnectNonce] = useState(0);
   const mountedRef = useRef(true);
   const hydratedSessionKeyRef = useRef<string | null>(null);
-  const hydratedTranscriptSignatureRef = useRef<string | null>(null);
   const noticeSignaturesRef = useRef<Set<string>>(new Set());
   const instanceIdRef = useRef(getOrCreateInstanceId());
   const socketRef = useRef<WebSocket | null>(null);
@@ -481,7 +486,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const lastSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reconnectAttemptRef = useRef(0);
-  const bootstrapMainSessionPromiseRef = useRef<Promise<void> | null>(null);
+  const bootstrapSessionPromisesRef = useRef<Partial<Record<string, Promise<void>>>>({});
 
   const defaultTargetSession = useMemo(() => chooseTargetSession(summary), [summary]);
   const liveTargetSession = useMemo<RuntimeBridgeLiveSessionTarget>(() => {
@@ -553,16 +558,11 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   }, [initialSummary]);
 
   useEffect(() => {
-    const knownKeys = new Set<string>([
-      MAIN_SESSION_KEY,
-      ...summary.sessionContext.roots.map((candidate) => candidate.key),
-      ...summary.sessionContext.recent.map((candidate) => candidate.key),
-    ]);
-    if (activeSessionKey && knownKeys.has(activeSessionKey)) return;
+    if (activeSessionKey) return;
     if (defaultTargetSession.key) {
       setActiveSessionKey(defaultTargetSession.key);
     }
-  }, [activeSessionKey, defaultTargetSession.key, summary.sessionContext.recent, summary.sessionContext.roots]);
+  }, [activeSessionKey, defaultTargetSession.key]);
 
   const load = useCallback(async (isBackgroundRefresh: boolean) => {
     if (isBackgroundRefresh) {
@@ -596,19 +596,15 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       if (payload.transcriptHistory?.sessionKey && payload.transcriptHistory.sessionKey === (activeSessionKey ?? defaultTargetSession.key)) {
         const hydratedSessionKey = payload.transcriptHistory.sessionKey ?? null;
         const incomingMessages = payload.transcriptHistory?.messages ?? [];
-        const lastIncoming = incomingMessages[incomingMessages.length - 1];
-        const incomingSignature = `${hydratedSessionKey ?? 'none'}:${incomingMessages.length}:${lastIncoming?.id ?? ''}:${lastIncoming?.body ?? ''}`;
 
         setMessages((current) => {
           const scopedCurrent = current.filter((message) => message.sessionKey === hydratedSessionKey || message.sessionKey === null);
           const hasScopedTranscript = scopedCurrent.some((message) => message.role === 'user' || message.role === 'assistant');
           const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
-          const signatureChanged = hydratedTranscriptSignatureRef.current !== incomingSignature;
-          const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || signatureChanged || !hasScopedTranscript);
+          const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || !hasScopedTranscript);
           if (!shouldHydrate) return current;
 
           hydratedSessionKeyRef.current = hydratedSessionKey;
-          hydratedTranscriptSignatureRef.current = incomingSignature;
           return mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
         });
       }
@@ -665,39 +661,50 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     }, delayMs);
   }, []);
 
-  const ensureCanonicalMainSession = useCallback(async () => {
-    if (summary.sessionContext.mainSession.exists) return;
+  const ensureSessionExists = useCallback(
+    async (sessionKey: string) => {
+      if (!sessionKey) return;
 
-    if (bootstrapMainSessionPromiseRef.current) {
-      await bootstrapMainSessionPromiseRef.current;
-      return;
-    }
+      const existsInSummary =
+        (sessionKey === MAIN_SESSION_KEY && summary.sessionContext.mainSession.exists) ||
+        summary.sessionContext.roots.some((candidate) => candidate.key === sessionKey) ||
+        summary.sessionContext.recent.some((candidate) => candidate.key === sessionKey);
 
-    const bootstrapPromise = (async () => {
-      await rpc('sessions.patch', { key: MAIN_SESSION_KEY });
-      if (!mountedRef.current) return;
-      setActiveSessionKey(MAIN_SESSION_KEY);
-      await load(true);
-    })();
+      if (existsInSummary) return;
 
-    bootstrapMainSessionPromiseRef.current = bootstrapPromise;
-    try {
-      await bootstrapPromise;
-    } finally {
-      bootstrapMainSessionPromiseRef.current = null;
-    }
-  }, [load, rpc, summary.sessionContext.mainSession.exists]);
+      const activeBootstraps = bootstrapSessionPromisesRef.current;
+      if (activeBootstraps[sessionKey]) {
+        await activeBootstraps[sessionKey];
+        return;
+      }
+
+      const bootstrapPromise = (async () => {
+        await rpc('sessions.patch', { key: sessionKey });
+        if (!mountedRef.current) return;
+        await load(true);
+      })();
+
+      activeBootstraps[sessionKey] = bootstrapPromise;
+      try {
+        await bootstrapPromise;
+      } finally {
+        delete activeBootstraps[sessionKey];
+      }
+    },
+    [load, rpc, summary.sessionContext.mainSession.exists, summary.sessionContext.recent, summary.sessionContext.roots],
+  );
 
   // Auto-refresh removed — refresh is now manual-only via bridge.refresh()
 
   useEffect(() => {
     if (session.state !== 'connected') return;
+    if (liveTargetSession.key !== MAIN_SESSION_KEY) return;
     if (summary.sessionContext.mainSession.exists) return;
 
-    void ensureCanonicalMainSession().catch((cause) => {
+    void ensureSessionExists(MAIN_SESSION_KEY).catch((cause) => {
       console.error('[mission-control-runtime] failed to bootstrap canonical main session', cause);
     });
-  }, [ensureCanonicalMainSession, session.state, summary.sessionContext.mainSession.exists]);
+  }, [ensureSessionExists, liveTargetSession.key, session.state, summary.sessionContext.mainSession.exists]);
 
   const handleGatewayEvent = useCallback(
     (message: GatewayEventMessage) => {
@@ -882,6 +889,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     let cancelled = false;
     let socket: WebSocket | null = null;
     let connectRequestId: string | null = null;
+    let handshakeEstablished = false;
     let url: URL;
 
     try {
@@ -944,6 +952,17 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         const eventName = message.event ?? null;
 
         if (eventName === 'connect.challenge') {
+          if (handshakeEstablished) {
+            setSession((current) => ({
+              ...current,
+              challengeSeen: true,
+              lastEvent: eventName,
+              eventCount: current.eventCount + 1,
+            }));
+            handleGatewayEvent(message);
+            return;
+          }
+
           setSession((current) => ({
             ...current,
             state: gatewaySessionToken ? 'connecting' : 'challenged',
@@ -1004,6 +1023,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         connectRequestId = null;
 
         if (message.ok) {
+          handshakeEstablished = true;
           const payload = asRecord(message.payload) ?? {};
           const sessionPayload = asRecord(payload.session);
           const rawScopes = Array.isArray(payload.scopes) ? payload.scopes : [];
@@ -1138,9 +1158,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         throw new Error('No visible runtime session is available for Mission Control to target.');
       }
 
-      if (sessionKey === MAIN_SESSION_KEY && !summary.sessionContext.mainSession.exists) {
-        await ensureCanonicalMainSession();
-      }
+      await ensureSessionExists(sessionKey);
 
       setActiveSessionKey(sessionKey);
       setSendState('sending');
@@ -1210,7 +1228,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         throw cause;
       }
     },
-    [ensureCanonicalMainSession, liveTargetSession.key, rpc, session.state, summary.sessionContext.mainSession.exists],
+    [ensureSessionExists, liveTargetSession.key, rpc, session.state],
   );
 
   const abortPrompt = useCallback(async () => {
@@ -1276,7 +1294,6 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     },
     switchSession: async (sessionKey: string) => {
       hydratedSessionKeyRef.current = null;
-      hydratedTranscriptSignatureRef.current = null;
       setActiveSessionKey(sessionKey);
       setMessages([]);
       setEvents([]);
@@ -1285,6 +1302,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setSendError(null);
       setSendState('idle');
       setActiveRunId(null);
+      await ensureSessionExists(sessionKey);
       await load(true);
     },
   };

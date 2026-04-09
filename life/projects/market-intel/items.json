@@ -151,10 +151,10 @@
       "projects/market-intel",
       "projects/autonomous-trading-bot"
     ],
-    "lastAccessed": "2026-03-05",
-    "accessCount": 1,
+    "lastAccessed": "2026-04-07",
+    "accessCount": 2,
     "source": "memory/2026-03-04.md",
-    "lastUsed": "2026-03-11T20:52:31.816820"
+    "lastUsed": "2026-04-07T22:00:00.000000"
   },
   {
     "id": "mi-012",
@@ -297,9 +297,23 @@
     "relatedEntities": [
       "projects/market-intel"
     ],
-    "lastAccessed": "2026-03-16",
-    "accessCount": 1,
+    "lastAccessed": "2026-04-07",
+    "accessCount": 2,
     "source": "memory/2026-03-16.md",
-    "lastUsed": "2026-03-18T13:03:29.194707"
+    "lastUsed": "2026-04-07T22:00:00.000000"
+  },
+  {
+    "id": "mi-023",
+    "fact": "Heavy private credit signal day (Apr 7, 2026): ~10 market-signal-generator runs produced consistently strong signals. Dominant theme: private credit / redemption pressure across Barings (fund limits withdrawals), Goldman Sachs, UBS, Blue Owl. Scores: 84-96/100. Secondary themes: SpaceX IPO speculation (forced covering, early June target, 80/100), GameStop short squeeze setup, regional banking contagion historical pattern match (Jan 2023 JPM miss analog). 5 pending signals reviewed at 22:00 (indices 13-17 added Apr 7).",
+    "category": "status",
+    "timestamp": "2026-04-07T22:00:00+07:00",
+    "status": "active",
+    "relatedEntities": [
+      "projects/market-intel"
+    ],
+    "source": "memory/2026-04-07.md",
+    "lastAccessed": "2026-04-07",
+    "accessCount": 1,
+    "lastUsed": "2026-04-07T23:00:00.000000"
   }
 ]

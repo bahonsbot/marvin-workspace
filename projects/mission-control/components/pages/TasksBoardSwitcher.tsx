@@ -425,7 +425,7 @@ function AutonomousTaskModal({ open, mode, initialTask, onClose, onSubmit }: { o
   );
 }
 
-function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, onDragEnd, onOpen, isSelected }: { task: Task; onEdit?: (task: Task) => void; onDelete?: (task: Task) => void; boardType?: 'autonomous' | 'personal' | 'projects'; isDragging?: boolean; onDragStart?: (taskId: string) => void; onDragEnd?: () => void; onOpen?: (task: Task) => void; isSelected?: boolean; }) {
+function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, onDragEnd, onOpen, isSelected, webResearchEnabled }: { task: Task; onEdit?: (task: Task) => void; onDelete?: (task: Task) => void; boardType?: 'autonomous' | 'personal' | 'projects'; isDragging?: boolean; onDragStart?: (taskId: string) => void; onDragEnd?: () => void; onOpen?: (task: Task) => void; isSelected?: boolean; webResearchEnabled?: boolean; }) {
   const lane = extractLane(task);
   const laneSd = laneStyleData(lane);
   const cardTint = autonomousTintForColumn(task.column);
@@ -435,6 +435,7 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
     title: task.detail.summary,
     description: task.detail.why,
     agentTarget: task.meta?.agentTarget,
+    webResearchEnabled,
   });
   const supportText = boardType === 'autonomous'
     ? formatAutonomousSupport(
@@ -462,13 +463,13 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
   );
 }
 
-function ColumnView({ column, boardType, onEdit, onDelete, onDropTask, draggingTaskId, isDropTarget, onDragEnterColumn, onDragLeaveColumn, onDragStartTask, onOpenTask, selectedTaskId }: { column: Column; boardType?: 'autonomous' | 'personal' | 'projects'; onEdit?: (task: Task) => void; onDelete?: (task: Task) => void; onDropTask?: (taskId: string, newColumn: ManualTaskColumn) => void; draggingTaskId?: string | null; isDropTarget?: boolean; onDragEnterColumn?: (columnId: ManualTaskColumn) => void; onDragLeaveColumn?: () => void; onDragStartTask?: (taskId: string, columnId: ManualTaskColumn) => void; onOpenTask?: (task: Task) => void; selectedTaskId?: string | null; }) {
+function ColumnView({ column, boardType, onEdit, onDelete, onDropTask, draggingTaskId, isDropTarget, onDragEnterColumn, onDragLeaveColumn, onDragStartTask, onOpenTask, selectedTaskId, webResearchEnabled }: { column: Column; boardType?: 'autonomous' | 'personal' | 'projects'; onEdit?: (task: Task) => void; onDelete?: (task: Task) => void; onDropTask?: (taskId: string, newColumn: ManualTaskColumn) => void; draggingTaskId?: string | null; isDropTarget?: boolean; onDragEnterColumn?: (columnId: ManualTaskColumn) => void; onDragLeaveColumn?: () => void; onDragStartTask?: (taskId: string, columnId: ManualTaskColumn) => void; onOpenTask?: (task: Task) => void; selectedTaskId?: string | null; webResearchEnabled?: boolean; }) {
   const palette = columnPalette(column.id);
   const isManual = boardType === 'personal' || boardType === 'projects';
   return (
     <section onDragOver={event => { if (!isManual || !onDropTask) return; event.preventDefault(); event.dataTransfer.dropEffect = 'move'; onDragEnterColumn?.(column.id as ManualTaskColumn); }} onDragEnter={() => { if (!isManual || !onDragEnterColumn) return; onDragEnterColumn(column.id as ManualTaskColumn); }} onDrop={event => { if (!isManual || !onDropTask) return; event.preventDefault(); const taskId = event.dataTransfer.getData('text/plain'); if (taskId) onDropTask(taskId, column.id as ManualTaskColumn); }} style={{ minWidth: 0, border: `1px solid ${isDropTarget ? `${palette.accent}66` : palette.border}`, borderRadius: 18, padding: 12, background: isDropTarget ? `linear-gradient(180deg, ${palette.accent}16 0%, rgba(255, 255, 255, 0.88) 24%)` : palette.bg, display: 'grid', gap: 10, alignContent: 'start', boxShadow: isDropTarget ? `0 0 0 1px ${palette.accent}20 inset` : 'none', transition: 'background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}><div style={{ display: 'flex', alignItems: 'center', gap: 9 }}><span style={{ width: 8, height: 8, borderRadius: '50%', background: palette.accent }} /><h3 style={{ margin: 0, fontSize: 14, fontWeight: 600 }}>{column.title}</h3></div><span style={{ fontSize: 11, color: palette.chipText, background: palette.chipBg, padding: '3px 8px', borderRadius: 999, fontWeight: 700 }}>{column.count}</span></div>
-      {column.tasks.length === 0 ? <div style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, padding: 18, background: 'rgba(255, 255, 255, 0.54)', textAlign: 'center', fontSize: 11.5, color: '#8a8a8a' }}>{palette.emptyText}</div> : <div style={{ display: 'grid', gap: 8 }}>{column.tasks.map(task => <TaskCard key={task.id} task={task} onOpen={onOpenTask} onEdit={onEdit} onDelete={onDelete} boardType={boardType} isDragging={draggingTaskId === task.id} isSelected={selectedTaskId === task.id} onDragStart={isManual ? taskId => onDragStartTask?.(taskId, column.id as ManualTaskColumn) : undefined} onDragEnd={isManual ? onDragLeaveColumn : undefined} />)}</div>}
+      {column.tasks.length === 0 ? <div style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, padding: 18, background: 'rgba(255, 255, 255, 0.54)', textAlign: 'center', fontSize: 11.5, color: '#8a8a8a' }}>{palette.emptyText}</div> : <div style={{ display: 'grid', gap: 8 }}>{column.tasks.map(task => <TaskCard key={task.id} task={task} onOpen={onOpenTask} onEdit={onEdit} onDelete={onDelete} boardType={boardType} isDragging={draggingTaskId === task.id} isSelected={selectedTaskId === task.id} onDragStart={isManual ? taskId => onDragStartTask?.(taskId, column.id as ManualTaskColumn) : undefined} onDragEnd={isManual ? onDragLeaveColumn : undefined} webResearchEnabled={webResearchEnabled} />)}</div>}
     </section>
   );
 }
@@ -491,7 +492,7 @@ function CompactSyncStatus({ state, details, onCleanup, cleanupBusy }: { state: 
   );
 }
 
-function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, onRemove, onEdit, busy }: { task: Task | null; onClose: () => void; onExecute: (task: Task) => Promise<void>; onApprove: (task: Task) => Promise<void>; onReject: (task: Task, note: string) => Promise<void>; onRemove: (task: Task) => Promise<void>; onEdit: (task: Task) => void; busy: boolean; }) {
+function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, onRemove, onEdit, busy, webResearchEnabled }: { task: Task | null; onClose: () => void; onExecute: (task: Task) => Promise<void>; onApprove: (task: Task) => Promise<void>; onReject: (task: Task, note: string) => Promise<void>; onRemove: (task: Task) => Promise<void>; onEdit: (task: Task) => void; busy: boolean; webResearchEnabled?: boolean; }) {
   const [rejectNote, setRejectNote] = useState('');
   const canExecute = task?.column === 'backlog' || task?.column === 'todo';
   const canReview = task?.column === 'review' && task?.meta?.runStatus === 'done';
@@ -499,6 +500,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
     title: task?.detail.summary,
     description: task?.detail.why,
     agentTarget: task?.meta?.agentTarget,
+    webResearchEnabled,
   });
 
   useEffect(() => {
@@ -569,7 +571,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   );
 }
 
-function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onRefreshImport, onCleanupSync, refreshBusy, cleanupBusy, onOpenTask, selectedTaskId }: { columns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; onOpenNewTask: () => void; onRefreshImport: () => Promise<void>; onCleanupSync: () => Promise<void>; refreshBusy: boolean; cleanupBusy: boolean; onOpenTask: (task: Task) => void; selectedTaskId: string | null; }) {
+function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onRefreshImport, onCleanupSync, refreshBusy, cleanupBusy, onOpenTask, selectedTaskId, webResearchEnabled }: { columns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; onOpenNewTask: () => void; onRefreshImport: () => Promise<void>; onCleanupSync: () => Promise<void>; refreshBusy: boolean; cleanupBusy: boolean; onOpenTask: (task: Task) => void; selectedTaskId: string | null; webResearchEnabled?: boolean; }) {
   return (
     <div style={{ display: 'grid', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
@@ -581,7 +583,11 @@ function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onR
           <button onClick={onOpenNewTask} style={{ width: 40, height: 40, borderRadius: 999, border: 'none', background: '#0f1f19', color: '#fff', cursor: 'pointer', fontSize: 20, fontWeight: 700, boxShadow: '0 8px 22px rgba(15, 31, 25, 0.16)' }} aria-label="New task" title="New task">+</button>
         </div>
       </div>
-      <section className="tasks-board-grid">{columns.map(col => <ColumnView key={col.id} column={col} boardType="autonomous" onOpenTask={onOpenTask} selectedTaskId={selectedTaskId} />)}</section>
+      <div style={{ overflowX: 'auto', paddingBottom: 2 }}>
+        <section className="tasks-board-grid" style={{ gridTemplateColumns: 'repeat(5, minmax(220px, 1fr))', minWidth: 1180 }}>
+          {columns.map(col => <ColumnView key={col.id} column={col} boardType="autonomous" onOpenTask={onOpenTask} selectedTaskId={selectedTaskId} webResearchEnabled={webResearchEnabled} />)}
+        </section>
+      </div>
     </div>
   );
 }
@@ -592,7 +598,7 @@ function ManualBoardContent({ board, label, onMove, onEdit, onDelete, onCreateTa
   return <div style={{ display: 'grid', gap: 14 }}><div style={{ display: 'grid', gap: 14 }}><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12, flexWrap: 'wrap' }}><button onClick={() => onCreateTask(boardType, 'todo')} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, minWidth: 44, height: 44, padding: '0 16px', borderRadius: 999, background: '#0f1f19', color: '#ffffff', border: 'none', cursor: 'pointer', fontSize: 20, lineHeight: 1, boxShadow: '0 8px 24px rgba(15, 31, 25, 0.18)', position: 'relative', zIndex: 2 }} aria-label={`New ${label.toLowerCase()} task`} title="New task"><span style={{ transform: 'translateY(-1px)' }}>+</span></button></div></div><section className="tasks-board-grid" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>{cols.map(col => <ColumnView key={col.id} column={col} boardType={boardType} onEdit={onEdit} onDelete={onDelete} onDropTask={(taskId, newCol) => { onMove(boardType, taskId, newCol); clearDragState(); }} draggingTaskId={draggingTaskId} isDropTarget={dropColumnId === col.id} onDragEnterColumn={columnId => { setDropColumnId(columnId); }} onDragLeaveColumn={clearDragState} onDragStartTask={(taskId, columnId) => { setDraggingTaskId(taskId); setDropColumnId(columnId); }} />)}</section></div>;
 }
 
-export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }: { autonomousColumns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; }) {
+export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails, webResearchEnabled }: { autonomousColumns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; webResearchEnabled?: boolean; }) {
   const AUTO_POLL_INTERVAL_MS = 3500;
   const searchParams = useSearchParams();
   const [activeBoard, setActiveBoard] = useState<BoardId>('autonomous');
@@ -891,10 +897,10 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails }
   return (
     <div style={{ display: 'grid', gap: 14 }}>
       <div role="tablist" aria-label="Task boards" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 6px', borderRadius: 999, background: 'rgba(255, 255, 255, 0.74)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(200, 195, 188, 0.4)', width: 'fit-content', boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)', marginInline: 'auto' }}>{BOARDS.map(board => { const isActive = activeBoard === board.id; return <button key={board.id} role="tab" aria-selected={isActive} onClick={() => setActiveBoard(board.id)} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 16px', borderRadius: 999, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: isActive ? 700 : 500, transition: 'all 0.15s ease', background: isActive ? 'var(--accent-deep, #0f1f19)' : 'transparent', color: isActive ? '#ffffff' : '#7a7a7a', boxShadow: isActive ? '0 2px 8px rgba(15, 31, 25, 0.18)' : 'none' }}><span>{board.icon}</span><span>{board.label}</span></button>; })}</div>
-      <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={autoSyncState} syncDetails={autoSyncDetails} onOpenNewTask={() => { setAutoModalMode('create'); setAutoModalTask(null); setAutoModalOpen(true); }} onRefreshImport={refreshAutonomousBoard} onCleanupSync={cleanupAutonomousSync} refreshBusy={autoRefreshBusy} cleanupBusy={autoCleanupBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
+      <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={autoSyncState} syncDetails={autoSyncDetails} onOpenNewTask={() => { setAutoModalMode('create'); setAutoModalTask(null); setAutoModalOpen(true); }} onRefreshImport={refreshAutonomousBoard} onCleanupSync={cleanupAutonomousSync} refreshBusy={autoRefreshBusy} cleanupBusy={autoCleanupBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} webResearchEnabled={webResearchEnabled} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
       <TaskModal modal={modal} onClose={() => setModal(null)} onSave={handleSave} />
       <AutonomousTaskModal open={autoModalOpen} mode={autoModalMode} initialTask={autoModalTask} onClose={() => { setAutoModalOpen(false); setAutoModalTask(null); }} onSubmit={async (input) => { if (autoModalMode === 'edit' && autoModalTask) { await updateAutonomousTask(autoModalTask.id, input); setAutoModalOpen(false); return; } await createAutonomousTask(input); }} />
-      <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} onRemove={removeAutonomousTask} onEdit={(task) => { setAutoModalMode('edit'); setAutoModalTask(task); setAutoModalOpen(true); }} busy={autoActionBusy} />
+      <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} onRemove={removeAutonomousTask} onEdit={(task) => { setAutoModalMode('edit'); setAutoModalTask(task); setAutoModalOpen(true); }} busy={autoActionBusy} webResearchEnabled={webResearchEnabled} />
     </div>
   );
 }

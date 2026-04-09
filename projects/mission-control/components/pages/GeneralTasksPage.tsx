@@ -1,4 +1,5 @@
 import { PageScaffold } from '@/components/shared/PageScaffold';
+import { resolveWebResearchProvider } from '@/lib/autonomous-preflight';
 import { getTaskBoard, getTaskSyncStatus } from '@/lib/adapters/tasks';
 import { TasksBoardSwitcher } from './TasksBoardSwitcher';
 
@@ -9,6 +10,7 @@ export const revalidate = 0;
 
 export default async function TasksPage() {
   const [board, sync] = await Promise.all([getTaskBoard(), getTaskSyncStatus()]);
+  const webResearchEnabled = Boolean(resolveWebResearchProvider());
 
   return (
     <PageScaffold
@@ -20,6 +22,7 @@ export default async function TasksPage() {
         autonomousColumns={board.columns}
         syncState={sync.state}
         syncDetails={sync.details}
+        webResearchEnabled={webResearchEnabled}
       />
     </PageScaffold>
   );

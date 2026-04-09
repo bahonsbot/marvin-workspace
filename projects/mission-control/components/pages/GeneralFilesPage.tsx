@@ -4,6 +4,7 @@ import { PageScaffold } from '@/components/shared/PageScaffold';
 import { DirectoryListing } from '@/components/files/DirectoryListing';
 import { FilesPreviewSection } from '@/components/files/FilesPreviewSection';
 import { FilesRail } from '@/components/files/FilesRail';
+import { RecentFilesStrip } from '@/components/files/RecentFilesStrip';
 import { BackToTopButton } from '@/components/memory/BackToTopButton';
 import { getDirectoryListing, getFilePreview } from '@/lib/adapters/files';
 
@@ -25,6 +26,7 @@ export default async function FilesPage({ searchParams }: { searchParams?: Files
         title="Files"
         titleVariant="editorial"
         descriptionVariant="quote"
+        hideHeader
       >
         <div className="general-two-col-layout">
           <FilesRail roots={listing.roots} currentPath={listing.directory.path} />
@@ -61,6 +63,8 @@ export default async function FilesPage({ searchParams }: { searchParams?: Files
                 ))}
               </div>
             </header>
+
+            <RecentFilesStrip activeFilePath={preview?.file?.path ?? null} />
 
             <DirectoryListing entries={listing.entries} currentDirectory={listing.directory.path} selectedFilePath={preview?.file?.path ?? null} />
 

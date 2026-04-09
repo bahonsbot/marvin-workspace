@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useMissionControlRuntime } from '@/components/chat/MissionControlRuntimeProvider';
 import { Sidebar } from './Sidebar';
 import { TopTabBar } from './TopTabBar';
+import { useShellContext } from './ShellContext';
 
 function toastSummary(event: { summary?: string; artifactPath?: string; type: string }) {
   const raw = String(event.summary || '').trim();
@@ -133,14 +134,21 @@ export function AppShellClient({
   const isChatRoute = pathname === '/general/chat' || pathname === '/chat';
   const bottomStripEnabled = false;
   const hideBottomStrip = isChatRoute || !bottomStripEnabled;
-  const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/crons', '/general/memory', '/general/files']);
+  const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/skills', '/general/crons', '/general/memory', '/general/files']);
   const isCompactTopRoute = compactTopRoutes.has(pathname);
+  const { sidebarCollapsed } = useShellContext();
 
   return (
     <div style={{ minHeight: '100vh', height: '100vh', overflow: 'hidden' }}>
       <TopTabBar />
       <ToastRail />
-      <div className="app-shell-grid" style={{ height: 'calc(100vh - 72px)' }}>
+      <div
+        className="app-shell-grid"
+        style={{
+          height: 'calc(100vh - 72px)',
+          ['--sidebar-width' as string]: sidebarCollapsed ? '76px' : '220px',
+        }}
+      >
         <Sidebar />
         <div
           style={{
