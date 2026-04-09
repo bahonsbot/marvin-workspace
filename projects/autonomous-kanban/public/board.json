@@ -2,18 +2,13 @@
   "board": {
     "todo": [
       {
-        "id": "e136d454",
-        "text": "[Other] 🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
+        "id": "321a38f2",
+        "text": "[Career] Practice: Blender primitives exercise",
         "column": "todo"
       },
       {
         "id": "4ba46c8f",
         "text": "[Trading] Fix: Equity bot improvement",
-        "column": "todo"
-      },
-      {
-        "id": "5c2b3431",
-        "text": "[Trading] Fix: Futures bot improvement",
         "column": "todo"
       },
       {
@@ -24,6 +19,11 @@
       {
         "id": "b8f002ff",
         "text": "[Personal] Practice: Python practice sheet",
+        "column": "todo"
+      },
+      {
+        "id": "4ba46c8f",
+        "text": "[Trading] Fix: Equity bot improvement",
         "column": "todo"
       }
     ],
@@ -107,6 +107,13 @@
         "source": "tasks-log"
       },
       {
+        "id": "2db0429a",
+        "text": "Create a clean implementation plan for an improved Home page",
+        "column": "done",
+        "outputPath": "projects/mission-control/docs/autonomous-research/create-a-clean-implementation-plan-for-an-improv-web-research.md",
+        "source": "tasks-log"
+      },
+      {
         "id": "c4fee0b0",
         "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
         "column": "done",
@@ -171,5 +178,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-08T07:16:03.498Z"
+  "updatedAt": "2026-04-09T01:04:29.291Z"
 }
