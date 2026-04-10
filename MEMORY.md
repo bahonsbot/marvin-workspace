@@ -126,6 +126,7 @@ Durable rule: protected zones are approval-gated, not permanently off-limits. In
 - Standing suppression baseline for overnight reviews:
   - .env credential rotation: do not re-raise if all conditions met: mode 600, gitignored patterns, no tracked .env, no fresh secret exposure evidence
   - reopen only on new exposure window (permission drift, committed .env, or fresh evidence)
+  - workspace `openclaw.json` architectural risk: treat as an accepted structural risk, not a quick env-migration fix; if it is removed from active HEAD but still exists historically, classify it as history hygiene / exposure review rather than an active workspace secret-file misconfiguration; reopen only on visibility/access change, fresh reintroduction to HEAD, or a newly available safe config architecture
   - accepted-risk items report once as INFO with a baseline note, then suppress repeats unless state changes
 
 ## Telegram

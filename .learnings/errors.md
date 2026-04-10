@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260410-1310]
+
+**What failed:** Morning Meeting push after remote history rewrite
+**Error:** normal `git push origin master` was rejected because the remote had been force-rewritten and the local workspace still sat on the pre-rewrite ancestry, producing a massive ahead/behind divergence despite only two real local commits needing to land
+**Context:** Apr 10 follow-up after removing `openclaw.json` from remote history and then trying to push the approved Morning Meeting fixes from the main workspace checkout
+**Suggested fix:** after any remote history rewrite, do not trust the main dirty workspace checkout for normal push/pull flow. Either realign the local repo deliberately first, or push approved follow-up commits from a clean temporary clone based on the rewritten remote.
+**Resolution:** Resolved same session by exporting the two approved commits as patches, applying them in a clean temporary clone of the rewritten remote, and pushing from there
+
+**Priority:** medium
+**Status:** resolved
+
+## [ERR-20260410-1302]
+
+**What failed:** Nightly security review finding quality on `openclaw.json`
+**Error:** the report framed workspace `openclaw.json` as an active git-tracked secret-file misconfiguration with an env-migration fix, but the file was not present in current HEAD/workspace and the proposed remediation did not fit the real architecture
+**Context:** Apr 10 Morning Meeting review after Philippe challenged the recommendation
+**Suggested fix:** for sensitive-file findings, verify three things separately before escalating: (1) present in current workspace/HEAD, (2) merely historical in git, or (3) architectural accepted-risk by design. Do not recommend env migration when the file's role makes that non-viable.
+**Resolution:** Resolved same session by verifying actual git state, removing the file from remote history, adding ignore protection upstream, and promoting a durable review-suppression rule in `MEMORY.md`
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260408-1735]
 
 **What failed:** first attempted Home-page redo after Philippe’s major visual critique
