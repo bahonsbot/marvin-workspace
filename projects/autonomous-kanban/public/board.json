@@ -2,64 +2,181 @@
   "board": {
     "todo": [
       {
-        "id": "f6c81963",
-        "text": "[Other] \ud83c\udf81 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
+        "id": "44106f89",
+        "text": "[Trading] Practice: Business metrics lesson",
         "column": "todo"
       },
       {
-        "id": "5268b591",
+        "id": "4ba46c8f",
+        "text": "[Trading] Fix: Equity bot improvement",
+        "column": "todo"
+      },
+      {
+        "id": "321a38f2",
         "text": "[Career] Practice: Blender primitives exercise",
         "column": "todo"
       },
       {
-        "id": "18ab9205",
-        "text": "[Trading] Fix: Equity bot improvement",
+        "id": "6c0ef225",
+        "text": "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
         "column": "todo"
       },
       {
-        "id": "e299ba72",
-        "text": "[Personal] Practice: Python practice sheet",
-        "column": "todo"
-      },
-      {
-        "id": "18ab9205",
-        "text": "[Trading] Fix: Equity bot improvement",
+        "id": "3b05052c",
+        "text": "[Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
         "column": "todo"
       }
     ],
     "inprogress": [],
     "done": [
       {
-        "id": "24fa9c1b",
-        "text": "(2026-03-24) [Career] \ud83d\udcdd Draft: 3 Instagram content angles tied to After Effects motion design project \u2192 projects/portfolio/content-plan-ae-motion-design.md",
-        "column": "done"
+        "id": "dace22c7",
+        "text": "🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/",
+        "column": "done",
+        "outputPath": "projects/_ops/daily-check.html, projects/_ops/daily-check-readme.md",
+        "source": "tasks-log"
       },
       {
-        "id": "5498edbf",
-        "text": "(2026-03-24) [Other] \ud83d\udd27 Fix: OpenClaw helper utility generation improved; daily-task-generator now produces concrete script deliverables",
-        "column": "done"
+        "id": "873f553c",
+        "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
+        "column": "done",
+        "outputPath": "projects/creative-challenges/index.html, projects/creative-challenges/README.md",
+        "source": "tasks-log"
       },
       {
-        "id": "90367ec6",
-        "text": "(2026-03-24) [Career] \ud83d\udd28 Build: daily creative challenge generator \u2192 projects/creative-challenges/index.html + README.md",
-        "column": "done"
+        "id": "0708ff73",
+        "text": "Queue replay handled: duplicate creative-challenges build task verified against existing artifacts, no re-run needed",
+        "column": "done",
+        "outputPath": "projects/creative-challenges/index.html, projects/creative-challenges/README.md",
+        "source": "tasks-log"
       },
       {
-        "id": "0f7d3b41",
-        "text": "(2026-03-24) [Career] \ud83d\ude80 Launch: portfolio case-study draft \u2192 projects/portfolio/case-studies/motion-design-loop.md",
-        "column": "done"
+        "id": "b999c42d",
+        "text": "[Other] 🔧 Fix: identify one repetitive workspace workflow that wastes time, excluding openclaw.json and any live config mutation path; deliverable: markdown spec in projects/automation/ with evidence, proposed automation, and safe boundaries | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Spec identifies a real workspace bottleneck, excludes risky config edits, and defines safe input/output clearly | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "done",
+        "outputPath": "projects/automation/fix-identify-one-repetitive-workspace-workflow-that-wastes-time-excludin.md",
+        "source": "tasks-log"
       },
       {
-        "id": "44306735",
-        "text": "(2026-03-24) [Trading] \ud83d\udd27 Fix: safe improvement in trading-bot workspace \u2192 bot-support-spec-health-snapshot-reporter-2026-03-16.md",
-        "column": "done"
+        "id": "2336a7e5",
+        "text": "[Other] 🔧 Fix: build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output | Why: Reduces repetitive manual work, freeing time for skill-building | Proof: Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "done",
+        "outputPath": "projects/automation/fix-build-one-small-automation-utility-that-addresses-one-specific-docum.md",
+        "source": "tasks-log"
       },
       {
-        "id": "32a9a711",
-        "text": "(2026-03-24) [Personal] \ud83d\udcda Learn: Japanese study pack (greetings lesson) \u2192 projects/language/lesson-01-greetings.md",
-        "column": "done"
+        "id": "3215a592",
+        "text": "🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker",
+        "column": "done",
+        "outputPath": "projects/learning-tools/python-daily-loop.html",
+        "source": "tasks-log"
+      },
+      {
+        "id": "294116e9",
+        "text": "Identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability",
+        "column": "done",
+        "outputPath": "AGENTS.md",
+        "source": "tasks-log"
+      },
+      {
+        "id": "cd0d0509",
+        "text": "Create a clean implementation plan for a more dynamic and colourful weather/time widget",
+        "column": "done",
+        "outputPath": "projects/mission-control/docs/weather-widget-implementation-plan.md",
+        "source": "tasks-log"
+      },
+      {
+        "id": "80d8d363",
+        "text": "Create a clean implementation plan for a more dynamic and collapsible left menu bar",
+        "column": "done",
+        "outputPath": "projects/mission-control/docs/sidebar-redesign-plan.md",
+        "source": "tasks-log"
+      },
+      {
+        "id": "8776052d",
+        "text": "Create a clean implementation plan for a collapsable top-section of the Chat page",
+        "column": "done",
+        "outputPath": "projects/mission-control/docs/chat-collapsible-top-section-plan.md",
+        "source": "tasks-log"
+      },
+      {
+        "id": "8ee3d3b5",
+        "text": "🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
+        "column": "done",
+        "outputPath": "scripts/cron_run_summary.py",
+        "source": "tasks-log"
+      },
+      {
+        "id": "2db0429a",
+        "text": "Create a clean implementation plan for an improved Home page",
+        "column": "done",
+        "outputPath": "projects/mission-control/docs/autonomous-research/create-a-clean-implementation-plan-for-an-improv-web-research.md",
+        "source": "tasks-log"
+      },
+      {
+        "id": "c4fee0b0",
+        "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
+        "column": "done",
+        "outputPath": "projects/autonomous-trading-bot/notes/bot-support-spec-health-snapshot-reporter-2026-03-16.md",
+        "source": "queue"
+      },
+      {
+        "id": "08499c87",
+        "text": "[Trading] 🎁 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements",
+        "column": "done",
+        "outputPath": "projects/autonomous-trading-bot/notes/mvp-spec-daily-diagnostics-report.md",
+        "source": "queue"
+      },
+      {
+        "id": "e1d42d94",
+        "text": "[Personal] 📚 Learn: create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts | Why: Spaced repetition with focused vocabulary and pattern practice builds usable language skill | Proof: Deck or exercise set has complete entries and is usable for deliberate practice | Unlocks: Unlocks the next stage of reading and basic output practice",
+        "column": "done",
+        "outputPath": "projects/language/lesson-01-greetings.md",
+        "source": "queue"
+      },
+      {
+        "id": "57b7fde7",
+        "text": "[Trading] 📚 Learn: create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts | Why: Understanding company financials is required for informed trading decisions | Proof: Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice | Unlocks: Unlocks later analysis tasks based on real followed companies once the watchlist is defined",
+        "column": "done",
+        "outputPath": "projects/company-research/lesson-01-financials-basics.md",
+        "source": "queue"
+      },
+      {
+        "id": "5678617b",
+        "text": "[Other] 🔧 Fix: build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "done",
+        "outputPath": "scripts/queue_triage.py",
+        "source": "queue"
+      },
+      {
+        "id": "6c0ef225",
+        "text": "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development",
+        "column": "done",
+        "outputPath": "projects/learning-tools/python-daily-loop.html",
+        "source": "queue"
+      },
+      {
+        "id": "c55641a6",
+        "text": "[Other] Fix build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note | Why: Improves OpenClaw reliability - essential for autonomous operations | Proof: Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations | Unlocks: Progress toward: Write a simple script with input validation",
+        "column": "done",
+        "outputPath": "scripts/operator_snapshot.py",
+        "source": "queue"
+      },
+      {
+        "id": "2ffa4aae",
+        "text": "[Philippe] 📝 Suggested: --category Other --title Investigate daily-task-generator backlog dropout bug --description 2026-04-01: Script reported 5 tasks generated, but only 4 appear in backlog. One task ('Tighten Chat recent-session switching') appears to have been silently dropped during the update. Investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why Task generation reliability — missing tasks break trust in the autonomous workflow --proof Telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks Confident daily task generation without silent data loss | Why: Philippe-prioritized task suggestion | Proof: Task outcome or deliverable is clear from the task text | Unlocks: Direct progress on Philippe's chosen priority",
+        "column": "done",
+        "outputPath": "scripts/daily-task-generator.py",
+        "source": "queue"
+      },
+      {
+        "id": "e136d454",
+        "text": "[Other] 🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | Why: A small system tool can create durable daily value without touching risky config | Proof: Tool shows one genuinely useful status snapshot from local workspace data | Unlocks: Better operational visibility for future automation",
+        "column": "done",
+        "outputPath": "scripts/cron_run_summary.py",
+        "source": "queue"
       }
     ]
   },
-  "updatedAt": "2026-04-09T10:00:15.000Z"
+  "updatedAt": "2026-04-10T01:03:07.686Z"
 }
