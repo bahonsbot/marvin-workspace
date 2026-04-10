@@ -35,6 +35,8 @@ function runtimeModeLabel(mode: ChatSeatActivation['runtimeMode']) {
 function shortSessionLabel(sessionKey: string) {
   if (sessionKey === 'agent:main:main') return 'Marvin main session';
   if (sessionKey === 'agent:language-tutor:main') return 'Japin specialist session';
+  if (sessionKey === 'agent:sportsbet-advisor:main') return 'Johan specialist session';
+  if (sessionKey === 'agent:trading-advisor:main') return 'Milou specialist session';
   return sessionKey;
 }
 

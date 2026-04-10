@@ -2,10 +2,10 @@
 
 Workspace slug: `sportsbet-advisor`
 Seat: `Johan`
-Status: Marvin-routed specialist seat with structured continuity
+Status: direct specialist runtime with structured continuity
 
 Live today:
-- Activate in chat from Mission Control (Marvin-routed)
+- Activate in chat from Mission Control (direct specialist runtime via `agent:sportsbet-advisor:main`)
 - Open workspace from Mission Control Agents via Files
 - Use `memory/continuity.md` as the active betting-research handoff anchor
 

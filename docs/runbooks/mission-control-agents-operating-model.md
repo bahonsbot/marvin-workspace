@@ -214,7 +214,7 @@ Current identity/skills posture:
   - Johan → `memory/continuity.md`, `memory/bettor-profile.md`, `.learnings/corrections.md`, `memory/research/`
   - Milou → `memory/continuity.md`, `memory/trader-profile.md`, `.learnings/corrections.md`, `memory/analyses/`
   - Japin → `memory/continuity.md`, `memory/learner-profile.md`, `.learnings/corrections.md`, `memory/lessons/`
-- only Japin is direct-runtime today; Johan and Milou still route through Marvin, but their continuity/update discipline should now match the same truth standard
+- Japin, Johan, and Milou now have direct specialist runtime posture with specialist-scoped continuity/update discipline
 
 ### Current action policy
 

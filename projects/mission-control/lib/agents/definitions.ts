@@ -391,13 +391,13 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     summary: 'Sports betting analyst with no patience for hype. Weighs odds, pressure, and probability like a bookmaker with trust issues.',
     arsenal: ['sportsbet-advisor'],
     expectedOutputs: ['pick thesis', 'matchup brief', 'probability assessment', 'betting research artifact'],
-    workspaceReadiness: 'staged',
-    chatReadiness: 'marvin-routed',
-    actionMode: 'marvin-routed',
+    workspaceReadiness: 'ready',
+    chatReadiness: 'ready',
+    actionMode: 'control',
     activation: {
-      routing: 'marvin-routed',
+      routing: 'direct',
       runtimeMode: 'seat-mode',
-      targetSessionKey: 'agent:main:main',
+      targetSessionKey: 'agent:sportsbet-advisor:main',
       defaultModel: 'codex5.4',
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
@@ -405,7 +405,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
         'Activate Johan mode. Before analyzing the bet, review `memory/continuity.md`, `memory/bettor-profile.md`, and `.learnings/corrections.md` in the sportsbet-advisor workspace, then continue from what is actually logged there. Start by asking for the sport, event, market, current line or odds, sportsbook, and any constraints. Focus on probability, data quality, downside risk, and bias control.',
       starterLabel: 'Johan activation starter',
       nextStep:
-        'Share the matchup or market with current odds. Marvin will keep the chat in Johan mode from main chat, continuing from `memory/continuity.md` and updating continuity after meaningful sessions, `memory/bettor-profile.md` when the bettor baseline changes, recurring patterns in `.learnings/corrections.md`, and a research note in `memory/research/` for substantial sessions.',
+        'Share the matchup or market with current odds. Johan runs as its own direct specialist seat and should continue from `memory/continuity.md`, updating continuity after meaningful sessions, `memory/bettor-profile.md` when the bettor baseline changes, recurring patterns in `.learnings/corrections.md`, and a research note in `memory/research/` for substantial sessions.',
     },
     workspace: {
       slug: 'sportsbet-advisor',
@@ -416,6 +416,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       ignoredArtifactFiles: ['README.md', '.gitkeep', '.keep'],
     },
     matchers: [
+      { mode: 'exact', value: 'agent:sportsbet-advisor:main' },
       { mode: 'marker', value: 'sportsbet-advisor' },
       { mode: 'marker', value: 'johan' },
       { mode: 'role', value: 'sportsbet advisor' },
@@ -432,13 +433,13 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     summary: 'Trading advisor that beats Mr.Market. Reads reports, feeds on technical analysis, sees opportunities, and keeps emotional trades away.',
     arsenal: ['trading-advisor', 'stock-market-pro', 'us-stock-analysis'],
     expectedOutputs: ['risk framework', 'technical thesis', 'market summary', 'trade-planning note'],
-    workspaceReadiness: 'staged',
-    chatReadiness: 'marvin-routed',
-    actionMode: 'marvin-routed',
+    workspaceReadiness: 'ready',
+    chatReadiness: 'ready',
+    actionMode: 'control',
     activation: {
-      routing: 'marvin-routed',
+      routing: 'direct',
       runtimeMode: 'seat-mode',
-      targetSessionKey: 'agent:main:main',
+      targetSessionKey: 'agent:trading-advisor:main',
       defaultModel: 'codex5.4',
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
@@ -446,7 +447,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
         'Activate Milou mode. Before assessing the setup, review `memory/continuity.md`, `memory/trader-profile.md`, and `.learnings/corrections.md` in the trading-advisor workspace, then continue from what is actually logged there. Start by asking for the ticker or market, timeframe, chart context, risk tolerance, and any open-position context. Establish stop, size, and risk-to-reward before discussing upside.',
       starterLabel: 'Milou activation starter',
       nextStep:
-        'Share the ticker, timeframe, and setup context. Marvin will keep the chat in Milou mode from main chat, continuing from `memory/continuity.md` and updating continuity after meaningful sessions, `memory/trader-profile.md` when the trader baseline changes, recurring patterns in `.learnings/corrections.md`, and an analysis note in `memory/analyses/` for substantial sessions.',
+        'Share the ticker, timeframe, and setup context. Milou runs as its own direct specialist seat and should continue from `memory/continuity.md`, updating continuity after meaningful sessions, `memory/trader-profile.md` when the trader baseline changes, recurring patterns in `.learnings/corrections.md`, and an analysis note in `memory/analyses/` for substantial sessions.',
     },
     workspace: {
       slug: 'trading-advisor',
@@ -457,6 +458,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       ignoredArtifactFiles: ['README.md', '.gitkeep', '.keep'],
     },
     matchers: [
+      { mode: 'exact', value: 'agent:trading-advisor:main' },
       { mode: 'marker', value: 'trading-advisor' },
       { mode: 'marker', value: 'milou' },
       { mode: 'role', value: 'trading advisor' },
