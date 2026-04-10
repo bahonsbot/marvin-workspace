@@ -39,6 +39,10 @@
 **Brief:** identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder
 - [Trading] Fix: Futures bot improvement
 **Brief:** identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder
+- [Trading] Practice: Business metrics lesson
+**Brief:** create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts
+- [Career] Practice: Blender primitives exercise
+**Brief:** choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist
 ## Done
 
 - (2026-03-24) [Career] 📝 Draft: 3 Instagram content angles tied to After Effects motion design project → projects/portfolio/content-plan-ae-motion-design.md

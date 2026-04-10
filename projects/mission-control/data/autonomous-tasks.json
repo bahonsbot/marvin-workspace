@@ -446,14 +446,75 @@
           "createdBy": "operator"
         }
       }
+    },
+    {
+      "id": "trading-practice-business-metrics-lesson",
+      "title": "[Trading] Practice: Business metrics lesson",
+      "description": "create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts",
+      "status": "backlog",
+      "priority": "normal",
+      "sourceType": "generated",
+      "agentTarget": "marvin",
+      "createdAt": 1775796889193,
+      "updatedAt": 1775796889193,
+      "version": 1,
+      "columnOrder": 18,
+      "editable": true,
+      "chatAnnouncementSent": false,
+      "feedback": [],
+      "artifacts": [],
+      "linkedAutonomyRef": {
+        "kind": "autonomous-md",
+        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
+        "section": "open-backlog",
+        "taskText": "[Trading] Practice: Business metrics lesson",
+        "taskTextNormalized": "[trading] practice: business metrics lesson",
+        "queueLinked": false,
+        "completedInTasksLog": false
+      },
+      "sourceMeta": {
+        "generator": {
+          "createdBy": "daily-task-generator"
+        }
+      }
+    },
+    {
+      "id": "career-practice-blender-primitives-exercise",
+      "title": "[Career] Practice: Blender primitives exercise",
+      "description": "choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist",
+      "status": "backlog",
+      "priority": "normal",
+      "sourceType": "generated",
+      "agentTarget": "marvin",
+      "createdAt": 1775796889193,
+      "updatedAt": 1775796889193,
+      "version": 1,
+      "columnOrder": 19,
+      "editable": true,
+      "chatAnnouncementSent": false,
+      "feedback": [],
+      "artifacts": [],
+      "linkedAutonomyRef": {
+        "kind": "autonomous-md",
+        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
+        "section": "open-backlog",
+        "taskText": "[Career] Practice: Blender primitives exercise",
+        "taskTextNormalized": "[career] practice: blender primitives exercise",
+        "queueLinked": false,
+        "completedInTasksLog": false
+      },
+      "sourceMeta": {
+        "generator": {
+          "createdBy": "daily-task-generator"
+        }
+      }
     }
   ],
   "meta": {
     "schemaVersion": 2,
-    "updatedAt": 1775660484211,
+    "updatedAt": 1775796889193,
     "suppressedLegacyTaskKeys": [
       "(2026-04-07) [trading] 🔧 fix: futures bot improvement → kept real deliverables (`scripts/signal_accuracy_report.py`, implementation plan, accuracy reports); review note: task overshot the ask by implementing the improvement instead of only producing the requested plan.",
-      "[career] practice: blender primitives exercise",
       "[career] practice: choose one beginner-intermediate blender exercise focused on primitives, modifiers, or lighting",
       "[other] draft an actionable next step toward: create a clean implementation plan for a more dyna | why: makes tangible progress toward: create a clean implementation plan for a more dyna | proof: task artifact exists and matches requirements | unlocks: advances goal progress measurably",
       "[other] draft: an actionable next step toward: create a...",
