@@ -210,6 +210,11 @@ Current identity/skills posture:
   - Japin → `skills/language-learning/SKILL.md`
 - preserved extraction copies still exist under `uploads/mission-control/` during migration/verification, but are no longer the preferred source of truth
 - `Milou` also links to workspace-installed market-analysis skills: `stock-market-pro` and `us-stock-analysis`
+- specialist continuity is now structurally real across all three named specialist seats:
+  - Johan → `memory/continuity.md`, `memory/bettor-profile.md`, `.learnings/corrections.md`, `memory/research/`
+  - Milou → `memory/continuity.md`, `memory/trader-profile.md`, `.learnings/corrections.md`, `memory/analyses/`
+  - Japin → `memory/continuity.md`, `memory/learner-profile.md`, `.learnings/corrections.md`, `memory/lessons/`
+- only Japin is direct-runtime today; Johan and Milou still route through Marvin, but their continuity/update discipline should now match the same truth standard
 
 ### Current action policy
 

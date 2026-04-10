@@ -402,14 +402,15 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
       starterPrompt:
-        'Activate Johan mode. Help me analyze this sports spot with a thesis-evidence-risk structure and no hype. Start by asking for the sport, event, market, current line or odds, sportsbook, and any constraints. Focus on probability, data quality, and downside risk.',
+        'Activate Johan mode. Before analyzing the bet, review `memory/continuity.md`, `memory/bettor-profile.md`, and `.learnings/corrections.md` in the sportsbet-advisor workspace, then continue from what is actually logged there. Start by asking for the sport, event, market, current line or odds, sportsbook, and any constraints. Focus on probability, data quality, downside risk, and bias control.',
       starterLabel: 'Johan activation starter',
-      nextStep: 'Share the matchup or market with current odds. Marvin will keep the chat in Johan mode from main chat.',
+      nextStep:
+        'Share the matchup or market with current odds. Marvin will keep the chat in Johan mode from main chat, continuing from `memory/continuity.md` and updating continuity after meaningful sessions, `memory/bettor-profile.md` when the bettor baseline changes, recurring patterns in `.learnings/corrections.md`, and a research note in `memory/research/` for substantial sessions.',
     },
     workspace: {
       slug: 'sportsbet-advisor',
       path: 'agent-workspaces/sportsbet-advisor',
-      memoryFile: 'agent-workspaces/sportsbet-advisor/MEMORY.md',
+      memoryFile: 'agent-workspaces/sportsbet-advisor/memory/continuity.md',
       starterFiles: ['SOUL.md', 'MEMORY.md', 'WORKSPACE.md', 'memory/README.md'],
       artifactDir: 'artifacts',
       ignoredArtifactFiles: ['README.md', '.gitkeep', '.keep'],
@@ -442,14 +443,15 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
       starterPrompt:
-        'Activate Milou mode. Help me assess this setup with conditional, risk-first technical analysis and no fake certainty. Start by asking for the ticker or market, timeframe, chart context, risk tolerance, and any open-position context. Establish stop, size, and risk-to-reward before discussing upside.',
+        'Activate Milou mode. Before assessing the setup, review `memory/continuity.md`, `memory/trader-profile.md`, and `.learnings/corrections.md` in the trading-advisor workspace, then continue from what is actually logged there. Start by asking for the ticker or market, timeframe, chart context, risk tolerance, and any open-position context. Establish stop, size, and risk-to-reward before discussing upside.',
       starterLabel: 'Milou activation starter',
-      nextStep: 'Share the ticker, timeframe, and setup context. Marvin will keep the chat in Milou mode from main chat.',
+      nextStep:
+        'Share the ticker, timeframe, and setup context. Marvin will keep the chat in Milou mode from main chat, continuing from `memory/continuity.md` and updating continuity after meaningful sessions, `memory/trader-profile.md` when the trader baseline changes, recurring patterns in `.learnings/corrections.md`, and an analysis note in `memory/analyses/` for substantial sessions.',
     },
     workspace: {
       slug: 'trading-advisor',
       path: 'agent-workspaces/trading-advisor',
-      memoryFile: 'agent-workspaces/trading-advisor/MEMORY.md',
+      memoryFile: 'agent-workspaces/trading-advisor/memory/continuity.md',
       starterFiles: ['SOUL.md', 'MEMORY.md', 'WORKSPACE.md', 'memory/README.md'],
       artifactDir: 'artifacts',
       ignoredArtifactFiles: ['README.md', '.gitkeep', '.keep'],
