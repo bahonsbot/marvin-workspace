@@ -15,14 +15,15 @@
         "id": "5268b591",
         "text": "[Career] Practice: Blender primitives exercise",
         "column": "todo"
-      },
-      {
-        "id": "f6c81963",
-        "text": "[Other] \ud83c\udf81 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
-        "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "9694711d",
+        "text": "[Other] \ud83c\udf81 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
+        "column": "inprogress"
+      }
+    ],
     "done": [
       {
         "id": "24fa9c1b",
@@ -56,5 +57,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-10T10:00:21.000Z"
+  "updatedAt": "2026-04-10T10:00:22.000Z"
 }
