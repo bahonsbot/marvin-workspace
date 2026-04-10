@@ -62,7 +62,7 @@ WATCHLIST_SYMBOLS = [
     # Commodities
     "USO", "GLD", "SLV",
     # Volatility
-    "VIX",
+    "^VIX",
     # Tech giants
     "AAPL", "MSFT", "NVDA", "GOOGL", "META", "AMZN", "TSLA", "ADBE",
     # Defense
