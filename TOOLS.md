@@ -167,6 +167,12 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 ### Workspace Local Skills
 - frontend-skill — verbatim OpenAI front-end skill for visually strong landing pages, websites, apps, prototypes, demos, and game UI
   - Path: `skills/frontend-skill/SKILL.md`
+- language-learning — AI language tutor for conversation practice, vocabulary, grammar, drills, translation, and immersive learning
+  - Path: `skills/language-learning/SKILL.md`
+- sportsbet-advisor — sports bet research and educated outcome analysis with explicit confidence caps and disclaimer posture
+  - Path: `skills/sportsbet-advisor/SKILL.md`
+- trading-advisor — trading analysis and education with a strict risk-first posture
+  - Path: `skills/trading-advisor/SKILL.md`
 
 ### Models (Operational Routing)
 - Primary provider: Bailian
