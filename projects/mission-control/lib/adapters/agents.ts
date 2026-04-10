@@ -421,7 +421,7 @@ function healthLabel(
   if (status === 'active') return matchedCount > 1 ? 'Live signals present' : 'Live now';
   if (verificationState === 'verified' && matchedCount === 0) return 'Verified output on file';
   if (status === 'ready') return matchedCount > 0 ? 'Runtime seen recently' : 'Ready through Marvin';
-  if (status === 'quiet') return verificationState === 'verified' ? 'Verified output on file' : 'Present but quiet';
+  if (status === 'quiet') return verificationState === 'verified' ? 'Verified output on file' : 'Ready now';
   if (verificationState === 'awaiting-first-output' && workspaceReadiness !== 'staged') return 'Awaiting first verified output';
   if (status === 'attention') return 'Signal needs verification';
   if (workspaceReadiness === 'staged') return 'Staged capability';

@@ -6,7 +6,7 @@ import type { AgentAlert, AgentAlertSeverity, AgentHealthStatus, AgentUnitPayloa
 function statePalette(status: AgentHealthStatus) {
   if (status === 'active') return { bg: 'rgba(121, 166, 148, 0.14)', border: 'rgba(121, 166, 148, 0.26)', text: '#315f51' };
   if (status === 'ready') return { bg: 'rgba(94, 128, 111, 0.11)', border: 'rgba(94, 128, 111, 0.22)', text: '#365347' };
-  if (status === 'quiet') return { bg: 'rgba(178, 151, 113, 0.1)', border: 'rgba(178, 151, 113, 0.18)', text: '#7d6642' };
+  if (status === 'quiet') return { bg: 'rgba(94, 128, 111, 0.11)', border: 'rgba(94, 128, 111, 0.22)', text: '#365347' };
   if (status === 'attention') return { bg: 'rgba(127, 134, 138, 0.1)', border: 'rgba(127, 134, 138, 0.22)', text: '#586167' };
   return { bg: 'rgba(91, 124, 116, 0.09)', border: 'rgba(91, 124, 116, 0.16)', text: '#47655c' };
 }
@@ -512,7 +512,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
                 <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>
                   Seats
                 </span>
-                <span style={{ fontSize: 11, color: '#5d675f' }}>{item.members.length} hidden by default</span>
+                <span aria-hidden="true" style={{ fontSize: 14, color: '#5d675f', lineHeight: 1 }}>▾</span>
               </summary>
               <div style={{ display: 'grid', gap: 10, padding: '0 14px 14px' }}>
                 {item.members.map((member) => {

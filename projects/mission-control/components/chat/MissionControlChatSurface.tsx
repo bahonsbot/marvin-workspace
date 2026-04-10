@@ -2273,7 +2273,7 @@ export function MissionControlChatSurface({
               <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
             </button>
             {topControlMenu === 'agent' ? (
-              <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 260, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
+              <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 260, maxHeight: 'min(360px, calc(100vh - 180px))', overflowY: 'auto', border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
                 {agentMenuOptions.map((option) => (
                   <button
                     key={option.id}

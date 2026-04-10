@@ -40,7 +40,7 @@ function shortSessionLabel(sessionKey: string) {
   return sessionKey;
 }
 
-const CHAT_SEAT_PRIORITY = ['marvin', 'dev-team', 'language-tutor', 'content-seo-team'] as const;
+const CHAT_SEAT_PRIORITY = ['marvin', 'dev-team', 'content-seo-team', 'language-tutor', 'sportsbet-advisor', 'trading-advisor'] as const;
 
 export function resolveChatSeatActivation(seatSlug?: string | null): ChatSeatActivation | null {
   if (!seatSlug) return null;
