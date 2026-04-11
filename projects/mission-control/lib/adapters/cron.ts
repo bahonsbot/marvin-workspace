@@ -9,6 +9,7 @@ const HOST_DETERMINISTIC_JOB_META: Record<string, { schedule: string; enabled: b
   'auto-signal-dispatcher': { schedule: '*/15 * * * 1-5', enabled: true },
   'rss-feed-monitor': { schedule: '10 * * * 1-5', enabled: true },
   'rss-feed-monitor-weekend-light': { schedule: '10 */4 * * 0,6', enabled: true },
+  'custom-news-feed-monitor': { schedule: '20,50 * * * *', enabled: true },
   'reddit-monitor': { schedule: '40 * * * 1-5', enabled: true },
   'reddit-monitor-weekend-light': { schedule: '40 */4 * * 0,6', enabled: true },
   'weekly-test-suite': { schedule: '15 2 * * 0', enabled: true },

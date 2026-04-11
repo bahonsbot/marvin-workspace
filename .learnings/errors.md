@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260411-1713]
+
+**What failed:** Volkskrant direct RSS ingestion for Mission Control Custom News
+**Error:** requests to `https://volkskrant.nl/voorpagina/rss` and `https://www.volkskrant.nl/voorpagina/rss` were redirected into DPG Media consent flow and/or blocked by the publisher WAF, returning HTML/403 instead of feed XML
+**Context:** Apr 11 rollout of the Home-page `Custom News` reader for Dutch news briefings
+**Suggested fix:** do not rely on Volkskrant direct RSS from this environment. Keep only if publisher access normalizes later, otherwise replace it with a reliably fetchable Dutch source. IEX via rss.app proved to be the better operational third source for this reader.
+**Resolution:** Resolved same session by replacing Volkskrant with IEX in the Custom News priority list.
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260411-1000]
 
 **What failed:** Mission Control autonomous Tasks sync semantics after daily task generation

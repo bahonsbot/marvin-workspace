@@ -357,7 +357,7 @@ main {
 
 .general-home-v3-lower-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   align-items: start;
   margin-top: 70px;
@@ -437,7 +437,7 @@ main {
   padding: 18px 18px 14px;
   display: grid;
   gap: 10px;
-  margin-right: 30px;
+  min-height: 620px;
 }
 
 .general-home-v3-market-head {
@@ -503,6 +503,9 @@ main {
   list-style: none;
   display: grid;
   gap: 10px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 6px;
 }
 
 .general-home-v3-news-item {
@@ -548,6 +551,85 @@ main {
   font-size: 14px;
   color: var(--text-muted);
   line-height: 1.6;
+}
+
+.general-home-v3-custom-news {
+  border: 1px solid rgba(113, 91, 152, 0.3);
+  border-radius: 24px;
+  background: linear-gradient(160deg, rgba(247, 244, 255, 0.92) 0%, rgba(238, 247, 255, 0.84) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+  min-height: 620px;
+}
+
+.general-home-v3-custom-news-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.general-home-v3-custom-news-head h2 {
+  margin: 0;
+  font-size: 26px;
+  font-family: var(--font-serif);
+  color: #3a2d56;
+}
+
+.general-home-v3-custom-news-head span {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6d608a;
+}
+
+.general-home-v3-custom-news-list {
+  margin: 0;
+  padding: 0 6px 0 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.general-home-v3-custom-news-item {
+  border-top: 1px solid rgba(148, 128, 181, 0.35);
+  padding-top: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.general-home-v3-custom-news-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.general-home-v3-custom-news-item h3 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.35;
+  color: #2c2342;
+}
+
+.general-home-v3-custom-news-item p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #3d3456;
+}
+
+.general-home-v3-custom-news-links a {
+  color: #47376f;
+  text-decoration: none;
+}
+
+.general-home-v3-custom-news-links a:hover {
+  text-decoration: underline;
 }
 
 .general-home-v3-bottom-strip {

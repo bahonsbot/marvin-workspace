@@ -72,6 +72,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 | self-improvement | 04:00 daily *(05:00 server GMT+8)* | Core files review | telegram (`self-improvement`) via scheduler announce |
 | weekly-test-suite | Sun 02:15 | Weekly regression tests (trading bots) | host deterministic scheduler |
 | rss-feed-monitor | :10 hourly | RSS news scanning | host deterministic scheduler |
+| custom-news-feed-monitor | :20 and :50 daily | Dutch custom-news digest (FD, NRC, IEX) → English Home-page briefings | host deterministic scheduler |
 | reddit-monitor | :40 hourly | Reddit sentiment scanning | host deterministic scheduler |
 | market-signal-generator | :45 hourly | Signal generation (+ reasoning engine trigger) | none |
 | auto-signal-dispatcher | every 15 min | Dispatch STRONG BUY signals to equity bot | host deterministic scheduler |
@@ -148,6 +149,12 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Mission Control repo wrap rule:
   - `projects/mission-control` may commit cleanly inside its own nested repo while the outer workspace still has unwrapped file changes
   - before telling Philippe a Mission Control feature is live, do outer-workspace wrap + preview restart + one light verification pass against the integrated version
+- Apr 11 Home/news posture:
+  - Home now uses two equal-width vertically scrollable readers under the hero: `Market Watch` and `Custom News`
+  - `Custom News` is generated from FD, NRC, and IEX into `projects/mission-control/data/custom-news-briefings.json`
+  - runner task: `custom-news-feed-monitor`
+  - scheduler cadence: `:20` and `:50` daily
+  - digest rule: last 24h only, max 30 published briefings, English output, higher-ranked source sets primary framing on duplicates
 
 ### Built-in OpenClaw Skills
 - coding-agent — Delegates to Codex/Claude Code/Pi for coding tasks

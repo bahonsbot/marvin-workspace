@@ -4,6 +4,7 @@ import os from 'node:os';
 import { promisify } from 'node:util';
 import { cache } from 'react';
 import type {
+  HomeCustomNewsSummary,
   HomeMarketSignalsSummary,
   HomeMarketWatchHeadline,
   HomeMarketWatchSummary,
@@ -25,6 +26,7 @@ const HOME_RSS_SOURCES = [
   '/data/.openclaw/workspace/projects/market-intel/data/news_alerts.json',
   '/data/.openclaw/workspace/projects/market-intel/data/rss_alerts.json',
 ] as const;
+const CUSTOM_NEWS_PATH = '/data/.openclaw/workspace/projects/mission-control/data/custom-news-briefings.json';
 const HOME_QUOTES = [
   { text: 'Simplicity is the ultimate sophistication.', author: 'Leonardo da Vinci' },
   { text: 'The details are not the details. They make the design.', author: 'Charles Eames' },
@@ -347,7 +349,7 @@ async function readRssSource(path: string): Promise<RssSourceCandidate | null> {
       .map((item, index) => toHeadlineRecord(item, index, dedupe))
       .filter((item): item is HomeMarketWatchHeadline => Boolean(item))
       .sort((a, b) => (a.at ?? '') < (b.at ?? '') ? 1 : -1)
-      .slice(0, 10);
+      .slice(0, 30);
 
     const latestFromHeadlines = headlines[0]?.at ?? null;
     const latestAt = latestFromHeadlines ?? stat.mtime.toISOString();
@@ -399,11 +401,82 @@ const getMarketWatchSummary = cache(async function getMarketWatchSummary(): Prom
       : null;
 
   return {
-    headlines: selected.headlines.slice(0, 7),
+    headlines: selected.headlines.slice(0, 30),
     sourcePath: selected.path,
     updatedAt: selected.latestAt,
     selectionNote,
   };
+});
+
+type RawCustomNewsDigest = {
+  generatedAt?: string;
+  windowHours?: number;
+  items?: Array<{
+    id?: string;
+    headline?: string;
+    sources?: unknown;
+    whatHappened?: string;
+    whyItMatters?: string;
+    differingViews?: string | null;
+    links?: Array<{ title?: string; url?: string }>;
+    publishedAt?: string;
+  }>;
+};
+
+const getCustomNewsSummary = cache(async function getCustomNewsSummary(): Promise<HomeCustomNewsSummary> {
+  try {
+    const raw = await fs.readFile(CUSTOM_NEWS_PATH, 'utf8');
+    const parsed = JSON.parse(raw) as RawCustomNewsDigest;
+
+    const items = (parsed.items ?? [])
+      .map((item, index) => {
+        const headline = typeof item.headline === 'string' ? item.headline.trim() : '';
+        if (!headline) return null;
+
+        const sources = Array.isArray(item.sources)
+          ? item.sources.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
+          : [];
+
+        const links = Array.isArray(item.links)
+          ? item.links
+              .map((link) => {
+                const title = typeof link?.title === 'string' ? link.title.trim() : '';
+                const url = typeof link?.url === 'string' ? link.url.trim() : '';
+                if (!title || !url) return null;
+                return { title, url };
+              })
+              .filter((entry): entry is { title: string; url: string } => Boolean(entry))
+              .slice(0, 2)
+          : [];
+
+        return {
+          id: typeof item.id === 'string' && item.id.trim() ? item.id.trim() : `custom-news-${index + 1}`,
+          headline,
+          sources,
+          whatHappened: typeof item.whatHappened === 'string' && item.whatHappened.trim() ? item.whatHappened.trim() : 'No summary available.',
+          whyItMatters: typeof item.whyItMatters === 'string' && item.whyItMatters.trim() ? item.whyItMatters.trim() : 'No impact summary available.',
+          differingViews: typeof item.differingViews === 'string' && item.differingViews.trim() ? item.differingViews.trim() : null,
+          links,
+          publishedAt: toIsoTimestamp(item.publishedAt),
+        };
+      })
+      .filter((item): item is NonNullable<typeof item> => Boolean(item))
+      .slice(0, 30);
+
+    return {
+      items,
+      updatedAt: toIsoTimestamp(parsed.generatedAt) ?? null,
+      windowHours: typeof parsed.windowHours === 'number' && parsed.windowHours > 0 ? parsed.windowHours : 24,
+      sourcePath: CUSTOM_NEWS_PATH,
+    };
+  } catch {
+    return {
+      items: [],
+      updatedAt: null,
+      windowHours: 24,
+      sourcePath: CUSTOM_NEWS_PATH,
+    };
+  }
 });
 
 const getSystemMetrics = cache(async function getSystemMetrics(): Promise<HomeSystemMetricsSummary> {
@@ -450,7 +523,7 @@ export const getWorkspaceHealth = cache(async function getWorkspaceHealth(): Pro
 });
 
 export const getHomeSummary = cache(async function getHomeSummary(): Promise<HomeSummary> {
-  const [sessionsData, cronData, activityData, weather, quickAccess, marketSignals, workspaceHealth, marketWatch, system] =
+  const [sessionsData, cronData, activityData, weather, quickAccess, marketSignals, workspaceHealth, marketWatch, customNews, system] =
     await Promise.all([
       getSessions(),
       getCronJobs(),
@@ -460,6 +533,7 @@ export const getHomeSummary = cache(async function getHomeSummary(): Promise<Hom
       getMarketSignalsSummary(),
       getWorkspaceHealth(),
       getMarketWatchSummary(),
+      getCustomNewsSummary(),
       getSystemMetrics(),
     ]);
 
@@ -501,6 +575,7 @@ export const getHomeSummary = cache(async function getHomeSummary(): Promise<Hom
     marketSignals,
     workspaceHealth,
     marketWatch,
+    customNews,
     system,
     ambient: {
       weather,

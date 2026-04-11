@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { getHomeSummary } from '@/lib/adapters/home';
 import { MarketWatchRefreshButton } from './MarketWatchRefreshButton';
 
@@ -50,7 +49,6 @@ function weatherIcon(condition: string | undefined) {
 export default async function HomePage() {
   const summary = await getHomeSummary();
   const weather = summary.ambient.weather;
-  const activeTasks = summary.quickAccess.find((item) => item.href === '/general/tasks')?.badge ?? 0;
 
   return (
     <section className="general-home-v3-shell">
@@ -77,7 +75,7 @@ export default async function HomePage() {
         </aside>
       </header>
 
-      <section className="general-home-v3-lower-grid" aria-label="Market and current tracks">
+      <section className="general-home-v3-lower-grid" aria-label="Market and custom news">
         <section className="general-home-v3-market" aria-label="Market watch news reader">
           <div className="general-home-v3-market-head">
             <h2>Market Watch</h2>
@@ -88,7 +86,7 @@ export default async function HomePage() {
 
           {summary.marketWatch.headlines.length > 0 ? (
             <ol className="general-home-v3-news-list">
-              {summary.marketWatch.headlines.map((item) => (
+              {summary.marketWatch.headlines.slice(0, 30).map((item) => (
                 <li key={item.id} className="general-home-v3-news-item">
                   <div className="general-home-v3-news-kicker">
                     <span>{item.source}</span>
@@ -109,27 +107,38 @@ export default async function HomePage() {
           )}
         </section>
 
-        <section className="general-home-v3-track-card" aria-label="Current tracks">
-          <div className="general-home-v3-track-head">Current Tracks</div>
-
-          <div className="general-home-v3-track-grid">
-            <article className="general-home-v3-track-item">
-              <h2>Workspace reliability</h2>
-              <p>Last cron run {formatRelative(summary.workspaceHealth.lastCronRunAt)}.</p>
-              <p>QMD collections: {summary.workspaceHealth.qmdCollections ?? '—'}.</p>
-            </article>
-
-            <article className="general-home-v3-track-item">
-              <h2>Autonomous lane</h2>
-              <p>{activeTasks > 0 ? `${activeTasks} active tasks in progress.` : 'No active task currently running.'}</p>
-              <p>Last task movement {formatRelative(summary.workspaceHealth.lastAutonomousTaskAt)}.</p>
-            </article>
+        <section className="general-home-v3-custom-news" aria-label="Custom News briefings">
+          <div className="general-home-v3-custom-news-head">
+            <h2>Custom News</h2>
+            <span>24h English briefings</span>
           </div>
 
-          <div className="general-home-v3-track-links">
-            <Link href="/general/chat">Open chat</Link>
-            <Link href="/general/tasks">Open tasks</Link>
-          </div>
+          {summary.customNews.items.length > 0 ? (
+            <ol className="general-home-v3-custom-news-list">
+              {summary.customNews.items.slice(0, 30).map((item) => (
+                <li key={item.id} className="general-home-v3-custom-news-item">
+                  <h3>{item.headline}</h3>
+                  <p><strong>Sources:</strong> {item.sources.length > 0 ? item.sources.join(', ') : 'Unknown source'}</p>
+                  <p><strong>What happened:</strong> {item.whatHappened}</p>
+                  <p><strong>Why it matters:</strong> {item.whyItMatters}</p>
+                  {item.differingViews ? <p><strong>Differing views:</strong> {item.differingViews}</p> : null}
+                  {item.links.length > 0 ? (
+                    <p className="general-home-v3-custom-news-links">
+                      🔗{' '}
+                      {item.links.map((link, idx) => (
+                        <span key={`${item.id}-link-${idx}`}>
+                          <a href={link.url} target="_blank" rel="noreferrer">{link.title}</a>
+                          {idx < item.links.length - 1 ? ' · ' : ''}
+                        </span>
+                      ))}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="general-home-v3-news-empty">Custom News has no briefings yet. It updates on the :20 and :50 feed cycle.</p>
+          )}
         </section>
       </section>
 

@@ -36,6 +36,24 @@ export interface HomeMarketWatchSummary {
   selectionNote: string | null;
 }
 
+export interface HomeCustomNewsItem {
+  id: string;
+  headline: string;
+  sources: string[];
+  whatHappened: string;
+  whyItMatters: string;
+  differingViews: string | null;
+  links: Array<{ title: string; url: string }>;
+  publishedAt: string | null;
+}
+
+export interface HomeCustomNewsSummary {
+  items: HomeCustomNewsItem[];
+  updatedAt: string | null;
+  windowHours: number;
+  sourcePath: string | null;
+}
+
 export interface HomeSystemMetricsSummary {
   ramUsedPercent: number | null;
   diskUsedPercent: number | null;
@@ -53,6 +71,7 @@ export interface HomeSummary {
   marketSignals: HomeMarketSignalsSummary;
   workspaceHealth: HomeWorkspaceHealthSummary;
   marketWatch: HomeMarketWatchSummary;
+  customNews: HomeCustomNewsSummary;
   system: HomeSystemMetricsSummary;
   ambient: {
     weather: {
