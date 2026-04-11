@@ -536,7 +536,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
       starterPrompt:
-        'Activate Link mode. Before drafting anything, review `memory/continuity.md`, `memory/candidate-profile.md`, and `.learnings/corrections.md` in the job-advisor workspace, then continue from what is actually logged there. Start by asking for the target role, company, location or remote constraints, seniority, job description, and any existing resume or cover-letter material. Prioritize role fit, evidence-backed wording, and ATS-safe clarity.',
+        'Activate Link mode. First read `skills/job-advisor/SKILL.md`, then review `memory/continuity.md`, `memory/candidate-profile.md`, and `.learnings/corrections.md` in the job-advisor workspace before drafting anything. Continue only from what is actually logged there. Start by asking for the target role, company, location or remote constraints, seniority, job description, and any existing resume or cover-letter material. Prioritize role fit, evidence-backed wording, ATS-safe clarity, and honest positioning.',
       starterLabel: 'Link activation starter',
       nextStep:
         'Share the target role, company, and any current resume/cover-letter draft. Link runs as her own direct specialist seat and should continue from `memory/continuity.md`, updating continuity after meaningful sessions, `memory/candidate-profile.md` when the candidate baseline changes, recurring patterns in `.learnings/corrections.md`, and an application note in `memory/applications/` for substantial sessions.',
@@ -545,7 +545,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       slug: 'job-advisor',
       path: 'agent-workspaces/job-advisor',
       memoryFile: 'agent-workspaces/job-advisor/memory/continuity.md',
-      starterFiles: ['SOUL.md', 'MEMORY.md', 'WORKSPACE.md', 'memory/README.md'],
+      starterFiles: ['SOUL.md', 'MEMORY.md', 'WORKSPACE.md', 'SKILLS.md', 'memory/README.md'],
       artifactDir: 'artifacts',
       ignoredArtifactFiles: ['README.md', '.gitkeep', '.keep'],
     },

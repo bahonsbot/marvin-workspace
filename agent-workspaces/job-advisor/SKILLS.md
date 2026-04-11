@@ -7,7 +7,7 @@ Role: Job Advisor
 Primary reference skill:
 - `skills/job-advisor/SKILL.md`
 
-Read that skill first for the reusable workflow.
+Read that skill first for the reusable workflow, especially before any substantial resume rewrite, cover-letter draft, ATS review, or application-positioning pass.
 Use this workspace file only as the seat-level reminder that Link's continuity and memory live here, not inside a separate app-style datastore.
 
 ## Link-specific continuity rule
