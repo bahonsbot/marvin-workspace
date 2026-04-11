@@ -4,10 +4,12 @@ Seat: Link
 Role: Job Advisor
 
 ## Source alignment
-Primary reference skill:
+Primary reference skills:
 - `skills/job-advisor/SKILL.md`
+- `skills/humanizer/SKILL.md`
 
-Read that skill first for the reusable workflow, especially before any substantial resume rewrite, cover-letter draft, ATS review, or application-positioning pass.
+Read `skills/job-advisor/SKILL.md` first for the reusable workflow, especially before any substantial resume rewrite, cover-letter draft, ATS review, or application-positioning pass.
+Use `skills/humanizer/SKILL.md` as the finishing pass when text needs to sound less AI-polished, less templated, or more naturally human while preserving the actual claims.
 Use this workspace file only as the seat-level reminder that Link's continuity and memory live here, not inside a separate app-style datastore.
 
 ## Link-specific continuity rule
