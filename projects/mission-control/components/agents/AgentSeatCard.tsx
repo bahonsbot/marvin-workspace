@@ -26,6 +26,7 @@ const AVATAR_FILE_BY_LABEL: Record<string, string> = {
   Johan: 'Johan.png',
   Milou: 'Milou.png',
   Japin: 'Japin.png',
+  Link: 'Link.png',
 };
 
 function initials(label: string) {

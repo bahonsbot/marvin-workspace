@@ -522,7 +522,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     kind: 'specialist',
     label: 'Link',
     role: 'Job Advisor',
-    summary: 'Job advisor focused on ATS-safe resumes, tailored cover letters, and clean positioning for each role instead of generic application fluff.',
+    summary: 'Recruitment expert with a bag full of ATS-safe resumes and tailored cover letters, who will find and get you the best possible jobs.',
     arsenal: [],
     expectedOutputs: ['tailored resume draft', 'cover letter draft', 'ATS-fit checklist', 'application tailoring note'],
     workspaceReadiness: 'ready',
