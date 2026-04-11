@@ -141,67 +141,6 @@
       }
     },
     {
-      "id": "other-surprise-mvp-build-a-tiny-workspace-utilit",
-      "title": "[Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
-      "status": "backlog",
-      "priority": "normal",
-      "sourceType": "generated",
-      "agentTarget": "marvin",
-      "createdAt": 1775120181599,
-      "updatedAt": 1775120181599,
-      "version": 1,
-      "columnOrder": 13,
-      "editable": true,
-      "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "open-backlog",
-        "taskText": "[Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas",
-        "taskTextNormalized": "[other] 🎁 surprise mvp: build a tiny workspace utility that turns one repeated openclaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | why: useful surprise mvps should reduce real operational friction | proof: script runs on a real workspace example and documents safe boundaries | unlocks: faster iteration on future automation ideas",
-        "queueLinked": false,
-        "completedInTasksLog": false
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      }
-    },
-    {
-      "id": "personal-practice-python-practice-sheet",
-      "title": "[Personal] Practice: Python practice sheet",
-      "description": "create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises",
-      "status": "backlog",
-      "priority": "normal",
-      "sourceType": "generated",
-      "agentTarget": "marvin",
-      "createdAt": 1775120630096,
-      "updatedAt": 1775120630096,
-      "version": 1,
-      "columnOrder": 14,
-      "editable": true,
-      "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "open-backlog",
-        "taskText": "[Personal] Practice: Python practice sheet",
-        "taskTextNormalized": "[personal] practice: python practice sheet",
-        "queueLinked": false,
-        "completedInTasksLog": false
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      }
-    },
-    {
       "id": "trading-fix-futures-bot-improvement",
       "title": "Futures bot improvement",
       "description": "Identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability. When done identifying, create an implementation plan for this.",
@@ -322,68 +261,6 @@
       }
     },
     {
-      "id": "trading-fix-equity-bot-improvement",
-      "title": "[Trading] Fix: Equity bot improvement",
-      "description": "identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder",
-      "status": "backlog",
-      "priority": "normal",
-      "sourceType": "generated",
-      "agentTarget": "marvin",
-      "createdAt": 1775632818202,
-      "updatedAt": 1775632818202,
-      "version": 1,
-      "columnOrder": 16,
-      "editable": true,
-      "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "open-backlog",
-        "taskText": "[Trading] Fix: Equity bot improvement",
-        "taskTextNormalized": "[trading] fix: equity bot improvement",
-        "queueLinked": false,
-        "completedInTasksLog": false
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      }
-    },
-    {
-      "id": "trading-fix-futures-bot-improvement-2",
-      "title": "[Trading] Fix: Futures bot improvement",
-      "description": "identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder",
-      "status": "backlog",
-      "priority": "normal",
-      "sourceType": "generated",
-      "agentTarget": "marvin",
-      "createdAt": 1775632818202,
-      "updatedAt": 1775632818202,
-      "version": 1,
-      "columnOrder": 17,
-      "editable": true,
-      "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "open-backlog",
-        "taskText": "[Trading] Fix: Futures bot improvement",
-        "taskTextNormalized": "[trading] fix: futures bot improvement",
-        "queueLinked": false,
-        "completedInTasksLog": false
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      }
-    },
-    {
       "id": "create-a-clean-implementation-plan-for-an-improv",
       "title": "Create a clean implementation plan for an improved Home page",
       "description": "The current Home page in Mission Control is basically still a placeholder, we want to make this more useful and appealing. Analyse this screenshot ('uploads/mission-control/Screenshot-03-24.jpg')  and use this as inspiration (but ignore the left side menu). It doesn't have to be an exact copy content-wise, but the design is desirable. Research and reason what widgets or elements would be useful to have on a Home page. Once done, create a plan to give it more of a wow-factor, while still being kinda elegant/minimalistic.",
@@ -446,85 +323,30 @@
           "createdBy": "operator"
         }
       }
-    },
-    {
-      "id": "trading-practice-business-metrics-lesson",
-      "title": "[Trading] Practice: Business metrics lesson",
-      "description": "create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts",
-      "status": "backlog",
-      "priority": "normal",
-      "sourceType": "generated",
-      "agentTarget": "marvin",
-      "createdAt": 1775796889193,
-      "updatedAt": 1775796889193,
-      "version": 1,
-      "columnOrder": 18,
-      "editable": true,
-      "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "open-backlog",
-        "taskText": "[Trading] Practice: Business metrics lesson",
-        "taskTextNormalized": "[trading] practice: business metrics lesson",
-        "queueLinked": false,
-        "completedInTasksLog": false
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      }
-    },
-    {
-      "id": "career-practice-blender-primitives-exercise",
-      "title": "[Career] Practice: Blender primitives exercise",
-      "description": "choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist",
-      "status": "backlog",
-      "priority": "normal",
-      "sourceType": "generated",
-      "agentTarget": "marvin",
-      "createdAt": 1775796889193,
-      "updatedAt": 1775796889193,
-      "version": 1,
-      "columnOrder": 19,
-      "editable": true,
-      "chatAnnouncementSent": false,
-      "feedback": [],
-      "artifacts": [],
-      "linkedAutonomyRef": {
-        "kind": "autonomous-md",
-        "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "open-backlog",
-        "taskText": "[Career] Practice: Blender primitives exercise",
-        "taskTextNormalized": "[career] practice: blender primitives exercise",
-        "queueLinked": false,
-        "completedInTasksLog": false
-      },
-      "sourceMeta": {
-        "generator": {
-          "createdBy": "daily-task-generator"
-        }
-      }
     }
   ],
   "meta": {
     "schemaVersion": 2,
-    "updatedAt": 1775796889193,
+    "updatedAt": 1775873584900,
     "suppressedLegacyTaskKeys": [
       "(2026-04-07) [trading] 🔧 fix: futures bot improvement → kept real deliverables (`scripts/signal_accuracy_report.py`, implementation plan, accuracy reports); review note: task overshot the ask by implementing the improvement instead of only producing the requested plan.",
+      "[career] practice: blender primitives exercise",
       "[career] practice: choose one beginner-intermediate blender exercise focused on primitives, modifiers, or lighting",
+      "[career] 🔨 build: create a daily creative challenge generator page or tool that gives philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across blender, after effects, unreal engine, illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | why: structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | proof: tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | unlocks: reusable daily practice system for portfolio, writing, and creative skill growth",
       "[other] draft an actionable next step toward: create a clean implementation plan for a more dyna | why: makes tangible progress toward: create a clean implementation plan for a more dyna | proof: task artifact exists and matches requirements | unlocks: advances goal progress measurably",
       "[other] draft: an actionable next step toward: create a...",
       "[other] fix: openclaw helper utility",
       "[other] 🎁 surprise mvp: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/ | why: a small system tool can create durable daily value without touching risky config | proof: tool shows one genuinely useful status snapshot from local workspace data | unlocks: better operational visibility for future automation",
+      "[other] 🎁 surprise mvp: build a tiny workspace utility that turns one repeated openclaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | why: useful surprise mvps should reduce real operational friction | proof: script runs on a real workspace example and documents safe boundaries | unlocks: faster iteration on future automation ideas",
       "[personal] practice: create one focused japanese study pack from a single beginner theme",
+      "[personal] practice: python practice sheet",
       "[personal] 🎁 surprise mvp: build a tiny learning helper for japanese, python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | why: a useful learning helper can turn practice into a repeatable daily habit | proof: tool or spec supports one real daily exercise loop without requiring advanced setup | unlocks: better consistency in staged skill development",
       "[philippe] 📝 suggested: --category other --title investigate daily-task-generator backlog dropout bug --description 2026-04-01: script reported 5 tasks generated, but only 4 appear in backlog. one task ('tighten chat recent-session switching') appears to have been silently dropped during the update. investigate update_autonomous_file() and kanban sync logic to find where existing backlog items may be overwritten instead of preserved. --why task generation reliability — missing tasks break trust in the autonomous workflow --proof telegram receipt shows 5 tasks, board.json shows 4, no evidence of the 5th in done/backlog/logs --unlocks confident daily task generation without silent data loss | why: philippe-prioritized task suggestion | proof: task outcome or deliverable is clear from the task text | unlocks: direct progress on philippe's chosen priority",
+      "[trading] fix: equity bot improvement",
+      "[trading] fix: futures bot improvement",
       "[trading] fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability",
       "[trading] practice create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts | why: understanding company financials is required for informed trading decisions | proof: lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice | unlocks: unlocks later analysis tasks based on real followed companies once the watchlist is defined",
+      "[trading] practice: business metrics lesson",
       "add clickable artefact-first rendering for reviewed autonomous task results",
       "add mission control tasks completion toast / chat-style notice for finished autonomous runs",
       "create a image conversion app that runs on mac os to convert .png to .jpg files",

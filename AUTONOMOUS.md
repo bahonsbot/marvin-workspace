@@ -3,22 +3,17 @@
 ## Goals
 
 ### Career
-- Improve modelling skills in Blender, motion design in After Effects, and world building & animation in Unreal Engine through structured practice that I personally execute
-- Build a portfolio of work I personally created in Blender, After Effects, Unreal, and design tools, focused on strong finished pieces rather than written case studies unless explicitly requested
-- Grow Instagram channel to 10k subscribers by publishing work I personally create, plus behind-the-scenes or process content tied to real practice
-
-### Personal
-- Learn Python programming as a language skill: first fundamentals and reading/comprehension, then guided exercises, then small practical scripts, and only later more advanced topics like PyTorch
-- Learn Japanese
+- Develop and maintain a library of Python-based automation scripts for Unreal Engine, Blender, and After Effects. Focus on automating routine tasks and procedural scene setup.
 
 ### Trading
-- Earn at least $200 in daily profits by equity trading (autonomous-trading-bot)
-- Earn at least $200 in daily profits by futures trading (futures-bot)
-- Learn to make proper business analysis of companies I follow, using named tickers, key metrics, and financial reports
+- Build and improve UI/UX tools for the internal trading dashboard that aggregate sentiment, technical indicators, and fundamental metrics into a single "Actionable Alpha" view.
+- Research and draft integrations for new APIs that bridge the gap between trading data and trading outputs, focusing on real-time data ingestion.
+- Develop a system that autonomously pulls SEC filings and quarterly reports for popular tickers, then populate the trading dashboard with sensitivity-analysis ranges.
+- Find ways to improve the current signal tracking and evidence verification.
 
 ### Other
-- Automate as much of his workflow as possible
-- Improve and optimise OpenClaw processes
+- Analyze OpenClaw’s logs to identify repetitive prompts or "looping" behaviors. Propose and implement logic-gate optimizations or custom tool definitions to reduce token waste and improve task success rates.
+- Transition OpenClaw into a Proactive Operations Manager. Find safe ways to move from "Reactive" (waiting for prompts) to "Recursive" (checking own work and optimizing own logic).
 
 ---
 
@@ -32,17 +27,6 @@
 ## Needs Input
 ## In Progress
 ## Open Backlog
-- [Other] 🎁 Surprise MVP: build a tiny workspace utility that turns one repeated OpenClaw or workspace step into a one-command helper; deliverable: working script in scripts/ plus short usage note | Why: Useful surprise MVPs should reduce real operational friction | Proof: Script runs on a real workspace example and documents safe boundaries | Unlocks: Faster iteration on future automation ideas
-- [Personal] Practice: Python practice sheet
-**Brief:** create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises
-- [Trading] Fix: Equity bot improvement
-**Brief:** identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder
-- [Trading] Fix: Futures bot improvement
-**Brief:** identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder
-- [Trading] Practice: Business metrics lesson
-**Brief:** create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts
-- [Career] Practice: Blender primitives exercise
-**Brief:** choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist
 ## Done
 
 - (2026-03-24) [Career] 📝 Draft: 3 Instagram content angles tied to After Effects motion design project → projects/portfolio/content-plan-ae-motion-design.md

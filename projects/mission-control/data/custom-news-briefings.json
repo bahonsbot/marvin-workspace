@@ -1,0 +1,470 @@
+{
+  "generatedAt": "2026-04-11T16:20:17.430603Z",
+  "windowHours": 24,
+  "feeds": [
+    {
+      "name": "FD",
+      "url": "https://fd.nl/?rss",
+      "priority": 1
+    },
+    {
+      "name": "NRC",
+      "url": "https://nrc.nl/rss",
+      "priority": 2
+    },
+    {
+      "name": "IEX",
+      "url": "https://rss.app/feeds/NV6eLUUDbfKCeMbI.xml",
+      "priority": 3
+    }
+  ],
+  "items": [
+    {
+      "id": "openai-sees-security-hole-in-third-party-tool-no-access-to-user-data",
+      "headline": "OpenAI sees security hole in third-party tool; no access to user data",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "OpenAI said Friday that it has identified a security issue with a third-party developer tool, Axios, and is taking steps to protect the process that certifies its macOS applications as legitimate OpenAI apps.",
+      "whyItMatters": "This may influence AI product strategy, regulation, or competitive positioning in Europe and beyond.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "OpenAI sees security hole in third-party tool; no access to user data",
+          "url": "https://www.iex.nl/Nieuws/860084/OpenAI-ziet-beveiligingslek-bij-tool-van-derden-geen-toegang-tot-gebruikersdata.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-11T02:05:00Z"
+    },
+    {
+      "id": "the-netherlands-is-the-first-country-in-europe-to-allow-self-driving-sof",
+      "headline": "The Netherlands is the first country in Europe to allow self-driving software from Tesla",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "The software allows drivers to hit the road without keeping their hands on the wheel. The RDW will submit an application to also allow the system in the rest of the European Union.",
+      "whyItMatters": "It signals a broader shift in the European tech landscape, with potential effects on product direction, competition, or regulation.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "The Netherlands is the first country in Europe to allow self-driving software from Tesla",
+          "url": "https://www.nrc.nl/nieuws/2026/04/11/zelfrijdende-software-van-tesla-mag-in-nederland-gebruikt-worden-als-eerste-land-in-europa-a4925284"
+        }
+      ],
+      "publishedAt": "2026-04-11T01:31:08Z"
+    },
+    {
+      "id": "how-a-dutch-ceo-fought-his-chinese-bosses-with-ez",
+      "headline": "How a Dutch CEO fought his Chinese bosses with EZ",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "Political concerns about the leakage of knowledge at a Chinese-owned chip company in Nijmegen. Ampleon's story is similar to that of Nexperia, although here it was mainly the CEO who intervened.",
+      "whyItMatters": "It signals a broader shift in the European tech landscape, with potential effects on product direction, competition, or regulation.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "How a Dutch CEO fought his Chinese bosses with EZ",
+          "url": "https://fd.nl/bedrijfsleven/1591416/hoe-een-nederlandse-ceo-samen-met-ez-de-strijd-aanbond-met-zijn-chinese-bazen"
+        }
+      ],
+      "publishedAt": "2026-04-10T22:30:01Z"
+    },
+    {
+      "id": "is-big-tech-going-after-the-tobacco-industry-with-its-social-media",
+      "headline": "Is big tech going after the tobacco industry with its social media?",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "Opposition to addictive social media algorithms is growing all over the world. Has the tipping point now been reached or can the big tech companies lobby their way out of difficulties?",
+      "whyItMatters": "It signals a broader shift in the European tech landscape, with potential effects on product direction, competition, or regulation.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Is big tech going after the tobacco industry with its social media?",
+          "url": "https://fd.nl/bedrijfsleven/1592353/gaan-grote-techbedrijven-met-hun-sociale-media-de-tabaksindustrie-achterna"
+        }
+      ],
+      "publishedAt": "2026-04-10T22:30:00Z"
+    },
+    {
+      "id": "tesla-receives-dutch-approval-for-self-driving-function",
+      "headline": "Tesla receives Dutch approval for self-driving function",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "It is the first time that the company has received approval for the driver assistance system in Europe. It will now be available in phases, at €99 per month, for Dutch Tesla owners.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Tesla receives Dutch approval for self-driving function",
+          "url": "https://fd.nl/bedrijfsleven/1592785/tesla-krijgt-nederlandse-goedkeuring-voor-zelfrijdende-functie"
+        }
+      ],
+      "publishedAt": "2026-04-11T08:12:48Z"
+    },
+    {
+      "id": "the-raw-materials-envoy-there-are-no-more-shock-absorbers-in-our-system",
+      "headline": "The raw materials envoy: 'There are no more shock absorbers in our system'",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "Allard Castelein is working in the shadows on a difficult but important task: the strategic autonomy of the Netherlands. He is very critical of the lack of urgency among large companies.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "The raw materials envoy: 'There are no more shock absorbers in our system'",
+          "url": "https://fd.nl/politiek/1592278/de-grondstoffengezant-er-zitten-geen-schokdempers-meer-in-ons-systeem"
+        }
+      ],
+      "publishedAt": "2026-04-10T22:30:00Z"
+    },
+    {
+      "id": "personal-details-saturday-april-11",
+      "headline": "Personal details Saturday April 11",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "New job? Email personalia@fd.nl, with a high-resolution photo and a job description in Dutch.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Personal details Saturday April 11",
+          "url": "https://fd.nl/bedrijfsleven/1592545/personalia-zaterdag-11-april"
+        }
+      ],
+      "publishedAt": "2026-04-10T22:28:00Z"
+    },
+    {
+      "id": "why-the-senate-is-so-relevant-now",
+      "headline": "Why the Senate is so relevant now",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "“We are not to be trifled with!” was the message from the Senate to the Jetten cabinet this week. A logical attitude from the senators, but a task for the cabinet.",
+      "whyItMatters": "Policy decisions here can quickly flow into company costs, investor sentiment, and cross-border business operations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Why the Senate is so relevant now",
+          "url": "https://www.nrc.nl/nieuws/2026/04/11/waarom-de-eerste-kamer-juist-nu-zo-relevant-is-a4925286"
+        }
+      ],
+      "publishedAt": "2026-04-11T03:30:00Z"
+    },
+    {
+      "id": "rapid-government-action-needed-on-ai-security",
+      "headline": "Rapid government action needed on AI security",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "If new AI models become so powerful that they pose major risks to society, government intervention is required.",
+      "whyItMatters": "Policy decisions here can quickly flow into company costs, investor sentiment, and cross-border business operations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Rapid government action needed on AI security",
+          "url": "https://fd.nl/opinie/1592567/snelle-overheidsactie-nodig-voor-aibeveiliging"
+        }
+      ],
+      "publishedAt": "2026-04-10T18:00:00Z"
+    },
+    {
+      "id": "the-woutertje-pieterse-prize-goes-to-the-enigmatic-atman-by-bart-moeyaer",
+      "headline": "The Woutertje Pieterse Prize goes to the enigmatic 'Atman!' by Bart Moeyaert and Mark Janssen",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "The Woutertje Pieterse Prize for the best children's book has been awarded to writer Bart Moeyaert and illustrator Mark Janssen for their book 'Atman!'. The jury praised “the power of oral storytelling, the music in language, the singing of words and images.”",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "The Woutertje Pieterse Prize goes to the enigmatic 'Atman!' by Bart Moeyaert and Mark Janssen",
+          "url": "https://www.nrc.nl/nieuws/2026/04/11/de-woutertje-pieterse-prijs-gaat-naar-het-raadselachtige-atman-van-bart-moeyaert-en-mark-janssen-a4925157"
+        }
+      ],
+      "publishedAt": "2026-04-11T11:00:00Z"
+    },
+    {
+      "id": "ireland-is-on-the-brink-of-complete-disruption-due-to-blockades-and-mass",
+      "headline": "Ireland is on the brink of complete disruption due to blockades and massive fuel shortages",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "Irish farmers and transporters have been protesting for days against high petrol prices as a result of the war in the Middle East. Gasoline at pumps in the country could run out as early as this weekend.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Ireland is on the brink of complete disruption due to blockades and massive fuel shortages",
+          "url": "https://www.nrc.nl/nieuws/2026/04/11/ierland-staat-op-de-rand-van-complete-ontwrichting-door-blokkades-en-enorme-brandstoftekorten-a4925293"
+        }
+      ],
+      "publishedAt": "2026-04-11T10:48:00Z"
+    },
+    {
+      "id": "lazard-reports-interest-in-imcd",
+      "headline": "Lazard reports interest in IMCD",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "Lazard Asset Management has reported an interest in IMCD for the first time. This emerged from a notification in the context of the Financial Supervision Act, dated April 9.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Lazard reports interest in IMCD",
+          "url": "https://www.iex.nl/Nieuws/860089/Lazard-meldt-belang-in-IMCD.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-11T08:56:00Z"
+    },
+    {
+      "id": "umg-rewarded-for-takeover-news",
+      "headline": "UMG rewarded for takeover news",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "The strong trading week on the Damrak was favorable for most shares in the AEX. KPN and Ahold Delhaize were under pressure, as were RELX and Wolters Kluwer, which fell 2.4 and 4.0 percent on a weekly basis.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "UMG rewarded for takeover news",
+          "url": "https://www.iex.nl/Nieuws/860088/UMG-beloond-voor-overnamenieuws.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-11T08:50:00Z"
+    },
+    {
+      "id": "european-leaders-must-demand-compensation-for-trump-s-illegal-war-in-ira",
+      "headline": "'European leaders must demand compensation for Trump's illegal war in Iran'",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "FD readers frequently respond to the developing news about the United States, Iran and Trump. There is also discussion about the 'new direction' of ABP.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "'European leaders must demand compensation for Trump's illegal war in Iran'",
+          "url": "https://fd.nl/opinie/1592652/europese-leiders-moeten-compensatie-eisen-voor-trumps-illegale-oorlog-in-iran-en-andere-lezersreacties"
+        }
+      ],
+      "publishedAt": "2026-04-11T05:00:00Z"
+    },
+    {
+      "id": "the-dizzying-news-week-of-nrc-foreign-chief-st-phane-alonso",
+      "headline": "The dizzying news week of NRC foreign chief Stéphane Alonso",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "This week, President Donald Trump announced the end of Iranian civilization, NATO seemed to be on the verge of collapse, a ceasefire was reached and Lebanon was once again...",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "The dizzying news week of NRC foreign chief Stéphane Alonso",
+          "url": "https://www.nrc.nl/nieuws/2026/04/11/de-duizelingwekkende-nieuwsweek-van-nrc-buitenlandchef-stephane-alonso-a4925285"
+        }
+      ],
+      "publishedAt": "2026-04-11T03:00:01Z"
+    },
+    {
+      "id": "liz-truss-trauma-is-still-haunting-and-what-should-we-do-with-tata",
+      "headline": "Liz Truss trauma is still haunting, and what should we do with Tata?",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "In this Added Value, Anna Dijkman and Marijn Jongsma celebrate the first anniversary of the podcast. They look back on two Liz Truss moments and discuss whether a third is on the way.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Liz Truss trauma is still haunting, and what should we do with Tata?",
+          "url": "https://fd.nl/economie/1592574/liz-truss-trauma-spookt-nog-rond-en-wat-moeten-we-met-tata"
+        }
+      ],
+      "publishedAt": "2026-04-11T03:00:00Z"
+    },
+    {
+      "id": "artemis-ii-moon-mission-safely-returns-to-earth-after-landing-in-pacific",
+      "headline": "Artemis II Moon Mission Safely Returns to Earth After Landing in Pacific Ocean",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "The four astronauts landed safely in the Pacific Ocean on Saturday night after a historic flight around the moon.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Artemis II Moon Mission Safely Returns to Earth After Landing in Pacific Ocean",
+          "url": "https://www.nrc.nl/nieuws/2026/04/11/maanmissie-artemis-ii-veilig-terug-op-aarde-na-landing-in-stille-oceaan-a4925283"
+        }
+      ],
+      "publishedAt": "2026-04-11T01:09:20Z"
+    },
+    {
+      "id": "healthcare-toppers",
+      "headline": "Healthcare toppers",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "My mother suffers from Parkinson's disease and lives in a nursing home. Despite Parkinson's, Mom still has moments of visible enjoyment, made possible by…",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Healthcare toppers",
+          "url": "https://www.nrc.nl/nieuws/2026/04/11/zorgtoppers-a4925267"
+        }
+      ],
+      "publishedAt": "2026-04-11T00:00:00Z"
+    },
+    {
+      "id": "fed-asks-us-banks-about-private-credit-exposure-bloomberg-reports",
+      "headline": "Fed asks US banks about private credit exposure, Bloomberg reports",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "The Federal Reserve is asking major US banks for details on their exposure to private credit, following a wave of withdrawals from the funds and a rise in problem loans in the sector, Bloomberg News reported on Friday, citing…",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Fed asks US banks about private credit exposure, Bloomberg reports",
+          "url": "https://www.iex.nl/Nieuws/860081/Fed-vraagt-Amerikaanse-banken-naar-blootstelling-aan-private-credit-meldt-Bloomberg.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-10T23:33:00Z"
+    },
+    {
+      "id": "how-the-attacks-on-lebanon-serve-netanyahu-s-political-survival",
+      "headline": "How the attacks on Lebanon serve Netanyahu's political survival",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "While a truce with Iran tentatively holds out, Israel is intensifying the war on other fronts. According to experts, this is no coincidence, but there is a political logic behind it.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "How the attacks on Lebanon serve Netanyahu's political survival",
+          "url": "https://fd.nl/politiek/1592572/hoe-de-aanvallen-op-libanon-netanyahus-politieke-overleving-dienen"
+        }
+      ],
+      "publishedAt": "2026-04-10T22:30:01Z"
+    },
+    {
+      "id": "distance-appears-not-to-be-dead-now-that-the-world-s-oceans-are-no-longe",
+      "headline": "Distance appears not to be dead, now that the world's oceans are no longer free",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "We shouted it in the heyday of globalization: distance is dead, the world is one market. That was beyond the comments of Donald Trump, writes FD columnist Mathijs Bouman.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Distance appears not to be dead, now that the world's oceans are no longer free",
+          "url": "https://fd.nl/politiek/1592615/afstand-blijkt-niet-dood-nu-de-wereldzeeen-niet-vrij-meer-zijn"
+        }
+      ],
+      "publishedAt": "2026-04-10T22:30:00Z"
+    },
+    {
+      "id": "beyond-the-fleeting-glance",
+      "headline": "Beyond the fleeting glance",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "The Japanese photographer sheds a new, poetic light on the world as you thought you knew it. Suddenly you see a world you never knew before.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Beyond the fleeting glance",
+          "url": "https://fd.nl/samenleving/1592363/voorbij-de-vluchtige-blik"
+        }
+      ],
+      "publishedAt": "2026-04-10T22:30:00Z"
+    },
+    {
+      "id": "camels-frank-drebin-donnie-and-the-axis-of-evil",
+      "headline": "Camels, Frank Drebin, Donnie and the axis of evil",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "At the time of writing, Iranian civilization still exists – so nothing came of Trump's promise to completely bomb the country. A paper tiger.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Camels, Frank Drebin, Donnie and the axis of evil",
+          "url": "https://fd.nl/opinie/1592647/donnie-en-de-as-van-het-kwaad"
+        }
+      ],
+      "publishedAt": "2026-04-10T22:30:00Z"
+    },
+    {
+      "id": "uncertain-peace-talks-dampen-wall-street-profits",
+      "headline": "Uncertain peace talks dampen Wall Street profits",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "American stock market trading started off cautiously positive, but uncertainty about the Iran war canceled out these gains.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Uncertain peace talks dampen Wall Street profits",
+          "url": "https://fd.nl/financiele-markten/1592655/onzekere-vredesbesprekingen-dempen-de-winst-op-wall-street"
+        }
+      ],
+      "publishedAt": "2026-04-10T20:11:05Z"
+    },
+    {
+      "id": "negotiations-between-iran-and-the-us-are-starting-in-pakistan-but-it-is-",
+      "headline": "Negotiations between Iran and the US are starting in Pakistan, but it is unclear what will be on the table",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "The Pakistani capital Islamabad should become the stage for negotiations between Iran and the United States. It offers the economically weak country an opportunity to play a starring role on the international stage.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Negotiations between Iran and the US are starting in Pakistan, but it is unclear what will be on the table",
+          "url": "https://www.nrc.nl/nieuws/2026/04/10/in-pakistan-beginnen-de-onderhandelingen-tussen-iran-en-de-vs-maar-wat-er-op-tafel-komt-is-onduidelijk-a4925225"
+        }
+      ],
+      "publishedAt": "2026-04-10T20:00:00Z"
+    },
+    {
+      "id": "russia-is-quickly-going-offline-now-that-telegram-is-down",
+      "headline": "Russia is quickly going offline now that Telegram is down",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "With an interference rate of 100 percent, chat app Telegram can no longer be used in Russia. Now the authorities are hunting users and providers of VPN connections.",
+      "whyItMatters": "This story has practical implications for business and policy watchers following Dutch and global developments.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Russia is quickly going offline now that Telegram is down",
+          "url": "https://www.nrc.nl/nieuws/2026/04/10/rusland-gaat-in-snel-tempo-offline-nu-telegram-uit-de-lucht-is-a4925244"
+        }
+      ],
+      "publishedAt": "2026-04-10T17:24:16Z"
+    }
+  ],
+  "stats": {
+    "itemsFetched": 73,
+    "itemsInWindow": 26,
+    "itemsPublished": 26
+  }
+}

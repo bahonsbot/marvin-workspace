@@ -110,7 +110,7 @@ export default async function HomePage() {
         <section className="general-home-v3-custom-news" aria-label="Custom News briefings">
           <div className="general-home-v3-custom-news-head">
             <h2>Custom News</h2>
-            <span>24h English briefings</span>
+            <MarketWatchRefreshButton ariaLabel="Refresh custom news briefings" />
           </div>
 
           {summary.customNews.items.length > 0 ? (

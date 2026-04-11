@@ -31,9 +31,9 @@ INTEREST_BUCKETS: List[tuple[str, int, List[str]]] = [
         "technology_ai",
         500,
         [
-            "ai", "artificial intelligence", "chip", "semiconductor", "openai", "anthropic", "meta", "microsoft",
-            "google", "startup", "software", "platform", "tech", "digital", "cloud", "data center", "robot", "model",
-            "regulation", "policy", "european commission", "eu ai", "algorithm", "cyber",
+            "ai", "artificial intelligence", "chip", "chips", "semiconductor", "semiconductors", "openai", "anthropic", "meta", "microsoft",
+            "google", "software", "cloud", "data center", "data centres", "robot", "robots", "eu ai", "algorithm", "algorithms",
+            "cyber", "cybersecurity", "hack", "hacker", "hackers", "vulnerability", "vulnerabilities",
         ],
     ),
     (
@@ -205,12 +205,25 @@ def tokenize(text: str) -> set[str]:
     return {token for token in re.findall(r"[a-z0-9]{3,}", (text or "").lower()) if token not in {"with", "from", "that", "this", "over", "into", "about", "after", "have", "will", "their", "your"}}
 
 
+def term_matches(term: str, normalized_text: str, tokens: set[str]) -> bool:
+    term = (term or "").strip().lower()
+    if not term:
+        return False
+
+    if " " in term:
+        pattern = rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])"
+        return re.search(pattern, normalized_text) is not None
+
+    return term in tokens
+
+
 def score_item(text: str) -> tuple[int, str]:
     normalized = (text or "").lower()
+    tokens = tokenize(normalized)
     best_label = "general"
     best = 0
     for label, base_score, terms in INTEREST_BUCKETS:
-        hits = sum(1 for term in terms if term in normalized)
+        hits = sum(1 for term in terms if term_matches(term, normalized, tokens))
         if hits <= 0:
             continue
         score = base_score + hits * 12
@@ -218,7 +231,7 @@ def score_item(text: str) -> tuple[int, str]:
             best = score
             best_label = label
 
-    penalty = sum(40 for term in DEPRIORITIZE_TERMS if term in normalized)
+    penalty = sum(40 for term in DEPRIORITIZE_TERMS if term_matches(term, normalized, tokens))
     return max(0, best - penalty), best_label
 
 
@@ -236,8 +249,16 @@ def compact_sentences(text: str, max_sentences: int = 2) -> str:
 
 
 def why_it_matters(label: str, headline: str) -> str:
+    normalized = (headline or "").lower()
+
     if label == "technology_ai":
-        return "This may influence AI product strategy, regulation, or competitive positioning in Europe and beyond."
+        if any(term in normalized for term in ["ai", "artificial intelligence", "openai", "anthropic", "llm", "chatbot"]):
+            return "This may influence AI product strategy, regulation, or competitive positioning in Europe and beyond."
+        if any(term in normalized for term in ["hack", "hacker", "hackers", "cyber", "security", "privacy", "vulnerability"]):
+            return "It points to cybersecurity, privacy, or infrastructure risk that could affect trust, compliance, and operational resilience."
+        if any(term in normalized for term in ["chip", "chips", "semiconductor", "semiconductors"]):
+            return "It matters for European tech supply chains, industrial capacity, and strategic control over critical hardware."
+        return "It signals a broader shift in the European tech landscape, with potential effects on product direction, competition, or regulation."
     if label == "dutch_economy":
         return "This affects Dutch economic confidence, business planning, and near-term market expectations."
     if label == "entrepreneurship_startups":
@@ -246,7 +267,7 @@ def why_it_matters(label: str, headline: str) -> str:
         return "Policy decisions here can quickly flow into company costs, investor sentiment, and cross-border business operations."
     if label == "opinion_high_quality":
         return "The perspective adds strategic context that can shape decision-making beyond headline events."
-    return f"This story has practical implications for business and policy watchers following Dutch and global developments."
+    return "This story has practical implications for business and policy watchers following Dutch and global developments."
 
 
 def jaccard(a: set[str], b: set[str]) -> float:

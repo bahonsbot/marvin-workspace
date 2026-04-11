@@ -3,21 +3,29 @@
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 
-export function MarketWatchRefreshButton() {
+type MarketWatchRefreshButtonProps = {
+  ariaLabel?: string;
+  className?: string;
+};
+
+export function MarketWatchRefreshButton({
+  ariaLabel = 'Refresh market headlines',
+  className = 'general-home-v3-market-refresh',
+}: MarketWatchRefreshButtonProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   return (
     <button
       type="button"
-      className="general-home-v3-market-refresh"
+      className={className}
       onClick={() => {
         startTransition(() => {
           router.refresh();
         });
       }}
       disabled={isPending}
-      aria-label="Refresh market headlines"
+      aria-label={ariaLabel}
     >
       {isPending ? 'Refreshing…' : 'Refresh'}
     </button>
