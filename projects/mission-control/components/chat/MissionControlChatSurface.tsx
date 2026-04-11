@@ -649,6 +649,9 @@ function assistantLabelForSeat(seatSlug: string | null | undefined) {
   if (seatSlug === 'language-tutor') return 'Japin';
   if (seatSlug === 'trading-advisor') return 'Milou';
   if (seatSlug === 'sportsbet-advisor') return 'Johan';
+  if (seatSlug === 'job-advisor') return 'Link';
+  if (seatSlug === 'content-seo-team') return 'Vantage';
+  if (seatSlug === 'dev-team') return 'Sudo';
   return 'Marvin';
 }
 

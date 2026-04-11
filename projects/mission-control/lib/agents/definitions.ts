@@ -515,6 +515,49 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       { mode: 'keyword', value: 'language' },
     ],
   },
+  {
+    id: 'specialist.job',
+    seatSlug: 'job-advisor',
+    sectionId: 'specialists',
+    kind: 'specialist',
+    label: 'Link',
+    role: 'Job Advisor',
+    summary: 'Job advisor focused on ATS-safe resumes, tailored cover letters, and clean positioning for each role instead of generic application fluff.',
+    arsenal: [],
+    expectedOutputs: ['tailored resume draft', 'cover letter draft', 'ATS-fit checklist', 'application tailoring note'],
+    workspaceReadiness: 'ready',
+    chatReadiness: 'ready',
+    actionMode: 'control',
+    activation: {
+      routing: 'direct',
+      runtimeMode: 'seat-mode',
+      targetSessionKey: 'agent:job-advisor:main',
+      defaultModel: 'codex5.4',
+      defaultThinking: 'medium',
+      supervisorLabel: 'Marvin',
+      starterPrompt:
+        'Activate Link mode. Before drafting anything, review `memory/continuity.md`, `memory/candidate-profile.md`, and `.learnings/corrections.md` in the job-advisor workspace, then continue from what is actually logged there. Start by asking for the target role, company, location or remote constraints, seniority, job description, and any existing resume or cover-letter material. Prioritize role fit, evidence-backed wording, and ATS-safe clarity.',
+      starterLabel: 'Link activation starter',
+      nextStep:
+        'Share the target role, company, and any current resume/cover-letter draft. Link runs as her own direct specialist seat and should continue from `memory/continuity.md`, updating continuity after meaningful sessions, `memory/candidate-profile.md` when the candidate baseline changes, recurring patterns in `.learnings/corrections.md`, and an application note in `memory/applications/` for substantial sessions.',
+    },
+    workspace: {
+      slug: 'job-advisor',
+      path: 'agent-workspaces/job-advisor',
+      memoryFile: 'agent-workspaces/job-advisor/memory/continuity.md',
+      starterFiles: ['SOUL.md', 'MEMORY.md', 'WORKSPACE.md', 'memory/README.md'],
+      artifactDir: 'artifacts',
+      ignoredArtifactFiles: ['README.md', '.gitkeep', '.keep'],
+    },
+    matchers: [
+      { mode: 'exact', value: 'agent:job-advisor:main' },
+      { mode: 'marker', value: 'job-advisor' },
+      { mode: 'marker', value: 'link' },
+      { mode: 'role', value: 'job advisor' },
+      { mode: 'keyword', value: 'resume' },
+      { mode: 'keyword', value: 'cover letter' },
+    ],
+  },
 ];
 
 export const AGENT_SECTION_META: Record<AgentSectionId, Pick<AgentSectionPayload, 'title' | 'description'>> = {

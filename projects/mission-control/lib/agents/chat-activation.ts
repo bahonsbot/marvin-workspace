@@ -37,10 +37,11 @@ function shortSessionLabel(sessionKey: string) {
   if (sessionKey === 'agent:language-tutor:main') return 'Japin specialist session';
   if (sessionKey === 'agent:sportsbet-advisor:main') return 'Johan specialist session';
   if (sessionKey === 'agent:trading-advisor:main') return 'Milou specialist session';
+  if (sessionKey === 'agent:job-advisor:main') return 'Link specialist session';
   return sessionKey;
 }
 
-const CHAT_SEAT_PRIORITY = ['marvin', 'dev-team', 'content-seo-team', 'language-tutor', 'sportsbet-advisor', 'trading-advisor'] as const;
+const CHAT_SEAT_PRIORITY = ['marvin', 'dev-team', 'content-seo-team', 'language-tutor', 'sportsbet-advisor', 'trading-advisor', 'job-advisor'] as const;
 
 export function resolveChatSeatActivation(seatSlug?: string | null): ChatSeatActivation | null {
   if (!seatSlug) return null;
@@ -63,7 +64,7 @@ export function resolveChatSeatActivation(seatSlug?: string | null): ChatSeatAct
       routing === 'direct'
         ? `This seat talks to its own direct runtime session (${shortSessionLabel(definition.activation.targetSessionKey)}).`
         : runtimeMode === 'lead-route'
-          ? `${definition.label} leads the operating context here, while Marvin remains the supervising runtime layer. Sudo can now spawn truthful FE, BE, and QA child runs without claiming a separate Sudo runtime exists.`
+          ? `${definition.label} leads the operating context here, while Marvin remains the supervising runtime layer. Team lanes should stay truthful to the seat's real structure instead of pretending there is a separate lead runtime.`
           : 'This seat mode is real in Chat, but the runtime stays routed through Marvin until direct seat routing exists.',
     runtimeMode,
     runtimeModeLabel: runtimeModeLabel(runtimeMode),
