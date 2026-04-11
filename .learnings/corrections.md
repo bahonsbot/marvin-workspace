@@ -39,6 +39,26 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** Self-improvement should verify not just file presence and list inclusion, but also whether the rendering/numbering gap has actual functional impact vs. being a cosmetic markdown artifact before flagging as LOW.
 **Priority:** low
 **Status:** resolved
+## [CORR-20260411-1020]
+
+**Trigger:** Morning Meeting self-improvement suggested backfilling Apr 9–10 Mission Control changes into `MEMORY.md`, and Philippe correctly pushed back that `MEMORY.md` is not for daily memory.
+**What was wrong:** I let a valid durable-memory question expand into an overbroad `promote recent days into MEMORY.md` recommendation.
+**Lesson:** `MEMORY.md` is for curated durable truth only, not timeline backfill. When reviewing recent work, only promote items that clearly changed long-term operating truth; leave chronology in `memory/YYYY-MM-DD.md`.
+
+**Priority:** high
+**Status:** resolved
+**Closed:** 2026-04-11 (narrow curated update applied instead of broad backfill)
+
+## [CORR-20260408-1519]
+
+**Trigger:** Philippe warned that while fixing executor completion visibility, I must not break the existing rule where manual edit/delete actions on the Tasks board remain authoritative and automatically reconcile to `AUTONOMOUS.md`.
+**What was wrong:** This was not a live breakage yet, but it surfaced a real drift risk: queue/board visibility fixes can accidentally blur `current-state board authority` with `historical completion/queue fallback` logic.
+**Lesson:** Keep these lanes separate. The Tasks board remains the authority for manual edit/delete state changes; `AUTONOMOUS.md` is the mirror/reconciliation surface for those actions. Queue-backed completion fallback may improve visibility for executor results, but it must never override manual board state.
+
+**Priority:** high
+**Status:** resolved
+**Closed:** 2026-04-11 (generator/store sync fixed; manual deletes stay authoritative and suppressed legacy tasks are no longer silently re-imported)
+
 <!-- New entries go at top -->
 
 ## [CORR-20260401-2239]

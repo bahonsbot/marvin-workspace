@@ -17,6 +17,18 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260411-1000]
+
+**What failed:** Mission Control autonomous Tasks sync semantics after daily task generation
+**Error:** newly generated backlog tasks were still being written only into `AUTONOMOUS.md`, while the Tasks cleanup path treated the structured board as source of truth and reconciled markdown from it. Result: clicking sync/cleanup could remove valid fresh tasks from `AUTONOMOUS.md` instead of bringing them into the board.
+**Context:** Apr 11 Mission Control review after Philippe noticed fresh generated tasks disappeared from markdown when syncing, even though the intended architecture was `structured board = truth`, `AUTONOMOUS.md = mirror`.
+**Suggested fix:** generated backlog items must land in `projects/mission-control/data/autonomous-tasks.json` as part of the generation flow, not only in legacy markdown. Also keep suppressed legacy delete keys respected so manually removed tasks do not silently return.
+**Resolution:** Fixed on 2026-04-11 by patching `scripts/daily-task-generator.py`, `projects/mission-control/lib/autonomous.ts`, `projects/mission-control/lib/adapters/tasks.ts`, and the Tasks UI labels; generated tasks now sync into the structured store and manual deletes stay suppressed.
+
+**Priority:** high
+**Status:** resolved
+
+
 ## [ERR-20260410-1310]
 
 **What failed:** Morning Meeting push after remote history rewrite
