@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260412-0041]
+
+**What failed:** first Chat helper-extraction build pass during post-rollback safe refactor lane
+**Error:** after extracting rich-text/file-link helpers from `MissionControlChatSurface.tsx`, the parent file still imported `isLikelyWorkspaceFilePath` and `normalizeWorkspacePath`, causing ESLint/typecheck failure for unused imports during `next build`
+**Context:** Apr 12 late-night Chat-only structural refactor after the rollback, where the working rule was tiny extraction → build → preview verify → commit
+**Suggested fix:** after every extraction from a large React file, immediately prune the parent module imports before assuming the move is complete. Treat build verification as part of the extraction, not a postscript.
+**Resolution:** Resolved same session by removing the unused imports and rerunning the build successfully
+
+**Priority:** low
+**Status:** resolved
+
+## [ERR-20260412-0053]
+
+**What failed:** first tool-group extraction build pass during post-rollback safe refactor lane
+**Error:** `formatEventTime` was moved into `chat-tool-groups.tsx` but the old local definition remained in `MissionControlChatSurface.tsx`, producing a duplicate-definition webpack/build error
+**Context:** Apr 12 late-night Chat-only structural refactor, third extraction slice
+**Suggested fix:** when extracting a rendering cluster that includes shared utilities, remove the original local definitions in the parent immediately and let build verification catch any missed duplicates before restart/commit
+**Resolution:** Resolved same session by deleting the duplicate local `formatEventTime` and rerunning the build successfully
+
+**Priority:** low
+**Status:** resolved
+
 ## [ERR-20260411-1713]
 
 **What failed:** Volkskrant direct RSS ingestion for Mission Control Custom News

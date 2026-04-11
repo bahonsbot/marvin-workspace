@@ -61,6 +61,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 <!-- New entries go at top -->
 
+## [CORR-20260412-0018]
+
+**Trigger:** After the VPS rollback, Philippe explicitly said the rollback had been done at a clean and safe state and warned that what was on git might be corrupted, asking me to rebuild/restart preview so he could verify the actual current baseline first.
+**What was wrong:** I initially leaned toward interpreting the Tasks issue through repo/git history before re-establishing runtime truth from the rolled-back workspace itself.
+**Lesson:** After a rollback, do not treat git history as the primary truth until the current workspace baseline has been rebuilt and verified in preview/runtime. If the operator confirms the current rolled-back workspace is the clean state, treat that as the recovery baseline first, then realign git to it carefully.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260401-2239]
 
 **Trigger:** Philippe noticed I had only performed read actions after agreeing to create a savepoint and memory/doc sweep, and correctly called out that no savepoint file or write actions existed yet.
