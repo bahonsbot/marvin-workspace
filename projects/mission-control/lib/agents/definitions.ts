@@ -523,7 +523,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
     label: 'Link',
     role: 'Job Advisor',
     summary: 'Recruitment expert with a bag full of ATS-safe resumes and tailored cover letters, who will find and get you the best possible jobs.',
-    arsenal: [],
+    arsenal: ['job-advisor'],
     expectedOutputs: ['tailored resume draft', 'cover letter draft', 'ATS-fit checklist', 'application tailoring note'],
     workspaceReadiness: 'ready',
     chatReadiness: 'ready',

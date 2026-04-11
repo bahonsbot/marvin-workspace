@@ -175,6 +175,8 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - Path: `skills/sportsbet-advisor/SKILL.md`
 - trading-advisor — trading analysis and education with a strict risk-first posture
   - Path: `skills/trading-advisor/SKILL.md`
+- job-advisor — ATS-safe resume/CV tailoring, cover-letter drafting, JD matching, application review, and honest candidate positioning for Link / job-search support
+  - Path: `skills/job-advisor/SKILL.md`
 
 ### Models (Operational Routing)
 - Primary provider: Bailian
