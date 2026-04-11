@@ -36,7 +36,7 @@ export function TopTabBar() {
           whiteSpace: 'nowrap',
         }}
       >
-        Mission Control
+        Marvin’s Room
       </div>
       <div style={{ width: 1, height: 20, background: 'var(--border)' }} />
       <nav style={{ display: 'flex', gap: 6, alignItems: 'center', marginLeft: 24 }}>

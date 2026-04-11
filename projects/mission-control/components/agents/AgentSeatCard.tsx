@@ -4,9 +4,9 @@ import { AgentIssueStateButton } from '@/components/agents/AgentIssueStateButton
 import type { AgentAlert, AgentAlertSeverity, AgentHealthStatus, AgentUnitPayload } from '@/lib/agents/definitions';
 
 function statePalette(status: AgentHealthStatus) {
-  if (status === 'active') return { bg: 'rgba(92, 214, 141, 0.18)', border: 'rgba(63, 201, 122, 0.34)', text: '#1f9a57' };
-  if (status === 'ready') return { bg: 'rgba(82, 196, 132, 0.14)', border: 'rgba(63, 176, 113, 0.28)', text: '#258a54' };
-  if (status === 'quiet') return { bg: 'rgba(82, 196, 132, 0.14)', border: 'rgba(63, 176, 113, 0.28)', text: '#258a54' };
+  if (status === 'active') return { bg: 'rgba(104, 242, 166, 0.22)', border: 'rgba(74, 224, 145, 0.4)', text: '#23b26b' };
+  if (status === 'ready') return { bg: 'rgba(122, 248, 177, 0.2)', border: 'rgba(92, 229, 157, 0.38)', text: '#29bb72' };
+  if (status === 'quiet') return { bg: 'rgba(122, 248, 177, 0.2)', border: 'rgba(92, 229, 157, 0.38)', text: '#29bb72' };
   if (status === 'attention') return { bg: 'rgba(127, 134, 138, 0.1)', border: 'rgba(127, 134, 138, 0.22)', text: '#586167' };
   return { bg: 'rgba(91, 124, 116, 0.09)', border: 'rgba(91, 124, 116, 0.16)', text: '#47655c' };
 }

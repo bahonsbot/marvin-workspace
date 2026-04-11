@@ -70,7 +70,10 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
-          <blockquote className="general-home-v3-quote">“{summary.ambient.quote}”</blockquote>
+          <div>
+            <blockquote className="general-home-v3-quote">“{summary.ambient.quote.text}”</blockquote>
+            <div style={{ marginTop: 8, fontSize: 12, color: '#6b756f', letterSpacing: '0.01em' }}>— {summary.ambient.quote.author}</div>
+          </div>
         </aside>
       </header>
 

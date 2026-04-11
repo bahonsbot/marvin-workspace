@@ -62,7 +62,10 @@ export interface HomeSummary {
     } | null;
     greeting: string;
     focusLine: string;
-    quote: string;
+    quote: {
+      text: string;
+      author: string;
+    };
   };
   refreshedAt: string;
 }

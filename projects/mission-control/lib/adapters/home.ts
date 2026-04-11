@@ -26,14 +26,30 @@ const HOME_RSS_SOURCES = [
   '/data/.openclaw/workspace/projects/market-intel/data/rss_alerts.json',
 ] as const;
 const HOME_QUOTES = [
-  'Useful before beautiful. Beautiful once useful.',
-  'Clarity first, speed second, polish third.',
-  'Small honest improvements beat grand unclear plans.',
-  'Quiet systems make loud progress possible.',
-  'Keep the signal strong and the interface calm.',
-  'Reliable beats impressive when the stakes are real.',
-  'Do the obvious thing well, then stop.',
-  'Good rhythm: inspect, decide, execute, verify.',
+  { text: 'Simplicity is the ultimate sophistication.', author: 'Leonardo da Vinci' },
+  { text: 'The details are not the details. They make the design.', author: 'Charles Eames' },
+  { text: 'Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.', author: 'Antoine de Saint-Exupéry' },
+  { text: 'Make it simple, but significant.', author: 'Don Draper' },
+  { text: 'Well begun is half done.', author: 'Aristotle' },
+  { text: 'Action is the foundational key to all success.', author: 'Pablo Picasso' },
+  { text: 'What we do every day matters more than what we do once in a while.', author: 'Gretchen Rubin' },
+  { text: 'The secret of getting ahead is getting started.', author: 'Mark Twain' },
+  { text: 'It always seems impossible until it’s done.', author: 'Nelson Mandela' },
+  { text: 'Luck is what happens when preparation meets opportunity.', author: 'Seneca' },
+  { text: 'Quality means doing it right when no one is looking.', author: 'Henry Ford' },
+  { text: 'The future depends on what you do today.', author: 'Mahatma Gandhi' },
+  { text: 'To improve is to change; to be perfect is to change often.', author: 'Winston Churchill' },
+  { text: 'You do not rise to the level of your goals. You fall to the level of your systems.', author: 'James Clear' },
+  { text: 'If I had more time, I would have written a shorter letter.', author: 'Blaise Pascal' },
+  { text: 'Amateurs sit and wait for inspiration, the rest of us just get up and go to work.', author: 'Stephen King' },
+  { text: 'The best way out is always through.', author: 'Robert Frost' },
+  { text: 'First solve the problem. Then write the code.', author: 'John Johnson' },
+  { text: 'Nothing is particularly hard if you divide it into small jobs.', author: 'Henry Ford' },
+  { text: 'Discipline is choosing between what you want now and what you want most.', author: 'Abraham Lincoln' },
+  { text: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.', author: 'Will Durant' },
+  { text: 'The man who moves a mountain begins by carrying away small stones.', author: 'Confucius' },
+  { text: 'Focus is saying no to the hundred other good ideas.', author: 'Steve Jobs' },
+  { text: 'Do less, then obsess.', author: 'Twyla Tharp' },
 ] as const;
 
 function weatherCodeLabel(code: number | null | undefined) {
@@ -277,24 +293,18 @@ type RssSourceCandidate = {
   usableCount: number;
 };
 
-function getVietnamDateKey(now = new Date()): string {
+function getDailyQuote(now = new Date()): { text: string; author: string } {
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'Asia/Ho_Chi_Minh',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   }).formatToParts(now);
-
-  const year = parts.find((part) => part.type === 'year')?.value ?? '1970';
-  const month = parts.find((part) => part.type === 'month')?.value ?? '01';
-  const day = parts.find((part) => part.type === 'day')?.value ?? '01';
-  return `${year}-${month}-${day}`;
-}
-
-function getDailyQuote(now = new Date()): string {
-  const dateKey = getVietnamDateKey(now);
-  const hash = Array.from(dateKey).reduce((sum, char) => sum + char.charCodeAt(0), 0);
-  return HOME_QUOTES[hash % HOME_QUOTES.length] ?? HOME_QUOTES[0];
+  const year = Number(parts.find((part) => part.type === 'year')?.value ?? '1970');
+  const month = Number(parts.find((part) => part.type === 'month')?.value ?? '1');
+  const day = Number(parts.find((part) => part.type === 'day')?.value ?? '1');
+  const utcDayNumber = Math.floor(Date.UTC(year, month - 1, day) / 86400000);
+  return HOME_QUOTES[utcDayNumber % HOME_QUOTES.length] ?? HOME_QUOTES[0];
 }
 
 function normalizeRssItems(parsed: unknown): RawRssAlert[] {
