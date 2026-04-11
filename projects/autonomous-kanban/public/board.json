@@ -2,18 +2,17 @@
   "board": {
     "todo": [
       {
+        "id": "e299ba72",
+        "text": "[Personal] Practice: Python practice sheet",
+        "column": "todo"
+      },
+      {
         "id": "44e345e9",
         "text": "[Trading] Practice: Business metrics lesson",
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "fd7eae0d",
-        "text": "[Personal] Practice: Python practice sheet",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": [
       {
         "id": "24fa9c1b",
