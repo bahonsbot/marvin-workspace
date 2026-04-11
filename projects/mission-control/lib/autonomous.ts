@@ -719,7 +719,7 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
     }
 
     if (suppressed.has(entry.normalizedText)) {
-      clearSuppressedKey(store, entry.normalizedText);
+      continue;
     }
 
     const status: MCAutoTaskStatus = entry.section === 'in-progress'

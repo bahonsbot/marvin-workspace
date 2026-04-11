@@ -487,7 +487,7 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
       if (source.structured.counts.backlog !== source.autonomous.counts.backlog) {
         issues.push(
           source.structured.counts.backlog < source.autonomous.counts.backlog
-            ? `Backlog count lower than AUTONOMOUS Open Backlog (structured=${source.structured.counts.backlog}, AUTONOMOUS=${source.autonomous.counts.backlog})`
+            ? `Backlog count lower than AUTONOMOUS Open Backlog (structured=${source.structured.counts.backlog}, AUTONOMOUS=${source.autonomous.counts.backlog}). If AUTONOMOUS.md has intentional new tasks, use Pull from md before applying board truth.`
             : `Backlog count higher than AUTONOMOUS Open Backlog (structured=${source.structured.counts.backlog}, AUTONOMOUS=${source.autonomous.counts.backlog})`,
         );
       }
@@ -514,7 +514,7 @@ export async function getTaskSyncStatus(): Promise<TaskSyncStatus> {
 
     const state: TaskSyncStatus['state'] = issues.length > 0 ? 'drift' : 'ok';
 
-    let details = 'Structured Autonomous store and legacy autonomy files look aligned enough for current Tasks UI.';
+    let details = 'Structured board state and AUTONOMOUS.md look aligned enough for current Tasks UI. The board remains the source of truth.';
     if (issues.length > 0) {
       details = issues.join(' ');
     } else if ((source.autonomous.staleDoneTodayCount ?? 0) > 0) {

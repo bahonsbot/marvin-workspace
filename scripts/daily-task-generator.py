@@ -30,6 +30,7 @@ SKILL_PROFILE_FILE = WORKSPACE / "config" / "skill-profile.json"
 KANBAN_DIR = WORKSPACE / "projects" / "autonomous-kanban"
 KANBAN_BOARD_FILE = WORKSPACE / "projects" / "autonomous-kanban" / "public" / "board.json"
 LATEST_ASSESSMENT_FILE = WORKSPACE / "memory" / "skill-assessments" / "latest.json"
+MISSION_CONTROL_TASK_STORE = WORKSPACE / "projects" / "mission-control" / "data" / "autonomous-tasks.json"
 KANBAN_SYNC_TIMEOUT_SECONDS = 20
 KANBAN_GIT_TIMEOUT_SECONDS = 15
 KANBAN_PUSH_TIMEOUT_SECONDS = 30
@@ -719,13 +720,59 @@ def get_active_suggestion_tasks():
     return tasks
 
 
+def normalize_task_text(text):
+    return re.sub(r'\s+', ' ', (text or '').strip()).lower()
+
+
+
+def load_structured_task_store():
+    if not MISSION_CONTROL_TASK_STORE.exists():
+        return {"tasks": [], "meta": {"schemaVersion": 2, "updatedAt": 0, "suppressedLegacyTaskKeys": []}}
+    try:
+        data = json.loads(MISSION_CONTROL_TASK_STORE.read_text())
+        if not isinstance(data, dict):
+            raise ValueError("task store must be a JSON object")
+    except (json.JSONDecodeError, IOError, ValueError):
+        return {"tasks": [], "meta": {"schemaVersion": 2, "updatedAt": 0, "suppressedLegacyTaskKeys": []}}
+
+    data.setdefault("tasks", [])
+    data.setdefault("meta", {})
+    data["meta"].setdefault("schemaVersion", 2)
+    data["meta"].setdefault("updatedAt", 0)
+    data["meta"].setdefault("suppressedLegacyTaskKeys", [])
+    return data
+
+
+
+def get_suppressed_legacy_task_keys():
+    store = load_structured_task_store()
+    suppressed = store.get("meta", {}).get("suppressedLegacyTaskKeys", [])
+    return {entry for entry in suppressed if isinstance(entry, str) and entry.strip()}
+
+
+
 def get_current_open_backlog_tasks():
-    """Read the current Open Backlog bullet items in order."""
+    """Read the current Open Backlog task texts, preferring the structured task store."""
+    store = load_structured_task_store()
+    tasks = []
+
+    structured_backlog = sorted(
+        [task for task in store.get("tasks", []) if task.get("status") == "backlog"],
+        key=lambda task: task.get("columnOrder", 0),
+    )
+    for task in structured_backlog:
+        link = task.get("linkedAutonomyRef") or {}
+        task_text = (link.get("taskText") or task.get("title") or "").strip()
+        if task_text:
+            tasks.append(task_text)
+
+    if tasks:
+        return tasks
+
     if not AUTONOMOUS_FILE.exists():
         return []
 
     content = AUTONOMOUS_FILE.read_text()
-    tasks = []
     in_open_backlog = False
 
     for line in content.splitlines():
@@ -744,43 +791,128 @@ def get_current_open_backlog_tasks():
 
 
 
-def update_autonomous_file(new_tasks):
-    """Update AUTONOMOUS.md by preserving existing backlog and only topping back up to NUM_TASKS."""
-
+def build_combined_backlog_tasks(new_tasks):
     suggestion_tasks = get_active_suggestion_tasks()
     existing_backlog_tasks = get_current_open_backlog_tasks()
+    suppressed = get_suppressed_legacy_task_keys()
     combined = []
     seen = set()
+
+    def add_task(task):
+        if len(combined) >= NUM_TASKS:
+            return
+        key = normalize_task_text(task)
+        if not key or key in seen or key in suppressed:
+            return
+        combined.append(task)
+        seen.add(key)
 
     # Add newly generated tasks first. This ensures fresh generated tasks are never
     # silently dropped when suggestions or existing backlog already fill NUM_TASKS.
     for task in new_tasks:
-        if len(combined) >= NUM_TASKS:
-            break
-        key = task.strip().lower()
-        if key and key not in seen:
-            combined.append(task)
-            seen.add(key)
+        add_task(task)
 
     # Fill remaining slots with existing backlog tasks (de-duped against new tasks).
     # This preserves older in-flight work when there's room for it.
     for task in existing_backlog_tasks:
-        if len(combined) >= NUM_TASKS:
-            break
-        key = task.strip().lower()
-        if key and key not in seen:
-            combined.append(task)
-            seen.add(key)
+        add_task(task)
 
     # Suggestions fill any final remaining slots.
     for task in suggestion_tasks:
-        if len(combined) >= NUM_TASKS:
-            break
-        key = task.strip().lower()
-        if key and key not in seen:
-            combined.append(task)
-            seen.add(key)
+        add_task(task)
 
+    return combined
+
+
+
+def sync_generated_backlog_to_structured_store(backlog_tasks):
+    """Ensure generated AUTONOMOUS backlog tasks also exist in the structured MC task store."""
+    store = load_structured_task_store()
+    tasks = store.get("tasks", [])
+    meta = store.get("meta", {})
+    suppressed = {entry for entry in meta.get("suppressedLegacyTaskKeys", []) if isinstance(entry, str) and entry.strip()}
+    existing_ids = {task.get("id") for task in tasks if isinstance(task, dict) and task.get("id")}
+    existing_norms = set()
+    backlog_max_order = -1
+
+    for task in tasks:
+        if not isinstance(task, dict):
+            continue
+        link = task.get("linkedAutonomyRef") or {}
+        linked_norm = link.get("taskTextNormalized")
+        title_norm = normalize_task_text(task.get("title", ""))
+        if linked_norm:
+            existing_norms.add(linked_norm)
+        if title_norm:
+            existing_norms.add(title_norm)
+        if task.get("status") == "backlog":
+            backlog_max_order = max(backlog_max_order, int(task.get("columnOrder", 0) or 0))
+
+    def unique_task_id(title):
+        slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')[:48].rstrip('-') or 'task'
+        candidate = slug
+        suffix = 2
+        while candidate in existing_ids:
+            candidate = f"{slug}-{suffix}"
+            suffix += 1
+        existing_ids.add(candidate)
+        return candidate
+
+    added = 0
+    now_ms = int(datetime.now().timestamp() * 1000)
+    for task_text in backlog_tasks:
+        normalized = normalize_task_text(task_text)
+        if not normalized or normalized in suppressed or normalized in existing_norms:
+            continue
+        backlog_max_order += 1
+        tasks.append({
+            "id": unique_task_id(task_text),
+            "title": task_text,
+            "status": "backlog",
+            "priority": "normal",
+            "sourceType": "generated",
+            "agentTarget": "marvin",
+            "createdAt": now_ms,
+            "updatedAt": now_ms,
+            "version": 1,
+            "columnOrder": backlog_max_order,
+            "editable": True,
+            "chatAnnouncementSent": False,
+            "feedback": [],
+            "artifacts": [],
+            "linkedAutonomyRef": {
+                "kind": "autonomous-md",
+                "sourceFile": str(AUTONOMOUS_FILE),
+                "section": "open-backlog",
+                "taskText": task_text,
+                "taskTextNormalized": normalized,
+            },
+            "sourceMeta": {
+                "generator": {
+                    "createdBy": "daily-task-generator",
+                    "createdAt": now_ms,
+                }
+            },
+        })
+        existing_norms.add(normalized)
+        added += 1
+
+    if added > 0:
+        meta["updatedAt"] = now_ms
+        meta["schemaVersion"] = 2
+        meta["suppressedLegacyTaskKeys"] = sorted(suppressed)
+        store["tasks"] = tasks
+        store["meta"] = meta
+        MISSION_CONTROL_TASK_STORE.write_text(json.dumps(store, indent=2) + "\n")
+
+    return added
+
+
+
+def update_autonomous_file(new_tasks):
+    """Update AUTONOMOUS.md by preserving existing backlog and only topping back up to NUM_TASKS."""
+
+    combined = build_combined_backlog_tasks(new_tasks)
     content = AUTONOMOUS_FILE.read_text()
 
     new_section = "## Open Backlog\n\n"
@@ -800,7 +932,8 @@ def update_autonomous_file(new_tasks):
     content = re.sub(r'\n## In Progress\s*\n(?=\n##|\Z)', '\n', content, flags=re.DOTALL)
 
     AUTONOMOUS_FILE.write_text(content)
-    return len(combined)
+    added_to_store = sync_generated_backlog_to_structured_store(combined)
+    return len(combined), added_to_store
 
 
 def sync_kanban_board_json():
@@ -907,10 +1040,11 @@ if __name__ == "__main__":
 
     # Update AUTONOMOUS.md with new tasks only
     if new_tasks:
-        added_count = update_autonomous_file(new_tasks)
+        added_count, store_added_count = update_autonomous_file(new_tasks)
         print(f"Generated {len(new_tasks)} tasks → AUTONOMOUS.md backlog has {added_count} items")
+        print(f"Structured Tasks store sync: {store_added_count} new backlog entr{'y' if store_added_count == 1 else 'ies'} added")
         if added_count < len(new_tasks):
-            print(f"  NOTE: {len(new_tasks) - added_count} generated task(s) deduplicated against existing backlog/suggestions")
+            print(f"  NOTE: {len(new_tasks) - added_count} generated task(s) deduplicated against existing backlog/suggestions/suppressed deletions")
         print("\nTasks created:")
         for i, task in enumerate(new_tasks, 1):
             # Show abbreviated version
