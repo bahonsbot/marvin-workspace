@@ -290,6 +290,77 @@ function nowIso(): string {
   return new Date().toISOString();
 }
 
+function stripTaskCategoryTag(value: string): string {
+  return value.replace(/^\[[^\]]+\]\s*/, '').trim();
+}
+
+function normalizeGeneratedBrief(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  let brief = value.trim();
+  brief = brief.replace(/^an actionable next step toward:\s*/i, '');
+  if (!brief) return undefined;
+  return `${brief.charAt(0).toUpperCase()}${brief.slice(1)}`;
+}
+
+function normalizeGeneratedTitle(rawTitle: string, description?: string): string {
+  const title = stripTaskCategoryTag(rawTitle.trim());
+  const genericPrefixMatch = title.match(/^(.*?:\s*)an actionable next step toward:\s*(.*)$/i);
+  if (!genericPrefixMatch) return title;
+
+  let candidate = normalizeGeneratedBrief(description) ?? genericPrefixMatch[2].trim();
+  candidate = candidate.replace(/^find ways to\s*/i, '');
+  candidate = candidate.replace(/^ways to\s*/i, '');
+  candidate = candidate.replace(/^how to\s*/i, '');
+  if (candidate) {
+    candidate = candidate.charAt(0).toUpperCase() + candidate.slice(1);
+  }
+
+  return `${genericPrefixMatch[1]}${(candidate || genericPrefixMatch[2].trim()).trim()}`;
+}
+
+function extractEmbeddedTaskTitleAndDescription(rawTitle: unknown, rawDescription: unknown): { title: string; description?: string } {
+  const fallbackTitle = typeof rawTitle === 'string' && rawTitle.trim() ? rawTitle.trim() : 'Untitled task';
+  const explicitDescription = normalizeGeneratedBrief(typeof rawDescription === 'string' ? rawDescription : undefined);
+
+  if (explicitDescription) {
+    return { title: normalizeGeneratedTitle(fallbackTitle, explicitDescription), description: explicitDescription };
+  }
+
+  if (typeof rawTitle !== 'string') {
+    return { title: fallbackTitle };
+  }
+
+  const normalizedTitle = rawTitle.replace(/\r\n/g, '\n').trim();
+  const looksEmbedded = normalizedTitle.includes('\n') || normalizedTitle.includes('**Brief:**');
+  if (!looksEmbedded) {
+    return { title: normalizeGeneratedTitle(fallbackTitle), description: explicitDescription };
+  }
+
+  const lines = normalizedTitle
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length === 0) {
+    return { title: fallbackTitle };
+  }
+
+  const rawEmbeddedTitle = lines[0].trim() || fallbackTitle;
+  let description: string | undefined;
+
+  const briefLine = lines.find((line) => line.startsWith('**Brief:**'));
+  if (briefLine) {
+    const brief = briefLine.replace(/^\*\*Brief:\*\*\s*/i, '').trim();
+    if (brief) {
+      description = brief;
+    }
+  }
+
+  const normalizedDescription = normalizeGeneratedBrief(description);
+  const title = normalizeGeneratedTitle(rawEmbeddedTitle, normalizedDescription);
+  return normalizedDescription ? { title, description: normalizedDescription } : { title };
+}
+
 function normalizeArtifacts(value: unknown): MCAutoArtifact[] {
   if (!Array.isArray(value)) return [];
   const artifacts: MCAutoArtifact[] = [];
@@ -376,10 +447,12 @@ function normalizeNeedsInput(value: unknown): MCAutoNeedsInput | undefined {
 }
 
 function normalizeTask(task: Partial<MCAutoTask>): MCAutoTask {
+  const normalizedText = extractEmbeddedTaskTitleAndDescription(task.title, task.description);
+
   return {
     id: typeof task.id === 'string' ? task.id : slugify(String(task.title ?? 'task')),
-    title: typeof task.title === 'string' ? task.title : 'Untitled task',
-    description: typeof task.description === 'string' ? task.description : undefined,
+    title: normalizedText.title,
+    description: normalizedText.description,
     status: task.status === 'backlog' || task.status === 'todo' || task.status === 'in-progress' || task.status === 'review' || task.status === 'done'
       ? task.status
       : 'backlog',

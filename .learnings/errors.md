@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260412-2358]
+
+**What failed:** first Mission Control seat-bridge transport assumption for specialist seats
+**Error:** I assumed specialist seat slugs like `job-advisor` and `language-tutor` could be invoked as registered OpenClaw agent ids via `openclaw agent --agent <id>`, but the live config only exposed `main`; the direct call failed with `Unknown agent id "job-advisor"`.
+**Context:** Apr 12 late-night Mission Control seat-bridge build so Marvin could trigger Sudo, Vantage, and the specialist seats directly instead of falling back to subagents.
+**Suggested fix:** before designing seat/runtime transport, check `openclaw agents list` and verify whether the target seat is a real registered agent or only a Mission Control seat concept. If only `main` is registered, bridge specialist seats as persistent seat sessions under the main runtime with seat-specific activation and continuity context instead of `--agent` invocations.
+**Resolution:** Resolved same session by pivoting Japin/Johan/Milou/Link to seat-session transport under the main runtime, keeping Sudo on the real orchestration backend and Vantage on a persistent lead-session path.
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260412-2317]
+
+**What failed:** initial Sudo seat-bridge dry-run semantics
+**Error:** `--dry-run` still wrote a test orchestration record into `projects/mission-control/data/sudo-delegations.json`, which meant a verification command mutated real orchestration state.
+**Context:** Apr 12 late-night seat-bridge verification after adding the first `scripts/seat-bridge.mjs` implementation.
+**Suggested fix:** dry-run paths for orchestration/queue systems must construct payloads in memory only. Never write runner state, queue entries, or orchestration records during dry-run verification.
+**Resolution:** Resolved same session by gating store writes/spawn behavior behind `!dryRun` and removing the temporary test artifact.
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260412-1115]
 
 **What failed:** first Morning Meeting framing of the `market-signal-generator` cron issue

@@ -215,6 +215,36 @@ export function createMissionControlSessionTarget({ agentId = 'main', label, ses
   };
 }
 
+export async function ensureSessionTarget({ agentId = 'main', sessionKey, sessionId, label = 'mission-control' }) {
+  const resolvedAgentId = normalizeAgentId(agentId || resolveAgentIdFromSessionKey(sessionKey));
+  const requestedSessionKey = String(sessionKey || '').trim() || buildSyntheticSessionKey(resolvedAgentId, label);
+  const requestedSessionId = String(sessionId || '').trim();
+  const storePath = resolveSessionStorePath(resolvedAgentId);
+
+  const ensuredTarget = await withStoreLock(storePath, async (store) => {
+    const current = store[requestedSessionKey] && typeof store[requestedSessionKey] === 'object' ? store[requestedSessionKey] : {};
+    const resolvedSessionId = String(current.sessionId || requestedSessionId || crypto.randomUUID()).trim();
+
+    store[requestedSessionKey] = {
+      ...current,
+      sessionId: resolvedSessionId,
+      updatedAt: Date.now(),
+    };
+
+    return {
+      sessionKey: requestedSessionKey,
+      sessionId: resolvedSessionId,
+    };
+  });
+
+  return {
+    agentId: resolvedAgentId,
+    sessionId: ensuredTarget.sessionId,
+    sessionKey: ensuredTarget.sessionKey,
+    storePath,
+  };
+}
+
 export async function prepareSessionModel({ agentId = 'main', sessionId, sessionKey, modelAlias }) {
   const resolvedSessionId = String(sessionId || '').trim();
   if (!resolvedSessionId) throw new Error('prepareSessionModel requires a sessionId.');

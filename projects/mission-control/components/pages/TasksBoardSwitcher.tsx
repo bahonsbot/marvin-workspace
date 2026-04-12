@@ -160,6 +160,10 @@ function columnPalette(colId: string) {
   return { accent: '#79a694', border: 'rgba(121, 166, 148, 0.16)', bg: 'linear-gradient(180deg, rgba(212, 231, 221, 0.45) 0%, rgba(255, 255, 255, 0.84) 20%)', chipBg: 'rgba(121, 166, 148, 0.11)', chipText: '#3c6658', emptyText: 'No completed cards yet.' };
 }
 
+function autonomousCategoryFromLink(taskText?: string) {
+  return taskText?.match(/^\[(.+?)\]/)?.[1]?.trim() ?? 'Autonomous';
+}
+
 function extractLane(task: Task) {
   return task.detail.summary.match(/^\[(.+?)\]/)?.[1] ?? 'Task';
 }
@@ -197,8 +201,19 @@ function cleanAutonomousTitle(summary: string) {
 }
 
 function formatAutonomousSummary(summary: string) {
-  const title = cleanAutonomousTitle(summary);
-  return title.length > 72 ? `${title.slice(0, 69).trimEnd()}…` : title;
+  return cleanAutonomousTitle(summary);
+}
+
+function capitalizeSupportLead(value: string) {
+  return value ? `${value.charAt(0).toUpperCase()}${value.slice(1)}` : value;
+}
+
+function supportPreview(value: string) {
+  const sentenceMatch = value.match(/^.*?[.!?](?=\s|$)/);
+  if (sentenceMatch) return sentenceMatch[0].trim();
+  const semicolonIndex = value.indexOf(';');
+  if (semicolonIndex !== -1) return value.slice(0, semicolonIndex).trim();
+  return value.trim();
 }
 
 function formatAutonomousSupport(detail: TaskDetail, feedback?: string[]) {
@@ -206,7 +221,7 @@ function formatAutonomousSupport(detail: TaskDetail, feedback?: string[]) {
   const source = latestFeedback ?? detail.why ?? detail.completed ?? detail.proof ?? detail.unlocks ?? '';
   const clean = cleanReviewText(source)?.replace(/\s+/g, ' ').trim() ?? '';
   if (!clean) return null;
-  return clean.length > 110 ? `${clean.slice(0, 107).trimEnd()}…` : clean;
+  return capitalizeSupportLead(clean);
 }
 
 function DetailMarkdown({ value, tone = 'default' }: { value?: string; tone?: 'default' | 'muted' | 'feedback' }) {
@@ -445,7 +460,14 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
       },
       task.meta?.feedback,
     )
-    : task.detail.why ?? task.detail.completed ?? null;
+    : capitalizeSupportLead(task.detail.why ?? task.detail.completed ?? '') || null;
+  const [showFullSupport, setShowFullSupport] = useState(false);
+  useEffect(() => {
+    setShowFullSupport(false);
+  }, [task.id, supportText]);
+  const supportPreviewText = supportText ? supportPreview(supportText) : null;
+  const supportHasMore = Boolean(supportText && supportPreviewText && supportPreviewText.length < supportText.length);
+  const visibleSupportText = supportText ? (showFullSupport ? supportText : supportPreviewText ?? supportText) : null;
   const isManual = boardType === 'personal' || boardType === 'projects';
   const showInspection = boardType === 'autonomous' && (task.detail.proof || task.detail.unlocks || latestFeedback || task.meta?.needsInputNote || task.meta?.runError);
   return (
@@ -455,7 +477,38 @@ function TaskCard({ task, onEdit, onDelete, boardType, isDragging, onDragStart, 
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{isManual && onEdit && <button onClick={() => onEdit(task)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#7a7a7a', padding: '2px 4px' }} aria-label="Edit task">✎</button>}{isManual && onDelete && <button onClick={() => onDelete(task)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#a06a6a', padding: '2px 4px' }} aria-label="Remove task">✕</button>}</div>
       </div>
       <div style={{ fontSize: boardType === 'autonomous' ? 13.5 : 14, fontWeight: boardType === 'autonomous' ? 600 : 500, lineHeight: 1.45, color: '#222222' }}>{visibleSummary}</div>
-      {supportText ? <div style={{ fontSize: 11.5, color: latestFeedback ? '#7f5aa2' : '#7a7a7a', lineHeight: 1.55 }}><span style={{ fontWeight: latestFeedback ? 700 : 500 }}>{latestFeedback ? 'Feedback:' : ''}</span>{latestFeedback ? ' ' : ''}{supportText}</div> : null}
+      {visibleSupportText ? (
+        <div style={{ display: 'grid', gap: 6 }}>
+          <div style={{ fontSize: 11.5, color: latestFeedback ? '#7f5aa2' : '#7a7a7a', lineHeight: 1.55 }}>
+            <span style={{ fontWeight: latestFeedback ? 700 : 500 }}>{latestFeedback ? 'Feedback:' : ''}</span>
+            {latestFeedback ? ' ' : ''}
+            {visibleSupportText}
+          </div>
+          {supportHasMore ? (
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                setShowFullSupport((current) => !current);
+              }}
+              style={{
+                width: 'fit-content',
+                padding: 0,
+                border: 'none',
+                background: 'none',
+                color: '#6c766f',
+                fontSize: 11,
+                fontWeight: 700,
+                cursor: 'pointer',
+                textDecoration: 'underline',
+                textDecorationStyle: 'dotted',
+              }}
+            >
+              {showFullSupport ? 'Show less' : 'Show more'}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
       {boardType === 'autonomous' && task.meta ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>{task.meta.priority ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,245,234,0.82)', color: '#b26a1f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.priority}</span> : null}{task.meta.agentTarget ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255,255,255,0.92)', border: '1px solid rgba(200,195,188,0.45)', color: '#5f655f', fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>{task.meta.agentTarget}</span> : null}{task.meta.model ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.84)', border: '1px solid rgba(121,166,148,0.3)', color: '#2d5a4a', fontSize: 10, fontWeight: 700 }}>{task.meta.model}</span> : null}{!preflight.ok ? <span style={{ padding: '4px 8px', borderRadius: 999, background: 'rgba(255, 244, 224, 0.9)', border: '1px solid rgba(205, 153, 69, 0.24)', color: '#9a6112', fontSize: 10, fontWeight: 800, textTransform: 'uppercase' }}>Blocked</span> : null}</div> : null}
       {boardType === 'autonomous' && !preflight.ok && preflight.warning ? <div style={{ display: 'grid', gap: 4, padding: '10px 11px', borderRadius: 12, background: 'rgba(255, 244, 224, 0.72)', border: '1px solid rgba(205, 153, 69, 0.22)', color: '#7d5314' }}><div style={{ fontSize: 10.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.3 }}>Execution preflight</div><div style={{ fontSize: 11.5, lineHeight: 1.5 }}>{preflight.warning}</div></div> : null}
       {showInspection ? <details style={{ margin: 0 }}><summary style={{ cursor: 'pointer', fontSize: 11, color: '#7a7a7a', listStyle: 'none', textDecoration: 'underline', textDecorationStyle: 'dotted', width: 'fit-content' }}>Scope</summary><div style={{ marginTop: 10, fontSize: 12, color: '#7a7a7a', display: 'grid', gap: 8, lineHeight: 1.65 }}>{task.detail.proof ? <div style={{ display: 'grid', gap: 4 }}><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Proof</span><InlineDetailMarkdown value={task.detail.proof} /></div> : null}{task.detail.unlocks ? <div><span style={{ fontWeight: 600, color: '#3d3d3d' }}>Unlocks:</span> {task.detail.unlocks}</div> : null}</div></details> : null}
@@ -544,7 +597,7 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
           {task.meta?.sourceType ? <span style={{ padding: '6px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(200,195,188,0.5)', fontSize: 10.5, fontWeight: 700, color: '#5f655f', textTransform: 'uppercase' }}>{task.meta.sourceType}</span> : null}
         </div>
 
-        {task.detail.why ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Brief</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', fontSize: 13.5, lineHeight: 1.68, color: '#37413d' }}>{task.detail.why}</div></section> : null}
+        {task.detail.why ? <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Brief</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', fontSize: 13.5, lineHeight: 1.68, color: '#37413d' }}>{capitalizeSupportLead(task.detail.why)}</div></section> : null}
 
         <section style={{ display: 'grid', gap: 8 }}><div style={{ fontSize: 10.5, textTransform: 'uppercase', letterSpacing: 0.4, color: '#8a8a8a' }}>Run status</div><div style={{ border: '1px solid rgba(200,195,188,0.42)', borderRadius: 16, padding: 14, background: 'rgba(255,255,255,0.82)', display: 'grid', gap: 10 }}><div style={{ fontSize: 13, fontWeight: 700, color: '#1f2f29' }}>{runLabel}</div><div style={{ fontSize: 12, color: '#7a7a7a', lineHeight: 1.6 }}>{runSummary ? <DetailMarkdown value={runSummary} tone="muted" /> : 'No run summary yet.'}</div>{!preflight.ok && preflight.warning ? <div style={{ display: 'grid', gap: 6, padding: '11px 12px', borderRadius: 14, background: 'rgba(255, 244, 224, 0.82)', border: '1px solid rgba(205, 153, 69, 0.28)', color: '#7d5314' }}><strong style={{ fontSize: 12.5 }}>Execution preflight</strong><div style={{ fontSize: 12.5, lineHeight: 1.6 }}>{preflight.warning}</div></div> : null}{task.meta?.artifactPath ? <a href={`/general/files?file=${encodeURIComponent(task.meta.artifactPath)}`} style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, background: 'rgba(236, 244, 240, 0.76)', color: '#2d5a4a', fontSize: 11.5, fontWeight: 700, textDecoration: 'none' }}>Open artefact<span style={{ fontFamily: 'monospace', fontWeight: 500 }}>{artifactLabel(task.meta.artifactPath)}</span></a> : null}</div></section>
 
@@ -670,7 +723,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails, 
     await fetchAutonomousBoard();
   }, [fetchAutonomousBoard]);
 
-  const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; model?: string; sourceType?: string; createdAt?: number; needsInput?: { reason?: string; note?: string }; run?: { status?: string; summary?: string; result?: string; error?: string }; artifacts?: Array<{ path?: string }>; feedback?: Array<{ by?: string; note?: string }> }): Task => {
+  const hydrateAutonomousTask = useCallback((t: { id: string; title: string; status: string; description?: string; priority?: string; agentTarget?: string; model?: string; sourceType?: string; createdAt?: number; needsInput?: { reason?: string; note?: string }; run?: { status?: string; summary?: string; result?: string; error?: string }; artifacts?: Array<{ path?: string }>; feedback?: Array<{ by?: string; note?: string }>; linkedAutonomyRef?: { taskText?: string } }): Task => {
     const envelopeArtifacts = (() => {
       if (!t.run?.result) return [] as Array<{ path?: string; kind?: string }>;
       try {
@@ -696,11 +749,12 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails, 
         ? t.needsInput?.note ?? t.run?.summary ?? t.run?.error
         : normalizedRun.summary ?? t.run?.summary;
     const proof = normalizedRun.proof;
+    const category = autonomousCategoryFromLink(t.linkedAutonomyRef?.taskText);
     return {
       id: t.id,
       text: t.title,
       column: t.status === 'backlog' ? 'backlog' : t.status === 'in-progress' ? 'inprogress' : t.status === 'review' ? 'review' : t.status === 'done' ? 'done' : 'todo',
-      detail: { summary: `[Autonomous] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(resultSummary ? { completed: resultSummary } : {}), ...(proof ? { proof } : {}) },
+      detail: { summary: `[${category}] ${t.title}`, ...(t.description ? { why: t.description } : {}), ...(resultSummary ? { completed: resultSummary } : {}), ...(proof ? { proof } : {}) },
       meta: {
         priority: t.priority,
         agentTarget: t.agentTarget,

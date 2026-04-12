@@ -4,20 +4,23 @@ import { Component, type ErrorInfo, type ReactNode, useEffect } from 'react';
 import { MissionControlChatSurface } from '@/components/chat/MissionControlChatSurface';
 import { useMissionControlRuntime } from '@/components/chat/MissionControlRuntimeProvider';
 import type { ChatSeatActivation } from '@/lib/agents/chat-activation';
-import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
+import type { OrchestratorIntegrationSummary, RuntimeBridgeTranscriptHistory } from '@/lib/types/contracts';
 
 function MissionControlChatRuntimeInner({
   initialSummary,
+  initialTranscriptHistory,
   activation,
 }: {
   initialSummary: OrchestratorIntegrationSummary;
+  initialTranscriptHistory: RuntimeBridgeTranscriptHistory;
   activation: ChatSeatActivation | null;
 }) {
-  const { bridge, summary, hydrateSummary } = useMissionControlRuntime();
+  const { bridge, summary, hydrateSummary, hydrateTranscriptHistory } = useMissionControlRuntime();
 
   useEffect(() => {
     hydrateSummary(initialSummary);
-  }, [hydrateSummary, initialSummary]);
+    hydrateTranscriptHistory(initialTranscriptHistory);
+  }, [hydrateSummary, hydrateTranscriptHistory, initialSummary, initialTranscriptHistory]);
 
   return (
     <MissionControlChatSurface
@@ -30,6 +33,7 @@ function MissionControlChatRuntimeInner({
 
 type BoundaryProps = {
   initialSummary: OrchestratorIntegrationSummary;
+  initialTranscriptHistory: RuntimeBridgeTranscriptHistory;
   activation: ChatSeatActivation | null;
   children: ReactNode;
 };
@@ -80,18 +84,22 @@ class MissionControlChatErrorBoundary extends Component<BoundaryProps, BoundaryS
 
 export function MissionControlChatRuntime({
   initialSummary,
+  initialTranscriptHistory,
   activation = null,
 }: {
   initialSummary: OrchestratorIntegrationSummary;
+  initialTranscriptHistory: RuntimeBridgeTranscriptHistory;
   activation?: ChatSeatActivation | null;
 }) {
   return (
     <MissionControlChatErrorBoundary
       initialSummary={initialSummary}
+      initialTranscriptHistory={initialTranscriptHistory}
       activation={activation}
     >
       <MissionControlChatRuntimeInner
         initialSummary={initialSummary}
+        initialTranscriptHistory={initialTranscriptHistory}
         activation={activation}
       />
     </MissionControlChatErrorBoundary>

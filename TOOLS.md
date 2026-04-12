@@ -136,6 +136,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Recent Mission Control savepoint refs:
   - `projects/_ops/mc-savepoint-2026-04-09-evening.md`
   - `projects/_ops/mc-savepoint-2026-04-12-late-night.md`
+  - `projects/_ops/mc-savepoint-2026-04-12-chat-seat-bridge.md`
 - Preview runtime dependency note: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` and `projects/mission-control/scripts/preview-origin-proxy.js` require npm package `ws`; a passing Next.js build alone does not prove preview health if `ws` is missing
 - Chat component inventory note: current shared chat helpers include `projects/mission-control/components/chat/chat-rich-text.tsx`, `projects/mission-control/components/chat/chat-ui-helpers.ts`, and `projects/mission-control/components/chat/chat-tool-groups.tsx`
 - Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
@@ -168,6 +169,13 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Mission Control repo wrap rule:
   - `projects/mission-control` may commit cleanly inside its own nested repo while the outer workspace still has unwrapped file changes
   - before telling Philippe a Mission Control feature is live, do outer-workspace wrap + preview restart + one light verification pass against the integrated version
+- Apr 12 seat-bridge runtime truth:
+  - bridge entry points: `projects/mission-control/scripts/seat-bridge.mjs` and `/api/agents/seat-bridge`
+  - Sudo uses the real Mission Control orchestration backend
+  - Vantage uses persistent lead session `agent:main:content-seo-team-lead`
+  - specialist seats (`agent:language-tutor:main`, `agent:sportsbet-advisor:main`, `agent:trading-advisor:main`, `agent:job-advisor:main`) currently bridge as persistent seat sessions under the **main** runtime with seat-specific activation/continuity context
+  - current config truth: `openclaw agents list` shows only `main`; do not assume specialist seat slugs are valid `openclaw agent --agent ...` targets here unless runtime config changes later
+  - cross-session `sessions_send` is not a reliable bridge path in this setup because visibility is restricted; use the seat-bridge transport instead
 - Apr 11 Home/news posture:
   - Home now uses two equal-width vertically scrollable readers under the hero: `Market Watch` and `Custom News`
   - `Custom News` is generated from FD, NRC, and IEX into `projects/mission-control/data/custom-news-briefings.json`

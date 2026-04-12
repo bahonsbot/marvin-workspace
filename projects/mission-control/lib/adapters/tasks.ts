@@ -215,6 +215,12 @@ function parseCompletedEntries(tasksLog: string): number {
     .filter((line) => line.startsWith('- ✅')).length;
 }
 
+function extractAutonomousCategory(task: MCAutoTask): string {
+  const linkedText = task.linkedAutonomyRef?.taskText?.trim();
+  const match = linkedText?.match(/^\[(.+?)\]/);
+  return match?.[1]?.trim() || 'Autonomous';
+}
+
 async function resolveExistingArtifactPath(paths: string[]): Promise<string | undefined> {
   const preferredPath = selectPreferredArtifactPath(paths.map((path) => ({ path })));
   const orderedPaths = preferredPath ? [preferredPath, ...paths.filter((path) => path !== preferredPath)] : paths;
@@ -268,7 +274,7 @@ async function taskToBoardTask(task: MCAutoTask): Promise<BoardTask> {
       ? task.needsInput?.note ?? normalizedRunSummary ?? task.run?.error
       : runResult.summary ?? normalizedRunSummary ?? (task.run?.status === 'done' ? completionFallback : undefined);
   const detail: BoardTask['detail'] = {
-    summary: task.title,
+    summary: `[${extractAutonomousCategory(task)}] ${task.title}`,
     ...(task.description ? { why: task.description } : {}),
     ...(displaySummary ? { completed: displaySummary } : {}),
     ...(runResult.proof ? { proof: runResult.proof } : {}),

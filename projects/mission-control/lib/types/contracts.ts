@@ -374,6 +374,21 @@ export interface OrchestratorIntegrationSummary {
   refreshedAt: string;
 }
 
+export interface RuntimeBridgeTranscriptMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  body: string;
+  status: 'final' | 'streaming' | 'error';
+  sessionKey: string | null;
+  runId: string | null;
+  at: number;
+}
+
+export interface RuntimeBridgeTranscriptHistory {
+  sessionKey: string | null;
+  messages: RuntimeBridgeTranscriptMessage[];
+}
+
 export type MarketIntelOutcome = 'correct' | 'incorrect' | 'duplicate' | 'pending';
 
 export interface MarketIntelExecutionCandidate {

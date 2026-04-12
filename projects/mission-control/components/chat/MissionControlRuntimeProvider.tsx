@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from 'react';
 import { useRuntimeBridge, type RuntimeBridgeState } from '@/hooks/useRuntimeBridge';
-import type { OrchestratorIntegrationSummary, TaskLifecycleEvent } from '@/lib/types/contracts';
+import type { OrchestratorIntegrationSummary, RuntimeBridgeTranscriptHistory, TaskLifecycleEvent } from '@/lib/types/contracts';
 
 const LIFECYCLE_POLL_INTERVAL_MS = 4000;
 const TOAST_SEEN_STORAGE_KEY = 'mission-control-lifecycle-toast-seen';
@@ -29,6 +29,7 @@ type MissionControlRuntimeContextValue = {
   lifecycleEvents: TaskLifecycleEvent[];
   visibleToasts: MissionControlLifecycleToast[];
   hydrateSummary: (summary: OrchestratorIntegrationSummary) => void;
+  hydrateTranscriptHistory: (history: RuntimeBridgeTranscriptHistory) => void;
   dismissToast: (eventId: string) => void;
 };
 
@@ -49,20 +50,24 @@ function shouldReplaceSummary(
 
 function MissionControlRuntimeBridgeManager({
   summary,
+  transcriptHistory,
   lifecycleEvents,
   visibleToasts,
   hydrateSummary,
+  hydrateTranscriptHistory,
   dismissToast,
   children,
 }: {
   summary: OrchestratorIntegrationSummary;
+  transcriptHistory: RuntimeBridgeTranscriptHistory | null;
   lifecycleEvents: TaskLifecycleEvent[];
   visibleToasts: MissionControlLifecycleToast[];
   hydrateSummary: (summary: OrchestratorIntegrationSummary) => void;
+  hydrateTranscriptHistory: (history: RuntimeBridgeTranscriptHistory) => void;
   dismissToast: (eventId: string) => void;
   children: ReactNode;
 }) {
-  const bridge = useRuntimeBridge(summary);
+  const bridge = useRuntimeBridge(summary, transcriptHistory);
 
   const value = useMemo<MissionControlRuntimeContextValue>(
     () => ({
@@ -71,9 +76,10 @@ function MissionControlRuntimeBridgeManager({
       lifecycleEvents,
       visibleToasts,
       hydrateSummary,
+      hydrateTranscriptHistory,
       dismissToast,
     }),
-    [bridge, dismissToast, hydrateSummary, lifecycleEvents, visibleToasts],
+    [bridge, dismissToast, hydrateSummary, hydrateTranscriptHistory, lifecycleEvents, visibleToasts],
   );
 
   return <MissionControlRuntimeContext.Provider value={value}>{children}</MissionControlRuntimeContext.Provider>;
@@ -81,6 +87,7 @@ function MissionControlRuntimeBridgeManager({
 
 export function MissionControlRuntimeProvider({ children }: { children: ReactNode }) {
   const [summary, setSummary] = useState<OrchestratorIntegrationSummary | null>(null);
+  const [transcriptHistory, setTranscriptHistory] = useState<RuntimeBridgeTranscriptHistory | null>(null);
   const [lifecycleEvents, setLifecycleEvents] = useState<TaskLifecycleEvent[]>([]);
   const [visibleToasts, setVisibleToasts] = useState<MissionControlLifecycleToast[]>([]);
   const seenToastIdsRef = useRef<Set<string>>(new Set());
@@ -90,6 +97,19 @@ export function MissionControlRuntimeProvider({ children }: { children: ReactNod
 
   const hydrateSummary = useCallback((incoming: OrchestratorIntegrationSummary) => {
     setSummary((current) => (shouldReplaceSummary(current, incoming) ? incoming : current));
+  }, []);
+
+  const hydrateTranscriptHistory = useCallback((incoming: RuntimeBridgeTranscriptHistory) => {
+    setTranscriptHistory((current) => {
+      if (
+        current?.sessionKey === incoming.sessionKey &&
+        current.messages.length === incoming.messages.length &&
+        current.messages.every((message, index) => message.id === incoming.messages[index]?.id)
+      ) {
+        return current;
+      }
+      return incoming;
+    });
   }, []);
 
   const dismissToast = useCallback((eventId: string) => {
@@ -245,7 +265,15 @@ export function MissionControlRuntimeProvider({ children }: { children: ReactNod
   if (!summary) {
     return (
       <MissionControlRuntimeContext.Provider
-        value={{ bridge: null, summary: null, lifecycleEvents, visibleToasts, hydrateSummary, dismissToast }}
+        value={{
+          bridge: null,
+          summary: null,
+          lifecycleEvents,
+          visibleToasts,
+          hydrateSummary,
+          hydrateTranscriptHistory,
+          dismissToast,
+        }}
       >
         {children}
       </MissionControlRuntimeContext.Provider>
@@ -255,9 +283,11 @@ export function MissionControlRuntimeProvider({ children }: { children: ReactNod
   return (
     <MissionControlRuntimeBridgeManager
       summary={summary}
+      transcriptHistory={transcriptHistory}
       lifecycleEvents={lifecycleEvents}
       visibleToasts={visibleToasts}
       hydrateSummary={hydrateSummary}
+      hydrateTranscriptHistory={hydrateTranscriptHistory}
       dismissToast={dismissToast}
     >
       {children}

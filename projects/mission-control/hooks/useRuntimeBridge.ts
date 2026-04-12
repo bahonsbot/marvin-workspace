@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
+import type { OrchestratorIntegrationSummary, RuntimeBridgeTranscriptHistory, RuntimeBridgeTranscriptMessage } from '@/lib/types/contracts';
 
 type RuntimeBridgeWsState = 'unavailable' | 'connecting' | 'open' | 'closed' | 'error';
 type RuntimeBridgeSessionState =
@@ -52,6 +52,10 @@ export type RuntimeBridgeChatMessage = {
   status: 'pending' | 'streaming' | 'final' | 'error';
   at: number;
 };
+
+function isTranscriptMessage(message: RuntimeBridgeChatMessage): message is RuntimeBridgeChatMessage & RuntimeBridgeTranscriptMessage {
+  return message.role === 'user' || message.role === 'assistant';
+}
 
 export type RuntimeBridgeToolEvent = {
   stream: 'tool';
@@ -458,7 +462,24 @@ function upsertAssistantMessage(params: {
   );
 }
 
-export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary): RuntimeBridgeState {
+function buildSeededMessages(
+  initialSessionKey: string | null,
+  initialTranscriptHistory: RuntimeBridgeTranscriptHistory | null | undefined,
+): RuntimeBridgeChatMessage[] {
+  if (!initialSessionKey) return [];
+  if (!initialTranscriptHistory) return [];
+  if (initialTranscriptHistory.sessionKey !== initialSessionKey) return [];
+  return initialTranscriptHistory.messages;
+}
+
+export function useRuntimeBridge(
+  initialSummary: OrchestratorIntegrationSummary,
+  initialTranscriptHistory: RuntimeBridgeTranscriptHistory | null = null,
+): RuntimeBridgeState {
+  const seededMessages = useMemo(
+    () => buildSeededMessages(chooseTargetSession(initialSummary).key, initialTranscriptHistory),
+    [initialSummary, initialTranscriptHistory],
+  );
   const [summary, setSummary] = useState(initialSummary);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -468,7 +489,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [session, setSession] = useState<RuntimeBridgeSessionSnapshot>(
     createEmptySession('unavailable', 'No Mission Control WS sidecar descriptor is available for this preview.'),
   );
-  const [messages, setMessages] = useState<RuntimeBridgeChatMessage[]>([]);
+  const [messages, setMessages] = useState<RuntimeBridgeChatMessage[]>(seededMessages);
   const [events, setEvents] = useState<RuntimeBridgeLiveEvent[]>([]);
   const [notices, setNotices] = useState<RuntimeBridgeTransientNotice[]>([]);
   const [sendState, setSendState] = useState<RuntimeBridgeSendState>('idle');
@@ -477,12 +498,15 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [activeSessionKey, setActiveSessionKey] = useState<string | null>(() => chooseTargetSession(initialSummary).key);
   const [reconnectNonce, setReconnectNonce] = useState(0);
   const mountedRef = useRef(true);
+  const messagesRef = useRef<RuntimeBridgeChatMessage[]>(seededMessages);
   const activeSessionKeyRef = useRef<string | null>(chooseTargetSession(initialSummary).key);
   const sessionGenerationRef = useRef(0);
-  const hydratedSessionKeyRef = useRef<string | null>(null);
+  const hydratedSessionKeyRef = useRef<string | null>(initialTranscriptHistory?.sessionKey ?? null);
   const noticeSignaturesRef = useRef<Set<string>>(new Set());
   const instanceIdRef = useRef(getOrCreateInstanceId());
   const socketRef = useRef<WebSocket | null>(null);
+  const websocketGenerationRef = useRef(0);
+  const handleGatewayEventRef = useRef<(message: GatewayEventMessage) => void>(() => {});
   const pendingRef = useRef<Record<string, PendingRequest>>({});
   const pendingTimeoutsRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const lastSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
@@ -560,6 +584,19 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   }, [initialSummary]);
 
   useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
+  useEffect(() => {
+    const initialSessionKey = chooseTargetSession(initialSummary).key;
+    if (!initialSessionKey) return;
+    if (initialTranscriptHistory?.sessionKey !== initialSessionKey) return;
+
+    hydratedSessionKeyRef.current = initialTranscriptHistory.sessionKey;
+    setMessages((current) => mergeHydratedMessages(current, initialTranscriptHistory.messages, initialSessionKey));
+  }, [initialSummary, initialTranscriptHistory]);
+
+  useEffect(() => {
     activeSessionKeyRef.current = activeSessionKey;
   }, [activeSessionKey]);
 
@@ -569,6 +606,69 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setActiveSessionKey(defaultTargetSession.key);
     }
   }, [activeSessionKey, defaultTargetSession.key]);
+
+  const applyHydratedHistory = useCallback((
+    requestedSessionKey: string | null,
+    incomingHistory: RuntimeBridgeTranscriptHistory,
+    capturedGeneration: number,
+  ) => {
+    if (!requestedSessionKey) return;
+    if (capturedGeneration !== sessionGenerationRef.current) return;
+    if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return;
+    if (incomingHistory.sessionKey !== requestedSessionKey) return;
+
+    const hydratedSessionKey = incomingHistory.sessionKey ?? null;
+    const incomingMessages = incomingHistory.messages ?? [];
+
+    setMessages((current) => {
+      if (capturedGeneration !== sessionGenerationRef.current) return current;
+      if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return current;
+
+      const scopedCurrent = current.filter((message) => message.sessionKey === hydratedSessionKey || message.sessionKey === null);
+      const hasScopedTranscript = scopedCurrent.some((message) => message.role === 'user' || message.role === 'assistant');
+      const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
+      const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || !hasScopedTranscript);
+      hydratedSessionKeyRef.current = hydratedSessionKey;
+      if (!shouldHydrate) return current;
+
+      return mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
+    });
+  }, [defaultTargetSession.key]);
+
+  const hydrateHistory = useCallback(async (sessionKey: string | null, options?: { force?: boolean }) => {
+    if (!sessionKey) return;
+
+    const scopedMessages = messagesRef.current.filter((message) => message.sessionKey === sessionKey || message.sessionKey === null);
+    const hasScopedTranscript = scopedMessages.some(isTranscriptMessage);
+    if (!options?.force && hydratedSessionKeyRef.current === sessionKey && hasScopedTranscript) {
+      return;
+    }
+
+    const capturedGeneration = sessionGenerationRef.current;
+
+    try {
+      const res = await fetch(`/api/runtime-bridge/history?sessionKey=${encodeURIComponent(sessionKey)}`, {
+        cache: 'no-store',
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`Runtime bridge history request failed (${res.status})`);
+      }
+
+      const payload = (await res.json()) as RuntimeBridgeTranscriptHistory;
+      if (!mountedRef.current) return;
+      applyHydratedHistory(sessionKey, payload, capturedGeneration);
+    } catch (cause) {
+      if (!mountedRef.current) return;
+      console.error('[mission-control-runtime] transcript hydration failed', {
+        sessionKey,
+        error: cause instanceof Error ? cause.message : cause,
+      });
+    }
+  }, [applyHydratedHistory]);
 
   const load = useCallback(async (isBackgroundRefresh: boolean) => {
     const requestedSessionKey = activeSessionKeyRef.current ?? defaultTargetSession.key;
@@ -581,8 +681,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     }
 
     try {
-      const sessionQuery = requestedSessionKey ? `?sessionKey=${encodeURIComponent(requestedSessionKey)}` : '';
-      const res = await fetch(`/api/runtime-bridge${sessionQuery}`, {
+      const res = await fetch('/api/runtime-bridge', {
         cache: 'no-store',
         headers: {
           Accept: 'application/json',
@@ -593,35 +692,12 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         throw new Error(`Runtime bridge request failed (${res.status})`);
       }
 
-      const payload = (await res.json()) as OrchestratorIntegrationSummary & {
-        transcriptHistory?: {
-          sessionKey?: string | null;
-          messages?: RuntimeBridgeChatMessage[];
-        };
-      };
+      const payload = (await res.json()) as OrchestratorIntegrationSummary;
       if (!mountedRef.current) return;
       if (capturedGeneration !== sessionGenerationRef.current) return;
       if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return;
 
       setSummary(payload);
-      if (payload.transcriptHistory?.sessionKey && payload.transcriptHistory.sessionKey === requestedSessionKey) {
-        const hydratedSessionKey = payload.transcriptHistory.sessionKey ?? null;
-        const incomingMessages = payload.transcriptHistory?.messages ?? [];
-
-        setMessages((current) => {
-          if (capturedGeneration !== sessionGenerationRef.current) return current;
-          if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return current;
-
-          const scopedCurrent = current.filter((message) => message.sessionKey === hydratedSessionKey || message.sessionKey === null);
-          const hasScopedTranscript = scopedCurrent.some((message) => message.role === 'user' || message.role === 'assistant');
-          const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
-          const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || !hasScopedTranscript);
-          if (!shouldHydrate) return current;
-
-          hydratedSessionKeyRef.current = hydratedSessionKey;
-          return mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
-        });
-      }
       setError(null);
     } catch (cause) {
       if (!mountedRef.current) return;
@@ -640,9 +716,10 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   }, [defaultTargetSession.key]);
 
   useEffect(() => {
-    if (!activeSessionKey) return;
+    const requestedSessionKey = activeSessionKeyRef.current ?? defaultTargetSession.key;
     void load(true);
-  }, [activeSessionKey, load]);
+    void hydrateHistory(requestedSessionKey);
+  }, [defaultTargetSession.key, hydrateHistory, load]);
 
   useEffect(() => {
     if (lastSessionStateRef.current === session.state) return;
@@ -730,6 +807,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       const payload = asRecord(message.payload);
       const eventRunId = typeof payload?.runId === 'string' ? payload.runId : null;
       const eventSessionKey = typeof payload?.sessionKey === 'string' ? payload.sessionKey : null;
+      const targetSessionKey = activeSessionKeyRef.current ?? defaultTargetSession.key;
 
       const tool = extractToolEvent(payload);
       const runtimeNotice = detectRuntimeNotice(payload);
@@ -780,7 +858,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       }
 
       if (eventName !== 'chat') return;
-      if (eventSessionKey && liveTargetSession.key && eventSessionKey !== liveTargetSession.key) return;
+      if (eventSessionKey && targetSessionKey && eventSessionKey !== targetSessionKey) return;
 
       const chatState = typeof payload?.state === 'string' ? payload.state : null;
       if (eventRunId) setActiveRunId(eventRunId);
@@ -797,7 +875,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         setMessages((current) =>
           upsertAssistantMessage({
             messages: current,
-            sessionKey: eventSessionKey ?? liveTargetSession.key,
+            sessionKey: eventSessionKey ?? targetSessionKey,
             runId: eventRunId,
             text: deltaText,
             status: 'streaming',
@@ -813,7 +891,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
           setMessages((current) =>
             upsertAssistantMessage({
               messages: current,
-              sessionKey: eventSessionKey ?? liveTargetSession.key,
+              sessionKey: eventSessionKey ?? targetSessionKey,
               runId: eventRunId,
               text: finalText,
               status: 'final',
@@ -822,7 +900,10 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         }
         setSendState('idle');
         // Refresh snapshot after chat completion to pick up cross-device messages
-        void load(true);
+        void Promise.all([
+          load(true),
+          hydrateHistory(targetSessionKey, { force: true }),
+        ]);
         return;
       }
 
@@ -842,7 +923,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               id: generateId('mc-system'),
               role: 'system',
               body: problem,
-              sessionKey: eventSessionKey ?? liveTargetSession.key,
+              sessionKey: eventSessionKey ?? targetSessionKey,
               runId: eventRunId,
               status: 'error',
               at: Date.now(),
@@ -851,7 +932,10 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
           ),
         );
         // Also refresh on error to keep snapshot in sync
-        void load(true);
+        void Promise.all([
+          load(true),
+          hydrateHistory(targetSessionKey, { force: true }),
+        ]);
         return;
       }
 
@@ -866,7 +950,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               id: generateId('mc-event'),
               name: 'chat.aborted',
               detail: 'Chat run aborted.',
-              sessionKey: eventSessionKey ?? liveTargetSession.key,
+              sessionKey: eventSessionKey ?? targetSessionKey,
               runId: eventRunId,
               seq: typeof payload?.seq === 'number' ? payload.seq : null,
               at: Date.now(),
@@ -876,11 +960,18 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
           ),
         );
         // Refresh after abort so snapshot stays aligned, but do not surface it as a fatal UI error.
-        void load(true);
+        void Promise.all([
+          load(true),
+          hydrateHistory(targetSessionKey, { force: true }),
+        ]);
       }
     },
-    [liveTargetSession.key, load],
+    [defaultTargetSession.key, hydrateHistory, load],
   );
+
+  useEffect(() => {
+    handleGatewayEventRef.current = handleGatewayEvent;
+  }, [handleGatewayEvent]);
 
   const runtimeBridgeWebsocketConfigured = summary.runtimeBridge.transport.websocket.configured;
   const runtimeBridgeBrowserReachability = summary.runtimeBridge.transport.websocket.browserReachability;
@@ -894,6 +985,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     const bridgeToken = runtimeBridgeWebsocketBridgeToken;
     const baseUrl = runtimeBridgeWebsocketBaseUrl;
     const gatewaySessionToken = runtimeBridgeGatewaySessionToken;
+    const websocketGeneration = ++websocketGenerationRef.current;
 
     if (!transportConfigured || !bridgeToken || !baseUrl) {
       socketRef.current = null;
@@ -940,7 +1032,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     }
 
     socket.onopen = () => {
-      if (cancelled) return;
+      if (cancelled || websocketGeneration !== websocketGenerationRef.current) return;
       reconnectAttemptRef.current = 0;
       if (reconnectTimerRef.current) {
         clearTimeout(reconnectTimerRef.current);
@@ -957,7 +1049,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     };
 
     socket.onmessage = (event) => {
-      if (cancelled || typeof event.data !== 'string') return;
+      if (cancelled || websocketGeneration !== websocketGenerationRef.current || typeof event.data !== 'string') return;
 
       let message: GatewayMessage;
       try {
@@ -977,7 +1069,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               lastEvent: eventName,
               eventCount: current.eventCount + 1,
             }));
-            handleGatewayEvent(message);
+            handleGatewayEventRef.current(message);
             return;
           }
 
@@ -993,7 +1085,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
           }));
 
           if (!gatewaySessionToken || !socket || socket.readyState !== WebSocket.OPEN || connectRequestId) {
-            handleGatewayEvent(message);
+            handleGatewayEventRef.current(message);
             return;
           }
 
@@ -1020,7 +1112,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               },
             }),
           );
-          handleGatewayEvent(message);
+          handleGatewayEventRef.current(message);
           return;
         }
 
@@ -1033,7 +1125,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
               ? `Gateway session active. Last event: ${eventName}.`
               : current.detail,
         }));
-        handleGatewayEvent(message);
+        handleGatewayEventRef.current(message);
         return;
       }
 
@@ -1099,7 +1191,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     };
 
     socket.onerror = () => {
-      if (cancelled) return;
+      if (cancelled || websocketGeneration !== websocketGenerationRef.current) return;
       setWsState('error');
       setWsDetail('Mission Control could not keep a browser socket attached to the WS sidecar. Retrying shortly.');
       setSession((current) => ({
@@ -1111,7 +1203,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     };
 
     socket.onclose = (event) => {
-      if (cancelled) return;
+      if (cancelled || websocketGeneration !== websocketGenerationRef.current) return;
       socketRef.current = null;
       const shouldRetry = event.code !== 1000 && event.code !== 1001;
       rejectPending(new Error('Mission Control gateway transport closed.'));
@@ -1153,7 +1245,6 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       socket?.close();
     };
   }, [
-    handleGatewayEvent,
     reconnectNonce,
     rejectPending,
     runtimeBridgeWebsocketBaseUrl,
@@ -1327,7 +1418,10 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       abortPrompt,
     },
     refresh: async () => {
-      await load(true);
+      await Promise.all([
+        load(true),
+        hydrateHistory(activeSessionKeyRef.current ?? defaultTargetSession.key, { force: true }),
+      ]);
     },
     switchSession: async (sessionKey: string) => {
       sessionGenerationRef.current += 1;
@@ -1341,8 +1435,9 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setSendError(null);
       setSendState('idle');
       setActiveRunId(null);
+      const historyPromise = hydrateHistory(sessionKey, { force: true });
       await ensureSessionExists(sessionKey);
-      await load(true);
+      await Promise.all([historyPromise, load(true)]);
     },
   };
 }
