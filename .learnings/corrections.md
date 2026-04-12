@@ -61,6 +61,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 <!-- New entries go at top -->
 
+## [CORR-20260412-1956]
+
+**Trigger:** Philippe clarified that autonomous task category tags do not need to be part of the visible task title and should live only in the category/icon pill treatment.
+**What was wrong:** Generated/stored autonomous task titles were still carrying bracketed category tags like `[Trading]` and `[Other]`, which added clutter and made titles less readable.
+**Lesson:** For Mission Control autonomous tasks, keep the category in its dedicated visual lane (pill/icon/metadata), not in the human-facing title text itself.
+
+**Priority:** medium
+**Status:** active
+
+
 ## [CORR-20260412-0018]
 
 **Trigger:** After the VPS rollback, Philippe explicitly said the rollback had been done at a clean and safe state and warned that what was on git might be corrupted, asking me to rebuild/restart preview so he could verify the actual current baseline first.

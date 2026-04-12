@@ -27,12 +27,13 @@
 ## Needs Input
 ## In Progress
 ## Open Backlog
-## Done
 
-- (2026-03-24) [Career] 📝 Draft: 3 Instagram content angles tied to After Effects motion design project → projects/portfolio/content-plan-ae-motion-design.md
-- (2026-03-24) [Other] 🔧 Fix: OpenClaw helper utility generation improved; daily-task-generator now produces concrete script deliverables
-- (2026-03-24) [Career] 🔨 Build: daily creative challenge generator → projects/creative-challenges/index.html + README.md
-- (2026-03-24) [Career] 🚀 Launch: portfolio case-study draft → projects/portfolio/case-studies/motion-design-loop.md
-- (2026-03-24) [Trading] 🔧 Fix: safe improvement in trading-bot workspace → bot-support-spec-health-snapshot-reporter-2026-03-16.md
-- (2026-03-24) [Personal] 📚 Learn: Japanese study pack (greetings lesson) → projects/language/lesson-01-greetings.md
+- [Trading] Draft: Improve the current signal tracking and...
+**Brief:** define one concrete next-step deliverable for this goal: Find ways to improve the current signal tracking and evidence verification.; deliverable: markdown note with exact output, success criteria, and next action
+| Why: Makes tangible progress toward: Find ways to improve the current signal tracking a | Proof: Task artifact exists and matches requirements | Unlocks: Advances goal progress measurably
+- [Career] Practice: Blender primitives exercise
+**Brief:** choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist
+| Why: Directly builds 3D modeling and animation skill through Philippe-owned practice | Proof: Task produces a practice brief or exercise artifact plus clear learning notes tied to Blender/3D skill | Unlocks: Progress toward: Complete one procedural modeling tutorial
+
+
 ## Review

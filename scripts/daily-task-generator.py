@@ -365,6 +365,10 @@ def clean_goal_title(goal):
     return shorten_generated_title(cleaned)
 
 
+def strip_category_tag(title):
+    return re.sub(r'^\[[^\]]+\]\s*', '', title.strip())
+
+
 def extract_task_title_and_description(task_text):
     normalized = task_text.replace('\r\n', '\n').strip()
     if not normalized:
@@ -382,13 +386,14 @@ def extract_task_title_and_description(task_text):
             break
 
     title = normalize_task_title(title, description)
-    return title, description
+    return strip_category_tag(title), description
 
 
 def normalize_task_title(title, description=None):
-    match = re.match(r'^(.*?:\s*)an actionable next step toward:\s*(.*)$', title.strip(), flags=re.IGNORECASE)
+    stripped_title = strip_category_tag(title)
+    match = re.match(r'^(.*?:\s*)an actionable next step toward:\s*(.*)$', stripped_title.strip(), flags=re.IGNORECASE)
     if not match:
-        return title.strip()
+        return stripped_title.strip()
 
     candidate = clean_generated_brief(description or match.group(2))
     candidate = re.sub(r'^find ways to\s*', '', candidate, flags=re.IGNORECASE)
