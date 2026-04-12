@@ -343,7 +343,10 @@ def has_content_source_work():
 def clean_generated_brief(text):
     if not text:
         return text
-    return re.sub(r'^an actionable next step toward:\s*', '', text.strip(), flags=re.IGNORECASE).strip()
+    cleaned = re.sub(r'^an actionable next step toward:\s*', '', text.strip(), flags=re.IGNORECASE).strip()
+    if not cleaned:
+        return cleaned
+    return cleaned[0].upper() + cleaned[1:]
 
 
 def shorten_generated_title(text, max_length=None):
