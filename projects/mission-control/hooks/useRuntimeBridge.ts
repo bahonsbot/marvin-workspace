@@ -1176,7 +1176,12 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         throw new Error('No visible runtime session is available for Mission Control to target.');
       }
 
+      const capturedGeneration = sessionGenerationRef.current;
+
       await ensureSessionExists(sessionKey);
+
+      if (capturedGeneration !== sessionGenerationRef.current) return;
+      if (activeSessionKeyRef.current !== sessionKey) return;
 
       setActiveSessionKey(sessionKey);
       setSendState('sending');
@@ -1204,6 +1209,9 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
           deliver: false,
           idempotencyKey: generateId('mc-chat-send'),
         })) as Record<string, unknown> | null;
+        if (capturedGeneration !== sessionGenerationRef.current) return;
+        if (activeSessionKeyRef.current !== sessionKey) return;
+
         const runId = typeof ack?.runId === 'string' ? ack.runId : null;
         const status = typeof ack?.status === 'string' ? ack.status : null;
         setActiveRunId(runId);
@@ -1225,6 +1233,9 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         );
         setSendState(status === 'ok' ? 'idle' : 'streaming');
       } catch (cause) {
+        if (capturedGeneration !== sessionGenerationRef.current) return;
+        if (activeSessionKeyRef.current !== sessionKey) return;
+
         const message = cause instanceof Error ? cause.message : 'Mission Control could not send the prompt.';
         setSendState('error');
         setSendError(message);
@@ -1258,8 +1269,13 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       throw new Error('No visible runtime session is available for Mission Control to stop.');
     }
 
+    const capturedGeneration = sessionGenerationRef.current;
+
     try {
       await rpc('chat.abort', { sessionKey });
+      if (capturedGeneration !== sessionGenerationRef.current) return;
+      if (activeSessionKeyRef.current !== sessionKey) return;
+
       setSendError(null);
       setSendState('idle');
       setActiveRunId(null);
@@ -1280,6 +1296,9 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         ),
       );
     } catch (cause) {
+      if (capturedGeneration !== sessionGenerationRef.current) return;
+      if (activeSessionKeyRef.current !== sessionKey) return;
+
       const message = cause instanceof Error ? cause.message : 'Mission Control could not stop the active response.';
       setSendError(message);
       throw cause;
