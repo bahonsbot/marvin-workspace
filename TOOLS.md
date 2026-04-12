@@ -69,7 +69,7 @@ Avoid duplication:
   4. apply/restart on the host so the allowlist change takes effect
 
 ### Infrastructure
-- Host: Hostinger VPS (`Linux 6.8.0-106-generic`)
+- Host: Hostinger VPS (`Linux 6.8.0-107-generic`)
 - Runtime: Docker (OpenClaw)
 - Workspace: `/data/.openclaw/workspace`
 - Primary operator user: `node`
