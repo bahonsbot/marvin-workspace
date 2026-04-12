@@ -162,11 +162,16 @@ GOAL_TYPE_MAP = {
 def classify_goal(goal_text):
     """Map a goal to goal_type, target_outcome, and relevant_skill."""
     goal_lower = goal_text.lower()
-    
+
+    if any(phrase in goal_lower for phrase in ("automation script", "automation scripts", "automating routine tasks", "procedural scene setup")):
+        return "automation", "build workflow automation", "python"
+    if "openclaw" in goal_lower and any(phrase in goal_lower for phrase in ("logs", "looping", "recursive", "reactive", "proactive")):
+        return "ops", "improve OpenClaw workflows", "python"
+
     for keyword, (goal_type, target, skill) in GOAL_TYPE_MAP.items():
         if keyword in goal_lower:
             return goal_type, target, skill
-    
+
     return "general", "make progress on goal", None
 
 
@@ -341,9 +346,9 @@ def clean_generated_brief(text):
     return re.sub(r'^an actionable next step toward:\s*', '', text.strip(), flags=re.IGNORECASE).strip()
 
 
-def shorten_generated_title(text, max_length=48):
+def shorten_generated_title(text, max_length=None):
     text = re.sub(r'\s+', ' ', text.strip())
-    if len(text) <= max_length:
+    if not max_length or len(text) <= max_length:
         return text
     sliced = text[: max_length - 3]
     last_space = sliced.rfind(' ')
@@ -359,10 +364,10 @@ def clean_goal_title(goal):
     cleaned = re.sub(r'^ways to\s*', '', cleaned, flags=re.IGNORECASE)
     cleaned = re.sub(r'^how to\s*', '', cleaned, flags=re.IGNORECASE)
     cleaned = cleaned.strip(' .:-')
+    cleaned = re.sub(r'\s+', ' ', cleaned)
     if not cleaned:
         return 'Concrete next step'
-    cleaned = cleaned[0].upper() + cleaned[1:]
-    return shorten_generated_title(cleaned)
+    return cleaned[0].upper() + cleaned[1:]
 
 
 def strip_category_tag(title):
@@ -428,25 +433,82 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
     proof = generate_proof(goal_type)
     unlocks = generate_unlocks(goal_type, skill)
 
-    if 'blender' in goal_lower:
+    task_title = None
+
+    if any(phrase in goal_lower for phrase in ("automation script", "automation scripts", "automating routine tasks", "procedural scene setup")):
+        task_prefix = "Draft"
+        task_title = "Creative-tool automation script plan"
+        task_desc = "define one scoped automation script for Blender, Unreal Engine, or After Effects that removes a real repetitive setup step; deliverable: markdown spec in projects/creative-practice/ or the relevant tool workspace with target app, inputs/outputs, edge cases, and first prototype step"
+        why = "Reduces repetitive manual setup work while moving directly toward the current creative-tool automation goal"
+        proof = "Spec names one target app, one concrete repetitive task, the intended input/output flow, and a believable first prototype scope"
+        unlocks = "Unlocks a first real automation prototype instead of another generic practice exercise"
+    elif "actionable alpha" in goal_lower or ("ui/ux" in goal_lower and "trading dashboard" in goal_lower) or ("aggregate sentiment" in goal_lower and "fundamental" in goal_lower):
+        task_prefix = "Draft"
+        task_title = "Actionable Alpha dashboard slice"
+        task_desc = "spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support"
+        why = "Turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next"
+        proof = "Spec defines one named module, its inputs, presentation logic, and why it improves trading decisions"
+        unlocks = "Unlocks a buildable next UI/UX implementation step for the trading dashboard"
+    elif "real-time data ingestion" in goal_lower or ("api" in goal_lower and "trading data" in goal_lower):
+        task_prefix = "Research"
+        task_title = "Real-time trading API shortlist"
+        task_desc = "compare 3 candidate APIs for real-time market-data ingestion and score them on latency, coverage, pricing, integration friction, and output usefulness; deliverable: markdown shortlist in projects/market-intel/notes/ with a recommendation and integration notes"
+        why = "Bridges the gap between raw market data sources and a real integration decision instead of leaving the API goal vague"
+        proof = "Shortlist names 3 concrete APIs with decision criteria, recommendation, and next integration step"
+        unlocks = "Unlocks a more credible real-time data integration task for the trading stack"
+    elif "sec filings" in goal_lower or "quarterly reports" in goal_lower or "sensitivity-analysis" in goal_lower:
+        task_prefix = "Draft"
+        task_title = "SEC filing ingestion pipeline"
+        task_desc = "define a first-pass pipeline that pulls SEC filings and quarterly reports for a small ticker set, extracts the inputs needed for sensitivity ranges, and maps the outputs into the dashboard; deliverable: markdown pipeline note in projects/market-intel/notes/ with source flow, parser stages, and storage/output contract"
+        why = "Makes the filings-and-sensitivity goal concrete enough to implement in stages"
+        proof = "Pipeline note defines source, extraction stages, target output fields, and one believable starter ticker set"
+        unlocks = "Unlocks a scoped implementation task for filings ingestion instead of leaving the goal at idea level"
+    elif "signal tracking" in goal_lower or "evidence verification" in goal_lower:
+        task_prefix = "Analyze"
+        task_title = "Signal evidence-verification gaps"
+        task_desc = "audit the current signal tracking flow and identify the top 3 gaps in evidence capture, reviewability, or outcome linkage; deliverable: markdown audit in projects/market-intel/notes/ with the current flow, concrete gaps, and one recommended first fix"
+        why = "Targets the exact signal-tracking goal directly instead of hiding it behind a generic next-step placeholder"
+        proof = "Audit names the current flow, at least 3 concrete gaps, and one prioritized improvement with rationale"
+        unlocks = "Unlocks a sharper implementation task for signal evidence and review quality"
+    elif "openclaw" in goal_lower and any(phrase in goal_lower for phrase in ("logs", "looping", "repetitive prompts")):
+        task_prefix = "Analyze"
+        task_title = "OpenClaw loop-pattern audit"
+        task_desc = "review recent OpenClaw logs to identify one concrete repetitive prompt or looping behavior, then propose a bounded gate, prompt fix, or tool-definition improvement; deliverable: markdown audit in projects/_ops/ with evidence, root-cause hypothesis, and recommended guard"
+        why = "Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output"
+        proof = "Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift"
+        unlocks = "Unlocks a safer token-efficiency or reliability fix with clear evidence behind it"
+    elif "proactive operations manager" in goal_lower or "reactive" in goal_lower or "recursive" in goal_lower:
+        task_prefix = "Draft"
+        task_title = "Proactive operations guardrails"
+        task_desc = "define one safe recursive operations loop for OpenClaw that improves self-checking without overreach; deliverable: markdown guardrail note in projects/_ops/ covering trigger, allowed actions, stop conditions, rollback, and operator visibility"
+        why = "Moves the proactive-operations goal toward an explicit safe operating loop instead of a vague ambition"
+        proof = "Guardrail note defines one bounded loop with clear trigger, limits, escalation path, and rollback"
+        unlocks = "Unlocks a safer proactive-ops prototype without blurring governance boundaries"
+    elif 'blender' in goal_lower:
         task_prefix = "Practice"
+        task_title = "Blender primitives exercise"
         task_desc = "choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist"
     elif 'after effects' in goal_lower or 'after_effects' in goal_lower:
         task_prefix = "Practice"
+        task_title = "AE keyframe practice"
         task_desc = "create one After Effects practice brief focused on keyframes, easing, or a simple loop; deliverable: markdown exercise in projects/creative-practice/ with references and execution checklist"
     elif 'unreal' in goal_lower:
         task_prefix = "Practice"
+        task_title = "UE scene setup"
         task_desc = "prepare one scoped Unreal practice exercise using pre-made assets and one mechanic only; deliverable: scene brief in projects/game-dev/ with setup steps and success checklist"
     elif 'portfolio' in goal_lower:
         task_prefix = "Analyze"
+        task_title = "Portfolio direction check"
         task_desc = "rank 3 portfolio directions or existing projects by creative relevance and personal ownership; deliverable: markdown shortlist in projects/portfolio/ with recommendation for what Philippe should build next"
     elif 'instagram' in goal_lower or 'social' in goal_lower:
         if not has_content_source_work():
             return None
         task_prefix = "Draft"
+        task_title = "Instagram content angles"
         task_desc = "draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle"
     elif 'python' in goal_lower:
         task_prefix = "Practice"
+        task_title = "Python practice sheet"
         if level == "novice":
             task_desc = "create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises"
             proof = "Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts"
@@ -458,38 +520,47 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
             proof = "Exercise clearly advances the next Python milestone with both comprehension and practice"
     elif 'japanese' in goal_lower:
         task_prefix = "Practice"
+        task_title = "Japanese study pack"
         task_desc = "create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts"
     elif 'business analysis' in goal_lower or 'financial' in goal_lower:
         task_prefix = "Practice"
+        task_title = "Business metrics lesson"
         task_desc = "create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts"
         proof = "Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice"
         unlocks = "Unlocks later analysis tasks based on real followed companies once the watchlist is defined"
     elif 'equity' in goal_lower or 'futures' in goal_lower:
         task_prefix = "Fix"
+        task_title = "Trading bot reliability spec"
         task_desc = "identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder"
         proof = "Spec targets a real bot-support improvement and avoids unsafe live-trading config changes"
         unlocks = "Unlocks a higher-quality system improvement task for the trading bots"
     elif 'trading' in goal_lower:
         task_prefix = "Analyze"
+        task_title = "Trading setup checklist"
         task_desc = "prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules"
     elif 'automate' in goal_lower:
         task_prefix = "Fix"
+        task_title = "Workspace automation helper"
         task_desc = "build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output"
         proof = "Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config"
     elif 'openclaw' in goal_lower:
         task_prefix = "Fix"
+        task_title = "OpenClaw helper utility"
         task_desc = "build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note"
         proof = "Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations"
     elif 'saas' in goal_lower or 'product' in goal_lower:
         task_prefix = "Draft"
+        task_title = "Thin MVP increment"
         task_desc = "define one thin MVP increment with explicit scope, dependencies, and success criteria; deliverable: spec note in the relevant project folder"
     elif 'partnership' in goal_lower or 'community' in goal_lower:
         task_prefix = "Draft"
+        task_title = "Outreach target list"
         task_desc = "create a ranked outreach target list of 10 relevant people or communities; deliverable: markdown list in projects/outreach/ with rationale"
     else:
         task_prefix = "Draft"
+        task_title = clean_goal_title(goal)
         task_desc = (
-            f"define one concrete next-step deliverable for this goal: {goal[:80]}; "
+            f"define one concrete next-step deliverable for this goal: {goal}; "
             "deliverable: markdown note with exact output, success criteria, and next action"
         )
 
@@ -501,37 +572,16 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
             if focus_text:
                 unlocks = f"Focus on {focus_text}. {unlocks}"
 
-    # Derive a SHORT title from the goal, NOT from task_desc's first clause.
-    # Title = concise summary. Brief = actionable detail.
     def _short_title(goal, category, prefix, task_desc):
-        short_goals = {
-            "japanese": "Japanese study pack",
-            "blender": "Blender primitives exercise",
-            "after effects": "AE keyframe practice",
-            "unreal": "UE scene setup",
-            "python": "Python practice sheet",
-            "portfolio": "Portfolio direction check",
-            "instagram": "Instagram content angles",
-            "business analysis": "Business metrics lesson",
-            "equity": "Equity bot improvement",
-            "futures": "Futures bot improvement",
-            "trading": "Trading workspace improvement",
-            "automate": "Workspace automation helper",
-            "openclaw": "OpenClaw helper utility",
-        }
-        goal_l = goal.lower()
-        for key, title in short_goals.items():
-            if key in goal_l:
-                return title
         fallback = task_desc.split(";")[0].strip()
-        for pfx in ("create one ", "identify ", "build ", "prepare ", "define ", "choose one ", "draft "):
+        for pfx in ("create one ", "identify ", "build ", "prepare ", "define ", "choose one ", "draft ", "review ", "compare ", "spec "):
             if fallback.startswith(pfx):
                 fallback = fallback[len(pfx):]
         if fallback.lower().startswith("one concrete next-step deliverable for this goal:"):
             return clean_goal_title(goal)
         return shorten_generated_title(fallback.capitalize())
 
-    task_title = _short_title(goal, category, task_prefix, task_desc)
+    task_title = task_title or _short_title(goal, category, task_prefix, task_desc)
     task = (
         f"[{category}] {task_prefix}: {task_title}\n"
         f"**Brief:** {task_desc}\n"
@@ -544,7 +594,7 @@ def maybe_add_surprise_mvp(tasks, goals, seen):
     """Add at most one useful surprise MVP in system/tool/project-improvement lanes."""
     import random
 
-    if MAX_SURPRISE_MVP <= 0:
+    if MAX_SURPRISE_MVP <= 0 or len(tasks) >= NUM_TASKS:
         return tasks
 
     goal_text = " ".join(item.lower() for items in goals.values() for item in items)
@@ -561,7 +611,7 @@ def maybe_add_surprise_mvp(tasks, goals, seen):
             "[Trading] 🎁 Surprise MVP: add one small non-execution improvement concept for the trading bots, such as a diagnostics view, reporting helper, or review utility; deliverable: build brief or MVP spec in projects/autonomous-trading-bot/notes/ or projects/futures-bot/notes/ | Why: Useful surprise MVPs should strengthen systems that support trading outcomes | Proof: MVP is tightly scoped, clearly useful, and avoids unsafe live-trading config changes | Unlocks: Faster iteration on bot quality improvements"
         ])
 
-    if "japanese" in goal_text or "python" in goal_text or "business analysis" in goal_text:
+    if "japanese" in goal_text or "business analysis" in goal_text or ("python" in goal_text and any(term in goal_text for term in ("learn", "study", "practice", "beginner", "basics"))):
         candidates.extend([
             "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development"
         ])
@@ -592,14 +642,30 @@ def maybe_add_surprise_mvp(tasks, goals, seen):
     return tasks[:NUM_TASKS]
 
 
+def interleave_goals_by_category(goals):
+    ordered = []
+    buckets = {category: list(items) for category, items in goals.items() if items}
+    categories = list(buckets.keys())
+    index = 0
+
+    while buckets:
+        category = categories[index % len(categories)]
+        items = buckets.get(category)
+        if items:
+            ordered.append((category, items.pop(0)))
+            if not items:
+                buckets.pop(category, None)
+        categories = [name for name in categories if name in buckets]
+        if not categories:
+            break
+        index += 1
+
+    return ordered
+
+
 def generate_tasks(goals):
     """Generate 4-5 actionable tasks from goals using structured synthesis."""
-    import random
-
-    all_goals = []
-    for category, items in goals.items():
-        for item in items:
-            all_goals.append((category, item))
+    all_goals = interleave_goals_by_category(goals)
 
     if not all_goals:
         return []
@@ -618,8 +684,7 @@ def generate_tasks(goals):
     if len(available_goals) < 3:
         available_goals = all_goals[:]
 
-    num_regular = min(NUM_TASKS - MAX_SURPRISE_MVP, len(available_goals))
-    selected_goals = random.sample(available_goals, min(num_regular, len(available_goals))) if num_regular > 0 else []
+    selected_goals = available_goals[:NUM_TASKS]
 
     use_assessment_bias = os.environ.get("TASK_ASSESSMENT_BIAS", "false").lower() == "true"
 
@@ -651,47 +716,56 @@ def generate_tasks(goals):
 
 
 def read_autonomous_file():
-    """Read the AUTONOMOUS.md file and extract goals from Goals section only."""
+    """Read AUTONOMOUS.md and extract only bullet goals under the ## Goals section."""
     if not AUTONOMOUS_FILE.exists():
         return {}, []
-    
+
     content = AUTONOMOUS_FILE.read_text()
-    
-    # Extract goals by section - only from under ## Goals
+
     goals = {}
     current_section = None
     current_goals = []
     in_goals_section = False
-    
+
     for line in content.split('\n'):
-        # Detect section headers
-        section_match = re.match(r'^##\s+(\w+)\s*$', line)
+        section_match = re.match(r'^##\s+(.+?)\s*$', line)
         if section_match:
-            if section_match.group(1) == "Goals":
+            section_name = section_match.group(1).strip().lower()
+            if section_name == "goals":
                 in_goals_section = True
-                continue
-            elif in_goals_section and current_section and current_goals:
-                goals[current_section] = current_goals
+                current_section = None
                 current_goals = []
-                in_goals_section = False
-        elif in_goals_section:
-            # Check for subsections like ### Career
-            subsection_match = re.match(r'^###\s+(\w+)\s*$', line)
-            if subsection_match:
+                continue
+
+            if in_goals_section:
                 if current_section and current_goals:
                     goals[current_section] = current_goals
-                current_section = subsection_match.group(1)
+                in_goals_section = False
+                current_section = None
                 current_goals = []
-            elif line.strip().startswith('- '):
-                candidate = line.strip()[2:].strip()
-                # Guardrail: keep Goals section clean, ignore task-like lines
-                if candidate.startswith('[') or 'success:' in candidate.lower():
-                    continue
-                current_goals.append(candidate)
-    
-    if current_section and current_goals:
+            continue
+
+        if not in_goals_section:
+            continue
+
+        subsection_match = re.match(r'^###\s+(.+?)\s*$', line)
+        if subsection_match:
+            if current_section and current_goals:
+                goals[current_section] = current_goals
+            current_section = subsection_match.group(1).strip()
+            current_goals = []
+            continue
+
+        if line.strip().startswith('- '):
+            candidate = line.strip()[2:].strip()
+            # Guardrail: keep Goals section clean, ignore task-like lines
+            if candidate.startswith('[') or 'success:' in candidate.lower():
+                continue
+            current_goals.append(candidate)
+
+    if in_goals_section and current_section and current_goals:
         goals[current_section] = current_goals
-    
+
     return goals, []
 
 
