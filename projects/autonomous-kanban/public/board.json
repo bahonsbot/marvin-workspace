@@ -2,18 +2,13 @@
   "board": {
     "todo": [
       {
+        "id": "630cc585",
+        "text": "[Trading] Draft: Improve the current signal tracking and...",
+        "column": "todo"
+      },
+      {
         "id": "321a38f2",
         "text": "[Career] Practice: Blender primitives exercise",
-        "column": "todo"
-      },
-      {
-        "id": "306f3b3f",
-        "text": "[Trading] Analyze: Trading workspace improvement",
-        "column": "todo"
-      },
-      {
-        "id": "5ad981fb",
-        "text": "[Trading] Draft: An actionable next step toward: find ways...",
         "column": "todo"
       }
     ],
@@ -168,5 +163,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-12T11:58:02.507Z"
+  "updatedAt": "2026-04-12T11:58:40.900Z"
 }
