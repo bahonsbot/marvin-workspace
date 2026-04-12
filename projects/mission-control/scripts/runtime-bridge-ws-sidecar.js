@@ -128,6 +128,9 @@ server.on('upgrade', (req, socket, head) => {
 });
 
 wss.on('connection', (client) => {
+  const clientId = Math.random().toString(36).slice(2, 9);
+  console.log(`[mission-control-ws-sidecar] Connection opened [${clientId}] total=${wss.clients.size}`);
+
   const target = getTarget();
   if (!target) {
     client.close(1013, 'Gateway target unresolved');
@@ -139,6 +142,7 @@ wss.on('connection', (client) => {
   });
 
   upstream.on('open', () => {
+    console.log(`[mission-control-ws-sidecar] Upstream WS open [${clientId}]`);
     client.on('message', (data, isBinary) => {
       if (upstream.readyState === WebSocket.OPEN) {
         upstream.send(data, { binary: isBinary });
@@ -153,20 +157,22 @@ wss.on('connection', (client) => {
   });
 
   upstream.on('error', (cause) => {
-    console.error('[mission-control-ws-sidecar] Upstream WS error:', cause instanceof Error ? cause.message : String(cause));
+    console.error(`[mission-control-ws-sidecar] Upstream WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
     closePair(client, upstream, 1011, 'Upstream gateway unavailable');
   });
 
   upstream.on('close', (code, reason) => {
+    console.log(`[mission-control-ws-sidecar] Upstream WS closed [${clientId}] code=${code} reason="${reason}"`);
     closePair(client, upstream, code || 1011, reason.toString() || 'Upstream gateway closed');
   });
 
   client.on('close', (code, reason) => {
+    console.log(`[mission-control-ws-sidecar] Client WS closed [${clientId}] code=${code} reason="${reason}" total=${wss.clients.size}`);
     closePair(client, upstream, code || 1000, reason.toString() || 'Client closed');
   });
 
   client.on('error', (cause) => {
-    console.error('[mission-control-ws-sidecar] Client WS error:', cause instanceof Error ? cause.message : String(cause));
+    console.error(`[mission-control-ws-sidecar] Client WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
     closePair(client, upstream, 1011, 'Client WS error');
   });
 });

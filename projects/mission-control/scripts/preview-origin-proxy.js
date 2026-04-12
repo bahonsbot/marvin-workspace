@@ -206,11 +206,15 @@ server.on('upgrade', (req, socket, head) => {
 });
 
 wss.on('connection', (client) => {
+  const clientId = Math.random().toString(36).slice(2, 9);
+  console.log(`[mission-control-preview-proxy] Browser WS connected [${clientId}] total=${wss.clients.size}`);
+
   const upstreamUrl = new URL(sidecarTarget);
   upstreamUrl.searchParams.set('bridgeToken', bridgeToken);
   const upstream = new WebSocket(upstreamUrl);
 
   upstream.on('open', () => {
+    console.log(`[mission-control-preview-proxy] Sidecar WS open [${clientId}]`);
     client.on('message', (data, isBinary) => {
       if (upstream.readyState === WebSocket.OPEN) {
         upstream.send(data, { binary: isBinary });
@@ -225,20 +229,22 @@ wss.on('connection', (client) => {
   });
 
   upstream.on('error', (cause) => {
-    console.error('[mission-control-preview-proxy] Sidecar WS error:', cause instanceof Error ? cause.message : String(cause));
+    console.error(`[mission-control-preview-proxy] Sidecar WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
     closePair(client, upstream, 1011, 'Mission Control sidecar unavailable');
   });
 
   upstream.on('close', (code, reason) => {
+    console.log(`[mission-control-preview-proxy] Sidecar WS closed [${clientId}] code=${code} reason="${reason}"`);
     closePair(client, upstream, code || 1011, reason.toString() || 'Mission Control sidecar closed');
   });
 
   client.on('close', (code, reason) => {
+    console.log(`[mission-control-preview-proxy] Browser WS closed [${clientId}] code=${code} reason="${reason}" total=${wss.clients.size}`);
     closePair(client, upstream, code || 1000, reason.toString() || 'Client closed');
   });
 
   client.on('error', (cause) => {
-    console.error('[mission-control-preview-proxy] Browser WS error:', cause instanceof Error ? cause.message : String(cause));
+    console.error(`[mission-control-preview-proxy] Browser WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
     closePair(client, upstream, 1011, 'Browser socket error');
   });
 });
