@@ -28,6 +28,17 @@ Command/tool failures and exceptions.
 **Priority:** medium
 **Status:** resolved
 
+## [ERR-20260412-2130]
+
+**What failed:** first autonomous backlog generation quality after the evening rollback-safe Tasks cleanup
+**Error:** the generator was reading the current `AUTONOMOUS.md` goals, but older keyword heuristics still warped newer goals into stale-style tasks. Example: an automation-scripts goal mentioning Blender/Unreal/After Effects could collapse into a generic creative-practice task, making it look like generation was still following old goals.
+**Context:** Apr 12 evening Mission Control Tasks cleanup after Philippe noticed new backlog tasks had weak titles/briefs and felt tied to older goal framing.
+**Suggested fix:** when goals evolve, do not rely on broad legacy keyword matches alone. Add higher-priority classifiers for newer goal families, reduce random sampling drift, and verify fresh backlog output against the actual current `AUTONOMOUS.md` goal list before calling generation healthy.
+**Resolution:** Resolved same session by tightening `read_autonomous_file()`, prioritizing current-goal classifiers, switching to deterministic category interleaving, and regenerating the backlog against the live goals.
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260412-1313]
 
 **What failed:** several first-pass Chat extraction builds during the Mission Control safe refactor lane

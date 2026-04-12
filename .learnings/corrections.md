@@ -61,6 +61,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 <!-- New entries go at top -->
 
+## [CORR-20260412-2129]
+
+**Trigger:** Philippe said the Tasks-page briefs were useful but visually too long, and asked for only the first sentence by default with a collapsible/show-more option. He also asked for briefs to start with a capital letter.
+**What was wrong:** I had improved autonomous task brief quality, but the board was still dumping the full brief inline, which made cards feel heavy and cluttered. Brief copy also still sometimes started lowercase.
+**Lesson:** For Mission Control autonomous cards, keep the board scan-friendly: show a compact brief preview by default with an explicit expand control, preserve the full brief in the drawer, and normalize generated/displayed brief text to sentence-style capitalization.
+
+**Priority:** medium
+**Status:** active
+
+
 ## [CORR-20260412-1956]
 
 **Trigger:** Philippe clarified that autonomous task category tags do not need to be part of the visible task title and should live only in the category/icon pill treatment.
