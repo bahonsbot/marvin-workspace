@@ -9,6 +9,7 @@ import {
   monoFont,
   renderPlainTextWithFileLinks,
 } from '@/components/chat/chat-rich-text';
+import { ChatComposer } from '@/components/chat/chat-composer';
 import { assistantLabelForSeat } from '@/components/chat/chat-message-blocks';
 import {
   LiveTranscriptSection,
@@ -20,7 +21,6 @@ import {
 } from '@/components/chat/chat-tool-groups';
 import {
   actionButtonStyle,
-  composerIconButtonStyle,
   contextTone,
   pillStyle,
 } from '@/components/chat/chat-ui-helpers';
@@ -44,46 +44,6 @@ import { useSpeechToText } from '@/components/chat/useSpeechToText';
 import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 
 const TOOL_BURST_WINDOW_MS = 10000;
-
-function SendIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M21 3 10 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M21 3 14 21l-4-7-7-4 18-7Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function NewSessionIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M8 10h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M8 14h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M12 3c5 0 9 3.58 9 8s-4 8-9 8a10.6 10.6 0 0 1-4-.77L3 21l1.55-4.12A7.4 7.4 0 0 1 3 11c0-4.42 4.03-8 9-8Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M18.5 5.5v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M16.5 7.5h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function MicIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M6 11a6 6 0 0 0 12 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M12 17v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <path d="M9 21h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function PaperclipIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M21.44 11.05 12 20.5a6 6 0 1 1-8.49-8.49l10.6-10.61a4 4 0 1 1 5.66 5.66L8.46 18.36a2 2 0 1 1-2.83-2.82l9.2-9.2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 type TopControlMenu = 'agent' | 'model' | 'effort' | null;
 
@@ -1787,158 +1747,54 @@ export function MissionControlChatSurface({
         />
       </section>
 
-      <form onSubmit={handleComposerSubmit} onDragOver={handleComposerDragOver} onDragLeave={handleComposerDragLeave} onDrop={handleComposerDrop} style={{ border: isDraggingFiles ? '1px solid rgba(121, 166, 148, 0.54)' : '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: isDraggingFiles ? 'rgba(244, 249, 246, 0.96)' : 'rgba(255, 255, 255, 0.9)', padding: 12, display: 'grid', gap: 8, zIndex: 11, boxShadow: '0 -8px 24px rgba(26, 61, 50, 0.08)' }}>
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            onChange={(event) => {
-              if (event.target.files?.length) {
-                void uploadSelectedFiles(event.target.files);
-                event.target.value = '';
-              }
-            }}
-            style={{ display: 'none' }}
-          />
-          {attachedFiles.length > 0 ? (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-              {attachedFiles.map((file) => (
-                <div key={`${file.path}-${file.name}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 999, border: '1px solid rgba(200, 195, 188, 0.28)', background: 'rgba(250, 248, 245, 0.92)', fontSize: 12, color: 'var(--text-muted)' }}>
-                  <span style={{ fontFamily: monoFont }}>{file.name}</span>
-                  <button type="button" onClick={() => setAttachedFiles((current) => current.filter((entry) => entry.path !== file.path))} style={{ border: 'none', background: 'transparent', color: 'var(--text-ghost)', cursor: 'pointer', padding: 0, fontSize: 14, lineHeight: 1 }}>×</button>
-                </div>
-              ))}
-            </div>
-          ) : null}
-          {isDraggingFiles ? <div style={{ fontSize: 12, color: '#163b31', padding: '2px 2px 0' }}>Drop files here to upload them into <span style={{ fontFamily: monoFont }}>uploads/mission-control/</span>.</div> : null}
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 12, alignItems: 'end' }}>
-            <textarea
-              value={composerValue}
-              onChange={(event) => setComposerValue(event.target.value)}
-              onKeyDown={handleComposerKeyDown}
-              rows={2}
-              disabled={!liveTargetSession || sessionState !== 'connected' || liveSendState === 'sending' || liveSendState === 'streaming'}
-              placeholder={
-                sessionState === 'connected'
-                  ? liveTargetSession
-                    ? `Message to ${liveTargetLabel}.`
-                    : 'A connected bridge still needs one visible runtime session key before Mission Control can send.'
-                  : 'Composer unlocks after the real gateway session connects.'
-              }
-              aria-label="Composer"
-              style={{
-                width: '100%',
-                minHeight: 64,
-                maxHeight: 120,
-                resize: 'none',
-                borderRadius: 16,
-                border: '1px solid rgba(200, 195, 188, 0.32)',
-                background: 'rgba(250, 248, 245, 0.94)',
-                padding: '12px 14px',
-                color: 'var(--text-muted)',
-                lineHeight: 1.5,
-                boxSizing: 'border-box',
-              }}
-            />
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center', paddingBottom: 2 }}>
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploadBusy}
-                aria-label="Add attachment"
-                title={uploadBusy ? 'Uploading...' : 'Add attachment'}
-                style={composerIconButtonStyle(!uploadBusy)}
-              >
-                <PaperclipIcon />
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setSpeechMessage(null);
-                  void toggleRecording();
-                }}
-                disabled={!speechButtonEnabled}
-                aria-label={
-                  speechStatus === 'recording'
-                    ? 'Stop recording'
-                    : speechStatus === 'transcribing'
-                      ? 'Transcribing audio'
-                      : 'Start voice input'
-                }
-                title={
-                  !speechSupported
-                    ? 'Voice input is not supported in this browser'
-                    : speechStatus === 'recording'
-                      ? 'Stop recording'
-                      : speechStatus === 'transcribing'
-                        ? 'Transcribing...'
-                        : 'Start voice input'
-                }
-                style={{
-                  ...composerIconButtonStyle(speechButtonEnabled),
-                  background:
-                    speechStatus === 'recording'
-                      ? 'rgba(183, 76, 67, 0.18)'
-                      : speechStatus === 'transcribing'
-                        ? 'rgba(121, 166, 148, 0.2)'
-                        : composerIconButtonStyle(speechButtonEnabled).background,
-                  border:
-                    speechStatus === 'recording'
-                      ? '1px solid rgba(183, 76, 67, 0.46)'
-                      : speechStatus === 'transcribing'
-                        ? '1px solid rgba(121, 166, 148, 0.42)'
-                        : composerIconButtonStyle(speechButtonEnabled).border,
-                  color: speechStatus === 'recording' ? '#8e2f26' : undefined,
-                }}
-              >
-                <MicIcon />
-              </button>
-              <button
-                type="button"
-                onClick={() => void handleNewSession()}
-                disabled={!liveCanSend || liveSendState === 'sending' || liveSendState === 'streaming'}
-                aria-label="New session"
-                title="New session"
-                style={composerIconButtonStyle(liveCanSend && liveSendState !== 'sending' && liveSendState !== 'streaming')}
-              >
-                <NewSessionIcon />
-              </button>
-              <button
-                type="submit"
-                disabled={(!(activation?.seatSlug === 'dev-team') && !liveCanSend) || (composerValue.trim().length === 0 && attachedFiles.length === 0)}
-                aria-label={activation?.seatSlug === 'dev-team' ? 'Let Sudo handle this' : liveSendState === 'sending' ? 'Sending' : liveSendState === 'streaming' ? 'Waiting' : 'Send'}
-                title={activation?.seatSlug === 'dev-team' ? 'Let Sudo handle this' : liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
-                style={composerIconButtonStyle(((activation?.seatSlug === 'dev-team') || liveCanSend) && (composerValue.trim().length > 0 || attachedFiles.length > 0))}
-              >
-                <SendIcon />
-              </button>
-            </div>
-          </div>
-        {(!speechSupported || speechStatus === 'recording' || speechStatus === 'transcribing' || speechError || speechMessage) ? (
-          <div
-            style={{
-              fontSize: 12,
-              color: speechError ? '#9a4b43' : speechStatus === 'recording' ? '#8e2f26' : 'var(--text-muted)',
-              maxWidth: 720,
-            }}
-          >
-            {!speechSupported
-              ? (speechSupportReason || 'Voice input is not available in this browser.')
-              : speechError
-                ? `Voice input error: ${speechError}`
-                : speechStatus === 'recording'
-                  ? 'Recording… click the mic again to stop.'
-                  : speechStatus === 'transcribing'
-                    ? 'Transcribing…'
-                    : speechMessage}
-          </div>
-        ) : null}
-        {(composerError || liveSendError || effectiveBridgeError || (!liveTargetSession && sessionState === 'connected')) ? (
-          <div style={{ fontSize: 12, color: composerError || liveSendError || effectiveBridgeError ? '#9a4b43' : 'var(--text-muted)', maxWidth: 720 }}>
-            {composerError || liveSendError || (effectiveBridgeError ? `Last refresh error: ${effectiveBridgeError}` : 'The gateway session is live, but Mission Control still needs one visible runtime session key before it can issue a real prompt.')}
-          </div>
-        ) : null}
-      </form>
+      <ChatComposer
+        fileInputRef={fileInputRef}
+        onSubmit={handleComposerSubmit}
+        onDragOver={handleComposerDragOver}
+        onDragLeave={handleComposerDragLeave}
+        onDrop={handleComposerDrop}
+        onFileInputChange={(event) => {
+          if (event.target.files?.length) {
+            void uploadSelectedFiles(event.target.files);
+            event.target.value = '';
+          }
+        }}
+        attachedFiles={attachedFiles}
+        setAttachedFiles={setAttachedFiles}
+        isDraggingFiles={isDraggingFiles}
+        composerValue={composerValue}
+        setComposerValue={setComposerValue}
+        onComposerKeyDown={handleComposerKeyDown}
+        composerDisabled={!liveTargetSession || sessionState !== 'connected' || liveSendState === 'sending' || liveSendState === 'streaming'}
+        composerPlaceholder={
+          sessionState === 'connected'
+            ? liveTargetSession
+              ? `Message to ${liveTargetLabel}.`
+              : 'A connected bridge still needs one visible runtime session key before Mission Control can send.'
+            : 'Composer unlocks after the real gateway session connects.'
+        }
+        uploadBusy={uploadBusy}
+        speechButtonEnabled={speechButtonEnabled}
+        speechSupported={speechSupported}
+        speechStatus={speechStatus}
+        onToggleRecording={() => {
+          setSpeechMessage(null);
+          void toggleRecording();
+        }}
+        onNewSession={() => void handleNewSession()}
+        canCreateNewSession={liveCanSend && liveSendState !== 'sending' && liveSendState !== 'streaming'}
+        canSubmit={((activation?.seatSlug === 'dev-team') || liveCanSend) && (composerValue.trim().length > 0 || attachedFiles.length > 0)}
+        sendButtonLabel={activation?.seatSlug === 'dev-team' ? 'Let Sudo handle this' : liveSendState === 'sending' ? 'Sending' : liveSendState === 'streaming' ? 'Waiting' : 'Send'}
+        sendButtonTitle={activation?.seatSlug === 'dev-team' ? 'Let Sudo handle this' : liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
+        speechSupportReason={speechSupportReason}
+        speechError={speechError}
+        speechMessage={speechMessage}
+        composerError={composerError}
+        liveSendError={liveSendError}
+        effectiveBridgeError={effectiveBridgeError}
+        liveTargetSession={liveTargetSession}
+        sessionState={sessionState}
+      />
     </div>
   );
 }
