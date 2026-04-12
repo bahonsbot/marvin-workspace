@@ -477,6 +477,8 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   const [activeSessionKey, setActiveSessionKey] = useState<string | null>(() => chooseTargetSession(initialSummary).key);
   const [reconnectNonce, setReconnectNonce] = useState(0);
   const mountedRef = useRef(true);
+  const activeSessionKeyRef = useRef<string | null>(chooseTargetSession(initialSummary).key);
+  const sessionGenerationRef = useRef(0);
   const hydratedSessionKeyRef = useRef<string | null>(null);
   const noticeSignaturesRef = useRef<Set<string>>(new Set());
   const instanceIdRef = useRef(getOrCreateInstanceId());
@@ -558,6 +560,10 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   }, [initialSummary]);
 
   useEffect(() => {
+    activeSessionKeyRef.current = activeSessionKey;
+  }, [activeSessionKey]);
+
+  useEffect(() => {
     if (activeSessionKey) return;
     if (defaultTargetSession.key) {
       setActiveSessionKey(defaultTargetSession.key);
@@ -565,6 +571,9 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
   }, [activeSessionKey, defaultTargetSession.key]);
 
   const load = useCallback(async (isBackgroundRefresh: boolean) => {
+    const requestedSessionKey = activeSessionKeyRef.current ?? defaultTargetSession.key;
+    const capturedGeneration = sessionGenerationRef.current;
+
     if (isBackgroundRefresh) {
       setRefreshing(true);
     } else {
@@ -572,7 +581,7 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
     }
 
     try {
-      const sessionQuery = activeSessionKey ? `?sessionKey=${encodeURIComponent(activeSessionKey)}` : '';
+      const sessionQuery = requestedSessionKey ? `?sessionKey=${encodeURIComponent(requestedSessionKey)}` : '';
       const res = await fetch(`/api/runtime-bridge${sessionQuery}`, {
         cache: 'no-store',
         headers: {
@@ -591,13 +600,18 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
         };
       };
       if (!mountedRef.current) return;
+      if (capturedGeneration !== sessionGenerationRef.current) return;
+      if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return;
 
       setSummary(payload);
-      if (payload.transcriptHistory?.sessionKey && payload.transcriptHistory.sessionKey === (activeSessionKey ?? defaultTargetSession.key)) {
+      if (payload.transcriptHistory?.sessionKey && payload.transcriptHistory.sessionKey === requestedSessionKey) {
         const hydratedSessionKey = payload.transcriptHistory.sessionKey ?? null;
         const incomingMessages = payload.transcriptHistory?.messages ?? [];
 
         setMessages((current) => {
+          if (capturedGeneration !== sessionGenerationRef.current) return current;
+          if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return current;
+
           const scopedCurrent = current.filter((message) => message.sessionKey === hydratedSessionKey || message.sessionKey === null);
           const hasScopedTranscript = scopedCurrent.some((message) => message.role === 'user' || message.role === 'assistant');
           const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
@@ -611,15 +625,19 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       setError(null);
     } catch (cause) {
       if (!mountedRef.current) return;
+      if (capturedGeneration !== sessionGenerationRef.current) return;
+      if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return;
 
       setError(cause instanceof Error ? cause.message : 'Runtime bridge request failed');
     } finally {
       if (!mountedRef.current) return;
+      if (capturedGeneration !== sessionGenerationRef.current) return;
+      if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return;
 
       setLoading(false);
       setRefreshing(false);
     }
-  }, [activeSessionKey, defaultTargetSession.key]);
+  }, [defaultTargetSession.key]);
 
   useEffect(() => {
     if (!activeSessionKey) return;
@@ -1293,6 +1311,8 @@ export function useRuntimeBridge(initialSummary: OrchestratorIntegrationSummary)
       await load(true);
     },
     switchSession: async (sessionKey: string) => {
+      sessionGenerationRef.current += 1;
+      activeSessionKeyRef.current = sessionKey;
       hydratedSessionKeyRef.current = null;
       setActiveSessionKey(sessionKey);
       setMessages([]);
