@@ -335,6 +335,69 @@ def has_content_source_work():
     return False
 
 
+def clean_generated_brief(text):
+    if not text:
+        return text
+    return re.sub(r'^an actionable next step toward:\s*', '', text.strip(), flags=re.IGNORECASE).strip()
+
+
+def shorten_generated_title(text, max_length=48):
+    text = re.sub(r'\s+', ' ', text.strip())
+    if len(text) <= max_length:
+        return text
+    sliced = text[: max_length - 3]
+    last_space = sliced.rfind(' ')
+    if last_space > 16:
+        sliced = sliced[:last_space]
+    return sliced.strip() + '...'
+
+
+def clean_goal_title(goal):
+    cleaned = goal.strip()
+    cleaned = re.sub(r'^an actionable next step toward:\s*', '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r'^find ways to\s*', '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r'^ways to\s*', '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r'^how to\s*', '', cleaned, flags=re.IGNORECASE)
+    cleaned = cleaned.strip(' .:-')
+    if not cleaned:
+        return 'Concrete next step'
+    cleaned = cleaned[0].upper() + cleaned[1:]
+    return shorten_generated_title(cleaned)
+
+
+def extract_task_title_and_description(task_text):
+    normalized = task_text.replace('\r\n', '\n').strip()
+    if not normalized:
+        return 'Untitled task', None
+
+    lines = [line.strip() for line in normalized.split('\n') if line.strip()]
+    if not lines:
+        return 'Untitled task', None
+
+    title = lines[0]
+    description = None
+    for line in lines[1:]:
+        if line.startswith('**Brief:**'):
+            description = clean_generated_brief(re.sub(r'^\*\*Brief:\*\*\s*', '', line, flags=re.IGNORECASE).strip())
+            break
+
+    title = normalize_task_title(title, description)
+    return title, description
+
+
+def normalize_task_title(title, description=None):
+    match = re.match(r'^(.*?:\s*)an actionable next step toward:\s*(.*)$', title.strip(), flags=re.IGNORECASE)
+    if not match:
+        return title.strip()
+
+    candidate = clean_generated_brief(description or match.group(2))
+    candidate = re.sub(r'^find ways to\s*', '', candidate, flags=re.IGNORECASE)
+    candidate = re.sub(r'^ways to\s*', '', candidate, flags=re.IGNORECASE)
+    candidate = re.sub(r'^how to\s*', '', candidate, flags=re.IGNORECASE)
+    candidate = clean_goal_title(candidate)
+    return f"{match.group(1)}{candidate}"
+
+
 def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
     """Convert a goal into a concrete autonomous task with Why/Proof/Unlocks.
 
@@ -420,7 +483,10 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
         task_desc = "create a ranked outreach target list of 10 relevant people or communities; deliverable: markdown list in projects/outreach/ with rationale"
     else:
         task_prefix = "Draft"
-        task_desc = f"an actionable next step toward: {goal[:50]}"
+        task_desc = (
+            f"define one concrete next-step deliverable for this goal: {goal[:80]}; "
+            "deliverable: markdown note with exact output, success criteria, and next action"
+        )
 
     focus_dimension = None
     if use_assessment_bias and skill and skill in DIMENSION_FOCUS:
@@ -456,9 +522,9 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
         for pfx in ("create one ", "identify ", "build ", "prepare ", "define ", "choose one ", "draft "):
             if fallback.startswith(pfx):
                 fallback = fallback[len(pfx):]
-        if len(fallback) > 45:
-            fallback = fallback[:42].rsplit(" ", 1)[0] + "..."
-        return fallback.capitalize()
+        if fallback.lower().startswith("one concrete next-step deliverable for this goal:"):
+            return clean_goal_title(goal)
+        return shorten_generated_title(fallback.capitalize())
 
     task_title = _short_title(goal, category, task_prefix, task_desc)
     task = (
@@ -865,9 +931,11 @@ def sync_generated_backlog_to_structured_store(backlog_tasks):
         if not normalized or normalized in suppressed or normalized in existing_norms:
             continue
         backlog_max_order += 1
+        parsed_title, parsed_description = extract_task_title_and_description(task_text)
         tasks.append({
             "id": unique_task_id(task_text),
-            "title": task_text,
+            "title": parsed_title,
+            "description": parsed_description,
             "status": "backlog",
             "priority": "normal",
             "sourceType": "generated",
