@@ -28,6 +28,20 @@ Command/tool failures and exceptions.
 **Priority:** medium
 **Status:** resolved
 
+## [ERR-20260412-1313]
+
+**What failed:** several first-pass Chat extraction builds during the Mission Control safe refactor lane
+**Error:** after moving UI blocks out of `MissionControlChatSurface.tsx`, the most common failures were not architectural regressions but leftover cleanup misses: stale imports, stale type imports, or narrowing a shared type locally instead of using the exported source-of-truth type.
+**Context:** Apr 12 post-rollback Chat-only refactor lane while extracting message/event rendering, transcript-adjacent UI, composer UI, and related helpers
+**Suggested fix:** after each extraction, do a deliberate leftover pass before assuming the slice is wrong:
+1. check stale imports/types in the parent
+2. prefer the real exported hook/runtime type over re-declaring a narrowed local union
+3. treat one or two compile misses as normal extraction fallout, then rerun build before reconsidering the slice boundary
+**Resolution:** Resolved same session across the extraction series by cleaning leftover imports/types and switching the composer speech status prop to the exported `SpeechToTextStatus` type.
+
+**Priority:** low
+**Status:** resolved
+
 ## [ERR-20260412-0041]
 
 **What failed:** first Chat helper-extraction build pass during post-rollback safe refactor lane
