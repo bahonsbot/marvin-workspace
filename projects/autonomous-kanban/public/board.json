@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "4123c0f4",
+        "text": "[Trading] Analyze: Trading workspace improvement",
+        "column": "todo"
+      },
+      {
         "id": "dee11a8a",
         "text": "[Other] Fix: OpenClaw helper utility",
         "column": "todo"
@@ -12,14 +17,8 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "dad759b5",
-        "text": "[Trading] Analyze: Trading workspace improvement",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-04-12T10:00:10.000Z"
+  "updatedAt": "2026-04-12T10:00:11.000Z"
 }
