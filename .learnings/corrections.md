@@ -61,6 +61,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 <!-- New entries go at top -->
 
+## [CORR-20260412-2309]
+
+**Trigger:** Philippe noticed token usage was no longer going down while I had implied the bridge work was still actively running.
+**What was wrong:** I reported continued active execution without first checking whether a live background process/session still existed. That created an inaccurate progress update.
+**Lesson:** For long-running work, verify live execution state before claiming it is still running. Check process/session status or equivalent concrete evidence first; if the worker paused, died, or finished, say that plainly instead of narrating momentum that is no longer real.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260412-2129]
 
 **Trigger:** Philippe said the Tasks-page briefs were useful but visually too long, and asked for only the first sentence by default with a collapsible/show-more option. He also asked for briefs to start with a capital letter.
