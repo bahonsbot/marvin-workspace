@@ -145,7 +145,3 @@ For image understanding in OpenClaw, use the configured VLM endpoint separately.
 ## Usage in OpenClaw
 
 When model switches to `minimax/MiniMax-M2.7`, read this file first to apply the above patterns.
-
-{
-  "source": "platform.minimax.io/docs — text-intro, text-anthropic-api, text-m2-function-call-refer, text-prompt-caching, models-intro, text-ai-coding-refer"
-}

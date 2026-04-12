@@ -133,7 +133,11 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 
 ### Mission Control Runtime / Preview Notes
 - Savepoint naming rule: prefer concise savepoint filenames, e.g. `mc-savepoint-YYYY-MM-DD-<descriptor>.md`, over long sentence-style names
+- Recent Mission Control savepoint refs:
+  - `projects/_ops/mc-savepoint-2026-04-09-evening.md`
+  - `projects/_ops/mc-savepoint-2026-04-12-late-night.md`
 - Preview runtime dependency note: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` and `projects/mission-control/scripts/preview-origin-proxy.js` require npm package `ws`; a passing Next.js build alone does not prove preview health if `ws` is missing
+- Chat component inventory note: current shared chat helpers include `projects/mission-control/components/chat/chat-rich-text.tsx`, `projects/mission-control/components/chat/chat-ui-helpers.ts`, and `projects/mission-control/components/chat/chat-tool-groups.tsx`
 - Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
   - Apr 2 rewind fix: hydrated transcript merge is timestamp-aware and overwrite-safe so older persisted history cannot clobber newer live messages during later hydrate cycles
   - Apr 2 UX stabilization: transient ACTIVITY/SYSTEM notices are no longer durable transcript rows; compression/fallback notices render in a transient notice channel instead, and default Chat load should prefer `agent:main:main`
@@ -430,6 +434,10 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - `projects-cryo/horizons-pms/` — PMS system (on hold, archived for reference)
 - `projects-cryo/market-intel-news-reader/` — PWA news reader prototype (archived)
 
+### Environment Safety Constraints
+- Runtime hotfixes to installed OpenClaw package files under `/usr/local/lib/node_modules/openclaw/dist/` require host/container-namespace access; they cannot be patched from a normal container session.
+- If a runtime bug traces back to installed-package behavior rather than workspace code, treat host-side patching as a separate lane and do not assume an in-workspace fix is possible.
+
 ### Trading Bot Troubleshooting
 
 **Common Crash Causes:**
@@ -476,6 +484,7 @@ bash scripts/run_webhook_receiver.sh  # Restart with proper env
 
 ### Deeper References
 - Project strategy and history: `MEMORY.md` + `memory/YYYY-MM-DD.md`
+- Self-improvement report archive: `memory/self-improvement/`
 - Morning Meeting decision template: `docs/runbooks/morning-meeting-decision-template.md`
 - Mission Control runtime/preview operations: `docs/runbooks/mission-control-runtime-preview-runbook.md`
 - Market Intel notes: `projects/market-intel/notes/`
