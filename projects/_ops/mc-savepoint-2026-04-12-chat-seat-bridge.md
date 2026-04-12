@@ -449,6 +449,9 @@ That boundary was intentional.
 - `29ee9e7a` — `Decouple chat transcript hydration`
 - `74a3e70d` — `Add Mission Control seat bridge`
 
+### Workspace repo
+- `c4e6907` — `Wrap chat fixes, seat bridge, and handoff docs`
+
 ### Key docs / artifacts
 - `projects/mission-control/docs/agent-seat-bridge.md`
 - `projects/_ops/mc-savepoint-2026-04-12-night-tasks-generator-stabilized.md`
