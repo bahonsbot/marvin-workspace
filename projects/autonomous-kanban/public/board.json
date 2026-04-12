@@ -2,13 +2,28 @@
   "board": {
     "todo": [
       {
-        "id": "630cc585",
-        "text": "[Trading] Draft: Improve the current signal tracking and...",
+        "id": "63b5a81a",
+        "text": "[Career] Draft: Creative-tool automation script plan",
         "column": "todo"
       },
       {
-        "id": "321a38f2",
-        "text": "[Career] Practice: Blender primitives exercise",
+        "id": "c10110b2",
+        "text": "[Other] Analyze: OpenClaw loop-pattern audit",
+        "column": "todo"
+      },
+      {
+        "id": "6dbf6d55",
+        "text": "[Trading] Draft: Actionable Alpha dashboard slice",
+        "column": "todo"
+      },
+      {
+        "id": "b0f34131",
+        "text": "[Other] Draft: Proactive operations guardrails",
+        "column": "todo"
+      },
+      {
+        "id": "8664d2d5",
+        "text": "[Trading] Research: Real-time trading API shortlist",
         "column": "todo"
       }
     ],
@@ -163,5 +178,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-12T11:58:40.900Z"
+  "updatedAt": "2026-04-12T12:49:09.448Z"
 }
