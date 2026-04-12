@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260412-1115]
+
+**What failed:** first Morning Meeting framing of the `market-signal-generator` cron issue
+**Error:** the overnight finding was initially treated like a scheduler/weekend-execution bug, but the real issue was narrower: the single job lacked an explicit `tz`, so weekday semantics drifted relative to Philippe-facing time while the engine itself remained correct.
+**Context:** Apr 12 Morning Meeting after Platform Health Council surfaced suspicious weekend-looking timing for `market-signal-generator`
+**Suggested fix:** before escalating cron-health findings, distinguish three cases explicitly: (1) bad cron expression, (2) missing/mis-set timezone, (3) actual scheduler misfire. For operator-facing schedules, verify the resolved next-run in both server time and `Asia/Ho_Chi_Minh` before calling it a weekend run.
+**Resolution:** Resolved same session by investigating the live job definition, confirming the missing timezone, adding `tz: Asia/Ho_Chi_Minh`, and verifying the next run resolved to Monday in Philippe-facing time.
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260412-0041]
 
 **What failed:** first Chat helper-extraction build pass during post-rollback safe refactor lane

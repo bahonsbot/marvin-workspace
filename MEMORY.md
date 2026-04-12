@@ -52,6 +52,7 @@ For timelines and exact session history, use `memory/YYYY-MM-DD.md`.
 - Mission Control auth baseline: non-local Mission Control access should be auth-gated. Current hardening uses Next.js middleware Basic Auth over pages and `/api/*`, with localhost/container bypass only for local verification. Preview runtime should load auth creds from `.preview-runtime/mission-control-preview.env` when persistent auth is desired.
 - Overnight review delivery rule: for scheduled overnight review jobs, operator-facing delivery must come from exactly one canonical parent-run summary. Avoid subagent/resume chatter that can leak non-canonical timeout or recovery narratives into Telegram.
 - Rollback recovery rule: after a VPS/workspace rollback, verify the current rebuilt preview/runtime baseline before trusting pre-rollback git history. If Philippe confirms the rolled-back workspace is the clean safe state, treat that runtime baseline as truth first, then realign git to it carefully with a curated commit rather than blindly preserving runtime noise.
+- Cron timezone rule: for OpenClaw cron jobs whose semantics are tied to Philippe-facing or market-facing calendar time, set an explicit `tz` instead of relying on server/runtime timezone defaults. Missing `tz` can create false weekday/weekend drift even when the cron expression itself is correct.
 
 ### Execution Style
 - Prefer decisive recommendations over option dumps
