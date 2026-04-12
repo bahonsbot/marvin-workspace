@@ -3,6 +3,21 @@
 Environment-specific runtime notes only.
 Use this file for live setup facts, not historical logs or long retrospectives.
 
+## What goes where
+- `TOOLS.md` = current operational reality: live setup facts, commands, service locations, runtime dependencies, scheduler ownership, file paths, and environment constraints.
+- `MEMORY.md` = durable decisions and standing rules: accepted-risk posture, review suppression baselines, canonical operating preferences, architecture direction, and rules that should survive daily churn.
+- `memory/YYYY-MM-DD.md` = chronology: what happened today, approvals, investigations, temporary states, one-off fixes, and execution notes.
+
+Quick rule:
+- If it answers **"how is the environment set up right now?"** → `TOOLS.md`
+- If it answers **"what rule or decision should still matter next month?"** → `MEMORY.md`
+- If it answers **"what happened today, and why?"** → daily memory
+
+Avoid duplication:
+- Do not promote routine daily work into `MEMORY.md` or `TOOLS.md` just to satisfy overnight reviews.
+- Do not use `TOOLS.md` for accepted-risk policy, suppression logic, or historical narrative unless the note is also a live operational constraint.
+- Do not use daily notes as the canonical source for stable runtime setup once the fact is verified and durable.
+
 ---
 
 ## Core Setup
