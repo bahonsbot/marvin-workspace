@@ -328,18 +328,27 @@
       "id": "career-draft-creative-tool-automation-script-pla",
       "title": "Draft: Creative-tool automation script plan",
       "description": "define one scoped automation script for Blender, Unreal Engine, or After Effects that removes a real repetitive setup step; deliverable: markdown spec in projects/creative-practice/ or the relevant tool workspace with target app, inputs/outputs, edge cases, and first prototype step",
-      "status": "backlog",
+      "status": "done",
       "priority": "normal",
       "sourceType": "generated",
       "agentTarget": "marvin",
       "createdAt": 1775998149312,
-      "updatedAt": 1775998149312,
-      "version": 1,
+      "updatedAt": 1776051034858,
+      "version": 2,
       "columnOrder": 0,
       "editable": true,
-      "chatAnnouncementSent": false,
+      "chatAnnouncementSent": true,
       "feedback": [],
-      "artifacts": [],
+      "artifacts": [
+        {
+          "path": "projects/creative-practice/blender-automation-spec-turntable-scene-setup-2026-04-13.md",
+          "kind": "file"
+        },
+        {
+          "path": "projects/creative-practice/blender-automation-implementation-plan-turntable-scene-setup-2026-04-13.md",
+          "kind": "file"
+        }
+      ],
       "linkedAutonomyRef": {
         "kind": "autonomous-md",
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
@@ -352,6 +361,19 @@
           "createdBy": "daily-task-generator",
           "createdAt": 1775998149312
         }
+      },
+      "run": {
+        "attemptId": "career-draft-creative-tool-automation-script-pla-manual-complete-1",
+        "attemptNumber": 1,
+        "trigger": "direct",
+        "sessionKey": "agent:main:main",
+        "sessionId": "manual-board-reconcile-2026-04-13",
+        "runId": "manual-board-reconcile-creative-tool-plan-2026-04-13",
+        "startedAt": 1776051034858,
+        "endedAt": 1776051034858,
+        "status": "done",
+        "summary": "Completed the Blender turntable automation spec and a follow-on implementation plan; artifacts saved under projects/creative-practice/.",
+        "result": "{\"schema\":\"mission-control-autonomous-run-v1\",\"summary\":\"Completed the Blender turntable automation spec and a follow-on implementation plan; artifacts saved under projects/creative-practice/.\",\"warnings\":[],\"artifacts\":[{\"path\":\"projects/creative-practice/blender-automation-spec-turntable-scene-setup-2026-04-13.md\",\"kind\":\"file\"},{\"path\":\"projects/creative-practice/blender-automation-implementation-plan-turntable-scene-setup-2026-04-13.md\",\"kind\":\"file\"}],\"proof\":\"Spec file exists, implementation plan file exists, and the backlog item was reconciled to done after completion.\"}"
       }
     },
     {
