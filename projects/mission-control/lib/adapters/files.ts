@@ -8,6 +8,7 @@ const WORKSPACE_ROOT = process.env.OPENCLAW_WORKSPACE_ROOT ?? '/data/.openclaw/w
 
 const CURATED_ROOTS: Array<{ id: string; label: string; path: string }> = [
   { id: 'workspace', label: 'Workspace', path: '.' },
+  { id: 'memory', label: 'Memory Files', path: 'memory' },
   { id: 'agent-workspaces', label: 'Agent Workspaces', path: 'agent-workspaces' },
   { id: 'docs', label: 'Docs', path: 'docs' },
   { id: 'projects', label: 'Projects', path: 'projects' },
@@ -46,8 +47,10 @@ const TEXT_EXTENSIONS = new Set([
 
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg']);
 
-const BLOCKED_EXACT = new Set(['MEMORY.md', 'memory', '.learnings']);
-const BLOCKED_PREFIXES = ['memory/', '.learnings/'];
+const HIDDEN_EXACT = new Set(['.learnings']);
+const HIDDEN_PREFIXES = ['.learnings/'];
+const WRITE_BLOCKED_EXACT = new Set(['MEMORY.md', 'memory', '.learnings']);
+const WRITE_BLOCKED_PREFIXES = ['memory/', '.learnings/'];
 
 function normalizeRelative(input: string | null | undefined): string {
   if (!input || input === '.') return '.';
@@ -58,15 +61,21 @@ function normalizeRelative(input: string | null | undefined): string {
   return trimmed;
 }
 
-function isBlockedRelative(relativePath: string): boolean {
+function isHiddenRelative(relativePath: string): boolean {
   const normalized = normalizeRelative(relativePath);
-  if (BLOCKED_EXACT.has(normalized)) return true;
-  return BLOCKED_PREFIXES.some((prefix) => normalized.startsWith(prefix));
+  if (HIDDEN_EXACT.has(normalized)) return true;
+  return HIDDEN_PREFIXES.some((prefix) => normalized.startsWith(prefix));
+}
+
+function isWriteBlockedRelative(relativePath: string): boolean {
+  const normalized = normalizeRelative(relativePath);
+  if (WRITE_BLOCKED_EXACT.has(normalized)) return true;
+  return WRITE_BLOCKED_PREFIXES.some((prefix) => normalized.startsWith(prefix));
 }
 
 function toAbsolute(relativePath: string): string | null {
   const normalized = normalizeRelative(relativePath);
-  if (isBlockedRelative(normalized)) return null;
+  if (isHiddenRelative(normalized)) return null;
 
   const absolute = path.resolve(WORKSPACE_ROOT, normalized);
   const relativeFromRoot = path.relative(WORKSPACE_ROOT, absolute);
@@ -99,7 +108,7 @@ function isPreviewableFile(filePath: string): boolean {
 }
 
 function isWritableFile(filePath: string): boolean {
-  return isTextFile(filePath) && !isBlockedRelative(filePath);
+  return isTextFile(filePath) && !isWriteBlockedRelative(filePath);
 }
 
 function buildBreadcrumb(relativePath: string): Array<{ label: string; path: string }> {
@@ -187,7 +196,7 @@ export async function getDirectoryListing(requestedPath: string | null | undefin
       entriesRaw
         .filter((entry) => !entry.name.startsWith('.next'))
         .filter((entry) => !entry.name.startsWith('node_modules'))
-        .filter((entry) => !isBlockedRelative(path.posix.join(resolvedDirectoryPath === '.' ? '' : resolvedDirectoryPath, entry.name)))
+        .filter((entry) => !isHiddenRelative(path.posix.join(resolvedDirectoryPath === '.' ? '' : resolvedDirectoryPath, entry.name)))
         .map(async (entry): Promise<FilesEntry | null> => {
           const absolute = path.join(directoryAbsolute, entry.name);
           const relative = toPublicPath(absolute);

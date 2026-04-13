@@ -5,10 +5,36 @@ import path from 'node:path';
 const WORKSPACE_ROOT = process.env.OPENCLAW_WORKSPACE_ROOT ?? '/data/.openclaw/workspace';
 const UPLOAD_ROOT = path.join(WORKSPACE_ROOT, 'uploads', 'mission-control');
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
+const BLOCKED_UPLOAD_EXTENSIONS = new Set([
+  '.php',
+  '.phtml',
+  '.phar',
+  '.cgi',
+  '.pl',
+  '.py',
+  '.sh',
+  '.bash',
+  '.zsh',
+  '.js',
+  '.mjs',
+  '.cjs',
+  '.bat',
+  '.cmd',
+  '.com',
+  '.exe',
+  '.dll',
+  '.msi',
+  '.scr',
+]);
 
 function sanitizeFilename(name: string): string {
-  const cleaned = name.replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-  return cleaned || 'upload';
+  const parsed = path.parse(name);
+  const safeStem = (parsed.name || 'upload')
+    .replace(/[^a-zA-Z0-9_-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+  const safeExtension = parsed.ext.toLowerCase().replace(/[^a-z0-9.]+/g, '');
+  return `${safeStem || 'upload'}${safeExtension}`;
 }
 
 function timestampPrefix(): string {
@@ -37,6 +63,12 @@ export async function POST(request: Request) {
       if (file.size > MAX_FILE_BYTES) {
         return NextResponse.json({ error: `File too large: ${file.name}` }, { status: 413 });
       }
+
+      const rawExtension = path.extname(file.name).toLowerCase();
+      if (rawExtension && BLOCKED_UPLOAD_EXTENSIONS.has(rawExtension)) {
+        return NextResponse.json({ error: `Blocked file type: ${file.name}` }, { status: 400 });
+      }
+
       const safeName = sanitizeFilename(file.name);
       const finalName = `${timestampPrefix()}-${safeName}`;
       const absolutePath = path.join(UPLOAD_ROOT, finalName);
