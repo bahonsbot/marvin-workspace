@@ -14,6 +14,17 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
+## [CORR-20260414-0109]
+
+**Trigger:** Philippe correctly pointed out that I called the latest Mission Control transcript pass `Slice 3` even though it did not include most of the dedicated Slice 3 renderer components and behaviors from the plan.
+**What was wrong:** I over-labeled a renderer-shaping pass as full `Slice 3` instead of describing it honestly as a partial follow-up on top of Slice 1 and Slice 2 foundations.
+**Lesson:** Do not overstate implementation progress. For Mission Control transcript work, reserve `Slice 3` for the dedicated renderer/component pass: thinking block, live activity strip, diff/file viewers, transcript-entry component, stronger intermediate narration treatment, and system strips. If only shaping/grouping semantics landed, call it `Slice 2.5` or renderer-facing shaping.
+
+**Priority:** high
+**Status:** pending
+
+---
+
 ## [CORR-20260408-1748]
 
 **Trigger:** Philippe correctly called out that the rejected Home-page rewrite was not even remotely close to the screenshot target and asked whether I had actually used the MCP export prompt.
@@ -522,3 +533,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Context:** The STT Phase 1 Sudo run initially looked muddied by prior Mission Control changes, but Philippe clarified the task started after the UI had already stabilized.
 **Rule:** For post-run confusion, separate (a) pre-existing churn, (b) run-time implementation, and (c) completion-state presentation bugs before assigning cause.
 **Status:** active
+
+## [CORR-20260414-0135]
+
+**Trigger:** Philippe asked what the new `RUNTIME / RUN STARTED / RUN FINISHED` rows mean and then decided to keep them for now.
+**Preference:** keep runtime boundary markers in Mission Control chat for now; they are useful structural markers rather than assistant content.
+**Lesson:** if these rows later feel too intrusive, reduce their visual weight first instead of removing the signal entirely.
+
+**Priority:** medium
+**Status:** pending
