@@ -173,6 +173,100 @@ function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['contro
   };
 }
 
+export function createDeferredOrchestratorIntegrationSummary(): OrchestratorIntegrationSummary {
+  const controlPath: OrchestratorIntegrationSummary['controlPath'] = {
+    label: 'Mission Control runtime summary is loading',
+    href: null,
+    endpoint: null,
+    guidance: 'Transcript history can render immediately while Mission Control hydrates the heavier runtime summary in the background.',
+    note: 'Deferred summary placeholder only. Live runtime details load after the page mounts.',
+    sameAuthBoundary: true,
+    embeddable: false,
+    reason: 'unavailable',
+  };
+
+  return {
+    status: 'stub',
+    integrationMode: 'hybrid-reuse',
+    chatEmbeddingStatus: 'embedded-reuse',
+    honestyNotes: [
+      'Mission Control is rendering transcript history first and deferring the heavier runtime summary until after mount.',
+      'This placeholder is intentional and should be replaced by live runtime metadata within the first background refresh.',
+    ],
+    runtimeBridge: deriveRuntimeBridge(controlPath, false),
+    controlPath,
+    runtime: {
+      defaultAgentId: null,
+      gateway: { mode: null, url: null, reachable: false, version: null },
+      health: { ok: false, channels: [] },
+    },
+    sessionContext: {
+      totalSessionsVisible: null,
+      activeDirectLast5m: 0,
+      roots: [],
+      mainSession: {
+        key: MAIN_SESSION_KEY,
+        exists: false,
+        model: null,
+        updatedAt: null,
+      },
+      recent: [],
+    },
+    integrationShape: {
+      now: 'Transcript history is seeded immediately while the runtime summary hydrates in the background.',
+      next: 'Replace this placeholder with live runtime/session metadata as soon as the runtime bridge refresh returns.',
+    },
+    refreshedAt: new Date().toISOString(),
+  };
+}
+
+function createUnavailableOrchestratorIntegrationSummary(): OrchestratorIntegrationSummary {
+  const controlPath: OrchestratorIntegrationSummary['controlPath'] = {
+    label: 'Use the existing OpenClaw control surface',
+    href: null,
+    endpoint: null,
+    guidance: 'Runtime launch details are unavailable, so the safest path is to keep using the already-working control surface.',
+    note: 'No runtime bridge details available.',
+    sameAuthBoundary: true,
+    embeddable: false,
+    reason: 'unavailable',
+  };
+
+  return {
+    status: 'stub',
+    integrationMode: 'hybrid-reuse',
+    chatEmbeddingStatus: 'not-implemented',
+    honestyNotes: [
+      'Could not read runtime/session state from local OpenClaw CLI in this environment.',
+      'No fallback chat implementation is provided by Mission Control.',
+    ],
+    runtimeBridge: deriveRuntimeBridge(controlPath, false),
+    controlPath,
+    runtime: {
+      defaultAgentId: null,
+      gateway: { mode: null, url: null, reachable: false, version: null },
+      health: { ok: false, channels: [] },
+    },
+    sessionContext: {
+      totalSessionsVisible: null,
+      activeDirectLast5m: 0,
+      roots: [],
+      mainSession: {
+        key: MAIN_SESSION_KEY,
+        exists: false,
+        model: null,
+        updatedAt: null,
+      },
+      recent: [],
+    },
+    integrationShape: {
+      now: 'No runtime context available from adapters.',
+      next: 'Verify local openclaw CLI availability for read-only status/session access, then re-enable bridge and context surfaces.',
+    },
+    refreshedAt: new Date().toISOString(),
+  };
+}
+
 export async function readOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
   try {
     const [statusRaw, healthRaw, sessionsRaw, allSessionsRaw] = (await Promise.all([
@@ -284,50 +378,7 @@ export async function readOrchestratorIntegrationSummary(): Promise<Orchestrator
       refreshedAt: new Date().toISOString(),
     };
   } catch {
-    const controlPath: OrchestratorIntegrationSummary['controlPath'] = {
-      label: 'Use the existing OpenClaw control surface',
-      href: null,
-      endpoint: null,
-      guidance: 'Runtime launch details are unavailable, so the safest path is to keep using the already-working control surface.',
-      note: 'No runtime bridge details available.',
-      sameAuthBoundary: true,
-      embeddable: false,
-      reason: 'unavailable',
-    };
-
-    return {
-      status: 'stub',
-      integrationMode: 'hybrid-reuse',
-      chatEmbeddingStatus: 'not-implemented',
-      honestyNotes: [
-        'Could not read runtime/session state from local OpenClaw CLI in this environment.',
-        'No fallback chat implementation is provided by Mission Control.',
-      ],
-      runtimeBridge: deriveRuntimeBridge(controlPath, false),
-      controlPath,
-      runtime: {
-        defaultAgentId: null,
-        gateway: { mode: null, url: null, reachable: false, version: null },
-        health: { ok: false, channels: [] },
-      },
-      sessionContext: {
-        totalSessionsVisible: null,
-        activeDirectLast5m: 0,
-        roots: [],
-        mainSession: {
-          key: MAIN_SESSION_KEY,
-          exists: false,
-          model: null,
-          updatedAt: null,
-        },
-        recent: [],
-      },
-      integrationShape: {
-        now: 'No runtime context available from adapters.',
-        next: 'Verify local openclaw CLI availability for read-only status/session access, then re-enable bridge and context surfaces.',
-      },
-      refreshedAt: new Date().toISOString(),
-    };
+    return createUnavailableOrchestratorIntegrationSummary();
   }
 }
 
