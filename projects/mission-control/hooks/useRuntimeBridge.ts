@@ -1,7 +1,18 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { OrchestratorIntegrationSummary, RuntimeBridgeTranscriptHistory, RuntimeBridgeTranscriptMessage } from '@/lib/types/contracts';
+import {
+  createEventEntry,
+  createMessageEntry,
+  createNoticeEntry,
+  createToolEntry,
+  mergeTranscriptEntries,
+} from '@/lib/chat/runtime-bridge-transcript';
+import type {
+  OrchestratorIntegrationSummary,
+  RuntimeBridgeTranscriptEntry,
+  RuntimeBridgeTranscriptHistory,
+} from '@/lib/types/contracts';
 
 type RuntimeBridgeWsState = 'unavailable' | 'connecting' | 'open' | 'closed' | 'error';
 type RuntimeBridgeSessionState =
@@ -52,10 +63,6 @@ export type RuntimeBridgeChatMessage = {
   status: 'pending' | 'streaming' | 'final' | 'error';
   at: number;
 };
-
-function isTranscriptMessage(message: RuntimeBridgeChatMessage): message is RuntimeBridgeChatMessage & RuntimeBridgeTranscriptMessage {
-  return message.role === 'user' || message.role === 'assistant';
-}
 
 export type RuntimeBridgeToolEvent = {
   stream: 'tool';
@@ -298,11 +305,6 @@ function describeGatewayEvent(name: string | null, payload: Record<string, unkno
   return name;
 }
 
-function appendBounded<T>(items: T[], next: T, limit: number): T[] {
-  const appended = [...items, next];
-  return appended.length > limit ? appended.slice(-limit) : appended;
-}
-
 function detectRuntimeNotice(payload: Record<string, unknown> | null): Omit<RuntimeBridgeTransientNotice, 'id' | 'at'> | null {
   if (!payload) return null;
   const serialized = JSON.stringify(payload).toLowerCase();
@@ -338,146 +340,148 @@ function detectRuntimeNotice(payload: Record<string, unknown> | null): Omit<Runt
   return null;
 }
 
-function mergeHydratedMessages(
-  current: RuntimeBridgeChatMessage[],
-  incoming: RuntimeBridgeChatMessage[],
-  sessionKey: string | null,
-): RuntimeBridgeChatMessage[] {
-  const scopedCurrent = current.filter((message) => !sessionKey || message.sessionKey === sessionKey || message.sessionKey === null);
-  const keyed = new Map<string, RuntimeBridgeChatMessage>();
-
-  const buildFallbackKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
-    `${message.role}|${message.sessionKey ?? 'none'}|${message.runId ?? 'none'}|${normalizedBody}`;
-
-  const buildTimestampBucketKey = (message: RuntimeBridgeChatMessage, normalizedBody: string) =>
-    `${message.role}|${message.sessionKey ?? 'none'}|${Math.floor((Number.isFinite(message.at) ? message.at : Date.now()) / 30000)}|${normalizedBody}`;
-
-  const upsert = (message: RuntimeBridgeChatMessage, source: 'current' | 'hydrated') => {
-    const normalizedBody = message.body.trim();
-    if (!normalizedBody) return;
-
-    const normalizedAt = Number.isFinite(message.at) ? message.at : Date.now();
-    const normalized: RuntimeBridgeChatMessage = {
-      ...message,
-      body: normalizedBody,
-      at: normalizedAt,
-    };
-    const idKey = normalized.id ? `id:${normalized.id}` : null;
-    const fallbackKey = `body:${buildFallbackKey(normalized, normalizedBody)}`;
-    const timestampBucketKey = `body-bucket:${buildTimestampBucketKey(normalized, normalizedBody)}`;
-    const existing = (idKey && keyed.get(idKey)) ?? keyed.get(fallbackKey) ?? keyed.get(timestampBucketKey);
-
-    if (!existing) {
-      if (idKey) keyed.set(idKey, normalized);
-      keyed.set(fallbackKey, normalized);
-      keyed.set(timestampBucketKey, normalized);
-      return;
-    }
-
-    const incomingIsNewer = normalized.at > existing.at;
-    const incomingIsSameTime = normalized.at === existing.at;
-    const incomingWinsOnTie = incomingIsSameTime && (
-      (existing.status !== 'final' && normalized.status === 'final') || normalized.body.length > existing.body.length
-    );
-    const winner = incomingIsNewer || incomingWinsOnTie ? normalized : existing;
-    const merged: RuntimeBridgeChatMessage = {
-      ...existing,
-      ...winner,
-      status: winner.status,
-      body: winner.body,
-      at: winner.at,
-      runId: winner.runId ?? existing.runId,
-      // Prefer existing id when hydrating into a live message bucket to avoid id churn.
-      id: source === 'hydrated' ? existing.id : winner.id,
-    };
-
-    if (idKey) keyed.set(idKey, merged);
-    keyed.set(fallbackKey, merged);
-    keyed.set(timestampBucketKey, merged);
-    if (existing.id && existing.id !== merged.id) {
-      keyed.set(`id:${existing.id}`, merged);
-    }
-  };
-
-  for (const message of scopedCurrent) upsert(message, 'current');
-  for (const message of incoming) upsert(message, 'hydrated');
-
-  const deduped = Array.from(new Set(keyed.values()));
-  deduped.sort((a, b) => a.at - b.at || a.id.localeCompare(b.id));
-  return deduped.slice(-MAX_LIVE_MESSAGES);
-}
-
-function upsertAssistantMessage(params: {
-  messages: RuntimeBridgeChatMessage[];
-  sessionKey: string | null;
-  runId: string | null;
-  text: string;
-  status: RuntimeBridgeChatMessage['status'];
-}): RuntimeBridgeChatMessage[] {
-  const { messages, sessionKey, runId, text, status } = params;
-  const normalized = text.trim();
-  if (!normalized) return messages;
-
-  const existingIndex = [...messages].reverse().findIndex((message) => {
-    if (message.role !== 'assistant') return false;
-    if (runId && message.runId === runId) return true;
-    return message.status === 'streaming' && message.sessionKey === sessionKey;
-  });
-
-  if (existingIndex === -1) {
-    return appendBounded(
-      messages,
-      {
-        id: generateId('mc-assistant'),
-        role: 'assistant',
-        body: normalized,
-        sessionKey,
-        runId,
-        status,
-        at: Date.now(),
-      },
-      MAX_LIVE_MESSAGES,
-    );
-  }
-
-  const resolvedIndex = messages.length - 1 - existingIndex;
-  const current = messages[resolvedIndex];
-  const nextBody =
-    status === 'final'
-      ? normalized
-      : normalized.startsWith(current.body)
-        ? normalized
-        : `${current.body}${normalized}`;
-
-  return messages.map((message, index) =>
-    index === resolvedIndex
-      ? {
-          ...message,
-          body: nextBody,
-          runId: runId ?? message.runId,
-          status,
-          at: Date.now(),
-        }
-      : message,
-  );
-}
-
-function buildSeededMessages(
+function buildSeededEntries(
   initialSessionKey: string | null,
   initialTranscriptHistory: RuntimeBridgeTranscriptHistory | null | undefined,
-): RuntimeBridgeChatMessage[] {
+): RuntimeBridgeTranscriptEntry[] {
   if (!initialSessionKey) return [];
   if (!initialTranscriptHistory) return [];
   if (initialTranscriptHistory.sessionKey !== initialSessionKey) return [];
-  return initialTranscriptHistory.messages;
+  return initialTranscriptHistory.entries ?? [];
+}
+
+function hasScopedTranscriptEntries(entries: RuntimeBridgeTranscriptEntry[], sessionKey: string | null): boolean {
+  return entries.some(
+    (entry) =>
+      entry.kind === 'message' &&
+      (entry.role === 'user' || entry.role === 'assistant') &&
+      (entry.sessionKey === sessionKey || entry.sessionKey === null),
+  );
+}
+
+function transcriptEntriesToLiveMessages(entries: RuntimeBridgeTranscriptEntry[]): RuntimeBridgeChatMessage[] {
+  return entries
+    .filter((entry): entry is Extract<RuntimeBridgeTranscriptEntry, { kind: 'message' }> => entry.kind === 'message')
+    .filter((entry) => entry.role === 'user' || entry.role === 'assistant' || entry.role === 'system')
+    .map((entry): RuntimeBridgeChatMessage => ({
+      id: entry.id,
+      role: entry.role,
+      variant: entry.role === 'system' ? ('bridge-note' as const) : undefined,
+      body: entry.body,
+      sessionKey: entry.sessionKey,
+      runId: entry.runId,
+      status: entry.status,
+      at: entry.at,
+    }))
+    .slice(-MAX_LIVE_MESSAGES);
+}
+
+function transcriptEntriesToLiveEvents(entries: RuntimeBridgeTranscriptEntry[]): RuntimeBridgeLiveEvent[] {
+  const liveEvents: RuntimeBridgeLiveEvent[] = [];
+
+  entries.forEach((entry) => {
+      if (entry.kind === 'tool') {
+        liveEvents.push({
+          id: entry.id,
+          name: 'agent',
+          detail: describeGatewayEvent('agent', {
+            stream: 'tool',
+            data: {
+              phase: entry.phase,
+              name: entry.name,
+              toolCallId: entry.toolCallId,
+              args: entry.args,
+              meta: entry.meta,
+              isError: entry.isError,
+            },
+          }),
+          sessionKey: entry.sessionKey,
+          runId: entry.runId,
+          seq: entry.evidence.seq ?? null,
+          at: entry.at,
+          tool: {
+            stream: 'tool',
+            phase: entry.phase,
+            name: entry.name,
+            toolCallId: entry.toolCallId,
+            args: entry.args,
+            meta: entry.meta,
+            isError: entry.isError,
+          },
+        });
+        return;
+      }
+
+      if (entry.kind === 'event') {
+        liveEvents.push({
+          id: entry.id,
+          name: entry.name,
+          detail: entry.detail,
+          sessionKey: entry.sessionKey,
+          runId: entry.runId,
+          seq: entry.seq,
+          at: entry.at,
+          tool: null,
+        });
+      }
+    });
+
+  return liveEvents.slice(-MAX_LIVE_EVENTS);
+}
+
+function transcriptEntriesToTransientNotices(entries: RuntimeBridgeTranscriptEntry[]): RuntimeBridgeTransientNotice[] {
+  return entries
+    .filter(
+      (
+        entry,
+      ): entry is Extract<RuntimeBridgeTranscriptEntry, { kind: 'notice' }> & {
+        noticeKind: 'context-compression' | 'fallback-model';
+      } => entry.kind === 'notice' && (entry.noticeKind === 'context-compression' || entry.noticeKind === 'fallback-model'),
+    )
+    .map((entry): RuntimeBridgeTransientNotice => ({
+      id: entry.id,
+      kind: entry.noticeKind,
+      message: entry.message,
+      at: entry.at,
+    }))
+    .slice(-MAX_TRANSIENT_NOTICES);
+}
+
+function upsertAssistantEntry(params: {
+  entries: RuntimeBridgeTranscriptEntry[];
+  sessionKey: string | null;
+  runId: string | null;
+  text: string;
+  status: 'streaming' | 'final' | 'error';
+}): RuntimeBridgeTranscriptEntry[] {
+  const at = Date.now();
+  const entry = createMessageEntry({
+    id: params.runId ? `mc-assistant-${params.runId}` : generateId('mc-assistant'),
+    role: 'assistant',
+    body: params.text,
+    status: params.status,
+    sessionKey: params.sessionKey,
+    runId: params.runId,
+    at,
+    evidence: {
+      sessionKey: params.sessionKey,
+      runId: params.runId,
+    },
+  });
+
+  if (!entry) return params.entries;
+  return mergeTranscriptEntries(params.entries, [entry], {
+    sessionKey: params.sessionKey,
+    limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 40,
+  });
 }
 
 export function useRuntimeBridge(
   initialSummary: OrchestratorIntegrationSummary,
   initialTranscriptHistory: RuntimeBridgeTranscriptHistory | null = null,
 ): RuntimeBridgeState {
-  const seededMessages = useMemo(
-    () => buildSeededMessages(chooseTargetSession(initialSummary).key, initialTranscriptHistory),
+  const seededEntries = useMemo(
+    () => buildSeededEntries(chooseTargetSession(initialSummary).key, initialTranscriptHistory),
     [initialSummary, initialTranscriptHistory],
   );
   const [summary, setSummary] = useState(initialSummary);
@@ -489,16 +493,14 @@ export function useRuntimeBridge(
   const [session, setSession] = useState<RuntimeBridgeSessionSnapshot>(
     createEmptySession('unavailable', 'No Mission Control WS sidecar descriptor is available for this preview.'),
   );
-  const [messages, setMessages] = useState<RuntimeBridgeChatMessage[]>(seededMessages);
-  const [events, setEvents] = useState<RuntimeBridgeLiveEvent[]>([]);
-  const [notices, setNotices] = useState<RuntimeBridgeTransientNotice[]>([]);
+  const [entries, setEntries] = useState<RuntimeBridgeTranscriptEntry[]>(seededEntries);
   const [sendState, setSendState] = useState<RuntimeBridgeSendState>('idle');
   const [sendError, setSendError] = useState<string | null>(null);
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
   const [activeSessionKey, setActiveSessionKey] = useState<string | null>(() => chooseTargetSession(initialSummary).key);
   const [reconnectNonce, setReconnectNonce] = useState(0);
   const mountedRef = useRef(true);
-  const messagesRef = useRef<RuntimeBridgeChatMessage[]>(seededMessages);
+  const entriesRef = useRef<RuntimeBridgeTranscriptEntry[]>(seededEntries);
   const activeSessionKeyRef = useRef<string | null>(chooseTargetSession(initialSummary).key);
   const sessionGenerationRef = useRef(0);
   const hydratedSessionKeyRef = useRef<string | null>(initialTranscriptHistory?.sessionKey ?? null);
@@ -519,6 +521,9 @@ export function useRuntimeBridge(
     const resolvedKey = activeSessionKey ?? defaultTargetSession.key;
     return { key: resolvedKey, label: shortenSessionKey(resolvedKey) };
   }, [activeSessionKey, defaultTargetSession.key]);
+  const messages = useMemo(() => transcriptEntriesToLiveMessages(entries), [entries]);
+  const events = useMemo(() => transcriptEntriesToLiveEvents(entries), [entries]);
+  const notices = useMemo(() => transcriptEntriesToTransientNotices(entries), [entries]);
 
   const rejectPending = useCallback((reason: Error) => {
     const pending = pendingRef.current;
@@ -574,7 +579,11 @@ export function useRuntimeBridge(
   useEffect(() => {
     if (notices.length === 0) return;
     const timer = window.setTimeout(() => {
-      setNotices((current) => current.slice(1));
+      setEntries((current) => {
+        const firstNotice = current.find((entry) => entry.kind === 'notice');
+        if (!firstNotice) return current;
+        return current.filter((entry) => entry.id !== firstNotice.id);
+      });
     }, 4500);
     return () => window.clearTimeout(timer);
   }, [notices]);
@@ -584,8 +593,8 @@ export function useRuntimeBridge(
   }, [initialSummary]);
 
   useEffect(() => {
-    messagesRef.current = messages;
-  }, [messages]);
+    entriesRef.current = entries;
+  }, [entries]);
 
   useEffect(() => {
     const initialSessionKey = chooseTargetSession(initialSummary).key;
@@ -593,7 +602,12 @@ export function useRuntimeBridge(
     if (initialTranscriptHistory?.sessionKey !== initialSessionKey) return;
 
     hydratedSessionKeyRef.current = initialTranscriptHistory.sessionKey;
-    setMessages((current) => mergeHydratedMessages(current, initialTranscriptHistory.messages, initialSessionKey));
+    setEntries((current) =>
+      mergeTranscriptEntries(current, initialTranscriptHistory.entries ?? [], {
+        sessionKey: initialSessionKey,
+        limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+      }),
+    );
   }, [initialSummary, initialTranscriptHistory]);
 
   useEffect(() => {
@@ -618,28 +632,29 @@ export function useRuntimeBridge(
     if (incomingHistory.sessionKey !== requestedSessionKey) return;
 
     const hydratedSessionKey = incomingHistory.sessionKey ?? null;
-    const incomingMessages = incomingHistory.messages ?? [];
+    const incomingEntries = incomingHistory.entries ?? [];
 
-    setMessages((current) => {
+    setEntries((current) => {
       if (capturedGeneration !== sessionGenerationRef.current) return current;
       if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== requestedSessionKey) return current;
 
-      const scopedCurrent = current.filter((message) => message.sessionKey === hydratedSessionKey || message.sessionKey === null);
-      const hasScopedTranscript = scopedCurrent.some((message) => message.role === 'user' || message.role === 'assistant');
+      const hasScopedTranscript = hasScopedTranscriptEntries(current, hydratedSessionKey);
       const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
-      const shouldHydrate = incomingMessages.length > 0 && (sessionChanged || !hasScopedTranscript);
+      const shouldHydrate = incomingEntries.length > 0 && (sessionChanged || !hasScopedTranscript);
       hydratedSessionKeyRef.current = hydratedSessionKey;
       if (!shouldHydrate) return current;
 
-      return mergeHydratedMessages(current, incomingMessages, hydratedSessionKey);
+      return mergeTranscriptEntries(current, incomingEntries, {
+        sessionKey: hydratedSessionKey,
+        limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+      });
     });
   }, [defaultTargetSession.key]);
 
   const hydrateHistory = useCallback(async (sessionKey: string | null, options?: { force?: boolean }) => {
     if (!sessionKey) return;
 
-    const scopedMessages = messagesRef.current.filter((message) => message.sessionKey === sessionKey || message.sessionKey === null);
-    const hasScopedTranscript = scopedMessages.some(isTranscriptMessage);
+    const hasScopedTranscript = hasScopedTranscriptEntries(entriesRef.current, sessionKey);
     if (!options?.force && hydratedSessionKeyRef.current === sessionKey && hasScopedTranscript) {
       return;
     }
@@ -808,6 +823,13 @@ export function useRuntimeBridge(
       const eventRunId = typeof payload?.runId === 'string' ? payload.runId : null;
       const eventSessionKey = typeof payload?.sessionKey === 'string' ? payload.sessionKey : null;
       const targetSessionKey = activeSessionKeyRef.current ?? defaultTargetSession.key;
+      const at = Date.now();
+      const evidence = {
+        runId: eventRunId,
+        sessionKey: eventSessionKey,
+        seq: typeof message.seq === 'number' ? message.seq : null,
+        sourceEvent: eventName,
+      };
 
       const tool = extractToolEvent(payload);
       const runtimeNotice = detectRuntimeNotice(payload);
@@ -820,40 +842,71 @@ export function useRuntimeBridge(
         (eventName === 'agent' && agentStream === 'lifecycle' && (lifecyclePhase === 'start' || lifecyclePhase === 'end'));
 
       if (shouldRecordEvent) {
-        setEvents((current) =>
-          appendBounded(
-            current,
-            {
-              id: generateId('mc-event'),
-              name: eventName ?? 'event',
-              detail: describeGatewayEvent(eventName, payload),
+        const nextEntries: RuntimeBridgeTranscriptEntry[] = [];
+        if (tool) {
+          nextEntries.push(
+            createToolEntry({
+              id: generateId('mc-tool'),
+              name: tool.name,
+              phase: tool.phase,
+              status: tool.isError ? 'failed' : tool.phase === 'result' ? 'completed' : 'running',
+              toolCallId: tool.toolCallId,
+              args: tool.args,
+              meta: tool.meta,
+              isError: tool.isError,
               sessionKey: eventSessionKey,
               runId: eventRunId,
-              seq: typeof message.seq === 'number' ? message.seq : null,
-              at: Date.now(),
-              tool,
-            },
-            MAX_LIVE_EVENTS,
-          ),
-        );
+              at,
+              evidence: {
+                ...evidence,
+                toolCallId: tool.toolCallId,
+              },
+            }),
+          );
+        } else {
+          const eventEntry = createEventEntry({
+            id: generateId('mc-event'),
+            name: eventName ?? 'event',
+            detail: describeGatewayEvent(eventName, payload),
+            sessionKey: eventSessionKey,
+            runId: eventRunId,
+            at,
+            evidence,
+          });
+          if (eventEntry) nextEntries.push(eventEntry);
+        }
+
+        if (nextEntries.length > 0) {
+          setEntries((current) =>
+            mergeTranscriptEntries(current, nextEntries, {
+              sessionKey: targetSessionKey,
+              limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+            }),
+          );
+        }
       }
 
       if (runtimeNotice) {
         const signature = `${runtimeNotice.kind}:${eventSessionKey ?? 'none'}:${eventRunId ?? 'none'}:${JSON.stringify(payload)}`;
         if (!noticeSignaturesRef.current.has(signature)) {
           noticeSignaturesRef.current.add(signature);
-          setNotices((current) =>
-            appendBounded(
-              current,
-              {
-                id: generateId('mc-notice'),
-                kind: runtimeNotice.kind,
-                message: runtimeNotice.message,
-                at: Date.now(),
-              },
-              MAX_TRANSIENT_NOTICES,
-            ),
-          );
+          const noticeEntry = createNoticeEntry({
+            id: generateId('mc-notice'),
+            noticeKind: runtimeNotice.kind,
+            message: runtimeNotice.message,
+            sessionKey: eventSessionKey,
+            runId: eventRunId,
+            at,
+            evidence,
+          });
+          if (noticeEntry) {
+            setEntries((current) =>
+              mergeTranscriptEntries(current, [noticeEntry], {
+                sessionKey: targetSessionKey,
+                limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+              }),
+            );
+          }
         }
       }
 
@@ -872,9 +925,9 @@ export function useRuntimeBridge(
       if (chatState === 'delta') {
         const deltaText = extractTextFromGatewayMessage(payload?.message);
         if (!deltaText) return;
-        setMessages((current) =>
-          upsertAssistantMessage({
-            messages: current,
+        setEntries((current) =>
+          upsertAssistantEntry({
+            entries: current,
             sessionKey: eventSessionKey ?? targetSessionKey,
             runId: eventRunId,
             text: deltaText,
@@ -888,9 +941,9 @@ export function useRuntimeBridge(
       if (chatState === 'final') {
         const finalText = payload ? extractFinalChatText(payload) : '';
         if (finalText) {
-          setMessages((current) =>
-            upsertAssistantMessage({
-              messages: current,
+          setEntries((current) =>
+            upsertAssistantEntry({
+              entries: current,
               sessionKey: eventSessionKey ?? targetSessionKey,
               runId: eventRunId,
               text: finalText,
@@ -916,21 +969,24 @@ export function useRuntimeBridge(
               : 'Gateway chat run failed.';
         setSendState('error');
         setSendError(problem);
-        setMessages((current) =>
-          appendBounded(
-            current,
-            {
-              id: generateId('mc-system'),
-              role: 'system',
-              body: problem,
-              sessionKey: eventSessionKey ?? targetSessionKey,
-              runId: eventRunId,
-              status: 'error',
-              at: Date.now(),
-            },
-            MAX_LIVE_MESSAGES,
-          ),
-        );
+        const errorEntry = createMessageEntry({
+          id: generateId('mc-system'),
+          role: 'system',
+          body: problem,
+          status: 'error',
+          sessionKey: eventSessionKey ?? targetSessionKey,
+          runId: eventRunId,
+          at,
+          evidence,
+        });
+        if (errorEntry) {
+          setEntries((current) =>
+            mergeTranscriptEntries(current, [errorEntry], {
+              sessionKey: targetSessionKey,
+              limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+            }),
+          );
+        }
         // Also refresh on error to keep snapshot in sync
         void Promise.all([
           load(true),
@@ -943,22 +999,23 @@ export function useRuntimeBridge(
         setSendState('idle');
         setSendError(null);
         setActiveRunId(null);
-        setEvents((current) =>
-          appendBounded(
-            current,
-            {
-              id: generateId('mc-event'),
-              name: 'chat.aborted',
-              detail: 'Chat run aborted.',
-              sessionKey: eventSessionKey ?? targetSessionKey,
-              runId: eventRunId,
-              seq: typeof payload?.seq === 'number' ? payload.seq : null,
-              at: Date.now(),
-              tool: null,
-            },
-            MAX_LIVE_EVENTS,
-          ),
-        );
+        const abortedEntry = createEventEntry({
+          id: generateId('mc-event'),
+          name: 'chat.aborted',
+          detail: 'Chat run aborted.',
+          sessionKey: eventSessionKey ?? targetSessionKey,
+          runId: eventRunId,
+          at,
+          evidence,
+        });
+        if (abortedEntry) {
+          setEntries((current) =>
+            mergeTranscriptEntries(current, [abortedEntry], {
+              sessionKey: targetSessionKey,
+              limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+            }),
+          );
+        }
         // Refresh after abort so snapshot stays aligned, but do not surface it as a fatal UI error.
         void Promise.all([
           load(true),
@@ -1277,21 +1334,26 @@ export function useRuntimeBridge(
       setActiveSessionKey(sessionKey);
       setSendState('sending');
       setSendError(null);
-      setMessages((current) =>
-        appendBounded(
-          current,
-          {
-            id: generateId('mc-user'),
-            role: 'user',
-            body: trimmed,
+      const userEntry = createMessageEntry({
+        id: generateId('mc-user'),
+        role: 'user',
+        body: trimmed,
+        status: 'final',
+        sessionKey,
+        runId: null,
+        at: Date.now(),
+        evidence: {
+          sessionKey,
+        },
+      });
+      if (userEntry) {
+        setEntries((current) =>
+          mergeTranscriptEntries(current, [userEntry], {
             sessionKey,
-            runId: null,
-            status: 'final',
-            at: Date.now(),
-          },
-          MAX_LIVE_MESSAGES,
-        ),
-      );
+            limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+          }),
+        );
+      }
 
       try {
         const ack = (await rpc('chat.send', {
@@ -1306,22 +1368,27 @@ export function useRuntimeBridge(
         const runId = typeof ack?.runId === 'string' ? ack.runId : null;
         const status = typeof ack?.status === 'string' ? ack.status : null;
         setActiveRunId(runId);
-        setEvents((current) =>
-          appendBounded(
-            current,
-            {
-              id: generateId('mc-event'),
-              name: 'chat.send',
-              detail: status ? `chat.send acknowledged as ${status}.` : 'chat.send acknowledged.',
+        const sendEvent = createEventEntry({
+          id: generateId('mc-event'),
+          name: 'chat.send',
+          detail: status ? `chat.send acknowledged as ${status}.` : 'chat.send acknowledged.',
+          sessionKey,
+          runId,
+          at: Date.now(),
+          evidence: {
+            sessionKey,
+            runId,
+            sourceEvent: 'chat.send',
+          },
+        });
+        if (sendEvent) {
+          setEntries((current) =>
+            mergeTranscriptEntries(current, [sendEvent], {
               sessionKey,
-              runId,
-              seq: null,
-              at: Date.now(),
-              tool: null,
-            },
-            MAX_LIVE_EVENTS,
-          ),
-        );
+              limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+            }),
+          );
+        }
         setSendState(status === 'ok' ? 'idle' : 'streaming');
       } catch (cause) {
         if (capturedGeneration !== sessionGenerationRef.current) return;
@@ -1330,21 +1397,26 @@ export function useRuntimeBridge(
         const message = cause instanceof Error ? cause.message : 'Mission Control could not send the prompt.';
         setSendState('error');
         setSendError(message);
-        setMessages((current) =>
-          appendBounded(
-            current,
-            {
-              id: generateId('mc-system'),
-              role: 'system',
-              body: message,
+        const systemEntry = createMessageEntry({
+          id: generateId('mc-system'),
+          role: 'system',
+          body: message,
+          status: 'error',
+          sessionKey,
+          runId: null,
+          at: Date.now(),
+          evidence: {
+            sessionKey,
+          },
+        });
+        if (systemEntry) {
+          setEntries((current) =>
+            mergeTranscriptEntries(current, [systemEntry], {
               sessionKey,
-              runId: null,
-              status: 'error',
-              at: Date.now(),
-            },
-            MAX_LIVE_MESSAGES,
-          ),
-        );
+              limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+            }),
+          );
+        }
         throw cause;
       }
     },
@@ -1370,22 +1442,26 @@ export function useRuntimeBridge(
       setSendError(null);
       setSendState('idle');
       setActiveRunId(null);
-      setEvents((current) =>
-        appendBounded(
-          current,
-          {
-            id: generateId('mc-event'),
-            name: 'chat.abort',
-            detail: 'chat.abort requested.',
+      const abortEvent = createEventEntry({
+        id: generateId('mc-event'),
+        name: 'chat.abort',
+        detail: 'chat.abort requested.',
+        sessionKey,
+        runId: null,
+        at: Date.now(),
+        evidence: {
+          sessionKey,
+          sourceEvent: 'chat.abort',
+        },
+      });
+      if (abortEvent) {
+        setEntries((current) =>
+          mergeTranscriptEntries(current, [abortEvent], {
             sessionKey,
-            runId: null,
-            seq: null,
-            at: Date.now(),
-            tool: null,
-          },
-          MAX_LIVE_EVENTS,
-        ),
-      );
+            limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+          }),
+        );
+      }
     } catch (cause) {
       if (capturedGeneration !== sessionGenerationRef.current) return;
       if (activeSessionKeyRef.current !== sessionKey) return;
@@ -1428,9 +1504,7 @@ export function useRuntimeBridge(
       activeSessionKeyRef.current = sessionKey;
       hydratedSessionKeyRef.current = null;
       setActiveSessionKey(sessionKey);
-      setMessages([]);
-      setEvents([]);
-      setNotices([]);
+      setEntries([]);
       noticeSignaturesRef.current.clear();
       setSendError(null);
       setSendState('idle');

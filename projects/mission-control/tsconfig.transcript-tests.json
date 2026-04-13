@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": ".test-dist",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "lib": ["es2022"],
+    "jsx": "preserve",
+    "isolatedModules": false,
+    "incremental": false
+  },
+  "include": [
+    "lib/chat/runtime-bridge-transcript.ts",
+    "lib/types/contracts.ts",
+    "tests/runtime-bridge-transcript.test.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next"
+  ]
+}

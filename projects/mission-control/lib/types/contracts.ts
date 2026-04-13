@@ -384,8 +384,98 @@ export interface RuntimeBridgeTranscriptMessage {
   at: number;
 }
 
+export interface RuntimeBridgeTranscriptEvidence {
+  messageId?: string | null;
+  parentId?: string | null;
+  sessionKey?: string | null;
+  runId?: string | null;
+  seq?: number | null;
+  toolCallId?: string | null;
+  sourceEvent?: string | null;
+}
+
+export type RuntimeBridgeTranscriptArtifact =
+  | {
+      kind: 'file-write';
+      filePath: string;
+      content: string;
+    }
+  | {
+      kind: 'file-edit';
+      filePath: string;
+      oldText: string;
+      newText: string;
+    };
+
+export type RuntimeBridgeTranscriptEntry =
+  | {
+      id: string;
+      stableKey: string;
+      kind: 'message';
+      role: 'user' | 'assistant' | 'system';
+      body: string;
+      status: 'final' | 'streaming' | 'error';
+      sessionKey: string | null;
+      runId: string | null;
+      at: number;
+      evidence: RuntimeBridgeTranscriptEvidence;
+    }
+  | {
+      id: string;
+      stableKey: string;
+      kind: 'process';
+      stage: 'thinking' | 'lifecycle';
+      label: string;
+      body: string;
+      sessionKey: string | null;
+      runId: string | null;
+      at: number;
+      evidence: RuntimeBridgeTranscriptEvidence;
+    }
+  | {
+      id: string;
+      stableKey: string;
+      kind: 'tool';
+      name: string;
+      phase: 'start' | 'update' | 'result';
+      status: 'running' | 'completed' | 'failed';
+      sessionKey: string | null;
+      runId: string | null;
+      toolCallId: string | null;
+      args: Record<string, unknown> | null;
+      meta: string | null;
+      isError: boolean;
+      artifacts: RuntimeBridgeTranscriptArtifact[];
+      at: number;
+      evidence: RuntimeBridgeTranscriptEvidence;
+    }
+  | {
+      id: string;
+      stableKey: string;
+      kind: 'event';
+      name: string;
+      detail: string;
+      sessionKey: string | null;
+      runId: string | null;
+      seq: number | null;
+      at: number;
+      evidence: RuntimeBridgeTranscriptEvidence;
+    }
+  | {
+      id: string;
+      stableKey: string;
+      kind: 'notice';
+      noticeKind: 'context-compression' | 'fallback-model' | 'system' | 'event';
+      message: string;
+      sessionKey: string | null;
+      runId: string | null;
+      at: number;
+      evidence: RuntimeBridgeTranscriptEvidence;
+    };
+
 export interface RuntimeBridgeTranscriptHistory {
   sessionKey: string | null;
+  entries: RuntimeBridgeTranscriptEntry[];
   messages: RuntimeBridgeTranscriptMessage[];
 }
 

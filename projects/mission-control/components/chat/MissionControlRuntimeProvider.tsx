@@ -103,8 +103,8 @@ export function MissionControlRuntimeProvider({ children }: { children: ReactNod
     setTranscriptHistory((current) => {
       if (
         current?.sessionKey === incoming.sessionKey &&
-        current.messages.length === incoming.messages.length &&
-        current.messages.every((message, index) => message.id === incoming.messages[index]?.id)
+        current.entries.length === incoming.entries.length &&
+        current.entries.every((entry, index) => entry.stableKey === incoming.entries[index]?.stableKey)
       ) {
         return current;
       }
