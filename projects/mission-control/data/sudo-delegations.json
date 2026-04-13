@@ -1,6 +1,92 @@
 {
   "orchestrations": [
     {
+      "id": "sudo-orchestration-1776057411117-m8rez1",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, take the current Mission Control backlog task 'Draft: Actionable Alpha dashboard slice' as a real Trading-domain handoff. Work as the Dev Team lead, not as a lone coder. Goal: produce a build-ready implementation brief for one operator-facing module intended for the eventual Trading domain in Mission Control. Use the current backlog brief as the core intent: spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view. Deliver exactly one markdown spec in projects/market-intel/notes/ that defines: (1) one named module, (2) the exact operator decision it supports, (3) FE layout and hierarchy, (4) required inputs and data contract, (5) QA acceptance checks and edge cases, and (6) one recommended smallest next build slice. Constraints: no broad redesign, no control-plane or runtime changes, no touching unrelated Mission Control pages, and no fake data claims. This is primarily a planning/spec handoff, not a general implementation sprint.",
+      "promptSummary": "Sudo, take the current Mission Control backlog task 'Draft: Actionable Alpha dashboard slice' as a real Trading-domain handoff. Work as the Dev Team lead, not as a lone coder. G...",
+      "status": "done",
+      "requestedAt": "2026-04-13T05:16:51.117Z",
+      "updatedAt": "2026-04-13T05:19:44.145Z",
+      "childRunIds": [
+        "sudo-delegation-1776057436487-3nxxcu",
+        "sudo-delegation-1776057508367-mh9xi0"
+      ],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": true
+      },
+      "startedAt": "2026-04-13T05:16:51.162Z",
+      "decision": {
+        "mode": "delegate",
+        "lanePlan": [
+          "frontend",
+          "qa"
+        ],
+        "lanePlanSteps": [
+          {
+            "lane": "frontend",
+            "order": 1,
+            "purpose": "Draft the single-module markdown spec as an operator-facing Trading UI handoff, including module name, decision supported, layout hierarchy, data contract, and smallest next bui...",
+            "expectedOutput": "One build-ready markdown spec in projects/market-intel/notes/ for the Actionable Alpha dashboard slice.",
+            "validationFocus": "Stay tightly scoped to one module, one decision view, and truthful input requirements without implying implemented data sources."
+          },
+          {
+            "lane": "qa",
+            "order": 2,
+            "purpose": "Review the spec for completeness, internal consistency, acceptance coverage, and edge-case realism before handoff.",
+            "expectedOutput": "QA-reviewed acceptance checks and edge cases reflected in the same markdown spec.",
+            "validationFocus": "Verify no broad redesign creep, no fake data claims, no runtime/control-plane changes, and clear completion criteria for the next build slice."
+          }
+        ],
+        "rationale": "The brief is specific enough to start now, and the smallest honest team plan is a frontend-led spec draft followed by QA validation.",
+        "orderRationale": "Frontend goes first because this is a UI-module planning handoff, not a backend implementation task. QA follows to harden acceptance checks and edge cases without adding unnecessary lanes.",
+        "expectedOutputs": [
+          "One named Actionable Alpha operator module",
+          "A precise operator decision the module supports",
+          "Frontend layout and hierarchy for the module",
+          "Required inputs and a concrete data contract",
+          "QA acceptance checks and edge cases"
+        ],
+        "validationIntent": "Mission Control should validate the finished markdown against the six required sections, scope constraints, and truthfulness of all data/input assumptions.",
+        "completionCriteria": "Done when exactly one markdown spec exists in projects/market-intel/notes/, covers all six requested sections, stays within Trading-domain module scope, and is ready for a later implementation pass without needing broad product clarifica...",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:97113a2e-4f09-41ce-998d-5525e01b6964",
+      "decisionRunId": "4a1dafe3-409f-4b93-821b-8c9dcb63917f",
+      "completedAt": "2026-04-13T05:19:44.145Z",
+      "synthesis": {
+        "summary": "Sudo completed the lane plan frontend -> qa.",
+        "decided": "Delegated frontend -> qa because The brief is specific enough to start now, and the smallest honest team plan is a frontend-led spec draft followed by QA validation.",
+        "lanesRun": [
+          "frontend",
+          "qa"
+        ],
+        "changesOrFindings": [],
+        "blockers": [],
+        "unresolvedIssues": [],
+        "completedAt": "2026-04-13T05:19:44.130Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      }
+    },
+    {
       "id": "sudo-orchestration-1775635932708-dv2u9v",
       "delegatedBy": "Sudo",
       "sourceSeatSlug": "dev-team",
@@ -699,6 +785,62 @@
   ],
   "runs": [
     {
+      "id": "sudo-delegation-1776057508367-mh9xi0",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1776057411117-m8rez1",
+      "orchestrationSequence": 2,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "qa",
+        "seatLabel": "QA Engineer",
+        "role": "Verification and regression lane",
+        "defaultModel": "minimax2.7",
+        "defaultThinking": "low",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the QA Engineer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: Verification and regression lane.\nSudo plan context:\n- Step 2 of 2\n- Planned lane order: frontend -> qa\n- Step purpose: Review the spec for completeness, internal consistency, acceptance coverage, and edge-case realism before handoff.\n- Expected output: QA-reviewed acceptance checks and edge cases reflected in the same markdown spec.\n- Validation focus: Verify no broad redesign creep, no fake data claims, no runtime/control-plane changes, and clear completion criteria for the next build slice.\n- Order rationale: Frontend goes first because this is a UI-module planning handoff, not a backend implementation task. QA follows to harden acceptance checks and edge cases without adding unnecessary lanes.\n- Validation intent: Mission Control should validate the finished markdown against the six required sections, scope constraints, and truthfulness of all data/input assumptions.\n- Completion criteria: Done when exactly one markdown spec exists in projects/market-intel/notes/, covers all six requested sections, stays within Trading-domain module scope, and is ready for a later implementation pass without needing broad product clarifica...\nPrior completed lane output:\n- Frontend Developer: completed\nTask delegated by Sudo:\nSudo, take the current Mission Control backlog task 'Draft: Actionable Alpha dashboard slice' as a real Trading-domain handoff. Work as the Dev Team lead, not as a lone coder. Goal: produce a build-ready implementation brief for one operator-facing module intended for the eventual Trading domain in Mission Control. Use the current backlog brief as the core intent: spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view. Deliver exactly one markdown spec in projects/market-intel/notes/ that defines: (1) one named module, (2) the exact operator decision it supports, (3) FE layout and hierarchy, (4) required inputs and data contract, (5) QA acceptance checks and edge cases, and (6) one recommended smallest next build slice. Constraints: no broad redesign, no control-plane or runtime changes, no touching unrelated Mission Control pages, and no fake data claims. This is primarily a planning/spec handoff, not a general implementation sprint.",
+      "promptSummary": "You are the QA Engineer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent session...",
+      "status": "done",
+      "requestedAt": "2026-04-13T05:18:28.367Z",
+      "updatedAt": "2026-04-13T05:19:31.579Z",
+      "startedAt": "2026-04-13T05:18:28.421Z",
+      "completedAt": "2026-04-13T05:19:31.579Z",
+      "childSessionKey": "agent:main:sudo-qa:3f229597-dade-430c-b2f3-fbb14dc4e89f",
+      "runId": "4d2eb1ad-80cb-47d1-ad4f-517d44760c4a",
+      "resultSummary": "completed"
+    },
+    {
+      "id": "sudo-delegation-1776057436487-3nxxcu",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1776057411117-m8rez1",
+      "orchestrationSequence": 1,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "frontend",
+        "seatLabel": "Frontend Developer",
+        "role": "UI implementation lane",
+        "defaultModel": "codex",
+        "defaultThinking": "medium",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the Frontend Developer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: UI implementation lane.\nSudo plan context:\n- Step 1 of 2\n- Planned lane order: frontend -> qa\n- Step purpose: Draft the single-module markdown spec as an operator-facing Trading UI handoff, including module name, decision supported, layout hierarchy, data contract, and smallest next bui...\n- Expected output: One build-ready markdown spec in projects/market-intel/notes/ for the Actionable Alpha dashboard slice.\n- Validation focus: Stay tightly scoped to one module, one decision view, and truthful input requirements without implying implemented data sources.\n- Order rationale: Frontend goes first because this is a UI-module planning handoff, not a backend implementation task. QA follows to harden acceptance checks and edge cases without adding unnecessary lanes.\n- Validation intent: Mission Control should validate the finished markdown against the six required sections, scope constraints, and truthfulness of all data/input assumptions.\n- Completion criteria: Done when exactly one markdown spec exists in projects/market-intel/notes/, covers all six requested sections, stays within Trading-domain module scope, and is ready for a later implementation pass without needing broad product clarifica...\nPrior completed lane output:\n- No prior lane output yet.\nTask delegated by Sudo:\nSudo, take the current Mission Control backlog task 'Draft: Actionable Alpha dashboard slice' as a real Trading-domain handoff. Work as the Dev Team lead, not as a lone coder. Goal: produce a build-ready implementation brief for one operator-facing module intended for the eventual Trading domain in Mission Control. Use the current backlog brief as the core intent: spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view. Deliver exactly one markdown spec in projects/market-intel/notes/ that defines: (1) one named module, (2) the exact operator decision it supports, (3) FE layout and hierarchy, (4) required inputs and data contract, (5) QA acceptance checks and edge cases, and (6) one recommended smallest next build slice. Constraints: no broad redesign, no control-plane or runtime changes, no touching unrelated Mission Control pages, and no fake data claims. This is primarily a planning/spec handoff, not a general implementation sprint.",
+      "promptSummary": "You are the Frontend Developer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent...",
+      "status": "done",
+      "requestedAt": "2026-04-13T05:17:16.487Z",
+      "updatedAt": "2026-04-13T05:18:28.353Z",
+      "startedAt": "2026-04-13T05:17:16.546Z",
+      "completedAt": "2026-04-13T05:18:28.353Z",
+      "childSessionKey": "agent:main:sudo-frontend:5906a03d-e8c8-4741-87b0-3d7ed7a5d4c4",
+      "runId": "cfd8e3a3-6a34-4738-b6f6-c4eb7c59cb6c",
+      "resultSummary": "completed"
+    },
+    {
       "id": "sudo-delegation-1775635667123-pqk0r8",
       "delegatedBy": "Sudo",
       "orchestrationId": "sudo-orchestration-1775635169774-yk05p8",
@@ -925,6 +1067,6 @@
   ],
   "meta": {
     "schemaVersion": 4,
-    "updatedAt": "2026-04-08T08:12:53.394Z"
+    "updatedAt": "2026-04-13T05:19:44.145Z"
   }
 }

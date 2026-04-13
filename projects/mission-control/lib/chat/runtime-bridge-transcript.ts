@@ -194,12 +194,23 @@ export type TranscriptArtifactGroup = {
   toolNames: string[];
 };
 
+export type TranscriptActivityItem = {
+  id: string;
+  kind: 'tool' | 'process';
+  label: string;
+  detail: string;
+  status: 'running' | 'completed' | 'failed';
+  at: number;
+};
+
 export type RuntimeBridgeTranscriptRenderItem =
   | {
       type: 'message';
       id: string;
       at: number;
       entry: MessageEntry & { role: 'user' | 'assistant' };
+      presentation: 'final' | 'streaming' | 'intermediate';
+      activity: TranscriptActivityItem[];
     }
   | {
       type: 'process';
@@ -613,6 +624,101 @@ function noticeTitle(entry: NoticeEntry): string {
   return 'System notice';
 }
 
+function latestToolRows(rows: ToolEntry[]): ToolEntry[] {
+  const latestRowsMap = new Map<string, ToolEntry>();
+  for (const row of rows) {
+    const key = row.toolCallId ?? row.id;
+    const existing = latestRowsMap.get(key);
+    if (!existing || existing.at <= row.at) {
+      latestRowsMap.set(key, row);
+    }
+  }
+
+  return Array.from(latestRowsMap.values()).sort(compareEntries);
+}
+
+function summarizeToolDetail(tool: ToolEntry): string {
+  const filePath =
+    typeof tool.args?.file_path === 'string'
+      ? tool.args.file_path
+      : typeof tool.args?.path === 'string'
+        ? tool.args.path
+        : null;
+  const command = typeof tool.args?.command === 'string' ? tool.args.command : null;
+  if ((tool.name === 'read' || tool.name === 'write' || tool.name === 'edit') && filePath) return filePath;
+  if (tool.name === 'exec' && command) return command;
+  return tool.meta || tool.name;
+}
+
+function messagePresentation(
+  entry: MessageEntry & { role: 'user' | 'assistant' },
+  index: number,
+  entries: RuntimeBridgeTranscriptEntry[],
+): 'final' | 'streaming' | 'intermediate' {
+  if (entry.role !== 'assistant') return 'final';
+  if (entry.status === 'streaming') return 'streaming';
+  if (!entry.runId) return 'final';
+
+  for (let cursor = index + 1; cursor < entries.length; cursor += 1) {
+    const candidate = entries[cursor];
+    if (candidate.sessionKey !== entry.sessionKey) continue;
+    if (candidate.kind === 'message' && candidate.role === 'user') break;
+    if (candidate.runId !== entry.runId) continue;
+    if (candidate.kind === 'tool') return 'intermediate';
+    if (candidate.kind === 'message' && candidate.role === 'assistant') break;
+  }
+
+  return 'final';
+}
+
+function buildMessageActivity(
+  entry: MessageEntry & { role: 'user' | 'assistant' },
+  entries: RuntimeBridgeTranscriptEntry[],
+): TranscriptActivityItem[] {
+  if (entry.role !== 'assistant' || !entry.runId) return [];
+
+  const runEntries = entries.filter(
+    (candidate) =>
+      candidate.runId === entry.runId &&
+      candidate.sessionKey === entry.sessionKey &&
+      candidate.at <= entry.at,
+  );
+
+  const runningTools = latestToolRows(
+    runEntries.filter((candidate): candidate is ToolEntry => candidate.kind === 'tool'),
+  ).filter((candidate) => candidate.status === 'running' && !candidate.isError);
+
+  const activities: TranscriptActivityItem[] = runningTools.map((tool) => ({
+    id: `activity:${tool.toolCallId ?? tool.id}`,
+    kind: 'tool',
+    label: tool.name,
+    detail: summarizeToolDetail(tool),
+    status: tool.status,
+    at: tool.at,
+  }));
+
+  const lifecycleEntries = runEntries.filter(
+    (candidate): candidate is ProcessEntry => candidate.kind === 'process' && candidate.stage === 'lifecycle',
+  );
+  const latestLifecycle = lifecycleEntries[lifecycleEntries.length - 1] ?? null;
+
+  if (latestLifecycle && latestLifecycle.label !== 'Run finished') {
+    activities.unshift({
+      id: `activity:${latestLifecycle.id}`,
+      kind: 'process',
+      label: latestLifecycle.label,
+      detail: latestLifecycle.body,
+      status: 'running',
+      at: latestLifecycle.at,
+    });
+  }
+
+  return activities
+    .sort((a, b) => b.at - a.at)
+    .slice(0, 4)
+    .sort((a, b) => a.at - b.at);
+}
+
 export function shapeTranscriptEntriesForRender(
   entries: RuntimeBridgeTranscriptEntry[],
   options?: { burstWindowMs?: number },
@@ -626,17 +732,20 @@ export function shapeTranscriptEntriesForRender(
   const items: Array<RuntimeBridgeTranscriptRenderItem & { order: number }> = [];
   let order = 0;
 
-  for (const entry of sortedEntries) {
+  sortedEntries.forEach((entry, index) => {
     if (entry.kind === 'message') {
       if (entry.role === 'user' || entry.role === 'assistant') {
+        const assistantEntry = entry as MessageEntry & { role: 'user' | 'assistant' };
         items.push({
           type: 'message',
           id: entry.id,
           at: entry.at,
-          entry: entry as MessageEntry & { role: 'user' | 'assistant' },
+          entry: assistantEntry,
+          presentation: messagePresentation(assistantEntry, index, sortedEntries),
+          activity: buildMessageActivity(assistantEntry, sortedEntries),
           order: order++,
         });
-        continue;
+        return;
       }
 
       items.push({
@@ -650,7 +759,7 @@ export function shapeTranscriptEntriesForRender(
         sessionKey: entry.sessionKey,
         order: order++,
       });
-      continue;
+      return;
     }
 
     if (entry.kind === 'process') {
@@ -661,7 +770,7 @@ export function shapeTranscriptEntriesForRender(
         entry,
         order: order++,
       });
-      continue;
+      return;
     }
 
     if (entry.kind === 'notice') {
@@ -677,7 +786,7 @@ export function shapeTranscriptEntriesForRender(
         order: order++,
       });
     }
-  }
+  });
 
   toolBursts.forEach((burst, index) => {
     items.push({

@@ -294,10 +294,90 @@ test('shapeTranscriptEntriesForRender keeps process, tool bursts, artifacts, and
     ['message', 'process', 'tools', 'artifacts', 'notice', 'message'],
   );
 
+  const messageItems = items.filter((item) => item.type === 'message');
+  assert.equal(messageItems[0]?.type, 'message');
+  assert.equal(messageItems[1]?.type, 'message');
+  if (messageItems[0]?.type === 'message') {
+    assert.equal(messageItems[0].presentation, 'final');
+  }
+  if (messageItems[1]?.type === 'message') {
+    assert.equal(messageItems[1].presentation, 'final');
+    assert.equal(messageItems[1].activity.length, 2);
+    assert.deepEqual(
+      messageItems[1].activity.map((activity) => activity.kind),
+      ['process', 'tool'],
+    );
+  }
+
   const artifactItem = items.find((item) => item.type === 'artifacts');
   assert.ok(artifactItem);
   if (artifactItem?.type === 'artifacts') {
     assert.equal(artifactItem.group.artifacts[0]?.kind, 'file-edit');
     assert.equal(artifactItem.group.artifacts[0]?.filePath, '/repo/file.ts');
+  }
+});
+
+test('shapeTranscriptEntriesForRender marks assistant narration before tools as intermediate', () => {
+  const sessionKey = 'agent:main:main';
+  const runId = 'run-84';
+  const user = createMessageEntry({
+    id: 'user-1',
+    role: 'user',
+    body: 'Do the work.',
+    status: 'final',
+    sessionKey,
+    runId: null,
+    at: 1000,
+    evidence: { sessionKey },
+  });
+  const assistantNarration = createMessageEntry({
+    id: 'assistant-1',
+    role: 'assistant',
+    body: 'Checking the files first.',
+    status: 'final',
+    sessionKey,
+    runId,
+    at: 1100,
+    evidence: { sessionKey, runId },
+  });
+  const toolStart = createToolEntry({
+    id: 'tool-1',
+    name: 'read',
+    phase: 'start',
+    status: 'running',
+    toolCallId: 'call-read-1',
+    args: { file_path: '/repo/file.ts' },
+    sessionKey,
+    runId,
+    at: 1200,
+    evidence: { sessionKey, runId, toolCallId: 'call-read-1' },
+  });
+  const assistantFinal = createMessageEntry({
+    id: 'assistant-2',
+    role: 'assistant',
+    body: 'Read the file and found the issue.',
+    status: 'final',
+    sessionKey,
+    runId,
+    at: 1300,
+    evidence: { sessionKey, runId },
+  });
+
+  assert.ok(user);
+  assert.ok(assistantNarration);
+  assert.ok(toolStart);
+  assert.ok(assistantFinal);
+
+  const items = shapeTranscriptEntriesForRender([user, assistantNarration, toolStart, assistantFinal], {
+    burstWindowMs: 10000,
+  });
+  const assistantItems = items.filter((item) => item.type === 'message' && item.entry.role === 'assistant');
+
+  assert.equal(assistantItems.length, 2);
+  if (assistantItems[0]?.type === 'message') {
+    assert.equal(assistantItems[0].presentation, 'intermediate');
+  }
+  if (assistantItems[1]?.type === 'message') {
+    assert.equal(assistantItems[1].presentation, 'final');
   }
 });

@@ -1,23 +1,17 @@
 'use client';
 
 import type { RefObject } from 'react';
+import { ChatTranscriptEntry } from '@/components/chat/chat-transcript-entry';
 import { monoFont } from '@/components/chat/chat-rich-text';
-import { LiveEventBlock, LiveMessageBlock, TranscriptNoticeBlock, TranscriptProcessBlock } from '@/components/chat/chat-message-blocks';
-import { ArtifactGroupBlock, ToolGroupBlock, type ToolGroupRow } from '@/components/chat/chat-tool-groups';
 import { pillStyle } from '@/components/chat/chat-ui-helpers';
-import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent } from '@/hooks/useRuntimeBridge';
+import type { RuntimeBridgeLiveEvent } from '@/hooks/useRuntimeBridge';
 import type { RuntimeBridgeTranscriptRenderItem } from '@/lib/chat/runtime-bridge-transcript';
 
 function InfoIcon() {
   return <span aria-hidden="true">ⓘ</span>;
 }
 
-export type ChatTranscriptItem =
-  | { type: 'message'; id: string; at: number; message: RuntimeBridgeChatMessage }
-  | { type: 'process'; id: string; at: number; item: Extract<RuntimeBridgeTranscriptRenderItem, { type: 'process' }> }
-  | { type: 'notice'; id: string; at: number; item: Extract<RuntimeBridgeTranscriptRenderItem, { type: 'notice' }> }
-  | { type: 'tools'; id: string; at: number; rows: ToolGroupRow[]; keepOpen: boolean }
-  | { type: 'artifacts'; id: string; at: number; item: Extract<RuntimeBridgeTranscriptRenderItem, { type: 'artifacts' }> };
+export type ChatTranscriptItem = RuntimeBridgeTranscriptRenderItem;
 
 export function LiveTranscriptSection({
   liveTargetLabel,
@@ -74,7 +68,13 @@ export function LiveTranscriptSection({
                 <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, width: 'min(360px, 92vw)', border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 10, display: 'grid', gap: 8, zIndex: 20 }}>
                   <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Recent bridge events</div>
                   {liveEvents.length > 0 ? (
-                    liveEvents.slice().reverse().map((eventItem) => <LiveEventBlock key={eventItem.id} event={eventItem} />)
+                    liveEvents.slice().reverse().map((eventItem) => (
+                      <ChatTranscriptEntry
+                        key={eventItem.id}
+                        item={{ type: 'bridge-event', id: eventItem.id, event: eventItem }}
+                        assistantSeatLabel={assistantSeatLabel}
+                      />
+                    ))
                   ) : (
                     <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>
                       No bridge events observed yet beyond the connection handshake.
@@ -87,19 +87,9 @@ export function LiveTranscriptSection({
         </div>
         <div style={{ display: 'grid', gap: 18 }}>
           {transcriptItems.length > 0 ? (
-            transcriptItems.map((item) =>
-              item.type === 'message' ? (
-                <LiveMessageBlock key={item.id} message={item.message} assistantLabel={assistantSeatLabel} />
-              ) : item.type === 'process' ? (
-                <TranscriptProcessBlock key={item.id} item={item.item} />
-              ) : item.type === 'notice' ? (
-                <TranscriptNoticeBlock key={item.id} item={item.item} />
-              ) : item.type === 'artifacts' ? (
-                <ArtifactGroupBlock key={item.id} group={item.item.group} />
-              ) : (
-                <ToolGroupBlock key={item.id} rows={item.rows} keepOpen={item.keepOpen} />
-              ),
-            )
+            transcriptItems.map((item) => (
+              <ChatTranscriptEntry key={item.id} item={item} assistantSeatLabel={assistantSeatLabel} />
+            ))
           ) : (
             <div style={{ padding: '6px 2px', fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8 }}>
               No live transcript yet. Send one prompt after the gateway session is connected to this target: <span style={{ fontFamily: monoFont }}>{liveTargetLabel}</span>.

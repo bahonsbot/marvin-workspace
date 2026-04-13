@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { TranscriptArtifactGroup } from '@/lib/chat/runtime-bridge-transcript';
+import { ChatDiffView } from '@/components/chat/chat-diff-view';
+import { ChatFileContentView } from '@/components/chat/chat-file-content-view';
 import { monoFont } from '@/components/chat/chat-rich-text';
 import { pillStyle } from '@/components/chat/chat-ui-helpers';
+import type { TranscriptArtifactGroup } from '@/lib/chat/runtime-bridge-transcript';
 import type { RuntimeBridgeTranscriptArtifact, RuntimeBridgeTranscriptEntry } from '@/lib/types/contracts';
 
 export type ToolGroupRow = {
@@ -11,31 +13,62 @@ export type ToolGroupRow = {
   entry: Extract<RuntimeBridgeTranscriptEntry, { kind: 'tool' }>;
 };
 
+function toolStatusColor(status: ToolGroupRow['entry']['status'], isError: boolean) {
+  if (status === 'failed' || isError) return '#a8473d';
+  if (status === 'completed') return '#30584a';
+  return '#7a622d';
+}
+
+function toolStatusDot(status: ToolGroupRow['entry']['status'], isError: boolean): string {
+  if (status === 'failed' || isError) return '!';
+  if (status === 'completed') return '•';
+  return '…';
+}
+
 export function toolLabel(name: string): string {
   return name.charAt(0).toUpperCase() + name.slice(1);
 }
 
-export function toolPreview(tool: ToolGroupRow['entry']): string {
+function lineCount(value: string): number {
+  if (!value) return 0;
+  return value.split('\n').length;
+}
+
+function compactPath(value: string): string {
+  const parts = value.split('/').filter(Boolean);
+  if (parts.length <= 3) return value;
+  return `.../${parts.slice(-3).join('/')}`;
+}
+
+function toolPath(tool: ToolGroupRow['entry']): string | null {
   const args = tool.args;
-  const filePath = typeof args?.file_path === 'string' ? args.file_path : typeof args?.path === 'string' ? args.path : null;
-  const command = typeof args?.command === 'string' ? args.command : null;
-  if ((tool.name === 'read' || tool.name === 'write' || tool.name === 'edit') && filePath) return filePath.split('/').pop() || filePath;
+  return typeof args?.file_path === 'string' ? args.file_path : typeof args?.path === 'string' ? args.path : null;
+}
+
+function toolCommand(tool: ToolGroupRow['entry']): string | null {
+  return typeof tool.args?.command === 'string' ? tool.args.command : null;
+}
+
+export function toolPreview(tool: ToolGroupRow['entry']): string {
+  const filePath = toolPath(tool);
+  const command = toolCommand(tool);
+  if ((tool.name === 'read' || tool.name === 'write' || tool.name === 'edit') && filePath) return compactPath(filePath);
   if (tool.name === 'exec' && command) return command;
   return tool.meta || tool.name;
 }
 
 export function isLowSignalExecTool(tool: ToolGroupRow['entry']): boolean {
   if (tool.name !== 'exec') return false;
-  const args = tool.args;
-  const command = typeof args?.command === 'string' ? args.command.trim() : '';
+  const command = toolCommand(tool)?.trim() ?? '';
   const meta = typeof tool.meta === 'string' ? tool.meta.trim() : '';
   return !command && !meta;
 }
 
 export function toolPhaseLabel(tool: ToolGroupRow['entry']): string {
-  if (tool.phase === 'start') return 'Running';
-  if (tool.phase === 'update') return 'Working';
-  return tool.isError ? 'Failed' : 'Completed';
+  if (tool.phase === 'start') return 'Starting';
+  if (tool.phase === 'update') return 'Running';
+  if (tool.status === 'failed' || tool.isError) return 'Failed';
+  return 'Completed';
 }
 
 export function formatEventTime(timestamp: number): string {
@@ -46,49 +79,65 @@ export function formatEventTime(timestamp: number): string {
   });
 }
 
+function artifactFromTool(tool: ToolGroupRow['entry']): RuntimeBridgeTranscriptArtifact | null {
+  return tool.artifacts[0] ?? null;
+}
+
+function toolRange(tool: ToolGroupRow['entry']): string | null {
+  const offset = typeof tool.args?.offset === 'number' ? tool.args.offset : null;
+  const limit = typeof tool.args?.limit === 'number' ? tool.args.limit : null;
+  if (offset === null && limit === null) return null;
+  return `${offset ?? 1}${limit !== null ? `, ${limit} lines` : ''}`;
+}
+
 function ToolDetailBlock({ row }: { row: ToolGroupRow }) {
-  const { entry: tool } = row;
-  const args = tool.args;
-  const filePath = typeof args?.file_path === 'string' ? args.file_path : typeof args?.path === 'string' ? args.path : null;
-  const command = typeof args?.command === 'string' ? args.command : null;
-  const content = typeof args?.content === 'string' ? args.content : null;
-  const oldText = typeof args?.old_string === 'string' ? args.old_string : typeof args?.oldText === 'string' ? args.oldText : null;
-  const newText = typeof args?.new_string === 'string' ? args.new_string : typeof args?.newText === 'string' ? args.newText : null;
-  const offset = typeof args?.offset === 'number' ? args.offset : null;
-  const limit = typeof args?.limit === 'number' ? args.limit : null;
-
-  if (tool.name === 'edit' && oldText !== null && newText !== null) {
-    return (
-      <div style={{ marginTop: 10, border: '1px solid rgba(200, 195, 188, 0.26)', borderRadius: 14, overflow: 'hidden', background: 'rgba(255,255,255,0.82)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-          <div style={{ borderRight: '1px solid rgba(200,195,188,0.2)' }}>
-            <div style={{ padding: '10px 12px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'rgba(190, 91, 91, 0.06)' }}>Before</div>
-            <pre style={{ margin: 0, padding: '12px 14px', fontFamily: monoFont, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--text-body)', background: 'rgba(255,255,255,0.78)' }}>{oldText}</pre>
-          </div>
-          <div>
-            <div style={{ padding: '10px 12px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'rgba(66, 124, 93, 0.08)' }}>After</div>
-            <pre style={{ margin: 0, padding: '12px 14px', fontFamily: monoFont, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--text-body)', background: 'rgba(255,255,255,0.78)' }}>{newText}</pre>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (tool.name === 'write' && content !== null) {
-    return (
-      <div style={{ marginTop: 10, border: '1px solid rgba(200, 195, 188, 0.26)', borderRadius: 14, overflow: 'hidden', background: 'rgba(255,255,255,0.82)' }}>
-        <div style={{ padding: '10px 12px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'rgba(250, 248, 245, 0.86)' }}>{filePath ? `${filePath.split('/').pop()} · new file content` : 'New file content'}</div>
-        <pre style={{ margin: 0, padding: '12px 14px', fontFamily: monoFont, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--text-body)', background: 'rgba(255,255,255,0.78)' }}>{content}</pre>
-      </div>
-    );
-  }
+  const tool = row.entry;
+  const filePath = toolPath(tool);
+  const command = toolCommand(tool);
+  const artifact = artifactFromTool(tool);
+  const content = typeof tool.args?.content === 'string' ? tool.args.content : null;
+  const range = toolRange(tool);
 
   return (
-    <div style={{ marginTop: 10, display: 'grid', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
-      {filePath ? <div><strong style={{ color: 'var(--text-body)' }}>Path:</strong> <span style={{ fontFamily: monoFont }}>{filePath}</span></div> : null}
-      {command ? <div><strong style={{ color: 'var(--text-body)' }}>Command:</strong> <span style={{ fontFamily: monoFont }}>{command}</span></div> : null}
-      {offset !== null || limit !== null ? <div><strong style={{ color: 'var(--text-body)' }}>Range:</strong> {offset ?? 1} {limit !== null ? `· ${limit} lines` : ''}</div> : null}
-      {tool.meta ? <div><strong style={{ color: 'var(--text-body)' }}>Result:</strong> {tool.meta}</div> : null}
+    <div style={{ display: 'grid', gap: 10 }}>
+      {artifact?.kind === 'file-edit' ? (
+        <ChatDiffView filePath={artifact.filePath} beforeText={artifact.oldText} afterText={artifact.newText} />
+      ) : null}
+      {artifact?.kind === 'file-write' ? (
+        <ChatFileContentView
+          title="Written file"
+          filePath={artifact.filePath}
+          content={artifact.content}
+          defaultExpanded={false}
+        />
+      ) : null}
+      {!artifact && tool.name === 'write' && content !== null && filePath ? (
+        <ChatFileContentView title="Written file" filePath={filePath} content={content} defaultExpanded={false} />
+      ) : null}
+      <div style={{ display: 'grid', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
+        {filePath ? (
+          <div>
+            <strong style={{ color: 'var(--text-body)' }}>Path:</strong>{' '}
+            <span style={{ fontFamily: monoFont }}>{filePath}</span>
+          </div>
+        ) : null}
+        {command ? (
+          <div>
+            <strong style={{ color: 'var(--text-body)' }}>Command:</strong>{' '}
+            <span style={{ fontFamily: monoFont }}>{command}</span>
+          </div>
+        ) : null}
+        {range ? (
+          <div>
+            <strong style={{ color: 'var(--text-body)' }}>Range:</strong> {range}
+          </div>
+        ) : null}
+        {tool.meta ? (
+          <div>
+            <strong style={{ color: 'var(--text-body)' }}>Result:</strong> {tool.meta}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -102,11 +151,15 @@ export function ToolGroupBlock({ rows, keepOpen }: { rows: ToolGroupRow[]; keepO
       latestRowsMap.set(key, row);
     }
   }
+
   const latestRows = Array.from(latestRowsMap.values()).sort((a, b) => a.entry.at - b.entry.at);
   const visibleRows = latestRows.filter((row) => !isLowSignalExecTool(row.entry));
   const [open, setOpen] = useState(keepOpen);
   const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const time = visibleRows[visibleRows.length - 1]?.entry.at ?? rows[rows.length - 1]?.entry.at ?? Date.now();
+  const completedCount = visibleRows.filter((row) => row.entry.status === 'completed' && !row.entry.isError).length;
+  const runningCount = visibleRows.filter((row) => row.entry.status === 'running' && !row.entry.isError).length;
+  const failedCount = visibleRows.filter((row) => row.entry.status === 'failed' || row.entry.isError).length;
 
   useEffect(() => {
     setOpen(keepOpen);
@@ -116,28 +169,107 @@ export function ToolGroupBlock({ rows, keepOpen }: { rows: ToolGroupRow[]; keepO
 
   return (
     <div style={{ display: 'grid', justifyItems: 'start', gap: 10, marginBottom: 10 }}>
-      <section style={{ width: 'min(78ch, 78%)', border: '1px solid rgba(200, 195, 188, 0.28)', borderRadius: 22, background: 'rgba(255, 255, 255, 0.84)', overflow: 'hidden' }}>
-        <button type="button" onClick={() => setOpen((v) => !v)} style={{ width: '100%', border: 'none', background: 'transparent', padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', textAlign: 'left' }}>
+      <section
+        style={{
+          width: 'min(80ch, 82%)',
+          border: '1px solid rgba(194, 187, 177, 0.4)',
+          borderRadius: 20,
+          background: 'rgba(248, 245, 240, 0.9)',
+          overflow: 'hidden',
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          style={{
+            width: '100%',
+            border: 'none',
+            background: 'transparent',
+            padding: '12px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            cursor: 'pointer',
+            textAlign: 'left',
+          }}
+        >
           <span style={{ fontSize: 12, color: 'var(--text-ghost)' }}>{open ? '▾' : '▸'}</span>
-          <span style={pillStyle({ active: true })}>Tools</span>
-          <span style={{ flex: 1, fontSize: 13, color: 'var(--text-muted)' }}>Used {visibleRows.length} tool{visibleRows.length !== 1 ? 's' : ''}</span>
+          <span style={pillStyle({ active: runningCount > 0 })}>Tool run</span>
+          <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--text-muted)' }}>
+            {visibleRows.length} step{visibleRows.length !== 1 ? 's' : ''}
+            {runningCount > 0 ? `, ${runningCount} running` : ''}
+            {failedCount > 0 ? `, ${failedCount} failed` : ''}
+            {completedCount > 0 && runningCount === 0 ? `, ${completedCount} completed` : ''}
+          </span>
           <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{formatEventTime(time)}</span>
         </button>
         {open ? (
-          <div style={{ borderTop: '1px solid rgba(200, 195, 188, 0.18)', padding: 8, display: 'grid', gap: 6 }}>
+          <div style={{ borderTop: '1px solid rgba(194, 187, 177, 0.22)', padding: 8, display: 'grid', gap: 6 }}>
             {visibleRows.map((row) => {
               const expanded = Boolean(expandedRows[row.id]);
-              const canExpand = row.entry.name === 'read' || row.entry.name === 'exec' || row.entry.name === 'write' || row.entry.name === 'edit';
+              const canExpand =
+                row.entry.name === 'read' ||
+                row.entry.name === 'exec' ||
+                row.entry.name === 'write' ||
+                row.entry.name === 'edit' ||
+                row.entry.artifacts.length > 0 ||
+                Boolean(row.entry.meta);
+              const color = toolStatusColor(row.entry.status, row.entry.isError);
               return (
-                <div key={row.id} style={{ borderRadius: 16, background: expanded ? 'rgba(250, 248, 245, 0.82)' : 'transparent', border: expanded ? '1px solid rgba(200, 195, 188, 0.22)' : '1px solid transparent', padding: '0 2px' }}>
-                  <button type="button" onClick={() => canExpand && setExpandedRows((current) => ({ ...current, [row.id]: !current[row.id] }))} style={{ width: '100%', border: 'none', background: 'transparent', padding: '10px 12px', display: 'flex', alignItems: 'flex-start', gap: 10, cursor: canExpand ? 'pointer' : 'default', textAlign: 'left' }}>
-                    <span style={{ width: 12, color: 'var(--text-ghost)', fontSize: 12, lineHeight: 1.4, paddingTop: 2 }}>{canExpand ? (expanded ? '▾' : '▸') : ''}</span>
-                    <span style={{ color: row.entry.isError ? '#b74c43' : '#3f695b', fontSize: 12, lineHeight: 1.4, paddingTop: 2 }}>✓</span>
-                    <span style={{ ...pillStyle(), flexShrink: 0 }}>{toolLabel(row.entry.name)}</span>
-                    <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.45, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}>{toolPreview(row.entry)}</span>
-                    <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0, lineHeight: 1.4, paddingTop: 2 }}>{toolPhaseLabel(row.entry)}</span>
+                <div
+                  key={row.id}
+                  style={{
+                    borderRadius: 16,
+                    background: expanded ? 'rgba(255, 253, 250, 0.92)' : 'rgba(255, 255, 255, 0.5)',
+                    border: expanded ? '1px solid rgba(194, 187, 177, 0.28)' : '1px solid rgba(194, 187, 177, 0.12)',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => canExpand && setExpandedRows((current) => ({ ...current, [row.id]: !current[row.id] }))}
+                    style={{
+                      width: '100%',
+                      border: 'none',
+                      background: 'transparent',
+                      padding: '10px 12px',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 10,
+                      cursor: canExpand ? 'pointer' : 'default',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <span style={{ width: 12, color: 'var(--text-ghost)', fontSize: 12, lineHeight: 1.4, paddingTop: 2 }}>
+                      {canExpand ? (expanded ? '▾' : '▸') : ''}
+                    </span>
+                    <span style={{ width: 14, color, fontSize: 14, lineHeight: 1.2, paddingTop: 2 }}>
+                      {toolStatusDot(row.entry.status, row.entry.isError)}
+                    </span>
+                    <div style={{ display: 'grid', gap: 4, flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                        <span style={pillStyle()}>{toolLabel(row.entry.name)}</span>
+                        <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color }}>
+                          {toolPhaseLabel(row.entry)}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 13,
+                          color: 'var(--text-muted)',
+                          lineHeight: 1.5,
+                          whiteSpace: 'pre-wrap',
+                          overflowWrap: 'anywhere',
+                          wordBreak: 'break-word',
+                        }}
+                      >
+                        {toolPreview(row.entry)}
+                      </div>
+                    </div>
+                    <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0, lineHeight: 1.4, paddingTop: 2 }}>
+                      {formatEventTime(row.entry.at)}
+                    </span>
                   </button>
-                  {expanded ? <div style={{ padding: '0 12px 12px 34px' }}><ToolDetailBlock row={row} /></div> : null}
+                  {expanded ? <div style={{ padding: '0 12px 12px 36px' }}><ToolDetailBlock row={row} /></div> : null}
                 </div>
               );
             })}
@@ -159,27 +291,16 @@ function artifactSummary(artifact: RuntimeBridgeTranscriptArtifact): string {
 
 function ArtifactPreview({ artifact }: { artifact: RuntimeBridgeTranscriptArtifact }) {
   if (artifact.kind === 'file-edit') {
-    return (
-      <div style={{ marginTop: 10, border: '1px solid rgba(200, 195, 188, 0.26)', borderRadius: 14, overflow: 'hidden', background: 'rgba(255,255,255,0.82)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
-          <div style={{ borderRight: '1px solid rgba(200,195,188,0.2)' }}>
-            <div style={{ padding: '10px 12px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'rgba(190, 91, 91, 0.06)' }}>Before</div>
-            <pre style={{ margin: 0, padding: '12px 14px', fontFamily: monoFont, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--text-body)', background: 'rgba(255,255,255,0.78)' }}>{artifact.oldText}</pre>
-          </div>
-          <div>
-            <div style={{ padding: '10px 12px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'rgba(66, 124, 93, 0.08)' }}>After</div>
-            <pre style={{ margin: 0, padding: '12px 14px', fontFamily: monoFont, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--text-body)', background: 'rgba(255,255,255,0.78)' }}>{artifact.newText}</pre>
-          </div>
-        </div>
-      </div>
-    );
+    return <ChatDiffView filePath={artifact.filePath} beforeText={artifact.oldText} afterText={artifact.newText} />;
   }
 
   return (
-    <div style={{ marginTop: 10, border: '1px solid rgba(200, 195, 188, 0.26)', borderRadius: 14, overflow: 'hidden', background: 'rgba(255,255,255,0.82)' }}>
-      <div style={{ padding: '10px 12px', fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'rgba(250, 248, 245, 0.86)' }}>{artifact.filePath.split('/').pop() || artifact.filePath}</div>
-      <pre style={{ margin: 0, padding: '12px 14px', fontFamily: monoFont, fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap', color: 'var(--text-body)', background: 'rgba(255,255,255,0.78)' }}>{artifact.content}</pre>
-    </div>
+    <ChatFileContentView
+      title="Written file"
+      filePath={artifact.filePath}
+      content={artifact.content}
+      defaultExpanded
+    />
   );
 }
 
@@ -190,29 +311,80 @@ export function ArtifactGroupBlock({ group }: { group: TranscriptArtifactGroup }
 
   return (
     <div style={{ display: 'grid', justifyItems: 'start', gap: 10, marginBottom: 10 }}>
-      <section style={{ width: 'min(78ch, 78%)', border: '1px solid rgba(121, 166, 148, 0.24)', borderRadius: 20, background: 'rgba(242, 248, 245, 0.92)', overflow: 'hidden' }}>
-        <button type="button" onClick={() => setOpen((value) => !value)} style={{ width: '100%', border: 'none', background: 'transparent', padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', textAlign: 'left' }}>
+      <section
+        style={{
+          width: 'min(80ch, 82%)',
+          border: '1px solid rgba(114, 150, 133, 0.26)',
+          borderRadius: 20,
+          background: 'rgba(240, 246, 243, 0.92)',
+          overflow: 'hidden',
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          style={{
+            width: '100%',
+            border: 'none',
+            background: 'transparent',
+            padding: '12px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            cursor: 'pointer',
+            textAlign: 'left',
+          }}
+        >
           <span style={{ fontSize: 12, color: 'var(--text-ghost)' }}>{open ? '▾' : '▸'}</span>
           <span style={pillStyle({ active: true })}>Files</span>
-          <span style={{ flex: 1, fontSize: 13, color: 'var(--text-muted)' }}>{fileCount} file artifact{fileCount !== 1 ? 's' : ''}</span>
+          <span style={{ flex: 1, fontSize: 13, color: 'var(--text-muted)' }}>
+            {fileCount} artifact{fileCount !== 1 ? 's' : ''}
+          </span>
           <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{formatEventTime(group.at)}</span>
         </button>
         {open ? (
-          <div style={{ borderTop: '1px solid rgba(121, 166, 148, 0.16)', padding: 8, display: 'grid', gap: 6 }}>
+          <div style={{ borderTop: '1px solid rgba(114, 150, 133, 0.16)', padding: 8, display: 'grid', gap: 6 }}>
             {group.artifacts.map((artifact, index) => {
               const artifactId = `${group.id}-${index}`;
               const expanded = Boolean(expandedRows[artifactId]);
+              const count = artifact.kind === 'file-edit' ? lineCount(artifact.newText) : lineCount(artifact.content);
               return (
-                <div key={artifactId} style={{ borderRadius: 16, background: expanded ? 'rgba(255, 255, 255, 0.82)' : 'transparent', border: expanded ? '1px solid rgba(121, 166, 148, 0.18)' : '1px solid transparent', padding: '0 2px' }}>
-                  <button type="button" onClick={() => setExpandedRows((current) => ({ ...current, [artifactId]: !current[artifactId] }))} style={{ width: '100%', border: 'none', background: 'transparent', padding: '10px 12px', display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer', textAlign: 'left' }}>
-                    <span style={{ width: 12, color: 'var(--text-ghost)', fontSize: 12, lineHeight: 1.4, paddingTop: 2 }}>{expanded ? '▾' : '▸'}</span>
-                    <span style={{ color: '#3f695b', fontSize: 12, lineHeight: 1.4, paddingTop: 2 }}>•</span>
-                    <span style={{ ...pillStyle(), flexShrink: 0 }}>{artifact.kind === 'file-edit' ? 'Edit' : 'Write'}</span>
-                    <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.45, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
-                      {artifactSummary(artifact)}
+                <div
+                  key={artifactId}
+                  style={{
+                    borderRadius: 16,
+                    background: expanded ? 'rgba(255, 255, 255, 0.88)' : 'rgba(255, 255, 255, 0.42)',
+                    border: expanded ? '1px solid rgba(114, 150, 133, 0.2)' : '1px solid rgba(114, 150, 133, 0.08)',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setExpandedRows((current) => ({ ...current, [artifactId]: !current[artifactId] }))}
+                    style={{
+                      width: '100%',
+                      border: 'none',
+                      background: 'transparent',
+                      padding: '10px 12px',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 10,
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <span style={{ width: 12, color: 'var(--text-ghost)', fontSize: 12, lineHeight: 1.4, paddingTop: 2 }}>
+                      {expanded ? '▾' : '▸'}
                     </span>
+                    <span style={{ color: '#3f695b', fontSize: 13, lineHeight: 1.4, paddingTop: 2 }}>•</span>
+                    <div style={{ display: 'grid', gap: 4, flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                        <span style={pillStyle()}>{artifact.kind === 'file-edit' ? 'Edit' : 'Write'}</span>
+                        <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{count} lines</span>
+                      </div>
+                      <div style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5 }}>{artifactSummary(artifact)}</div>
+                    </div>
                   </button>
-                  {expanded ? <div style={{ padding: '0 12px 12px 34px' }}><ArtifactPreview artifact={artifact} /></div> : null}
+                  {expanded ? <div style={{ padding: '0 12px 12px 36px' }}><ArtifactPreview artifact={artifact} /></div> : null}
                 </div>
               );
             })}

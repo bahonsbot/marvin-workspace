@@ -1,4 +1,3 @@
 [mission-control-preview-proxy] Listening on http://0.0.0.0:3005
 [mission-control-preview-proxy] Forwarding HTTP to http://127.0.0.1:3007
 [mission-control-preview-proxy] Forwarding /api/runtime-bridge/ws to ws://127.0.0.1:3006/mission-control-runtime
-[mission-control-preview-proxy] HTTP proxy error: connect ECONNREFUSED 127.0.0.1:3007

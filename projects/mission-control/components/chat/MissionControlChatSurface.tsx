@@ -1232,62 +1232,8 @@ export function MissionControlChatSurface({
   }, [isNearTranscriptBottom, liveEntries.length, liveEvents.length, liveSendState]);
 
   const transcriptItems = useMemo<ChatTranscriptItem[]>(() => {
-    const shapedItems = shapeTranscriptEntriesForRender(liveEntries, {
+    return shapeTranscriptEntriesForRender(liveEntries, {
       burstWindowMs: TOOL_BURST_WINDOW_MS,
-    });
-
-    return shapedItems.map((item) => {
-      if (item.type === 'message') {
-        return {
-          type: 'message',
-          id: item.id,
-          at: item.at,
-          message: {
-            id: item.entry.id,
-            role: item.entry.role,
-            body: item.entry.body,
-            sessionKey: item.entry.sessionKey,
-            runId: item.entry.runId,
-            status: item.entry.status,
-            at: item.entry.at,
-          },
-        };
-      }
-
-      if (item.type === 'tools') {
-        return {
-          type: 'tools',
-          id: item.id,
-          at: item.at,
-          rows: item.burst.rows.map((entry) => ({ id: entry.id, entry })),
-          keepOpen: item.keepOpen,
-        };
-      }
-
-      if (item.type === 'artifacts') {
-        return {
-          type: 'artifacts',
-          id: item.id,
-          at: item.at,
-          item,
-        };
-      }
-
-      if (item.type === 'process') {
-        return {
-          type: 'process',
-          id: item.id,
-          at: item.at,
-          item,
-        };
-      }
-
-      return {
-        type: 'notice',
-        id: item.id,
-        at: item.at,
-        item,
-      };
     });
   }, [liveEntries]);
   const controlsDetailsId = 'chat-surface-top-controls';
