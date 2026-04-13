@@ -12,6 +12,7 @@ import {
 
 const execFileAsync = promisify(execFile);
 const workspaceRoot = '/data/.openclaw/workspace';
+const sharedWorkspacePath = (relativePath) => path.posix.join(workspaceRoot, relativePath);
 const sudoStorePath = path.join(process.cwd(), 'data', 'sudo-delegations.json');
 const sudoRunnerPath = path.join(process.cwd(), 'scripts', 'run-sudo-orchestration.mjs');
 
@@ -59,15 +60,15 @@ const seatConfigs = [
     defaultModel: 'codex5.4',
     defaultThinking: 'medium',
     workspaceFiles: [
-      'agent-workspaces/language-tutor/SOUL.md',
-      'agent-workspaces/language-tutor/MEMORY.md',
-      'agent-workspaces/language-tutor/WORKSPACE.md',
-      'agent-workspaces/language-tutor/memory/continuity.md',
-      'agent-workspaces/language-tutor/memory/learner-profile.md',
-      'agent-workspaces/language-tutor/.learnings/corrections.md',
+      sharedWorkspacePath('agent-workspaces/language-tutor/SOUL.md'),
+      sharedWorkspacePath('agent-workspaces/language-tutor/MEMORY.md'),
+      sharedWorkspacePath('agent-workspaces/language-tutor/WORKSPACE.md'),
+      sharedWorkspacePath('agent-workspaces/language-tutor/memory/continuity.md'),
+      sharedWorkspacePath('agent-workspaces/language-tutor/memory/learner-profile.md'),
+      sharedWorkspacePath('agent-workspaces/language-tutor/.learnings/corrections.md'),
     ],
     starterPrompt:
-      'Activate Japin mode. Before planning the lesson, review `agent-workspaces/language-tutor/memory/continuity.md`, `agent-workspaces/language-tutor/memory/learner-profile.md`, and `agent-workspaces/language-tutor/.learnings/corrections.md`, then continue with what is actually logged there. Start by confirming target language, current level, learning goal, preferred exercise format, and whether grammar, conversation, vocabulary, or script practice should come first.',
+      `Activate Japin mode. Before planning the lesson, review \`${sharedWorkspacePath('agent-workspaces/language-tutor/memory/continuity.md')}\`, \`${sharedWorkspacePath('agent-workspaces/language-tutor/memory/learner-profile.md')}\`, and \`${sharedWorkspacePath('agent-workspaces/language-tutor/.learnings/corrections.md')}\`, then continue with what is actually logged there. Start by confirming target language, current level, learning goal, preferred exercise format, and whether grammar, conversation, vocabulary, or script practice should come first.`,
     runtimeNote:
       'Japin is bridged through a persistent specialist seat session under the main runtime, with Japin-specific activation and continuity context, instead of a fake spawned subagent.',
   },
@@ -82,15 +83,15 @@ const seatConfigs = [
     defaultModel: 'codex5.4',
     defaultThinking: 'medium',
     workspaceFiles: [
-      'agent-workspaces/sportsbet-advisor/SOUL.md',
-      'agent-workspaces/sportsbet-advisor/MEMORY.md',
-      'agent-workspaces/sportsbet-advisor/WORKSPACE.md',
-      'agent-workspaces/sportsbet-advisor/memory/continuity.md',
-      'agent-workspaces/sportsbet-advisor/memory/bettor-profile.md',
-      'agent-workspaces/sportsbet-advisor/.learnings/corrections.md',
+      sharedWorkspacePath('agent-workspaces/sportsbet-advisor/SOUL.md'),
+      sharedWorkspacePath('agent-workspaces/sportsbet-advisor/MEMORY.md'),
+      sharedWorkspacePath('agent-workspaces/sportsbet-advisor/WORKSPACE.md'),
+      sharedWorkspacePath('agent-workspaces/sportsbet-advisor/memory/continuity.md'),
+      sharedWorkspacePath('agent-workspaces/sportsbet-advisor/memory/bettor-profile.md'),
+      sharedWorkspacePath('agent-workspaces/sportsbet-advisor/.learnings/corrections.md'),
     ],
     starterPrompt:
-      'Activate Johan mode. Before analyzing the bet, review `agent-workspaces/sportsbet-advisor/memory/continuity.md`, `agent-workspaces/sportsbet-advisor/memory/bettor-profile.md`, and `agent-workspaces/sportsbet-advisor/.learnings/corrections.md`, then continue from what is actually logged there. Start by asking for the sport, event, market, current line or odds, sportsbook, and any constraints. Focus on probability, data quality, downside risk, and bias control.',
+      `Activate Johan mode. Before analyzing the bet, review \`${sharedWorkspacePath('agent-workspaces/sportsbet-advisor/memory/continuity.md')}\`, \`${sharedWorkspacePath('agent-workspaces/sportsbet-advisor/memory/bettor-profile.md')}\`, and \`${sharedWorkspacePath('agent-workspaces/sportsbet-advisor/.learnings/corrections.md')}\`, then continue from what is actually logged there. Start by asking for the sport, event, market, current line or odds, sportsbook, and any constraints. Focus on probability, data quality, downside risk, and bias control.`,
     runtimeNote:
       'Johan is bridged through a persistent specialist seat session under the main runtime, with Johan-specific activation and continuity context, instead of a fake spawned subagent.',
   },
@@ -105,15 +106,15 @@ const seatConfigs = [
     defaultModel: 'codex5.4',
     defaultThinking: 'medium',
     workspaceFiles: [
-      'agent-workspaces/trading-advisor/SOUL.md',
-      'agent-workspaces/trading-advisor/MEMORY.md',
-      'agent-workspaces/trading-advisor/WORKSPACE.md',
-      'agent-workspaces/trading-advisor/memory/continuity.md',
-      'agent-workspaces/trading-advisor/memory/trader-profile.md',
-      'agent-workspaces/trading-advisor/.learnings/corrections.md',
+      sharedWorkspacePath('agent-workspaces/trading-advisor/SOUL.md'),
+      sharedWorkspacePath('agent-workspaces/trading-advisor/MEMORY.md'),
+      sharedWorkspacePath('agent-workspaces/trading-advisor/WORKSPACE.md'),
+      sharedWorkspacePath('agent-workspaces/trading-advisor/memory/continuity.md'),
+      sharedWorkspacePath('agent-workspaces/trading-advisor/memory/trader-profile.md'),
+      sharedWorkspacePath('agent-workspaces/trading-advisor/.learnings/corrections.md'),
     ],
     starterPrompt:
-      'Activate Milou mode. Before assessing the setup, review `agent-workspaces/trading-advisor/memory/continuity.md`, `agent-workspaces/trading-advisor/memory/trader-profile.md`, and `agent-workspaces/trading-advisor/.learnings/corrections.md`, then continue from what is actually logged there. Start by asking for the ticker or market, timeframe, chart context, risk tolerance, and any open-position context. Establish stop, size, and risk-to-reward before discussing upside.',
+      `Activate Milou mode. Before assessing the setup, review \`${sharedWorkspacePath('agent-workspaces/trading-advisor/memory/continuity.md')}\`, \`${sharedWorkspacePath('agent-workspaces/trading-advisor/memory/trader-profile.md')}\`, and \`${sharedWorkspacePath('agent-workspaces/trading-advisor/.learnings/corrections.md')}\`, then continue from what is actually logged there. Start by asking for the ticker or market, timeframe, chart context, risk tolerance, and any open-position context. Establish stop, size, and risk-to-reward before discussing upside.`,
     runtimeNote:
       'Milou is bridged through a persistent specialist seat session under the main runtime, with Milou-specific activation and continuity context, instead of a fake spawned subagent.',
   },
@@ -128,16 +129,16 @@ const seatConfigs = [
     defaultModel: 'codex5.4',
     defaultThinking: 'medium',
     workspaceFiles: [
-      'agent-workspaces/job-advisor/SOUL.md',
-      'agent-workspaces/job-advisor/MEMORY.md',
-      'agent-workspaces/job-advisor/WORKSPACE.md',
-      'agent-workspaces/job-advisor/SKILLS.md',
-      'agent-workspaces/job-advisor/memory/continuity.md',
-      'agent-workspaces/job-advisor/memory/candidate-profile.md',
-      'agent-workspaces/job-advisor/.learnings/corrections.md',
+      sharedWorkspacePath('agent-workspaces/job-advisor/SOUL.md'),
+      sharedWorkspacePath('agent-workspaces/job-advisor/MEMORY.md'),
+      sharedWorkspacePath('agent-workspaces/job-advisor/WORKSPACE.md'),
+      sharedWorkspacePath('agent-workspaces/job-advisor/SKILLS.md'),
+      sharedWorkspacePath('agent-workspaces/job-advisor/memory/continuity.md'),
+      sharedWorkspacePath('agent-workspaces/job-advisor/memory/candidate-profile.md'),
+      sharedWorkspacePath('agent-workspaces/job-advisor/.learnings/corrections.md'),
     ],
     starterPrompt:
-      'Activate Link mode. First read `skills/job-advisor/SKILL.md`, then review `agent-workspaces/job-advisor/memory/continuity.md`, `agent-workspaces/job-advisor/memory/candidate-profile.md`, and `agent-workspaces/job-advisor/.learnings/corrections.md` before drafting anything. Continue only from what is actually logged there. Start by asking for the target role, company, location or remote constraints, seniority, job description, and any existing resume or cover-letter material. Prioritize role fit, evidence-backed wording, ATS-safe clarity, and honest positioning.',
+      `Activate Link mode. First read \`${sharedWorkspacePath('skills/job-advisor/SKILL.md')}\`, then review \`${sharedWorkspacePath('agent-workspaces/job-advisor/memory/continuity.md')}\`, \`${sharedWorkspacePath('agent-workspaces/job-advisor/memory/candidate-profile.md')}\`, and \`${sharedWorkspacePath('agent-workspaces/job-advisor/.learnings/corrections.md')}\` before drafting anything. Continue only from what is actually logged there. Start by asking for the target role, company, location or remote constraints, seniority, job description, and any existing resume or cover-letter material. Prioritize role fit, evidence-backed wording, ATS-safe clarity, and honest positioning.`,
     runtimeNote:
       'Link is bridged through a persistent specialist seat session under the main runtime, with Link-specific activation and continuity context, instead of a fake spawned subagent.',
   },

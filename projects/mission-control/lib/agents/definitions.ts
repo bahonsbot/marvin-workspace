@@ -21,6 +21,9 @@ export type SessionMatchHint = {
   value?: string;
 };
 
+const SHARED_WORKSPACE_ROOT = '/data/.openclaw/workspace';
+const sharedWorkspacePath = (relativePath: string) => `${SHARED_WORKSPACE_ROOT}/${relativePath}`;
+
 export type AgentMemberDefinition = {
   id: string;
   label: string;
@@ -410,7 +413,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
       starterPrompt:
-        'Activate Johan mode. Before analyzing the bet, review `memory/continuity.md`, `memory/bettor-profile.md`, and `.learnings/corrections.md` in the sportsbet-advisor workspace, then continue from what is actually logged there. Start by asking for the sport, event, market, current line or odds, sportsbook, and any constraints. Focus on probability, data quality, downside risk, and bias control.',
+        `Activate Johan mode. Before analyzing the bet, review \`${sharedWorkspacePath('agent-workspaces/sportsbet-advisor/memory/continuity.md')}\`, \`${sharedWorkspacePath('agent-workspaces/sportsbet-advisor/memory/bettor-profile.md')}\`, and \`${sharedWorkspacePath('agent-workspaces/sportsbet-advisor/.learnings/corrections.md')}\`, then continue from what is actually logged there. Start by asking for the sport, event, market, current line or odds, sportsbook, and any constraints. Focus on probability, data quality, downside risk, and bias control.`,
       starterLabel: 'Johan activation starter',
       nextStep:
         'Share the matchup or market with current odds. Johan runs as its own direct specialist seat and should continue from `memory/continuity.md`, updating continuity after meaningful sessions, `memory/bettor-profile.md` when the bettor baseline changes, recurring patterns in `.learnings/corrections.md`, and a research note in `memory/research/` for substantial sessions.',
@@ -452,7 +455,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
       starterPrompt:
-        'Activate Milou mode. Before assessing the setup, review `memory/continuity.md`, `memory/trader-profile.md`, and `.learnings/corrections.md` in the trading-advisor workspace, then continue from what is actually logged there. Start by asking for the ticker or market, timeframe, chart context, risk tolerance, and any open-position context. Establish stop, size, and risk-to-reward before discussing upside.',
+        `Activate Milou mode. Before assessing the setup, review \`${sharedWorkspacePath('agent-workspaces/trading-advisor/memory/continuity.md')}\`, \`${sharedWorkspacePath('agent-workspaces/trading-advisor/memory/trader-profile.md')}\`, and \`${sharedWorkspacePath('agent-workspaces/trading-advisor/.learnings/corrections.md')}\`, then continue from what is actually logged there. Start by asking for the ticker or market, timeframe, chart context, risk tolerance, and any open-position context. Establish stop, size, and risk-to-reward before discussing upside.`,
       starterLabel: 'Milou activation starter',
       nextStep:
         'Share the ticker, timeframe, and setup context. Milou runs as its own direct specialist seat and should continue from `memory/continuity.md`, updating continuity after meaningful sessions, `memory/trader-profile.md` when the trader baseline changes, recurring patterns in `.learnings/corrections.md`, and an analysis note in `memory/analyses/` for substantial sessions.',
@@ -493,7 +496,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       defaultModel: 'codex5.4',
       defaultThinking: 'medium',
       starterPrompt:
-        'Activate Japin mode. Before planning the lesson, review `memory/continuity.md`, `memory/learner-profile.md`, and `.learnings/corrections.md` in the language-tutor workspace, then continue with what is actually logged there. Start by confirming target language, current level, learning goal, preferred exercise format, and whether grammar, conversation, vocabulary, or script practice should come first.',
+        `Activate Japin mode. Before planning the lesson, review \`${sharedWorkspacePath('agent-workspaces/language-tutor/memory/continuity.md')}\`, \`${sharedWorkspacePath('agent-workspaces/language-tutor/memory/learner-profile.md')}\`, and \`${sharedWorkspacePath('agent-workspaces/language-tutor/.learnings/corrections.md')}\`, then continue with what is actually logged there. Start by confirming target language, current level, learning goal, preferred exercise format, and whether grammar, conversation, vocabulary, or script practice should come first.`,
       starterLabel: 'Japin activation starter',
       nextStep:
         'State target language, current level, and what to practice next. Japin runs as its own direct specialist seat and should continue from `memory/continuity.md`, updating continuity after each lesson, `memory/learner-profile.md` when the learner baseline changes, recurring patterns in `.learnings/corrections.md`, and a lesson note in `memory/lessons/` for substantial sessions.',
@@ -536,7 +539,7 @@ export const AGENT_DEFINITIONS: AgentDefinition[] = [
       defaultThinking: 'medium',
       supervisorLabel: 'Marvin',
       starterPrompt:
-        'Activate Link mode. First read `skills/job-advisor/SKILL.md`, then review `memory/continuity.md`, `memory/candidate-profile.md`, and `.learnings/corrections.md` in the job-advisor workspace before drafting anything. Continue only from what is actually logged there. Start by asking for the target role, company, location or remote constraints, seniority, job description, and any existing resume or cover-letter material. Prioritize role fit, evidence-backed wording, ATS-safe clarity, and honest positioning.',
+        `Activate Link mode. First read \`${sharedWorkspacePath('skills/job-advisor/SKILL.md')}\`, then review \`${sharedWorkspacePath('agent-workspaces/job-advisor/memory/continuity.md')}\`, \`${sharedWorkspacePath('agent-workspaces/job-advisor/memory/candidate-profile.md')}\`, and \`${sharedWorkspacePath('agent-workspaces/job-advisor/.learnings/corrections.md')}\` before drafting anything. Continue only from what is actually logged there. Start by asking for the target role, company, location or remote constraints, seniority, job description, and any existing resume or cover-letter material. Prioritize role fit, evidence-backed wording, ATS-safe clarity, and honest positioning.`,
       starterLabel: 'Link activation starter',
       nextStep:
         'Share the target role, company, and any current resume/cover-letter draft. Link runs as her own direct specialist seat and should continue from `memory/continuity.md`, updating continuity after meaningful sessions, `memory/candidate-profile.md` when the candidate baseline changes, recurring patterns in `.learnings/corrections.md`, and an application note in `memory/applications/` for substantial sessions.',
