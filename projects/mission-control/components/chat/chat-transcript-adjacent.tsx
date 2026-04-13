@@ -2,10 +2,11 @@
 
 import type { RefObject } from 'react';
 import { monoFont } from '@/components/chat/chat-rich-text';
-import { LiveEventBlock, LiveMessageBlock } from '@/components/chat/chat-message-blocks';
-import { ToolGroupBlock, type ToolGroupRow } from '@/components/chat/chat-tool-groups';
+import { LiveEventBlock, LiveMessageBlock, TranscriptNoticeBlock, TranscriptProcessBlock } from '@/components/chat/chat-message-blocks';
+import { ArtifactGroupBlock, ToolGroupBlock, type ToolGroupRow } from '@/components/chat/chat-tool-groups';
 import { pillStyle } from '@/components/chat/chat-ui-helpers';
-import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent, RuntimeBridgeTransientNotice } from '@/hooks/useRuntimeBridge';
+import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent } from '@/hooks/useRuntimeBridge';
+import type { RuntimeBridgeTranscriptRenderItem } from '@/lib/chat/runtime-bridge-transcript';
 
 function InfoIcon() {
   return <span aria-hidden="true">ⓘ</span>;
@@ -13,7 +14,10 @@ function InfoIcon() {
 
 export type ChatTranscriptItem =
   | { type: 'message'; id: string; at: number; message: RuntimeBridgeChatMessage }
-  | { type: 'tools'; id: string; at: number; rows: ToolGroupRow[]; keepOpen: boolean };
+  | { type: 'process'; id: string; at: number; item: Extract<RuntimeBridgeTranscriptRenderItem, { type: 'process' }> }
+  | { type: 'notice'; id: string; at: number; item: Extract<RuntimeBridgeTranscriptRenderItem, { type: 'notice' }> }
+  | { type: 'tools'; id: string; at: number; rows: ToolGroupRow[]; keepOpen: boolean }
+  | { type: 'artifacts'; id: string; at: number; item: Extract<RuntimeBridgeTranscriptRenderItem, { type: 'artifacts' }> };
 
 export function LiveTranscriptSection({
   liveTargetLabel,
@@ -21,7 +25,6 @@ export function LiveTranscriptSection({
   setBridgeEventsOpen,
   bridgeEventsRef,
   liveEvents,
-  liveNotices,
   transcriptItems,
   assistantSeatLabel,
   showJumpToLatest,
@@ -33,7 +36,6 @@ export function LiveTranscriptSection({
   setBridgeEventsOpen: (updater: (value: boolean) => boolean) => void;
   bridgeEventsRef: RefObject<HTMLDivElement>;
   liveEvents: RuntimeBridgeLiveEvent[];
-  liveNotices: RuntimeBridgeTransientNotice[];
   transcriptItems: ChatTranscriptItem[];
   assistantSeatLabel: string;
   showJumpToLatest: boolean;
@@ -84,31 +86,16 @@ export function LiveTranscriptSection({
           </div>
         </div>
         <div style={{ display: 'grid', gap: 18 }}>
-          {liveNotices.length > 0 ? (
-            <div style={{ display: 'grid', gap: 8 }}>
-              {liveNotices.slice().reverse().map((notice) => (
-                <div
-                  key={notice.id}
-                  style={{
-                    border: '1px solid rgba(121, 166, 148, 0.28)',
-                    borderRadius: 12,
-                    background: 'rgba(240, 248, 244, 0.9)',
-                    color: '#163b31',
-                    padding: '8px 10px',
-                    fontSize: 12,
-                    lineHeight: 1.5,
-                    fontWeight: 600,
-                  }}
-                >
-                  SYSTEM NOTICE · {notice.message}
-                </div>
-              ))}
-            </div>
-          ) : null}
           {transcriptItems.length > 0 ? (
             transcriptItems.map((item) =>
               item.type === 'message' ? (
                 <LiveMessageBlock key={item.id} message={item.message} assistantLabel={assistantSeatLabel} />
+              ) : item.type === 'process' ? (
+                <TranscriptProcessBlock key={item.id} item={item.item} />
+              ) : item.type === 'notice' ? (
+                <TranscriptNoticeBlock key={item.id} item={item.item} />
+              ) : item.type === 'artifacts' ? (
+                <ArtifactGroupBlock key={item.id} group={item.item.group} />
               ) : (
                 <ToolGroupBlock key={item.id} rows={item.rows} keepOpen={item.keepOpen} />
               ),

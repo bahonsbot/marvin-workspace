@@ -172,6 +172,64 @@ type ProcessEntry = Extract<RuntimeBridgeTranscriptEntry, { kind: 'process' }>;
 type ToolEntry = Extract<RuntimeBridgeTranscriptEntry, { kind: 'tool' }>;
 type EventEntry = Extract<RuntimeBridgeTranscriptEntry, { kind: 'event' }>;
 type NoticeEntry = Extract<RuntimeBridgeTranscriptEntry, { kind: 'notice' }>;
+type ToolStatus = ToolEntry['status'];
+
+export type TranscriptToolBurst = {
+  id: string;
+  at: number;
+  endAt: number;
+  runId: string | null;
+  sessionKey: string | null;
+  rows: ToolEntry[];
+  artifacts: RuntimeBridgeTranscriptArtifact[];
+  status: ToolStatus;
+};
+
+export type TranscriptArtifactGroup = {
+  id: string;
+  at: number;
+  runId: string | null;
+  sessionKey: string | null;
+  artifacts: RuntimeBridgeTranscriptArtifact[];
+  toolNames: string[];
+};
+
+export type RuntimeBridgeTranscriptRenderItem =
+  | {
+      type: 'message';
+      id: string;
+      at: number;
+      entry: MessageEntry & { role: 'user' | 'assistant' };
+    }
+  | {
+      type: 'process';
+      id: string;
+      at: number;
+      entry: ProcessEntry;
+    }
+  | {
+      type: 'notice';
+      id: string;
+      at: number;
+      tone: 'info' | 'error';
+      title: string;
+      body: string;
+      runId: string | null;
+      sessionKey: string | null;
+    }
+  | {
+      type: 'tools';
+      id: string;
+      at: number;
+      burst: TranscriptToolBurst;
+      keepOpen: boolean;
+    }
+  | {
+      type: 'artifacts';
+      id: string;
+      at: number;
+      group: TranscriptArtifactGroup;
+    };
 
 function withStableKey<T extends EntryWithoutStableKey>(entry: T): T & { stableKey: string } {
   return {
@@ -203,7 +261,7 @@ export function createMessageEntry(
   });
 }
 
-function createProcessEntry(
+export function createProcessEntry(
   input: BaseEntryInput & {
     stage: 'thinking' | 'lifecycle';
     label: string;
@@ -479,6 +537,183 @@ export function buildTranscriptHistory(
     entries,
     messages: transcriptEntriesToMessages(entries),
   };
+}
+
+function compareEntries(a: RuntimeBridgeTranscriptEntry, b: RuntimeBridgeTranscriptEntry): number {
+  return a.at - b.at || a.id.localeCompare(b.id);
+}
+
+function dedupeArtifacts(artifacts: RuntimeBridgeTranscriptArtifact[]): RuntimeBridgeTranscriptArtifact[] {
+  const keyed = new Map<string, RuntimeBridgeTranscriptArtifact>();
+  for (const artifact of artifacts) {
+    const key =
+      artifact.kind === 'file-edit'
+        ? `${artifact.kind}:${artifact.filePath}:${artifact.oldText}:${artifact.newText}`
+        : `${artifact.kind}:${artifact.filePath}:${artifact.content}`;
+    keyed.set(key, artifact);
+  }
+  return Array.from(keyed.values());
+}
+
+function burstStatus(rows: ToolEntry[]): ToolStatus {
+  if (rows.some((row) => row.status === 'failed' || row.isError)) return 'failed';
+  if (rows.every((row) => row.status === 'completed')) return 'completed';
+  return 'running';
+}
+
+function groupToolBursts(entries: ToolEntry[], burstWindowMs: number): TranscriptToolBurst[] {
+  const toolCallGroups = new Map<string, ToolEntry[]>();
+
+  for (const entry of entries) {
+    const key = `${entry.runId ?? 'runless'}:${entry.toolCallId ?? entry.id}`;
+    const group = toolCallGroups.get(key) ?? [];
+    group.push(entry);
+    toolCallGroups.set(key, group);
+  }
+
+  const sortedToolCallGroups = Array.from(toolCallGroups.values())
+    .map((rows) => rows.slice().sort(compareEntries))
+    .sort((a, b) => (a[0]?.at ?? 0) - (b[0]?.at ?? 0));
+
+  const bursts: TranscriptToolBurst[] = [];
+
+  for (const rows of sortedToolCallGroups) {
+    const startAt = rows[0]?.at ?? Date.now();
+    const endAt = rows[rows.length - 1]?.at ?? startAt;
+    const runId = rows[0]?.runId ?? null;
+    const previous = bursts[bursts.length - 1];
+
+    if (previous && previous.runId === runId && startAt - previous.endAt <= burstWindowMs) {
+      previous.rows.push(...rows);
+      previous.endAt = Math.max(previous.endAt, endAt);
+      previous.artifacts = dedupeArtifacts([...previous.artifacts, ...rows.flatMap((row) => row.artifacts)]);
+      previous.status = burstStatus(previous.rows);
+      continue;
+    }
+
+    bursts.push({
+      id: `tools-${rows[0]?.stableKey ?? rows[0]?.id ?? startAt}`,
+      at: startAt,
+      endAt,
+      runId,
+      sessionKey: rows[0]?.sessionKey ?? null,
+      rows: [...rows],
+      artifacts: dedupeArtifacts(rows.flatMap((row) => row.artifacts)),
+      status: burstStatus(rows),
+    });
+  }
+
+  return bursts;
+}
+
+function noticeTitle(entry: NoticeEntry): string {
+  if (entry.noticeKind === 'context-compression') return 'Context updated';
+  if (entry.noticeKind === 'fallback-model') return 'Fallback model';
+  if (entry.noticeKind === 'event') return 'Runtime event';
+  return 'System notice';
+}
+
+export function shapeTranscriptEntriesForRender(
+  entries: RuntimeBridgeTranscriptEntry[],
+  options?: { burstWindowMs?: number },
+): RuntimeBridgeTranscriptRenderItem[] {
+  const burstWindowMs = options?.burstWindowMs ?? 10000;
+  const sortedEntries = entries.slice().sort(compareEntries);
+  const toolBursts = groupToolBursts(
+    sortedEntries.filter((entry): entry is ToolEntry => entry.kind === 'tool'),
+    burstWindowMs,
+  );
+  const items: Array<RuntimeBridgeTranscriptRenderItem & { order: number }> = [];
+  let order = 0;
+
+  for (const entry of sortedEntries) {
+    if (entry.kind === 'message') {
+      if (entry.role === 'user' || entry.role === 'assistant') {
+        items.push({
+          type: 'message',
+          id: entry.id,
+          at: entry.at,
+          entry: entry as MessageEntry & { role: 'user' | 'assistant' },
+          order: order++,
+        });
+        continue;
+      }
+
+      items.push({
+        type: 'notice',
+        id: entry.id,
+        at: entry.at,
+        tone: entry.status === 'error' ? 'error' : 'info',
+        title: entry.status === 'error' ? 'Runtime error' : 'System message',
+        body: entry.body,
+        runId: entry.runId,
+        sessionKey: entry.sessionKey,
+        order: order++,
+      });
+      continue;
+    }
+
+    if (entry.kind === 'process') {
+      items.push({
+        type: 'process',
+        id: entry.id,
+        at: entry.at,
+        entry,
+        order: order++,
+      });
+      continue;
+    }
+
+    if (entry.kind === 'notice') {
+      items.push({
+        type: 'notice',
+        id: entry.id,
+        at: entry.at,
+        tone: entry.noticeKind === 'system' ? 'error' : 'info',
+        title: noticeTitle(entry),
+        body: entry.message,
+        runId: entry.runId,
+        sessionKey: entry.sessionKey,
+        order: order++,
+      });
+    }
+  }
+
+  toolBursts.forEach((burst, index) => {
+    items.push({
+      type: 'tools',
+      id: burst.id,
+      at: burst.at,
+      burst,
+      keepOpen: index === toolBursts.length - 1,
+      order: order++,
+    });
+
+    if (burst.artifacts.length > 0) {
+      items.push({
+        type: 'artifacts',
+        id: `${burst.id}-artifacts`,
+        at: burst.endAt,
+        group: {
+          id: `${burst.id}-artifacts`,
+          at: burst.endAt,
+          runId: burst.runId,
+          sessionKey: burst.sessionKey,
+          artifacts: burst.artifacts,
+          toolNames: Array.from(new Set(burst.rows.map((row) => row.name))),
+        },
+        order: order++,
+      });
+    }
+  });
+
+  return items
+    .sort((a, b) => a.at - b.at || a.order - b.order || a.id.localeCompare(b.id))
+    .map((item) => {
+      const { order, ...renderItem } = item;
+      void order;
+      return renderItem;
+    });
 }
 
 export function normalizeHistoryRecord(

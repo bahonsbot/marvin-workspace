@@ -3,9 +3,13 @@ import assert from 'node:assert/strict';
 import {
   createEventEntry,
   createMessageEntry,
+  createNoticeEntry,
+  createProcessEntry,
+  createToolEntry,
   mergeTranscriptEntries,
   normalizeHistoryRecord,
   reconstructTranscriptFromHistoryRecords,
+  shapeTranscriptEntriesForRender,
 } from '../lib/chat/runtime-bridge-transcript';
 
 test('normalizeHistoryRecord reconstructs assistant tool usage and visible process summaries', () => {
@@ -213,5 +217,87 @@ test('reconstructTranscriptFromHistoryRecords preserves structured tool results'
   if (toolEntries[1]?.kind === 'tool') {
     assert.equal(toolEntries[1].status, 'completed');
     assert.equal(toolEntries[1].meta, 'Wrote /repo/new-file.ts');
+  }
+});
+
+test('shapeTranscriptEntriesForRender keeps process, tool bursts, artifacts, and notices distinct', () => {
+  const sessionKey = 'agent:main:main';
+  const runId = 'run-42';
+  const user = createMessageEntry({
+    id: 'user-1',
+    role: 'user',
+    body: 'Patch the transcript renderer.',
+    status: 'final',
+    sessionKey,
+    runId: null,
+    at: 1000,
+    evidence: { sessionKey },
+  });
+  const process = createProcessEntry({
+    id: 'process-1',
+    stage: 'lifecycle',
+    label: 'Run started',
+    body: 'Run start.',
+    sessionKey,
+    runId,
+    at: 1100,
+    evidence: { sessionKey, runId },
+  });
+  const toolStart = createToolEntry({
+    id: 'tool-1',
+    name: 'edit',
+    phase: 'start',
+    status: 'running',
+    toolCallId: 'call-edit-1',
+    args: {
+      file_path: '/repo/file.ts',
+      old_string: 'before',
+      new_string: 'after',
+    },
+    sessionKey,
+    runId,
+    at: 1200,
+    evidence: { sessionKey, runId, toolCallId: 'call-edit-1' },
+  });
+  const notice = createNoticeEntry({
+    id: 'notice-1',
+    noticeKind: 'context-compression',
+    message: 'Context compression applied for this run.',
+    sessionKey,
+    runId,
+    at: 1300,
+    evidence: { sessionKey, runId },
+  });
+  const assistant = createMessageEntry({
+    id: 'assistant-2',
+    role: 'assistant',
+    body: 'Patched the renderer and kept the transcript unified.',
+    status: 'final',
+    sessionKey,
+    runId,
+    at: 1400,
+    evidence: { sessionKey, runId },
+  });
+
+  assert.ok(user);
+  assert.ok(process);
+  assert.ok(toolStart);
+  assert.ok(notice);
+  assert.ok(assistant);
+
+  const items = shapeTranscriptEntriesForRender([user, process, toolStart, notice, assistant], {
+    burstWindowMs: 10000,
+  });
+
+  assert.deepEqual(
+    items.map((item) => item.type),
+    ['message', 'process', 'tools', 'artifacts', 'notice', 'message'],
+  );
+
+  const artifactItem = items.find((item) => item.type === 'artifacts');
+  assert.ok(artifactItem);
+  if (artifactItem?.type === 'artifacts') {
+    assert.equal(artifactItem.group.artifacts[0]?.kind, 'file-edit');
+    assert.equal(artifactItem.group.artifacts[0]?.filePath, '/repo/file.ts');
   }
 });

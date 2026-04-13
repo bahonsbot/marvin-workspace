@@ -5,6 +5,7 @@ import type { RuntimeBridgeChatMessage, RuntimeBridgeLiveEvent } from '@/hooks/u
 import { renderRichText } from '@/components/chat/chat-rich-text';
 import { formatEventTime } from '@/components/chat/chat-tool-groups';
 import { pillStyle } from '@/components/chat/chat-ui-helpers';
+import type { RuntimeBridgeTranscriptRenderItem } from '@/lib/chat/runtime-bridge-transcript';
 
 function CopyIcon() {
   return (
@@ -173,6 +174,70 @@ export function LiveMessageBlock({ message, assistantLabel }: { message: Runtime
         </div>
         {message.status === 'streaming' ? <div style={{ fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Streaming</div> : null}
       </div>
+    </div>
+  );
+}
+
+export function TranscriptProcessBlock({
+  item,
+}: {
+  item: Extract<RuntimeBridgeTranscriptRenderItem, { type: 'process' }>;
+}) {
+  const stageLabel = item.entry.stage === 'thinking' ? 'Process' : 'Runtime';
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'center', marginBottom: 10 }}>
+      <section
+        style={{
+          maxWidth: 'min(74ch, 82%)',
+          borderRadius: 16,
+          padding: '10px 12px',
+          background: 'rgba(244, 241, 235, 0.82)',
+          border: '1px solid rgba(200, 195, 188, 0.26)',
+          display: 'grid',
+          gap: 6,
+          color: '#4d5d57',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={pillStyle()}>{stageLabel}</span>
+          <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{formatEventTime(item.at)}</span>
+        </div>
+        <div style={{ fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{item.entry.label}</div>
+        <div style={{ fontSize: 13, lineHeight: 1.6 }}>{renderRichText(item.entry.body)}</div>
+      </section>
+    </div>
+  );
+}
+
+export function TranscriptNoticeBlock({
+  item,
+}: {
+  item: Extract<RuntimeBridgeTranscriptRenderItem, { type: 'notice' }>;
+}) {
+  const isError = item.tone === 'error';
+
+  return (
+    <div style={{ display: 'grid', justifyItems: 'center', marginBottom: 10 }}>
+      <section
+        style={{
+          maxWidth: 'min(74ch, 82%)',
+          borderRadius: 999,
+          padding: '9px 14px',
+          background: isError ? 'rgba(244, 224, 220, 0.88)' : 'rgba(232, 239, 235, 0.84)',
+          border: isError ? '1px solid rgba(181, 88, 74, 0.24)' : '1px solid rgba(111, 140, 126, 0.2)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 10,
+          color: isError ? '#7c2e24' : '#4a5f55',
+          flexWrap: 'wrap',
+        }}
+      >
+        <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: isError ? '#8f4237' : '#60796d' }}>
+          {item.title}
+        </span>
+        <span style={{ fontSize: 13, lineHeight: 1.45 }}>{item.body}</span>
+      </section>
     </div>
   );
 }

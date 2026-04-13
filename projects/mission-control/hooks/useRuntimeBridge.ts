@@ -5,6 +5,7 @@ import {
   createEventEntry,
   createMessageEntry,
   createNoticeEntry,
+  createProcessEntry,
   createToolEntry,
   mergeTranscriptEntries,
 } from '@/lib/chat/runtime-bridge-transcript';
@@ -106,6 +107,7 @@ type RuntimeBridgeLiveState = {
   sendState: RuntimeBridgeSendState;
   sendError: string | null;
   activeRunId: string | null;
+  entries: RuntimeBridgeTranscriptEntry[];
   messages: RuntimeBridgeChatMessage[];
   events: RuntimeBridgeLiveEvent[];
   notices: RuntimeBridgeTransientNotice[];
@@ -157,6 +159,10 @@ function createEmptySession(
     lastEvent: null,
     eventCount: 0,
   };
+}
+
+function scopedTranscriptEntries(entries: RuntimeBridgeTranscriptEntry[], sessionKey: string | null): RuntimeBridgeTranscriptEntry[] {
+  return entries.filter((entry) => entry.sessionKey === sessionKey || entry.sessionKey === null);
 }
 
 function generateId(prefix: string): string {
@@ -521,9 +527,10 @@ export function useRuntimeBridge(
     const resolvedKey = activeSessionKey ?? defaultTargetSession.key;
     return { key: resolvedKey, label: shortenSessionKey(resolvedKey) };
   }, [activeSessionKey, defaultTargetSession.key]);
-  const messages = useMemo(() => transcriptEntriesToLiveMessages(entries), [entries]);
-  const events = useMemo(() => transcriptEntriesToLiveEvents(entries), [entries]);
-  const notices = useMemo(() => transcriptEntriesToTransientNotices(entries), [entries]);
+  const liveEntries = useMemo(() => scopedTranscriptEntries(entries, liveTargetSession.key), [entries, liveTargetSession.key]);
+  const messages = useMemo(() => transcriptEntriesToLiveMessages(liveEntries), [liveEntries]);
+  const events = useMemo(() => transcriptEntriesToLiveEvents(liveEntries), [liveEntries]);
+  const notices = useMemo(() => transcriptEntriesToTransientNotices(liveEntries), [liveEntries]);
 
   const rejectPending = useCallback((reason: Error) => {
     const pending = pendingRef.current;
@@ -863,6 +870,18 @@ export function useRuntimeBridge(
               },
             }),
           );
+        } else if (eventName === 'agent' && agentStream === 'lifecycle' && (lifecyclePhase === 'start' || lifecyclePhase === 'end')) {
+          const processEntry = createProcessEntry({
+            id: generateId('mc-process'),
+            stage: 'lifecycle',
+            label: lifecyclePhase === 'start' ? 'Run started' : 'Run finished',
+            body: describeGatewayEvent(eventName, payload),
+            sessionKey: eventSessionKey,
+            runId: eventRunId,
+            at,
+            evidence,
+          });
+          if (processEntry) nextEntries.push(processEntry);
         } else {
           const eventEntry = createEventEntry({
             id: generateId('mc-event'),
@@ -1487,6 +1506,7 @@ export function useRuntimeBridge(
       sendState,
       sendError,
       activeRunId,
+      entries: liveEntries,
       messages,
       events,
       notices,

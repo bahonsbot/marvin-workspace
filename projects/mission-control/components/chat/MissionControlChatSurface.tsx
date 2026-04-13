@@ -18,7 +18,6 @@ import {
 } from '@/components/chat/chat-transcript-adjacent';
 import {
   formatEventTime,
-  type ToolGroupRow,
 } from '@/components/chat/chat-tool-groups';
 import {
   actionButtonStyle,
@@ -35,13 +34,11 @@ import type {
   SudoOrchestrationRun,
 } from '@/lib/agents/sudo-delegation';
 import type {
-  RuntimeBridgeLiveEvent,
-  RuntimeBridgeToolEvent,
-  RuntimeBridgeTransientNotice,
   RuntimeBridgeState,
 } from '@/hooks/useRuntimeBridge';
 import { buildChatSurfaceModel } from '@/lib/chat/thread-model';
 import { useSpeechToText } from '@/components/chat/useSpeechToText';
+import { shapeTranscriptEntriesForRender } from '@/lib/chat/runtime-bridge-transcript';
 import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 
 const TOOL_BURST_WINDOW_MS = 10000;
@@ -802,12 +799,8 @@ export function MissionControlChatSurface({
   const live = bridge?.live;
   const liveTargetSession = live?.targetSession.key ?? null;
   const liveTargetLabel = live?.targetSession.label ?? 'No target session';
-  const liveMessages = useMemo(
-    () => (live?.messages ?? []).slice().sort((a, b) => (a.at ?? 0) - (b.at ?? 0)),
-    [live?.messages],
-  );
+  const liveEntries = useMemo(() => live?.entries ?? [], [live?.entries]);
   const liveEvents = live?.events ?? [];
-  const liveNotices = (live?.notices ?? []) as RuntimeBridgeTransientNotice[];
   const liveCanSend = Boolean(live?.canSend);
   const liveSendState = live?.sendState ?? 'idle';
   const liveSendError = live?.sendError ?? null;
@@ -1236,64 +1229,67 @@ export function MissionControlChatSurface({
         setShowJumpToLatest(true);
       }
     });
-  }, [isNearTranscriptBottom, liveMessages.length, liveEvents.length, liveSendState]);
+  }, [isNearTranscriptBottom, liveEntries.length, liveEvents.length, liveSendState]);
 
-  const toolRows = liveEvents
-    .filter((event): event is RuntimeBridgeLiveEvent & { tool: RuntimeBridgeToolEvent } => Boolean(event.tool))
-    .map((event) => ({ id: `${event.id}-${event.tool.toolCallId ?? 'tool'}`, event, tool: event.tool }));
-
-  const transcriptItems: ChatTranscriptItem[] = [];
-
-  const toolCallGroups = new Map<string, ToolGroupRow[]>();
-  for (const row of toolRows) {
-    const key = `${row.event.runId ?? 'runless'}:${row.tool.toolCallId ?? row.id}`;
-    const group = toolCallGroups.get(key) ?? [];
-    group.push(row);
-    toolCallGroups.set(key, group);
-  }
-
-  const sortedToolCallGroups = Array.from(toolCallGroups.values())
-    .map((rows) => rows.slice().sort((a, b) => a.event.at - b.event.at))
-    .sort((a, b) => (a[0]?.event.at ?? 0) - (b[0]?.event.at ?? 0));
-
-  const toolBursts: Array<{ id: string; at: number; endAt: number; runId: string | null; rows: ToolGroupRow[] }> = [];
-
-  for (const rows of sortedToolCallGroups) {
-    const startAt = rows[0]?.event.at ?? Date.now();
-    const endAt = rows[rows.length - 1]?.event.at ?? startAt;
-    const runId = rows[0]?.event.runId ?? null;
-    const previous = toolBursts[toolBursts.length - 1];
-
-    if (previous && previous.runId === runId && startAt - previous.endAt <= TOOL_BURST_WINDOW_MS) {
-      previous.rows.push(...rows);
-      previous.endAt = Math.max(previous.endAt, endAt);
-      continue;
-    }
-
-    toolBursts.push({
-      id: `tools-${rows[0]?.id ?? 'group'}`,
-      at: startAt,
-      endAt,
-      runId,
-      rows: [...rows],
+  const transcriptItems = useMemo<ChatTranscriptItem[]>(() => {
+    const shapedItems = shapeTranscriptEntriesForRender(liveEntries, {
+      burstWindowMs: TOOL_BURST_WINDOW_MS,
     });
-  }
 
-  toolBursts.forEach((burst, index) => {
-    transcriptItems.push({
-      type: 'tools',
-      id: burst.id,
-      at: burst.at,
-      rows: burst.rows,
-      keepOpen: index === toolBursts.length - 1,
+    return shapedItems.map((item) => {
+      if (item.type === 'message') {
+        return {
+          type: 'message',
+          id: item.id,
+          at: item.at,
+          message: {
+            id: item.entry.id,
+            role: item.entry.role,
+            body: item.entry.body,
+            sessionKey: item.entry.sessionKey,
+            runId: item.entry.runId,
+            status: item.entry.status,
+            at: item.entry.at,
+          },
+        };
+      }
+
+      if (item.type === 'tools') {
+        return {
+          type: 'tools',
+          id: item.id,
+          at: item.at,
+          rows: item.burst.rows.map((entry) => ({ id: entry.id, entry })),
+          keepOpen: item.keepOpen,
+        };
+      }
+
+      if (item.type === 'artifacts') {
+        return {
+          type: 'artifacts',
+          id: item.id,
+          at: item.at,
+          item,
+        };
+      }
+
+      if (item.type === 'process') {
+        return {
+          type: 'process',
+          id: item.id,
+          at: item.at,
+          item,
+        };
+      }
+
+      return {
+        type: 'notice',
+        id: item.id,
+        at: item.at,
+        item,
+      };
     });
-  });
-
-  for (const message of liveMessages) {
-    transcriptItems.push({ type: 'message', id: message.id, at: message.at ?? Date.now(), message });
-  }
-
-  transcriptItems.sort((a, b) => a.at - b.at);
+  }, [liveEntries]);
   const controlsDetailsId = 'chat-surface-top-controls';
 
   return (
@@ -1666,7 +1662,6 @@ export function MissionControlChatSurface({
           setBridgeEventsOpen={setBridgeEventsOpen}
           bridgeEventsRef={bridgeEventsRef}
           liveEvents={liveEvents}
-          liveNotices={liveNotices}
           transcriptItems={transcriptItems}
           assistantSeatLabel={assistantSeatLabel}
           showJumpToLatest={showJumpToLatest}
