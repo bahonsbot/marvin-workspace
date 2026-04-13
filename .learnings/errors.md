@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260413-1340]
+
+**What failed:** Mission Control specialist-seat continuity loading during real Link seat testing
+**Error:** specialist seats like Link were activated with main-workspace-relative paths such as `agent-workspaces/job-advisor/...`, but the actual specialist runtime was mounted on its own workspace root (for example `/data/.openclaw/workspace-job-advisor`). Result: the seat implied continuity/skill files were missing even though the shared files existed.
+**Context:** Apr 13 Mission Control seat-bridge validation after the first real Link test
+**Suggested fix:** for specialist seats, do not assume the runtime shares the main workspace root. Use seat-safe absolute shared-workspace paths (for example `/data/.openclaw/workspace/...`) when continuity/skill files live in the shared workspace, or seat-local paths when the files truly live inside the specialist mount.
+**Resolution:** Resolved same session by switching Mission Control specialist activation and bridge prompts to absolute shared-workspace paths; Link then verified file access correctly and the seat test passed.
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260413-2204]
+
+**What failed:** Mission Control `/general/chat` hard-refresh + runtime-summary refresh architecture
+**Error:** the page still waited on a heavy runtime summary before finishing the server render, and the summary path paid for multiple expensive CLI probes. At the same time, transcript history and live runtime actions were still too separate, which made any naive speed fix risky for the duplicate-message bug.
+**Context:** Apr 13 late-night Mission Control Chat performance pass after the Apr 12 savepoint and Nerve comparison
+**Suggested fix:** render transcript history first, defer the heavier summary, slim the summary path to the minimum truthful data source, and move history/live transcript semantics toward one normalized transcript + dedupe path rather than separate truths.
+**Resolution:** Resolved in stages the same session: deferred the blocking summary on hard refresh (`cbb0e1b`), slimmed/cached the summary refresh path with status + session registry (`e1dd89d`), and laid the unified transcript foundation for later slices (`b0ae60b`).
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260413-1128]
 
 **What failed:** queued autonomous/spec task completion did not write back to the Mission Control structured board state
