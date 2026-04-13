@@ -410,30 +410,52 @@
       "id": "trading-draft-actionable-alpha-dashboard-slice-b",
       "title": "Draft: Actionable Alpha dashboard slice",
       "description": "spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support",
-      "status": "backlog",
+      "status": "review",
       "priority": "normal",
       "sourceType": "generated",
       "agentTarget": "marvin",
       "createdAt": 1775998149312,
-      "updatedAt": 1775998149312,
-      "version": 1,
-      "columnOrder": 2,
+      "updatedAt": 1776060643096,
+      "version": 2,
+      "columnOrder": 0,
       "editable": true,
       "chatAnnouncementSent": false,
       "feedback": [],
-      "artifacts": [],
+      "artifacts": [
+        {
+          "path": "projects/market-intel/notes/actionable-alpha-dashboard-slice-spec-2026-04-13.md",
+          "label": "Sudo output",
+          "kind": "file"
+        }
+      ],
       "linkedAutonomyRef": {
         "kind": "autonomous-md",
         "sourceFile": "/data/.openclaw/workspace/AUTONOMOUS.md",
-        "section": "open-backlog",
+        "section": "review",
         "taskText": "[Trading] Draft: Actionable Alpha dashboard slice\n**Brief:** spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support\n| Why: Turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next | Proof: Spec defines one named module, its inputs, presentation logic, and why it improves trading decisions | Unlocks: Unlocks a buildable next UI/UX implementation step for the trading dashboard",
-        "taskTextNormalized": "[trading] draft: actionable alpha dashboard slice **brief:** spec one concrete ui module for the actionable alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support | why: turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next | proof: spec defines one named module, its inputs, presentation logic, and why it improves trading decisions | unlocks: unlocks a buildable next ui/ux implementation step for the trading dashboard"
+        "taskTextNormalized": "[trading] draft: actionable alpha dashboard slice **brief:** spec one concrete ui module for the actionable alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support | why: turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next | proof: spec defines one named module, its inputs, presentation logic, and why it improves trading decisions | unlocks: unlocks a buildable next ui/ux implementation step for the trading dashboard",
+        "queueLinked": false,
+        "completedOutputPath": "projects/market-intel/notes/actionable-alpha-dashboard-slice-spec-2026-04-13.md",
+        "completedInTasksLog": false
       },
       "sourceMeta": {
         "generator": {
           "createdBy": "daily-task-generator",
           "createdAt": 1775998149312
         }
+      },
+      "run": {
+        "attemptId": "sudo:sudo-orchestration-1776057411117-m8rez1",
+        "attemptNumber": 1,
+        "trigger": "direct",
+        "sessionKey": "agent:main:sudo-orchestration:97113a2e-4f09-41ce-998d-5525e01b6964",
+        "runId": "4a1dafe3-409f-4b93-821b-8c9dcb63917f",
+        "startedAt": 1776057411162,
+        "endedAt": 1776057584145,
+        "status": "done",
+        "summary": "Sudo completed the lane plan frontend -> qa.",
+        "result": "Artifact: projects/market-intel/notes/actionable-alpha-dashboard-slice-spec-2026-04-13.md",
+        "error": null
       }
     },
     {
@@ -499,7 +521,7 @@
   ],
   "meta": {
     "schemaVersion": 2,
-    "updatedAt": 1775998149312,
+    "updatedAt": 1776060643096,
     "suppressedLegacyTaskKeys": [
       "(2026-04-07) [trading] \ud83d\udd27 fix: futures bot improvement \u2192 kept real deliverables (`scripts/signal_accuracy_report.py`, implementation plan, accuracy reports); review note: task overshot the ask by implementing the improvement instead of only producing the requested plan.",
       "[career] practice: blender primitives exercise",

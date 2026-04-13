@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
     const body = (await request.json()) as {
       prompt?: string;
       sourceSessionKey?: string | null;
+      taskId?: string | null;
     };
 
     const prompt = typeof body.prompt === 'string' ? body.prompt.trim() : '';
@@ -46,6 +47,7 @@ export async function POST(request: NextRequest) {
     const orchestration = await createSudoOrchestrationRun({
       requestedPrompt: prompt,
       sourceSessionKey: body.sourceSessionKey,
+      linkedTaskId: body.taskId,
     });
 
     try {

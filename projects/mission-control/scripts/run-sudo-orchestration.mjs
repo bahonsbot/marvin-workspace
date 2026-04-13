@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFile } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import {
@@ -14,6 +14,8 @@ const execFileAsync = promisify(execFile);
 const storePath = path.join(process.cwd(), 'data', 'sudo-delegations.json');
 const delegationRunnerPath = path.join(process.cwd(), 'scripts', 'run-sudo-delegation.mjs');
 const workspaceRoot = '/data/.openclaw/workspace';
+const autonomousStorePath = path.join(workspaceRoot, 'projects', 'mission-control', 'data', 'autonomous-tasks.json');
+const autonomousMarkdownPath = path.join(workspaceRoot, 'AUTONOMOUS.md');
 const sudoModelAlias = 'codex5.4';
 const sudoThinking = 'medium';
 const supportedLanes = new Set(['frontend', 'backend', 'qa']);
@@ -72,6 +74,273 @@ function compactList(value, max = 4, itemMax = 220) {
     .map((entry) => summarizeText(entry, itemMax))
     .filter(Boolean)
     .slice(0, max);
+}
+
+function toMillis(value) {
+  const parsed = Date.parse(String(value || ''));
+  return Number.isFinite(parsed) ? parsed : Date.now();
+}
+
+function normalizeWorkspaceRelativePath(value, { allowDirectory = false } = {}) {
+  let clean = String(value || '').trim();
+  clean = clean.replace(/^[\s`"'([{<]+/, '').replace(/[\s`"',.;:!?)}\]>]+$/, '');
+  clean = clean.replace(/^\/data\/\.openclaw\/workspace\//, '');
+  clean = clean.replace(/\\/g, '/');
+  if (!clean) return '';
+  if (clean.startsWith('http://') || clean.startsWith('https://')) return '';
+  if (clean.startsWith('/')) return '';
+  const normalized = path.posix.normalize(clean).replace(/^\.\//, '');
+  if (!normalized || normalized === '.' || normalized.startsWith('..')) return '';
+  if (!allowDirectory && normalized.endsWith('/')) return '';
+  return normalized;
+}
+
+function extractWorkspacePaths(text, { directoriesOnly = false } = {}) {
+  const source = String(text || '');
+  if (!source) return [];
+  const patterns = directoriesOnly
+    ? [
+        /(?:\/data\/\.openclaw\/workspace\/)?([A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)+\/)/g,
+      ]
+    : [
+        /(?:\/data\/\.openclaw\/workspace\/)?([A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)+\.[A-Za-z0-9._-]+)/g,
+      ];
+
+  const values = new Set();
+  for (const pattern of patterns) {
+    let match;
+    while ((match = pattern.exec(source)) !== null) {
+      const normalized = normalizeWorkspaceRelativePath(match[1], { allowDirectory: directoriesOnly });
+      if (normalized) values.add(normalized);
+    }
+  }
+
+  return [...values];
+}
+
+async function statSafe(filePath) {
+  try {
+    return await stat(filePath);
+  } catch {
+    return null;
+  }
+}
+
+async function collectRecentFilesInDirectory(directoryPath, startedAt, completedAt) {
+  const absoluteDirectory = path.join(workspaceRoot, directoryPath);
+  let entries;
+  try {
+    entries = await readdir(absoluteDirectory, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+
+  const startMs = Math.max(0, startedAt - 60_000);
+  const endMs = completedAt + 60_000;
+  const files = [];
+  for (const entry of entries) {
+    if (!entry.isFile()) continue;
+    const relativePath = normalizeWorkspaceRelativePath(path.posix.join(directoryPath, entry.name));
+    if (!relativePath) continue;
+    const details = await statSafe(path.join(workspaceRoot, relativePath));
+    if (!details?.isFile()) continue;
+    if (details.mtimeMs < startMs || details.mtimeMs > endMs) continue;
+    files.push({ path: relativePath, mtimeMs: details.mtimeMs });
+  }
+
+  return files.sort((left, right) => right.mtimeMs - left.mtimeMs).map((entry) => entry.path);
+}
+
+async function collectOrchestrationArtifacts(orchestration, childRuns, synthesis) {
+  const startedAt = toMillis(orchestration.startedAt || orchestration.requestedAt);
+  const completedAt = toMillis(orchestration.completedAt || synthesis?.completedAt || orchestration.updatedAt);
+  const artifactMap = new Map();
+  const texts = [
+    orchestration.requestedPrompt,
+    orchestration.decision?.completionCriteria,
+    orchestration.synthesis?.summary,
+    synthesis?.summary,
+    synthesis?.decided,
+    ...childRuns.map((run) => run.resultSummary),
+  ];
+
+  for (const text of texts) {
+    for (const candidate of extractWorkspacePaths(text)) {
+      const details = await statSafe(path.join(workspaceRoot, candidate));
+      if (!details?.isFile()) continue;
+      artifactMap.set(candidate, { path: candidate, kind: 'file', label: 'Sudo output' });
+    }
+  }
+
+  if (artifactMap.size === 0) {
+    for (const directory of texts.flatMap((text) => extractWorkspacePaths(text, { directoriesOnly: true }))) {
+      const details = await statSafe(path.join(workspaceRoot, directory));
+      if (!details?.isDirectory()) continue;
+      for (const candidate of await collectRecentFilesInDirectory(directory, startedAt, completedAt)) {
+        artifactMap.set(candidate, { path: candidate, kind: 'file', label: 'Sudo output' });
+      }
+      if (artifactMap.size > 0) break;
+    }
+  }
+
+  return [...artifactMap.values()].slice(0, 4);
+}
+
+async function loadAutonomousStore() {
+  const raw = await readFile(autonomousStorePath, 'utf8');
+  return JSON.parse(raw);
+}
+
+async function saveAutonomousStore(store) {
+  const currentMeta = store?.meta && typeof store.meta === 'object' ? store.meta : {};
+  store.meta = {
+    ...currentMeta,
+    updatedAt: Date.now(),
+  };
+  await writeFile(autonomousStorePath, `${JSON.stringify(store, null, 2)}\n`, 'utf8');
+}
+
+function nextTaskColumnOrder(tasks, status, taskId) {
+  return tasks
+    .filter((task) => task.id !== taskId && task.status === status)
+    .reduce((max, task) => Math.max(max, Number.isFinite(task.columnOrder) ? task.columnOrder : -1), -1) + 1;
+}
+
+function addTaskArtifact(task, artifact) {
+  task.artifacts = Array.isArray(task.artifacts) ? task.artifacts : [];
+  if (task.artifacts.some((entry) => entry.path === artifact.path)) return;
+  task.artifacts.push(artifact);
+}
+
+function normalizeLegacyTaskText(value) {
+  return String(value || '').trim().replace(/^[-*]\s+/, '').replace(/\s+/g, ' ').toLowerCase();
+}
+
+function collapseExtraSpacing(markdown) {
+  return markdown.replace(/\n{3,}/g, '\n\n');
+}
+
+function removeLegacyTaskBlock(markdown, taskText) {
+  const target = normalizeLegacyTaskText(taskText);
+  if (!target) return markdown;
+
+  const lines = markdown.split('\n');
+  const nextLines = [];
+  const completedPrefix = normalizeLegacyTaskText(`${taskText} | ✅`);
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const trimmed = line.trim();
+
+    if (!trimmed.startsWith('- ')) {
+      nextLines.push(line);
+      continue;
+    }
+
+    const text = trimmed.slice(2).trim();
+    const normalized = normalizeLegacyTaskText(text);
+    const isMatchingTask = normalized === target || normalized.startsWith(completedPrefix);
+    if (!isMatchingTask) {
+      nextLines.push(line);
+      continue;
+    }
+
+    while (index + 1 < lines.length) {
+      const next = lines[index + 1];
+      if (next.startsWith('## ') || next.trim().startsWith('- ')) break;
+      index += 1;
+    }
+  }
+
+  return `${collapseExtraSpacing(nextLines.join('\n')).trimEnd()}\n`;
+}
+
+function insertLegacyTaskIntoSection(markdown, heading, taskText) {
+  const block = String(taskText || '').trim();
+  if (!block) return markdown;
+
+  const lines = markdown.split('\n');
+  const headerIndex = lines.findIndex((line) => line.trim() === heading.trim());
+  if (headerIndex === -1) {
+    return `${markdown.trimEnd()}\n\n${heading}\n- ${block}\n`;
+  }
+
+  let insertIndex = headerIndex + 1;
+  while (insertIndex < lines.length && !lines[insertIndex].startsWith('## ')) {
+    insertIndex += 1;
+  }
+
+  lines.splice(insertIndex, 0, `- ${block}`);
+  return lines.join('\n');
+}
+
+async function writeBackLinkedTask(orchestration, synthesis, artifacts) {
+  const taskId = String(orchestration.linkedTaskId || '').trim();
+  if (!taskId) return null;
+
+  const store = await loadAutonomousStore();
+  if (!Array.isArray(store.tasks)) return null;
+  const index = store.tasks.findIndex((task) => task.id === taskId);
+  if (index === -1) return null;
+
+  const task = store.tasks[index];
+  const attemptNumber = Math.max(Number.isFinite(task.run?.attemptNumber) ? task.run.attemptNumber + 1 : 1, 1);
+  const startedAt = toMillis(orchestration.startedAt || orchestration.requestedAt);
+  const endedAt = toMillis(orchestration.completedAt || synthesis?.completedAt || orchestration.updatedAt);
+  const primaryArtifact = Array.isArray(artifacts) && artifacts[0]?.path ? artifacts[0] : null;
+
+  task.status = 'review';
+  task.needsInput = undefined;
+  task.chatAnnouncementSent = false;
+  task.columnOrder = nextTaskColumnOrder(store.tasks, 'review', task.id);
+  task.updatedAt = Date.now();
+  task.version = Math.max((task.version ?? 1) + 1, 1);
+  for (const artifact of Array.isArray(artifacts) ? artifacts : []) {
+    if (artifact?.path) addTaskArtifact(task, artifact);
+  }
+  task.run = {
+    attemptId: `sudo:${orchestration.id}`,
+    attemptNumber,
+    trigger: 'direct',
+    sessionKey: orchestration.decisionSessionKey || orchestration.sourceSessionKey || 'agent:main:main',
+    runId: orchestration.decisionRunId,
+    startedAt,
+    endedAt,
+    status: 'done',
+    summary: summarizeText(synthesis?.summary || 'Sudo completed the linked task handoff.', 220),
+    result: primaryArtifact?.path ? `Artifact: ${primaryArtifact.path}` : summarizeText(synthesis?.decided || synthesis?.summary || 'Sudo completed the linked task handoff.', 400),
+    error: undefined,
+  };
+  if (task.linkedAutonomyRef && task.linkedAutonomyRef.kind === 'autonomous-md') {
+    task.linkedAutonomyRef = {
+      ...task.linkedAutonomyRef,
+      section: 'review',
+      queueLinked: false,
+      queueLabel: undefined,
+      completedOutputPath: primaryArtifact?.path || task.linkedAutonomyRef.completedOutputPath,
+      completedInTasksLog: false,
+    };
+  }
+
+  store.tasks[index] = task;
+  await saveAutonomousStore(store);
+
+  if (task.linkedAutonomyRef?.kind === 'autonomous-md' && task.linkedAutonomyRef.taskText) {
+    try {
+      const markdown = await readFile(autonomousMarkdownPath, 'utf8');
+      const withoutCurrent = removeLegacyTaskBlock(markdown, task.linkedAutonomyRef.taskText);
+      const nextMarkdown = insertLegacyTaskIntoSection(withoutCurrent, '## Review', task.linkedAutonomyRef.taskText);
+      if (nextMarkdown !== markdown) {
+        await writeFile(autonomousMarkdownPath, nextMarkdown, 'utf8');
+      }
+    } catch {}
+  }
+
+  return {
+    taskId: task.id,
+    status: task.status,
+    artifactPath: primaryArtifact?.path,
+  };
 }
 
 async function loadStore() {
@@ -806,16 +1075,31 @@ async function run() {
 
     const synthesis = await buildSynthesis(orchestration, decision, completedRuns, preparedDecisionSession.sessionId);
     const holdAfterSynthesis = needsOversightHold(synthesis.oversight);
-    await updateOrchestration(runId, (current) => ({
+    const completedAt = nowIso();
+    const artifacts = await collectOrchestrationArtifacts(
+      {
+        ...orchestration,
+        completedAt,
+        decision,
+        synthesis,
+      },
+      completedRuns,
+      synthesis,
+    );
+    const finalizedOrchestration = await updateOrchestration(runId, (current) => ({
       ...current,
       status: holdAfterSynthesis ? 'waiting' : 'done',
-      completedAt: nowIso(),
+      completedAt,
       childRunIds,
       waitingForPhilippe: false,
       synthesis,
+      artifacts,
       oversight: synthesis.oversight,
       error: undefined,
     }));
+    if (!holdAfterSynthesis) {
+      await writeBackLinkedTask(finalizedOrchestration, synthesis, artifacts);
+    }
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Sudo orchestration failed.';
     await updateOrchestration(runId, (current) => ({

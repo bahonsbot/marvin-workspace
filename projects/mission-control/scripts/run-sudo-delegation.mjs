@@ -75,14 +75,28 @@ function extractTexts(value, output = []) {
   return output;
 }
 
+function isLowSignalSummary(value) {
+  const clean = String(value || '').trim().toLowerCase();
+  return clean === 'completed' || clean === 'done' || clean === 'ok' || clean === 'success' || clean === 'succeeded';
+}
+
+function firstInformativeSummary(candidates) {
+  const normalized = candidates
+    .map((value) => summarizeText(value))
+    .filter(Boolean);
+  return normalized.find((value) => !isLowSignalSummary(value)) || normalized[0] || '';
+}
+
 function deriveResultSummary(parsed, stdout) {
-  const summary =
-    summarizeText(parsed?.summary)
-    || summarizeText(parsed?.result?.summary)
-    || summarizeText(parsed?.result?.message)
-    || summarizeText(parsed?.result?.text)
-    || summarizeText(extractTexts(parsed)[0])
-    || summarizeText(stdout);
+  const summary = firstInformativeSummary([
+    ...(extractTexts(parsed?.result) || []),
+    ...(extractTexts(parsed) || []),
+    parsed?.result?.message,
+    parsed?.result?.text,
+    parsed?.result?.summary,
+    parsed?.summary,
+    stdout,
+  ]);
 
   return summary || 'Delegated lane run completed without a concise summary payload.';
 }

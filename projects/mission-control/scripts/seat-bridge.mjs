@@ -200,6 +200,7 @@ function parseArgs(argv) {
     seat: '',
     prompt: '',
     sourceSessionKey: 'agent:main:main',
+    taskId: '',
     timeoutSeconds: 900,
     dryRun: false,
     list: false,
@@ -219,6 +220,11 @@ function parseArgs(argv) {
     }
     if (token === '--source-session-key') {
       args.sourceSessionKey = String(argv[index + 1] || '').trim() || 'agent:main:main';
+      index += 1;
+      continue;
+    }
+    if (token === '--task-id') {
+      args.taskId = String(argv[index + 1] || '').trim();
       index += 1;
       continue;
     }
@@ -262,7 +268,7 @@ async function writeJson(filePath, value) {
   await writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
 }
 
-function buildSudoOrchestration(prompt, sourceSessionKey) {
+function buildSudoOrchestration(prompt, sourceSessionKey, taskId) {
   const requestedAt = nowIso();
   return {
     id: `sudo-orchestration-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -274,6 +280,7 @@ function buildSudoOrchestration(prompt, sourceSessionKey) {
       'Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.',
     requestedPrompt: prompt.trim(),
     promptSummary: summarizeText(prompt, 180),
+    linkedTaskId: taskId || undefined,
     status: 'queued',
     requestedAt,
     updatedAt: requestedAt,
@@ -288,8 +295,8 @@ function buildSudoOrchestration(prompt, sourceSessionKey) {
   };
 }
 
-async function triggerSudoOrchestration(prompt, sourceSessionKey, dryRun) {
-  const orchestration = buildSudoOrchestration(prompt, sourceSessionKey);
+async function triggerSudoOrchestration(prompt, sourceSessionKey, taskId, dryRun) {
+  const orchestration = buildSudoOrchestration(prompt, sourceSessionKey, taskId);
 
   if (!dryRun) {
     const store = await readJson(sudoStorePath, {
@@ -326,6 +333,7 @@ async function triggerSudoOrchestration(prompt, sourceSessionKey, dryRun) {
     status: dryRun ? 'dry-run' : 'accepted',
     orchestrationId: orchestration.id,
     sourceSessionKey: orchestration.sourceSessionKey,
+    linkedTaskId: orchestration.linkedTaskId || null,
     storePath: sudoStorePath,
     promptSummary: orchestration.promptSummary,
     runtimeNote:
@@ -477,7 +485,7 @@ async function main() {
   }
 
   if (seat.kind === 'sudo-orchestration') {
-    const result = await triggerSudoOrchestration(prompt, args.sourceSessionKey, args.dryRun);
+    const result = await triggerSudoOrchestration(prompt, args.sourceSessionKey, args.taskId, args.dryRun);
     printJson(result);
     return;
   }

@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
       seat?: string;
       prompt?: string;
       sourceSessionKey?: string | null;
+      taskId?: string | null;
       timeoutSeconds?: number | null;
       dryRun?: boolean;
     };
@@ -49,6 +50,9 @@ export async function POST(request: NextRequest) {
     const args = [BRIDGE_SCRIPT, '--seat', seat, '--prompt', prompt];
     if (typeof body.sourceSessionKey === 'string' && body.sourceSessionKey.trim()) {
       args.push('--source-session-key', body.sourceSessionKey.trim());
+    }
+    if (typeof body.taskId === 'string' && body.taskId.trim()) {
+      args.push('--task-id', body.taskId.trim());
     }
     if (typeof body.timeoutSeconds === 'number' && Number.isFinite(body.timeoutSeconds) && body.timeoutSeconds > 0) {
       args.push('--timeout', String(body.timeoutSeconds));

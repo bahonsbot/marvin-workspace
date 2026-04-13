@@ -105,6 +105,7 @@ export type SudoOrchestrationRun = {
   sourceRuntimeNote: string;
   requestedPrompt: string;
   promptSummary: string;
+  linkedTaskId?: string;
   status: SudoOrchestrationStatus;
   requestedAt: string;
   startedAt?: string;
@@ -368,6 +369,22 @@ function normalizeDecision(value: unknown): SudoOrchestrationDecision | null {
   };
 }
 
+function normalizeArtifacts(value: unknown): SudoOrchestrationArtifact[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const artifacts: SudoOrchestrationArtifact[] = [];
+  for (const entry of value) {
+    if (!entry || typeof entry !== 'object') continue;
+    const artifact = entry as Partial<SudoOrchestrationArtifact>;
+    if (typeof artifact.path !== 'string' || !artifact.path.trim()) continue;
+    artifacts.push({
+      path: artifact.path.trim(),
+      label: typeof artifact.label === 'string' ? artifact.label : undefined,
+      kind: artifact.kind === 'dir' || artifact.kind === 'url' || artifact.kind === 'log' ? artifact.kind : 'file',
+    });
+  }
+  return artifacts.length > 0 ? artifacts : undefined;
+}
+
 function normalizeSynthesis(value: unknown): SudoOrchestrationSynthesis | null {
   if (!value || typeof value !== 'object') return null;
   const synthesis = value as Partial<SudoOrchestrationSynthesis>;
@@ -414,6 +431,7 @@ function normalizeOrchestration(value: unknown): SudoOrchestrationRun | null {
         : 'Sudo itself remains routed through the main session. Orchestration records the parent decision, and only delegated lanes create child runs.',
     requestedPrompt: run.requestedPrompt,
     promptSummary: run.promptSummary,
+    linkedTaskId: typeof run.linkedTaskId === 'string' ? run.linkedTaskId : undefined,
     status:
       run.status === 'running' || run.status === 'waiting' || run.status === 'done' || run.status === 'error'
         ? run.status
@@ -424,6 +442,7 @@ function normalizeOrchestration(value: unknown): SudoOrchestrationRun | null {
     updatedAt: typeof run.updatedAt === 'string' ? run.updatedAt : nowIso(),
     decision: decision ?? undefined,
     synthesis: synthesis ?? undefined,
+    artifacts: normalizeArtifacts(run.artifacts),
     decisionSessionKey: typeof run.decisionSessionKey === 'string' ? run.decisionSessionKey : undefined,
     decisionRunId: typeof run.decisionRunId === 'string' ? run.decisionRunId : undefined,
     childRunIds: Array.isArray(run.childRunIds) ? run.childRunIds.filter((entry): entry is string => typeof entry === 'string') : [],
@@ -547,6 +566,7 @@ export async function listSudoOrchestrationRuns() {
 export async function createSudoOrchestrationRun(input: {
   requestedPrompt: string;
   sourceSessionKey?: string | null;
+  linkedTaskId?: string | null;
 }) {
   const store = await readSudoDelegationStore();
   const requestedAt = nowIso();
@@ -560,6 +580,7 @@ export async function createSudoOrchestrationRun(input: {
       'Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.',
     requestedPrompt: input.requestedPrompt.trim(),
     promptSummary: summarizePrompt(input.requestedPrompt),
+    linkedTaskId: input.linkedTaskId?.trim() || undefined,
     status: 'queued',
     requestedAt,
     updatedAt: requestedAt,
