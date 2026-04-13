@@ -1,9 +1,12 @@
+import { promises as fs } from 'node:fs';
 import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 import { runJsonCommand } from '@/lib/adapters/runtime';
 import { getRuntimeBridgeSidecarDescriptor } from '@/lib/runtime-bridge-sidecar';
 
 const RUNTIME_BRIDGE_POLL_INTERVAL_MS = 15000;
+const ORCHESTRATOR_SUMMARY_CACHE_TTL_MS = 15000;
 const MAIN_SESSION_KEY = 'agent:main:main';
+const MAIN_SESSION_REGISTRY_PATH = '/data/.openclaw/agents/main/sessions/sessions.json';
 
 type OpenClawStatusRaw = {
   defaultAgentId?: string;
@@ -19,6 +22,7 @@ type OpenClawStatusRaw = {
       key?: string;
       updatedAt?: number;
       age?: number;
+      kind?: string;
       model?: string;
       percentUsed?: number | null;
       totalTokens?: number | null;
@@ -27,22 +31,22 @@ type OpenClawStatusRaw = {
   };
 };
 
-type OpenClawHealthRaw = {
-  ok?: boolean;
-  channels?: Record<string, { probe?: { ok?: boolean } }>;
+type SessionRegistryEntry = {
+  sessionId?: string;
+  updatedAt?: number;
+  modelOverride?: string | null;
+  providerOverride?: string | null;
 };
 
-type SessionsRaw = {
-  sessions?: Array<{
-    key?: string;
-    model?: string;
-    ageMs?: number;
-    updatedAt?: number;
-    kind?: string;
-    contextTokens?: number | null;
-    totalTokens?: number | null;
-  }>;
+type SessionRegistryRaw = Record<string, SessionRegistryEntry>;
+
+type OrchestratorSummaryCacheEntry = {
+  value: OrchestratorIntegrationSummary;
+  expiresAt: number;
 };
+
+let orchestratorSummaryCache: OrchestratorSummaryCacheEntry | null = null;
+let orchestratorSummaryPromise: Promise<OrchestratorIntegrationSummary> | null = null;
 
 function toIso(value?: number): string | null {
   return typeof value === 'number' ? new Date(value).toISOString() : null;
@@ -112,6 +116,15 @@ function deriveControlPath(gatewayUrl?: string | null): OrchestratorIntegrationS
       embeddable: false,
       reason: 'invalid',
     };
+  }
+}
+
+async function readSessionRegistry(): Promise<SessionRegistryRaw> {
+  try {
+    const raw = await fs.readFile(MAIN_SESSION_REGISTRY_PATH, 'utf8');
+    return JSON.parse(raw) as SessionRegistryRaw;
+  } catch {
+    return {};
   }
 }
 
@@ -267,119 +280,132 @@ function createUnavailableOrchestratorIntegrationSummary(): OrchestratorIntegrat
   };
 }
 
-export async function readOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
-  try {
-    const [statusRaw, healthRaw, sessionsRaw, allSessionsRaw] = (await Promise.all([
-      runJsonCommand('openclaw status --json'),
-      runJsonCommand('openclaw health --json'),
-      runJsonCommand('openclaw sessions --all-agents --active 180 --json'),
-      runJsonCommand('openclaw sessions --all-agents --json'),
-    ])) as [OpenClawStatusRaw, OpenClawHealthRaw, SessionsRaw, SessionsRaw];
+async function buildOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
+  const [statusRaw, registryRaw] = (await Promise.all([
+    runJsonCommand('openclaw status --json'),
+    readSessionRegistry(),
+  ])) as [OpenClawStatusRaw, SessionRegistryRaw];
 
-    const statusRecentByKey = new Map(
-      (statusRaw.sessions?.recent ?? [])
-        .filter((session) => typeof session.key === 'string')
-        .map((session) => [session.key as string, session]),
-    );
-
-    const recentSessions = (sessionsRaw.sessions ?? [])
+  const statusRecentByKey = new Map(
+    (statusRaw.sessions?.recent ?? [])
       .filter((session) => typeof session.key === 'string')
-      .filter((session) => !isRunSession(session.key))
-      .slice(0, 8)
-      .map((session) => {
-        const statusSession = statusRecentByKey.get(session.key as string);
-        return {
-          key: session.key as string,
-          model: session.model ?? statusSession?.model ?? null,
-          kind: session.kind ?? 'unknown',
-          ageMs: typeof session.ageMs === 'number' ? session.ageMs : typeof statusSession?.age === 'number' ? statusSession.age : null,
-          updatedAt: toIso(session.updatedAt ?? statusSession?.updatedAt),
-          tokenUsage:
-            typeof session.totalTokens === 'number' && typeof session.contextTokens === 'number' && session.contextTokens > 0
-              ? {
-                  totalTokens: session.totalTokens,
-                  contextTokens: session.contextTokens,
-                  percentUsed: Math.round((session.totalTokens / session.contextTokens) * 100),
-                }
-              : typeof statusSession?.totalTokens === 'number' && typeof statusSession?.contextTokens === 'number' && statusSession.contextTokens > 0
-                ? {
-                    totalTokens: statusSession.totalTokens,
-                    contextTokens: statusSession.contextTokens,
-                    percentUsed: typeof statusSession.percentUsed === 'number' ? statusSession.percentUsed : Math.round((statusSession.totalTokens / statusSession.contextTokens) * 100),
-                  }
-              : null,
-        };
-      });
+      .map((session) => [session.key as string, session]),
+  );
 
-    const authoritativeRoots = (allSessionsRaw.sessions ?? [])
-      .filter((session) => typeof session.key === 'string')
-      .filter((session) => isRootSession(session.key))
-      .sort((left, right) => {
-        if (left.key === MAIN_SESSION_KEY) return -1;
-        if (right.key === MAIN_SESSION_KEY) return 1;
-        return (right.updatedAt ?? 0) - (left.updatedAt ?? 0);
-      })
-      .map((session) => ({
-        key: session.key as string,
-        model: session.model ?? statusRecentByKey.get(session.key as string)?.model ?? null,
-        updatedAt: toIso(session.updatedAt ?? statusRecentByKey.get(session.key as string)?.updatedAt),
-      }));
-
-    const mainSession = authoritativeRoots.find((session) => session.key === MAIN_SESSION_KEY) ?? null;
-
-    const activeDirectCount = recentSessions.filter((session) => session.kind === 'direct' && typeof session.ageMs === 'number' && session.ageMs <= 5 * 60 * 1000).length;
-
-    const channelProbe = Object.entries(healthRaw.channels ?? {}).map(([channel, value]) => ({
-      channel,
-      ok: Boolean(value?.probe?.ok),
+  const recentSessions = (statusRaw.sessions?.recent ?? [])
+    .filter((session) => typeof session.key === 'string')
+    .filter((session) => !isRunSession(session.key))
+    .slice(0, 8)
+    .map((session) => ({
+      key: session.key as string,
+      model: session.model ?? null,
+      kind: session.kind ?? 'unknown',
+      ageMs: typeof session.age === 'number' ? session.age : null,
+      updatedAt: toIso(session.updatedAt),
+      tokenUsage:
+        typeof session.totalTokens === 'number' && typeof session.contextTokens === 'number' && session.contextTokens > 0
+          ? {
+              totalTokens: session.totalTokens,
+              contextTokens: session.contextTokens,
+              percentUsed: typeof session.percentUsed === 'number' ? session.percentUsed : Math.round((session.totalTokens / session.contextTokens) * 100),
+            }
+          : null,
     }));
-    const controlPath = deriveControlPath(statusRaw.gateway?.url ?? null);
-    const runtimeOk = Boolean(healthRaw.ok) && Boolean(statusRaw.gateway?.reachable);
 
-    return {
-      status: 'partial',
-      integrationMode: 'hybrid-reuse',
-      chatEmbeddingStatus: 'embedded-reuse',
-      honestyNotes: [
-        'Mission Control does not implement its own chat transport or session state.',
-        'The center chat surface reuses the real OpenClaw Control UI instead of simulating a separate chat system.',
-      ],
-      runtimeBridge: deriveRuntimeBridge(controlPath, runtimeOk),
-      controlPath,
-      runtime: {
-        defaultAgentId: statusRaw.defaultAgentId ?? null,
-        gateway: {
-          mode: statusRaw.gateway?.mode ?? null,
-          url: statusRaw.gateway?.url ?? null,
-          reachable: Boolean(statusRaw.gateway?.reachable),
-          version: statusRaw.gateway?.self?.version ?? null,
-        },
-        health: {
-          ok: Boolean(healthRaw.ok),
-          channels: channelProbe,
-        },
+  const authoritativeRoots = Object.entries(registryRaw)
+    .filter(([key]) => isRootSession(key))
+    .sort((left, right) => {
+      if (left[0] === MAIN_SESSION_KEY) return -1;
+      if (right[0] === MAIN_SESSION_KEY) return 1;
+      return (right[1]?.updatedAt ?? 0) - (left[1]?.updatedAt ?? 0);
+    })
+    .map(([key, entry]) => {
+      const statusSession = statusRecentByKey.get(key);
+      const modelOverride = typeof entry?.modelOverride === 'string' && entry.modelOverride.trim() ? entry.modelOverride.trim() : null;
+      const providerOverride = typeof entry?.providerOverride === 'string' && entry.providerOverride.trim() ? entry.providerOverride.trim() : null;
+      const model = statusSession?.model ?? (providerOverride && modelOverride ? `${providerOverride}/${modelOverride}` : modelOverride);
+      return {
+        key,
+        model: model ?? null,
+        updatedAt: toIso(entry?.updatedAt ?? statusSession?.updatedAt),
+      };
+    });
+
+  const mainSession = authoritativeRoots.find((session) => session.key === MAIN_SESSION_KEY) ?? null;
+  const activeDirectCount = recentSessions.filter((session) => session.kind === 'direct' && typeof session.ageMs === 'number' && session.ageMs <= 5 * 60 * 1000).length;
+  const controlPath = deriveControlPath(statusRaw.gateway?.url ?? null);
+  const runtimeOk = Boolean(statusRaw.gateway?.reachable);
+
+  return {
+    status: 'partial',
+    integrationMode: 'hybrid-reuse',
+    chatEmbeddingStatus: 'embedded-reuse',
+    honestyNotes: [
+      'Mission Control does not implement its own chat transport or session state.',
+      'The center chat surface reuses the real OpenClaw Control UI instead of simulating a separate chat system.',
+      'This runtime summary now prefers the on-disk session registry plus openclaw status so chat refreshes stay bounded.',
+    ],
+    runtimeBridge: deriveRuntimeBridge(controlPath, runtimeOk),
+    controlPath,
+    runtime: {
+      defaultAgentId: statusRaw.defaultAgentId ?? null,
+      gateway: {
+        mode: statusRaw.gateway?.mode ?? null,
+        url: statusRaw.gateway?.url ?? null,
+        reachable: Boolean(statusRaw.gateway?.reachable),
+        version: statusRaw.gateway?.self?.version ?? null,
       },
-      sessionContext: {
-        totalSessionsVisible: typeof statusRaw.sessions?.count === 'number' ? statusRaw.sessions.count : null,
-        activeDirectLast5m: activeDirectCount,
-        roots: authoritativeRoots,
-        mainSession: {
-          key: MAIN_SESSION_KEY,
-          exists: Boolean(mainSession),
-          model: mainSession?.model ?? null,
-          updatedAt: mainSession?.updatedAt ?? null,
-        },
-        recent: recentSessions,
+      health: {
+        ok: runtimeOk,
+        channels: [],
       },
-      integrationShape: {
-        now: 'Reuse the real OpenClaw Control UI as the center chat surface, with Mission Control supplying surrounding context and agent framing.',
-        next: 'Keep refining the embedded-chat shell while preserving one real chat transport and auth boundary.',
+    },
+    sessionContext: {
+      totalSessionsVisible: typeof statusRaw.sessions?.count === 'number' ? statusRaw.sessions.count : null,
+      activeDirectLast5m: activeDirectCount,
+      roots: authoritativeRoots,
+      mainSession: {
+        key: MAIN_SESSION_KEY,
+        exists: Boolean(mainSession),
+        model: mainSession?.model ?? null,
+        updatedAt: mainSession?.updatedAt ?? null,
       },
-      refreshedAt: new Date().toISOString(),
-    };
-  } catch {
-    return createUnavailableOrchestratorIntegrationSummary();
+      recent: recentSessions,
+    },
+    integrationShape: {
+      now: 'Reuse the real OpenClaw Control UI as the center chat surface, with Mission Control supplying surrounding context and agent framing.',
+      next: 'Keep refining the embedded-chat shell while preserving one real chat transport and auth boundary.',
+    },
+    refreshedAt: new Date().toISOString(),
+  };
+}
+
+export async function readOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
+  const now = Date.now();
+  if (orchestratorSummaryCache && orchestratorSummaryCache.expiresAt > now) {
+    return orchestratorSummaryCache.value;
   }
+
+  if (!orchestratorSummaryPromise) {
+    orchestratorSummaryPromise = buildOrchestratorIntegrationSummary()
+      .then((summary) => {
+        orchestratorSummaryCache = {
+          value: summary,
+          expiresAt: Date.now() + ORCHESTRATOR_SUMMARY_CACHE_TTL_MS,
+        };
+        return summary;
+      })
+      .catch(() => createUnavailableOrchestratorIntegrationSummary())
+      .finally(() => {
+        orchestratorSummaryPromise = null;
+      });
+  }
+
+  return orchestratorSummaryPromise;
+}
+
+export function primeOrchestratorIntegrationSummary(): void {
+  void readOrchestratorIntegrationSummary();
 }
 
 export const getOrchestratorIntegrationSummary = readOrchestratorIntegrationSummary;

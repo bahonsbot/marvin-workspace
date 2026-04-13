@@ -1,6 +1,6 @@
 import { MissionControlChatRuntime } from '@/components/chat/MissionControlChatRuntime';
 import { resolveChatSeatActivation } from '@/lib/agents/chat-activation';
-import { createDeferredOrchestratorIntegrationSummary } from '@/lib/adapters/orchestrator';
+import { createDeferredOrchestratorIntegrationSummary, primeOrchestratorIntegrationSummary } from '@/lib/adapters/orchestrator';
 import { loadRuntimeBridgeSessionHistory } from '@/lib/runtime-bridge-history';
 
 export const dynamic = 'force-dynamic';
@@ -14,6 +14,7 @@ export default async function GeneralChatPage({
   const seatParam = Array.isArray(params?.seat) ? params.seat[0] : params?.seat;
   const activation = resolveChatSeatActivation(seatParam);
   const initialSessionKey = activation?.targetSessionKey ?? 'agent:main:main';
+  primeOrchestratorIntegrationSummary();
   const initialTranscriptHistory = await loadRuntimeBridgeSessionHistory(initialSessionKey);
 
   return (

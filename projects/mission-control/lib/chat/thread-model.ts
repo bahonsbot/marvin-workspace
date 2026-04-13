@@ -124,14 +124,15 @@ function buildToolsRail(summary: OrchestratorIntegrationSummary, primarySession:
   const sessionCount = summary.sessionContext.totalSessionsVisible;
   const channelsOk = summary.runtime.health.channels.filter((channel) => channel.ok).length;
   const channelCount = summary.runtime.health.channels.length;
+  const rootCount = summary.sessionContext.roots.length;
 
   return {
     kind: 'tools',
     title: 'Tools',
     summary: 'Read-only runtime probes used to build this surface',
-    detail: 'Mission Control is reading CLI-backed runtime metadata only. It is not replaying message events or inventing tool completions.',
+    detail: 'Mission Control is reading bounded runtime metadata only. It is not replaying message events or inventing tool completions.',
     metrics: [
-      channelCount > 0 ? `${channelsOk}/${channelCount} channels healthy` : 'channel health unavailable',
+      channelCount > 0 ? `${channelsOk}/${channelCount} channels healthy` : 'channel health deferred',
       sessionCount !== null ? `${sessionCount} sessions visible` : 'session count unavailable',
       primarySession?.model ?? 'model hidden by runtime',
     ],
@@ -142,15 +143,18 @@ function buildToolsRail(summary: OrchestratorIntegrationSummary, primarySession:
         preview: summary.runtime.gateway.url ?? 'No gateway URL exposed by runtime.',
       },
       {
-        label: 'openclaw health --json',
-        meta: summary.runtime.health.ok ? 'ok' : 'degraded',
+        label: '/data/.openclaw/agents/main/sessions/sessions.json',
+        meta: rootCount > 0 ? `${rootCount} roots` : 'registry unavailable',
         preview:
-          channelCount > 0
-            ? `${channelsOk} of ${channelCount} reported channels passed probe.`
-            : 'No channel-level probe data returned.',
+          rootCount > 0
+            ? summary.sessionContext.roots
+                .slice(0, 3)
+                .map((session) => shortSessionKey(session.key))
+                .join(' • ')
+            : 'No root sessions surfaced from the session registry.',
       },
       {
-        label: 'openclaw sessions --all-agents --active 180 --json',
+        label: 'status-backed recent session snapshot',
         meta: sessions.length > 0 ? `${sessions.length} recent` : 'none',
         preview:
           sessions.length > 0
