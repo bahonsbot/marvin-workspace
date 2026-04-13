@@ -1,20 +1,23 @@
 # Philippe te Wierik — Master Resume Draft
 
 ## Positioning note
-Credible default positioning: customer-facing communications and operations professional with experience across support, hospitality, teaching/training, and marketing/communications. This is the most defensible base posture from the source material because it captures Philippe's strongest recurring themes without overcommitting to a single niche or overstating recent technical depth.
+Credible default positioning: communications and customer-facing operations professional with experience across support, hospitality, teaching/training, and marketing/communications, plus active portfolio-led creative practice and recent AI-related learning. This is the most defensible base posture because it reflects Philippe's strongest recurring work themes without overstating a single niche or misrepresenting Motion Display as the dominant commercial focus.
 
 ---
 
 ## Header
 **Philippe te Wierik**  
-Tilburg, North Brabant, Netherlands  
-LinkedIn: existing profile to update  
-Portfolio / website: motiondisplay.net
+The Netherlands  
+Email: philippe@motiondisplay.net  
+Phone: +31 6 83853931 (WhatsApp only)  
+LinkedIn: www.linkedin.com/in/pwierik  
+Portfolio: www.motiondisplay.net  
+Nationality: Dutch
 
 ---
 
 ## Professional Summary
-Customer-facing communications and operations professional with experience spanning support, hospitality, teaching, creative services, and marketing/communications leadership. Brings a mix of service judgment, written communication, training experience, stakeholder coordination, and content development across international and multilingual environments. Recent work includes communications leadership and self-employed creative direction, with additional current learning in AI-related topics through recent certifications.
+Communications and customer-facing operations professional with experience spanning support, hospitality, teaching, creative services, and marketing/communications leadership. Brings a mix of written communication, stakeholder coordination, training, service operations, content development, and brand-focused communication across international environments. Recent work includes communications leadership, self-employed creative direction through Motion Display, and current AI-related learning through recent certifications.
 
 ---
 
@@ -26,6 +29,7 @@ Customer-facing communications and operations professional with experience spann
 - Stakeholder communication and cross-functional coordination
 - Social media and website content management
 - Brand messaging and tone consistency
+- Press, PR, and external communications support
 - Event and media production coordination
 - Customer relations and service operations
 - Documentation-oriented communication
@@ -38,81 +42,72 @@ Customer-facing communications and operations professional with experience spann
 
 ### Creative Director | Motion Display | Self-employed
 **Jul 2024 - Present** | Hybrid
-- Creates narratives and visual communication work intended to help brands communicate with clarity and impact.
-- Works across motion design, creative writing, photography, and immersive 3D environments.
-- Positions services around storytelling, design, and message clarity.
+- Runs Motion Display as a self-employed creative direction practice focused on narrative, visual communication, and storytelling-led brand work.
+- Creates multimodal design and content across motion design, creative writing, photography, and immersive 3D environments.
+- Develops brand narrative by combining written communication and visual design.
 
 ### Group Communications Manager | MTD Water | Full-time
 **Sep 2023 - Sep 2025** | Tilburg, North Brabant, Netherlands | On-site
-- Developed and executed communication vision and strategy to support the company's global market presence.
-- Oversaw online and offline content creation across website, social channels, and other media.
+- Developed and executed communication vision and strategy to support MTD Water's global market presence.
+- Led communication work across websites, social channels, offline materials, and broader media content.
 - Wrote press releases, newsletters, advertisements, and scripts for video productions.
+- Supported PR and communications activity during major events, including the 2024 Paris Olympics and Paralympics.
 - Managed marketing and communication activities and budgets.
-- Served as a discussion partner to the director and global sales teams on communication alignment.
-- Maintained tone consistency and brand image across communication channels.
-- Managed press and stakeholder contact with external parties.
-- Supported creation of new corporate and careers websites.
-- Managed rebranding work including corporate style, brand book, and templates.
-- Managed social media copy and related operations.
+- Worked closely with the director and global sales teams to align communication priorities.
+- Helped ensure consistent tone, brand image, and communication standards across channels.
+- Led creation of new corporate and careers websites.
+- Managed rebranding work, including corporate style, brand book, and updated templates.
+- Managed operations for social media accounts and related content.
 - Planned and managed media productions at major events.
 
 ### Marketing Communications Specialist | Giarte - Founders of XLA | Full-time
 **Feb 2023 - Sep 2023** | Amsterdam, North Holland, Netherlands | Hybrid
-- Set up and managed marketing campaigns and strategies.
-- Created graphic design and digital content.
-- Supported event organization.
-- Wrote and edited company narratives.
+- Set up and managed new marketing campaigns and strategies, including creative brainstorm sessions.
+- Produced digital content and graphic design work.
+- Wrote, edited, and improved brand and campaign narratives.
 - Managed website and social channel content.
-- Used data and web analytics to improve conversion.
+- Supported event organization.
+- Improved conversion based on data and web analytics.
 
-### Head Teacher | Monkey Tree International Group | Full-time
-**Jul 2019 - Apr 2022** | Pearl Oriental, Macau | On-site
-- Managed, appraised, and trained a team of native English teachers.
-- Taught English to students ages 3-12.
-- Created team schedules and assigned responsibilities.
-- Organized and attended meetings with teachers and senior management.
+### Monkey Tree International Group | Full-time
+**Mar 2018 - Apr 2022** | Macau / Macao SAR | On-site
+**Progression:** English Language Teacher -> Head Teacher
+- Taught English to students aged 3-12 years in an English as a second language environment.
+- Progressed into Head Teacher role with responsibility for managing, appraising, and training a team of native English teachers.
+- Managed day-to-day English center operations, including schedules and assigned responsibilities.
+- Organized and attended regular meetings with teachers and senior management.
 
-### English Language Teacher | Monkey Tree International Group | Full-time
-**Mar 2018 - Apr 2022** | Macao SAR | On-site
-- Taught English in a structured learning environment.
-- Supported language development for students in English as a second language contexts.
-
-### Graphic Designer | Kiwimotion | Self-employed
+### Graphic Designer | Kiwimotion | Self-employed, part-time freelance alongside Moby Dick
 **Jun 2014 - Apr 2017** | Greater Enschede Area | On-site
-- Delivered 2D and 3D graphic design work.
-- Acquired new clients and managed follow-up communication.
-- Managed day-to-day operations, administration, and sales tax tasks.
+- Delivered 2D and 3D graphic design work for clients.
+- Built client relationships through new business development, customer contact, and follow-up communication.
+- Managed day-to-day freelance operations, administration, and sales tax tasks.
 - Produced logo and web design work.
-- Followed market developments and analyzed trends.
+- Followed market developments and analyzed trends relevant to creative work.
 
 ### F&B Assistant Manager | Moby Dick | Full-time
 **Jun 2008 - Apr 2017** | Hengelo, the Netherlands
+- Supported full hospitality operations, including opening and closing procedures, daily bar work, and cash registry management.
 - Trained current and new staff members.
-- Worked to improve customer satisfaction and maintain business relations.
+- Improved customer satisfaction and customer loyalty while maintaining business relations.
 - Managed customer loyalty projects and product innovations.
-- Handled opening and closing procedures.
-- Managed cash registry and staff work hours.
+- Managed staff work hours and day-to-day operational responsibilities.
 
-### Account Administrator - English | Blizzard Entertainment | Full-time
-**Aug 2007 - Mar 2008** | Velizy-Villacoublay, France | On-site
-- Managed customer service operations for World of Warcraft in its early years.
-- Assisted in developing new tools and operations.
-- Reported bugs and managed database-related work.
-- Applied account safety measures and processed player identity verification.
-- Worked in an international environment.
-
-### Game Master - English | Blizzard Entertainment | Full-time
-**Oct 2006 - Aug 2007** | Velizy-Villacoublay, France
-- Supported players in a customer service and game support environment.
-- Resolved problems and provided technical support-related assistance.
+### Blizzard Entertainment | Full-time
+**Oct 2006 - Mar 2008** | Velizy-Villacoublay, France | On-site
+**Progression:** Game Master - English -> Account Administrator - English
+- Managed customer service operations for World of Warcraft during the early years of the MMORPG boom.
+- Supported players through customer service and problem resolution work in an international environment.
+- Reported bugs, supported new tools, and contributed to operational improvements.
+- Maintained account safety measures and processed player identity verification.
 
 ### Bartender / Waiter | St. Louis & Moby Dick
 **Feb 2002 - Sep 2006** | Hengelo, the Netherlands
-- Worked in customer-facing hospitality roles.
+- Worked in customer-facing hospitality roles with direct service and customer relations responsibilities.
 
 ### Customer Service Agent - Dutch | KPN
 **May 2002 - Nov 2002** | Greater Enschede Area
-- Worked in a Dutch-language customer service role.
+- Worked in a Dutch-language customer service role involving customer communication and support.
 
 ---
 
@@ -147,27 +142,27 @@ Customer-facing communications and operations professional with experience spann
 - SUMMER OF UNREAL 2022 — INCAS Training und Projekte GmbH & Co. KG — Aug 2022
 - Advanced 3D Cinematography (Lights, Camera, Render) — School of Motion
 
-Note: one duplicate "AI for Content Creation" certification appears in the LinkedIn export and should be cleaned up on LinkedIn and in future resume versions.
+Note: the LinkedIn export included a duplicate "AI for Content Creation" entry; the duplicate should be removed from LinkedIn and excluded from future resume versions.
 
 ---
 
 ## Chronology / consistency notes
-- Kiwimotion (Jun 2014 - Apr 2017) overlaps with F&B Assistant Manager at Moby Dick (Jun 2008 - Apr 2017). This may be legitimate concurrent work or self-employment, but the relationship should be clarified in future versions.
-- Windesheim (2011 - 2015) overlaps with both Kiwimotion and Moby Dick, which may also be accurate but should be left as-is unless Philippe wants to clarify study/work overlap.
-- Monkey Tree roles overlap by title and dates, which appears consistent with internal progression from English Language Teacher to Head Teacher, but future versions may present this more compactly as one employer entry with progression.
+- Kiwimotion (Jun 2014 - Apr 2017) is confirmed as part-time freelance work alongside Moby Dick.
+- Moby Dick continued while Philippe studied at Windesheim; the overlap is intentional and does not need to be treated as an error.
+- Monkey Tree is presented as one employer with progression from English Language Teacher to Head Teacher.
+- Motion Display is kept as active current self-employed creative practice, but this base resume does not describe it as Philippe's dominant commercial focus.
 
 ---
 
 ## Explicit evidence gaps / questions
-1. Confirm preferred contact details for the resume header, including email, phone, LinkedIn URL, and preferred portfolio link.
-2. Confirm whether Motion Display should be positioned as current primary work, freelance work, or a side business.
-3. Confirm whether Kiwimotion ran concurrently with Moby Dick and whether that overlap should be labeled explicitly as self-employed work.
-4. Add any measurable outcomes, scope, or scale for communications, support, teaching, hospitality, or creative work if available.
-5. Clarify whether the 2026 Google AI certifications should all remain grouped on the base resume or be selectively trimmed for shorter role-specific versions.
-6. Confirm whether Dutch, English, and German proficiency should be listed formally and at what level.
-7. Add any missing dates, employment context, or more specific responsibilities if a fuller CV or older resume exists.
+1. Add measurable outcomes, audience scale, or stronger scope where available for MTD Water, Giarte, Monkey Tree, Blizzard, Motion Display, and hospitality work.
+2. Confirm whether the resume should show full Dutch mailing location or stay at the simpler "The Netherlands" level for international applications.
+3. Confirm whether the WhatsApp-only phone number should stay on the resume for all applications or be omitted for roles where email and LinkedIn are sufficient.
+4. Confirm whether a separate Languages section should be added formally for Dutch, English, and German.
+5. Confirm whether Motion Display should stay as "Creative Director" on the resume or shift to a slightly plainer self-employed title in future role-specific versions.
+6. Add any public portfolio links, writing samples, campaign examples, press releases, or website launches that can strengthen role-specific tailoring later.
 
 ---
 
 ## Working note for future tailoring
-This is a base ATS-safe master resume draft built only from the LinkedIn export working note and current Link continuity files. It is intentionally conservative, readable, and evidence-limited. Role-specific versions should reorder and tighten this material around a specific target role rather than expand claims.
+This is a base ATS-safe master resume draft built only from the LinkedIn export working note, the clarification note, and current Link continuity files. It is intentionally conservative, readable, and evidence-limited. Role-specific versions should reorder and tighten this material around a specific target role rather than expand claims.
