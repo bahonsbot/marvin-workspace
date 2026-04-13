@@ -110,7 +110,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 - Do not treat disabled wrapper timeout/error metadata as current runtime health for tasks now owned by `scripts/deterministic_scheduler.py`.
 | entity-lifecycle-manager | Sun 05:00 weekly | Demote old life/ entities to archive | none |
 | data-manager | Sun 05:00 weekly | JSONL/log rotation (>30 days) | none |
-| dependency-update-audit | Mon 10:30 weekly | Check for outdated dependencies | none |
+| dependency-update-audit | Mon 10:30 weekly | Check for outdated dependencies (workspace Python, futures-bot Python, autonomous-kanban npm, mission-control npm) | none |
 | news-feed-generator | DISABLED | Superseded by RSS/Reddit monitor pipeline | none |
 
 **Cron Context-Sharing Pipeline (Market Intel):**
@@ -166,6 +166,9 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - Tasks page now uses live polling only while autonomous work is actively running
   - autonomous completion notifications now fan out to Chat activity line + top-right shell toast + subtle sound cue
   - shell bottom status strip is intentionally disabled globally for now, not deleted as a concept
+- Apr 13 Files/Memory visibility note:
+  - `MEMORY.md` and `memory/*` are intentionally visible in `/general/files` again, via the `Memory Files` root, but remain read-only there
+  - `.learnings/*` remains excluded from Files
 - Mission Control repo wrap rule:
   - `projects/mission-control` may commit cleanly inside its own nested repo while the outer workspace still has unwrapped file changes
   - before telling Philippe a Mission Control feature is live, do outer-workspace wrap + preview restart + one light verification pass against the integrated version

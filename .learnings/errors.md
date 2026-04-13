@@ -17,6 +17,18 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260413-1128]
+
+**What failed:** queued autonomous/spec task completion did not write back to the Mission Control structured board state
+**Error:** a queued subagent completed the creative-tool automation spec and produced the artifact successfully, but `projects/mission-control/data/autonomous-tasks.json` still showed the original backlog item as untouched `backlog` because completion state/artifacts were never reconciled into the board record
+**Context:** Apr 13 Morning Meeting follow-up after the Blender automation spec had landed but the task still appeared in Backlog
+**Suggested fix:** when queue/executor/subagent work produces a real deliverable, completion is not done until the structured board record is updated too. Verify artifact existence and then write back `status`, `artifacts`, and a minimal run summary so Mission Control reflects the real task outcome instead of stale backlog truth
+**Resolution:** Resolved same session by manually reconciling the affected task record to `done` with both artifacts attached and a minimal completion summary
+
+**Priority:** medium
+**Status:** resolved
+
+
 ## [ERR-20260412-2358]
 
 **What failed:** first Mission Control seat-bridge transport assumption for specialist seats
