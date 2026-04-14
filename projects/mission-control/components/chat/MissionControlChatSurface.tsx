@@ -798,6 +798,10 @@ export function MissionControlChatSurface({
   const live = bridge?.live;
   const liveTargetSession = live?.targetSession.key ?? null;
   const liveTargetLabel = live?.targetSession.label ?? 'No target session';
+  const mainRecentSession = useMemo(
+    () => summary.sessionContext.recent.find((session) => session.key === summary.sessionContext.mainSession.key) ?? null,
+    [summary.sessionContext.mainSession.key, summary.sessionContext.recent],
+  );
   const topRailSession = useMemo(() => {
     const targetKey = liveTargetSession ?? activation?.targetSessionKey ?? null;
     if (targetKey) {
@@ -805,12 +809,16 @@ export function MissionControlChatSurface({
       if (exactTarget) return exactTarget;
     }
 
-    const mainExact = summary.sessionContext.recent.find((session) => session.key === summary.sessionContext.mainSession.key);
-    if (mainExact) return mainExact;
+    if (mainRecentSession) return mainRecentSession;
 
     return model.primarySession;
-  }, [activation?.targetSessionKey, liveTargetSession, model.primarySession, summary.sessionContext.mainSession.key, summary.sessionContext.recent]);
-  const topRailContextPercent = topRailSession?.tokenUsage?.percentUsed ?? model.contextPercent;
+  }, [activation?.targetSessionKey, liveTargetSession, mainRecentSession, model.primarySession, summary.sessionContext.recent]);
+  const topRailContextPercent =
+    topRailSession?.tokenUsage?.percentUsed ??
+    mainRecentSession?.tokenUsage?.percentUsed ??
+    model.primarySession?.tokenUsage?.percentUsed ??
+    summary.sessionContext.recent.find((session) => session.tokenUsage?.percentUsed != null)?.tokenUsage?.percentUsed ??
+    model.contextPercent;
   const contextStyles = contextTone(topRailContextPercent);
   const liveEntries = useMemo(() => live?.entries ?? [], [live?.entries]);
   const liveEvents = live?.events ?? [];
@@ -1423,7 +1431,8 @@ export function MissionControlChatSurface({
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
             <button
               type="button"
               onClick={() => void handleResetToDefaults()}
@@ -1503,8 +1512,9 @@ export function MissionControlChatSurface({
                 {bridgeRefreshing ? '…' : '↻'}
               </button>
             ) : null}
+          </div>
 
-            <div ref={statusDropdownRef} style={{ position: 'relative', display: 'flex', gap: 5, flexShrink: 0 }}>
+          <div ref={statusDropdownRef} style={{ position: 'relative', display: 'flex', gap: 6, flexShrink: 0 }}>
               <button
                 type="button"
                 onClick={() => setStatusDropdownOpen((value) => !value)}
