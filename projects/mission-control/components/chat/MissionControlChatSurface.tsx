@@ -913,6 +913,14 @@ export function MissionControlChatSurface({
   const selectedSeatLabel = activation?.label ?? 'Marvin';
   const assistantSeatLabel = assistantLabelForSeat(activation?.seatSlug);
   const displayModelLabel = model.modelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : model.modelLabel;
+  const modelTriggerLabel = (() => {
+    const source = (optimisticModelLabel ?? displayModelLabel).trim();
+    const lower = source.toLowerCase();
+    if (lower.includes('gpt-5.4')) return 'gpt-5.4';
+    if (lower.includes('minimax')) return 'minimax-2.7';
+    if (lower.includes('codex') || lower.includes('5.3')) return 'codex-5.3';
+    return source;
+  })();
   const agentMenuOptions = useMemo<AgentMenuOption[]>(
     () =>
       listPreferredChatSeatActivations().map((seat) => ({
@@ -1234,7 +1242,7 @@ export function MissionControlChatSurface({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
+            gap: 5,
             flexWrap: 'nowrap',
             minWidth: 0,
             overflowX: 'auto',
@@ -1325,8 +1333,11 @@ export function MissionControlChatSurface({
                 background: 'rgba(255, 255, 255, 0.78)',
                 color: 'var(--text-body)',
                 cursor: bridgeRefreshing ? 'progress' : 'pointer',
-                padding: '7px 10px',
-                fontSize: 11,
+                width: 30,
+                height: 30,
+                padding: 0,
+                fontSize: 12,
+                borderRadius: 999,
                 flexShrink: 0,
               }}
             >
@@ -1344,7 +1355,7 @@ export function MissionControlChatSurface({
               border: '1px solid rgba(200, 195, 188, 0.46)',
               background: 'rgba(255, 255, 255, 0.78)',
               color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)',
-              padding: '7px 11px',
+              padding: '7px 9px',
               fontSize: 11,
               flexShrink: 0,
             }}
@@ -1356,8 +1367,8 @@ export function MissionControlChatSurface({
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 6,
-              padding: '6px 9px',
+              gap: 5,
+              padding: '6px 8px',
               border: '1px solid rgba(200, 195, 188, 0.34)',
               borderRadius: 999,
               background: 'rgba(255, 255, 255, 0.7)',
@@ -1367,12 +1378,12 @@ export function MissionControlChatSurface({
           >
             <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Ctx</span>
             <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{model.contextPercent !== null ? `${model.contextPercent}%` : 'n/a'}</span>
-            <div style={{ width: 42, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
-              <div style={{ width: `${model.contextPercent ?? 18}%`, minWidth: model.contextPercent === null ? 24 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
+            <div style={{ width: 34, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
+              <div style={{ width: `${model.contextPercent ?? 18}%`, minWidth: model.contextPercent === null ? 20 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
             </div>
           </div>
 
-          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 176px' }}>
+          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 118px' }}>
             <button
               type="button"
               onClick={() => setTopControlMenu((current) => (current === 'agent' ? null : 'agent'))}
@@ -1380,11 +1391,11 @@ export function MissionControlChatSurface({
                 border: '1px solid rgba(200, 195, 188, 0.34)',
                 borderRadius: 14,
                 background: 'rgba(255, 255, 255, 0.7)',
-                padding: '7px 10px',
+                padding: '7px 8px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: 8,
+                gap: 6,
                 width: '100%',
                 minHeight: 32,
                 textAlign: 'left',
@@ -1392,10 +1403,10 @@ export function MissionControlChatSurface({
               }}
               title={`Seat: ${selectedSeatLabel}`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                <span style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Seat</span>
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedSeatLabel}</span>
-              </div>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◎</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{selectedSeatLabel}</span>
+              </span>
               <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
             </button>
             {topControlMenu === 'agent' ? (
@@ -1415,22 +1426,47 @@ export function MissionControlChatSurface({
                     {option.detail ? <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.detail}</span> : null}
                   </button>
                 ))}
+                {activation ? (
+                  <>
+                    <div style={{ borderTop: '1px solid rgba(200, 195, 188, 0.32)', margin: '4px 6px' }} />
+                    <button
+                      type="button"
+                      onClick={() => void handleApplySeatDefaults()}
+                      disabled={runtimeDefaultsBusy}
+                      title={`Sync runtime model and effort to ${activation.label}`}
+                      style={{
+                        border: '1px solid rgba(121, 166, 148, 0.34)',
+                        borderRadius: 12,
+                        background: 'rgba(212, 231, 221, 0.42)',
+                        color: 'var(--text-body)',
+                        padding: '8px 12px',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        cursor: runtimeDefaultsBusy ? 'progress' : 'pointer',
+                        opacity: runtimeDefaultsBusy ? 0.78 : 1,
+                        textAlign: 'left',
+                      }}
+                    >
+                      {runtimeDefaultsBusy ? 'Applying defaults…' : 'Sync seat defaults'}
+                    </button>
+                  </>
+                ) : null}
               </div>
             ) : null}
           </div>
 
-          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 172px' }}>
+          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 110px' }}>
             <button
               type="button"
               onClick={() => setTopControlMenu((current) => (current === 'model' ? null : 'model'))}
               disabled={modelSwitchBusy}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '7px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, width: '100%', minHeight: 32, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '7px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, width: '100%', minHeight: 32, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
               title={`Model: ${optimisticModelLabel ?? displayModelLabel}`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                <span style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Model</span>
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{optimisticModelLabel ?? displayModelLabel}</span>
-              </div>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◉</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{modelTriggerLabel}</span>
+              </span>
               <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
             </button>
             {topControlMenu === 'model' ? (
@@ -1451,18 +1487,18 @@ export function MissionControlChatSurface({
             ) : null}
           </div>
 
-          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 148px' }}>
+          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 92px' }}>
             <button
               type="button"
               onClick={() => effortInteractive && setTopControlMenu((current) => (current === 'effort' ? null : 'effort'))}
               disabled={!effortInteractive || effortSwitchBusy}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '7px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, width: '100%', minHeight: 32, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '7px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, width: '100%', minHeight: 32, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
               title={`Effort: ${effortTriggerLabel}`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                <span style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Effort</span>
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{effortTriggerLabel}</span>
-              </div>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◈</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{effortTriggerLabel}</span>
+              </span>
               <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>{effortInteractive ? '▾' : '—'}</span>
             </button>
             {topControlMenu === 'effort' ? (
@@ -1482,24 +1518,6 @@ export function MissionControlChatSurface({
               </div>
             ) : null}
           </div>
-
-          {activation ? (
-            <button
-              type="button"
-              onClick={() => void handleApplySeatDefaults()}
-              disabled={runtimeDefaultsBusy}
-              title={`Apply ${activation.label} seat defaults`}
-              style={{
-                ...actionButtonStyle(!runtimeDefaultsBusy, true),
-                padding: '7px 9px',
-                fontSize: 11,
-                cursor: runtimeDefaultsBusy ? 'progress' : 'pointer',
-                flexShrink: 0,
-              }}
-            >
-              {runtimeDefaultsBusy ? 'Applying…' : 'Defaults'}
-            </button>
-          ) : null}
 
           <ChatSessionRail
             compact

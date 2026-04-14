@@ -55,13 +55,13 @@ export function ChatSessionRail({
           border: '1px solid rgba(200, 195, 188, 0.34)',
           borderRadius: 14,
           background: 'rgba(255, 255, 255, 0.7)',
-          padding: compact ? '7px 10px' : '8px 12px',
+          padding: compact ? '6px 8px' : '8px 12px',
           display: 'flex',
           alignItems: 'center',
-          gap: compact ? 6 : 8,
-          minHeight: 32,
+          gap: compact ? 5 : 8,
+          minHeight: compact ? 30 : 32,
           cursor: 'pointer',
-          maxWidth: compact ? 126 : undefined,
+          maxWidth: compact ? 96 : undefined,
         }}
         title="Recent sessions"
       >
