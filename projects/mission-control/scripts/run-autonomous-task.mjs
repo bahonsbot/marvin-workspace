@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createHash } from 'node:crypto';
 import { readFile, writeFile, unlink, stat, rm } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import path from 'node:path';
@@ -71,6 +72,11 @@ function isAllowedPlanningArtifactPath(relativePath) {
   if (!normalized) return false;
   if (normalized.endsWith('.md')) return true;
   return false;
+}
+
+function buildAutonomousSessionId(taskId, startedAt = Date.now()) {
+  const digest = createHash('sha1').update(String(taskId || '')).digest('hex').slice(0, 10);
+  return `mc-auto-${digest}-${startedAt}`;
 }
 
 function isIgnorablePlanningRuntimeChurnPath(relativePath) {
@@ -632,7 +638,7 @@ if (!attemptId) {
 const sessionTarget = createMissionControlSessionTarget({
   agentId: 'main',
   label: `autonomous-${task.id}`,
-  sessionId: activeRun.sessionId || activeRun.sessionKey || `mc-auto-${task.id}-${Date.now()}`,
+  sessionId: activeRun.sessionId || activeRun.sessionKey || buildAutonomousSessionId(task.id),
 });
 const explicitModelOverride = normalizeModelAlias(activeRun?.model || task.model);
 const effectiveModelAlias = effectiveModelAliasForTask(task, activeRun);

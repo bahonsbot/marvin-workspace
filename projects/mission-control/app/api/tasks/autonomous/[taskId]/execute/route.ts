@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
@@ -16,6 +17,11 @@ const RUNNER_START_POLL_MS = 150;
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function buildAutonomousSessionId(taskId: string, startedAt: number): string {
+  const digest = createHash('sha1').update(String(taskId || '')).digest('hex').slice(0, 10);
+  return `mc-auto-${digest}-${startedAt}`;
 }
 
 async function fileExists(targetPath: string): Promise<boolean> {
@@ -155,7 +161,7 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
     }
 
     const startedAt = Date.now();
-    const sessionId = `mc-auto-${task.id}-${startedAt}`;
+    const sessionId = buildAutonomousSessionId(task.id, startedAt);
     const attemptNumber = Math.max((task.run?.attemptNumber ?? 0) + 1, 1);
     const attemptId = `${task.id}-attempt-${attemptNumber}`;
     const latestFeedback = latestMeaningfulRetryFeedback(task);
