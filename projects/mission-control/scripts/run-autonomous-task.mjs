@@ -73,6 +73,15 @@ function isAllowedPlanningArtifactPath(relativePath) {
   return false;
 }
 
+function isIgnorablePlanningRuntimeChurnPath(relativePath) {
+  const normalized = String(relativePath || '').replace(/\\/g, '/').trim().toLowerCase();
+  if (!normalized) return false;
+  if (normalized.startsWith('projects/mission-control/.preview-runtime/') && normalized.endsWith('.log')) return true;
+  if (normalized === 'projects/mission-control/runtime-bridge-ws-sidecar.log') return true;
+  if (normalized === 'projects/mission-control/preview-origin-proxy.log') return true;
+  return false;
+}
+
 async function snapshotRepoStatus() {
   const result = await execFileAsync('bash', ['-lc', 'git status --porcelain=v1 -uall'], {
     cwd: workspaceRoot,
@@ -724,8 +733,11 @@ try {
 
   const repoStatusAfter = await snapshotRepoStatus();
   const runChangedPaths = newlyChangedPaths(repoStatusBefore, repoStatusAfter);
+  const relevantRunChangedPaths = planningOnlyTask
+    ? runChangedPaths.filter((relativePath) => !isIgnorablePlanningRuntimeChurnPath(relativePath))
+    : runChangedPaths;
   if (planningOnlyTask) {
-    const disallowedChanges = runChangedPaths.filter((relativePath) => !isAllowedPlanningArtifactPath(relativePath));
+    const disallowedChanges = relevantRunChangedPaths.filter((relativePath) => !isAllowedPlanningArtifactPath(relativePath));
     if (disallowedChanges.length) {
       await rollbackNewRepoChanges(disallowedChanges);
       throw new Error(`Planning-only task attempted non-plan changes: ${disallowedChanges.join(', ')}`);
