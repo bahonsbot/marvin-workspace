@@ -21,7 +21,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** Do not overstate implementation progress. For Mission Control transcript work, reserve `Slice 3` for the dedicated renderer/component pass: thinking block, live activity strip, diff/file viewers, transcript-entry component, stronger intermediate narration treatment, and system strips. If only shaping/grouping semantics landed, call it `Slice 2.5` or renderer-facing shaping.
 
 **Priority:** high
-**Status:** pending
+**Status:** resolved
+**Closed:** 2026-04-14 (self-improvement review confirmed Slice 3 over-labeling lesson was resolved in the same session)
 
 ---
 
@@ -188,7 +189,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** For Mission Control pages, once the substance is finally there, the next pass should usually be editing and restraint, not more feature density. When Philippe says a page is “too much,” preserve the stronger underlying functionality and reduce visual/informational noise instead of rethinking the whole page.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-14 (self-improvement review confirmed the restraint/editing pass had already resolved this)
 
 ## [CORR-20260325-2344]
 
@@ -541,4 +543,5 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** if these rows later feel too intrusive, reduce their visual weight first instead of removing the signal entirely.
 
 **Priority:** medium
-**Status:** pending
+**Status:** resolved
+**Closed:** 2026-04-14 (preference is now explicit and does not need to remain open as a pending correction)
