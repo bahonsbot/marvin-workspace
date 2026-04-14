@@ -834,7 +834,6 @@ export function MissionControlChatSurface({
   const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
   const [bridgeEventsOpen, setBridgeEventsOpen] = useState(false);
   const [topControlMenu, setTopControlMenu] = useState<TopControlMenu>(null);
-  const [controlsExpanded, setControlsExpanded] = useState(false);
   const [modelSwitchError, setModelSwitchError] = useState<string | null>(null);
   const [modelSwitchBusy, setModelSwitchBusy] = useState(false);
   const [effortSwitchBusy, setEffortSwitchBusy] = useState(false);
@@ -876,11 +875,6 @@ export function MissionControlChatSurface({
     return () => window.clearTimeout(timeout);
   }, [speechMessage]);
 
-  useEffect(() => {
-    if (controlsExpanded) return;
-    setTopControlMenu(null);
-    setSessionsOpen(false);
-  }, [controlsExpanded]);
 
   const runtimeModelLabel = model.modelLabel.includes('gpt-5.4')
     ? 'gpt-5.4'
@@ -904,6 +898,10 @@ export function MissionControlChatSurface({
           ? confirmedEffortLabel
           : 'Last requested: low'
     : 'Last requested: low';
+  const compactEffortLabel = effortMenuLabel.replace(/^Last requested:\s*/i, '').trim();
+  const effortTriggerLabel = compactEffortLabel.toLowerCase() === 'xhigh'
+    ? 'XHigh'
+    : compactEffortLabel.charAt(0).toUpperCase() + compactEffortLabel.slice(1);
   const visibleModelMenuOptions = modelMenuOptions.filter((option) => option.label !== modelMenuLabel);
 
   const lastRealModelRef = useRef(model.modelLabel.toLowerCase() !== 'runtime controlled' ? model.modelLabel : 'MiniMax-M2.7');
@@ -914,11 +912,6 @@ export function MissionControlChatSurface({
 
   const selectedSeatLabel = activation?.label ?? 'Marvin';
   const assistantSeatLabel = assistantLabelForSeat(activation?.seatSlug);
-  const selectedSeatDetail = activation
-    ? activation.routing === 'direct'
-      ? `Direct runtime · ${activation.targetSessionLabel}`
-      : `${activation.supervisorLabel ?? 'Marvin'}-routed ${activation.runtimeModeLabel.toLowerCase()}`
-    : 'Direct main runtime';
   const displayModelLabel = model.modelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : model.modelLabel;
   const agentMenuOptions = useMemo<AgentMenuOption[]>(
     () =>
@@ -1057,23 +1050,6 @@ export function MissionControlChatSurface({
     }
   }
 
-  async function handleResetToDefaults() {
-    setTopControlMenu(null);
-    if (!live?.sendPrompt) {
-      window.location.reload();
-      return;
-    }
-    try {
-      setModelSwitchBusy(true);
-      setEffortSwitchBusy(true);
-      await applyRuntimeDefaults('minimax2.7', 'low');
-    } catch {
-      window.location.reload();
-    } finally {
-      setModelSwitchBusy(false);
-      setEffortSwitchBusy(false);
-    }
-  }
 
   async function uploadSelectedFiles(fileList: FileList | File[]) {
     const files = Array.from(fileList);
@@ -1236,7 +1212,6 @@ export function MissionControlChatSurface({
       burstWindowMs: TOOL_BURST_WINDOW_MS,
     });
   }, [liveEntries]);
-  const controlsDetailsId = 'chat-surface-top-controls';
 
   return (
     <div style={{ display: 'grid', gridTemplateRows: 'auto minmax(0, 1fr) auto', gap: 8, minHeight: '100%', height: '100%' }}>
@@ -1254,185 +1229,172 @@ export function MissionControlChatSurface({
           zIndex: 12,
         }}
       >
-        {/* Row 1: WS + Session status (left) / Refresh, Stop, Context Meter (right) */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          {/* Left: WS OPEN / SESSION CONNECTED / Status dropdown */}
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={pillStyle({ active: wsState === 'open' })}>{`ws ${wsState}`}</span>
-            <span style={pillStyle({ active: sessionState === 'connected' })}>{`session ${sessionState}`}</span>
-            
-            {/* Status dropdown trigger */}
-            <div ref={statusDropdownRef} style={{ position: 'relative' }}>
-              <button
-                type="button"
-                onClick={() => setStatusDropdownOpen((v) => !v)}
+        <div
+          ref={topControlMenuRef}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            flexWrap: 'nowrap',
+            minWidth: 0,
+            overflowX: 'auto',
+            paddingBottom: 2,
+          }}
+        >
+          <span style={pillStyle({ active: wsState === 'open' })} title={`WS ${wsState}`}>WS</span>
+          <span style={pillStyle({ active: sessionState === 'connected' })} title={`Session ${sessionState}`}>SESS</span>
+
+          <div ref={statusDropdownRef} style={{ position: 'relative', flexShrink: 0 }}>
+            <button
+              type="button"
+              onClick={() => setStatusDropdownOpen((v) => !v)}
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: '50%',
+                border: '1px solid rgba(200, 195, 188, 0.4)',
+                background: effectiveBridgeError ? 'rgba(248, 113, 113, 0.14)' : 'rgba(255, 255, 255, 0.7)',
+                color: effectiveBridgeError ? '#f87171' : 'var(--text-body)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 13,
+              }}
+              title={effectiveBridgeError ? 'Bridge error' : wsDetail || 'WS status'}
+            >
+              {effectiveBridgeError ? '!' : 'ⓘ'}
+            </button>
+            {statusDropdownOpen && (
+              <div
                 style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
+                  position: 'absolute',
+                  top: 'calc(100% + 8px)',
+                  left: 0,
+                  width: 'min(320px, 92vw)',
                   border: '1px solid rgba(200, 195, 188, 0.4)',
-                  background: effectiveBridgeError ? 'rgba(248, 113, 113, 0.14)' : 'rgba(255, 255, 255, 0.7)',
-                  color: effectiveBridgeError ? '#f87171' : 'var(--text-body)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 14,
+                  borderRadius: 14,
+                  background: 'rgba(255, 253, 251, 0.98)',
+                  boxShadow: '0 12px 32px rgba(26, 61, 50, 0.12)',
+                  padding: 12,
+                  display: 'grid',
+                  gap: 8,
+                  zIndex: 20,
                 }}
-                title={effectiveBridgeError ? 'Bridge error' : wsDetail || 'WS status'}
               >
-                {effectiveBridgeError ? '!' : 'ⓘ'}
-              </button>
-              {statusDropdownOpen && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 8px)',
-                    left: 0,
-                    width: 'min(320px, 92vw)',
-                    border: '1px solid rgba(200, 195, 188, 0.4)',
-                    borderRadius: 14,
-                    background: 'rgba(255, 253, 251, 0.98)',
-                    boxShadow: '0 12px 32px rgba(26, 61, 50, 0.12)',
-                    padding: 12,
-                    display: 'grid',
-                    gap: 8,
-                    zIndex: 20,
-                  }}
-                >
-                  {effectiveBridgeError ? (
-                    <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6 }}>
-                      Bridge refresh failed: {effectiveBridgeError}
-                    </div>
-                  ) : wsDetail ? (
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                      {wsDetail}
-                    </div>
-                  ) : sessionDetail ? (
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                      {sessionDetail}
-                    </div>
-                  ) : (
-                    <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                      WS sidecar socket is open. Waiting for gateway handshake.
-                    </div>
-                  )}
-                  {sessionId && (
-                    <div style={{ fontSize: 11, fontFamily: monoFont, color: 'var(--text-ghost)' }}>
-                      Session: {sessionId}
-                    </div>
-                  )}
-                  {sessionLastEvent && (
-                    <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
-                      Last event: {sessionLastEvent}
-                    </div>
-                  )}
-                </div>
-              )}
+                {effectiveBridgeError ? (
+                  <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6 }}>
+                    Bridge refresh failed: {effectiveBridgeError}
+                  </div>
+                ) : wsDetail ? (
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                    {wsDetail}
+                  </div>
+                ) : sessionDetail ? (
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                    {sessionDetail}
+                  </div>
+                ) : (
+                  <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                    WS sidecar socket is open. Waiting for gateway handshake.
+                  </div>
+                )}
+                {sessionId && (
+                  <div style={{ fontSize: 11, fontFamily: monoFont, color: 'var(--text-ghost)' }}>
+                    Session: {sessionId}
+                  </div>
+                )}
+                {sessionLastEvent && (
+                  <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
+                    Last event: {sessionLastEvent}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {bridge ? (
+            <button
+              type="button"
+              onClick={() => void bridge.refresh()}
+              disabled={bridgeRefreshing}
+              title="Refresh the bounded runtime bridge snapshot."
+              style={{
+                ...actionButtonStyle(true),
+                border: '1px solid rgba(200, 195, 188, 0.46)',
+                background: 'rgba(255, 255, 255, 0.78)',
+                color: 'var(--text-body)',
+                cursor: bridgeRefreshing ? 'progress' : 'pointer',
+                padding: '7px 10px',
+                fontSize: 11,
+                flexShrink: 0,
+              }}
+            >
+              {bridgeRefreshing ? '…' : '↻'}
+            </button>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={() => void handleStop()}
+            disabled={!live?.canAbort}
+            title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a Mission Control chat response is active.'}
+            style={{
+              ...actionButtonStyle(Boolean(live?.canAbort)),
+              border: '1px solid rgba(200, 195, 188, 0.46)',
+              background: 'rgba(255, 255, 255, 0.78)',
+              color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)',
+              padding: '7px 11px',
+              fontSize: 11,
+              flexShrink: 0,
+            }}
+          >
+            Stop
+          </button>
+
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '6px 9px',
+              border: '1px solid rgba(200, 195, 188, 0.34)',
+              borderRadius: 999,
+              background: 'rgba(255, 255, 255, 0.7)',
+              flexShrink: 0,
+            }}
+            title={model.contextPercent !== null ? `${model.contextPercent}% of visible context` : 'Context usage unavailable'}
+          >
+            <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Ctx</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{model.contextPercent !== null ? `${model.contextPercent}%` : 'n/a'}</span>
+            <div style={{ width: 42, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
+              <div style={{ width: `${model.contextPercent ?? 18}%`, minWidth: model.contextPercent === null ? 24 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
             </div>
           </div>
 
-          {/* Right: Refresh / Stop / Context Meter */}
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-            {bridge ? (
-              <button
-                type="button"
-                onClick={() => void bridge.refresh()}
-                disabled={bridgeRefreshing}
-                title="Refresh the bounded runtime bridge snapshot."
-                style={{
-                  ...actionButtonStyle(true),
-                  border: '1px solid rgba(200, 195, 188, 0.46)',
-                  background: 'rgba(255, 255, 255, 0.78)',
-                  color: 'var(--text-body)',
-                  cursor: bridgeRefreshing ? 'progress' : 'pointer',
-                  padding: '8px 12px',
-                  fontSize: 11,
-                }}
-              >
-                {bridgeRefreshing ? 'Refreshing…' : 'Refresh'}
-              </button>
-            ) : null}
+          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 176px' }}>
             <button
               type="button"
-              onClick={() => void handleStop()}
-              disabled={!live?.canAbort}
-              title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a Mission Control chat response is active.'}
-              style={{ ...actionButtonStyle(Boolean(live?.canAbort)), border: '1px solid rgba(200, 195, 188, 0.46)', background: 'rgba(255, 255, 255, 0.78)', color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)', padding: '8px 12px', fontSize: 11 }}
-            >
-              Stop
-            </button>
-            {/* Context Meter inline */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 999, background: 'rgba(255, 255, 255, 0.7)' }}>
-              <span style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Context</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{model.contextPercent !== null ? `${model.contextPercent}%` : 'n/a'}</span>
-              <div style={{ width: 48, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
-                <div style={{ width: `${model.contextPercent ?? 18}%`, minWidth: model.contextPercent === null ? 24 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setControlsExpanded((current) => !current)}
-              aria-controls={controlsDetailsId}
-              aria-expanded={controlsExpanded}
+              onClick={() => setTopControlMenu((current) => (current === 'agent' ? null : 'agent'))}
               style={{
                 border: '1px solid rgba(200, 195, 188, 0.34)',
                 borderRadius: 14,
                 background: 'rgba(255, 255, 255, 0.7)',
-                padding: '8px 12px',
+                padding: '7px 10px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 6,
+                justifyContent: 'space-between',
+                gap: 8,
+                width: '100%',
+                minHeight: 32,
+                textAlign: 'left',
                 cursor: 'pointer',
               }}
+              title={`Seat: ${selectedSeatLabel}`}
             >
-              <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Controls</span>
-              <span style={{ fontSize: 11, color: 'var(--text-body)' }}>{controlsExpanded ? '▴' : '▾'}</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Row 2: SESSION/AGENT / MODEL / EFFORT / RESET / RECENT SESSIONS */}
-        <details
-          id={controlsDetailsId}
-          open={controlsExpanded}
-          onToggle={(event) => setControlsExpanded((event.currentTarget as HTMLDetailsElement).open)}
-          style={{
-            border: '1px solid rgba(200, 195, 188, 0.34)',
-            borderRadius: 16,
-            background: 'rgba(255, 255, 255, 0.45)',
-            padding: '8px 10px',
-          }}
-        >
-          <summary
-            style={{
-              listStyle: 'none',
-              position: 'absolute',
-              width: 1,
-              height: 1,
-              padding: 0,
-              margin: -1,
-              overflow: 'hidden',
-              clip: 'rect(0, 0, 0, 0)',
-              whiteSpace: 'nowrap',
-              border: 0,
-            }}
-          >
-            Chat controls
-          </summary>
-          <div ref={topControlMenuRef} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ position: 'relative' }}>
-            <button
-              type="button"
-              onClick={() => setTopControlMenu((current) => (current === 'agent' ? null : 'agent'))}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minWidth: 228, minHeight: 32, textAlign: 'left', cursor: 'pointer' }}
-            >
-              <div style={{ display: 'grid', gap: 2, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-                  <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Seat</div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedSeatLabel}</div>
-                </div>
-                <div style={{ fontSize: 10.5, color: 'var(--text-ghost)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedSeatDetail}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Seat</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedSeatLabel}</span>
               </div>
               <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
             </button>
@@ -1456,16 +1418,18 @@ export function MissionControlChatSurface({
               </div>
             ) : null}
           </div>
-          <div style={{ position: 'relative' }}>
+
+          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 172px' }}>
             <button
               type="button"
               onClick={() => setTopControlMenu((current) => (current === 'model' ? null : 'model'))}
               disabled={modelSwitchBusy}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minWidth: 188, minHeight: 32, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '7px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, width: '100%', minHeight: 32, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
+              title={`Model: ${optimisticModelLabel ?? displayModelLabel}`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-                <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Model</div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{optimisticModelLabel ?? displayModelLabel}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Model</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{optimisticModelLabel ?? displayModelLabel}</span>
               </div>
               <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
             </button>
@@ -1486,16 +1450,18 @@ export function MissionControlChatSurface({
               </div>
             ) : null}
           </div>
-          <div style={{ position: 'relative' }}>
+
+          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 148px' }}>
             <button
               type="button"
               onClick={() => effortInteractive && setTopControlMenu((current) => (current === 'effort' ? null : 'effort'))}
               disabled={!effortInteractive || effortSwitchBusy}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '8px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minWidth: 188, minHeight: 32, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
+              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '7px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, width: '100%', minHeight: 32, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
+              title={`Effort: ${effortTriggerLabel}`}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-                <div style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Effort</div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{effortMenuLabel}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                <span style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Effort</span>
+                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{effortTriggerLabel}</span>
               </div>
               <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>{effortInteractive ? '▾' : '—'}</span>
             </button>
@@ -1516,6 +1482,7 @@ export function MissionControlChatSurface({
               </div>
             ) : null}
           </div>
+
           {activation ? (
             <button
               type="button"
@@ -1524,34 +1491,18 @@ export function MissionControlChatSurface({
               title={`Apply ${activation.label} seat defaults`}
               style={{
                 ...actionButtonStyle(!runtimeDefaultsBusy, true),
-                padding: '8px 12px',
+                padding: '7px 9px',
                 fontSize: 11,
                 cursor: runtimeDefaultsBusy ? 'progress' : 'pointer',
+                flexShrink: 0,
               }}
             >
-              {runtimeDefaultsBusy ? 'Applying…' : 'Apply seat defaults'}
+              {runtimeDefaultsBusy ? 'Applying…' : 'Defaults'}
             </button>
           ) : null}
-          <button
-            type="button"
-            onClick={handleResetToDefaults}
-            title="Reset to defaults: Marvin / MiniMax-M2.7 / None"
-            style={{
-              ...actionButtonStyle(true),
-              border: '1px solid rgba(200, 195, 188, 0.46)',
-              background: 'rgba(255, 255, 255, 0.78)',
-              color: 'var(--text-body)',
-              cursor: 'pointer',
-              padding: '8px 14px',
-              fontSize: 11,
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-            }}
-          >
-            Reset
-          </button>
+
           <ChatSessionRail
+            compact
             sessionsRef={sessionsRef}
             sessionsOpen={sessionsOpen}
             setSessionsOpen={setSessionsOpen}
@@ -1563,8 +1514,7 @@ export function MissionControlChatSurface({
               }
             }}
           />
-          </div>
-        </details>
+        </div>
         {modelSwitchError ? (
           <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6, paddingLeft: 4 }}>
             {modelSwitchError}

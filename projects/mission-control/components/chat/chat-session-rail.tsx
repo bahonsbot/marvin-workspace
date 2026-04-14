@@ -36,6 +36,7 @@ export function ChatSessionRail({
   recentSessions,
   liveTargetSession,
   onSwitchSession,
+  compact = false,
 }: {
   sessionsRef: RefObject<HTMLDivElement | null>;
   sessionsOpen: boolean;
@@ -43,6 +44,7 @@ export function ChatSessionRail({
   recentSessions: RecentSession[];
   liveTargetSession: string | null;
   onSwitchSession: (sessionKey: string) => void;
+  compact?: boolean;
 }) {
   return (
     <div ref={sessionsRef} style={{ position: 'relative', marginLeft: 'auto' }}>
@@ -53,15 +55,19 @@ export function ChatSessionRail({
           border: '1px solid rgba(200, 195, 188, 0.34)',
           borderRadius: 14,
           background: 'rgba(255, 255, 255, 0.7)',
-          padding: '8px 12px',
+          padding: compact ? '7px 10px' : '8px 12px',
           display: 'flex',
           alignItems: 'center',
-          gap: 8,
+          gap: compact ? 6 : 8,
           minHeight: 32,
           cursor: 'pointer',
+          maxWidth: compact ? 126 : undefined,
         }}
+        title="Recent sessions"
       >
-        <span style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Recent Sessions</span>
+        <span style={{ fontSize: compact ? 12 : 9, textTransform: compact ? 'none' : 'uppercase', letterSpacing: compact ? 'normal' : '0.08em', color: 'var(--text-muted)' }}>
+          {compact ? '⏱' : 'Recent Sessions'}
+        </span>
         <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)', lineHeight: 1 }}>{recentSessions.length}</span>
       </button>
       {sessionsOpen ? (
