@@ -30,18 +30,26 @@ function readGatewayTarget() {
   }
 }
 
+function parseMs(value, fallback) {
+  const parsed = Number.parseInt(value || '', 10);
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
 const host = (process.env.MISSION_CONTROL_WS_SIDECAR_HOST || '127.0.0.1').trim();
 const port = parsePort(process.env.MISSION_CONTROL_WS_SIDECAR_PORT, 3006);
 const path = (process.env.MISSION_CONTROL_WS_SIDECAR_PATH || '/mission-control-runtime').trim();
 const upstreamOrigin = (process.env.MISSION_CONTROL_WS_UPSTREAM_ORIGIN || '').trim();
 const bridgeToken = process.env.MISSION_CONTROL_WS_SIDECAR_TOKEN || '';
+const targetCacheTtlMs = parseMs(process.env.MISSION_CONTROL_WS_TARGET_CACHE_TTL_MS, 30000);
 if (!bridgeToken) {
   console.error('[mission-control-ws-sidecar] Refusing to start without MISSION_CONTROL_WS_SIDECAR_TOKEN.');
   process.exit(1);
 }
 
-function getTarget() {
-  const target = readGatewayTarget();
+let cachedTarget = null;
+let cachedTargetExpiresAt = 0;
+
+function normalizeTarget(target) {
   if (!target) {
     return null;
   }
@@ -57,6 +65,20 @@ function getTarget() {
     console.error('[mission-control-ws-sidecar] Invalid gateway target:', target);
     return null;
   }
+}
+
+function refreshCachedTarget() {
+  const target = normalizeTarget(readGatewayTarget());
+  cachedTarget = target;
+  cachedTargetExpiresAt = Date.now() + targetCacheTtlMs;
+  return cachedTarget;
+}
+
+function getTarget({ forceRefresh = false } = {}) {
+  if (forceRefresh || !cachedTarget || Date.now() >= cachedTargetExpiresAt) {
+    return refreshCachedTarget();
+  }
+  return cachedTarget;
 }
 
 const server = http.createServer((req, res) => {
@@ -131,50 +153,65 @@ wss.on('connection', (client) => {
   const clientId = Math.random().toString(36).slice(2, 9);
   console.log(`[mission-control-ws-sidecar] Connection opened [${clientId}] total=${wss.clients.size}`);
 
-  const target = getTarget();
+  let target = getTarget();
   if (!target) {
     client.close(1013, 'Gateway target unresolved');
     return;
   }
 
-  const upstream = new WebSocket(target, {
-    headers: upstreamOrigin ? { origin: upstreamOrigin } : undefined,
-  });
+  let refreshedAfterFailure = false;
 
-  upstream.on('open', () => {
-    console.log(`[mission-control-ws-sidecar] Upstream WS open [${clientId}]`);
-    client.on('message', (data, isBinary) => {
-      if (upstream.readyState === WebSocket.OPEN) {
-        upstream.send(data, { binary: isBinary });
+  function openUpstream(currentTarget) {
+    const upstream = new WebSocket(currentTarget, {
+      headers: upstreamOrigin ? { origin: upstreamOrigin } : undefined,
+    });
+
+    upstream.on('open', () => {
+      console.log(`[mission-control-ws-sidecar] Upstream WS open [${clientId}]`);
+      client.on('message', (data, isBinary) => {
+        if (upstream.readyState === WebSocket.OPEN) {
+          upstream.send(data, { binary: isBinary });
+        }
+      });
+    });
+
+    upstream.on('message', (data, isBinary) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(data, { binary: isBinary });
       }
     });
-  });
 
-  upstream.on('message', (data, isBinary) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data, { binary: isBinary });
-    }
-  });
+    upstream.on('error', (cause) => {
+      console.error(`[mission-control-ws-sidecar] Upstream WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
+      if (!refreshedAfterFailure) {
+        const refreshedTarget = getTarget({ forceRefresh: true });
+        refreshedAfterFailure = true;
+        if (refreshedTarget && refreshedTarget !== currentTarget) {
+          console.log(`[mission-control-ws-sidecar] Retrying upstream WS with refreshed target [${clientId}]`);
+          openUpstream(refreshedTarget);
+          return;
+        }
+      }
+      closePair(client, upstream, 1011, 'Upstream gateway unavailable');
+    });
 
-  upstream.on('error', (cause) => {
-    console.error(`[mission-control-ws-sidecar] Upstream WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
-    closePair(client, upstream, 1011, 'Upstream gateway unavailable');
-  });
+    upstream.on('close', (code, reason) => {
+      console.log(`[mission-control-ws-sidecar] Upstream WS closed [${clientId}] code=${code} reason="${reason}"`);
+      closePair(client, upstream, code || 1011, reason.toString() || 'Upstream gateway closed');
+    });
 
-  upstream.on('close', (code, reason) => {
-    console.log(`[mission-control-ws-sidecar] Upstream WS closed [${clientId}] code=${code} reason="${reason}"`);
-    closePair(client, upstream, code || 1011, reason.toString() || 'Upstream gateway closed');
-  });
+    client.on('close', (code, reason) => {
+      console.log(`[mission-control-ws-sidecar] Client WS closed [${clientId}] code=${code} reason="${reason}" total=${wss.clients.size}`);
+      closePair(client, upstream, code || 1000, reason.toString() || 'Client closed');
+    });
 
-  client.on('close', (code, reason) => {
-    console.log(`[mission-control-ws-sidecar] Client WS closed [${clientId}] code=${code} reason="${reason}" total=${wss.clients.size}`);
-    closePair(client, upstream, code || 1000, reason.toString() || 'Client closed');
-  });
+    client.on('error', (cause) => {
+      console.error(`[mission-control-ws-sidecar] Client WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
+      closePair(client, upstream, 1011, 'Client WS error');
+    });
+  }
 
-  client.on('error', (cause) => {
-    console.error(`[mission-control-ws-sidecar] Client WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
-    closePair(client, upstream, 1011, 'Client WS error');
-  });
+  openUpstream(target);
 });
 
 function shutdown() {

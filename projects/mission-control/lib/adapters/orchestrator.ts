@@ -24,6 +24,7 @@ type OpenClawStatusRaw = {
       age?: number;
       kind?: string;
       model?: string;
+      thinkingLevel?: string | null;
       percentUsed?: number | null;
       totalTokens?: number | null;
       contextTokens?: number | null;
@@ -36,6 +37,7 @@ type SessionRegistryEntry = {
   updatedAt?: number;
   modelOverride?: string | null;
   providerOverride?: string | null;
+  thinkingLevel?: string | null;
 };
 
 type SessionRegistryRaw = Record<string, SessionRegistryEntry>;
@@ -299,6 +301,7 @@ async function buildOrchestratorIntegrationSummary(): Promise<OrchestratorIntegr
     .map((session) => ({
       key: session.key as string,
       model: session.model ?? null,
+      thinkingLevel: typeof session.thinkingLevel === 'string' && session.thinkingLevel.trim() ? session.thinkingLevel.trim() : null,
       kind: session.kind ?? 'unknown',
       ageMs: typeof session.age === 'number' ? session.age : null,
       updatedAt: toIso(session.updatedAt),
