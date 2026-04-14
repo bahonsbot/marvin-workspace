@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { NextRequest, NextResponse } from 'next/server';
 import {
   createSudoDelegatedRun,
@@ -12,7 +12,7 @@ import {
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const RUNNER_PATH = path.join(process.cwd(), 'scripts', 'run-sudo-delegation.mjs');
+const RUNNER_PATH = fileURLToPath(new URL('../../../../scripts/run-sudo-delegation.mjs', import.meta.url));
 
 export async function GET() {
   const runs = await listSudoDelegatedRuns();

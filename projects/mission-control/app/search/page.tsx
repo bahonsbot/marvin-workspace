@@ -10,17 +10,18 @@ type SearchPageParams = {
   scope?: string;
 };
 
-export default async function SearchPage({ searchParams }: { searchParams?: SearchPageParams }) {
+export default async function SearchPage({ searchParams }: { searchParams?: Promise<SearchPageParams> }) {
+  const resolvedSearchParams = await searchParams;
   const initialData = await queryWorkspaceSearch({
-    query: searchParams?.q,
-    scope: searchParams?.scope,
+    query: resolvedSearchParams?.q,
+    scope: resolvedSearchParams?.scope,
     limit: 50,
   });
 
   return (
     <div id="page-top">
       <PageScaffold title="Search">
-        <SearchExperience initialQuery={searchParams?.q} initialScope={searchParams?.scope} initialData={initialData} />
+        <SearchExperience initialQuery={resolvedSearchParams?.q} initialScope={resolvedSearchParams?.scope} initialData={initialData} />
         <BackToTopButton />
       </PageScaffold>
     </div>

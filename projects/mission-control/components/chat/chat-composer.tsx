@@ -81,7 +81,7 @@ export function ChatComposer({
   liveTargetSession,
   sessionState,
 }: {
-  fileInputRef: RefObject<HTMLInputElement>;
+  fileInputRef: RefObject<HTMLInputElement | null>;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onDragOver: (event: DragEvent<HTMLFormElement>) => void;
   onDragLeave: (event: DragEvent<HTMLFormElement>) => void;

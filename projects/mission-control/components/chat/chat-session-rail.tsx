@@ -37,7 +37,7 @@ export function ChatSessionRail({
   liveTargetSession,
   onSwitchSession,
 }: {
-  sessionsRef: RefObject<HTMLDivElement>;
+  sessionsRef: RefObject<HTMLDivElement | null>;
   sessionsOpen: boolean;
   setSessionsOpen: (updater: (value: boolean) => boolean) => void;
   recentSessions: RecentSession[];

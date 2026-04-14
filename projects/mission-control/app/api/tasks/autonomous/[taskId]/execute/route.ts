@@ -1,11 +1,11 @@
 import { spawn } from 'node:child_process';
-import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { NextRequest, NextResponse } from 'next/server';
 import { getAutonomousTaskById, latestMeaningfulRetryFeedback, moveLinkedLegacyTask, updateAutonomousTask } from '@/lib/autonomous';
 import { autonomousTaskPreflight } from '@/lib/autonomous-preflight';
 
 const WORKSPACE_ROOT = '/data/.openclaw/workspace';
-const RUNNER_PATH = path.join(WORKSPACE_ROOT, 'projects', 'mission-control', 'scripts', 'run-autonomous-task.mjs');
+const RUNNER_PATH = fileURLToPath(new URL('../../../../../../scripts/run-autonomous-task.mjs', import.meta.url));
 
 export async function POST(_request: NextRequest, { params }: { params: Promise<{ taskId: string }> }) {
   try {

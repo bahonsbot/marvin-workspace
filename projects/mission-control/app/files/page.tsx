@@ -1,15 +1,16 @@
 import { redirect } from 'next/navigation';
 
 type FilesCompatProps = {
-  searchParams?: {
+  searchParams?: Promise<{
     path?: string;
     file?: string;
-  };
+  }>;
 };
 
-export default function FilesCompatPage({ searchParams }: FilesCompatProps) {
+export default async function FilesCompatPage({ searchParams }: FilesCompatProps) {
+  const resolvedSearchParams = await searchParams;
   const params = new URLSearchParams();
-  if (searchParams?.path) params.set('path', searchParams.path);
-  if (searchParams?.file) params.set('file', searchParams.file);
+  if (resolvedSearchParams?.path) params.set('path', resolvedSearchParams.path);
+  if (resolvedSearchParams?.file) params.set('file', resolvedSearchParams.file);
   redirect(`/general/files${params.size > 0 ? `?${params.toString()}` : ''}`);
 }

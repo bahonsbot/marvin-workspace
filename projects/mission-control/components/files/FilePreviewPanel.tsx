@@ -70,7 +70,6 @@ export function FilePreviewPanel({
   if (preview.file.kind === 'image') {
     return (
       <div style={{ border: '1px solid var(--border)', borderRadius: 20, background: 'linear-gradient(180deg, rgba(255, 253, 251, 0.96) 0%, rgba(247, 241, 235, 0.9) 100%)', padding: 16 }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={preview.imageUrl} alt={preview.file.name} style={{ width: '100%', height: 'auto', borderRadius: 8, objectFit: 'contain', maxHeight: 520 }} />
       </div>
     );

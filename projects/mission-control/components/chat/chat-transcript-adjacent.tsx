@@ -28,13 +28,13 @@ export function LiveTranscriptSection({
   liveTargetLabel: string;
   bridgeEventsOpen: boolean;
   setBridgeEventsOpen: (updater: (value: boolean) => boolean) => void;
-  bridgeEventsRef: RefObject<HTMLDivElement>;
+  bridgeEventsRef: RefObject<HTMLDivElement | null>;
   liveEvents: RuntimeBridgeLiveEvent[];
   transcriptItems: ChatTranscriptItem[];
   assistantSeatLabel: string;
   showJumpToLatest: boolean;
   onJumpToLatest: () => void;
-  transcriptBottomRef: RefObject<HTMLDivElement>;
+  transcriptBottomRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
     <>
