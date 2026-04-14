@@ -1086,25 +1086,6 @@ export function MissionControlChatSurface({
     }
   }
 
-  async function handleResetToDefaults() {
-    setTopControlMenu(null);
-    if (!live?.sendPrompt) {
-      window.location.reload();
-      return;
-    }
-
-    try {
-      setModelSwitchBusy(true);
-      setEffortSwitchBusy(true);
-      await applyRuntimeDefaults('minimax2.7', 'low');
-    } catch {
-      window.location.reload();
-    } finally {
-      setModelSwitchBusy(false);
-      setEffortSwitchBusy(false);
-    }
-  }
-
   async function uploadSelectedFiles(fileList: FileList | File[]) {
     const files = Array.from(fileList);
     if (files.length === 0) return;
@@ -1438,88 +1419,70 @@ export function MissionControlChatSurface({
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 30, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 50, flexShrink: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
-            <button
-              type="button"
-              onClick={() => void handleResetToDefaults()}
-              title="Reset to defaults: Marvin / MiniMax-M2.7 / low"
-              style={{
-                ...actionButtonStyle(true),
-                border: '1px solid rgba(200, 195, 188, 0.46)',
-                background: 'rgba(255, 255, 255, 0.78)',
-                color: 'var(--text-body)',
-                cursor: 'pointer',
-                padding: '7px 10px',
-                fontSize: 11,
-                flexShrink: 0,
-              }}
-            >
-              Reset
-            </button>
-
-            <button
-              type="button"
-              onClick={() => void handleStop()}
-              disabled={!live?.canAbort}
-              title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a Mission Control chat response is active.'}
-              style={{
-                ...actionButtonStyle(Boolean(live?.canAbort)),
-                border: '1px solid rgba(200, 195, 188, 0.46)',
-                background: 'rgba(255, 255, 255, 0.78)',
-                color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)',
-                padding: '7px 10px',
-                fontSize: 11,
-                flexShrink: 0,
-              }}
-            >
-              Stop
-            </button>
-
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '6px 9px',
-                border: '1px solid rgba(200, 195, 188, 0.34)',
-                borderRadius: 999,
-                background: 'rgba(255, 255, 255, 0.7)',
-                flexShrink: 0,
-              }}
-              title={topRailContextPercent !== null ? `${topRailContextPercent}% of visible context` : 'Context usage unavailable'}
-            >
-              <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Context</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{topRailContextPercent !== null ? `${topRailContextPercent}%` : 'n/a'}</span>
-              <div style={{ width: 40, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
-                <div style={{ width: `${topRailContextPercent ?? 18}%`, minWidth: topRailContextPercent === null ? 22 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
-              </div>
-            </div>
-
-            {bridge ? (
               <button
                 type="button"
-                onClick={() => void bridge.refresh()}
-                disabled={bridgeRefreshing}
-                title="Refresh the bounded runtime bridge snapshot."
+                onClick={() => void handleStop()}
+                disabled={!live?.canAbort}
+                title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a Mission Control chat response is active.'}
                 style={{
-                  ...actionButtonStyle(true),
+                  ...actionButtonStyle(Boolean(live?.canAbort)),
                   border: '1px solid rgba(200, 195, 188, 0.46)',
                   background: 'rgba(255, 255, 255, 0.78)',
-                  color: 'var(--text-body)',
-                  cursor: bridgeRefreshing ? 'progress' : 'pointer',
-                  width: 30,
-                  height: 30,
-                  padding: 0,
-                  fontSize: 12,
-                  borderRadius: 999,
+                  color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)',
+                  padding: '7px 10px',
+                  fontSize: 11,
                   flexShrink: 0,
                 }}
               >
-                {bridgeRefreshing ? '…' : '↻'}
+                Stop
               </button>
-            ) : null}
-          </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '6px 9px',
+                  border: '1px solid rgba(200, 195, 188, 0.34)',
+                  borderRadius: 999,
+                  background: 'rgba(255, 255, 255, 0.7)',
+                  flexShrink: 0,
+                }}
+                title={topRailContextPercent !== null ? `${topRailContextPercent}% of visible context` : 'Context usage unavailable'}
+              >
+                <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Context</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{topRailContextPercent !== null ? `${topRailContextPercent}%` : 'n/a'}</span>
+                <div style={{ width: 40, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
+                  <div style={{ width: `${topRailContextPercent ?? 18}%`, minWidth: topRailContextPercent === null ? 22 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
+                </div>
+              </div>
+
+              {bridge ? (
+                <button
+                  type="button"
+                  onClick={() => void bridge.refresh()}
+                  disabled={bridgeRefreshing}
+                  title="Refresh the bounded runtime bridge snapshot."
+                  style={{
+                    ...actionButtonStyle(true),
+                    border: '1px solid rgba(200, 195, 188, 0.46)',
+                    background: 'rgba(255, 255, 255, 0.78)',
+                    color: 'var(--text-body)',
+                    cursor: bridgeRefreshing ? 'progress' : 'pointer',
+                    width: 30,
+                    height: 30,
+                    padding: 0,
+                    fontSize: 12,
+                    borderRadius: 999,
+                    flexShrink: 0,
+                  }}
+                >
+                  {bridgeRefreshing ? '…' : '↻'}
+                </button>
+              ) : null}
+            </div>
 
           <div ref={statusDropdownRef} style={{ position: 'relative', display: 'flex', gap: 6, flexShrink: 0 }}>
               <button
