@@ -786,7 +786,6 @@ export function MissionControlChatSurface({
   const model = useMemo(() => buildChatSurfaceModel(summary), [summary]);
   const [sessionsOpen, setSessionsOpen] = useState(false);
   const sessionsRef = useRef<HTMLDivElement | null>(null);
-  const contextStyles = contextTone(model.contextPercent);
   const bridgeRefreshing = Boolean(bridge?.refreshing);
   const bridgeError = bridge?.error ?? null;
   const effectiveBridgeError = fallbackNotice ?? bridgeError;
@@ -799,6 +798,20 @@ export function MissionControlChatSurface({
   const live = bridge?.live;
   const liveTargetSession = live?.targetSession.key ?? null;
   const liveTargetLabel = live?.targetSession.label ?? 'No target session';
+  const topRailSession = useMemo(() => {
+    const targetKey = liveTargetSession ?? activation?.targetSessionKey ?? null;
+    if (targetKey) {
+      const exactTarget = summary.sessionContext.recent.find((session) => session.key === targetKey);
+      if (exactTarget) return exactTarget;
+    }
+
+    const mainExact = summary.sessionContext.recent.find((session) => session.key === summary.sessionContext.mainSession.key);
+    if (mainExact) return mainExact;
+
+    return model.primarySession;
+  }, [activation?.targetSessionKey, liveTargetSession, model.primarySession, summary.sessionContext.mainSession.key, summary.sessionContext.recent]);
+  const topRailContextPercent = topRailSession?.tokenUsage?.percentUsed ?? model.contextPercent;
+  const contextStyles = contextTone(topRailContextPercent);
   const liveEntries = useMemo(() => live?.entries ?? [], [live?.entries]);
   const liveEvents = live?.events ?? [];
   const liveCanSend = Boolean(live?.canSend);
@@ -876,19 +889,25 @@ export function MissionControlChatSurface({
   }, [speechMessage]);
 
 
-  const runtimeModelLabel = model.modelLabel.includes('gpt-5.4')
+  const topRailModelLabel = topRailSession?.model ?? summary.sessionContext.mainSession.model ?? model.modelLabel;
+  const runtimeModelLabel = topRailModelLabel.includes('gpt-5.4')
     ? 'gpt-5.4'
-    : model.modelLabel.toLowerCase().includes('minimax')
+    : topRailModelLabel.toLowerCase().includes('minimax')
       ? 'minimax-2.7'
-      : model.modelLabel.toLowerCase().includes('codex') || model.modelLabel.toLowerCase().includes('5.3')
+      : topRailModelLabel.toLowerCase().includes('codex') || topRailModelLabel.toLowerCase().includes('5.3')
         ? 'codex-5.3'
-        : model.modelLabel;
+        : topRailModelLabel;
   const modelMenuLabel = optimisticModelLabel ?? pendingModelLabel ?? runtimeModelLabel;
   const xhighCapable = modelMenuLabel === 'gpt-5.4' || modelMenuLabel === 'codex-5.3';
   const boundedThinkCapable = modelMenuLabel === 'minimax-2.7';
   const effortInteractive = xhighCapable || boundedThinkCapable;
   const availableEffortOptions = xhighCapable ? effortMenuOptions : boundedThinkCapable ? effortMenuOptions.filter((level) => level !== 'xhigh') : [];
-  const confirmedEffortLabel = model.effortLabel && model.effortLabel !== 'Not exposed yet' ? model.effortLabel : null;
+  const confirmedEffortLabel =
+    topRailSession?.thinkingLevel && topRailSession.thinkingLevel !== 'Not exposed yet'
+      ? topRailSession.thinkingLevel
+      : model.effortLabel && model.effortLabel !== 'Not exposed yet'
+        ? model.effortLabel
+        : null;
   const effortMenuLabel = effortInteractive
     ? pendingEffortLabel
       ? `Last requested: ${pendingEffortLabel}`
@@ -904,15 +923,15 @@ export function MissionControlChatSurface({
     : compactEffortLabel.charAt(0).toUpperCase() + compactEffortLabel.slice(1);
   const visibleModelMenuOptions = modelMenuOptions.filter((option) => option.label !== modelMenuLabel);
 
-  const lastRealModelRef = useRef(model.modelLabel.toLowerCase() !== 'runtime controlled' ? model.modelLabel : 'MiniMax-M2.7');
+  const lastRealModelRef = useRef(topRailModelLabel.toLowerCase() !== 'runtime controlled' ? topRailModelLabel : 'MiniMax-M2.7');
 
-  if (model.modelLabel && model.modelLabel.toLowerCase() !== 'runtime controlled') {
-    lastRealModelRef.current = model.modelLabel;
+  if (topRailModelLabel && topRailModelLabel.toLowerCase() !== 'runtime controlled') {
+    lastRealModelRef.current = topRailModelLabel;
   }
 
   const selectedSeatLabel = activation?.label ?? 'Marvin';
   const assistantSeatLabel = assistantLabelForSeat(activation?.seatSlug);
-  const displayModelLabel = model.modelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : model.modelLabel;
+  const displayModelLabel = topRailModelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : topRailModelLabel;
   const modelTriggerLabel = (() => {
     const source = (optimisticModelLabel ?? displayModelLabel).trim();
     const lower = source.toLowerCase();
@@ -1058,6 +1077,24 @@ export function MissionControlChatSurface({
     }
   }
 
+  async function handleResetToDefaults() {
+    setTopControlMenu(null);
+    if (!live?.sendPrompt) {
+      window.location.reload();
+      return;
+    }
+
+    try {
+      setModelSwitchBusy(true);
+      setEffortSwitchBusy(true);
+      await applyRuntimeDefaults('minimax2.7', 'low');
+    } catch {
+      window.location.reload();
+    } finally {
+      setModelSwitchBusy(false);
+      setEffortSwitchBusy(false);
+    }
+  }
 
   async function uploadSelectedFiles(fileList: FileList | File[]) {
     const files = Array.from(fileList);
@@ -1242,296 +1279,357 @@ export function MissionControlChatSurface({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 5,
-            flexWrap: 'nowrap',
+            justifyContent: 'space-between',
+            gap: 12,
             minWidth: 0,
-            overflowX: 'auto',
-            paddingBottom: 2,
+            overflow: 'visible',
           }}
         >
-          <span style={pillStyle({ active: wsState === 'open' })} title={`WS ${wsState}`}>WS</span>
-          <span style={pillStyle({ active: sessionState === 'connected' })} title={`Session ${sessionState}`}>SESS</span>
-
-          <div ref={statusDropdownRef} style={{ position: 'relative', flexShrink: 0 }}>
-            <button
-              type="button"
-              onClick={() => setStatusDropdownOpen((v) => !v)}
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: '50%',
-                border: '1px solid rgba(200, 195, 188, 0.4)',
-                background: effectiveBridgeError ? 'rgba(248, 113, 113, 0.14)' : 'rgba(255, 255, 255, 0.7)',
-                color: effectiveBridgeError ? '#f87171' : 'var(--text-body)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 13,
-              }}
-              title={effectiveBridgeError ? 'Bridge error' : wsDetail || 'WS status'}
-            >
-              {effectiveBridgeError ? '!' : 'ⓘ'}
-            </button>
-            {statusDropdownOpen && (
-              <div
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, minWidth: 0, flex: '1 1 auto' }}>
+            <div style={{ position: 'relative', minWidth: 0, flex: '0 1 128px' }}>
+              <button
+                type="button"
+                onClick={() => setTopControlMenu((current) => (current === 'agent' ? null : 'agent'))}
                 style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 8px)',
-                  left: 0,
-                  width: 'min(320px, 92vw)',
-                  border: '1px solid rgba(200, 195, 188, 0.4)',
+                  border: '1px solid rgba(200, 195, 188, 0.34)',
                   borderRadius: 14,
-                  background: 'rgba(255, 253, 251, 0.98)',
-                  boxShadow: '0 12px 32px rgba(26, 61, 50, 0.12)',
-                  padding: 12,
-                  display: 'grid',
-                  gap: 8,
-                  zIndex: 20,
+                  background: 'rgba(255, 255, 255, 0.7)',
+                  padding: '7px 8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 6,
+                  width: '100%',
+                  minHeight: 32,
+                  textAlign: 'left',
+                  cursor: 'pointer',
                 }}
+                title={`Seat: ${selectedSeatLabel}`}
               >
-                {effectiveBridgeError ? (
-                  <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6 }}>
-                    Bridge refresh failed: {effectiveBridgeError}
-                  </div>
-                ) : wsDetail ? (
-                  <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                    {wsDetail}
-                  </div>
-                ) : sessionDetail ? (
-                  <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                    {sessionDetail}
-                  </div>
-                ) : (
-                  <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                    WS sidecar socket is open. Waiting for gateway handshake.
-                  </div>
-                )}
-                {sessionId && (
-                  <div style={{ fontSize: 11, fontFamily: monoFont, color: 'var(--text-ghost)' }}>
-                    Session: {sessionId}
-                  </div>
-                )}
-                {sessionLastEvent && (
-                  <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
-                    Last event: {sessionLastEvent}
-                  </div>
-                )}
-              </div>
-            )}
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                  <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◎</span>
+                  <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{selectedSeatLabel}</span>
+                </span>
+                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
+              </button>
+              {topControlMenu === 'agent' ? (
+                <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 260, maxHeight: 'min(360px, calc(100vh - 180px))', overflowY: 'auto', border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
+                  {agentMenuOptions.map((option) => (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => handleSeatSelection(option.seatSlug)}
+                      style={{ border: 'none', borderRadius: 12, background: option.label === selectedSeatLabel ? 'rgba(212, 231, 221, 0.66)' : 'transparent', padding: '10px 12px', display: 'grid', gap: 4, textAlign: 'left', cursor: 'pointer' }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{option.label}</span>
+                        {option.runtimeTag ? <span style={pillStyle(option.label === selectedSeatLabel ? { active: true } : undefined)}>{option.runtimeTag}</span> : null}
+                      </div>
+                      {option.note ? <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{option.note}</span> : null}
+                      {option.detail ? <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.detail}</span> : null}
+                    </button>
+                  ))}
+                  {activation ? (
+                    <>
+                      <div style={{ borderTop: '1px solid rgba(200, 195, 188, 0.32)', margin: '4px 6px' }} />
+                      <button
+                        type="button"
+                        onClick={() => void handleApplySeatDefaults()}
+                        disabled={runtimeDefaultsBusy}
+                        title={`Sync runtime model and effort to ${activation.label}`}
+                        style={{
+                          border: '1px solid rgba(121, 166, 148, 0.34)',
+                          borderRadius: 12,
+                          background: 'rgba(212, 231, 221, 0.42)',
+                          color: 'var(--text-body)',
+                          padding: '8px 12px',
+                          fontSize: 12,
+                          fontWeight: 600,
+                          cursor: runtimeDefaultsBusy ? 'progress' : 'pointer',
+                          opacity: runtimeDefaultsBusy ? 0.78 : 1,
+                          textAlign: 'left',
+                        }}
+                      >
+                        {runtimeDefaultsBusy ? 'Applying defaults…' : 'Sync seat defaults'}
+                      </button>
+                    </>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+
+            <div style={{ position: 'relative', minWidth: 0, flex: '0 1 116px' }}>
+              <button
+                type="button"
+                onClick={() => setTopControlMenu((current) => (current === 'model' ? null : 'model'))}
+                disabled={modelSwitchBusy}
+                style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '7px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, width: '100%', minHeight: 32, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
+                title={`Model: ${optimisticModelLabel ?? displayModelLabel}`}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                  <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◉</span>
+                  <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{modelTriggerLabel}</span>
+                </span>
+                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
+              </button>
+              {topControlMenu === 'model' ? (
+                <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
+                  {visibleModelMenuOptions.map((option) => (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => void handleModelSwitch(option)}
+                      disabled={modelSwitchBusy}
+                      style={{ border: 'none', borderRadius: 12, padding: '10px 12px', display: 'grid', gap: 2, textAlign: 'left', background: 'transparent', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.76 : 1 }}
+                    >
+                      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{option.label}</span>
+                      <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.command}</span>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
+            <div style={{ position: 'relative', minWidth: 0, flex: '0 1 94px' }}>
+              <button
+                type="button"
+                onClick={() => effortInteractive && setTopControlMenu((current) => (current === 'effort' ? null : 'effort'))}
+                disabled={!effortInteractive || effortSwitchBusy}
+                style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '7px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, width: '100%', minHeight: 32, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
+                title={`Effort: ${effortTriggerLabel}`}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                  <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◈</span>
+                  <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{effortTriggerLabel}</span>
+                </span>
+                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>{effortInteractive ? '▾' : '—'}</span>
+              </button>
+              {topControlMenu === 'effort' ? (
+                <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
+                  {availableEffortOptions.filter((label) => label !== lastRequestedEffort).map((label) => (
+                    <button
+                      key={label}
+                      type="button"
+                      onClick={() => void handleEffortSwitch(label)}
+                      disabled={effortSwitchBusy}
+                      style={{ border: 'none', borderRadius: 12, padding: '10px 12px', display: 'grid', gap: 2, textAlign: 'left', background: 'transparent', cursor: effortSwitchBusy ? 'progress' : 'pointer', opacity: effortSwitchBusy ? 0.76 : 1 }}
+                    >
+                      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', textTransform: 'capitalize' }}>{label}</span>
+                      <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{`/think:${label}`}</span>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </div>
 
-          {bridge ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
             <button
               type="button"
-              onClick={() => void bridge.refresh()}
-              disabled={bridgeRefreshing}
-              title="Refresh the bounded runtime bridge snapshot."
+              onClick={() => void handleResetToDefaults()}
+              title="Reset to defaults: Marvin / MiniMax-M2.7 / low"
               style={{
                 ...actionButtonStyle(true),
                 border: '1px solid rgba(200, 195, 188, 0.46)',
                 background: 'rgba(255, 255, 255, 0.78)',
                 color: 'var(--text-body)',
-                cursor: bridgeRefreshing ? 'progress' : 'pointer',
-                width: 30,
-                height: 30,
-                padding: 0,
-                fontSize: 12,
-                borderRadius: 999,
+                cursor: 'pointer',
+                padding: '7px 10px',
+                fontSize: 11,
                 flexShrink: 0,
               }}
             >
-              {bridgeRefreshing ? '…' : '↻'}
+              Reset
             </button>
-          ) : null}
 
-          <button
-            type="button"
-            onClick={() => void handleStop()}
-            disabled={!live?.canAbort}
-            title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a Mission Control chat response is active.'}
-            style={{
-              ...actionButtonStyle(Boolean(live?.canAbort)),
-              border: '1px solid rgba(200, 195, 188, 0.46)',
-              background: 'rgba(255, 255, 255, 0.78)',
-              color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)',
-              padding: '7px 9px',
-              fontSize: 11,
-              flexShrink: 0,
-            }}
-          >
-            Stop
-          </button>
-
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 5,
-              padding: '6px 8px',
-              border: '1px solid rgba(200, 195, 188, 0.34)',
-              borderRadius: 999,
-              background: 'rgba(255, 255, 255, 0.7)',
-              flexShrink: 0,
-            }}
-            title={model.contextPercent !== null ? `${model.contextPercent}% of visible context` : 'Context usage unavailable'}
-          >
-            <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Ctx</span>
-            <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{model.contextPercent !== null ? `${model.contextPercent}%` : 'n/a'}</span>
-            <div style={{ width: 34, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
-              <div style={{ width: `${model.contextPercent ?? 18}%`, minWidth: model.contextPercent === null ? 20 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
-            </div>
-          </div>
-
-          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 118px' }}>
             <button
               type="button"
-              onClick={() => setTopControlMenu((current) => (current === 'agent' ? null : 'agent'))}
+              onClick={() => void handleStop()}
+              disabled={!live?.canAbort}
+              title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a Mission Control chat response is active.'}
               style={{
-                border: '1px solid rgba(200, 195, 188, 0.34)',
-                borderRadius: 14,
-                background: 'rgba(255, 255, 255, 0.7)',
-                padding: '7px 8px',
+                ...actionButtonStyle(Boolean(live?.canAbort)),
+                border: '1px solid rgba(200, 195, 188, 0.46)',
+                background: 'rgba(255, 255, 255, 0.78)',
+                color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)',
+                padding: '7px 10px',
+                fontSize: 11,
+                flexShrink: 0,
+              }}
+            >
+              Stop
+            </button>
+
+            <div
+              style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
                 gap: 6,
-                width: '100%',
-                minHeight: 32,
-                textAlign: 'left',
-                cursor: 'pointer',
+                padding: '6px 9px',
+                border: '1px solid rgba(200, 195, 188, 0.34)',
+                borderRadius: 999,
+                background: 'rgba(255, 255, 255, 0.7)',
+                flexShrink: 0,
               }}
-              title={`Seat: ${selectedSeatLabel}`}
+              title={topRailContextPercent !== null ? `${topRailContextPercent}% of visible context` : 'Context usage unavailable'}
             >
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◎</span>
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{selectedSeatLabel}</span>
-              </span>
-              <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
-            </button>
-            {topControlMenu === 'agent' ? (
-              <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 260, maxHeight: 'min(360px, calc(100vh - 180px))', overflowY: 'auto', border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
-                {agentMenuOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => handleSeatSelection(option.seatSlug)}
-                    style={{ border: 'none', borderRadius: 12, background: option.label === selectedSeatLabel ? 'rgba(212, 231, 221, 0.66)' : 'transparent', padding: '10px 12px', display: 'grid', gap: 4, textAlign: 'left', cursor: 'pointer' }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{option.label}</span>
-                      {option.runtimeTag ? <span style={pillStyle(option.label === selectedSeatLabel ? { active: true } : undefined)}>{option.runtimeTag}</span> : null}
+              <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Context</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{topRailContextPercent !== null ? `${topRailContextPercent}%` : 'n/a'}</span>
+              <div style={{ width: 40, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
+                <div style={{ width: `${topRailContextPercent ?? 18}%`, minWidth: topRailContextPercent === null ? 22 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
+              </div>
+            </div>
+
+            {bridge ? (
+              <button
+                type="button"
+                onClick={() => void bridge.refresh()}
+                disabled={bridgeRefreshing}
+                title="Refresh the bounded runtime bridge snapshot."
+                style={{
+                  ...actionButtonStyle(true),
+                  border: '1px solid rgba(200, 195, 188, 0.46)',
+                  background: 'rgba(255, 255, 255, 0.78)',
+                  color: 'var(--text-body)',
+                  cursor: bridgeRefreshing ? 'progress' : 'pointer',
+                  width: 30,
+                  height: 30,
+                  padding: 0,
+                  fontSize: 12,
+                  borderRadius: 999,
+                  flexShrink: 0,
+                }}
+              >
+                {bridgeRefreshing ? '…' : '↻'}
+              </button>
+            ) : null}
+
+            <div ref={statusDropdownRef} style={{ position: 'relative', display: 'flex', gap: 5, flexShrink: 0 }}>
+              <button
+                type="button"
+                onClick={() => setStatusDropdownOpen((value) => !value)}
+                aria-label={`WS ${wsState}`}
+                title={`WS ${wsState}`}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 999,
+                  border: wsState === 'open' ? '1px solid rgba(121, 166, 148, 0.42)' : wsState === 'error' ? '1px solid rgba(181, 88, 74, 0.34)' : '1px solid rgba(200, 195, 188, 0.42)',
+                  background: wsState === 'open' ? 'rgba(212, 231, 221, 0.68)' : wsState === 'error' ? 'rgba(244, 224, 220, 0.88)' : 'rgba(255, 255, 255, 0.72)',
+                  color: wsState === 'open' ? '#1a3d32' : wsState === 'error' ? '#7c2e24' : 'var(--text-muted)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  fontSize: 13,
+                }}
+              >
+                ⌁
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusDropdownOpen((value) => !value)}
+                aria-label={`Session ${sessionState}`}
+                title={`Session ${sessionState}`}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 999,
+                  border: sessionState === 'connected' ? '1px solid rgba(121, 166, 148, 0.42)' : sessionState === 'error' || sessionState === 'rejected' ? '1px solid rgba(181, 88, 74, 0.34)' : '1px solid rgba(200, 195, 188, 0.42)',
+                  background: sessionState === 'connected' ? 'rgba(212, 231, 221, 0.68)' : sessionState === 'error' || sessionState === 'rejected' ? 'rgba(244, 224, 220, 0.88)' : 'rgba(255, 255, 255, 0.72)',
+                  color: sessionState === 'connected' ? '#1a3d32' : sessionState === 'error' || sessionState === 'rejected' ? '#7c2e24' : 'var(--text-muted)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  fontSize: 13,
+                }}
+              >
+                ◎
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusDropdownOpen((value) => !value)}
+                aria-label={effectiveBridgeError ? 'Bridge error' : 'Bridge details'}
+                title={effectiveBridgeError ? 'Bridge error' : wsDetail || sessionDetail || 'Bridge details'}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 999,
+                  border: '1px solid rgba(200, 195, 188, 0.4)',
+                  background: effectiveBridgeError ? 'rgba(244, 224, 220, 0.88)' : 'rgba(255, 255, 255, 0.72)',
+                  color: effectiveBridgeError ? '#7c2e24' : 'var(--text-body)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  fontSize: 13,
+                }}
+              >
+                {effectiveBridgeError ? '!' : 'ⓘ'}
+              </button>
+              {statusDropdownOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: 'min(320px, 92vw)',
+                    border: '1px solid rgba(200, 195, 188, 0.4)',
+                    borderRadius: 14,
+                    background: 'rgba(255, 253, 251, 0.98)',
+                    boxShadow: '0 12px 32px rgba(26, 61, 50, 0.12)',
+                    padding: 12,
+                    display: 'grid',
+                    gap: 8,
+                    zIndex: 20,
+                  }}
+                >
+                  {effectiveBridgeError ? (
+                    <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6 }}>
+                      Bridge refresh failed: {effectiveBridgeError}
                     </div>
-                    {option.note ? <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{option.note}</span> : null}
-                    {option.detail ? <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.detail}</span> : null}
-                  </button>
-                ))}
-                {activation ? (
-                  <>
-                    <div style={{ borderTop: '1px solid rgba(200, 195, 188, 0.32)', margin: '4px 6px' }} />
-                    <button
-                      type="button"
-                      onClick={() => void handleApplySeatDefaults()}
-                      disabled={runtimeDefaultsBusy}
-                      title={`Sync runtime model and effort to ${activation.label}`}
-                      style={{
-                        border: '1px solid rgba(121, 166, 148, 0.34)',
-                        borderRadius: 12,
-                        background: 'rgba(212, 231, 221, 0.42)',
-                        color: 'var(--text-body)',
-                        padding: '8px 12px',
-                        fontSize: 12,
-                        fontWeight: 600,
-                        cursor: runtimeDefaultsBusy ? 'progress' : 'pointer',
-                        opacity: runtimeDefaultsBusy ? 0.78 : 1,
-                        textAlign: 'left',
-                      }}
-                    >
-                      {runtimeDefaultsBusy ? 'Applying defaults…' : 'Sync seat defaults'}
-                    </button>
-                  </>
-                ) : null}
-              </div>
-            ) : null}
-          </div>
+                  ) : wsDetail ? (
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                      {wsDetail}
+                    </div>
+                  ) : sessionDetail ? (
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                      {sessionDetail}
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                      WS sidecar socket is open. Waiting for gateway handshake.
+                    </div>
+                  )}
+                  {sessionId && (
+                    <div style={{ fontSize: 11, fontFamily: monoFont, color: 'var(--text-ghost)' }}>
+                      Session: {sessionId}
+                    </div>
+                  )}
+                  {sessionLastEvent && (
+                    <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
+                      Last event: {sessionLastEvent}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
-          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 110px' }}>
-            <button
-              type="button"
-              onClick={() => setTopControlMenu((current) => (current === 'model' ? null : 'model'))}
-              disabled={modelSwitchBusy}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: 'rgba(255, 255, 255, 0.7)', padding: '7px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, width: '100%', minHeight: 32, textAlign: 'left', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.82 : 1 }}
-              title={`Model: ${optimisticModelLabel ?? displayModelLabel}`}
-            >
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◉</span>
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{modelTriggerLabel}</span>
-              </span>
-              <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
-            </button>
-            {topControlMenu === 'model' ? (
-              <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
-                {visibleModelMenuOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => void handleModelSwitch(option)}
-                    disabled={modelSwitchBusy}
-                    style={{ border: 'none', borderRadius: 12, padding: '10px 12px', display: 'grid', gap: 2, textAlign: 'left', background: 'transparent', cursor: modelSwitchBusy ? 'progress' : 'pointer', opacity: modelSwitchBusy ? 0.76 : 1 }}
-                  >
-                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{option.label}</span>
-                    <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{option.command}</span>
-                  </button>
-                ))}
-              </div>
-            ) : null}
+            <ChatSessionRail
+              compact
+              sessionsRef={sessionsRef}
+              sessionsOpen={sessionsOpen}
+              setSessionsOpen={setSessionsOpen}
+              recentSessions={model.recentSessions}
+              liveTargetSession={liveTargetSession}
+              onSwitchSession={(sessionKey) => {
+                if (sessionKey !== liveTargetSession) {
+                  void bridge?.switchSession(sessionKey);
+                }
+              }}
+            />
           </div>
-
-          <div style={{ position: 'relative', minWidth: 0, flex: '0 1 92px' }}>
-            <button
-              type="button"
-              onClick={() => effortInteractive && setTopControlMenu((current) => (current === 'effort' ? null : 'effort'))}
-              disabled={!effortInteractive || effortSwitchBusy}
-              style={{ border: '1px solid rgba(200, 195, 188, 0.34)', borderRadius: 14, background: effortInteractive ? 'rgba(255, 255, 255, 0.7)' : 'rgba(247, 242, 236, 0.82)', padding: '7px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, width: '100%', minHeight: 32, textAlign: 'left', cursor: effortInteractive && !effortSwitchBusy ? 'pointer' : 'not-allowed', opacity: effortInteractive ? 1 : 0.72 }}
-              title={`Effort: ${effortTriggerLabel}`}
-            >
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◈</span>
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{effortTriggerLabel}</span>
-              </span>
-              <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>{effortInteractive ? '▾' : '—'}</span>
-            </button>
-            {topControlMenu === 'effort' ? (
-              <div style={{ position: 'absolute', top: 'calc(100% + 8px)', left: 0, width: 220, border: '1px solid rgba(200, 195, 188, 0.4)', borderRadius: 16, background: 'rgba(255, 253, 251, 0.98)', boxShadow: '0 18px 40px rgba(26, 61, 50, 0.14)', padding: 8, display: 'grid', gap: 6, zIndex: 20 }}>
-                {availableEffortOptions.filter((label) => label !== lastRequestedEffort).map((label) => (
-                  <button
-                    key={label}
-                    type="button"
-                    onClick={() => void handleEffortSwitch(label)}
-                    disabled={effortSwitchBusy}
-                    style={{ border: 'none', borderRadius: 12, padding: '10px 12px', display: 'grid', gap: 2, textAlign: 'left', background: 'transparent', cursor: effortSwitchBusy ? 'progress' : 'pointer', opacity: effortSwitchBusy ? 0.76 : 1 }}
-                  >
-                    <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', textTransform: 'capitalize' }}>{label}</span>
-                    <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{`/think:${label}`}</span>
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
-
-          <ChatSessionRail
-            compact
-            sessionsRef={sessionsRef}
-            sessionsOpen={sessionsOpen}
-            setSessionsOpen={setSessionsOpen}
-            recentSessions={model.recentSessions}
-            liveTargetSession={liveTargetSession}
-            onSwitchSession={(sessionKey) => {
-              if (sessionKey !== liveTargetSession) {
-                void bridge?.switchSession(sessionKey);
-              }
-            }}
-          />
         </div>
         {modelSwitchError ? (
           <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6, paddingLeft: 4 }}>

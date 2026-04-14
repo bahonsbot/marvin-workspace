@@ -29,13 +29,20 @@ function normalizeText(value: string): string {
     previous = body;
     body = body.replace(/^\[\[\s*reply_to_current\s*\]\]\s*/i, '');
     body = body.replace(/^\[\[\s*reply_to\s*:\s*[^\]]+\]\]\s*/i, '');
+    body = body.replace(/^\[Inter-session message\][^\n]*(?:\n|$)*/i, '');
+    body = body.replace(/^sourceSession=\S+\s+sourceChannel=\S+\s+sourceTool=\S+\s*/i, '');
     body = body.replace(/^(?:System:\s*\[[^\]]+\]\s*.*(?:\n|$))+/i, '');
     body = body.replace(/^\s*Sender \(untrusted metadata\):\s*```json\s*[\s\S]*?```\s*/i, '');
     body = body.replace(/^\s*Sender \(untrusted metadata\):\s*\{[\s\S]*?\}\s*/i, '');
     body = body.replace(/^\s*\[[A-Za-z]{3} [^\]]*GMT\+\d+\]\s*/i, '');
   }
 
-  return body.trim();
+  const normalized = body.trim();
+  if (/^(?:REPLY_SKIP|NO_REPLY|HEARTBEAT_OK)$/i.test(normalized)) {
+    return '';
+  }
+
+  return normalized;
 }
 
 export function toTimestamp(value: unknown): number | null {

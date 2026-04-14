@@ -108,13 +108,22 @@ function derivePrimarySession(summary: OrchestratorIntegrationSummary): SessionV
   const sessions = summary.sessionContext.recent;
   if (sessions.length === 0) return null;
 
-  const mainDirect = sessions.find((session) => session.key.includes('agent:main:main') || session.kind === 'direct');
-  if (mainDirect) return mainDirect;
+  const mainExact = sessions.find((session) => session.key === 'agent:main:main');
+  if (mainExact) return mainExact;
+
+  const configuredMain = sessions.find((session) => session.key === summary.sessionContext.mainSession.key);
+  if (configuredMain) return configuredMain;
 
   if (summary.runtime.defaultAgentId) {
-    const match = sessions.find((session) => session.key.includes(summary.runtime.defaultAgentId as string));
-    if (match) return match;
+    const exactDefault = sessions.find((session) => session.key === summary.runtime.defaultAgentId);
+    if (exactDefault) return exactDefault;
+
+    const includesDefault = sessions.find((session) => session.key.includes(summary.runtime.defaultAgentId as string));
+    if (includesDefault) return includesDefault;
   }
+
+  const directSession = sessions.find((session) => session.kind === 'direct');
+  if (directSession) return directSession;
 
   return sessions[0] ?? null;
 }
@@ -291,7 +300,7 @@ export function buildChatSurfaceModel(summary: OrchestratorIntegrationSummary): 
     recentSessions: summary.sessionContext.recent,
     agentLabel,
     sessionLabel: shortSessionKey(primarySession?.key ?? summary.runtime.defaultAgentId),
-    modelLabel: primarySession?.model ?? summary.runtime.gateway.version ?? 'Runtime controlled',
+    modelLabel: primarySession?.model ?? summary.sessionContext.mainSession.model ?? summary.runtime.gateway.version ?? 'Runtime controlled',
     effortLabel: primarySession?.thinkingLevel ?? summary.sessionContext.recent.find((session) => session.kind === 'direct' && session.thinkingLevel)?.thinkingLevel ?? summary.sessionContext.recent.find((session) => session.thinkingLevel)?.thinkingLevel ?? 'Last requested: low',
     runtimeStatus,
     runtimeTone: summary.runtime.health.ok && summary.runtime.gateway.reachable ? 'ok' : 'warn',
