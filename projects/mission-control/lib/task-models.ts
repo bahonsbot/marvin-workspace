@@ -10,10 +10,10 @@ export type AutonomousTaskModelAlias = (typeof AUTONOMOUS_TASK_MODEL_ALIASES)[nu
 
 export const AUTONOMOUS_TASK_MODEL_DEFAULT = 'agent-default' as const;
 
-const AUTONOMOUS_AGENT_DEFAULT_MODEL: Record<string, string> = {
-  marvin: 'gpt-5.4',
-  builder: 'codex',
-  reviewer: 'minimax2.7',
+const AUTONOMOUS_AGENT_DEFAULT_MODEL: Record<string, { alias: string; runtime: string }> = {
+  marvin: { alias: 'codex5.4', runtime: 'gpt-5.4' },
+  builder: { alias: 'codex', runtime: 'gpt-5.3-codex' },
+  reviewer: { alias: 'minimax2.7', runtime: 'MiniMax-M2.7' },
 };
 
 export function isAutonomousTaskModelAlias(value: unknown): value is AutonomousTaskModelAlias {
@@ -28,7 +28,7 @@ export function normalizeAutonomousTaskModel(value: unknown): AutonomousTaskMode
 
 export function agentDefaultModelLabel(agentTarget?: string | null): string {
   const agentDefault = agentTarget ? AUTONOMOUS_AGENT_DEFAULT_MODEL[agentTarget] : undefined;
-  return agentDefault ? `Agent default (${agentDefault})` : 'Agent default';
+  return agentDefault ? `Agent default (${agentDefault.alias} → ${agentDefault.runtime})` : 'Agent default';
 }
 
 export function formatAutonomousTaskModel(value: string | null | undefined, agentTarget?: string | null): string {

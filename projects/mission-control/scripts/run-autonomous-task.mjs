@@ -634,7 +634,7 @@ const sessionTarget = createMissionControlSessionTarget({
   label: `autonomous-${task.id}`,
   sessionId: activeRun.sessionId || activeRun.sessionKey || `mc-auto-${task.id}-${Date.now()}`,
 });
-const modelOverride = normalizeModelAlias(activeRun?.model || task.model);
+const explicitModelOverride = normalizeModelAlias(activeRun?.model || task.model);
 const effectiveModelAlias = effectiveModelAliasForTask(task, activeRun);
 const thinking = resolveThinkingLevel(task, activeRun);
 const planningOnlyTask = isPlanningOnlyTask(task);
@@ -674,7 +674,11 @@ try {
     `Autonomous task: ${task.title}`,
     task.description ? `Description: ${task.description}` : null,
     `Agent target: ${task.agentTarget}`,
-    modelOverride ? `Model override: ${modelOverride}` : 'Model override: agent default',
+    explicitModelOverride
+      ? `Model override: ${explicitModelOverride}`
+      : effectiveModelAlias
+        ? `Agent default model alias: ${effectiveModelAlias}`
+        : 'Model override: agent default',
     `Effective thinking level for this run: ${thinking}`,
     effectiveModelAlias === 'minimax2.7' ? 'MiniMax runs must start at thinking=high from the initial execution call. Do not try to change thinking later via chat commands.' : null,
     isRetry ? 'This is a retry after operator rejection. Treat the latest feedback as a required revision brief, not as optional context.' : null,
@@ -692,12 +696,12 @@ try {
     isRetry ? 'Your result should clearly reflect how you addressed the feedback.' : null,
   ].filter(Boolean).join('\n');
 
-  preparedSession = modelOverride
+  preparedSession = effectiveModelAlias
     ? await prepareSessionModel({
         agentId: sessionTarget.agentId,
         sessionId: sessionTarget.sessionId,
         sessionKey: sessionTarget.sessionKey,
-        modelAlias: modelOverride,
+        modelAlias: effectiveModelAlias,
       })
     : preparedSession;
 
@@ -716,16 +720,16 @@ try {
     parsed = JSON.parse(stdout);
   } catch {}
 
-  if (modelOverride) {
+  if (effectiveModelAlias) {
     const verification = await verifySessionModel({
       agentId: preparedSession.agentId,
       sessionId: preparedSession.sessionId,
       sessionKey: preparedSession.sessionKey,
-      modelAlias: modelOverride,
+      modelAlias: effectiveModelAlias,
       runtimeResult: parsed,
     });
     if (!verification.ok) {
-      throw new Error(formatModelVerificationError('Autonomous execution model verification failed.', verification, modelOverride));
+      throw new Error(formatModelVerificationError('Autonomous execution model verification failed.', verification, effectiveModelAlias));
     }
   }
 
