@@ -14,6 +14,17 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
+## [CORR-20260414-1138]
+
+**Trigger:** Philippe pointed out that my wording after the Mission Control dependency planning item made it sound like I might already be switching from Morning Meeting into actual dependency work without clearly saying so.
+**What was wrong:** I did not clearly separate (a) Morning Meeting planning/reporting completion from (b) a possible later execution block. That made the handoff feel mixed and ambiguous.
+**Lesson:** When one topic produces a plan for later execution, explicitly state the current mode before moving on: either `Morning Meeting continues` or `switching to execution now`. Do not imply a work-mode transition without naming it plainly.
+
+**Priority:** high
+**Status:** active
+
+---
+
 ## [CORR-20260414-0109]
 
 **Trigger:** Philippe correctly pointed out that I called the latest Mission Control transcript pass `Slice 3` even though it did not include most of the dedicated Slice 3 renderer components and behaviors from the plan.
