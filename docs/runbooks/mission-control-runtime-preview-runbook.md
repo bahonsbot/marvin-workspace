@@ -1,6 +1,6 @@
 # Mission Control Runtime & Preview Runbook
 
-Last updated: 2026-03-18
+Last updated: 2026-04-14
 Owner: Marvin / Philippe
 Scope: Mission Control app runtime, preview verification, and build-output recovery
 
