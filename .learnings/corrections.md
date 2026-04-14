@@ -14,6 +14,17 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
+## [CORR-20260414-1411]
+
+**Trigger:** Philippe pointed out that I had started editing `runtime-bridge-ws-sidecar.js` even though I had said I would investigate first and not touch anything yet.
+**What was wrong:** I crossed the agreed investigate-only boundary before reporting back. Even though the partial edit had not changed live behavior yet, starting the patch without first stating that I was switching from investigation into execution was the wrong move.
+**Lesson:** When I explicitly say I am in investigation-only mode, I must not begin code edits until I report findings and clearly announce the switch to implementation. A harmless partial edit still counts as crossing the line.
+
+**Priority:** high
+**Status:** active
+
+---
+
 ## [CORR-20260414-1138]
 
 **Trigger:** Philippe pointed out that my wording after the Mission Control dependency planning item made it sound like I might already be switching from Morning Meeting into actual dependency work without clearly saying so.
