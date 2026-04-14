@@ -21,7 +21,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** For interactive UI slices, do not call the work done on code shape + build alone. Verify the real behavior path the user cares about: menus open, controls sit in the intended lane, status signals read correctly, and runtime readback matches live state. If the plan includes behavior changes, a cosmetic-only landing is not a valid stop condition.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
+**Closed:** 2026-04-14 (resolved after the real behavior-verification loop, top-rail interaction fixes, and final Chat top-section signoff landed the same evening)
 
 ## [CORR-20260414-1411]
 
