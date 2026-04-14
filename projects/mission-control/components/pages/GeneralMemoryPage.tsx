@@ -10,10 +10,12 @@ import type { LearningKind, MemorySection } from '@/lib/types/contracts';
 
 export const dynamic = 'force-dynamic';
 
+type SearchParamValue = string | string[] | undefined;
+
 type MemoryPageSearchParams = {
-  section?: string;
-  date?: string;
-  learning?: string;
+  section?: SearchParamValue;
+  date?: SearchParamValue;
+  learning?: SearchParamValue;
 };
 
 const learningTabs: Array<{ key: LearningKind; label: string }> = [
@@ -22,19 +24,28 @@ const learningTabs: Array<{ key: LearningKind; label: string }> = [
   { key: 'requests', label: 'Requests' },
 ];
 
-export default async function MemoryPage({ searchParams }: { searchParams?: MemoryPageSearchParams }) {
-  const section = (searchParams?.section === 'daily' || searchParams?.section === 'learnings' ? searchParams.section : 'durable') as MemorySection;
+function getParam(value: SearchParamValue) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function MemoryPage({ searchParams }: { searchParams?: Promise<MemoryPageSearchParams> }) {
+  const resolvedSearchParams = await searchParams;
+  const sectionParam = getParam(resolvedSearchParams?.section);
+  const dateParam = getParam(resolvedSearchParams?.date);
+  const learningParam = getParam(resolvedSearchParams?.learning);
+
+  const section = (sectionParam === 'daily' || sectionParam === 'learnings' ? sectionParam : 'durable') as MemorySection;
 
   const [overview, selected] = await Promise.all([
     getMemoryOverview(),
     getMemoryDocument({
       section,
-      date: searchParams?.date,
-      learning: searchParams?.learning,
+      date: dateParam,
+      learning: learningParam,
     }),
   ]);
 
-  const selectedLearning = resolveLearningKind(searchParams?.learning ?? selected.selectedLearning ?? undefined);
+  const selectedLearning = resolveLearningKind(learningParam ?? selected.selectedLearning ?? undefined);
 
   return (
     <div id="page-top">

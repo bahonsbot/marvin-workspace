@@ -10,14 +10,23 @@ import { getDirectoryListing, getFilePreview } from '@/lib/adapters/files';
 
 export const dynamic = 'force-dynamic';
 
+type SearchParamValue = string | string[] | undefined;
+
 type FilesPageSearchParams = {
-  path?: string;
-  file?: string;
+  path?: SearchParamValue;
+  file?: SearchParamValue;
 };
 
-export default async function FilesPage({ searchParams }: { searchParams?: FilesPageSearchParams }) {
-  const listing = await getDirectoryListing(searchParams?.path);
-  const selectedFilePath = searchParams?.file ?? null;
+function getParam(value: SearchParamValue) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function FilesPage({ searchParams }: { searchParams?: Promise<FilesPageSearchParams> }) {
+  const resolvedSearchParams = await searchParams;
+  const selectedPath = getParam(resolvedSearchParams?.path);
+  const selectedFilePath = getParam(resolvedSearchParams?.file) ?? null;
+
+  const listing = await getDirectoryListing(selectedPath);
   const preview = selectedFilePath ? await getFilePreview(selectedFilePath) : null;
 
   return (

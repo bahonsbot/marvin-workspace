@@ -17,6 +17,36 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260414-1418]
+
+**Context:** Mission Control Chat `Session connected` badge started appearing about 5 seconds late again after the upgrade/restart loops.
+**What failed:** `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` was resolving the gateway target with `openclaw status --json` on every websocket connection. That CLI call took about 5.57 seconds, so each connect/reconnect paid the full cost before the gateway challenge arrived.
+**Suggested fix:** cache the gateway target in-process and refresh only on failure/TTL instead of probing `openclaw status --json` on the hot path.
+**Resolution:** Resolved Apr 14 by caching the gateway target in-process inside the sidecar and reusing it across connections.
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260414-1513]
+
+**Context:** Manual autonomous tasks on the Mission Control board flipped to `in-progress/running` but never created a real session and appeared to hang forever.
+**What failed:** the execute route startup validation and runner-launch path regressed during the Next 16 migration work. The board could say `running` before execution had real backing, and planning-only tasks could also be falsely rejected because preview/runtime log churn looked like forbidden file edits.
+**Suggested fix:** fail fast only on real launch errors / truly early exits, do not require immediate session-log creation as the sole success signal, and ignore preview/runtime log churn when enforcing planning-only artifact restrictions.
+**Resolution:** Resolved Apr 14 by hardening `app/api/tasks/autonomous/[taskId]/execute/route.ts` startup validation and teaching `scripts/run-autonomous-task.mjs` to ignore preview/runtime log churn for planning-only tasks.
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260414-1602]
+
+**Context:** A Marvin planning task reached Review with a misleading `Context overflow: prompt too large for the model` proof message.
+**What failed:** the actual provider error was OpenAI Codex rejecting `prompt_cache_key` because the autonomous session id was too long (`max 64`, got `70`). Long `mc-auto-${task.id}-${timestamp}` ids pushed the derived cache key over the limit.
+**Suggested fix:** use shortened hashed autonomous session ids and do not trust overflow-style proof wording at face value without checking provider logs.
+**Resolution:** Resolved Apr 14 by switching autonomous session ids to `mc-auto-<10-char-hash>-<timestamp>` in both the execute route and runner fallback path.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260413-1340]
 
 **What failed:** Mission Control specialist-seat continuity loading during real Link seat testing
