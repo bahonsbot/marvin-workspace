@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Bot, Brain, Cpu } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from 'react';
 import type { CSSProperties } from 'react';
@@ -1315,7 +1316,9 @@ export function MissionControlChatSurface({
                 title={`Seat: ${selectedSeatLabel}`}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                  <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◎</span>
+                  <span style={{ width: 14, height: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', flexShrink: 0 }}>
+                    <Bot size={13} strokeWidth={1.9} />
+                  </span>
                   <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{selectedSeatLabel}</span>
                 </span>
                 <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
@@ -1375,7 +1378,9 @@ export function MissionControlChatSurface({
                 title={`Model: ${optimisticModelLabel ?? displayModelLabel}`}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                  <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◉</span>
+                  <span style={{ width: 14, height: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', flexShrink: 0 }}>
+                    <Cpu size={13} strokeWidth={1.9} />
+                  </span>
                   <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{modelTriggerLabel}</span>
                 </span>
                 <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>▾</span>
@@ -1407,7 +1412,9 @@ export function MissionControlChatSurface({
                 title={`Effort: ${effortTriggerLabel}`}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                  <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>◈</span>
+                  <span style={{ width: 14, height: 14, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', flexShrink: 0 }}>
+                    <Brain size={13} strokeWidth={1.9} />
+                  </span>
                   <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{effortTriggerLabel}</span>
                 </span>
                 <span style={{ fontSize: 11, color: 'var(--text-ghost)', flexShrink: 0 }}>{effortInteractive ? '▾' : '—'}</span>
@@ -1431,7 +1438,7 @@ export function MissionControlChatSurface({
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 30, flexShrink: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
             <button
               type="button"
