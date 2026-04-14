@@ -14,6 +14,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
+## [CORR-20260414-1830]
+
+**Trigger:** Philippe pointed out that the Mission Control Chat top-bar pass looked cleaner but several planned/expected behaviors were still missing or broken: dropdowns did not actually open, the control grouping was off, WS/SESS stayed text-heavy, model readback drifted, and I even replied to ghost/system chatter.
+**What was wrong:** I let a visual compaction pass stop at lint/build and described it as effectively done without verifying the actual interactive behavior and readback truth in the rendered surface. That meant I solved spacing while missing core functionality and left parts of the implementation plan unfinished.
+**Lesson:** For interactive UI slices, do not call the work done on code shape + build alone. Verify the real behavior path the user cares about: menus open, controls sit in the intended lane, status signals read correctly, and runtime readback matches live state. If the plan includes behavior changes, a cosmetic-only landing is not a valid stop condition.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260414-1411]
 
 **Trigger:** Philippe pointed out that I had started editing `runtime-bridge-ws-sidecar.js` even though I had said I would investigate first and not touch anything yet.
