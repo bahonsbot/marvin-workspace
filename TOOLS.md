@@ -184,7 +184,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - bridge entry points: `projects/mission-control/scripts/seat-bridge.mjs` and `/api/agents/seat-bridge`
   - Sudo uses the real Mission Control orchestration backend
   - Vantage uses persistent lead session `agent:main:content-seo-team-lead`
-  - specialist seats (`agent:language-tutor:main`, `agent:sportsbet-advisor:main`, `agent:trading-advisor:main`, `agent:job-advisor:main`) currently bridge as persistent seat sessions under the **main** runtime with seat-specific activation/continuity context
+  - specialist seats (`agent:language-tutor:main`, `agent:sportsbet-advisor:main`, `agent:trading-advisor:main`, `agent:job-advisor:main`) bridge through Mission Control with seat-specific activation/continuity context, but their durable session logs may live under the matching agent storage roots (for example `/data/.openclaw/agents/job-advisor/sessions`) rather than only under `/data/.openclaw/agents/main/sessions`
   - current config truth: `openclaw agents list` shows only `main`; do not assume specialist seat slugs are valid `openclaw agent --agent ...` targets here unless runtime config changes later
   - cross-session `sessions_send` is not a reliable bridge path in this setup because visibility is restricted; use the seat-bridge transport instead
   - Apr 15 workspace unification note: seat-local specialist roots like `/data/.openclaw/workspace-job-advisor` still keep their runtime/bootstrap files (`.openclaw/`, AGENTS, etc.), but their content layer now aliases shared specialist truth via symlinks for `memory`, `artifacts`, `.learnings`, `MEMORY.md`, `SKILLS.md`, `WORKSPACE.md`, plus shared `skills/` and `agent-workspaces/`

@@ -47,6 +47,16 @@ Command/tool failures and exceptions.
 **Priority:** high
 **Status:** resolved
 
+## [ERR-20260415-1555]
+
+**Context:** Philippe used the Link seat in Mission Control for Hospitable application-question drafting. The UI showed a brief `WORKING` indicator and a tool run, then went back to `READY` with no visible assistant text.
+**What failed:** Link did generate assistant replies in the seat's own transcript, including a short acknowledgment and a full draft answer block, but Mission Control failed to surface those assistant messages in the visible seat transcript even though tool activity and status changes were reflected. This makes the seat look mute when the underlying specialist session actually answered.
+**Suggested fix:** audit the specialist-seat bridge / transcript-merging path so assistant text messages from agent-level seat sessions are mirrored into the Mission Control Chat transcript with the same reliability as tool events. Also verify why the seat session is not visible from the current-session `sessions_list` perspective, to avoid debugging blind spots.
+**Resolution:** Resolved Apr 15 by teaching `projects/mission-control/lib/runtime-bridge-history.ts` to load transcript history from the session root that matches the target agent slug (for example `/data/.openclaw/agents/job-advisor/sessions`) instead of assuming everything lives under `/data/.openclaw/agents/main/sessions`. Verified by hitting `/api/runtime-bridge/history?sessionKey=agent:job-advisor:main` and confirming Link's missing acknowledgment + draft answers now appear in the returned history entries.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260414-1418]
 
 **Context:** Mission Control Chat `Session connected` badge started appearing about 5 seconds late again after the upgrade/restart loops.
