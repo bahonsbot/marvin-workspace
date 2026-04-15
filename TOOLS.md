@@ -101,17 +101,15 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
 | skill-level-check | Sun 07:00 weekly | Weekly hybrid skill assessment (test mode for objective skills, challenge mode for creative skills) | none |
 | audit-sensitive-snapshot | Sun 03:15 | Weekly sensitive-file drift snapshot via runner task | none |
 | enrichment-ab-review | Mon 10:00 | Weekly enrichment A/B review | none |
+| entity-lifecycle-manager | Sun 05:00 | Demote old life/ entities to archive | none |
+| data-manager | Mon 05:00 | JSONL/log rotation (>30 days); also truncates .err.log >10MB and prunes cron-run-details | none |
+| dependency-update-audit | Mon 10:30 | Check for outdated dependencies (workspace Python, futures-bot Python, autonomous-kanban npm, mission-control npm) | none |
 | session-log-cleanup | 05:20 daily | Purge OpenClaw raw session log files older than 5 days from `/data/.openclaw/agents/main/sessions` | none |
 | nightly-memory-extraction | 01:00 daily | Durable memory extraction | none |
 
-**Disabled legacy OpenClaw cron wrapper posture:**
-- After the Mar 19 deterministic scheduler cutover, old disabled OpenClaw wrapper jobs are cleanup candidates, not runtime truth.
-- `deterministic-scheduler-watchdog` was removed on 2026-03-23 after host-side verification confirmed `marvin-deterministic-scheduler.service` is installed, enabled, and healthy.
-- Do not treat disabled wrapper timeout/error metadata as current runtime health for tasks now owned by `scripts/deterministic_scheduler.py`.
-| entity-lifecycle-manager | Sun 05:00 weekly | Demote old life/ entities to archive | none |
-| data-manager | Sun 05:00 weekly | JSONL/log rotation (>30 days) | none |
-| dependency-update-audit | Mon 10:30 weekly | Check for outdated dependencies (workspace Python, futures-bot Python, autonomous-kanban npm, mission-control npm) | none |
-| news-feed-generator | DISABLED | Superseded by RSS/Reddit monitor pipeline | none |
+**Disabled / superseded jobs:**
+- `news-feed-generator`: DISABLED — superseded by RSS/Reddit monitor pipeline
+- `deterministic-scheduler-watchdog`: removed 2026-03-23 (marvin-deterministic-scheduler.service is the live supervisor)
 
 **Cron Context-Sharing Pipeline (Market Intel):**
 - `rss-feed-monitor` writes RSS context
@@ -157,7 +155,11 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - Apr 14 startup-validation hardening: the detached helper for manual autonomous tasks may exit before session artifacts appear; startup checks should fail fast on real launch errors / truly early exits, but should not require immediate session-log creation as the only success signal
   - Apr 14 planning-only guard hardening: ignore preview/runtime log churn (`projects/mission-control/.preview-runtime/*.log`, `runtime-bridge-ws-sidecar.log`, `preview-origin-proxy.log`) when validating planning-only tasks, or clean planning tasks can be falsely rejected as non-plan edits
   - Apr 14 session-id limit note: OpenAI Codex can reject autonomous runs when long session ids push the derived `prompt_cache_key` past 64 chars; current fix uses shortened hashed `mc-auto-<hash>-<timestamp>` ids
-- Apr 14 WS sidecar latency note: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` should cache the gateway websocket target in-process. Calling `openclaw status --json` per websocket connection added about 5 seconds of avoidable handshake delay before `connect.challenge`.
+- Apr 14 runtime-behavior updates (verified fixed):
+  - WS sidecar gateway target is cached in-process in `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js`; connect challenge latency dropped from about 5 seconds to about 15 milliseconds by removing per-connection `openclaw status --json` probes
+  - autonomous session ids now use shortened hashed form `mc-auto-<10-char-hash>-<timestamp>` because OpenAI Codex rejects overlong derived `prompt_cache_key` values above 64 chars
+  - Mission Control task model-default alignment is now explicit: Marvin tasks default to `codex5.4 -> gpt-5.4`, not the runtime lightweight default
+  - detached autonomous-task startup validation is hardened to fail fast on real launch errors / truly early exits without requiring immediate session-log creation as the only success signal
   - registry source: `/data/.openclaw/agents/main/sessions/sessions.json`
   - important runtime truth: this file is keyed directly by `sessionKey`; do not assume a nested `sessions.*` wrapper when resolving a session
   - session logs: `/data/.openclaw/agents/main/sessions/<sessionId>.jsonl`
