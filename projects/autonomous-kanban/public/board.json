@@ -2,6 +2,11 @@
   "board": {
     "todo": [
       {
+        "id": "8fa9153d",
+        "text": "[Career] Draft: Creative-tool automation script plan",
+        "column": "todo"
+      },
+      {
         "id": "9d9048a6",
         "text": "[Trading] Draft: Actionable Alpha dashboard slice",
         "column": "todo"
@@ -22,14 +27,8 @@
         "column": "todo"
       }
     ],
-    "inprogress": [
-      {
-        "id": "e4dc1d35",
-        "text": "[Career] Draft: Creative-tool automation script plan",
-        "column": "inprogress"
-      }
-    ],
+    "inprogress": [],
     "done": []
   },
-  "updatedAt": "2026-04-15T10:00:24.000Z"
+  "updatedAt": "2026-04-15T10:00:26.000Z"
 }
