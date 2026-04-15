@@ -25,9 +25,9 @@
 ## In Progress
 ## Open Backlog
 
-- [Career] Draft: Creative-tool automation script plan
-**Brief:** define one scoped automation script for Blender, Unreal Engine, or After Effects that removes a real repetitive setup step; deliverable: markdown spec in projects/creative-practice/ or the relevant tool workspace with target app, inputs/outputs, edge cases, and first prototype step
-| Why: Reduces repetitive manual setup work while moving directly toward the current creative-tool automation goal | Proof: Spec names one target app, one concrete repetitive task, the intended input/output flow, and a believable first prototype scope | Unlocks: Unlocks a first real automation prototype instead of another generic practice exercise
+- [Trading] Draft: Actionable Alpha dashboard slice
+**Brief:** spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support
+| Why: Turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next | Proof: Spec defines one named module, its inputs, presentation logic, and why it improves trading decisions | Unlocks: Unlocks a buildable next UI/UX implementation step for the trading dashboard
 - [Other] Analyze: OpenClaw loop-pattern audit
 **Brief:** review recent OpenClaw logs to identify one concrete repetitive prompt or looping behavior, then propose a bounded gate, prompt fix, or tool-definition improvement; deliverable: markdown audit in projects/_ops/ with evidence, root-cause hypothesis, and recommended guard
 | Why: Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output | Proof: Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift | Unlocks: Unlocks a safer token-efficiency or reliability fix with clear evidence behind it
@@ -38,7 +38,7 @@
 **Brief:** compare 3 candidate APIs for real-time market-data ingestion and score them on latency, coverage, pricing, integration friction, and output usefulness; deliverable: markdown shortlist in projects/market-intel/notes/ with a recommendation and integration notes
 | Why: Bridges the gap between raw market data sources and a real integration decision instead of leaving the API goal vague | Proof: Shortlist names 3 concrete APIs with decision criteria, recommendation, and next integration step | Unlocks: Unlocks a more credible real-time data integration task for the trading stack
 
+
 ## Review
 - [Trading] Draft: Actionable Alpha dashboard slice
-**Brief:** spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support
-| Why: Turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next | Proof: Spec defines one named module, its inputs, presentation logic, and why it improves trading decisions | Unlocks: Unlocks a buildable next UI/UX implementation step for the trading dashboard
+- Create a clean implementation plan to change the top section in Chat to one row
