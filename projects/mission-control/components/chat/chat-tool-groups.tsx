@@ -49,12 +49,42 @@ function toolCommand(tool: ToolGroupRow['entry']): string | null {
   return typeof tool.args?.command === 'string' ? tool.args.command : null;
 }
 
+function lineLabel(count: number): string {
+  return `${count} line${count === 1 ? '' : 's'}`;
+}
+
+function compactInlineText(value: string, maxChars: number): string {
+  const collapsed = value.replace(/\s+/g, ' ').trim();
+  if (!collapsed) return '';
+  if (collapsed.length <= maxChars) return collapsed;
+  return `${collapsed.slice(0, Math.max(1, maxChars - 1)).trimEnd()}…`;
+}
+
+function toolMetaSummary(tool: ToolGroupRow['entry']): string | null {
+  if (!tool.meta) return null;
+  const firstMeaningfulLine = tool.meta
+    .split('\n')
+    .map((line) => line.trim())
+    .find(Boolean);
+  const inline = compactInlineText(firstMeaningfulLine ?? tool.meta, 88);
+  if (!inline) return null;
+
+  if (tool.name === 'read' || tool.name === 'exec') {
+    return `${lineLabel(lineCount(tool.meta))} · ${inline}`;
+  }
+
+  return compactInlineText(tool.meta, 120);
+}
+
 export function toolPreview(tool: ToolGroupRow['entry']): string {
   const filePath = toolPath(tool);
   const command = toolCommand(tool);
+  const metaSummary = toolMetaSummary(tool);
   if ((tool.name === 'read' || tool.name === 'write' || tool.name === 'edit') && filePath) return compactPath(filePath);
+  if (tool.name === 'read' && metaSummary) return `Read result · ${metaSummary}`;
   if (tool.name === 'exec' && command) return command;
-  return tool.meta || tool.name;
+  if (tool.name === 'exec' && metaSummary) return `Output · ${metaSummary}`;
+  return metaSummary || tool.meta || tool.name;
 }
 
 export function isLowSignalExecTool(tool: ToolGroupRow['entry']): boolean {
@@ -97,6 +127,7 @@ function ToolDetailBlock({ row }: { row: ToolGroupRow }) {
   const artifact = artifactFromTool(tool);
   const content = typeof tool.args?.content === 'string' ? tool.args.content : null;
   const range = toolRange(tool);
+  const showStructuredResult = !artifact && Boolean(tool.meta) && (tool.name === 'read' || tool.name === 'exec');
 
   return (
     <div style={{ display: 'grid', gap: 10 }}>
@@ -113,6 +144,14 @@ function ToolDetailBlock({ row }: { row: ToolGroupRow }) {
       ) : null}
       {!artifact && tool.name === 'write' && content !== null && filePath ? (
         <ChatFileContentView title="Written file" filePath={filePath} content={content} defaultExpanded={false} />
+      ) : null}
+      {showStructuredResult ? (
+        <ChatFileContentView
+          title={tool.name === 'read' ? 'Read result' : 'Command output'}
+          filePath={filePath ?? command ?? `${toolLabel(tool.name)} output`}
+          content={tool.meta ?? ''}
+          defaultExpanded={false}
+        />
       ) : null}
       <div style={{ display: 'grid', gap: 6, fontSize: 12, color: 'var(--text-muted)' }}>
         {filePath ? (
@@ -132,7 +171,7 @@ function ToolDetailBlock({ row }: { row: ToolGroupRow }) {
             <strong style={{ color: 'var(--text-body)' }}>Range:</strong> {range}
           </div>
         ) : null}
-        {tool.meta ? (
+        {tool.meta && !showStructuredResult ? (
           <div>
             <strong style={{ color: 'var(--text-body)' }}>Result:</strong> {tool.meta}
           </div>
