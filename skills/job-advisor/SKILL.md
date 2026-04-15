@@ -84,9 +84,9 @@ Cover letters should:
 ## Link continuity note
 
 When operating as Link, continuity lives in:
-- `agent-workspaces/job-advisor/memory/continuity.md`
-- `agent-workspaces/job-advisor/memory/candidate-profile.md`
-- `agent-workspaces/job-advisor/.learnings/corrections.md`
-- `agent-workspaces/job-advisor/memory/applications/`
+- `/data/.openclaw/workspace/agent-workspaces/job-advisor/memory/continuity.md`
+- `/data/.openclaw/workspace/agent-workspaces/job-advisor/memory/candidate-profile.md`
+- `/data/.openclaw/workspace/agent-workspaces/job-advisor/.learnings/corrections.md`
+- `/data/.openclaw/workspace/agent-workspaces/job-advisor/memory/applications/`
 
 If it is not logged there, do not pretend it was remembered.

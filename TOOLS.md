@@ -187,6 +187,9 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - specialist seats (`agent:language-tutor:main`, `agent:sportsbet-advisor:main`, `agent:trading-advisor:main`, `agent:job-advisor:main`) currently bridge as persistent seat sessions under the **main** runtime with seat-specific activation/continuity context
   - current config truth: `openclaw agents list` shows only `main`; do not assume specialist seat slugs are valid `openclaw agent --agent ...` targets here unless runtime config changes later
   - cross-session `sessions_send` is not a reliable bridge path in this setup because visibility is restricted; use the seat-bridge transport instead
+  - Apr 15 workspace unification note: seat-local specialist roots like `/data/.openclaw/workspace-job-advisor` still keep their runtime/bootstrap files (`.openclaw/`, AGENTS, etc.), but their content layer now aliases shared specialist truth via symlinks for `memory`, `artifacts`, `.learnings`, `MEMORY.md`, `SKILLS.md`, `WORKSPACE.md`, plus shared `skills/` and `agent-workspaces/`
+  - canonical specialist data remains under `/data/.openclaw/workspace/agent-workspaces/<seat>/...`; seat-local roots are compatibility/runtime shells, not a second truth store
+  - repair/check script: `python3 scripts/specialist_workspace_aliases.py` (`--apply` to recreate safe missing aliases after a seat re-seed)
 - Apr 11 Home/news posture:
   - Home now uses two equal-width vertically scrollable readers under the hero: `Market Watch` and `Custom News`
   - `Custom News` is generated from FD, NRC, and IEX into `projects/mission-control/data/custom-news-briefings.json`

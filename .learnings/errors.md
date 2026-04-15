@@ -37,6 +37,16 @@ Command/tool failures and exceptions.
 **Priority:** medium
 **Status:** resolved
 
+## [ERR-20260415-1405]
+
+**Context:** Philippe asked Link to use `agent-workspaces/job-advisor/memory/applications/philippe-master-resume-2026-04-13.md` while the specialist seats were running through their dedicated seat-local workspace mounts.
+**What failed:** specialist seats like Link still become fragile when the user provides shared-workspace files via relative `agent-workspaces/<seat>/...` paths. The bridge prompts were fixed on Apr 13 to inject absolute shared paths, but the seat-local mounts remained mostly scaffolds, so user-supplied relative paths could still resolve against `/data/.openclaw/workspace-<seat>` and fail. Link then wandered into unnecessary file/skill discovery instead of converting the path or asking for clarification.
+**Suggested fix:** harden specialist handling in two places: (1) normalize user-supplied `agent-workspaces/<seat>/...` paths to `/data/.openclaw/workspace/agent-workspaces/<seat>/...` before attempting reads, and (2) update specialist-facing skill/continuity docs to prefer absolute shared-workspace paths where seat-local mounts are not the source of truth.
+**Resolution:** Resolved Apr 15 by aliasing each seat-local specialist content layer back to the shared specialist workspace (`memory`, `artifacts`, `.learnings`, `MEMORY.md`, `SKILLS.md`, `WORKSPACE.md`, shared `skills/`, shared `agent-workspaces/`) and updating Link's skill docs to prefer absolute shared-workspace continuity paths.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260414-1418]
 
 **Context:** Mission Control Chat `Session connected` badge started appearing about 5 seconds late again after the upgrade/restart loops.
