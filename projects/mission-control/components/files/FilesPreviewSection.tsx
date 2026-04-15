@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CodeMirrorEditor } from '@/components/editor/CodeMirrorEditor';
 import { EditorStatusBanner } from '@/components/editor/EditorStatusBanner';
 import { FileConflictCompare } from '@/components/files/FileConflictCompare';
@@ -24,6 +24,7 @@ function isConflictMessage(message: string | null) {
 }
 
 export function FilesPreviewSection({ initialPreview }: FilesPreviewSectionProps) {
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   const [preview, setPreview] = useState<FilesPreview | null>(clonePreview(initialPreview));
   const [draft, setDraft] = useState(initialPreview?.textContent ?? '');
   const [saveState, setSaveState] = useState<SaveState>('idle');
@@ -37,6 +38,18 @@ export function FilesPreviewSection({ initialPreview }: FilesPreviewSectionProps
     setMessage(null);
     setConflictPreview(null);
   }, [initialPreview]);
+
+  useEffect(() => {
+    if (!preview?.file?.path) return;
+    if (typeof window === 'undefined') return;
+    if (window.location.hash !== '#file-preview') return;
+
+    const frame = window.requestAnimationFrame(() => {
+      sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [preview?.file?.path]);
 
   const textFile = preview?.file?.kind === 'text' ? preview.file : null;
   const canEdit = Boolean(textFile?.writable);
@@ -151,7 +164,7 @@ export function FilesPreviewSection({ initialPreview }: FilesPreviewSectionProps
   }
 
   return (
-    <div id="file-preview" style={{ display: 'grid', gap: 10, scrollMarginTop: 24 }}>
+    <div ref={sectionRef} id="file-preview" style={{ display: 'grid', gap: 10, scrollMarginTop: 24 }}>
       <FilesMetaStrip
         path={preview.file.path}
         kind={preview.file.kind}

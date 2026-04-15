@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 
 const STORAGE_KEY = 'mission-control:files:recent';
-const MAX_RECENT_FILES = 8;
+const MAX_RECENT_FILES = 3;
 
 function dirname(filePath: string): string {
   const parts = filePath.split('/').filter(Boolean);

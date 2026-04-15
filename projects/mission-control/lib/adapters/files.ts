@@ -2,7 +2,7 @@ import 'server-only';
 
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import type { FilesEntry, FilesListing, FilesPreview, FilesRoot } from '@/lib/types/contracts';
+import type { FilesEntry, FilesListing, FilesNameSearchResponse, FilesNameSearchResult, FilesPreview, FilesRoot } from '@/lib/types/contracts';
 
 const WORKSPACE_ROOT = process.env.OPENCLAW_WORKSPACE_ROOT ?? '/data/.openclaw/workspace';
 
@@ -51,6 +51,7 @@ const HIDDEN_EXACT = new Set(['.learnings']);
 const HIDDEN_PREFIXES = ['.learnings/'];
 const WRITE_BLOCKED_EXACT = new Set(['MEMORY.md', 'memory', '.learnings']);
 const WRITE_BLOCKED_PREFIXES = ['memory/', '.learnings/'];
+const FILES_NAME_SEARCH_LIMIT = 50;
 
 function normalizeRelative(input: string | null | undefined): string {
   if (!input || input === '.') return '.';
@@ -128,6 +129,12 @@ function buildBreadcrumb(relativePath: string): Array<{ label: string; path: str
   return crumbs;
 }
 
+function shouldSkipEntry(entryName: string, entryPath: string): boolean {
+  if (entryName.startsWith('.next')) return true;
+  if (entryName.startsWith('node_modules')) return true;
+  return isHiddenRelative(entryPath);
+}
+
 async function existsDirectory(relativePath: string): Promise<boolean> {
   const absolute = toAbsolute(relativePath);
   if (!absolute) return false;
@@ -194,9 +201,7 @@ export async function getDirectoryListing(requestedPath: string | null | undefin
 
     const visibleEntries = await Promise.all(
       entriesRaw
-        .filter((entry) => !entry.name.startsWith('.next'))
-        .filter((entry) => !entry.name.startsWith('node_modules'))
-        .filter((entry) => !isHiddenRelative(path.posix.join(resolvedDirectoryPath === '.' ? '' : resolvedDirectoryPath, entry.name)))
+        .filter((entry) => !shouldSkipEntry(entry.name, path.posix.join(resolvedDirectoryPath === '.' ? '' : resolvedDirectoryPath, entry.name)))
         .map(async (entry): Promise<FilesEntry | null> => {
           const absolute = path.join(directoryAbsolute, entry.name);
           const relative = toPublicPath(absolute);
@@ -248,6 +253,105 @@ export async function getDirectoryListing(requestedPath: string | null | undefin
       entries: [],
     };
   }
+}
+
+export async function getFilesNameSearch(
+  queryInput: string | null | undefined,
+  options?: { limit?: number | null },
+): Promise<FilesNameSearchResponse> {
+  const query = (queryInput ?? '').trim();
+  const limit = options?.limit && options.limit > 0 ? Math.min(options.limit, FILES_NAME_SEARCH_LIMIT) : FILES_NAME_SEARCH_LIMIT;
+
+  if (!query) {
+    return {
+      status: 'partial',
+      query: '',
+      limit,
+      total: 0,
+      truncated: false,
+      results: [],
+      refreshedAt: new Date().toISOString(),
+    };
+  }
+
+  const workspaceAbsolute = toAbsolute('.');
+  if (!workspaceAbsolute) {
+    return {
+      status: 'stub',
+      query,
+      limit,
+      total: 0,
+      truncated: false,
+      results: [],
+      refreshedAt: new Date().toISOString(),
+    };
+  }
+
+  const results: FilesNameSearchResult[] = [];
+  const needle = query.toLocaleLowerCase();
+  const pendingDirectories: Array<{ relative: string; absolute: string }> = [{ relative: '.', absolute: workspaceAbsolute }];
+  let totalMatches = 0;
+  let hadReadError = false;
+
+  while (pendingDirectories.length > 0) {
+    const nextDirectory = pendingDirectories.shift();
+    if (!nextDirectory) break;
+
+    let entries;
+    try {
+      entries = await fs.readdir(nextDirectory.absolute, { withFileTypes: true });
+    } catch {
+      hadReadError = true;
+      continue;
+    }
+
+    for (const entry of entries) {
+      const entryRelative = path.posix.join(nextDirectory.relative === '.' ? '' : nextDirectory.relative, entry.name);
+      if (shouldSkipEntry(entry.name, entryRelative)) continue;
+      if (entry.isSymbolicLink()) continue;
+
+      const entryAbsolute = path.join(nextDirectory.absolute, entry.name);
+      const entryKind = entry.isDirectory() ? 'directory' : 'file';
+
+      if (entry.name.toLocaleLowerCase().includes(needle)) {
+        try {
+          const stat = await fs.stat(entryAbsolute);
+          totalMatches += 1;
+          if (results.length < limit) {
+            results.push({
+              name: entry.name,
+              path: entryRelative,
+              kind: entryKind,
+              directoryPath: nextDirectory.relative,
+              updatedAt: formatUpdatedAt(stat),
+              size: entryKind === 'file' ? stat.size : null,
+            });
+          }
+        } catch {
+          hadReadError = true;
+        }
+      }
+
+      if (entry.isDirectory()) {
+        pendingDirectories.push({ relative: entryRelative, absolute: entryAbsolute });
+      }
+    }
+  }
+
+  results.sort((a, b) => {
+    if (a.kind !== b.kind) return a.kind === 'directory' ? -1 : 1;
+    return a.path.localeCompare(b.path);
+  });
+
+  return {
+    status: hadReadError ? 'partial' : 'adapter-backed',
+    query,
+    limit,
+    total: totalMatches,
+    truncated: totalMatches > limit,
+    results,
+    refreshedAt: new Date().toISOString(),
+  };
 }
 
 export async function getFilePreview(requestedPath: string | null | undefined): Promise<FilesPreview> {

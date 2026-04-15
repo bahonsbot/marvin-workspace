@@ -745,6 +745,25 @@ export interface FilesPreview {
   message?: string;
 }
 
+export interface FilesNameSearchResult {
+  name: string;
+  path: string;
+  kind: FileEntryKind;
+  directoryPath: string;
+  updatedAt: string | null;
+  size: number | null;
+}
+
+export interface FilesNameSearchResponse {
+  status: IntegrationStatus;
+  query: string;
+  limit: number;
+  total: number;
+  truncated: boolean;
+  results: FilesNameSearchResult[];
+  refreshedAt: string;
+}
+
 export type SearchScope = 'all' | 'memory' | 'files' | 'docs' | 'projects' | 'scripts';
 export type SearchSourceKind = Exclude<SearchScope, 'all'>;
 
