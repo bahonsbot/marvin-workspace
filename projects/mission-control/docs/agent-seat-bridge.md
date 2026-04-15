@@ -86,6 +86,21 @@ POST body:
 
 These seats currently run as persistent specialist-flavored seat sessions under the **main** runtime, not as separate registered OpenClaw agent ids. The bridge injects the seat's own activation/continuity instructions so Marvin can use them truthfully without falling back to spawned subagents.
 
+#### Specialist activation default (do not skip)
+
+All specialist activation prompts should include the shared brief-presence rule:
+
+- one short in-character acknowledgment when enough material is already present
+- one short verbal handoff on meaningful completion
+- no chatty/theatrical filler
+
+Implementation guardrail:
+
+- in `lib/agents/definitions.ts`, wrap specialist `starterPrompt` strings with `withSpecialistPresenceHandoff(...)`
+- in `scripts/seat-bridge.mjs`, wrap specialist `starterPrompt` strings with the same helper
+
+When adding a new specialist seat, use that helper by default unless Philippe explicitly asks for a different interaction behavior.
+
 ## Notes
 
 - The bridge is for **Marvin-triggered seat execution**.
