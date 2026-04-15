@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260416-0144]
+
+**What failed:** live model/fallback readout stayed noisy during rehearsal work
+**Error:** Mission Control / Control UI intermittently surfaced fallback-model chatter such as fallback activation/clearing even while runtime `session_status` still reported the live session on `gpt-5.4`. This created operator doubt about whether the active model had really dropped or whether the UI/status layer was over-reporting the configured fallback chain.
+**Context:** Apr 16 overnight OpenClaw `v2026.4.12` rehearsal, while live preview and live runtime remained in use on the main lane
+**Suggested fix:** when the UI reports fallback activity, verify against runtime truth first (`session_status`, live status/readback, actual reply behavior). Treat the UI message as untrusted until the runtime confirms a real active-model switch. Later, audit the Control UI readout path so configured fallback chains are not presented like confirmed runtime transitions.
+**Resolution:** Not fully resolved yet. Operational workaround is to trust runtime `session_status` over intermittent UI fallback chatter unless the runtime itself confirms a live model drop.
+
+**Priority:** medium
+**Status:** pending
+
 ## [ERR-20260416-0102]
 
 **What failed:** rehearsal `v2026.4.12` memory search after state copy
