@@ -47,6 +47,16 @@ Command/tool failures and exceptions.
 **Priority:** high
 **Status:** resolved
 
+## [ERR-20260415-1736]
+
+**Context:** After the specialist seat history-loader fix, Link's messages appeared correctly only after a hard browser refresh. Live use still showed `WORKING` briefly and then `READY`, while the assistant reply stayed missing until manual reload.
+**What failed:** the specialist seat bridge was not reliably delivering live `chat.final` events back into the current Mission Control tab, and `useRuntimeBridge` was letting the send path look effectively idle too early. Result: the transcript only updated after a forced history reload, not when the seat actually finished.
+**Suggested fix:** keep specialist sends visually in-flight after the initial ack, then treat lifecycle completion as a trustworthy signal to force-hydrate the active specialist transcript before returning to `READY`.
+**Resolution:** Resolved Apr 15 in `projects/mission-control/hooks/useRuntimeBridge.ts` by keeping seat sends active after the initial ack and forcing transcript hydration on lifecycle end. Philippe then tested Milou and reported the chat flow ran smoothly without the old hard-refresh step.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260415-1555]
 
 **Context:** Philippe used the Link seat in Mission Control for Hospitable application-question drafting. The UI showed a brief `WORKING` indicator and a tool run, then went back to `READY` with no visible assistant text.

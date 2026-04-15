@@ -190,6 +190,8 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - Apr 15 workspace unification note: seat-local specialist roots like `/data/.openclaw/workspace-job-advisor` still keep their runtime/bootstrap files (`.openclaw/`, AGENTS, etc.), but their content layer now aliases shared specialist truth via symlinks for `memory`, `artifacts`, `.learnings`, `MEMORY.md`, `SKILLS.md`, `WORKSPACE.md`, plus shared `skills/` and `agent-workspaces/`
   - canonical specialist data remains under `/data/.openclaw/workspace/agent-workspaces/<seat>/...`; seat-local roots are compatibility/runtime shells, not a second truth store
   - repair/check script: `python3 scripts/specialist_workspace_aliases.py` (`--apply` to recreate safe missing aliases after a seat re-seed)
+  - transcript/debugging note: specialist seat history and live hydration must follow the matching agent storage roots as well as the seat key. For example, `agent:job-advisor:main` history lives under `/data/.openclaw/agents/job-advisor/sessions`, not only under `/data/.openclaw/agents/main/sessions`
+  - visibility note: current-session `sessions_list` may not expose those agent-owned specialist sessions even when the seat is working normally, so debug via the matching agent `sessions.json` + JSONL logs when seat replies appear missing
 - Apr 11 Home/news posture:
   - Home now uses two equal-width vertically scrollable readers under the hero: `Market Watch` and `Custom News`
   - `Custom News` is generated from FD, NRC, and IEX into `projects/mission-control/data/custom-news-briefings.json`

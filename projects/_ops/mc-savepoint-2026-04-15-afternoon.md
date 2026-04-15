@@ -265,3 +265,103 @@ If/when Mission Control is reopened next, prefer one of these bounded lanes:
 - Philippe explicitly asked for a proper save before touching anything else; this file is part of that continuity handoff
 - The current Mission Control posture after this block is: calmer, more truthful, more usable, and intentionally not over-expanded
 - Treat this as a stable checkpoint, not an invitation to reopen half the app because the paint is still wet elsewhere
+
+## Late-afternoon addendum — specialist seats
+
+### Additional commits after the original savepoint
+- `c7333f1` — `Unify specialist workspace content paths`
+- `71221f6` — `Give Link a brief greeting and handoff`
+- `9d76c89` — `Align specialist seat greeting and handoff policy`
+- `df44dc1` — `Fix specialist seat transcript history loading`
+- `ad6b1a3` — `Fix live specialist seat transcript hydration`
+
+### What changed after the earlier savepoint
+
+#### 1. Specialist workspace content paths were unified
+The earlier Link path confusion was removed without destroying the seat-local runtime roots.
+
+What is now true:
+- `/data/.openclaw/workspace/agent-workspaces/<seat>/...` remains canonical specialist truth
+- seat-local roots like `/data/.openclaw/workspace-job-advisor` still keep runtime/bootstrap files
+- but their meaningful content layer now aliases shared truth for:
+  - `memory`
+  - `artifacts`
+  - `.learnings`
+  - `MEMORY.md`
+  - `SKILLS.md`
+  - `WORKSPACE.md`
+  - shared `skills/`
+  - shared `agent-workspaces/`
+
+Why it mattered:
+- Link was stumbling on relative `agent-workspaces/job-advisor/...` inputs because the seat-local scaffold and the shared workspace were not resolving to one data layer
+
+Result:
+- both seat-local-style paths and shared-workspace-style paths now resolve against the same specialist content
+- this change applies to Japin, Johan, Milou, and Link
+
+#### 2. Link was given visible manners, then the rule was generalized
+Philippe noticed the quality of Link’s output improved after the workspace fix, but Link still felt too silent. That diagnosis was correct.
+
+What landed:
+- Link now has an explicit brief-greeting + brief-handoff rule
+- Japin, Johan, and Milou were checked and brought into parity
+- Mission Control now has a reusable specialist activation helper so this behavior does not depend on seat-by-seat prompt drift
+- the specialist seat-bridge doc now records the rule for future-added specialists
+
+Accepted behavior now:
+- one short in-character acknowledgment when enough material is already present
+- one short verbal handoff on meaningful completion
+- no chatty theater, no silent daemon behavior
+
+#### 3. The first specialist transcript fix solved hard-refresh history
+When Philippe tested Link with a real Hospitable application-question flow, the UI showed tool activity and `WORKING -> READY`, but not Link’s actual assistant text.
+
+Raw-seat diagnosis found:
+- Link **did** reply in her own seat transcript
+- the visible Mission Control transcript missed those replies because the history loader only read `/data/.openclaw/agents/main/sessions`
+- but the real seat transcript lived under the specialist agent storage root, for example `/data/.openclaw/agents/job-advisor/sessions`
+
+Fix:
+- `runtime-bridge-history.ts` now loads history from the agent-specific session root that matches the target session key
+
+Result:
+- hard refresh history now resolves the real specialist assistant transcript instead of a main-session-only partial view
+
+#### 4. The second specialist transcript fix solved live updates without hard refresh
+After the history fix, Philippe still found a second bug:
+- specialist replies would appear only after a hard browser refresh
+- live usage still showed `WORKING` briefly and then `READY`, while the assistant reply stayed missing
+
+Root cause:
+- specialist seats were not reliably surfacing live `chat.final` events into the current Mission Control tab
+- `useRuntimeBridge` was also letting the send path look effectively idle too early after the initial ack
+
+Fix:
+- keep specialist sends visually in-flight after the initial ack
+- treat lifecycle completion as a trustworthy signal to force-hydrate the active specialist transcript before returning to `READY`
+
+Result:
+- the seat no longer depends on a manual hard refresh to show the assistant reply
+- this fix was done at the shared hook level, so it applies across specialist seats
+
+#### 5. Real-world verification after the live fix
+Philippe then tested Milou and reported:
+- the chat flow ran smoothly
+- the last patch likely fixed the missing live-update behavior
+
+This is the best evidence we have so far that the shared live specialist hydration fix is behaving correctly outside the Link-specific reproduction path.
+
+### Current specialist-seat state after the addendum
+- content layer unified across seat-local and shared specialist paths
+- Link / Japin / Johan / Milou all have the same brief greeting + handoff rule
+- specialist history hydration follows agent-specific session roots
+- specialist live transcript hydration no longer depends on hard refresh after completion
+- specialist sessions may still be invisible from the current main-session `sessions_list` view even while they are healthy; agent-local session logs remain the more reliable debug surface
+
+### Recommendation for next sessions
+Treat the specialist seats as materially stabilized for now.
+
+If reopened later, the right follow-up is not more personality tweaking. It is:
+1. one or two more real-world smoke tests across different specialist seats
+2. only then any deeper bridge cleanup if a new concrete transcript-gap case appears
