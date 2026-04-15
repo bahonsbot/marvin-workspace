@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260416-0048]
+
+**What failed:** parallel Mission Control preview safety during isolated rehearsal work
+**Error:** `projects/mission-control/scripts/preview-stop.sh` used broad `pkill` patterns such as `next-server`, `runtime-bridge-ws-sidecar.js`, and `preview-origin-proxy.js`, so stopping or restarting a rehearsal preview lane could kill the normal preview lane too and produce a `502 Bad Gateway`.
+**Context:** Apr 16 isolated OpenClaw `v2026.4.12` rehearsal bring-up with a second Mission Control preview on ports `3015/3016/3017`
+**Suggested fix:** for any multi-preview or multi-runtime setup, stop only the processes referenced by the selected runtime directory PID files, preferably using process-group aware termination. Do not use global `pkill` cleanup for shared binaries like `next-server`, sidecars, or preview proxies.
+**Resolution:** Resolved Apr 16 by rewriting `projects/mission-control/scripts/preview-stop.sh` to kill only the runtime-dir PID-file-backed process groups.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260415-1019]
 
 **Context:** Mission Control Chat preview refreshes could rehydrate older tool history rows after file/document-heavy work.

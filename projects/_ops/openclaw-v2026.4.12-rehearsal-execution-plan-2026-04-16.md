@@ -1,8 +1,56 @@
 # OpenClaw `v2026.4.12` Rehearsal Execution Plan
 
 Date: 2026-04-16
-Status: planning only
+Status: rehearsal lane brought up; P0 passed, one QMD collection-migration wrinkle found and worked around in isolated state
 Related audit: `projects/_ops/openclaw-v2026.4.12-upgrade-audit-2026-04-16.md`
+
+## Execution notes — 2026-04-16
+
+### Rehearsal lane actually created
+- Isolated OpenClaw `v2026.4.12` CLI installed at `/data/.openclaw/rehearsals/v2026.4.12/cli`
+- Isolated rehearsal state created at `/data/.openclaw/rehearsals/v2026.4.12/state`
+- Rehearsal gateway runs on `ws://127.0.0.1:19001`
+- Rehearsal Mission Control preview runs on `3015/3016/3017`
+- Live Mission Control preview remains on `3005/3006/3007`
+- Rehearsal Telegram was kept disabled
+- Dreaming / Active Memory remained disabled in the rehearsal config
+
+### Verified pass set
+- `config validate` passed for the rehearsal config
+- rehearsal gateway reached healthy `200 OK` on `/health`
+- rehearsal `status --json` showed reachable gateway metadata for `19001`
+- rehearsal Mission Control routes returned `200` for:
+  - `/general/home`
+  - `/general/chat`
+  - `/general/agents`
+  - `/general/crons`
+  - `/general/tasks`
+  - `/general/memory`
+  - `/general/files`
+- rehearsal runtime-bridge history returned `200` for `agent:main:main`
+- rehearsal cron `status` and `list` succeeded and showed the expected scheduler inventory
+- rehearsal sessions registry responded
+- rehearsal memory backend reported `backend: qmd`
+- rehearsal memory search returned results after the QMD collection workaround below
+
+### Important issue found during rehearsal
+- The original Mission Control `preview-stop.sh` was unsafe for parallel preview lanes because it used broad `pkill` patterns like `next-server`, `runtime-bridge-ws-sidecar.js`, and `preview-origin-proxy.js`.
+- In practice, stopping or restarting the rehearsal preview could also kill the normal live preview lane.
+- Fix applied in workspace source: `projects/mission-control/scripts/preview-stop.sh` now stops only the processes recorded in the selected runtime dir PID files, using process-group aware termination instead of broad global `pkill` cleanup.
+- Verified result: the rehearsal preview can now be stopped/restarted without taking down the normal preview.
+
+### QMD migration wrinkle
+- Rehearsal `memory status` initially failed over to builtin memory because the wrapper PATH did not include the local `qmd` and `bun` binaries used on this VPS.
+- Fix applied in workspace source: `scripts/openclaw-rehearsal-412.sh` now prepends `/data/.local/bin:/data/.bun/bin` so the rehearsal CLI inherits the same local QMD/Bun toolchain as the live environment.
+- After that, rehearsal `memory status` correctly reported `backend: qmd`.
+- Rehearsal `memory search` still failed at first because the isolated QMD state had a legacy collection named `memory`, while `v2026.4.12` expected the scoped collection name `memory-dir-main` during managed search.
+- Workaround applied only inside isolated rehearsal state: removed the legacy `memory` collection from the rehearsal QMD config/store so the scoped collection could be used cleanly.
+- Verified result: rehearsal `memory search "Philippe" --max-results 3 --json` returned results successfully.
+- Non-fatal note: QMD reported a boot-time embed timeout during one search pass; search still completed and produced results.
+
+### Current interpretation
+- The base `v2026.4.12` isolated rehearsal lane is viable on this host.
+- The upgrade is **not** yet promoted-ready, but it is no longer theoretical; the key remaining work is cleanup, documenting the QMD collection-name migration risk, and deciding whether to rehearse a bounded send / disposable cron write test before planning a live window.
 
 ## Core decision
 
