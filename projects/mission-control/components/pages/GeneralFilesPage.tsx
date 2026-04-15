@@ -138,20 +138,22 @@ export default async function FilesPage({ searchParams }: { searchParams?: Promi
                 </div>
 
                 {searchResults.results.length > 0 ? (
-                  <div style={{ display: 'grid', gap: 6 }}>
-                    {searchResults.results.map((result) => {
-                      const href = result.kind === 'file'
-                        ? `/general/files?path=${encodeURIComponent(dirname(result.path))}&file=${encodeURIComponent(result.path)}&q=${encodeURIComponent(nameQuery)}#file-preview`
-                        : `/general/files?path=${encodeURIComponent(result.path)}&q=${encodeURIComponent(nameQuery)}`;
-                      return (
-                        <Link key={result.path} href={href} style={{ display: 'grid', gap: 2, padding: '8px 10px', borderRadius: 12, border: '1px solid var(--border)', background: 'rgba(255, 255, 255, 0.58)' }}>
-                          <div style={{ fontFamily: 'monospace', fontSize: 12, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {result.kind === 'directory' ? '📁' : '📄'} {result.path}
-                          </div>
-                          <div style={{ fontSize: 11, color: 'var(--muted)' }}>{formatResultMeta(result)}</div>
-                        </Link>
-                      );
-                    })}
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', background: 'rgba(255, 255, 255, 0.44)' }}>
+                    <div style={{ maxHeight: 'min(40vh, 360px)', overflow: 'auto', display: 'grid', gap: 6, padding: 8 }}>
+                      {searchResults.results.map((result) => {
+                        const href = result.kind === 'file'
+                          ? `/general/files?path=${encodeURIComponent(dirname(result.path))}&file=${encodeURIComponent(result.path)}&q=${encodeURIComponent(nameQuery)}#file-preview`
+                          : `/general/files?path=${encodeURIComponent(result.path)}&q=${encodeURIComponent(nameQuery)}`;
+                        return (
+                          <Link key={result.path} href={href} style={{ display: 'grid', gap: 2, padding: '8px 10px', borderRadius: 12, border: '1px solid var(--border)', background: 'rgba(255, 255, 255, 0.72)' }}>
+                            <div style={{ fontFamily: 'monospace', fontSize: 12, color: 'var(--text-body)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {result.kind === 'directory' ? '📁' : '📄'} {result.path}
+                            </div>
+                            <div style={{ fontSize: 11, color: 'var(--muted)' }}>{formatResultMeta(result)}</div>
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </div>
                 ) : (
                   <div style={{ fontSize: 12, color: 'var(--muted)' }}>No file or folder names matched this query.</div>
