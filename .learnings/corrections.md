@@ -42,7 +42,7 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Lesson:** When one topic produces a plan for later execution, explicitly state the current mode before moving on: either `Morning Meeting continues` or `switching to execution now`. Do not imply a work-mode transition without naming it plainly.
 
 **Priority:** high
-**Status:** active
+**Status:** resolved
 
 ---
 
