@@ -770,6 +770,8 @@ export function shapeTranscriptEntriesForRender(
     }
 
     if (entry.kind === 'process') {
+      if (entry.stage === 'lifecycle') return;
+
       items.push({
         type: 'process',
         id: entry.id,

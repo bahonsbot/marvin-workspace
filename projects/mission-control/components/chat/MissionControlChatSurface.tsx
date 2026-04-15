@@ -927,9 +927,7 @@ export function MissionControlChatSurface({
           : 'Last requested: low'
     : 'Last requested: low';
   const compactEffortLabel = effortMenuLabel.replace(/^Last requested:\s*/i, '').trim();
-  const effortTriggerLabel = compactEffortLabel.toLowerCase() === 'xhigh'
-    ? 'XHigh'
-    : compactEffortLabel.charAt(0).toUpperCase() + compactEffortLabel.slice(1);
+  const effortTriggerLabel = compactEffortLabel.toLowerCase();
   const visibleModelMenuOptions = modelMenuOptions.filter((option) => option.label !== modelMenuLabel);
 
   const lastRealModelRef = useRef(topRailModelLabel.toLowerCase() !== 'runtime controlled' ? topRailModelLabel : 'MiniMax-M2.7');
@@ -1350,7 +1348,7 @@ export function MissionControlChatSurface({
               ) : null}
             </div>
 
-            <div style={{ position: 'relative', minWidth: 0, flex: '0 1 116px' }}>
+            <div style={{ position: 'relative', minWidth: 0, flex: '0 1 138px' }}>
               <button
                 type="button"
                 onClick={() => setTopControlMenu((current) => (current === 'model' ? null : 'model'))}
@@ -1384,7 +1382,7 @@ export function MissionControlChatSurface({
               ) : null}
             </div>
 
-            <div style={{ position: 'relative', minWidth: 0, flex: '0 1 94px' }}>
+            <div style={{ position: 'relative', minWidth: 0, flex: '0 1 112px' }}>
               <button
                 type="button"
                 onClick={() => effortInteractive && setTopControlMenu((current) => (current === 'effort' ? null : 'effort'))}
@@ -1410,7 +1408,7 @@ export function MissionControlChatSurface({
                       disabled={effortSwitchBusy}
                       style={{ border: 'none', borderRadius: 12, padding: '10px 12px', display: 'grid', gap: 2, textAlign: 'left', background: 'transparent', cursor: effortSwitchBusy ? 'progress' : 'pointer', opacity: effortSwitchBusy ? 0.76 : 1 }}
                     >
-                      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)', textTransform: 'capitalize' }}>{label}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-body)' }}>{label}</span>
                       <span style={{ fontSize: 11, color: 'var(--text-ghost)' }}>{`/think:${label}`}</span>
                     </button>
                   ))}

@@ -39,11 +39,25 @@ export function ChatActivityStrip({ items }: { items: TranscriptActivityItem[] }
               display: 'inline-flex',
               alignItems: 'center',
               gap: 8,
+              minWidth: 0,
               maxWidth: '100%',
+              overflow: 'hidden',
             }}
           >
-            <span style={pillStyle()}>{activityLabel(item)}</span>
-            <span style={{ fontSize: 12, lineHeight: 1.45, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ ...pillStyle(), flexShrink: 0 }}>{activityLabel(item)}</span>
+            <span
+              style={{
+                fontSize: 12,
+                lineHeight: 1.45,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                minWidth: 0,
+                maxWidth: '100%',
+                flex: '1 1 auto',
+                display: 'block',
+              }}
+            >
               {item.detail}
             </span>
           </div>
