@@ -17,6 +17,26 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260415-1019]
+
+**Context:** Mission Control Chat preview refreshes could rehydrate older tool history rows after file/document-heavy work.
+**What failed:** history-loaded `read` / `exec` tool rows could fall back to the full raw `meta` body when richer args/context were missing, which made collapsed or lightly expanded tool cards dump huge document/output walls into the transcript.
+**Suggested fix:** keep hydrated `read` / `exec` rows summary-first even when only result text is present, and route large bodies through an explicit collapsible viewer rather than inline `Result:` dumping.
+**Resolution:** Resolved Apr 15 by tightening `projects/mission-control/components/chat/chat-tool-groups.tsx` so history-loaded read/exec previews stay compact and expanded bodies render via `ChatFileContentView`.
+
+**Priority:** medium
+**Status:** resolved
+
+## [ERR-20260415-1153]
+
+**Context:** Mission Control Files/Memory editor search was upgraded to real CodeMirror 6, but Philippe immediately tested the behavior from the page chrome instead of with editor focus already inside the text area.
+**What failed:** relying on `Cmd/Ctrl+F` alone for embedded editor search was misleading because the browser-level find shortcut still wins when focus is outside the editor, making the new search feel broken even though CM search support is enabled.
+**Suggested fix:** for browser-embedded editors, provide an explicit `Find` affordance that focuses the editor and opens the CodeMirror search panel programmatically; treat the keyboard shortcut as a bonus when focus is already inside the editor.
+**Resolution:** Resolved Apr 15 by adding a shared header `Find` button in `projects/mission-control/components/editor/CodeMirrorEditor.tsx` for both Files and Memory editors.
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260414-1418]
 
 **Context:** Mission Control Chat `Session connected` badge started appearing about 5 seconds late again after the upgrade/restart loops.

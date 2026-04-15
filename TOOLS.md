@@ -135,8 +135,10 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - `projects/_ops/mc-savepoint-2026-04-09-evening.md`
   - `projects/_ops/mc-savepoint-2026-04-12-late-night.md`
   - `projects/_ops/mc-savepoint-2026-04-12-chat-seat-bridge.md`
+  - `projects/_ops/mc-savepoint-2026-04-15-afternoon.md`
 - Preview runtime dependency note: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` and `projects/mission-control/scripts/preview-origin-proxy.js` require npm package `ws`; a passing Next.js build alone does not prove preview health if `ws` is missing
 - Chat component inventory note: current shared chat helpers include `projects/mission-control/components/chat/chat-rich-text.tsx`, `projects/mission-control/components/chat/chat-ui-helpers.ts`, and `projects/mission-control/components/chat/chat-tool-groups.tsx`
+- Shared editor foundation note: `projects/mission-control/components/editor/CodeMirrorEditor.tsx` is now a real CodeMirror 6 editor for both Files and Memory, not a styled textarea. Built-in editor search is enabled; the header `Find` button is the reliable entry point when browser `Cmd/Ctrl+F` focus capture would otherwise win.
 - Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
   - Apr 2 rewind fix: hydrated transcript merge is timestamp-aware and overwrite-safe so older persisted history cannot clobber newer live messages during later hydrate cycles
   - Apr 2 UX stabilization: transient ACTIVITY/SYSTEM notices are no longer durable transcript rows; compression/fallback notices render in a transient notice channel instead, and default Chat load should prefer `agent:main:main`
