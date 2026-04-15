@@ -12,7 +12,7 @@ import {
 } from '@codemirror/view';
 import { defaultHighlightStyle, indentOnInput, bracketMatching, foldGutter, syntaxHighlighting } from '@codemirror/language';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
-import { search, searchKeymap } from '@codemirror/search';
+import { openSearchPanel, search, searchKeymap } from '@codemirror/search';
 import { getLanguageExtension, shouldWrap } from '@/components/editor/languageMap';
 import { missionControlEditorTheme, missionControlEditorHighlighting } from '@/components/editor/editorTheme';
 
@@ -151,6 +151,13 @@ export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, 
     syncedValueRef.current = value;
   }, [value]);
 
+  const openFind = () => {
+    const view = viewRef.current;
+    if (!view) return;
+    view.focus();
+    openSearchPanel(view);
+  };
+
   return (
     <div
       style={{
@@ -174,21 +181,43 @@ export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, 
         }}
       >
         <span style={{ fontFamily: 'var(--font-mono), SFMono-Regular, ui-monospace, monospace' }}>{filename}</span>
-        <span
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            padding: '4px 9px',
-            borderRadius: 999,
-            border: readOnly ? '1px solid rgba(157, 103, 55, 0.28)' : '1px solid rgba(63, 138, 113, 0.22)',
-            background: readOnly ? 'rgba(255, 247, 240, 0.9)' : 'rgba(236, 248, 242, 0.85)',
-            color: readOnly ? '#8a6338' : '#2e6a56',
-            fontWeight: 700,
-          }}
-        >
-          {readOnly ? 'Read-only' : 'Editable'}
-        </span>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <button
+            type="button"
+            onClick={openFind}
+            style={{
+              appearance: 'none',
+              border: '1px solid rgba(132, 121, 110, 0.28)',
+              borderRadius: 8,
+              background: 'rgba(255, 255, 255, 0.68)',
+              color: 'var(--text-muted)',
+              fontSize: 12,
+              fontWeight: 600,
+              padding: '4px 10px',
+              lineHeight: 1.2,
+              cursor: 'pointer',
+            }}
+            title="Find in editor (Cmd/Ctrl+F)"
+            aria-label="Find in editor"
+          >
+            Find
+          </button>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '4px 9px',
+              borderRadius: 999,
+              border: readOnly ? '1px solid rgba(157, 103, 55, 0.28)' : '1px solid rgba(63, 138, 113, 0.22)',
+              background: readOnly ? 'rgba(255, 247, 240, 0.9)' : 'rgba(236, 248, 242, 0.85)',
+              color: readOnly ? '#8a6338' : '#2e6a56',
+              fontWeight: 700,
+            }}
+          >
+            {readOnly ? 'Read-only' : 'Editable'}
+          </span>
+        </div>
       </div>
 
       <div
