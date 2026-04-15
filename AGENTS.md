@@ -224,7 +224,11 @@ Use a two-message pattern when work takes time:
 1. brief confirmation
 2. completion with deliverables
 
-Silence between those is fine. For longer tasks, one short progress update is okay.
+Silence between those is fine for short tasks. For longer tasks:
+- if work is likely to take more than ~5 minutes, send the brief confirmation up front
+- if still working after about 8-10 minutes, send one short progress update
+- once tools/processes have effectively finished, send a terminal user-facing update within about 30 seconds: done, blocked, or still debugging with the next checkpoint
+- do not leave the user guessing whether work is still running, silently finished, or stalled
 
 Do not narrate investigation step-by-step. Reach a conclusion, then report.
 Treat each new user message as the active task unless asked to resume an older one.

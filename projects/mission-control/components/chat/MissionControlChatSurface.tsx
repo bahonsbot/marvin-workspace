@@ -45,6 +45,13 @@ import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 const TOOL_BURST_WINDOW_MS = 10000;
 
 type TopControlMenu = 'agent' | 'model' | 'effort' | null;
+type RuntimeStatusTone = 'ready' | 'working' | 'finalizing' | 'attention' | 'disconnected';
+
+type RuntimeStatus = {
+  label: 'Ready' | 'Working' | 'Finalizing' | 'Attention' | 'Disconnected';
+  tone: RuntimeStatusTone;
+  detail: string;
+};
 
 type AgentMenuOption = {
   id: string;
@@ -179,6 +186,42 @@ function laneSequenceLabel(lanePlan: SudoLaneSlug[], lanes: SudoDelegationLane[]
 }
 
 const SUDO_DISMISSED_RUNS_STORAGE_KEY = 'mission-control:sudo-dismissed-runs';
+
+function runtimeStatusStyle(tone: RuntimeStatusTone): CSSProperties {
+  if (tone === 'attention') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(181, 88, 74, 0.34)',
+      background: 'rgba(244, 224, 220, 0.88)',
+      color: '#7c2e24',
+    };
+  }
+  if (tone === 'disconnected') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(200, 195, 188, 0.42)',
+      background: 'rgba(247, 242, 236, 0.9)',
+      color: 'var(--text-muted)',
+    };
+  }
+  if (tone === 'working') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(114, 96, 31, 0.3)',
+      background: 'rgba(247, 241, 219, 0.92)',
+      color: '#5d4814',
+    };
+  }
+  if (tone === 'finalizing') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(96, 118, 145, 0.32)',
+      background: 'rgba(230, 236, 245, 0.9)',
+      color: '#314b66',
+    };
+  }
+  return pillStyle({ active: true });
+}
 
 function buildSudoReviewPrompt(run: SudoOrchestrationRun) {
   const sequence = run.decision?.lanePlan?.length ? reviewLaneSequence(run.decision.lanePlan) : 'No lane delegation';
@@ -826,6 +869,7 @@ export function MissionControlChatSurface({
   const liveCanSend = Boolean(live?.canSend);
   const liveSendState = live?.sendState ?? 'idle';
   const liveSendError = live?.sendError ?? null;
+  const liveActiveRunId = live?.activeRunId ?? null;
   const [composerValue, setComposerValue] = useState('');
   const [composerError, setComposerError] = useState<string | null>(null);
   const [sudoOrchestrationTrigger, setSudoOrchestrationTrigger] = useState(0);
@@ -938,6 +982,41 @@ export function MissionControlChatSurface({
 
   const selectedSeatLabel = activation?.label ?? 'Marvin';
   const assistantSeatLabel = assistantLabelForSeat(activation?.seatSlug);
+  const runtimeStatus: RuntimeStatus = (() => {
+    if (liveSendError || effectiveBridgeError || sessionState === 'error' || sessionState === 'rejected') {
+      return {
+        label: 'Attention',
+        tone: 'attention',
+        detail: liveSendError || effectiveBridgeError || sessionDetail || 'Runtime bridge needs attention.',
+      };
+    }
+    if (sessionState !== 'connected' || wsState !== 'open') {
+      return {
+        label: 'Disconnected',
+        tone: 'disconnected',
+        detail: sessionDetail || wsDetail || 'Mission Control runtime is not connected yet.',
+      };
+    }
+    if (liveSendState === 'sending' || liveSendState === 'streaming') {
+      return {
+        label: 'Working',
+        tone: 'working',
+        detail: 'Marvin is actively working on the current run.',
+      };
+    }
+    if (liveActiveRunId) {
+      return {
+        label: 'Finalizing',
+        tone: 'finalizing',
+        detail: 'Run is wrapping up and syncing final state.',
+      };
+    }
+    return {
+      label: 'Ready',
+      tone: 'ready',
+      detail: liveCanSend ? 'Ready for the next prompt.' : 'Ready state is waiting on runtime session targeting.',
+    };
+  })();
   const displayModelLabel = topRailModelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : topRailModelLabel;
   const modelTriggerLabel = (() => {
     const source = (optimisticModelLabel ?? displayModelLabel).trim();
@@ -1419,6 +1498,9 @@ export function MissionControlChatSurface({
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 50, flexShrink: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+              <span style={runtimeStatusStyle(runtimeStatus.tone)} title={runtimeStatus.detail}>
+                {runtimeStatus.label}
+              </span>
               <button
                 type="button"
                 onClick={() => void handleStop()}

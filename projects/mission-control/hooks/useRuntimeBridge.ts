@@ -971,6 +971,7 @@ export function useRuntimeBridge(
           );
         }
         setSendState('idle');
+        setActiveRunId(null);
         // Refresh snapshot after chat completion to pick up cross-device messages
         void Promise.all([
           load(true),
@@ -988,6 +989,7 @@ export function useRuntimeBridge(
               : 'Gateway chat run failed.';
         setSendState('error');
         setSendError(problem);
+        setActiveRunId(null);
         const errorEntry = createMessageEntry({
           id: generateId('mc-system'),
           role: 'system',
@@ -1416,6 +1418,7 @@ export function useRuntimeBridge(
         const message = cause instanceof Error ? cause.message : 'Mission Control could not send the prompt.';
         setSendState('error');
         setSendError(message);
+        setActiveRunId(null);
         const systemEntry = createMessageEntry({
           id: generateId('mc-system'),
           role: 'system',
