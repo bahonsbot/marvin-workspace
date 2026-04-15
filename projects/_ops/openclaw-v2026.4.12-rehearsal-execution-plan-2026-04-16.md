@@ -50,7 +50,22 @@ Related audit: `projects/_ops/openclaw-v2026.4.12-upgrade-audit-2026-04-16.md`
 
 ### Current interpretation
 - The base `v2026.4.12` isolated rehearsal lane is viable on this host.
-- The upgrade is **not** yet promoted-ready, but it is no longer theoretical; the key remaining work is cleanup, documenting the QMD collection-name migration risk, and deciding whether to rehearse a bounded send / disposable cron write test before planning a live window.
+- The upgrade is no longer theoretical; the remaining work was narrowed to one bounded write-surface proof and live-window planning.
+
+### Disposable cron write test — passed
+- Added an isolated, no-delivery, one-shot rehearsal job named `rehearsal-disposable-echo`
+- Payload: `Reply exactly with OK and nothing else.`
+- Model: `minimax/MiniMax-M2.7`
+- Manual run result: `status: ok`
+- Run summary: `OK`
+- Delivery: `not-delivered`
+- Duration: about `15.6s`
+- Session evidence: fresh cron session key under `agent:main:cron:0f3bf7f1-21f4-4284-9f2b-aa458b114aab:run:...`
+- Cleanup: removed the disposable job after verification
+
+### Updated interpretation
+- The isolated `v2026.4.12` rehearsal now covers both read surfaces and one bounded write surface.
+- Next step is a narrow live upgrade window, not more rehearsal sprawl.
 
 ## Core decision
 

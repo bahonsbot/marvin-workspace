@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260416-0102]
+
+**What failed:** rehearsal `v2026.4.12` memory search after state copy
+**Error:** isolated QMD state still carried a legacy collection named `memory`, while `v2026.4.12` managed search expected the scoped collection name `memory-dir-main`. Result: `memory status` could look healthy, but `memory search` failed until the stale legacy collection was removed from the isolated rehearsal QMD state.
+**Context:** Apr 16 isolated OpenClaw `v2026.4.12` rehearsal after QMD/Bun PATH was corrected
+**Suggested fix:** after upgrading into a copied state, do not treat `memory status` as sufficient proof. Run a real `openclaw memory search ...` command. If search fails with missing managed collection behavior, inspect the isolated QMD collection config for stale legacy collection names and repair them before calling the upgrade healthy.
+**Resolution:** Resolved Apr 16 in the isolated rehearsal state by removing the legacy `memory` collection, after which `memory search "Philippe" --max-results 3 --json` succeeded.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260416-0048]
 
 **What failed:** parallel Mission Control preview safety during isolated rehearsal work
