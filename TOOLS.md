@@ -258,6 +258,8 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - Rule: do not edit `auth-profiles.json` directly unless Philippe explicitly approves it
 - **Current posture:** dual-home Codex CLI wrapper experiments were removed; do not assume `/data/codex-work-home` or `/data/codex-personal-home` exist. Runtime account switching for the main OpenClaw path is a Philippe-only manual runbook, not a normal CLI flow.
 - **Runbook:** `docs/runbooks/openai-codex-runtime-account-switch.md`
+- **Current local default model:** `~/.codex/config.toml` should set `model = "gpt-5.3-codex"` on this box.
+  - Reason: the local Codex CLI is currently authenticated in ChatGPT mode, and the no-flag default can fall back to unsupported `gpt-5.2-codex`, which fails immediately with a model/account mismatch.
 - **Git repo required:** Codex refuses to run outside a git repository
   - For scratch work: `mktemp -d && git init` before running Codex
 - **Coding agent skill:** Built-in OpenClaw skill `coding-agent` delegates to Codex/Claude Code/Pi
