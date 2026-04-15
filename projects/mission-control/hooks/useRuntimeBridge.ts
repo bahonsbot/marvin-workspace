@@ -929,6 +929,25 @@ export function useRuntimeBridge(
         }
       }
 
+      const isLifecycleEndEvent = eventName === 'agent' && agentStream === 'lifecycle' && lifecyclePhase === 'end';
+      const sessionMatchesTarget = !eventSessionKey || !targetSessionKey || eventSessionKey === targetSessionKey;
+      const runMatchesActive = !activeRunId || !eventRunId || eventRunId === activeRunId;
+      if (isLifecycleEndEvent && sessionMatchesTarget && runMatchesActive) {
+        if (sendState === 'sending' || sendState === 'streaming') {
+          setSendState('idle');
+          setSendError(null);
+        }
+        if (!eventRunId || !activeRunId || eventRunId === activeRunId) {
+          setActiveRunId(null);
+        }
+        // Some specialist seats do not emit reliable chat.final events, so treat lifecycle end
+        // as a completion signal and force-hydrate transcript history for the active session.
+        void Promise.all([
+          load(true),
+          hydrateHistory(targetSessionKey, { force: true }),
+        ]);
+      }
+
       if (eventName !== 'chat') return;
       if (eventSessionKey && targetSessionKey && eventSessionKey !== targetSessionKey) return;
 
@@ -1044,7 +1063,7 @@ export function useRuntimeBridge(
         ]);
       }
     },
-    [defaultTargetSession.key, hydrateHistory, load],
+    [activeRunId, defaultTargetSession.key, hydrateHistory, load, sendState],
   );
 
   useEffect(() => {
@@ -1410,7 +1429,9 @@ export function useRuntimeBridge(
             }),
           );
         }
-        setSendState(status === 'ok' ? 'idle' : 'streaming');
+        // chat.send ack confirms acceptance, not completion. Keep the run in-flight until
+        // a completion signal (chat.final/chat.error/chat.aborted or lifecycle end) arrives.
+        setSendState('streaming');
       } catch (cause) {
         if (capturedGeneration !== sessionGenerationRef.current) return;
         if (activeSessionKeyRef.current !== sessionKey) return;
