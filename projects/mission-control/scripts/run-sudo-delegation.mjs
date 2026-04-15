@@ -2,13 +2,15 @@
 import { execFile } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
-import {
+
+const {
   createMissionControlSessionTarget,
   formatModelVerificationError,
   prepareSessionModel,
   verifySessionModel,
-} from './lib/openclaw-session-model.mjs';
+} = await import(pathToFileURL(path.join(process.cwd(), 'scripts', 'lib', 'openclaw-session-model.mjs')).href);
 
 const execFileAsync = promisify(execFile);
 const storePath = path.join(process.cwd(), 'data', 'sudo-delegations.json');

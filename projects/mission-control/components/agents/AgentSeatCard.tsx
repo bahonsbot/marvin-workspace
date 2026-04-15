@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { floatingInsetStyle } from '@/components/shared/floating';
 import { AgentActionButton } from '@/components/agents/AgentActionButton';
 import { AgentIssueStateButton } from '@/components/agents/AgentIssueStateButton';
@@ -50,9 +51,12 @@ function AgentAvatarImage({ item, size }: { item: AgentUnitPayload; size: number
   if (!file) return null;
 
   return (
-    <img
+    <Image
       src={`/api/files/raw?path=${encodeURIComponent(`uploads/mission-control/avatars/${file}`)}`}
       alt={`${item.label} avatar`}
+      width={size}
+      height={size}
+      unoptimized
       style={{
         width: size,
         height: size,

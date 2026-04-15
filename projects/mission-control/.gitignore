@@ -1,6 +1,23 @@
-# Environment files — never commit
-.preview-runtime/*.env
-.env
+# Dependencies
+node_modules/
 
-# Runtime event logs
-data/task-lifecycle-events.json
+# Next.js / build artifacts
+.next/
+out/
+.test-dist/
+tsconfig.tsbuildinfo
+
+# Local preview/runtime artifacts
+.preview-runtime/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.preview-runtime/*.env
+
+# Local caches
+scripts/__pycache__/

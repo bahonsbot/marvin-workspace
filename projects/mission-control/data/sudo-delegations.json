@@ -1,6 +1,180 @@
 {
   "orchestrations": [
     {
+      "id": "sudo-orchestration-1776159252352-v4i83p",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Review this completed Sudo run and take over from here.\n\nOriginal brief: Sudo, improve the current top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md\nStatus: done\nLane sequence: Frontend Developer -> QA Engineer\nResult summary: Sudo completed the lane plan frontend -> qa.",
+      "promptSummary": "Review this completed Sudo run and take over from here. Original brief: Sudo, improve the current top-section of the Chat page, following this implementation plan: projects/miss...",
+      "status": "waiting",
+      "requestedAt": "2026-04-14T09:34:12.352Z",
+      "updatedAt": "2026-04-14T09:34:43.704Z",
+      "childRunIds": [],
+      "waitingForPhilippe": true,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": false
+      },
+      "startedAt": "2026-04-14T09:34:12.480Z",
+      "completedAt": "2026-04-14T09:34:43.704Z",
+      "decision": {
+        "mode": "ask_question",
+        "lanePlan": [],
+        "lanePlanSteps": [],
+        "rationale": "The handoff is too vague to start honest execution. I know the prior run is marked done, but I do not yet know what was changed, what QA actually validated, or whether Philippe wants audit, polish, merge readiness, or the next implementation slice.",
+        "orderRationale": "No lane should start before the handoff target is clarified. Asking one precise question is the smallest honest next step.",
+        "expectedOutputs": [
+          "Clear takeover target for the completed Chat top-section run",
+          "Confirmed desired next action: audit, fix follow-ups, approve, or continue to the next scoped section"
+        ],
+        "validationIntent": "Validate against the completed run artifacts and Philippe's intended next outcome before starting any further implementation or QA.",
+        "completionCriteria": "Philippe confirms what 'take over from here' means and identifies the expected outcome for the next step.",
+        "question": "What exactly do you want me to take over now: 1) audit the completed frontend+QA run and decide if it is ready, 2) fix any remaining issues from that run, or 3) move on to the next Chat-page scope after the top section? If you have a branch, commit, or result note from the completed run, send that too.",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": false
+        }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:132c8f02-30d3-4431-a124-1c5d844300ec",
+      "decisionRunId": "a9819191-a7ec-415c-b55b-9cf4d3896d23",
+      "synthesis": {
+        "summary": "What exactly do you want me to take over now: 1) audit the completed frontend+QA run and decide if it is ready, 2) fix any remaining issues from that run, or 3) move on to the next Chat-page scope after the top section? If you have a bra...",
+        "decided": "Clarification needed. The handoff is too vague to start honest execution. I know the prior run is marked done, but I do not yet know what was changed, what QA actually validated, or whether Philippe wants audit, polish, merge readiness, or the next implementation slice.",
+        "lanesRun": [],
+        "changesOrFindings": [],
+        "blockers": [],
+        "unresolvedIssues": [
+          "What exactly do you want me to take over now: 1) audit the completed frontend+QA run and decide if it is ready, 2) fix any remaining issues from that run, or 3) move on to the next Chat-page scope after the top sectio..."
+        ],
+        "completedAt": "2026-04-14T09:34:43.704Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": false
+        }
+      }
+    },
+    {
+      "id": "sudo-orchestration-1776158475700-1m0y92",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, improve the current top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md",
+      "promptSummary": "Sudo, improve the current top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md",
+      "status": "done",
+      "requestedAt": "2026-04-14T09:21:15.699Z",
+      "startedAt": "2026-04-14T09:21:15.739Z",
+      "completedAt": "2026-04-14T09:30:32.433Z",
+      "updatedAt": "2026-04-14T09:30:32.456Z",
+      "decision": {
+        "mode": "delegate",
+        "lanePlan": [
+          "frontend",
+          "qa"
+        ],
+        "lanePlanSteps": [
+          {
+            "lane": "frontend",
+            "order": 1,
+            "purpose": "Implement the compression-first refactor in MissionControlChatSurface.tsx so the Chat top section becomes a single sticky operator row on desktop without losing current controls.",
+            "expectedOutput": "Updated Chat top-section UI: one-row layout, Reset removed, second-row/collapse pattern removed, compressed closed-state triggers, compact Recent Sessions trigger, compact conte...",
+            "validationFocus": "Layout density, sticky behavior, trigger truncation, and preserving existing handlers/dropdowns."
+          },
+          {
+            "lane": "qa",
+            "order": 2,
+            "purpose": "Verify the refactor behaves correctly and did not regress key Chat controls or top-bar usability.",
+            "expectedOutput": "Verification notes covering functional checks for seat/model/effort switching, refresh, stop, recent sessions, status details, context updates, and desktop one-row behavior.",
+            "validationFocus": "Desktop one-row fit, no awkward wrapping, readable active states, dropdown stability, and no lost access to seat defaults if still applicable."
+          }
+        ],
+        "rationale": "The brief is specific, scoped to a known file, and includes a concrete implementation plan, so execution can start now with frontend work followed by verification.",
+        "orderRationale": "Frontend is the smallest honest first lane because this is a surface-composition refactor. QA follows to confirm the compressed layout still works and remains truthful.",
+        "expectedOutputs": [
+          "One-row Chat top section implementation in the Mission Control frontend",
+          "Removal of Reset and old two-row/collapse behavior from the top section",
+          "QA verification of functionality and layout regressions"
+        ],
+        "validationIntent": "Mission Control should validate with functional UI checks plus desktop-width layout verification to ensure the strip stays on one row and all existing controls remain reachable and clear.",
+        "completionCriteria": "The Chat top section renders as a single sticky row at normal desktop/laptop widths, the specified controls remain available and functional, Reset is gone, the old second-row/collapse mechanism is removed, and QA confirms no meaningful r...",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "synthesis": {
+        "summary": "Sudo completed the lane plan frontend -> qa.",
+        "decided": "Delegated frontend -> qa because The brief is specific, scoped to a known file, and includes a concrete implementation plan, so execution can start now with frontend work followed by verification.",
+        "lanesRun": [
+          "frontend",
+          "qa"
+        ],
+        "changesOrFindings": [],
+        "blockers": [],
+        "unresolvedIssues": [],
+        "completedAt": "2026-04-14T09:30:32.432Z",
+        "oversight": {
+          "oversightNeeded": false,
+          "approvalNeeded": false,
+          "blockedBy": [],
+          "safeToAutoContinue": true
+        }
+      },
+      "artifacts": [
+        {
+          "path": "projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md",
+          "label": "Sudo output",
+          "kind": "file"
+        }
+      ],
+      "decisionSessionKey": "agent:main:sudo-orchestration:554998d4-2103-44fc-9637-efd10c96b167",
+      "decisionRunId": "b30e9169-554d-49ad-b6c1-fb8a359363ac",
+      "childRunIds": [
+        "sudo-delegation-1776158504215-9dez8s",
+        "sudo-delegation-1776158864345-f69qlr"
+      ],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": true
+      }
+    },
+    {
+      "id": "sudo-orchestration-1776156489539-m7lxur",
+      "delegatedBy": "Sudo",
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This orchestration records the parent decision and only delegated lanes spawn real child runs.",
+      "requestedPrompt": "Sudo, improve the current top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md",
+      "promptSummary": "Sudo, improve the current top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md",
+      "status": "queued",
+      "requestedAt": "2026-04-14T08:48:09.539Z",
+      "updatedAt": "2026-04-14T08:48:09.539Z",
+      "childRunIds": [],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": false
+      }
+    },
+    {
       "id": "sudo-orchestration-1776057411117-m8rez1",
       "delegatedBy": "Sudo",
       "sourceSeatSlug": "dev-team",
@@ -11,19 +185,9 @@
       "promptSummary": "Sudo, take the current Mission Control backlog task 'Draft: Actionable Alpha dashboard slice' as a real Trading-domain handoff. Work as the Dev Team lead, not as a lone coder. G...",
       "status": "done",
       "requestedAt": "2026-04-13T05:16:51.117Z",
-      "updatedAt": "2026-04-13T05:19:44.145Z",
-      "childRunIds": [
-        "sudo-delegation-1776057436487-3nxxcu",
-        "sudo-delegation-1776057508367-mh9xi0"
-      ],
-      "waitingForPhilippe": false,
-      "oversight": {
-        "oversightNeeded": false,
-        "approvalNeeded": false,
-        "blockedBy": [],
-        "safeToAutoContinue": true
-      },
       "startedAt": "2026-04-13T05:16:51.162Z",
+      "completedAt": "2026-04-13T05:19:44.145Z",
+      "updatedAt": "2026-04-13T05:19:44.145Z",
       "decision": {
         "mode": "delegate",
         "lanePlan": [
@@ -64,9 +228,6 @@
           "safeToAutoContinue": true
         }
       },
-      "decisionSessionKey": "agent:main:sudo-orchestration:97113a2e-4f09-41ce-998d-5525e01b6964",
-      "decisionRunId": "4a1dafe3-409f-4b93-821b-8c9dcb63917f",
-      "completedAt": "2026-04-13T05:19:44.145Z",
       "synthesis": {
         "summary": "Sudo completed the lane plan frontend -> qa.",
         "decided": "Delegated frontend -> qa because The brief is specific enough to start now, and the smallest honest team plan is a frontend-led spec draft followed by QA validation.",
@@ -84,6 +245,19 @@
           "blockedBy": [],
           "safeToAutoContinue": true
         }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:97113a2e-4f09-41ce-998d-5525e01b6964",
+      "decisionRunId": "4a1dafe3-409f-4b93-821b-8c9dcb63917f",
+      "childRunIds": [
+        "sudo-delegation-1776057436487-3nxxcu",
+        "sudo-delegation-1776057508367-mh9xi0"
+      ],
+      "waitingForPhilippe": false,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": true
       }
     },
     {
@@ -97,17 +271,9 @@
       "promptSummary": "Review this completed Sudo run and take over from here. Original brief: Sudo, improve the current Home page, following this implementation plan: projects/mission-control/docs/ho...",
       "status": "waiting",
       "requestedAt": "2026-04-08T08:12:12.708Z",
-      "updatedAt": "2026-04-08T08:12:53.394Z",
-      "childRunIds": [],
-      "waitingForPhilippe": true,
-      "oversight": {
-        "oversightNeeded": false,
-        "approvalNeeded": false,
-        "blockedBy": [],
-        "safeToAutoContinue": false
-      },
       "startedAt": "2026-04-08T08:12:12.883Z",
       "completedAt": "2026-04-08T08:12:53.393Z",
+      "updatedAt": "2026-04-08T08:12:53.394Z",
       "decision": {
         "mode": "ask_question",
         "lanePlan": [],
@@ -129,8 +295,6 @@
           "safeToAutoContinue": false
         }
       },
-      "decisionSessionKey": "agent:main:sudo-orchestration:0db3144a-4460-49c9-88ea-90670c1259f6",
-      "decisionRunId": "c0df31fe-3757-4692-83df-0804f38e2d06",
       "synthesis": {
         "summary": "Send me the completed run output to review: either the commit/PR, the changed files, or screenshots plus QA notes. Without that, I can’t truthfully take over from a 'done' status.",
         "decided": "Clarification needed. The plan is clear, but the completed run itself is not reviewable yet from the brief alone. I need the actual output before I can honestly choose between accepting, fixing, or continuing implementation.",
@@ -145,8 +309,18 @@
           "oversightNeeded": false,
           "approvalNeeded": false,
           "blockedBy": [],
-          "safeToAutoContinue": false
+          "safeToAutoContinue": true
         }
+      },
+      "decisionSessionKey": "agent:main:sudo-orchestration:0db3144a-4460-49c9-88ea-90670c1259f6",
+      "decisionRunId": "c0df31fe-3757-4692-83df-0804f38e2d06",
+      "childRunIds": [],
+      "waitingForPhilippe": true,
+      "oversight": {
+        "oversightNeeded": false,
+        "approvalNeeded": false,
+        "blockedBy": [],
+        "safeToAutoContinue": false
       }
     },
     {
@@ -785,6 +959,62 @@
   ],
   "runs": [
     {
+      "id": "sudo-delegation-1776158864345-f69qlr",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1776158475700-1m0y92",
+      "orchestrationSequence": 2,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "qa",
+        "seatLabel": "QA Engineer",
+        "role": "Verification and regression lane",
+        "defaultModel": "minimax2.7",
+        "defaultThinking": "low",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the QA Engineer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: Verification and regression lane.\nSudo plan context:\n- Step 2 of 2\n- Planned lane order: frontend -> qa\n- Step purpose: Verify the refactor behaves correctly and did not regress key Chat controls or top-bar usability.\n- Expected output: Verification notes covering functional checks for seat/model/effort switching, refresh, stop, recent sessions, status details, context updates, and desktop one-row behavior.\n- Validation focus: Desktop one-row fit, no awkward wrapping, readable active states, dropdown stability, and no lost access to seat defaults if still applicable.\n- Order rationale: Frontend is the smallest honest first lane because this is a surface-composition refactor. QA follows to confirm the compressed layout still works and remains truthful.\n- Validation intent: Mission Control should validate with functional UI checks plus desktop-width layout verification to ensure the strip stays on one row and all existing controls remain reachable and clear.\n- Completion criteria: The Chat top section renders as a single sticky row at normal desktop/laptop widths, the specified controls remain available and functional, Reset is gone, the old second-row/collapse mechanism is removed, and QA confirms no meaningful r...\nPrior completed lane output:\n- Frontend Developer: Done: I implemented the one-row compression refactor for the Chat top section in `MissionControlChatSurface.tsx`, removed Reset and the second-row collapse mechanism, and kept all core controls reachable in the sticky...\nTask delegated by Sudo:\nSudo, improve the current top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md",
+      "promptSummary": "You are the QA Engineer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent session...",
+      "status": "done",
+      "requestedAt": "2026-04-14T09:27:44.345Z",
+      "startedAt": "2026-04-14T09:27:44.400Z",
+      "completedAt": "2026-04-14T09:30:12.110Z",
+      "updatedAt": "2026-04-14T09:30:12.110Z",
+      "childSessionKey": "agent:main:sudo-qa:bc34b146-4f05-4c6f-8344-58296a4cfd3d",
+      "runId": "ef7935f1-c205-442b-bac2-077513fa7b0f",
+      "resultSummary": "**QA Verification Result: PASS — refactor is complete and correct** --- ## What QA Checks ### 1. Functional Controls — All Present and Wired ✓ | Control | In Code | Handler | Dropdown/Menu | |---|---|---|---| | WS sta..."
+    },
+    {
+      "id": "sudo-delegation-1776158504215-9dez8s",
+      "delegatedBy": "Sudo",
+      "orchestrationId": "sudo-orchestration-1776158475700-1m0y92",
+      "orchestrationSequence": 1,
+      "sourceSeatSlug": "dev-team",
+      "sourceSessionKey": "agent:main:main",
+      "sourceSessionLabel": "Sudo via main session",
+      "sourceRuntimeNote": "Sudo itself remains routed through the main session. This delegation spawns a real child run under that runtime.",
+      "lane": {
+        "slug": "frontend",
+        "seatLabel": "Frontend Developer",
+        "role": "UI implementation lane",
+        "defaultModel": "codex",
+        "defaultThinking": "medium",
+        "executionNote": "Real child run spawned under the main OpenClaw agent/runtime."
+      },
+      "requestedPrompt": "You are the Frontend Developer lane delegated by Sudo inside Mission Control.\nRuntime truth:\n- This is a real delegated child run under the main OpenClaw runtime and main agent session boundary.\n- Sudo itself still routes through the main session; do not claim a separate dedicated lane backend exists.\nLane focus: UI implementation lane.\nSudo plan context:\n- Step 1 of 2\n- Planned lane order: frontend -> qa\n- Step purpose: Implement the compression-first refactor in MissionControlChatSurface.tsx so the Chat top section becomes a single sticky operator row on desktop without losing current controls.\n- Expected output: Updated Chat top-section UI: one-row layout, Reset removed, second-row/collapse pattern removed, compressed closed-state triggers, compact Recent Sessions trigger, compact conte...\n- Validation focus: Layout density, sticky behavior, trigger truncation, and preserving existing handlers/dropdowns.\n- Order rationale: Frontend is the smallest honest first lane because this is a surface-composition refactor. QA follows to confirm the compressed layout still works and remains truthful.\n- Validation intent: Mission Control should validate with functional UI checks plus desktop-width layout verification to ensure the strip stays on one row and all existing controls remain reachable and clear.\n- Completion criteria: The Chat top section renders as a single sticky row at normal desktop/laptop widths, the specified controls remain available and functional, Reset is gone, the old second-row/collapse mechanism is removed, and QA confirms no meaningful r...\nPrior completed lane output:\n- No prior lane output yet.\nTask delegated by Sudo:\nSudo, improve the current top-section of the Chat page, following this implementation plan: projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md",
+      "promptSummary": "You are the Frontend Developer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent...",
+      "status": "done",
+      "requestedAt": "2026-04-14T09:21:44.215Z",
+      "startedAt": "2026-04-14T09:21:44.252Z",
+      "completedAt": "2026-04-14T09:27:44.320Z",
+      "updatedAt": "2026-04-14T09:27:44.320Z",
+      "childSessionKey": "agent:main:sudo-frontend:c8dc28dc-8b21-4dab-9866-418348ce9ddf",
+      "runId": "338c17b4-a55f-4cdb-ba78-e788a1e16373",
+      "resultSummary": "Done: I implemented the one-row compression refactor for the Chat top section in `MissionControlChatSurface.tsx`, removed Reset and the second-row collapse mechanism, and kept all core controls reachable in the sticky..."
+    },
+    {
       "id": "sudo-delegation-1776057508367-mh9xi0",
       "delegatedBy": "Sudo",
       "orchestrationId": "sudo-orchestration-1776057411117-m8rez1",
@@ -805,9 +1035,9 @@
       "promptSummary": "You are the QA Engineer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent session...",
       "status": "done",
       "requestedAt": "2026-04-13T05:18:28.367Z",
-      "updatedAt": "2026-04-13T05:19:31.579Z",
       "startedAt": "2026-04-13T05:18:28.421Z",
       "completedAt": "2026-04-13T05:19:31.579Z",
+      "updatedAt": "2026-04-13T05:19:31.579Z",
       "childSessionKey": "agent:main:sudo-qa:3f229597-dade-430c-b2f3-fbb14dc4e89f",
       "runId": "4d2eb1ad-80cb-47d1-ad4f-517d44760c4a",
       "resultSummary": "completed"
@@ -833,9 +1063,9 @@
       "promptSummary": "You are the Frontend Developer lane delegated by Sudo inside Mission Control. Runtime truth: - This is a real delegated child run under the main OpenClaw runtime and main agent...",
       "status": "done",
       "requestedAt": "2026-04-13T05:17:16.487Z",
-      "updatedAt": "2026-04-13T05:18:28.353Z",
       "startedAt": "2026-04-13T05:17:16.546Z",
       "completedAt": "2026-04-13T05:18:28.353Z",
+      "updatedAt": "2026-04-13T05:18:28.353Z",
       "childSessionKey": "agent:main:sudo-frontend:5906a03d-e8c8-4741-87b0-3d7ed7a5d4c4",
       "runId": "cfd8e3a3-6a34-4738-b6f6-c4eb7c59cb6c",
       "resultSummary": "completed"
@@ -1067,6 +1297,6 @@
   ],
   "meta": {
     "schemaVersion": 4,
-    "updatedAt": "2026-04-13T05:19:44.145Z"
+    "updatedAt": "2026-04-14T09:34:43.704Z"
   }
 }

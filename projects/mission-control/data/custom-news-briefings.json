@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-13T17:20:07.113831Z",
+  "generatedAt": "2026-04-15T15:50:20.444478Z",
   "windowHours": 24,
   "feeds": [
     {
@@ -20,106 +20,38 @@
   ],
   "items": [
     {
-      "id": "meta-on-track-to-surpass-google-in-digital-advertising-revenue-for-the-f",
-      "headline": "Meta on track to surpass Google in digital advertising revenue for the first time",
+      "id": "eu-threatens-meta-with-interim-measures-to-ban-ai-rivals-on-whatsapp",
+      "headline": "EU threatens Meta with interim measures to ban AI rivals on WhatsApp",
       "sources": [
         "IEX"
       ],
       "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
-      "whyItMatters": "It signals a broader shift in the European tech landscape, with potential effects on product direction, competition, or regulation.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Meta on track to surpass Google in digital advertising revenue for the first time",
-          "url": "https://www.iex.nl/Nieuws/860217/Meta-op-koers-om-Google-voor-het-eerst-voorbij-te-streven-in-digitale-advertentie-omzet.aspx"
-        }
-      ],
-      "publishedAt": "2026-04-13T15:49:00Z"
-    },
-    {
-      "id": "hackers-break-into-booking-com-and-basic-fit",
-      "headline": "Hackers break into Booking.com and Basic-Fit",
-      "sources": [
-        "FD"
-      ],
-      "whatHappened": "At Basic-Fit, hackers stole customer data from a million customers. At Booking.com they gained access to booking data of an unknown number of customers.",
-      "whyItMatters": "It points to cybersecurity, privacy, or infrastructure risk that could affect trust, compliance, and operational resilience.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Hackers break into Booking.com and Basic-Fit",
-          "url": "https://fd.nl/tech-en-innovatie/1592820/hackers-breken-in-bij-booking-com-en-basic-fit"
-        }
-      ],
-      "publishedAt": "2026-04-13T14:22:34Z"
-    },
-    {
-      "id": "dutch-regulator-seeks-eu-approval-for-tesla-s-self-driving-software",
-      "headline": "Dutch regulator seeks EU approval for Tesla's self-driving software",
-      "sources": [
-        "IEX"
-      ],
-      "whatHappened": "Dutch vehicle authority RDW has notified the European Commission of its plan to seek EU-wide approval for Tesla's Full Self-Driving software system, the regulator's general manager of type approvals said...",
-      "whyItMatters": "It signals a broader shift in the European tech landscape, with potential effects on product direction, competition, or regulation.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Dutch regulator seeks EU approval for Tesla's self-driving software",
-          "url": "https://www.iex.nl/Nieuws/860201/Nederlandse-toezichthouder-zoekt-EU-goedkeuring-voor-Teslas-zelfrijsoftware.aspx"
-        }
-      ],
-      "publishedAt": "2026-04-13T13:38:00Z"
-    },
-    {
-      "id": "asml-is-balancing-between-ai-chip-boom-and-renewed-export-threat",
-      "headline": "ASML is balancing between AI chip boom and renewed export threat",
-      "sources": [
-        "FD"
-      ],
-      "whatHappened": "ASML publishes quarterly figures on Wednesday. These will likely reflect the current buoyant chip market, but the threat of more restrictions on exports to China hangs over the company.",
       "whyItMatters": "This may influence AI product strategy, regulation, or competitive positioning in Europe and beyond.",
       "differingViews": null,
       "links": [
         {
-          "title": "ASML is balancing between AI chip boom and renewed export threat",
-          "url": "https://fd.nl/bedrijfsleven/1592809/asml-balanceert-tussen-ai-chiphausse-en-hernieuwde-exportdreiging"
+          "title": "EU threatens Meta with interim measures to ban AI rivals on WhatsApp",
+          "url": "https://www.iex.nl/Nieuws/860528/EU-dreigt-Meta-met-voorlopige-maatregelen-om-verbod-op-AI-rivalen-op-WhatsApp.aspx"
         }
       ],
-      "publishedAt": "2026-04-13T13:35:59Z"
+      "publishedAt": "2026-04-15T13:03:00Z"
     },
     {
-      "id": "the-smartest-in-the-class",
-      "headline": "The smartest in the class",
+      "id": "entrepreneur-florentine-gillis-i-m-not-that-afraid-of-failure",
+      "headline": "Entrepreneur Florentine Gillis: 'I'm not that afraid of failure'",
       "sources": [
         "FD"
       ],
-      "whatHappened": "In Estonia, students are required to use AI. Has Estonia been seduced by OpenAI's marketing talk?",
-      "whyItMatters": "It signals a broader shift in the European tech landscape, with potential effects on product direction, competition, or regulation.",
+      "whatHappened": "Online intro: Kicking against sacred cows, stopping in time. What do professionals experience in their careers?",
+      "whyItMatters": "This may influence AI product strategy, regulation, or competitive positioning in Europe and beyond.",
       "differingViews": null,
       "links": [
         {
-          "title": "The smartest in the class",
-          "url": "https://fd.nl/opinie/1592458/de-slimste-van-de-klas"
+          "title": "Entrepreneur Florentine Gillis: 'I'm not that afraid of failure'",
+          "url": "https://fd.nl/samenleving/1592811/ondernemer-florentine-gillis-ik-ben-niet-zo-bang-om-te-falen"
         }
       ],
-      "publishedAt": "2026-04-12T22:30:00Z"
-    },
-    {
-      "id": "rabo-productivity-of-the-dutch-export-sector-has-stagnated-since-2010",
-      "headline": "Rabo: productivity of the Dutch export sector has stagnated since 2010",
-      "sources": [
-        "FD"
-      ],
-      "whatHappened": "The Dutch export sector has not shown any productivity growth since 2010, Rabobank concludes. “This makes the economy vulnerable and undermines future earning capacity.”",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Rabo: productivity of the Dutch export sector has stagnated since 2010",
-          "url": "https://fd.nl/economie/1592624/rabo-productiviteit-nederlandse-exportsector-stagneert-sinds-2010"
-        }
-      ],
-      "publishedAt": "2026-04-12T22:01:00Z"
+      "publishedAt": "2026-04-15T09:30:00Z"
     },
     {
       "id": "exhibition-agenda-dutch-companies",
@@ -127,54 +59,20 @@
       "sources": [
         "IEX"
       ],
-      "whatHappened": "Below are the most important items on the financial agenda for the Netherlands until Tuesday, April 21, 2026:",
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
       "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
       "differingViews": null,
       "links": [
         {
           "title": "Exhibition agenda: Dutch companies",
-          "url": "https://www.iex.nl/Nieuws/860208/Beursagenda-Nederlandse-bedrijven.aspx"
+          "url": "https://www.iex.nl/Nieuws/860546/Beursagenda-Nederlandse-bedrijven.aspx"
         }
       ],
-      "publishedAt": "2026-04-13T14:28:00Z"
+      "publishedAt": "2026-04-15T13:58:00Z"
     },
     {
-      "id": "update-rdw-approves-tesla-driver-assistance-system-for-the-netherlands",
-      "headline": "Update: RDW approves Tesla driver assistance system for the Netherlands",
-      "sources": [
-        "IEX"
-      ],
-      "whatHappened": "The Dutch RDW has issued type approval for Tesla's driver assistance system.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Update: RDW approves Tesla driver assistance system for the Netherlands",
-          "url": "https://www.iex.nl/Nieuws/860204/Update-RDW-keurt-rijhulpsysteem-van-Tesla-goed-voor-Nederland.aspx"
-        }
-      ],
-      "publishedAt": "2026-04-13T14:16:00Z"
-    },
-    {
-      "id": "ecb-interest-rate-increase-depends-on-effects-of-oil-price-peak-says-de-",
-      "headline": "ECB interest rate increase depends on effects of oil price peak, says De Guindos",
-      "sources": [
-        "IEX"
-      ],
-      "whatHappened": "Any rate hike by the European Central Bank will depend on how a war-fueled rise in the costs of crude oil and some chemicals feeds into other prices, ECB Vice President Luis de Guindos said on Monday.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "ECB interest rate increase depends on effects of oil price peak, says De Guindos",
-          "url": "https://www.iex.nl/Nieuws/860178/ECB-renteverhoging-hangt-af-van-effecten-van-olieprijspiek-zegt-De-Guindos.aspx"
-        }
-      ],
-      "publishedAt": "2026-04-13T12:04:00Z"
-    },
-    {
-      "id": "yields-on-eurozone-bonds-are-rising-as-the-market-bets-on-ecb-rate-hikes",
-      "headline": "Yields on eurozone bonds are rising as the market bets on ECB rate hikes",
+      "id": "us-oil-inventories-fall-unexpectedly",
+      "headline": "US oil inventories fall unexpectedly",
       "sources": [
         "IEX"
       ],
@@ -183,32 +81,15 @@
       "differingViews": null,
       "links": [
         {
-          "title": "Yields on eurozone bonds are rising as the market bets on ECB rate hikes",
-          "url": "https://www.iex.nl/Nieuws/860173/Rentes-op-eurozone-obligaties-stijgen-nu-markt-inzet-op-ECB-renteverhogingen.aspx"
+          "title": "US oil inventories fall unexpectedly",
+          "url": "https://www.iex.nl/Nieuws/860556/Amerikaanse-olievoorraden-dalen-onverwacht.aspx"
         }
       ],
-      "publishedAt": "2026-04-13T11:26:00Z"
+      "publishedAt": "2026-04-15T14:40:00Z"
     },
     {
-      "id": "american-pharmaceutical-company-msd-benefits-from-billions-in-tax-benefi",
-      "headline": "American pharmaceutical company MSD benefits from billions in tax benefits in the Netherlands. How about that?",
-      "sources": [
-        "FD"
-      ],
-      "whatHappened": "The American pharmaceutical company MSD receives billions of euros in tax credits in the Netherlands thanks to a tax scheme for innovative companies. What kind of company is MSD anyway?",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "American pharmaceutical company MSD benefits from billions in tax benefits in the Netherlands. How about that?",
-          "url": "https://fd.nl/bedrijfsleven/1592732/amerikaanse-farmaceut-msd-profiteert-in-nederland-van-miljarden-aan-belastingvoordeel-hoe-zit-dat"
-        }
-      ],
-      "publishedAt": "2026-04-13T16:36:45Z"
-    },
-    {
-      "id": "slight-growth-for-lvmh-despite-geopolitical-challenges",
-      "headline": "Slight growth for LVMH despite geopolitical challenges",
+      "id": "byd-avoids-price-war-in-south-africa-to-build-ev-brand",
+      "headline": "BYD avoids price war in South Africa to build EV brand",
       "sources": [
         "IEX"
       ],
@@ -217,32 +98,19 @@
       "differingViews": null,
       "links": [
         {
-          "title": "Slight growth for LVMH despite geopolitical challenges",
-          "url": "https://www.iex.nl/Nieuws/860221/Lichte-groei-voor-LVMH-ondanks-geopolitieke-uitdagingen.aspx"
-        }
-      ],
-      "publishedAt": "2026-04-13T16:22:00Z"
-    },
-    {
-      "id": "the-meeting-schedule-of-the-house-of-representatives-remains-empty-on-tu",
-      "headline": "The meeting schedule of the House of Representatives remains empty on Tuesday: some civil servants are on strike",
-      "sources": [
-        "NRC"
-      ],
-      "whatHappened": "The unions are demonstrating against the continuation of the 'zero line', which stipulates that there will be no salary increase and inflation adjustment for civil servants.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
+          "title": "BYD avoids price war in South Africa to build EV brand",
+          "url": "https://www.iex.nl/Nieuws/860555/BYD-mijdt-prijzenoorlog-in-Zuid-Afrika-om-EV-merk-op-te-bouwen.aspx"
+        },
         {
-          "title": "The meeting schedule of the House of Representatives remains empty on Tuesday: some civil servants are on strike",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/het-vergaderschema-van-de-tweede-kamer-blijft-dinsdag-leeg-deel-van-de-ambtenaren-staakt-a4925427"
+          "title": "BYD avoids price war in South Africa to build its EV brand",
+          "url": "https://www.iex.nl/Nieuws/860555/BYD-mijdt-prijzenoorlog-in-Zuid-Afrika-om-zijn-EV-merk-op-te-bouwen.aspx"
         }
       ],
-      "publishedAt": "2026-04-13T16:21:22Z"
+      "publishedAt": "2026-04-15T14:30:00Z"
     },
     {
-      "id": "aex-still-ends-up-in-the-green",
-      "headline": "AEX still ends up in the green",
+      "id": "video-small-catch-at-asml",
+      "headline": "Video: small catch at ASML",
       "sources": [
         "IEX"
       ],
@@ -251,15 +119,15 @@
       "differingViews": null,
       "links": [
         {
-          "title": "AEX still ends up in the green",
-          "url": "https://www.iex.nl/Nieuws/860218/AEX-eindigt-toch-in-het-groen.aspx"
+          "title": "Video: small catch at ASML",
+          "url": "https://www.iex.nl/Nieuws/860553/Video-klein-addertje-onder-het-gras-bij-ASML.aspx"
         }
       ],
-      "publishedAt": "2026-04-13T15:57:00Z"
+      "publishedAt": "2026-04-15T14:18:00Z"
     },
     {
-      "id": "lvmh-warns-of-sales-impact-of-iran-war-dampener-on-luxury-recovery",
-      "headline": "LVMH warns of sales impact of Iran war, dampener on luxury recovery",
+      "id": "confidence-in-american-homebuilders-is-falling",
+      "headline": "Confidence in American homebuilders is falling",
       "sources": [
         "IEX"
       ],
@@ -268,271 +136,411 @@
       "differingViews": null,
       "links": [
         {
-          "title": "LVMH warns of sales impact of Iran war, dampener on luxury recovery",
-          "url": "https://www.iex.nl/Nieuws/860215/LVMH-waarschuwt-voor-verkoopimpact-van-Iran-oorlog-domper-op-luxeherstel.aspx"
+          "title": "Confidence in American homebuilders is falling",
+          "url": "https://www.iex.nl/Nieuws/860552/Vertrouwen-Amerikaanse-huizenbouwers-daalt.aspx"
         }
       ],
-      "publishedAt": "2026-04-13T15:47:00Z"
+      "publishedAt": "2026-04-15T14:07:00Z"
     },
     {
-      "id": "peers-about-sonja-barend-i-looked-up-to-her-so-much-she-did-something-i-",
-      "headline": "Peers about Sonja Barend: 'I looked up to her so much! She did something I had never seen women do so brazenly before.\"",
-      "sources": [
-        "NRC"
-      ],
-      "whatHappened": "'Talk show queen' Sonja Barend died on Saturday. What did she mean for Dutch (TV) journalism?",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Peers about Sonja Barend: 'I looked up to her so much! She did something I had never seen women do so brazenly before.\"",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/vakgenoten-over-sonja-barend-ik-keek-zo-tegen-haar-op-ze-deed-iets-wat-ik-vrouwen-niet-eerder-zo-onbeschaamd-had-zien-doen-a4925410"
-        }
-      ],
-      "publishedAt": "2026-04-13T14:59:12Z"
-    },
-    {
-      "id": "what-is-it-like-to-live-in-the-netherlands-without-papers-i-wish-i-could",
-      "headline": "What is it like to live in the Netherlands without papers? “I wish I could fly away and live in a tree”",
-      "sources": [
-        "NRC"
-      ],
-      "whatHappened": "This week, the Senate is debating the asylum laws of former asylum minister Marjolein Faber (PVV), with the criminalization of illegality as the most controversial point. What is it like to live without papers?",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "What is it like to live in the Netherlands without papers? “I wish I could fly away and live in a tree”",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/illegaal-in-nederland-als-ik-terug-kon-naar-libie-had-ik-dat-wel-gedaan-a4925249"
-        }
-      ],
-      "publishedAt": "2026-04-13T14:32:06Z"
-    },
-    {
-      "id": "education-council-the-netherlands-is-falling-short-on-the-caribbean-isla",
-      "headline": "Education Council: The Netherlands is falling short on the Caribbean islands",
-      "sources": [
-        "NRC"
-      ],
-      "whatHappened": "The Netherlands must implement unequal policies to improve education in the Caribbean Netherlands, the Education Council says in a lengthy and critical report. \"Our conclusion is that too little structural improvement has been made over the past fifteen years.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Education Council: The Netherlands is falling short on the Caribbean islands",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/onderwijsraad-nederland-schiet-tekort-op-de-caribische-eilanden-a4925059"
-        }
-      ],
-      "publishedAt": "2026-04-13T14:12:08Z"
-    },
-    {
-      "id": "sportcity-is-making-a-loss-again-but-less",
-      "headline": "Sportcity is making a loss again, but less",
+      "id": "there-is-no-diversity-in-the-top-lawyers-yet",
+      "headline": "There is no diversity in the top lawyers yet",
       "sources": [
         "FD"
       ],
-      "whatHappened": "Revenues are growing at the second largest gym chain in the Netherlands, but there are still red figures.",
+      "whatHappened": "In April 2007, a declaration of intent 'diversity policy' was drawn up by the Dutch Bar Association. What about the ambitions?",
       "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
       "differingViews": null,
       "links": [
         {
-          "title": "Sportcity is making a loss again, but less",
-          "url": "https://fd.nl/bedrijfsleven/1592818/sportcity-maakt-weer-verlies-maar-wel-minder"
+          "title": "There is no diversity in the top lawyers yet",
+          "url": "https://fd.nl/financiele-markten/1593016/van-diversiteit-in-de-advocatentop-is-nog-geen-sprake"
         }
       ],
-      "publishedAt": "2026-04-13T13:58:02Z"
+      "publishedAt": "2026-04-15T14:00:00Z"
     },
     {
-      "id": "women-do-most-of-the-work-in-tea-production-but-benefit-the-least-how-do",
-      "headline": "Women do most of the work in tea production, but benefit the least. How do you get tea without a bitter aftertaste?",
-      "sources": [
-        "NRC"
-      ],
-      "whatHappened": "Small tea farmers and pickers are often women, who usually do not earn a living income. How the story of one Ugandan woman shows what is going wrong – and could be improved – in the tea trade.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Women do most of the work in tea production, but benefit the least. How do you get tea without a bitter aftertaste?",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/vrouwen-doen-het-meeste-werk-in-theeproductie-maar-profiteren-het-minst-hoe-kom-je-aan-thee-zonder-wrange-afdronk-a4925380"
-        }
-      ],
-      "publishedAt": "2026-04-13T13:48:28Z"
-    },
-    {
-      "id": "rdw-reports-plan-to-ec-to-request-eu-approval-for-tesla-s-fsd",
-      "headline": "RDW reports plan to EC to request EU approval for Tesla's FSD",
-      "sources": [
-        "IEX"
-      ],
-      "whatHappened": "The Dutch vehicle authority RDW has informed the European Commission of its intention to seek EU-wide approval for Tesla's Full-Self Driving system, said Bernd van Nieuwenhoven, general manager of type approvals at the...",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "RDW reports plan to EC to request EU approval for Tesla's FSD",
-          "url": "https://www.iex.nl/Nieuws/860201/RDW-meldt-plan-aan-EC-om-EU-goedkeuring-voor-Teslas-FSD-te-vragen.aspx"
-        }
-      ],
-      "publishedAt": "2026-04-13T13:38:00Z"
-    },
-    {
-      "id": "singer-anaiis-enormous-chaos-can-arise-internally-as-soon-as-i-make-musi",
-      "headline": "Singer Anaiis: 'Enormous chaos can arise internally. As soon as I make music I become calmer'",
-      "sources": [
-        "NRC"
-      ],
-      "whatHappened": "The French-Senegalese Anaiis impresses with her 'spiritual soul'. This weekend she will be at the Motel Mozaïque festival in Rotterdam.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Singer Anaiis: 'Enormous chaos can arise internally. As soon as I make music I become calmer'",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/zangeres-anaiis-innerlijk-kan-er-enorme-chaos-ontstaan-zodra-ik-muziek-maak-word-ik-kalmer-a4923116"
-        }
-      ],
-      "publishedAt": "2026-04-13T13:26:27Z"
-    },
-    {
-      "id": "rheinmetall-joins-forces-with-dutch-rocket-builder-destinus",
-      "headline": "Rheinmetall joins forces with Dutch rocket builder Destinus",
-      "sources": [
-        "IEX"
-      ],
-      "whatHappened": "German defense company Rheinmetall will collaborate with Dutch aerospace company Destinus to make missiles for Europe and some NATO member states. Rheinmetall announced this on Monday.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "Rheinmetall joins forces with Dutch rocket builder Destinus",
-          "url": "https://www.iex.nl/Nieuws/860198/Rheinmetall-in-zee-met-Nederlandse-rakettenbouwer-Destinus.aspx"
-        }
-      ],
-      "publishedAt": "2026-04-13T13:26:00Z"
-    },
-    {
-      "id": "group-of-dutch-investors-buys-majority-in-developer-vanwonen",
-      "headline": "Group of Dutch investors buys majority in developer VanWonen",
+      "id": "brussels-launches-app-for-online-age-verification",
+      "headline": "Brussels launches app for online age verification",
       "sources": [
         "FD"
       ],
-      "whatHappened": "After six years, the Zwolle area and real estate developer is back in Dutch hands. A group of wealthy individuals and family offices takes over the majority stake in ActivumSG.",
+      "whatHappened": "European countries can also use the app if they decide to introduce an age limit for social media. Several countries, including the Netherlands, are heading towards such a border.",
       "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
       "differingViews": null,
       "links": [
         {
-          "title": "Group of Dutch investors buys majority in developer VanWonen",
-          "url": "https://fd.nl/bedrijfsleven/1592730/groep-nederlandse-investeerders-koopt-meerderheid-in-ontwikkelaar-vanwonen"
+          "title": "Brussels launches app for online age verification",
+          "url": "https://fd.nl/politiek/1592945/brussel-lanceert-app-voor-online-leeftijdverificatie"
         }
       ],
-      "publishedAt": "2026-04-13T12:31:03Z"
+      "publishedAt": "2026-04-15T13:58:28Z"
     },
     {
-      "id": "a-gender-fluid-god-in-17th-century-amsterdam-freethinkers-brought-with-t",
-      "headline": "A gender fluid God? In 17th century Amsterdam, freethinkers brought with them ideas that are still controversial",
-      "sources": [
-        "NRC"
-      ],
-      "whatHappened": "Amsterdam was the international capital of freethinkers in the 17th century. An exhibition at Museum Embassy of the Free Mind now shows their books.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "A gender fluid God? In 17th century Amsterdam, freethinkers brought with them ideas that are still controversial",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/een-genderfluide-god-in-het-amsterdam-van-de-17de-eeuw-brachten-vrijdenkers-ideeen-met-zich-mee-die-nog-steeds-omstreden-zijn-a4924196"
-        }
-      ],
-      "publishedAt": "2026-04-13T11:52:44Z"
-    },
-    {
-      "id": "the-bruilboom-in-de-bruil-is-the-source-of-many-stories",
-      "headline": "The Bruilboom in De Bruil is the source of many stories",
-      "sources": [
-        "NRC"
-      ],
-      "whatHappened": "Arjen Fortuin always takes a book from street bookcases throughout the Netherlands, discusses it and passes it on. This week, David Grossman's debut appears in the most beautiful bookcase in the Netherlands in the hamlet of De Bruil.",
-      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
-      "differingViews": null,
-      "links": [
-        {
-          "title": "The Bruilboom in De Bruil is the source of many stories",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/de-bruilboom-in-de-bruil-is-de-bron-van-vele-verhalen-a4925399"
-        }
-      ],
-      "publishedAt": "2026-04-13T11:44:48Z"
-    },
-    {
-      "id": "traders-are-pricing-in-a-70-chance-of-a-third-ecb-rate-hike-by-december",
-      "headline": "Traders are pricing in a 70% chance of a third ECB rate hike by December",
+      "id": "stock-market-agenda-foreign-funds",
+      "headline": "Stock market agenda: foreign funds",
       "sources": [
         "IEX"
       ],
-      "whatHappened": "Euro zone government bond yields rose toward recent highs on Monday after the United States and Iran failed to reach a deal to end the war, boosting oil prices and prompting traders...",
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
       "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
       "differingViews": null,
       "links": [
         {
-          "title": "Traders are pricing in a 70% chance of a third ECB rate hike by December",
-          "url": "https://www.iex.nl/Nieuws/860173/Handelaren-prijzen-70-kans-in-op-derde-renteverhoging-door-ECB-tegen-december.aspx"
+          "title": "Stock market agenda: foreign funds",
+          "url": "https://www.iex.nl/Nieuws/860547/Beursagenda-buitenlandse-fondsen.aspx"
         }
       ],
-      "publishedAt": "2026-04-13T11:26:00Z"
+      "publishedAt": "2026-04-15T13:58:00Z"
     },
     {
-      "id": "the-horror-of-colonial-propaganda-films-lies-in-the-details",
-      "headline": "The horror of colonial propaganda films lies in the details",
+      "id": "stock-market-agenda-macroeconomic",
+      "headline": "Stock market agenda: macroeconomic",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Stock market agenda: macroeconomic",
+          "url": "https://www.iex.nl/Nieuws/860548/Beursagenda-macro-economisch.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T13:58:00Z"
+    },
+    {
+      "id": "in-the-milk-white-netherlands-she-was-a-refugee-for-somaliland-she-was-a",
+      "headline": "In the 'milk white' Netherlands she was a refugee, for Somaliland she was a diplomat. “Don't be a coward, I told myself”",
       "sources": [
         "NRC"
       ],
-      "whatHappened": "The Dutch colonial films were more obsessed with details than with spectacle, which other European powers indulged in. This is clearly visible in the colonial film archives in Eye.",
+      "whatHappened": "When she was a girl, she came to the Netherlands as a refugee. She returned to Somaliland as a success story.",
       "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
       "differingViews": null,
       "links": [
         {
-          "title": "The horror of colonial propaganda films lies in the details",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/de-gruwelijkheid-zit-hem-bij-koloniale-propagandafilms-in-de-details-a4924873"
+          "title": "In the 'milk white' Netherlands she was a refugee, for Somaliland she was a diplomat. “Don't be a coward, I told myself”",
+          "url": "https://www.nrc.nl/nieuws/2026/04/15/in-melkwit-nederland-was-ze-vluchteling-voor-somaliland-was-ze-diplomaat-wees-geen-lafaard-zei-ik-tegen-mezelf-a4924419"
         }
       ],
-      "publishedAt": "2026-04-13T11:01:04Z"
+      "publishedAt": "2026-04-15T13:56:37Z"
     },
     {
-      "id": "permanently-higher-oil-prices-imf-struggles-with-economic-forecasts",
-      "headline": "Permanently higher oil prices? IMF struggles with economic forecasts",
+      "id": "fed-s-hammack-rates-likely-to-remain-unchanged-for-quite-some-time",
+      "headline": "Fed's Hammack: Rates likely to remain unchanged for 'quite some time'",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Fed's Hammack: Rates likely to remain unchanged for 'quite some time'",
+          "url": "https://www.iex.nl/Nieuws/860545/Hammack-van-de-Fed-Rentes-waarschijnlijk-nog-geruime-tijd-ongewijzigd-CNBC.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T13:53:00Z"
+    },
+    {
+      "id": "imf-in-the-event-of-a-prolonged-war-national-debts-are-at-risk-of-skyroc",
+      "headline": "IMF: in the event of a prolonged war, national debts are at risk of skyrocketing",
       "sources": [
         "NRC"
       ],
-      "whatHappened": "Which countries are the economic winners and losers of the Iran war? This week the International Monetary Fund presents new – very uncertain – economic estimates for the global economy.",
+      "whatHappened": "The public finances of many countries were already not doing well - and now a new energy crisis has arisen. In a severe scenario, global government debt could explode to 120 percent of the size of the global economy.",
       "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
       "differingViews": null,
       "links": [
         {
-          "title": "Permanently higher oil prices? IMF struggles with economic forecasts",
-          "url": "https://www.nrc.nl/nieuws/2026/04/13/permanent-hogere-olieprijzen-imf-worstelt-met-economische-prognoses-a4925386"
+          "title": "IMF: in the event of a prolonged war, national debts are at risk of skyrocketing",
+          "url": "https://www.nrc.nl/nieuws/2026/04/15/imf-bij-langdurige-oorlog-dreigen-staatsschulden-de-hoogte-in-te-schieten-a4925578"
         }
       ],
-      "publishedAt": "2026-04-13T10:56:52Z"
+      "publishedAt": "2026-04-15T13:40:17Z"
     },
     {
-      "id": "rheinmetall-will-produce-cruise-missiles-with-the-dutch-destinus",
-      "headline": "Rheinmetall will produce cruise missiles with the Dutch Destinus",
+      "id": "wall-street-heads-down-on-flat-opening",
+      "headline": "Wall Street heads down on flat opening",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Wall Street heads down on flat opening",
+          "url": "https://www.iex.nl/Nieuws/860522/Wall-Street-koerst-af-op-vlakke-opening.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T13:02:00Z"
+    },
+    {
+      "id": "stock-market-view-jefferies-increases-price-targets-for-azelis-and-imcd",
+      "headline": "Stock market view: Jefferies increases price targets for Azelis and IMCD",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Stock market view: Jefferies increases price targets for Azelis and IMCD",
+          "url": "https://www.iex.nl/Nieuws/860519/Beursblik-Jefferies-verhoogt-koersdoelen-Azelis-en-IMCD.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T12:47:00Z"
+    },
+    {
+      "id": "empire-state-index-shows-growth-again",
+      "headline": "Empire State index shows growth again",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Empire State index shows growth again",
+          "url": "https://www.iex.nl/Nieuws/860518/Empire-State-index-laat-weer-groei-zien.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T12:38:00Z"
+    },
+    {
+      "id": "us-import-prices-increased",
+      "headline": "US import prices increased",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "US import prices increased",
+          "url": "https://www.iex.nl/Nieuws/860517/Amerikaanse-importprijzen-gestegen.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T12:38:00Z"
+    },
+    {
+      "id": "not-only-building-more-wind-turbines-at-sea-but-now-especially-more-gree",
+      "headline": "Not only building more wind turbines at sea, but now especially more green industry",
       "sources": [
         "FD"
       ],
-      "whatHappened": "The joint venture gives the Dutch the opportunity to expand their production. The two companies expect the market to be worth several billion euros annually.",
+      "whatHappened": "Vattenfall Netherlands CEO Cindy Kroon sees how the government is allocating money for 40 gigawatts of offshore wind, but not for electrification of the industry that has to purchase this green energy.",
       "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
       "differingViews": null,
       "links": [
         {
-          "title": "Rheinmetall will produce cruise missiles with the Dutch Destinus",
-          "url": "https://fd.nl/bedrijfsleven/1592724/rheinmetall-gaat-met-het-nederlandse-destinus-kruisraketten-produceren"
+          "title": "Not only building more wind turbines at sea, but now especially more green industry",
+          "url": "https://fd.nl/opinie/1592875/niet-alleen-meer-windmolens-nu-vooral-meer-groene-industrie"
         }
       ],
-      "publishedAt": "2026-04-13T08:27:16Z"
+      "publishedAt": "2026-04-15T12:30:00Z"
+    },
+    {
+      "id": "morgan-stanley-posts-record-quarter",
+      "headline": "Morgan Stanley posts record quarter",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Morgan Stanley posts record quarter",
+          "url": "https://www.iex.nl/Nieuws/860509/Morgan-Stanley-boekt-recordkwartaal.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T11:47:00Z"
+    },
+    {
+      "id": "the-heat-pump-market-is-picking-up-again",
+      "headline": "The heat pump market is picking up again",
+      "sources": [
+        "FD"
+      ],
+      "whatHappened": "This year, more than one million heat pumps are expected to be installed in Dutch homes and buildings.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "The heat pump market is picking up again",
+          "url": "https://fd.nl/economie/1593027/markt-voor-warmtepompen-trekt-weer-aan"
+        }
+      ],
+      "publishedAt": "2026-04-15T11:41:12Z"
+    },
+    {
+      "id": "snap-is-making-significant-cuts-in-its-workforce",
+      "headline": "Snap is making significant cuts in its workforce",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Snap is making significant cuts in its workforce",
+          "url": "https://www.iex.nl/Nieuws/860505/Snap-snijdt-flink-in-personeelsbestand.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T11:33:00Z"
+    },
+    {
+      "id": "trump-threatens-to-fire-powell-if-he-doesn-t-leave-fed-board-investigati",
+      "headline": "Trump threatens to fire Powell if he doesn't leave Fed board; investigation makes confirmation of Warsh difficult",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Trump threatens to fire Powell if he doesn't leave Fed board; investigation makes confirmation of Warsh difficult",
+          "url": "https://www.iex.nl/Nieuws/860534/Trump-dreigt-Powell-te-ontslaan-als-hij-Fed-bestuur-niet-verlaat-onderzoek-bemoeilijkt-bevestiging-Warsh.aspx"
+        },
+        {
+          "title": "Trump threatens to fire Powell if he doesn't leave Fed board",
+          "url": "https://www.iex.nl/Nieuws/860534/Trump-dreigt-Powell-te-ontslaan-als-hij-Fed-raad-niet-verlaat.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T11:28:00Z"
+    },
+    {
+      "id": "what-is-daily-life-like-in-iran-now-the-ceasefire-makes-me-desperate",
+      "headline": "What is daily life like in Iran now? 'The ceasefire makes me desperate'",
+      "sources": [
+        "NRC"
+      ],
+      "whatHappened": "Since the ceasefire with the US last week, the streets in Iran have been busy again. Offices are open again, schools are teaching online.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "What is daily life like in Iran now? 'The ceasefire makes me desperate'",
+          "url": "https://www.nrc.nl/nieuws/2026/04/15/onder-iraniers-is-de-angst-voor-knallen-afgenomen-maar-wekt-het-staakt-het-vuren-ook-zorgen-a4925029"
+        }
+      ],
+      "publishedAt": "2026-04-15T11:25:38Z"
+    },
+    {
+      "id": "bank-of-america-profits-skyrocket",
+      "headline": "Bank of America profits skyrocket",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Bank of America profits skyrocket",
+          "url": "https://www.iex.nl/Nieuws/860501/Winst-Bank-of-America-schiet-omhoog.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T11:21:00Z"
+    },
+    {
+      "id": "wall-street-futures-signal-flat-opening",
+      "headline": "Wall Street futures signal flat opening",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Wall Street futures signal flat opening",
+          "url": "https://www.iex.nl/Nieuws/860498/Futures-Wall-Street-signaleren-vlakke-opening.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T10:55:00Z"
+    },
+    {
+      "id": "regional-fed-banks-form-front-in-battle-for-central-bank-independence",
+      "headline": "Regional Fed banks form front in battle for central bank independence",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Regional Fed banks form front in battle for central bank independence",
+          "url": "https://www.iex.nl/Nieuws/860537/Regionale-Fed-banken-vormen-front-in-strijd-om-onafhankelijkheid-centrale-bank.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T10:05:00Z"
+    },
+    {
+      "id": "luxury-brands-under-pressure-on-the-european-stock-market",
+      "headline": "Luxury brands under pressure on the European stock market",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Luxury brands under pressure on the European stock market",
+          "url": "https://www.iex.nl/Nieuws/860492/Luxemerken-onder-druk-op-Europese-beurs.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T10:05:00Z"
+    },
+    {
+      "id": "netflix-returns-to-focus-on-advertising-and-content-after-failed-bid-for",
+      "headline": "Netflix returns to focus on advertising and content after failed bid for Warner Bros",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Netflix returns to focus on advertising and content after failed bid for Warner Bros",
+          "url": "https://www.iex.nl/Nieuws/860526/Netflix-richt-zich-weer-op-advertenties-en-content-na-mislukt-bod-op-Warner-Bros.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T10:04:00Z"
+    },
+    {
+      "id": "automakers-are-struggling-with-a-costly-transition-to-battery-energy-sto",
+      "headline": "Automakers are struggling with a costly transition to battery energy storage",
+      "sources": [
+        "IEX"
+      ],
+      "whatHappened": "IEX.nl is the investor platform in the Netherlands. Stay up to date with all relevant information about shares and other investment products.",
+      "whyItMatters": "This affects Dutch economic confidence, business planning, and near-term market expectations.",
+      "differingViews": null,
+      "links": [
+        {
+          "title": "Automakers are struggling with a costly transition to battery energy storage",
+          "url": "https://www.iex.nl/Nieuws/860524/Autofabrikanten-worstelen-met-kostbare-omslag-naar-energieopslag-op-batterijen.aspx"
+        }
+      ],
+      "publishedAt": "2026-04-15T10:03:00Z"
     }
   ],
   "stats": {
-    "itemsFetched": 95,
-    "itemsInWindow": 85,
+    "itemsFetched": 94,
+    "itemsInWindow": 90,
     "itemsPublished": 30
   }
 }

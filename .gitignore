@@ -8,6 +8,10 @@ memory/*
 **/__pycache__/
 *.pyc
 *.bak
+projects/mission-control/.preview-runtime/
+projects/mission-control/tsconfig.tsbuildinfo
+projects/mission-control/data/task-lifecycle-events.json
+projects/mission-control/.test-dist/
 projects/market-intel/data/last_signal_check
 projects/market-intel/data/rss_alerts.json
 projects/market-intel/data/reddit_alerts.json
