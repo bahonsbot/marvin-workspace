@@ -1,6 +1,20 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { Compartment, EditorState } from '@codemirror/state';
+import {
+  EditorView,
+  drawSelection,
+  highlightActiveLine,
+  highlightActiveLineGutter,
+  keymap,
+  lineNumbers,
+} from '@codemirror/view';
+import { defaultHighlightStyle, indentOnInput, bracketMatching, foldGutter, syntaxHighlighting } from '@codemirror/language';
+import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
+import { search, searchKeymap } from '@codemirror/search';
+import { getLanguageExtension, shouldWrap } from '@/components/editor/languageMap';
+import { missionControlEditorTheme, missionControlEditorHighlighting } from '@/components/editor/editorTheme';
 
 type CodeMirrorEditorProps = {
   filename: string;
@@ -11,15 +25,130 @@ type CodeMirrorEditorProps = {
 };
 
 export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, onSave }: CodeMirrorEditorProps) {
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const editorContainerRef = useRef<HTMLDivElement | null>(null);
+  const viewRef = useRef<EditorView | null>(null);
+  const readOnlyCompartmentRef = useRef(new Compartment());
+  const languageCompartmentRef = useRef(new Compartment());
+  const onChangeRef = useRef(onChange);
+  const onSaveRef = useRef(onSave);
+  const syncedValueRef = useRef(value);
+
+  onChangeRef.current = onChange;
+  onSaveRef.current = onSave;
 
   useEffect(() => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
+    syncedValueRef.current = value;
+  }, []);
 
-    if (textarea.value !== value) {
-      textarea.value = value;
+  useEffect(() => {
+    if (!editorContainerRef.current) return;
+
+    let disposed = false;
+
+    async function setupEditor() {
+      const language = await getLanguageExtension(filename);
+      if (disposed || !editorContainerRef.current) return;
+
+      const extensions = [
+        lineNumbers(),
+        highlightActiveLine(),
+        highlightActiveLineGutter(),
+        foldGutter(),
+        drawSelection(),
+        history(),
+        bracketMatching(),
+        indentOnInput(),
+        search(),
+        keymap.of([
+          ...defaultKeymap,
+          ...historyKeymap,
+          ...searchKeymap,
+          {
+            key: 'Mod-s',
+            run: () => {
+              onSaveRef.current();
+              return true;
+            },
+          },
+        ]),
+        missionControlEditorTheme,
+        missionControlEditorHighlighting ?? syntaxHighlighting(defaultHighlightStyle),
+        EditorView.updateListener.of((update) => {
+          if (!update.docChanged) return;
+          const next = update.state.doc.toString();
+          syncedValueRef.current = next;
+          onChangeRef.current(next);
+        }),
+        readOnlyCompartmentRef.current.of(EditorState.readOnly.of(readOnly)),
+        languageCompartmentRef.current.of(language ?? []),
+      ];
+
+      if (shouldWrap(filename)) {
+        extensions.push(EditorView.lineWrapping);
+      }
+
+      const state = EditorState.create({
+        doc: value,
+        extensions,
+      });
+
+      if (disposed || !editorContainerRef.current) return;
+
+      if (viewRef.current) {
+        viewRef.current.destroy();
+      }
+
+      viewRef.current = new EditorView({
+        state,
+        parent: editorContainerRef.current,
+      });
     }
+
+    setupEditor();
+
+    return () => {
+      disposed = true;
+      if (viewRef.current) {
+        viewRef.current.destroy();
+        viewRef.current = null;
+      }
+    };
+  }, [filename]);
+
+  useEffect(() => {
+    const view = viewRef.current;
+    if (!view) return;
+
+    view.dispatch({
+      effects: readOnlyCompartmentRef.current.reconfigure(EditorState.readOnly.of(readOnly)),
+    });
+  }, [readOnly]);
+
+  useEffect(() => {
+    const view = viewRef.current;
+    if (!view) return;
+
+    const currentDoc = view.state.doc.toString();
+
+    if (value === currentDoc) {
+      syncedValueRef.current = value;
+      return;
+    }
+
+    // Ignore stale external values while local edits are in-flight.
+    if (currentDoc !== syncedValueRef.current) {
+      return;
+    }
+
+    view.dispatch({
+      changes: {
+        from: 0,
+        to: currentDoc.length,
+        insert: value,
+      },
+    });
+
+    syncedValueRef.current = value;
   }, [value]);
 
   return (
@@ -62,33 +191,15 @@ export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, 
         </span>
       </div>
 
-      <textarea
-        ref={textareaRef}
-        defaultValue={value}
-        readOnly={readOnly}
-        spellCheck={false}
-        onChange={(event) => onChange(event.target.value)}
-        onKeyDown={(event) => {
-          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
-            event.preventDefault();
-            onSave();
-          }
-        }}
+      <div
+        ref={editorContainerRef}
         style={{
           width: '100%',
           height: '100%',
           minHeight: 520,
-          border: 'none',
-          outline: 'none',
-          resize: 'none',
-          padding: '18px 20px 26px',
           background: readOnly ? 'rgba(250, 246, 241, 0.75)' : 'transparent',
           color: readOnly ? '#6d675f' : 'var(--text-body)',
-          fontSize: 14,
-          lineHeight: 1.7,
-          fontFamily: 'var(--font-mono), SFMono-Regular, ui-monospace, monospace',
-          whiteSpace: 'pre',
-          overflow: 'auto',
+          overflow: 'hidden',
         }}
       />
     </div>
