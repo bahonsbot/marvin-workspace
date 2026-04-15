@@ -8,7 +8,8 @@ memory/*
 **/__pycache__/
 *.pyc
 *.bak
-projects/mission-control/.preview-runtime/
+projects/mission-control/.preview-runtime/*
+!projects/mission-control/.preview-runtime/mission-control-preview.env.example
 projects/mission-control/tsconfig.tsbuildinfo
 projects/mission-control/data/task-lifecycle-events.json
 projects/mission-control/.test-dist/
