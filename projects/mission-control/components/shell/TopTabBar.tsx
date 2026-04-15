@@ -81,24 +81,6 @@ export function TopTabBar() {
       >
         ⌕
       </button>
-      <div
-        style={{
-          width: 30,
-          height: 30,
-          borderRadius: 'var(--radius-full)',
-          background: 'var(--accent-surface)',
-          border: '2px solid var(--accent-soft)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 11,
-          fontWeight: 700,
-          color: 'var(--accent-deep)',
-          cursor: 'pointer',
-        }}
-      >
-        P
-      </div>
     </header>
   );
 }

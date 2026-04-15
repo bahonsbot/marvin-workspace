@@ -11,14 +11,11 @@ import {
 import { useShellContext } from './ShellContext';
 
 function SidebarAmbientWidget({ collapsed }: { collapsed: boolean }) {
+  if (collapsed) return null;
+
   const date = new Date();
   const fullDateLabel = new Intl.DateTimeFormat('en-US', {
     weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'Asia/Ho_Chi_Minh',
-  }).format(date);
-  const compactDateLabel = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     timeZone: 'Asia/Ho_Chi_Minh',
@@ -29,7 +26,7 @@ function SidebarAmbientWidget({ collapsed }: { collapsed: boolean }) {
       style={{
         display: 'grid',
         justifyItems: 'center',
-        padding: collapsed ? '6px 0 8px' : '8px 2px 10px',
+        padding: '8px 2px 10px',
         minHeight: 26,
       }}
     >
@@ -37,7 +34,7 @@ function SidebarAmbientWidget({ collapsed }: { collapsed: boolean }) {
         style={{
           fontSize: 10,
           lineHeight: 1.2,
-          letterSpacing: collapsed ? '0.08em' : '0.12em',
+          letterSpacing: '0.12em',
           textTransform: 'uppercase',
           color: 'rgba(84, 74, 62, 0.88)',
           fontVariantNumeric: 'tabular-nums',
@@ -46,7 +43,7 @@ function SidebarAmbientWidget({ collapsed }: { collapsed: boolean }) {
           textAlign: 'center',
         }}
       >
-        {collapsed ? compactDateLabel : fullDateLabel}
+        {fullDateLabel}
       </div>
     </div>
   );
