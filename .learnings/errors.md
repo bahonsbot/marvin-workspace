@@ -1057,3 +1057,14 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 **Suggested fix:** audit the OpenClaw Control message-rendering path for async exec completions and internal system notices; internal completion payloads should remain hidden/agent-internal unless explicitly promoted into a human-facing reply. Treat raw `System (untrusted)` exec summaries as unsafe for direct chat rendering.
 **Priority:** high
 **Status:** active
+
+## [ERR-20260416-2243]
+
+**What failed:** normal git-stash / reset flow during the end-of-day Mission Control rollback
+**Error:** `memory/cron-context.json` was script-managed as `root:root` with mode `600`, so normal dirty-tree handling could fail during `git stash push -u` / rollback prep from the `node` user.
+**Context:** Apr 16 late-evening wrap-up while resetting the workspace repo back to the accepted Mission Control cutoff `a097067`.
+**Suggested fix:** before destructive git actions in this workspace, check whether any dirty files are script-managed and root-owned. For `memory/cron-context.json`, use a bounded recovery path: `sudo` backup the file, temporarily `chown` only that file to `node:node`, complete the stash/reset, then restore `root:root` and `600` immediately afterward.
+**Resolution:** resolved the same evening with that bounded ownership flip plus explicit ownership/mode restoration.
+
+**Priority:** medium
+**Status:** resolved
