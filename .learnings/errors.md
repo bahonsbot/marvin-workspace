@@ -1010,3 +1010,14 @@ Command/tool failures and exceptions.
 
 **Priority:** medium
 **Status:** resolved as procedural lesson
+
+## [ERR-20260416-1340]
+
+**What failed:** the first live in-place OpenClaw `2026.3.8` → `v2026.4.12` upgrade window on the Hostinger Docker lane
+**Error:** the package install itself appeared to complete, but post-restart validation failed in multiple ways: `openclaw --version` still reported `2026.3.8`, core CLI surfaces started failing config validation on `channels.telegram.streaming={"mode":"off"}`, Mission Control preview on `:3005` was down during the proof window, and the later rollback/login path degraded into plugin requirement skips plus `OpenClaw exited with code 1` before device approval completed. Final recovery required a full VPS rollback.
+**Context:** Apr 16 cautious live upgrade attempt after the isolated `v2026.4.12` rehearsal had passed.
+**Suggested fix:** before any future live retry, add a target-version config/schema preflight against the real live config, especially Telegram keys like `channels.telegram.streaming`; treat Dashboard/UI appearance as non-authoritative and gate only on CLI/runtime proof; make Mission Control preview restore an explicit post-restart step; and prefer a rollback path proven in advance over assuming in-place npm downgrade + restart will bring the UI path back cleanly.
+**Extra note:** npm deprecation warnings during `npm install -g` were noise here, not the deciding failure signal.
+
+**Priority:** high
+**Status:** active
