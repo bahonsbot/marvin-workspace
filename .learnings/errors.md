@@ -1047,3 +1047,13 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** medium
 **Status:** resolved
+
+
+## [ERR-20260416-1828]
+
+**What failed:** OpenClaw Control chat surface leaked raw async exec-completion/system payloads into the visible conversation
+**Error:** user-facing chat showed internal `System (untrusted)` exec summaries containing probe output, log fragments, and command-result snippets (including Mission Control bridge probe details like `challenge`, `connect-res ok true`, health/tick counts, and HTTP header fragments) instead of keeping them internal.
+**Context:** Apr 16 post-upgrade sanity follow-up after Mission Control verification probes; Philippe reported the leak again even after a gateway restart, which confirms it is a reproducible Control-UI presentation bug rather than one stale pre-restart artifact.
+**Suggested fix:** audit the OpenClaw Control message-rendering path for async exec completions and internal system notices; internal completion payloads should remain hidden/agent-internal unless explicitly promoted into a human-facing reply. Treat raw `System (untrusted)` exec summaries as unsafe for direct chat rendering.
+**Priority:** high
+**Status:** active
