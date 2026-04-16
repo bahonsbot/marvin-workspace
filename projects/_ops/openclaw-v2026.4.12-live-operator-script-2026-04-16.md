@@ -37,16 +37,21 @@ Run:
 
 ```bash
 LOGDIR=/data/.openclaw/workspace/projects/_ops/logs/live-upgrade-2026-04-16-1300
+TARGET_OPENCLAW=/data/.openclaw/rehearsals/v2026.4.12/cli/node_modules/.bin/openclaw
+export PATH=/data/.local/bin:/data/bin:/data/.bun/bin:$PATH
 mkdir -p "$LOGDIR"
 cp /data/.openclaw/openclaw.json "$LOGDIR/00-openclaw-json-pre.json"
 python3 /data/.openclaw/workspace/projects/_ops/scripts/openclaw_retry_preflight.py \
   --rollback-backup "$LOGDIR/00-openclaw-json-pre.json"
 
+command -v qmd | tee "$LOGDIR/00a-qmd-path.txt"
+command -v bun | tee "$LOGDIR/00b-bun-path.txt"
+
 openclaw --version | tee "$LOGDIR/01-version-pre.txt"
 openclaw status --json > "$LOGDIR/02-status-pre.json"
 openclaw health --json > "$LOGDIR/03-health-pre.json"
 openclaw memory status --json > "$LOGDIR/04-memory-status-pre.json"
-openclaw memory search --query "Philippe" --max-results 3 --json > "$LOGDIR/05-memory-search-pre.json"
+"$TARGET_OPENCLAW" memory search --query "Philippe" --max-results 3 --json > "$LOGDIR/05-memory-search-target-pre.json"
 openclaw cron status --json > "$LOGDIR/06-cron-status-pre.json"
 openclaw cron list --json > "$LOGDIR/07-cron-list-pre.json"
 openclaw sessions --all-agents --json > "$LOGDIR/08-sessions-pre.json"
@@ -55,6 +60,11 @@ curl -sS -I http://127.0.0.1:3005/general/home > "$LOGDIR/09-home-pre.txt"
 curl -sS -I http://127.0.0.1:3005/general/chat > "$LOGDIR/10-chat-pre.txt"
 curl -sS -I "http://127.0.0.1:3005/api/runtime-bridge/history?sessionKey=agent:main:main" > "$LOGDIR/11-history-pre.txt"
 ```
+
+Important for this deployment:
+- export the QMD/Bun PATH before any memory gate commands
+- use the target `v2026.4.12` CLI search as the real pre-mutation memory gate
+- current live `2026.3.8` shell search may emit scope-noise and is not the deciding signal here
 
 If the retry-preflight script fails or the live lane is already unhealthy here, **stop**.
 
