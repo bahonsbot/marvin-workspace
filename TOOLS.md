@@ -137,6 +137,10 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
   - `projects/_ops/mc-savepoint-2026-04-12-chat-seat-bridge.md`
   - `projects/_ops/mc-savepoint-2026-04-15-afternoon.md`
 - Preview runtime dependency note: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` and `projects/mission-control/scripts/preview-origin-proxy.js` require npm package `ws`; a passing Next.js build alone does not prove preview health if `ws` is missing
+- Current Mission Control app stack: `projects/mission-control/package.json` now pins `next 16.2.0`, `react 19.2.0`, and `react-dom 19.2.0`; any lingering `14.x` stack notes are stale
+- Preview stop safety note: `projects/mission-control/scripts/preview-stop.sh` now stops only the PID-file-backed process group(s) for the selected runtime dir; do not revert to broad `pkill` patterns because that can kill sibling preview lanes, including rehearsal previews
+- OpenClaw `v2026.4.12` rehearsal posture: isolated lane verified healthy on gateway `:19001` with Mission Control preview `3015/3016/3017`, Telegram disabled, and all core smoke checks passing; Philippe approved a live upgrade window target of `13:00-13:40 Asia/Ho_Chi_Minh` on 2026-04-16
+- QMD migration note for the `v2026.4.12` live window: do not trust `memory status` alone; run a real `memory search` preflight. A legacy `memory` collection can conflict with the expected `memory-dir-main` collection name, so remove the legacy collection first if search fails after upgrade
 - Chat component inventory note: current shared chat helpers include `projects/mission-control/components/chat/chat-rich-text.tsx`, `projects/mission-control/components/chat/chat-ui-helpers.ts`, and `projects/mission-control/components/chat/chat-tool-groups.tsx`
 - Shared editor foundation note: `projects/mission-control/components/editor/CodeMirrorEditor.tsx` is now a real CodeMirror 6 editor for both Files and Memory, not a styled textarea. Built-in editor search is enabled; the header `Find` button is the reliable entry point when browser `Cmd/Ctrl+F` focus capture would otherwise win.
 - Chat transcript rehydration now reads persisted session logs via `projects/mission-control/app/api/runtime-bridge/route.ts`
@@ -431,7 +435,7 @@ Note: `Delivery: none` means intentional silence by design unless otherwise note
     - `projects/_ops/mission-control-v1-technical-integration-plan-2026-03-16.md`
     - `projects/_ops/orchestrator-integration-decision-memo-2026-03-16.md`
   - Current checkpoint notes:
-    - Next.js patched from 14.2.15 to ^14.2.35; build passes
+    - stack is now on Next.js `16.2.0` with React `19.2.0` / `react-dom 19.2.0`; build passes on the migrated app
     - npm audit still reports upstream high-severity dependency findings; acceptable for local scaffold stage, revisit before real exposed deployment
     - Remaining major implementation question is how far to take Orchestrator integration after the successful read-first spike
     - Preview access: Mission Control is intended to be publicly reachable at `http://preview.motiondisplay.cloud` when host nginx is correctly proxying to the container-side app on port `3005`
