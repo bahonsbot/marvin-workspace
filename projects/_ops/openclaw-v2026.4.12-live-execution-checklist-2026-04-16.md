@@ -68,6 +68,27 @@ Ignore generic update drama and check these first:
 4. **Mission Control proof:** CLI health alone is not enough; require core preview routes, runtime-bridge history, and one bounded live chat reply.
 5. **Do not widen scope:** do not mix auth/origin hardening, Dreaming, Active Memory, or unrelated UI cleanup into this window.
 
+## Mandatory retry-preflight gate for the next live attempt
+Read first:
+- `projects/_ops/openclaw-v2026.4.12-retry-preflight-2026-04-16.md`
+
+Before any package mutation:
+```bash
+LOGDIR=/data/.openclaw/workspace/projects/_ops/logs/live-upgrade-2026-04-16-1300
+mkdir -p "$LOGDIR"
+cp /data/.openclaw/openclaw.json "$LOGDIR/00-openclaw-json-pre.json"
+python3 /data/.openclaw/workspace/projects/_ops/scripts/openclaw_retry_preflight.py \
+  --rollback-backup "$LOGDIR/00-openclaw-json-pre.json"
+```
+
+Pass condition:
+- the script ends with `PRECHECK RESULT: PASS`
+- if it reports a Telegram rollback-compatibility gap, treat the raw config backup as rollback-critical and restore it before any `2026.3.8` restart
+
+Abort now if:
+- the preflight script fails
+- the raw config backup is missing or stale
+
 ---
 
 # Minute-by-minute plan
@@ -273,9 +294,15 @@ Use only if the live window fails.
 ## Rollback commands
 **Host-side operator command:**
 ```bash
+LOGDIR=/data/.openclaw/workspace/projects/_ops/logs/live-upgrade-2026-04-16-1300
+cp "$LOGDIR/00-openclaw-json-pre.json" /data/.openclaw/openclaw.json
 docker exec -i openclaw-ktrt-openclaw-1 bash -lc 'npm install -g openclaw@2026.3.8'
 docker restart openclaw-ktrt-openclaw-1
 ```
+
+Why the extra restore step:
+- `v2026.4.12` can normalize Telegram streaming config into a nested object shape that `2026.3.8` does not accept
+- if the upgrade touched config before rollback, restoring the raw pre-upgrade `openclaw.json` is part of the rollback, not an optional extra
 
 If you use a different established host-side container wrapper, restart through that exact path instead.
 

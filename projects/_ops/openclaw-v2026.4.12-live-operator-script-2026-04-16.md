@@ -5,6 +5,7 @@ Purpose: short execution script for the real live upgrade.
 
 This is the compressed companion to:
 - `projects/_ops/openclaw-v2026.4.12-live-execution-checklist-2026-04-16.md`
+- `projects/_ops/openclaw-v2026.4.12-retry-preflight-2026-04-16.md`
 
 ## Ground rules
 - Upgrade the live OpenClaw runtime only.
@@ -31,12 +32,15 @@ Unless a step explicitly says otherwise, the raw command blocks below are meant 
 
 ---
 
-## 1. Freeze and capture baseline
+## 1. Retry-preflight gate, then freeze and capture baseline
 Run:
 
 ```bash
 LOGDIR=/data/.openclaw/workspace/projects/_ops/logs/live-upgrade-2026-04-16-1300
 mkdir -p "$LOGDIR"
+cp /data/.openclaw/openclaw.json "$LOGDIR/00-openclaw-json-pre.json"
+python3 /data/.openclaw/workspace/projects/_ops/scripts/openclaw_retry_preflight.py \
+  --rollback-backup "$LOGDIR/00-openclaw-json-pre.json"
 
 openclaw --version | tee "$LOGDIR/01-version-pre.txt"
 openclaw status --json > "$LOGDIR/02-status-pre.json"
@@ -52,7 +56,7 @@ curl -sS -I http://127.0.0.1:3005/general/chat > "$LOGDIR/10-chat-pre.txt"
 curl -sS -I "http://127.0.0.1:3005/api/runtime-bridge/history?sessionKey=agent:main:main" > "$LOGDIR/11-history-pre.txt"
 ```
 
-If the live lane is already unhealthy here, **stop**.
+If the retry-preflight script fails or the live lane is already unhealthy here, **stop**.
 
 ---
 
@@ -209,9 +213,13 @@ If rollback is triggered:
 From the VPS host as root:
 
 ```bash
+LOGDIR=/data/.openclaw/workspace/projects/_ops/logs/live-upgrade-2026-04-16-1300
+cp "$LOGDIR/00-openclaw-json-pre.json" /data/.openclaw/openclaw.json
 docker exec -i openclaw-ktrt-openclaw-1 bash -lc 'npm install -g openclaw@2026.3.8'
 docker restart openclaw-ktrt-openclaw-1
 ```
+
+Important: restoring the raw pre-upgrade config backup is part of rollback for this deployment. `v2026.4.12` can normalize Telegram streaming config to a nested object shape that `2026.3.8` rejects.
 
 Then from a `node` shell inside the live container, run:
 

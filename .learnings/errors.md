@@ -1017,6 +1017,11 @@ Command/tool failures and exceptions.
 **Error:** the package install itself appeared to complete, but post-restart validation failed in multiple ways: `openclaw --version` still reported `2026.3.8`, core CLI surfaces started failing config validation on `channels.telegram.streaming={"mode":"off"}`, Mission Control preview on `:3005` was down during the proof window, and the later rollback/login path degraded into plugin requirement skips plus `OpenClaw exited with code 1` before device approval completed. Final recovery required a full VPS rollback.
 **Context:** Apr 16 cautious live upgrade attempt after the isolated `v2026.4.12` rehearsal had passed.
 **Suggested fix:** before any future live retry, add a target-version config/schema preflight against the real live config, especially Telegram keys like `channels.telegram.streaming`; treat Dashboard/UI appearance as non-authoritative and gate only on CLI/runtime proof; make Mission Control preview restore an explicit post-restart step; and prefer a rollback path proven in advance over assuming in-place npm downgrade + restart will bring the UI path back cleanly.
+**Proven cause/refinement:** local temp-config simulation on Apr 16 showed the likely rollback trap clearly:
+- `2026.3.8` accepts raw `channels.telegram.streaming: "off"`
+- `2026.4.12` accepts the legacy scalar and normalizes it to nested `{"mode":"off"}`
+- `2026.3.8` rejects that nested shape
+That means rollback can fail unless the raw pre-upgrade `openclaw.json` is restored before any `2026.3.8` restart. The concrete guard now lives in `projects/_ops/scripts/openclaw_retry_preflight.py` plus the companion retry-preflight runbook.
 **Extra note:** npm deprecation warnings during `npm install -g` were noise here, not the deciding failure signal.
 
 **Priority:** high
