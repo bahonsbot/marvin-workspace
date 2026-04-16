@@ -1026,3 +1026,12 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** high
 **Status:** active
+
+## [ERR-20260416-1600]
+
+**What failed:** live OpenClaw upgrade landed in a split global-install state inside the container
+**Error:** `npm install -g openclaw@2026.4.12` wrote the active runtime install under `/data/.npm-global/...`, while `/usr/local/bin/openclaw` and `/usr/local/lib/node_modules/openclaw` remained on `2026.3.8`, so different shells resolved different OpenClaw versions after the same upgrade.
+**Context:** Apr 16 second live retry after the VPS snapshot; runtime/gateway came up on `2026.4.12`, but non-runtime shells still hit the stale `/usr/local` CLI and reported config/version mismatches.
+**Suggested fix:** after any container-side global npm upgrade, verify both the active PATH-resolved binary and the canonical `/usr/local/bin/openclaw` target. If the install prefix drifted, normalize it explicitly instead of assuming `npm install -g` updated `/usr/local`.
+**Priority:** high
+**Status:** active
