@@ -1,12 +1,14 @@
 import 'server-only';
 
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-import { cache } from 'react';
+import { promises as fs } from 'node:fs';
 import type { IntegrationStatus, SkillSummary, SkillsSummary } from '@/lib/types/contracts';
+import { runShellCommand } from '@/lib/adapters/runtime';
 
-const execFileAsync = promisify(execFile);
-const SKILLS_TIMEOUT_MS = 15000;
+const SKILLS_TIMEOUT_MS = 45000;
+const SKILLS_CACHE_PATH = '/data/.openclaw/workspace/projects/mission-control/data/skills-summary-cache.json';
+
+let skillsMemoryCache: { data: SkillsSummary; cachedAtMs: number } | null = null;
+let skillsRefreshPromise: Promise<SkillsSummary> | null = null;
 
 type RawSkill = {
   name?: string;
@@ -91,12 +93,36 @@ function countMissing(skill: RawSkill): number {
   return [missing.bins, missing.anyBins, missing.env, missing.config, missing.os].reduce((sum, items) => sum + (items?.length ?? 0), 0);
 }
 
-async function loadSkillsSummaryUncached(): Promise<SkillsSummary> {
+async function readSkillsCache(): Promise<SkillsSummary | null> {
   try {
-    const { stdout, stderr } = await execFileAsync('bash', ['-lc', 'openclaw skills list --json'], {
-      timeout: SKILLS_TIMEOUT_MS,
-      maxBuffer: 2 * 1024 * 1024,
-    });
+    const raw = await fs.readFile(SKILLS_CACHE_PATH, 'utf8');
+    const parsed = JSON.parse(raw) as SkillsSummary;
+    if (!parsed || !Array.isArray(parsed.skills) || !parsed.counts) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+async function writeSkillsCache(summary: SkillsSummary): Promise<void> {
+  try {
+    await fs.writeFile(SKILLS_CACHE_PATH, `${JSON.stringify(summary, null, 2)}\n`, 'utf8');
+  } catch (error) {
+    console.warn('[skills-adapter] Failed to persist skills cache', error instanceof Error ? error.message : error);
+  }
+}
+
+function primeSkillsMemoryCache(summary: SkillsSummary): SkillsSummary {
+  skillsMemoryCache = {
+    data: summary,
+    cachedAtMs: Date.now(),
+  };
+  return summary;
+}
+
+async function fetchSkillsSummaryLive(): Promise<SkillsSummary> {
+  try {
+    const { stdout, stderr } = await runShellCommand('openclaw skills list --json', SKILLS_TIMEOUT_MS, 2 * 1024 * 1024);
 
     const output = stdout.trim() ? stdout : stderr;
     const parsed = parseSkillsOutput(output);
@@ -156,6 +182,7 @@ async function loadSkillsSummaryUncached(): Promise<SkillsSummary> {
       refreshedAt: new Date().toISOString(),
     };
   } catch (error) {
+    console.error('[skills-adapter] Failed to load skills', error instanceof Error ? error.message : error);
     return {
       status: 'partial',
       workspaceDir: '/data/.openclaw/workspace',
@@ -177,4 +204,34 @@ async function loadSkillsSummaryUncached(): Promise<SkillsSummary> {
   }
 }
 
-export const getSkillsSummary = cache(loadSkillsSummaryUncached);
+export async function getSkillsSummary(options?: { preferFresh?: boolean }): Promise<SkillsSummary> {
+  const preferFresh = options?.preferFresh === true;
+
+  if (!preferFresh && skillsMemoryCache) {
+    return skillsMemoryCache.data;
+  }
+
+  if (!preferFresh) {
+    const cached = await readSkillsCache();
+    if (cached) return primeSkillsMemoryCache(cached);
+  }
+
+  if (!skillsRefreshPromise) {
+    skillsRefreshPromise = (async () => {
+      const live = await fetchSkillsSummaryLive();
+      if (live.status === 'adapter-backed' && live.skills.length > 0) {
+        await writeSkillsCache(live);
+        return primeSkillsMemoryCache(live);
+      }
+
+      const cached = await readSkillsCache();
+      if (cached) return primeSkillsMemoryCache(cached);
+
+      return primeSkillsMemoryCache(live);
+    })().finally(() => {
+      skillsRefreshPromise = null;
+    });
+  }
+
+  return skillsRefreshPromise;
+}

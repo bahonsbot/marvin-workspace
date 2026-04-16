@@ -5,6 +5,8 @@ const { execFileSync } = require('node:child_process');
 const { URL } = require('node:url');
 const { WebSocketServer, WebSocket } = require('ws');
 
+const MISSION_CONTROL_PATH_PREFIX = '/data/.npm-global/bin:/data/.local/bin:/data/bin:/data/.bun/bin';
+
 function parsePort(value, fallback) {
   const parsed = Number.parseInt(value || '', 10);
   return Number.isInteger(parsed) && parsed > 0 && parsed <= 65535 ? parsed : fallback;
@@ -17,7 +19,7 @@ function readGatewayTarget() {
   }
 
   try {
-    const stdout = execFileSync('bash', ['-lc', 'openclaw status --json'], {
+    const stdout = execFileSync('bash', ['-lc', `export PATH=${MISSION_CONTROL_PATH_PREFIX}:$PATH; openclaw status --json`], {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });

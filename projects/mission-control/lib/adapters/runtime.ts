@@ -3,13 +3,23 @@ import { promises as fs } from 'node:fs';
 import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
+const MISSION_CONTROL_PATH_PREFIX = '/data/.npm-global/bin:/data/.local/bin:/data/bin:/data/.bun/bin';
 
-export async function runJsonCommand(command: string, timeoutMs = 15000): Promise<unknown> {
-  const { stdout } = await execFileAsync('bash', ['-lc', command], {
+function withMissionControlPath(command: string): string {
+  return `export PATH=${MISSION_CONTROL_PATH_PREFIX}:$PATH; ${command}`;
+}
+
+export async function runShellCommand(command: string, timeoutMs = 15000, maxBuffer = 5 * 1024 * 1024): Promise<{ stdout: string; stderr: string }> {
+  const { stdout, stderr } = await execFileAsync('bash', ['-lc', withMissionControlPath(command)], {
     timeout: timeoutMs,
-    maxBuffer: 5 * 1024 * 1024,
+    maxBuffer,
   });
 
+  return { stdout, stderr };
+}
+
+export async function runJsonCommand(command: string, timeoutMs = 15000): Promise<unknown> {
+  const { stdout } = await runShellCommand(command, timeoutMs);
   return JSON.parse(stdout);
 }
 

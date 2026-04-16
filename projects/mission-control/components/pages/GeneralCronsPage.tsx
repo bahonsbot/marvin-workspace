@@ -7,9 +7,19 @@ import { getCronJobs, getCronRuns } from '@/lib/adapters/cron';
 
 export const dynamic = 'force-dynamic';
 
-type CronPageParams = {
-  tab?: string;
+type CronPageSearchParams = {
+  tab?: string | string[];
 };
+
+async function resolveSearchParams(
+  searchParams?: CronPageSearchParams | Promise<CronPageSearchParams | undefined>,
+): Promise<CronPageSearchParams | undefined> {
+  if (!searchParams) return undefined;
+  if (typeof (searchParams as Promise<CronPageSearchParams | undefined>).then === 'function') {
+    return await (searchParams as Promise<CronPageSearchParams | undefined>);
+  }
+  return searchParams;
+}
 
 function JobGroup({ title, count, children, defaultOpen = false }: { title: string; count: number; children: React.ReactNode; defaultOpen?: boolean }) {
   return (
@@ -265,13 +275,16 @@ function RunRow({ run }: { run: { id: string; jobId: string; state: string; star
   );
 }
 
-export default async function CronPage({ searchParams }: { searchParams?: CronPageParams }) {
-  const [jobs, runs] = await Promise.all([getCronJobs(), getCronRuns()]);
-  const activeTab = searchParams?.tab === 'runs' ? 'runs' : 'jobs';
+export default async function CronPage({ searchParams }: { searchParams?: CronPageSearchParams | Promise<CronPageSearchParams | undefined> }) {
+  const resolvedSearchParams = await resolveSearchParams(searchParams);
+  const tabParam = Array.isArray(resolvedSearchParams?.tab) ? resolvedSearchParams?.tab[0] : resolvedSearchParams?.tab;
+  const activeTab = tabParam === 'runs' ? 'runs' : 'jobs';
+  const jobs = activeTab === 'jobs' ? await getCronJobs() : null;
+  const runs = activeTab === 'runs' ? await getCronRuns() : null;
 
-  const runnerJobs = jobs.jobs.filter((j) => j.type === 'runner-backed');
-  const mixedJobs = jobs.jobs.filter((j) => j.type === 'mixed');
-  const modelJobs = jobs.jobs.filter((j) => j.type === 'model-backed' || !j.type);
+  const runnerJobs = jobs?.jobs.filter((j) => j.type === 'runner-backed') ?? [];
+  const mixedJobs = jobs?.jobs.filter((j) => j.type === 'mixed') ?? [];
+  const modelJobs = jobs?.jobs.filter((j) => j.type === 'model-backed' || !j.type) ?? [];
 
   return (
     <div id="page-top">
@@ -283,8 +296,8 @@ export default async function CronPage({ searchParams }: { searchParams?: CronPa
         <div style={{ display: 'grid', gap: 20 }}>
           <div className="floating-pill-row">
             {[
-              { key: 'jobs', label: `Jobs (${jobs.jobs.length})` },
-              { key: 'runs', label: `Recent runs (${runs.runs.length})` },
+              { key: 'jobs', label: activeTab === 'jobs' ? `Jobs (${jobs?.jobs.length ?? 0})` : 'Jobs' },
+              { key: 'runs', label: activeTab === 'runs' ? `Recent runs (${runs?.runs.length ?? 0})` : 'Recent runs' },
             ].map((tab) => {
               const active = activeTab === tab.key;
               return (
@@ -301,7 +314,7 @@ export default async function CronPage({ searchParams }: { searchParams?: CronPa
 
           {activeTab === 'jobs' ? (
             <section>
-              {jobs.jobs.length === 0 ? (
+              {(jobs?.jobs.length ?? 0) === 0 ? (
                 <div style={{ ...cardStyle(), color: 'var(--muted)', textAlign: 'center', padding: 24 }}>
                   No cron jobs visible from the current adapter path.
                 </div>
@@ -333,7 +346,7 @@ export default async function CronPage({ searchParams }: { searchParams?: CronPa
             </section>
           ) : (
             <section>
-              {runs.runs.length === 0 ? (
+              {(runs?.runs.length ?? 0) === 0 ? (
                 <div style={{ ...cardStyle(), color: 'var(--muted)', textAlign: 'center', padding: 24 }}>
                   No recent runs in cron-run-log.jsonl.
                 </div>
@@ -344,7 +357,7 @@ export default async function CronPage({ searchParams }: { searchParams?: CronPa
                     <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>State</div>
                     <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'right' }}>Duration</div>
                   </div>
-                  {runs.runs.slice(0, 30).map((run) => (
+                  {(runs?.runs ?? []).slice(0, 30).map((run) => (
                     <RunRow key={run.id} run={run} />
                   ))}
                 </div>

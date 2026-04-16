@@ -2,6 +2,7 @@
 set -euo pipefail
 
 cd /data/.openclaw/workspace/projects/mission-control
+export PATH="/data/.npm-global/bin:/data/.local/bin:/data/bin:/data/.bun/bin:$PATH"
 RUNTIME_DIR="${MISSION_CONTROL_PREVIEW_RUNTIME_DIR:-/data/.openclaw/workspace/projects/mission-control/.preview-runtime}"
 ENV_FILE="$RUNTIME_DIR/mission-control-preview.env"
 mkdir -p "$RUNTIME_DIR"

@@ -1035,3 +1035,15 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 **Suggested fix:** after any container-side global npm upgrade, verify both the active PATH-resolved binary and the canonical `/usr/local/bin/openclaw` target. If the install prefix drifted, normalize it explicitly instead of assuming `npm install -g` updated `/usr/local`.
 **Priority:** high
 **Status:** active
+
+
+## [ERR-20260416-1825]
+
+**What failed:** Mission Control Crons `Recent runs` tab looked clickable but kept rendering the Jobs view
+**Error:** `projects/mission-control/components/pages/GeneralCronsPage.tsx` treated `searchParams` like a synchronous object. Under Next.js 16, `searchParams` can arrive asynchronously, so `?tab=runs` was ignored and the server page defaulted back to `jobs`.
+**Context:** Apr 16 post-upgrade Mission Control sanity pass after Philippe reported that the Crons page mostly recovered but the `Recent runs` tab still felt unresponsive.
+**Suggested fix:** for Next.js 16 server pages, resolve/await `searchParams` before using them for routing state; do not assume old synchronous page-prop behavior on app-router pages.
+**Resolution:** Fixed on 2026-04-16 by updating `GeneralCronsPage.tsx` to resolve async `searchParams`, rebuilding, and restarting the Mission Control preview.
+
+**Priority:** medium
+**Status:** resolved

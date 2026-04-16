@@ -1,8 +1,11 @@
+import { promises as fs } from 'node:fs';
 import { cache } from 'react';
 import type { CronJobsSummary, CronRunsSummary } from '@/lib/types/contracts';
 import { readJsonlFile, runJsonCommand } from '@/lib/adapters/runtime';
 
 const CRON_RUN_LOG_PATH = '/data/.openclaw/workspace/memory/cron-run-log.jsonl';
+const CRON_JOBS_PATH = '/data/.openclaw/cron/jobs.json';
+const CRON_LIST_TIMEOUT_MS = 45000;
 const HOST_DETERMINISTIC_JOB_META: Record<string, { schedule: string; enabled: boolean }> = {
   'trading-daily-report': { schedule: '0 8 * * 1-5', enabled: true },
   'pre-market-brief': { schedule: '0 20 * * 1-5', enabled: true },
@@ -32,6 +35,10 @@ type CronJobRaw = {
     lastRunAtMs?: number;
     lastRunStatus?: string;
   };
+};
+
+type CronJobsFile = {
+  jobs?: CronJobRaw[];
 };
 
 function classifyJobType(job: CronJobRaw): 'runner-backed' | 'mixed' | 'model-backed' {
@@ -134,14 +141,25 @@ async function getLatestRunnerRunsByTask(): Promise<Map<string, { lastRunAt: str
   return latestByTask;
 }
 
+async function loadCronJobsRaw(): Promise<CronJobRaw[]> {
+  try {
+    const raw = await fs.readFile(CRON_JOBS_PATH, 'utf8');
+    const parsed = JSON.parse(raw) as CronJobsFile;
+    if (Array.isArray(parsed.jobs)) return parsed.jobs;
+    throw new Error('jobs.json did not contain a jobs array');
+  } catch (error) {
+    console.warn('[cron-adapter] Falling back to openclaw cron list --json', error instanceof Error ? error.message : error);
+    const data = (await runJsonCommand('openclaw cron list --json', CRON_LIST_TIMEOUT_MS)) as CronJobsFile;
+    return Array.isArray(data.jobs) ? data.jobs : [];
+  }
+}
+
 export const getCronJobs = cache(async function getCronJobs(): Promise<CronJobsSummary> {
   try {
-    const [data, runnerRunsByTask] = await Promise.all([
-      runJsonCommand('openclaw cron list --json') as Promise<{ jobs?: CronJobRaw[] }>,
-      getLatestRunnerRunsByTask(),
-    ]);
+    const rawJobs = await loadCronJobsRaw();
+    const runnerRunsByTask = await getLatestRunnerRunsByTask();
 
-    const jobs = (data.jobs ?? []).map((job) => {
+    const jobs = rawJobs.map((job) => {
       const type = classifyJobType(job);
       const executionPath = getExecutionPath(job);
       const jobName = job.name ?? job.id ?? 'unknown';
@@ -190,11 +208,12 @@ export const getCronJobs = cache(async function getCronJobs(): Promise<CronJobsS
     jobs.sort((a, b) => a.name.localeCompare(b.name));
 
     return {
-      status: 'partial',
+      status: 'adapter-backed',
       jobs,
       refreshedAt: new Date().toISOString(),
     };
-  } catch {
+  } catch (error) {
+    console.error('[cron-adapter] Failed to load cron jobs', error instanceof Error ? error.message : error);
     return {
       status: 'stub',
       jobs: [],
