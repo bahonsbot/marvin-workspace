@@ -60,6 +60,14 @@ Rollback immediately if any of these happen and do not clear fast:
 - cron status/list is broken
 - bounded live chat send fails
 
+## Very short triage note for this specific deployment
+Ignore generic update drama and check these first:
+1. **Right namespace:** we are upgrading the live Docker container `openclaw-ktrt-openclaw-1`, not the bare VPS shell.
+2. **Install-path sanity:** confirm `/usr/local/bin/openclaw` and `/usr/local/lib/node_modules/openclaw` still match the live container install after upgrade.
+3. **Real QMD proof:** `memory status` is not enough; the real gate is a successful `openclaw memory search --query "Philippe"`.
+4. **Mission Control proof:** CLI health alone is not enough; require core preview routes, runtime-bridge history, and one bounded live chat reply.
+5. **Do not widen scope:** do not mix auth/origin hardening, Dreaming, Active Memory, or unrelated UI cleanup into this window.
+
 ---
 
 # Minute-by-minute plan
