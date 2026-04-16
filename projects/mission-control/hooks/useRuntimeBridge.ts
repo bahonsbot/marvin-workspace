@@ -521,6 +521,7 @@ export function useRuntimeBridge(
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reconnectAttemptRef = useRef(0);
   const bootstrapSessionPromisesRef = useRef<Partial<Record<string, Promise<void>>>>({});
+  const latestSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
 
   const defaultTargetSession = useMemo(() => chooseTargetSession(summary), [summary]);
   const liveTargetSession = useMemo<RuntimeBridgeLiveSessionTarget>(() => {
@@ -744,6 +745,7 @@ export function useRuntimeBridge(
   }, [defaultTargetSession.key, hydrateHistory, load]);
 
   useEffect(() => {
+    latestSessionStateRef.current = session.state;
     if (lastSessionStateRef.current === session.state) return;
     if (lastSessionStateRef.current !== 'unavailable') {
       console.info('[mission-control-runtime] session state', {
@@ -1258,6 +1260,14 @@ export function useRuntimeBridge(
             protocolVersion,
             scopes,
           }));
+
+          const reconnectSessionKey = activeSessionKeyRef.current ?? MAIN_SESSION_KEY;
+          void Promise.all([
+            load(true),
+            hydrateHistory(reconnectSessionKey, { force: true }),
+          ]).catch((cause) => {
+            console.error('[mission-control-runtime] reconnect resync failed', cause);
+          });
         } else {
           setSession((current) => ({
             ...current,
@@ -1302,7 +1312,8 @@ export function useRuntimeBridge(
     socket.onclose = (event) => {
       if (cancelled || websocketGeneration !== websocketGenerationRef.current) return;
       socketRef.current = null;
-      const shouldRetry = event.code !== 1000 && event.code !== 1001;
+      const latestSessionState = latestSessionStateRef.current;
+      const shouldRetry = latestSessionState !== 'rejected';
       rejectPending(new Error('Mission Control gateway transport closed.'));
       setWsState(event.wasClean ? 'closed' : 'error');
       setWsDetail(
@@ -1350,6 +1361,8 @@ export function useRuntimeBridge(
     runtimeBridgeBrowserReachability,
     runtimeBridgeWebsocketConfigured,
     scheduleReconnect,
+    hydrateHistory,
+    load,
   ]);
 
   const sendPrompt = useCallback(
