@@ -73,6 +73,11 @@ Avoid duplication:
 - Runtime: Docker (OpenClaw)
 - Workspace: `/data/.openclaw/workspace`
 - Primary operator user: `node`
+- Live container access from the host:
+  - root shell: `docker exec -it openclaw-ktrt-openclaw-1 bash`
+  - node shell: `docker exec -it --user node openclaw-ktrt-openclaw-1 bash`
+  - rule of thumb: use `node` for normal OpenClaw CLI checks and workspace operations; use root only for global npm installs inside the container
+  - restart rule: use the normal host-side container restart path, not `openclaw gateway restart` from inside the container
 - Backup posture:
   - manual VPS snapshot path exists
   - automated off-server backup exists

@@ -12,8 +12,22 @@ This is the compressed companion to:
 - If `memory search` fails after the upgrade, default to **rollback**, not improvised repair.
 
 ## Roles
-- **Philippe:** host-side install + restart
+- **Philippe:** host-side Docker entry, install, and restart
 - **Marvin:** validation, smoke checks, decision support
+
+## Docker operator reality for this VPS
+This live lane runs inside the Hostinger Docker container `openclaw-ktrt-openclaw-1`.
+
+Default entry points from the VPS host:
+- root shell in the live container: `docker exec -it openclaw-ktrt-openclaw-1 bash`
+- node shell in the live container: `docker exec -it --user node openclaw-ktrt-openclaw-1 bash`
+
+Rules for this runbook:
+- use the `node` shell for normal `openclaw ...`, `curl`, log-capture, and validation commands
+- use root in the live container only for the global `npm install -g openclaw@...` step
+- restart through the host-side container path, not `openclaw gateway restart` from inside the container
+
+Unless a step explicitly says otherwise, the raw command blocks below are meant to be run from a `node` shell inside the live container.
 
 ---
 
@@ -68,28 +82,30 @@ If snapshot/restart authority is not available, **defer the window**.
 ---
 
 ## 4. Upgrade the live package
-Run on the real host install lane:
+Run from the VPS host in the live container as root:
 
 ```bash
-sudo npm install -g openclaw@2026.4.12
+docker exec -i openclaw-ktrt-openclaw-1 bash -lc 'npm install -g openclaw@2026.4.12'
 ```
 
-If the host originally used a different global npm prefix, use that same path instead of forcing a new one.
+If you prefer an interactive root shell, enter `docker exec -it openclaw-ktrt-openclaw-1 bash` first, then run the same `npm install -g ...` command inside the container.
+
+If the live container originally used a different global npm prefix than `/usr/local`, use that same path instead of forcing a new one.
 
 If install fails, **stop and rollback only if the live install is left broken**.
 
 ---
 
 ## 5. Restart the live gateway
-Run on the host side:
+Run on the VPS host through the container path:
 
 ```bash
-openclaw gateway restart
+docker restart openclaw-ktrt-openclaw-1
 ```
 
-If the deployment uses a host-managed container/service wrapper, use that normal host restart path instead.
+If the deployment uses a different established host-side container/service wrapper, use that exact restart path instead.
 
-Do **not** improvise a container-internal restart from chat.
+Do **not** run `openclaw gateway restart` from inside the container.
 
 ---
 
@@ -190,10 +206,16 @@ Then stop. Do **not** open a second workstream in the same window.
 ## Rollback script
 If rollback is triggered:
 
-```bash
-sudo npm install -g openclaw@2026.3.8
-openclaw gateway restart
+From the VPS host as root:
 
+```bash
+docker exec -i openclaw-ktrt-openclaw-1 bash -lc 'npm install -g openclaw@2026.3.8'
+docker restart openclaw-ktrt-openclaw-1
+```
+
+Then from a `node` shell inside the live container, run:
+
+```bash
 openclaw --version
 openclaw status --json
 openclaw health --json
