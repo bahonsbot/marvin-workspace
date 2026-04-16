@@ -365,6 +365,23 @@ function hasScopedTranscriptEntries(entries: RuntimeBridgeTranscriptEntry[], ses
   );
 }
 
+function replaceTranscriptEntriesForSession(
+  current: RuntimeBridgeTranscriptEntry[],
+  incoming: RuntimeBridgeTranscriptEntry[],
+  options: { sessionKey: string | null; limit?: number },
+): RuntimeBridgeTranscriptEntry[] {
+  const rebuilt = mergeTranscriptEntries([], incoming, {
+    sessionKey: options.sessionKey,
+    limit: options.limit,
+  });
+
+  const preserved = current.filter(
+    (entry) => entry.sessionKey !== options.sessionKey && entry.sessionKey !== null,
+  );
+
+  return [...preserved, ...rebuilt].sort((a, b) => a.at - b.at || a.id.localeCompare(b.id));
+}
+
 function transcriptEntriesToLiveMessages(entries: RuntimeBridgeTranscriptEntry[]): RuntimeBridgeChatMessage[] {
   return entries
     .filter((entry): entry is Extract<RuntimeBridgeTranscriptEntry, { kind: 'message' }> => entry.kind === 'message')
@@ -633,6 +650,7 @@ export function useRuntimeBridge(
     requestedSessionKey: string | null,
     incomingHistory: RuntimeBridgeTranscriptHistory,
     capturedGeneration: number,
+    options?: { force?: boolean },
   ) => {
     if (!requestedSessionKey) return;
     if (capturedGeneration !== sessionGenerationRef.current) return;
@@ -648,9 +666,18 @@ export function useRuntimeBridge(
 
       const hasScopedTranscript = hasScopedTranscriptEntries(current, hydratedSessionKey);
       const sessionChanged = hydratedSessionKeyRef.current !== hydratedSessionKey;
-      const shouldHydrate = incomingEntries.length > 0 && (sessionChanged || !hasScopedTranscript);
+      const shouldHydrate = options?.force
+        ? sessionChanged || incomingEntries.length > 0 || !hasScopedTranscript
+        : incomingEntries.length > 0 && (sessionChanged || !hasScopedTranscript);
       hydratedSessionKeyRef.current = hydratedSessionKey;
       if (!shouldHydrate) return current;
+
+      if (options?.force && incomingEntries.length > 0) {
+        return replaceTranscriptEntriesForSession(current, incomingEntries, {
+          sessionKey: hydratedSessionKey,
+          limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+        });
+      }
 
       return mergeTranscriptEntries(current, incomingEntries, {
         sessionKey: hydratedSessionKey,
@@ -683,7 +710,7 @@ export function useRuntimeBridge(
 
       const payload = (await res.json()) as RuntimeBridgeTranscriptHistory;
       if (!mountedRef.current) return;
-      applyHydratedHistory(sessionKey, payload, capturedGeneration);
+      applyHydratedHistory(sessionKey, payload, capturedGeneration, options);
     } catch (cause) {
       if (!mountedRef.current) return;
       console.error('[mission-control-runtime] transcript hydration failed', {
@@ -907,6 +934,8 @@ export function useRuntimeBridge(
         }
       }
 
+      const sessionMatchesTarget = !eventSessionKey || !targetSessionKey || eventSessionKey === targetSessionKey;
+
       if (runtimeNotice) {
         const signature = `${runtimeNotice.kind}:${eventSessionKey ?? 'none'}:${eventRunId ?? 'none'}:${JSON.stringify(payload)}`;
         if (!noticeSignaturesRef.current.has(signature)) {
@@ -928,11 +957,19 @@ export function useRuntimeBridge(
               }),
             );
           }
+
+          if (runtimeNotice.kind === 'context-compression' && sessionMatchesTarget) {
+            void Promise.all([
+              load(true),
+              hydrateHistory(targetSessionKey, { force: true }),
+            ]).catch((cause) => {
+              console.error('[mission-control-runtime] compaction resync failed', cause);
+            });
+          }
         }
       }
 
       const isLifecycleEndEvent = eventName === 'agent' && agentStream === 'lifecycle' && lifecyclePhase === 'end';
-      const sessionMatchesTarget = !eventSessionKey || !targetSessionKey || eventSessionKey === targetSessionKey;
       const runMatchesActive = !activeRunId || !eventRunId || eventRunId === activeRunId;
       if (isLifecycleEndEvent && sessionMatchesTarget && runMatchesActive) {
         if (sendState === 'sending' || sendState === 'streaming') {
