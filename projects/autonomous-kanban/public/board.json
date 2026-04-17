@@ -2,11 +2,6 @@
   "board": {
     "todo": [
       {
-        "id": "de0cbde2",
-        "text": "[Other] Analyze: OpenClaw loop-pattern audit",
-        "column": "todo"
-      },
-      {
         "id": "9a2888c1",
         "text": "[Other] Draft: Proactive operations guardrails",
         "column": "todo"
@@ -17,8 +12,14 @@
         "column": "todo"
       }
     ],
-    "inprogress": [],
+    "inprogress": [
+      {
+        "id": "a72d8852",
+        "text": "[Other] Analyze: OpenClaw loop-pattern audit",
+        "column": "inprogress"
+      }
+    ],
     "done": []
   },
-  "updatedAt": "2026-04-17T10:00:25.000Z"
+  "updatedAt": "2026-04-17T10:00:27.000Z"
 }
