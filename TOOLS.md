@@ -23,6 +23,7 @@ Quick rule:
 - Canonical OpenClaw CLI path: `/data/.npm-global/bin/openclaw`
 - Current rule: use the host/container restart path for runtime restarts, not `openclaw gateway restart` from inside the container
 - Current operational posture: this environment was reset to a clean baseline after recent upgrade/hotfix churn while preserving memories and recent projects. Expect some rewiring gaps. Prefer minimal clean fixes over patch stacking, and avoid routine backup restores.
+- Nexos provider note: Nexos model entries are currently re-injected on gateway restart by the Hostinger Docker environment. Removing Nexos-related files inside the current container does not persist. Treat Nexos as unavoidable ambient config for now unless there is a deliberate, approval-backed container rebuild plan.
 
 ## Container Access
 - Root shell from host: `docker exec -it openclaw-ktrt-openclaw-1 bash`
