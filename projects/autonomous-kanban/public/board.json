@@ -2,8 +2,8 @@
   "board": {
     "todo": [
       {
-        "id": "6dbf6d55",
-        "text": "[Trading] Draft: Actionable Alpha dashboard slice",
+        "id": "63b5a81a",
+        "text": "[Career] Draft: Creative-tool automation script plan",
         "column": "todo"
       },
       {
@@ -187,5 +187,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-18T01:03:09.555Z"
+  "updatedAt": "2026-04-19T01:01:45.698Z"
 }
