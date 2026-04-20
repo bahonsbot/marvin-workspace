@@ -50,6 +50,18 @@ type OrchestratorSummaryCacheEntry = {
 let orchestratorSummaryCache: OrchestratorSummaryCacheEntry | null = null;
 let orchestratorSummaryPromise: Promise<OrchestratorIntegrationSummary> | null = null;
 
+function storeOrchestratorSummary(
+  value: OrchestratorIntegrationSummary,
+  ttlMs = ORCHESTRATOR_SUMMARY_CACHE_TTL_MS,
+): OrchestratorIntegrationSummary {
+  orchestratorSummaryCache = {
+    value,
+    expiresAt: Date.now() + ttlMs,
+  };
+
+  return value;
+}
+
 function toIso(value?: number): string | null {
   return typeof value === 'number' ? new Date(value).toISOString() : null;
 }
@@ -383,22 +395,14 @@ async function buildOrchestratorIntegrationSummary(): Promise<OrchestratorIntegr
   };
 }
 
-export async function readOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
-  const now = Date.now();
-  if (orchestratorSummaryCache && orchestratorSummaryCache.expiresAt > now) {
-    return orchestratorSummaryCache.value;
-  }
-
+function startOrchestratorIntegrationSummaryRefresh(): Promise<OrchestratorIntegrationSummary> {
   if (!orchestratorSummaryPromise) {
     orchestratorSummaryPromise = buildOrchestratorIntegrationSummary()
-      .then((summary) => {
-        orchestratorSummaryCache = {
-          value: summary,
-          expiresAt: Date.now() + ORCHESTRATOR_SUMMARY_CACHE_TTL_MS,
-        };
-        return summary;
+      .then((summary) => storeOrchestratorSummary(summary))
+      .catch(() => {
+        const fallback = orchestratorSummaryCache?.value ?? createUnavailableOrchestratorIntegrationSummary();
+        return storeOrchestratorSummary(fallback, Math.min(ORCHESTRATOR_SUMMARY_CACHE_TTL_MS, 5000));
       })
-      .catch(() => createUnavailableOrchestratorIntegrationSummary())
       .finally(() => {
         orchestratorSummaryPromise = null;
       });
@@ -407,8 +411,30 @@ export async function readOrchestratorIntegrationSummary(): Promise<Orchestrator
   return orchestratorSummaryPromise;
 }
 
-export function primeOrchestratorIntegrationSummary(): void {
-  void readOrchestratorIntegrationSummary();
+export async function readOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
+  const now = Date.now();
+  if (orchestratorSummaryCache && orchestratorSummaryCache.expiresAt > now) {
+    return orchestratorSummaryCache.value;
+  }
+
+  void startOrchestratorIntegrationSummaryRefresh();
+
+  if (orchestratorSummaryCache) {
+    return orchestratorSummaryCache.value;
+  }
+
+  return createDeferredOrchestratorIntegrationSummary();
 }
 
-export const getOrchestratorIntegrationSummary = readOrchestratorIntegrationSummary;
+export async function getOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
+  const now = Date.now();
+  if (orchestratorSummaryCache && orchestratorSummaryCache.expiresAt > now) {
+    return orchestratorSummaryCache.value;
+  }
+
+  return startOrchestratorIntegrationSummaryRefresh();
+}
+
+export function primeOrchestratorIntegrationSummary(): void {
+  void startOrchestratorIntegrationSummaryRefresh();
+}

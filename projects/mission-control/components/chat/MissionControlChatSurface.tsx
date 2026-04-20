@@ -833,6 +833,7 @@ export function MissionControlChatSurface({
   const bridgeRefreshing = Boolean(bridge?.refreshing);
   const bridgeError = bridge?.error ?? null;
   const effectiveBridgeError = fallbackNotice ?? bridgeError;
+  const bridgeTiming = bridge?.timing ?? null;
   const wsState = bridge?.wsState ?? 'unavailable';
   const wsDetail = bridge?.wsDetail ?? null;
   const sessionState = bridge?.session.state ?? 'unavailable';
@@ -1017,6 +1018,24 @@ export function MissionControlChatSurface({
       detail: liveCanSend ? 'Ready for the next prompt.' : 'Ready state is waiting on runtime session targeting.',
     };
   })();
+  const bridgeTimingSummary = useMemo(() => {
+    if (!bridgeTiming?.connectStartedAt) return null;
+    const socketOpenMs = bridgeTiming.socketOpenedAt ? bridgeTiming.socketOpenedAt - bridgeTiming.connectStartedAt : null;
+    const challengeMs = bridgeTiming.challengeReceivedAt ? bridgeTiming.challengeReceivedAt - bridgeTiming.connectStartedAt : null;
+    const connectAckMs = bridgeTiming.connectedAt ? bridgeTiming.connectedAt - bridgeTiming.connectStartedAt : null;
+    const challengeToConnectMs = bridgeTiming.challengeReceivedAt && bridgeTiming.connectedAt
+      ? bridgeTiming.connectedAt - bridgeTiming.challengeReceivedAt
+      : null;
+
+    return {
+      socketOpenMs,
+      challengeMs,
+      connectAckMs,
+      challengeToConnectMs,
+      closeCode: bridgeTiming.lastCloseCode,
+      closeReason: bridgeTiming.lastCloseReason,
+    };
+  }, [bridgeTiming]);
   const displayModelLabel = topRailModelLabel.toLowerCase() === 'runtime controlled' ? lastRealModelRef.current : topRailModelLabel;
   const modelTriggerLabel = (() => {
     const source = (optimisticModelLabel ?? displayModelLabel).trim();
@@ -1539,6 +1558,27 @@ export function MissionControlChatSurface({
                 </div>
               </div>
 
+              {bridgeTimingSummary ? (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    padding: '6px 9px',
+                    border: '1px solid rgba(200, 195, 188, 0.34)',
+                    borderRadius: 999,
+                    background: 'rgba(255, 255, 255, 0.7)',
+                    flexShrink: 0,
+                  }}
+                  title="Socket open, challenge arrival, and connect-ack timing for the current bridge session."
+                >
+                  <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Handshake</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-body)' }}>
+                    {bridgeTimingSummary.challengeMs != null ? bridgeTimingSummary.challengeMs / 1000 >= 1 ? `${(bridgeTimingSummary.challengeMs / 1000).toFixed(1)}s` : `${bridgeTimingSummary.challengeMs}ms` : '…'}
+                  </span>
+                </div>
+              ) : null}
+
               {bridge ? (
                 <button
                   type="button"
@@ -1672,6 +1712,30 @@ export function MissionControlChatSurface({
                       Last event: {sessionLastEvent}
                     </div>
                   )}
+                  {bridgeTimingSummary ? (
+                    <div style={{ display: 'grid', gap: 4, paddingTop: 4, borderTop: '1px solid rgba(200, 195, 188, 0.28)' }}>
+                      <div style={{ fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                        Handshake timing
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                        Socket open: {bridgeTimingSummary.socketOpenMs != null ? `${bridgeTimingSummary.socketOpenMs}ms` : '—'}
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                        Challenge: {bridgeTimingSummary.challengeMs != null ? `${bridgeTimingSummary.challengeMs}ms` : '—'}
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                        Connect ack: {bridgeTimingSummary.connectAckMs != null ? `${bridgeTimingSummary.connectAckMs}ms` : '—'}
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                        Challenge → connect: {bridgeTimingSummary.challengeToConnectMs != null ? `${bridgeTimingSummary.challengeToConnectMs}ms` : '—'}
+                      </div>
+                      {bridgeTimingSummary.closeCode ? (
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                          Last close: {bridgeTimingSummary.closeCode}{bridgeTimingSummary.closeReason ? `, ${bridgeTimingSummary.closeReason}` : ''}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
               )}
             </div>

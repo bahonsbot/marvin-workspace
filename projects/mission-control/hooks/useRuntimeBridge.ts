@@ -100,6 +100,17 @@ type RuntimeBridgeLiveSessionTarget = {
   label: string;
 };
 
+type RuntimeBridgeConnectionTiming = {
+  generation: number;
+  connectStartedAt: number | null;
+  socketOpenedAt: number | null;
+  challengeReceivedAt: number | null;
+  connectedAt: number | null;
+  lastClosedAt: number | null;
+  lastCloseCode: number | null;
+  lastCloseReason: string | null;
+};
+
 type RuntimeBridgeLiveState = {
   targetSession: RuntimeBridgeLiveSessionTarget;
   canSend: boolean;
@@ -123,6 +134,7 @@ export type RuntimeBridgeState = {
   wsState: RuntimeBridgeWsState;
   wsDetail: string | null;
   session: RuntimeBridgeSessionSnapshot;
+  timing: RuntimeBridgeConnectionTiming;
   live: RuntimeBridgeLiveState;
   refresh: () => Promise<void>;
   switchSession: (sessionKey: string) => Promise<void>;
@@ -169,6 +181,19 @@ function generateId(prefix: string): string {
   return typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
     ? `${prefix}-${crypto.randomUUID()}`
     : `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function createEmptyTiming(generation = 0): RuntimeBridgeConnectionTiming {
+  return {
+    generation,
+    connectStartedAt: null,
+    socketOpenedAt: null,
+    challengeReceivedAt: null,
+    connectedAt: null,
+    lastClosedAt: null,
+    lastCloseCode: null,
+    lastCloseReason: null,
+  };
 }
 
 function getOrCreateInstanceId(): string {
@@ -517,6 +542,7 @@ export function useRuntimeBridge(
     createEmptySession('unavailable', 'No Mission Control WS sidecar descriptor is available for this preview.'),
   );
   const [entries, setEntries] = useState<RuntimeBridgeTranscriptEntry[]>(seededEntries);
+  const [timing, setTiming] = useState<RuntimeBridgeConnectionTiming>(createEmptyTiming());
   const [sendState, setSendState] = useState<RuntimeBridgeSendState>('idle');
   const [sendError, setSendError] = useState<string | null>(null);
   const [activeRunId, setActiveRunId] = useState<string | null>(null);
@@ -1125,6 +1151,7 @@ export function useRuntimeBridge(
 
     if (!transportConfigured || !bridgeToken || !baseUrl) {
       socketRef.current = null;
+      setTiming(createEmptyTiming(websocketGeneration));
       setWsState('unavailable');
       setWsDetail('No Mission Control WS sidecar descriptor is available for this preview.');
       setSession(createEmptySession('unavailable', 'No Mission Control WS sidecar descriptor is available for this preview.'));
@@ -1141,6 +1168,10 @@ export function useRuntimeBridge(
     try {
       url = resolveWebSocketUrl(baseUrl);
       url.searchParams.set('bridgeToken', bridgeToken);
+      setTiming({
+        ...createEmptyTiming(websocketGeneration),
+        connectStartedAt: Date.now(),
+      });
     } catch (cause) {
       setWsState('error');
       setWsDetail(cause instanceof Error ? cause.message : 'Mission Control could not resolve the websocket endpoint.');
@@ -1169,11 +1200,20 @@ export function useRuntimeBridge(
 
     socket.onopen = () => {
       if (cancelled || websocketGeneration !== websocketGenerationRef.current) return;
+      const openedAt = Date.now();
       reconnectAttemptRef.current = 0;
       if (reconnectTimerRef.current) {
         clearTimeout(reconnectTimerRef.current);
         reconnectTimerRef.current = null;
       }
+      setTiming((current) => ({
+        ...current,
+        generation: websocketGeneration,
+        socketOpenedAt: openedAt,
+        lastClosedAt: null,
+        lastCloseCode: null,
+        lastCloseReason: null,
+      }));
       setWsState('open');
       setWsDetail('WS sidecar socket is open. Waiting for gateway handshake.');
       setSendError(null);
@@ -1198,6 +1238,12 @@ export function useRuntimeBridge(
         const eventName = message.event ?? null;
 
         if (eventName === 'connect.challenge') {
+          const challengeAt = Date.now();
+          setTiming((current) => ({
+            ...current,
+            generation: websocketGeneration,
+            challengeReceivedAt: current.challengeReceivedAt ?? challengeAt,
+          }));
           if (handshakeEstablished) {
             setSession((current) => ({
               ...current,
@@ -1270,6 +1316,7 @@ export function useRuntimeBridge(
 
         if (message.ok) {
           handshakeEstablished = true;
+          const connectedAt = Date.now();
           const payload = asRecord(message.payload) ?? {};
           const sessionPayload = asRecord(payload.session);
           const rawScopes = Array.isArray(payload.scopes) ? payload.scopes : [];
@@ -1287,6 +1334,11 @@ export function useRuntimeBridge(
                 ? payload.sessionId
                 : null;
 
+          setTiming((current) => ({
+            ...current,
+            generation: websocketGeneration,
+            connectedAt,
+          }));
           setSession((current) => ({
             ...current,
             state: 'connected',
@@ -1348,10 +1400,18 @@ export function useRuntimeBridge(
 
     socket.onclose = (event) => {
       if (cancelled || websocketGeneration !== websocketGenerationRef.current) return;
+      const closedAt = Date.now();
       socketRef.current = null;
       const latestSessionState = latestSessionStateRef.current;
       const shouldRetry = latestSessionState !== 'rejected';
       rejectPending(new Error('Mission Control gateway transport closed.'));
+      setTiming((current) => ({
+        ...current,
+        generation: websocketGeneration,
+        lastClosedAt: closedAt,
+        lastCloseCode: event.code || null,
+        lastCloseReason: event.reason || null,
+      }));
       setWsState(event.wasClean ? 'closed' : 'error');
       setWsDetail(
         event.reason
@@ -1573,6 +1633,7 @@ export function useRuntimeBridge(
     wsState,
     wsDetail,
     session,
+    timing,
     live: {
       targetSession: liveTargetSession,
       canSend: session.state === 'connected' && Boolean(liveTargetSession.key) && sendState !== 'sending' && sendState !== 'streaming',
