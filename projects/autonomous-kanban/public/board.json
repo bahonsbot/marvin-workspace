@@ -2,8 +2,8 @@
   "board": {
     "todo": [
       {
-        "id": "63b5a81a",
-        "text": "[Career] Draft: Creative-tool automation script plan",
+        "id": "6dbf6d55",
+        "text": "[Trading] Draft: Actionable Alpha dashboard slice",
         "column": "todo"
       },
       {
@@ -19,6 +19,11 @@
       {
         "id": "8664d2d5",
         "text": "[Trading] Research: Real-time trading API shortlist",
+        "column": "todo"
+      },
+      {
+        "id": "63b5a81a",
+        "text": "[Career] Draft: Creative-tool automation script plan",
         "column": "todo"
       }
     ],
@@ -116,6 +121,13 @@
         "source": "tasks-log"
       },
       {
+        "id": "fef0c021",
+        "text": "Create a clean implementation plan to change the top section in Chat to one row",
+        "column": "done",
+        "outputPath": "projects/mission-control/docs/chat-top-bar-one-row-plan-2026-04-14.md",
+        "source": "tasks-log"
+      },
+      {
         "id": "c4fee0b0",
         "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
         "column": "done",
@@ -187,5 +199,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-19T01:01:45.698Z"
+  "updatedAt": "2026-04-20T01:03:44.747Z"
 }
