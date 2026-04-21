@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { floatingInsetStyle } from '@/components/shared/floating';
-import { AgentActionButton } from '@/components/agents/AgentActionButton';
+import { AgentActionButton, type AgentActionButtonTone } from '@/components/agents/AgentActionButton';
 import { AgentIssueStateButton } from '@/components/agents/AgentIssueStateButton';
 import type { AgentAlert, AgentAlertSeverity, AgentHealthStatus, AgentUnitPayload } from '@/lib/agents/definitions';
 
@@ -122,64 +122,34 @@ function SingleAvatar({ item }: { item: AgentUnitPayload }) {
   );
 }
 
-function TeamAvatar({ item }: { item: AgentUnitPayload }) {
-  const avatarImage = <AgentAvatarImage item={item} size={84} />;
-  if (avatarImage) return avatarImage;
-
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        width: 84,
-        height: 84,
-        borderRadius: 24,
-        background: avatarGradient(item),
-        border: '1px solid rgba(18, 31, 25, 0.12)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 12px 28px rgba(19, 31, 27, 0.1)',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 7,
-        padding: 10,
-      }}
-    >
-      {Array.from({ length: 4 }).map((_, index) => (
-        <div
-          key={index}
-          style={{
-            borderRadius: 16,
-            background: index === 0 ? 'rgba(255, 250, 242, 0.94)' : 'rgba(255, 250, 242, 0.3)',
-            border: '1px solid rgba(255,255,255,0.18)',
-            boxShadow: index === 0 ? '0 4px 12px rgba(13, 27, 21, 0.12)' : 'none',
-          }}
-        />
-      ))}
-    </div>
-  );
+function AvatarBlock({ item }: { item: AgentUnitPayload }) {
+  return <SingleAvatar item={item} />;
 }
 
-function AvatarBlock({ item }: { item: AgentUnitPayload }) {
-  if (item.kind === 'team') return <TeamAvatar item={item} />;
-  return <SingleAvatar item={item} />;
+function actionToneForItem(item: AgentUnitPayload): AgentActionButtonTone {
+  if (item.kind === 'team') return 'team';
+  if (item.kind === 'specialist') return 'specialist';
+  return 'control';
 }
 
 function visibleActions(actions: AgentUnitPayload['actions']) {
   return actions.filter((action) => action.availability === 'live' && action.href);
 }
 
-function ActionCluster({ actions }: { actions: AgentUnitPayload['actions'] }) {
+function ActionCluster({ actions, tone }: { actions: AgentUnitPayload['actions']; tone: AgentActionButtonTone }) {
   const liveActions = visibleActions(actions);
   if (liveActions.length === 0) return null;
 
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
       {liveActions.map((action) => (
-        <AgentActionButton key={action.id} action={action} />
+        <AgentActionButton key={action.id} action={action} tone={tone} />
       ))}
     </div>
   );
 }
 
-function AlertActions({ actions }: { actions: AgentAlert['actions'] }) {
+function AlertActions({ actions, tone }: { actions: AgentAlert['actions']; tone: AgentActionButtonTone }) {
   if (actions.length === 0) return null;
   const [primary, ...secondary] = actions;
 
@@ -187,12 +157,12 @@ function AlertActions({ actions }: { actions: AgentAlert['actions'] }) {
     <div style={{ display: 'grid', gap: 8 }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
         <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b756e' }}>Next step</span>
-        <AgentActionButton action={primary} />
+        <AgentActionButton action={primary} tone={tone} />
       </div>
       {secondary.length > 0 ? (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {secondary.map((action) => (
-            <AgentActionButton key={action.id} action={action} />
+            <AgentActionButton key={action.id} action={action} tone={tone} />
           ))}
         </div>
       ) : null}
@@ -200,7 +170,7 @@ function AlertActions({ actions }: { actions: AgentAlert['actions'] }) {
   );
 }
 
-function AlertCard({ alert, showUnitLabel = false }: { alert: AgentUnitPayload['alerts'][number]; showUnitLabel?: boolean }) {
+function AlertCard({ alert, tone, showUnitLabel = false }: { alert: AgentUnitPayload['alerts'][number]; tone: AgentActionButtonTone; showUnitLabel?: boolean }) {
   const severity = alertPalette(alert.severity);
   const isAcknowledged = alert.state === 'acknowledged';
 
@@ -261,7 +231,7 @@ function AlertCard({ alert, showUnitLabel = false }: { alert: AgentUnitPayload['
       ) : null}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'start', justifyContent: 'space-between' }}>
         <div style={{ flex: '1 1 220px' }}>
-          <AlertActions actions={alert.actions} />
+          <AlertActions actions={alert.actions} tone={tone} />
         </div>
         <AgentIssueStateButton alert={alert} />
       </div>
@@ -270,8 +240,8 @@ function AlertCard({ alert, showUnitLabel = false }: { alert: AgentUnitPayload['
 }
 
 export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
-  const palette = statePalette(item.health.status);
   const surface = sectionSurfacePalette(item);
+  const actionTone = actionToneForItem(item);
   const showAlertBlock = item.kind !== 'control' && item.alerts.length > 0;
   const visibleAlerts = item.kind === 'control' ? item.alerts.slice(0, 4) : item.alerts;
   const activeIssueCount = item.alerts.filter((alert) => alert.state === 'active').length;
@@ -303,19 +273,6 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
       <div style={{ display: 'grid', gap: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 14, alignItems: 'flex-start' }}>
           <AvatarBlock item={item} />
-          <div
-            title={item.health.label}
-            aria-label={`Status: ${item.health.label}`}
-            style={{
-              width: 14,
-              height: 14,
-              borderRadius: '50%',
-              background: palette.text,
-              boxShadow: `0 0 0 4px ${palette.bg}`,
-              marginTop: 8,
-              flex: '0 0 auto',
-            }}
-          />
         </div>
 
         <div style={{ display: 'grid', gap: 12, paddingTop: 10 }}>
@@ -375,7 +332,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
       <div style={{ minHeight: 30 }} />
 
       <div style={{ marginTop: 'auto' }}>
-        <ActionCluster actions={item.actions} />
+        <ActionCluster actions={item.actions} tone={actionTone} />
       </div>
     </div>
   );
@@ -391,7 +348,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
         display: 'grid',
         gap: 18,
         alignContent: 'start',
-        minHeight: item.kind === 'control' ? 0 : 468,
+        minHeight: item.kind === 'control' ? 468 : 468,
       }}
     >
       {item.kind === 'control' ? (
@@ -401,19 +358,6 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
           <div style={{ display: 'grid', gap: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 14, alignItems: 'flex-start' }}>
               <AvatarBlock item={item} />
-              <div
-                title={item.health.label}
-                aria-label={`Status: ${item.health.label}`}
-                style={{
-                  width: 14,
-                  height: 14,
-                  borderRadius: '50%',
-                  background: palette.text,
-                  boxShadow: `0 0 0 4px ${palette.bg}`,
-                  marginTop: 8,
-                  flex: '0 0 auto',
-                }}
-              />
             </div>
 
             <div style={{ display: 'grid', gap: 12, paddingTop: 10 }}>
@@ -534,14 +478,14 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
               <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>Issues</div>
               <div style={{ display: 'grid', gap: 8 }}>
                 {visibleAlerts.map((alert) => (
-                  <AlertCard key={alert.id} alert={alert} />
+                  <AlertCard key={alert.id} alert={alert} tone={actionTone} />
                 ))}
               </div>
             </div>
           ) : null}
 
           <div style={{ marginTop: 'auto' }}>
-            <ActionCluster actions={item.actions} />
+            <ActionCluster actions={item.actions} tone={actionTone} />
           </div>
         </>
       )}
