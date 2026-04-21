@@ -45,7 +45,7 @@ export function AgentSection({ section }: { section: AgentSectionPayload }) {
         >
           {section.items.map((item) => {
             const basis = isControl
-              ? `${RAIL_LAYOUT.teams.minWidth}px`
+              ? `max(${RAIL_LAYOUT.teams.minWidth}px, calc((100% - ${RAIL_LAYOUT.teams.peek}px - ${(RAIL_LAYOUT.teams.visibleCount - 1) * 18}px) / ${RAIL_LAYOUT.teams.visibleCount}))`
               : `max(${rail.minWidth}px, calc((100% - ${rail.peek}px - ${(rail.visibleCount - 1) * 18}px) / ${rail.visibleCount}))`;
 
             return (

@@ -318,7 +318,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
           />
         </div>
 
-        <div style={{ display: 'grid', gap: 12 }}>
+        <div style={{ display: 'grid', gap: 12, paddingTop: 10 }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
             <span
               style={roleBadgeStyle}
@@ -416,7 +416,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
               />
             </div>
 
-            <div style={{ display: 'grid', gap: 12 }}>
+            <div style={{ display: 'grid', gap: 12, paddingTop: 10 }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
                 <span
                   style={roleBadgeStyle}
