@@ -274,7 +274,6 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
   const surface = sectionSurfacePalette(item);
   const showAlertBlock = item.kind !== 'control' && item.alerts.length > 0;
   const visibleAlerts = item.kind === 'control' ? item.alerts.slice(0, 4) : item.alerts;
-  const oversight = item.oversight;
   const activeIssueCount = item.alerts.filter((alert) => alert.state === 'active').length;
   const acknowledgedIssueCount = item.alerts.filter((alert) => alert.state === 'acknowledged').length;
   const roleBadgeStyle = {
@@ -319,7 +318,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
           />
         </div>
 
-        <div style={{ display: 'grid', gap: 8 }}>
+        <div style={{ display: 'grid', gap: 12 }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
             <span
               style={roleBadgeStyle}
@@ -396,55 +395,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
       }}
     >
       {item.kind === 'control' ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.7fr) minmax(280px, 0.92fr)', gap: 18, alignItems: 'start' }}>
-          {controlLeftColumn}
-          <aside
-            style={{
-              ...floatingInsetStyle({ padding: '12px 12px 13px', radius: 20, background: surface.panel }),
-              display: 'grid',
-              gap: 10,
-              alignContent: 'start',
-              alignSelf: 'start',
-              justifySelf: 'end',
-              width: '100%',
-              maxWidth: 336,
-            }}
-          >
-            <div style={{ display: 'grid', gap: 8 }}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>Oversight</div>
-                <span style={{ fontSize: 10.5, color: '#5d675f' }}>
-                  {oversight && oversight.activeIssues > 0 ? 'Active issues in view' : oversight && oversight.acknowledgedIssues > 0 ? 'Seen issues retained' : 'All clear'}
-                </span>
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                <div style={{ ...floatingInsetStyle({ padding: '9px 10px', radius: 14, background: 'rgba(255,255,255,0.72)' }), display: 'grid', gap: 2, minWidth: 90 }}>
-                  <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b756e' }}>Active</span>
-                  <strong style={{ fontSize: 18, color: '#183328', lineHeight: 1 }}>{oversight?.activeIssues ?? activeIssueCount}</strong>
-                </div>
-                <div style={{ ...floatingInsetStyle({ padding: '9px 10px', radius: 14, background: 'rgba(255,255,255,0.72)' }), display: 'grid', gap: 2, minWidth: 90 }}>
-                  <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b756e' }}>Seen</span>
-                  <strong style={{ fontSize: 18, color: '#183328', lineHeight: 1 }}>{oversight?.acknowledgedIssues ?? acknowledgedIssueCount}</strong>
-                </div>
-                <div style={{ ...floatingInsetStyle({ padding: '9px 10px', radius: 14, background: 'rgba(255,255,255,0.72)' }), display: 'grid', gap: 2, minWidth: 104, flex: '1 1 104px' }}>
-                  <span style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6b756e' }}>Seats</span>
-                  <strong style={{ fontSize: 18, color: '#183328', lineHeight: 1 }}>{oversight?.seatsNeedingAttention ?? 0}</strong>
-                </div>
-              </div>
-            </div>
-
-            {visibleAlerts.length > 0 ? (
-              <div style={{ display: 'grid', gap: 7 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#47655c' }}>Issue flow</div>
-                <div style={{ display: 'grid', gap: 7 }}>
-                  {visibleAlerts.map((alert) => (
-                    <AlertCard key={alert.id} alert={alert} showUnitLabel />
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </aside>
-        </div>
+        controlLeftColumn
       ) : (
         <>
           <div style={{ display: 'grid', gap: 16 }}>
@@ -465,7 +416,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
               />
             </div>
 
-            <div style={{ display: 'grid', gap: 8 }}>
+            <div style={{ display: 'grid', gap: 12 }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
                 <span
                   style={roleBadgeStyle}
