@@ -68,10 +68,18 @@ type ModelMenuOption = {
   command: string;
 };
 
+function runtimeModelCommand(modelAlias: ModelMenuOption['id'] | ChatSeatActivation['defaultModel']): string {
+  if (modelAlias === 'codex5.4') return '/model openai-codex/gpt-5.4';
+  if (modelAlias === 'codex5.4mini') return '/model openai-codex/gpt-5.4-mini';
+  if (modelAlias === 'codex') return '/model codex';
+  if (modelAlias === 'minimax2.7') return '/model minimax2.7';
+  return `/model ${modelAlias}`;
+}
+
 const modelMenuOptions: ModelMenuOption[] = [
-  { id: 'codex5.4', label: 'gpt-5.4', command: '/model codex5.4' },
-  { id: 'codex', label: 'codex-5.3', command: '/model codex' },
-  { id: 'minimax2.7', label: 'minimax-2.7', command: '/model minimax2.7' },
+  { id: 'codex5.4', label: 'gpt-5.4', command: runtimeModelCommand('codex5.4') },
+  { id: 'codex', label: 'codex-5.3', command: runtimeModelCommand('codex') },
+  { id: 'minimax2.7', label: 'minimax-2.7', command: runtimeModelCommand('minimax2.7') },
 ];
 
 const effortMenuOptions = ['low', 'medium', 'high', 'xhigh'] as const;
@@ -1155,7 +1163,7 @@ export function MissionControlChatSurface({
 
     try {
       setModelSwitchError(null);
-      await live.sendPrompt(`/model ${modelAlias}`);
+      await live.sendPrompt(runtimeModelCommand(modelAlias));
       await new Promise((resolve) => window.setTimeout(resolve, 500));
       await live.sendPrompt(`/think:${effort}`);
       void bridge?.refresh();
