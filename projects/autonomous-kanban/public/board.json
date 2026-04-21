@@ -2,11 +2,6 @@
   "board": {
     "todo": [
       {
-        "id": "6dbf6d55",
-        "text": "[Trading] Draft: Actionable Alpha dashboard slice",
-        "column": "todo"
-      },
-      {
         "id": "c10110b2",
         "text": "[Other] Analyze: OpenClaw loop-pattern audit",
         "column": "todo"
@@ -14,11 +9,6 @@
       {
         "id": "b0f34131",
         "text": "[Other] Draft: Proactive operations guardrails",
-        "column": "todo"
-      },
-      {
-        "id": "8664d2d5",
-        "text": "[Trading] Research: Real-time trading API shortlist",
         "column": "todo"
       },
       {
@@ -199,5 +189,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-20T01:03:44.747Z"
+  "updatedAt": "2026-04-21T01:04:14.479Z"
 }
