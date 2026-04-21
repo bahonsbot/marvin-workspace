@@ -63,8 +63,14 @@ Use this if you want nginx to remain the routing/control point for:
 - operational familiarity
 
 ### Recommendation between A and B
-If there is no strong existing nginx requirement, start by evaluating **Pomerium direct**.
-If you already rely on nginx operationally or want cleaner route composition, use **Pomerium -> nginx**.
+For this deployment, the recommendation is now explicit: use **Pomerium -> nginx**.
+
+Reason:
+- Mission Control already relies on host nginx routing operationally
+- the migration window will likely need flexible host/path/upstream switching
+- nginx is the safer routing spine while Pomerium becomes the identity layer
+
+`Pomerium direct` remains a later simplification candidate, not the first deployment choice.
 
 ## Important OpenClaw constraint
 OpenClaw's trusted-proxy authorization rejects loopback-source requests as trusted-proxy identity sources.

@@ -225,7 +225,7 @@ This is the most important implementation block.
 1. [ ] Approve `lab.motiondisplay.cloud` as the long-term sandbox lane name
 2. [ ] Approve `gateway.auth.mode = trusted-proxy` as the target live auth posture, or reject it explicitly
 3. [ ] Choose the reverse proxy / identity system to front dashboard and future lab
-   - recommended target: Pomerium-first trusted-proxy deployment, with nginx only as a routing helper if needed
+   - recommended target: Pomerium-first trusted-proxy deployment with **Pomerium -> nginx** as the deployment topology
 4. [ ] Decide whether `dashboard` launches first as a temporary HTTPS-wrapped intermediate or only after the first Chat/runtime migration slice
 
 ## Best next implementation artifact after this checklist
