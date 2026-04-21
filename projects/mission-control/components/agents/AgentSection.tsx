@@ -7,10 +7,14 @@ const RAIL_LAYOUT: Record<AgentSectionPayload['id'], { visibleCount: number; min
   specialists: { visibleCount: 3, minWidth: 280, peek: 54 },
 };
 
+const RAIL_GAP = 18;
+
 export function AgentSection({ section }: { section: AgentSectionPayload }) {
   const isControl = section.id === 'control';
   const showHeading = !isControl;
   const rail = RAIL_LAYOUT[section.id];
+  const teamRail = RAIL_LAYOUT.teams;
+  const controlBasis = `max(${teamRail.minWidth}px, calc((100% - ${teamRail.peek}px - ${(teamRail.visibleCount - 1) * RAIL_GAP}px) / ${teamRail.visibleCount}))`;
 
   return (
     <section style={{ display: 'grid', gap: showHeading ? 16 : 0 }}>
@@ -35,25 +39,26 @@ export function AgentSection({ section }: { section: AgentSectionPayload }) {
         <div
           style={{
             display: 'flex',
-            gap: 18,
+            gap: RAIL_GAP,
             overflowX: isControl ? 'visible' : 'auto',
             paddingBottom: 8,
-            paddingRight: showHeading ? rail.peek : 0,
+            paddingRight: isControl ? teamRail.peek : showHeading ? rail.peek : 0,
             scrollSnapType: isControl ? 'none' : 'x proximity',
             scrollbarWidth: 'thin',
           }}
         >
           {section.items.map((item) => {
             const basis = isControl
-              ? `max(${RAIL_LAYOUT.teams.minWidth}px, calc((100% - ${RAIL_LAYOUT.teams.peek}px - ${(RAIL_LAYOUT.teams.visibleCount - 1) * 18}px) / ${RAIL_LAYOUT.teams.visibleCount}))`
-              : `max(${rail.minWidth}px, calc((100% - ${rail.peek}px - ${(rail.visibleCount - 1) * 18}px) / ${rail.visibleCount}))`;
+              ? controlBasis
+              : `max(${rail.minWidth}px, calc((100% - ${rail.peek}px - ${(rail.visibleCount - 1) * RAIL_GAP}px) / ${rail.visibleCount}))`;
 
             return (
               <div
                 key={item.id}
                 style={{
-                  flex: `0 0 ${basis}`,
-                  minWidth: isControl ? 0 : rail.minWidth,
+                  flex: isControl ? '0 0 auto' : `0 0 ${basis}`,
+                  width: isControl ? basis : undefined,
+                  minWidth: isControl ? teamRail.minWidth : rail.minWidth,
                   maxWidth: isControl ? basis : undefined,
                   scrollSnapAlign: isControl ? 'none' : 'start',
                 }}

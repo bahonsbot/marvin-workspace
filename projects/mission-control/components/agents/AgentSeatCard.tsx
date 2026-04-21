@@ -84,18 +84,16 @@ function AgentAvatarImage({ item, size }: { item: AgentUnitPayload; size: number
       style={{
         width: size,
         height: size,
-        borderRadius: item.kind === 'control' ? 25 : 23,
-        objectFit: 'cover',
-        border: '1px solid rgba(18, 31, 25, 0.12)',
-        boxShadow: '0 12px 28px rgba(19, 31, 27, 0.1)',
-        background: '#ede7dc',
+        display: 'block',
+        objectFit: 'contain',
+        background: 'transparent',
       }}
     />
   );
 }
 
 function SingleAvatar({ item }: { item: AgentUnitPayload }) {
-  const size = item.kind === 'control' ? 80 : 74;
+  const size = item.kind === 'control' ? 88 : 80;
   const avatarImage = <AgentAvatarImage item={item} size={size} />;
   if (avatarImage) return avatarImage;
 
@@ -105,10 +103,8 @@ function SingleAvatar({ item }: { item: AgentUnitPayload }) {
       style={{
         width: size,
         height: size,
-        borderRadius: item.kind === 'control' ? 25 : 23,
+        borderRadius: '50%',
         background: avatarGradient(item),
-        border: '1px solid rgba(18, 31, 25, 0.12)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 28px rgba(19, 31, 27, 0.1)',
         display: 'grid',
         placeItems: 'center',
         color: '#fffaf2',
@@ -329,8 +325,6 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
         </div>
       </div>
 
-      <div style={{ minHeight: 30 }} />
-
       <div style={{ marginTop: 'auto' }}>
         <ActionCluster actions={item.actions} tone={actionTone} />
       </div>
@@ -348,7 +342,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
         display: 'grid',
         gap: 18,
         alignContent: 'start',
-        minHeight: item.kind === 'control' ? 468 : 468,
+        minHeight: item.kind === 'control' ? 0 : 468,
       }}
     >
       {item.kind === 'control' ? (
