@@ -14,7 +14,22 @@ Capabilities the user wanted but don't exist.
 
 ---
 
+## [REQ-20260420-1410]
+
+**Request:** Before resetting or starting a fresh session after a meaningful work block, write a concise daily-memory and learnings save so continuation can resume cleanly later.
+**What triggered it:** After Morning Meeting closeout and doc fixes, Philippe asked for a savepoint before continuing in a fresh session.
+**Outcome:** Added a Morning Meeting savepoint to `memory/2026-04-20.md` and recorded this continuation preference in `.learnings/requests.md`.
+**Status:** implemented
+
 ## Recent Requests
+
+## [REQ-20260422-0048]
+
+**Request:** After producing planning docs, also create a comprehensive "tomorrow-you" savepoint plus daily memory and learnings cleanup so a future agent can resume without Philippe re-explaining the architecture, findings, created docs, or next work.
+**What triggered it:** After the Mission Control live-rollout architecture pass, Philippe explicitly asked for a configuration-oriented cutover doc, then asked for a highly detailed savepoint and a clean office handoff into daily memory and learnings.
+**Outcome:** Implemented by creating a dedicated savepoint doc under `projects/_ops/`, extending the daily memory with the full rollout/planning carry-forward, and recording the new correction/error entries from the day's work.
+**Status:** implemented
+
 
 ## [FEAT-20260330-1710]
 
@@ -154,3 +169,25 @@ Capabilities the user wanted but don't exist.
   - Added errors to `.learnings/errors.md` covering: color fidelity loss, icon mismatches, Tailwind opacity notation failures, glass panel interpretation differences, Design System screen MCP API limitation
 **Status:** implemented
 
+
+## IEX RSS feed article extraction + translation fix — 2026-04-21 00:30 GMT+8
+
+**Request:** Fix IEX news items in Mission Control Custom News showing generic site tagline instead of real article content, and ensure extracted IEX article text is translated to English like all other sources.
+
+**What was done:**
+
+1. **Root cause (tagline showing):** IEX RSS feed returns a generic tagline as the `description` field for all items. The existing `try_fetch_article_snippet()` fallback was defeated by the IEX page structure — after HTML parsing, the entire nav/branding block + credit line appeared as one line with no sentence-ending periods, so sentence-splitting produced a single giant non-matching block.
+
+2. **Fix in `try_fetch_article_snippet()`:** Strip the IEX nav/branding header and attribution lines *before* sentence splitting, not after:
+   - `re.sub(r"^IEX\.nl\s+\|[^C]*Columns\s+", "", text)` — removes `IEX.nl | Beurs - Beleggen - ... - Columns`
+   - `re.sub(r"^Beeld:\s*", "", text)` — removes `Beeld: Reuters`
+   - `re.sub(r"^Door\s+[^\n]+\n?", "", text)` — removes `Door Utkarsh Shetti 20 april (Reuters)`
+   - Then split sentences, skip first sentence if it starts with `Door` (credit-line pattern)
+
+3. **Root cause (Dutch text):** `try_fetch_article_snippet()` extracted Dutch article content but returned it raw. All other news sources translate summaries via `Translator.to_english()`.
+
+4. **Fix in `compact_sentences()`:** When returning a snippet from `try_fetch_article_snippet()`, pass it through `Translator().to_english()` first.
+
+**Status:** implemented — all 24 IEX items now show English article content.
+
+**Lesson:** When scraping IEX article pages, strip page-structure artifacts (nav/branding headers, photo credits, bylines) *before* sentence splitting, not after. The IEX page concatenates these into a single text node without sentence boundaries, so naive sentence-splitting produces one giant "sentence" that fails the meaningful-length filter.

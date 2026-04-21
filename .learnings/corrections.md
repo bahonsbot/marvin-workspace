@@ -14,6 +14,118 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
+## [CORR-20260421-2327]
+
+**Trigger:** Philippe said the latest Agents-page change had altered Marvin's height/empty space instead of fixing the requested width, and pointed out that the avatars still sat on rounded-rectangle tiles despite being transparent PNGs.
+**What was wrong:** I had implemented a perceptual workaround that changed the control card's height/whitespace instead of the actual width relationship, and I had left the avatar image component's own border/background/shadow styling in place even after saying the avatar tile treatment was removed.
+**Lesson:** For precise UI corrections, change the actual requested dimension or chrome, not a proxy. If the user asks for width, fix width math. If the assets already have transparency, remove the image component's frame styles themselves, not just nearby wrappers. Verify the rendered result against the screenshot before claiming success.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260421-2058]
+
+**Trigger:** Philippe said my statement about the latest Agents-page pass was not fully accurate, pointed out that Marvin was still narrower than Sudo and that the whitespace change was not visibly there, and attached a screenshot as visual proof.
+**What was wrong:** I described a subtle UI polish change as effectively landed based on code edits plus build/route health, without validating the actual rendered result closely enough. That overstated what had really been verified.
+**Lesson:** For visual UI polish, do not claim pixel-level success from build success or HTTP checks alone. When the request is about width, spacing, proportions, or visual balance, verify the rendered surface itself, or explicitly say the result is still unconfirmed until the user validates it. If the change is subtle, trust screenshot proof over inference.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260421-1932]
+
+**Trigger:** Philippe clarified during the Mission Control Tasks audit that the structured board is intentionally canonical because manual items are created directly on the board, and that `Pull from .md` should remain import-only.
+**What was wrong:** I initially reasoned too broadly about `Pull from .md` and drift instead of grounding the analysis in the product rule that board truth is authoritative and markdown reconciliation is intentionally one-way unless `Apply board truth` is used.
+**Lesson:** For Mission Control Tasks, treat the structured board as the source of truth. `Pull from .md` should only import missing legacy tasks or refresh narrow linked state, never overwrite board truth. `Apply board truth` is the explicit reconciliation path back into `AUTONOMOUS.md`. When drift appears, check for duplicate or stale structured records first.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260421-1848]
+
+**Trigger:** Philippe clarified that the `lossless-claw` suspicious-ownership warning came from running `openclaw doctor --fix` as root via `docker exec`, and asked me to verify whether it was a real runtime issue or a context false positive.
+**What was wrong:** I initially treated the doctor ownership warning as potentially a real plugin trust problem before verifying it under the actual runtime user for this Docker deployment.
+**Lesson:** In this Docker-hosted OpenClaw setup, do not treat plugin ownership or trust warnings from root-run `openclaw doctor` as runtime truth until they are rechecked under the normal container user. `lossless-claw` is expected to be owned by `node:node` here, and root-run doctor can falsely flag it as suspicious because plugin trust is evaluated against the current executing UID. For plugin and state diagnostics, prefer the real runtime context first, for example `docker exec --user node ... openclaw doctor`, before proposing ownership changes.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260421-1812]
+
+**Trigger:** Philippe pointed out that my attempted GPT-5.4 context-limit change broke `~/.openclaw/openclaw.json`, preventing the gateway from starting, and told me clearly that I must only change config after checking the docs/schema properly and being fully certain.
+**What was wrong:** I improvised in a gateway-critical config file instead of verifying the exact documented schema and preserving the required provider/model structure. That turned a simple context-window change into a control-plane break.
+**Lesson:** For `openclaw.json` and any runtime/control-plane config, never improvise, infer structure from memory, or reshape objects unless I have verified the exact docs/schema and am fully certain the edit is correct. Preserve required sibling fields exactly. If certainty is not absolute, stop, research, and propose first, because if the config breaks, the gateway/runtime breaks.
+
+**Priority:** critical
+**Status:** active
+
+## [CORR-20260421-1521]
+
+**Trigger:** Philippe asked for a proposal-only merge of `IDENTITY.md` into `SOUL.md`, explicitly said not to apply anything yet, then later approved only the exact merge-only additions and asked that no other `SOUL.md` changes be made.
+**What was wrong:** The safe boundary here is narrow: when a core doc was recently updated and the user asks for a merge-only change, I must preserve the approved file exactly apart from the explicitly authorized inserted material.
+**Lesson:** For recently updated core docs, treat merge requests surgically. If the user says merge-only, add only the approved carried-over content, do not opportunistically rewrite nearby wording, and log the resulting redundancy/relevance shift separately instead of folding in extra cleanup.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260421-1448]
+
+**Trigger:** After I said I could draft the lean replacement for `AUTONOMY.md` without applying it yet, Philippe pointed out that I applied the rewrite anyway and told me not to do that again.
+**What was wrong:** I crossed the draft-only boundary and mutated the file after describing the next step as a non-applying draft review.
+**Lesson:** If I say I will draft or show a rewrite without applying it, I must not edit the file until Philippe explicitly approves implementation after seeing the draft. Keep draft/review mode and apply mode clearly separated.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260421-1442]
+
+**Trigger:** Philippe clarified that `AUTONOMY.md` is now mainly for the daily home-improvement task and current Tasks board items, and wanted the file updated to reflect the real still-live autonomy scope rather than older broader autonomy behavior.
+**What was wrong:** `AUTONOMY.md` still described a wider proactive-execution model than the current system actually uses, including stale framing that made `AUTONOMOUS.md` sound like the sole backlog truth and retained policy/detail that no longer matched the live autonomy surface.
+**Lesson:** Keep `AUTONOMY.md` tightly aligned to the actual live autonomy surface. Treat it as a lean policy for bounded task-board autonomy plus daily home improvement, explicitly state that heartbeat is not the normal execution trigger, and describe `AUTONOMOUS.md` as a compatibility or sync surface when the structured task board is the real current task store.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260421-1428]
+
+**Trigger:** Philippe asked for a lean AGENTS.md audit, then clarified the desired bootstrap shape: keep bootstrap files as thin as possible, retain `Morning Meeting Protocol`, `Heartbeat Governance`, and `Market Intel Data Hygiene`, keep `Main Session Protection` prominent, preserve default startup reads for today's and yesterday's daily memory, and make delegation routing use explicit model names with `openai-codex/gpt-5.4` positioned as the high-end route for heavier technical and multi-step work rather than orchestration-only.
+**What was wrong:** `AGENTS.md` had grown too broad for a bootstrap file, and `SUBAGENT-POLICY.md` still used alias-style routing language and an overly narrow description of GPT-5.4.
+**Lesson:** Keep bootstrap files thin and high-value: startup order, main-session protection, approval boundary, memory rules, and a few hard guardrails. Keep `Main Session Protection` visually prominent, preserve `memory/YYYY-MM-DD.md` for today and yesterday in default startup reads, use explicit model names in routing docs, make `openai-codex/gpt-5.3-codex` the default for non-trivial coding/debugging, `openai-codex/gpt-5.4` the high-end route for multi-file technical and multi-step work, and `minimax/MiniMax-M2.7` the lightweight route for smaller routine delegation.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260421-1205]
+
+**Trigger:** Philippe said the main session context fills too quickly and asked me to make more active subagent spawning the primary operating rule, placing the strongest wording where it has the biggest impact.
+**What was wrong:** I was still doing too much multi-step, exploratory, and noisy work in the main session instead of treating delegation as the default context-protection move.
+**Lesson:** Protect the main session for coordination, decisions, continuity, and final synthesis. Default to delegation when work is multi-step, exploratory, noisy, implementation-heavy, or likely to require more than a few tool calls. Keep direct main-session work for conversation, quick checks, tiny low-risk edits, and final user-facing synthesis.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260420-1850]
+
+**Trigger:** Philippe said the current speed was already acceptable and explicitly wanted to stop here because other things were more important.
+**What was wrong:** I kept trying to squeeze out the remaining cold-start handshake delay even after the warm path was already much better and the user had enough improvement for now.
+**Lesson:** When Philippe says the current result is good enough and wants to stop, capture the exact stop-point and remaining issue in memory/learnings, then stop cleanly instead of continuing to optimize a narrower residual problem.
+
+**Priority:** medium
+**Status:** active
+
+---
+
+## [CORR-20260418-1408]
+
+**Trigger:** Philippe pointed out that a planned OpenClaw reload caused another gateway disconnect and asked to be warned ahead of future disconnecting actions instead of only being told afterward.
+**What was wrong:** I treated the reload notice as something that could be delivered around the action instead of as a hard precondition for restart-affecting work. The result was correct technically but poor operational UX, because the disconnect landed before the warning was actually useful.
+**Lesson:** For any planned gateway reload, runtime restart, or similar action likely to interrupt the UI/session, warn Philippe clearly before triggering it, then confirm once the system is back. The warning must land before the bounce, not during or after it.
+
+**Priority:** high
+**Status:** active
+
+---
+
 ## [CORR-20260414-1830]
 
 **Trigger:** Philippe pointed out that the Mission Control Chat top-bar pass looked cleaner but several planned/expected behaviors were still missing or broken: dropdowns did not actually open, the control grouping was off, WS/SESS stayed text-heavy, model readback drifted, and I even replied to ghost/system chatter.
@@ -95,6 +207,46 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Closed:** 2026-04-11 (generator/store sync fixed; manual deletes stay authoritative and suppressed legacy tasks are no longer silently re-imported)
 
 <!-- New entries go at top -->
+
+## [CORR-20260422-0038]
+
+**Trigger:** During the Mission Control live-rollout planning, the reverse-proxy recommendation wobbled between nginx-only, nginx plus oauth2-proxy, Pomerium-first, Pomerium-direct, and Pomerium plus nginx before the actual OpenClaw trusted-proxy and current-stack constraints were fully grounded.
+**What was wrong:** I was still reasoning too much from abstract architecture preferences before locking against the real deployment facts: current host nginx is already operationally in the path, Mission Control is still a dynamic Next.js app with websocket-sensitive migration needs, and OpenClaw trusted-proxy rejects loopback-source proxy requests. That made the recommendation look less settled than it should have.
+**Lesson:** For infrastructure architecture recommendations, do not finalize the stack from taste or generic best-practice preference alone. First lock the answer against the actual runtime constraints, especially existing routing reality, migration complexity, and host/runtime auth rules. In this case, the right answer is not merely "best identity layer" but "best practical deployment topology for this stack", which is Pomerium in front of nginx.
+
+**Priority:** high
+**Status:** active
+
+
+## [CORR-20260420-1601]
+
+**Trigger:** Philippe instructed that for system processes and host/runtime operations, I must not act or advise from partial confidence and should not hedge operational guidance when certainty is missing.
+**What was wrong:** I gave system/process guidance using confidence language like "safest path", "least messy option", and "probably not" while still carrying uncertainty about the actual operational impact. That led to patch-on-patch infrastructure guidance instead of firm, verified advice.
+**Lesson:** For any advice or action touching system processes, services, installs, systemd, Docker/runtime supervision, gateway behavior, host operations, or persistent runtime behavior, do not proceed unless I am fully certain of the impact. If certainty is missing, research until certain or stop and say plainly what remains unknown. Do not hedge uncertain operational advice as a recommendation.
+
+**Priority:** high
+**Status:** active
+
+
+## [CORR-20260419-1421]
+
+**Trigger:** Philippe clarified that Mission Control and the Gateway Dashboard are distinct surfaces, and pointed out that my shell grid width change made the sidebar spacing feel worse and should be reverted.
+**What was wrong:** I let the Mission Control preview/auth debugging drift into mixed terminology with the OpenClaw Gateway Dashboard, and I trusted the width-alignment theory over the rendered spacing reality. That produced a tidy-looking code change that made the actual shell layout worse.
+**Lesson:** Keep Mission Control and the Gateway Dashboard clearly separate in both diagnosis and reporting. For shell spacing/layout tweaks, trust rendered behavior over code neatness and revert quickly when a visual change makes the UI feel worse, even if the underlying numbers seem more internally consistent.
+
+**Priority:** high
+**Status:** active
+
+
+## [CORR-20260417-1539]
+
+**Trigger:** Philippe said I had been acting on prompts he did not give me and instructed me to only follow his clear instructions, to say plainly when something does not work, and to stop running in circles trying to solve things on my own.
+**What was wrong:** I let autonomous investigation and self-generated follow-up actions outrun Philippe's explicit intent. That made me act on inferred work instead of staying tightly bound to his direct instructions.
+**Lesson:** In direct work with Philippe, do not continue autonomous debugging or side-quests unless he clearly asks for them. Follow the stated instruction only. If something fails or is blocked, say so plainly and stop instead of looping through self-directed attempts.
+
+**Priority:** high
+**Status:** active
+
 
 ## [CORR-20260412-2309]
 

@@ -17,6 +17,102 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260422-0016]
+
+**What failed:** first memory-flush attempt for `memory/2026-04-22.md`
+**Error:** the session reported that the new daily memory entry had been appended, but an immediate follow-up read returned `ENOENT`, creating conflicting evidence about whether the file had actually been created/written on the first pass.
+**Context:** after finishing the first Mission Control live-rollout plan, I tried to do the requested end-of-block memory save and got inconsistent tool/reporting history around the new daily file.
+**Suggested fix:** after first-write creation of a new daily memory file, verify existence with an immediate read and treat any contradictory result as unresolved until re-read or rewritten cleanly. For important savepoints, do not rely on a single successful write message when the file did not previously exist.
+**Resolution:** operationally worked around the same night by re-reading and then writing the durable carry-forward content again, after which `memory/2026-04-22.md` exists and contains the carry-forward summary.
+
+**Priority:** medium
+**Status:** resolved
+
+## [ERR-20260421-2302]
+
+**What failed:** Mission Control preview restart after final Agents-page polish
+**Error:** `scripts/preview-stop.sh` relied on stale `.preview-runtime/*.pid` files, so the visible old preview stack kept running even after a documented restart flow. The old live processes had different PIDs than the files indicated.
+**Context:** Philippe noticed the preview still had not actually reset after the first rebuild/restart attempt and explicitly asked me to read the project instructions and stop assuming the wrapper script had fully worked.
+**Suggested fix:** preview stop logic must not trust PID files alone. For Mission Control preview, stop should use PID files first but also target known live preview processes and remaining listeners on ports `3005`, `3006`, and `3007`, with a fallback like `fuser` when `ss` is unavailable. Verify by confirming the ports are actually cleared before restart.
+**Resolution:** Resolved the same night by hardening `projects/mission-control/scripts/preview-stop.sh` and committing `4e6de3c` (`Harden Mission Control preview stop script`).
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260421-1811]
+
+**What failed:** follow-up GPT-5.4 context-limit edit in `~/.openclaw/openclaw.json`
+**Error:** config validation failed with:
+- `models.providers.openai-codex.baseUrl: Invalid input: expected string, received undefined`
+- `models.providers.openai-codex.models.0.name: Invalid input: expected string, received undefined`
+**Context:** after an earlier unsuccessful attempt to raise GPT-5.4 from 200k to 250k, I made a bad follow-up edit to the provider config and broke the gateway-critical config shape.
+**Suggested fix:** for OpenClaw config changes, do not improvise provider/model structure from memory. Verify the exact docs/schema first, preserve required keys like `baseUrl` and model `name`, and if full certainty is missing, stop and propose instead of mutating `openclaw.json`.
+
+**Priority:** critical
+**Status:** pending
+
+## [ERR-20260421-1216]
+
+**What failed:** first GPT-5.4 context-window override attempt
+**Error:** putting `contextTokens` under `agents.defaults.models["openai-codex/gpt-5.4"]` did not affect live/default session context resolution for the generic provider path, so status stayed at `200000`.
+**Context:** Philippe approved raising GPT-5.4 from 200k to 250k, and I first targeted the wrong config tree.
+**Suggested fix:** for generic model context overrides, use the provider catalog path that context resolution actually reads, namely top-level `models.providers.<provider>.models[]` with `contextTokens` or `contextWindow`, or use `agents.defaults.contextTokens` only if a truly global override is intended. Expect existing sessions to keep their persisted context window until a new session or reset.
+
+**Priority:** medium
+**Status:** resolved
+
+## [ERR-20260421-1115]
+
+**What failed:** main-session system-event cron jobs looked enabled but were skipped as `disabled`
+**Error:** `workspace-home-improvement` and `Memory Dreaming Promotion` were still `enabled: true`, but because they depended on `sessionTarget: "main"` + `payload.kind: "systemEvent"`, disabling the main heartbeat/wake path caused cron to skip them with `lastError: "disabled"`.
+**Context:** Morning Meeting investigation into why Dreaming and home-improvement did not run on Apr 21 even though the jobs still existed.
+**Suggested fix:** do not treat this as manual job disablement or a task-logic failure. For jobs that do not truly need main-session injection, move them to isolated `agentTurn` execution with `delivery.mode: "none"`. For Dreaming, inspect memory-core implementation before editing cron, because the plugin reconciles the managed job back to a main-session heartbeat-dependent path.
+
+**Priority:** high
+**Status:** pending
+
+## [ERR-20260420-1850]
+
+**What failed:** first Mission Control Chat reload after a fresh preview restart still paid a very large websocket handshake delay even after the preview proxy and warm-path responsiveness fixes
+**Error:** Philippe measured the first post-restart handshake at about `25.4s`, while subsequent reloads dropped to about `1.2s`, then `388ms` and `378ms`
+**Context:** Apr 20 Mission Control responsiveness/debugging after the top-rail/runtime-summary regressions were fixed and the preview proxy path had already been improved
+**Suggested fix:** treat this as a restart-only cold-path issue, not a general chat reload issue. When resuming, inspect preview startup/runtime warm state and the very first preview-path handshake after restart instead of reopening transcript, shell prefetch, or warm steady-state transport work.
+
+**Priority:** medium
+**Status:** pending
+
+
+## [ERR-20260419-1207]
+
+**What failed:** host-level verification attempt for webhook receiver systemd supervision
+**Error:** `elevated is not available right now (runtime=direct). Failing gates: allowFrom ... provider=webchat`
+**Context:** While hardening trading webhook supervision, I tried to check `systemctl status marvin-webhook-receiver.service` and related host-side runtime state from the current webchat session.
+**Suggested fix:** From this direct webchat runtime, do not assume elevated host exec is available. If host/service-manager verification is required, either use an approved host-side path with explicit operator involvement or fall back to workspace-local mitigation and document the remaining limitation.
+
+**Priority:** medium
+**Status:** pending
+
+## [ERR-20260419-1209]
+
+**What failed:** pytest verification for trading webhook hardening
+**Error:** `/usr/bin/python3: No module named pytest`
+**Context:** After patching the webhook supervision scripts, I tried to run `python3 -m pytest tests/test_webhook_receiver.py -q` inside the container to verify the change.
+**Suggested fix:** When the runtime container does not include pytest, do not block urgent shell/runtime hardening on that missing dependency. Verify behavior directly with health checks and failure-recovery tests, and reserve pytest runs for a dev/test environment that actually has the dependency installed.
+
+**Priority:** low
+**Status:** pending
+
+## [ERR-20260418-1700]
+
+**What failed:** Mission Control runtime bridge after the OpenClaw update
+**Error:** Mission Control preview could load and show transcript/history, but the live websocket bridge kept retrying and then failed with `WS sidecar closed: origin not allowed (open the Control UI from the gateway host or allow it in gateway.controlUi.allowedOrigins)`.
+**Context:** Apr 18 live Mission Control audit after the broader OpenClaw update path, while using preview through `preview.motiondisplay.cloud`
+**Suggested fix:** if Mission Control sidecar/proxy sets an explicit upstream Origin header, do not rely on `dangerouslyAllowHostHeaderOriginFallback` alone. Add the real preview/browser origins to `gateway.controlUi.allowedOrigins`, reload the live gateway/runtime so the new policy is actually loaded, then re-test the websocket path from Mission Control itself.
+**Resolution:** Resolved Apr 18 by adding `http://localhost:8080`, `http://127.0.0.1:8080`, `http://preview.motiondisplay.cloud`, and `https://preview.motiondisplay.cloud` to `gateway.controlUi.allowedOrigins` in `/data/.openclaw/openclaw.json`, then reloading the live gateway/runtime and restarting Mission Control preview. Philippe confirmed Mission Control connected successfully afterward.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260416-0144]
 
 **What failed:** live model/fallback readout stayed noisy during rehearsal work
