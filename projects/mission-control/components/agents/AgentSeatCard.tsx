@@ -20,6 +20,30 @@ function alertPalette(severity: AgentAlertSeverity) {
   return { bg: 'rgba(94, 128, 111, 0.11)', border: 'rgba(94, 128, 111, 0.22)', text: '#365347' };
 }
 
+function sectionSurfacePalette(item: AgentUnitPayload) {
+  if (item.kind === 'control') {
+    return {
+      card: 'rgba(231, 241, 235, 0.96)',
+      border: 'rgba(121, 166, 148, 0.3)',
+      panel: 'rgba(255, 255, 255, 0.7)',
+    };
+  }
+
+  if (item.kind === 'team') {
+    return {
+      card: 'rgba(247, 238, 228, 0.96)',
+      border: 'rgba(196, 130, 58, 0.22)',
+      panel: 'rgba(255, 255, 255, 0.7)',
+    };
+  }
+
+  return {
+    card: 'rgba(242, 237, 248, 0.96)',
+    border: 'rgba(127, 90, 162, 0.22)',
+    panel: 'rgba(255, 255, 255, 0.72)',
+  };
+}
+
 const AVATAR_FILE_BY_LABEL: Record<string, string> = {
   Marvin: 'Marvin.png',
   Sudo: 'Sudo.png',
@@ -60,10 +84,10 @@ function AgentAvatarImage({ item, size }: { item: AgentUnitPayload; size: number
       style={{
         width: size,
         height: size,
-        borderRadius: item.kind === 'control' ? 28 : 26,
+        borderRadius: item.kind === 'control' ? 25 : 23,
         objectFit: 'cover',
         border: '1px solid rgba(18, 31, 25, 0.12)',
-        boxShadow: '0 16px 34px rgba(19, 31, 27, 0.12)',
+        boxShadow: '0 12px 28px rgba(19, 31, 27, 0.1)',
         background: '#ede7dc',
       }}
     />
@@ -71,7 +95,7 @@ function AgentAvatarImage({ item, size }: { item: AgentUnitPayload; size: number
 }
 
 function SingleAvatar({ item }: { item: AgentUnitPayload }) {
-  const size = item.kind === 'control' ? 88 : 84;
+  const size = item.kind === 'control' ? 80 : 74;
   const avatarImage = <AgentAvatarImage item={item} size={size} />;
   if (avatarImage) return avatarImage;
 
@@ -81,14 +105,14 @@ function SingleAvatar({ item }: { item: AgentUnitPayload }) {
       style={{
         width: size,
         height: size,
-        borderRadius: item.kind === 'control' ? 28 : 26,
+        borderRadius: item.kind === 'control' ? 25 : 23,
         background: avatarGradient(item),
         border: '1px solid rgba(18, 31, 25, 0.12)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), 0 16px 34px rgba(19, 31, 27, 0.12)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), 0 12px 28px rgba(19, 31, 27, 0.1)',
         display: 'grid',
         placeItems: 'center',
         color: '#fffaf2',
-        fontSize: item.kind === 'control' ? 24 : 22,
+        fontSize: item.kind === 'control' ? 22 : 19,
         fontWeight: 700,
         letterSpacing: '-0.05em',
       }}
@@ -99,23 +123,23 @@ function SingleAvatar({ item }: { item: AgentUnitPayload }) {
 }
 
 function TeamAvatar({ item }: { item: AgentUnitPayload }) {
-  const avatarImage = <AgentAvatarImage item={item} size={92} />;
+  const avatarImage = <AgentAvatarImage item={item} size={84} />;
   if (avatarImage) return avatarImage;
 
   return (
     <div
       aria-hidden="true"
       style={{
-        width: 92,
-        height: 92,
-        borderRadius: 28,
+        width: 84,
+        height: 84,
+        borderRadius: 24,
         background: avatarGradient(item),
         border: '1px solid rgba(18, 31, 25, 0.12)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 16px 34px rgba(19, 31, 27, 0.12)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 12px 28px rgba(19, 31, 27, 0.1)',
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 8,
-        padding: 12,
+        gap: 7,
+        padding: 10,
       }}
     >
       {Array.from({ length: 4 }).map((_, index) => (
@@ -247,11 +271,34 @@ function AlertCard({ alert, showUnitLabel = false }: { alert: AgentUnitPayload['
 
 export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
   const palette = statePalette(item.health.status);
+  const surface = sectionSurfacePalette(item);
   const showAlertBlock = item.kind !== 'control' && item.alerts.length > 0;
   const visibleAlerts = item.kind === 'control' ? item.alerts.slice(0, 4) : item.alerts;
   const oversight = item.oversight;
   const activeIssueCount = item.alerts.filter((alert) => alert.state === 'active').length;
   const acknowledgedIssueCount = item.alerts.filter((alert) => alert.state === 'acknowledged').length;
+  const roleBadgeStyle = {
+    display: 'inline-flex',
+    width: 'fit-content',
+    padding: '5px 10px',
+    borderRadius: 999,
+    background: 'rgba(255,255,255,0.72)',
+    border: '1px solid rgba(121, 166, 148, 0.3)',
+    color: 'var(--accent-mid)',
+    fontSize: 10.5,
+    fontWeight: 700,
+    letterSpacing: '0.14em',
+    textTransform: 'uppercase',
+  } as const;
+  const nameStyle = {
+    margin: 0,
+    fontSize: item.kind === 'control' ? 24 : 20,
+    lineHeight: 1.08,
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    fontWeight: 700,
+    color: '#173128',
+  } as const;
   const controlLeftColumn = (
     <div style={{ display: 'grid', gap: 18, alignContent: 'start' }}>
       <div style={{ display: 'grid', gap: 16 }}>
@@ -275,19 +322,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
         <div style={{ display: 'grid', gap: 8 }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
             <span
-              style={{
-                display: 'inline-flex',
-                width: 'fit-content',
-                padding: '5px 10px',
-                borderRadius: 999,
-                background: palette.bg,
-                border: `1px solid ${palette.border}`,
-                color: palette.text,
-                fontSize: 11,
-                fontWeight: 700,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-              }}
+              style={roleBadgeStyle}
             >
               {item.role}
             </span>
@@ -328,7 +363,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
               </span>
             ) : null}
           </div>
-          <h2 style={{ margin: 0, fontSize: item.kind === 'control' ? 28 : 25, lineHeight: 1.08, letterSpacing: -0.4, color: '#102b22' }}>{item.label}</h2>
+          <h2 style={nameStyle}>{item.label}</h2>
           <p style={{ margin: 0, maxWidth: 560, fontSize: 13, lineHeight: 1.6, color: '#51605a' }}>
             {item.kind === 'control'
               ? 'King of all lobsters and Philippe’s dedicated right-hand. Orchestrates, reviews, and monitors continuity across all levels.'
@@ -349,11 +384,11 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
   return (
     <article
       style={{
-        border: `1px solid ${palette.border}`,
+        border: `1px solid ${surface.border}`,
         borderRadius: item.kind === 'control' ? 32 : 30,
         padding: item.kind === 'control' ? 22 : 20,
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(247, 242, 233, 0.92) 100%)',
-        boxShadow: '0 18px 42px rgba(25, 31, 28, 0.06)',
+        background: surface.card,
+        boxShadow: '0 18px 42px rgba(25, 31, 28, 0.05)',
         display: 'grid',
         gap: 18,
         alignContent: 'start',
@@ -365,7 +400,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
           {controlLeftColumn}
           <aside
             style={{
-              ...floatingInsetStyle({ padding: '12px 12px 13px', radius: 20, background: 'rgba(255,255,255,0.64)' }),
+              ...floatingInsetStyle({ padding: '12px 12px 13px', radius: 20, background: surface.panel }),
               display: 'grid',
               gap: 10,
               alignContent: 'start',
@@ -433,19 +468,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
             <div style={{ display: 'grid', gap: 8 }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
                 <span
-                  style={{
-                    display: 'inline-flex',
-                    width: 'fit-content',
-                    padding: '5px 10px',
-                    borderRadius: 999,
-                    background: palette.bg,
-                    border: `1px solid ${palette.border}`,
-                    color: palette.text,
-                    fontSize: 11,
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
-                  }}
+                  style={roleBadgeStyle}
                 >
                   {item.role}
                 </span>
@@ -486,7 +509,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
                   </span>
                 ) : null}
               </div>
-              <h2 style={{ margin: 0, fontSize: 25, lineHeight: 1.08, letterSpacing: -0.4, color: '#102b22' }}>{item.label}</h2>
+              <h2 style={nameStyle}>{item.label}</h2>
               <p style={{ margin: 0, maxWidth: 560, fontSize: 13, lineHeight: 1.6, color: '#51605a' }}>{item.summary}</p>
               {item.arsenal.length > 0 ? <div style={{ fontSize: 11.5, lineHeight: 1.55, color: '#68736d' }}>{item.arsenal.join(' · ')}</div> : null}
             </div>
@@ -499,7 +522,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
               style={{
                 border: '1px solid rgba(200, 195, 188, 0.26)',
                 borderRadius: 18,
-                background: 'rgba(255,255,255,0.38)',
+                background: surface.panel,
                 overflow: 'hidden',
               }}
             >
@@ -526,7 +549,7 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
                     <div
                       key={member.id}
                       style={{
-                        ...floatingInsetStyle({ padding: '12px 14px', radius: 16, background: 'rgba(255,255,255,0.66)' }),
+                        ...floatingInsetStyle({ padding: '12px 14px', radius: 16, background: surface.panel }),
                         display: 'grid',
                         gap: 6,
                       }}

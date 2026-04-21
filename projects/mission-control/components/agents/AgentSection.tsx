@@ -16,7 +16,18 @@ export function AgentSection({ section }: { section: AgentSectionPayload }) {
     <section style={{ display: 'grid', gap: showHeading ? 16 : 0 }}>
       {showHeading ? (
         <div style={{ display: 'grid', gap: 4 }}>
-          <h2 style={{ margin: 0, fontSize: 22, letterSpacing: -0.28, color: '#173128' }}>{section.title}</h2>
+          <h2
+            style={{
+              margin: 0,
+              fontSize: 14,
+              fontWeight: 650,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: 'var(--accent-mid)',
+            }}
+          >
+            {section.title}
+          </h2>
         </div>
       ) : null}
 

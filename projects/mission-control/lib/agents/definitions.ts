@@ -585,7 +585,7 @@ export const AGENT_SECTION_META: Record<AgentSectionId, Pick<AgentSectionPayload
     description: 'Operating units with grouped seats, mixed readiness, and truthful visibility into what is actually live today.',
   },
   specialists: {
-    title: 'Standalone Specialists',
+    title: 'Specialists',
     description: 'Dedicated specialist seats can be staged early, but direct routing only appears once it is real.',
   },
 };
