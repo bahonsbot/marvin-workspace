@@ -45,11 +45,19 @@ export function AgentSection({ section }: { section: AgentSectionPayload }) {
         >
           {section.items.map((item) => {
             const basis = isControl
-              ? '100%'
+              ? `min(100%, calc((100% - ${RAIL_LAYOUT.teams.peek}px - ${(RAIL_LAYOUT.teams.visibleCount - 1) * 18}px) / ${RAIL_LAYOUT.teams.visibleCount}))`
               : `max(${rail.minWidth}px, calc((100% - ${rail.peek}px - ${(rail.visibleCount - 1) * 18}px) / ${rail.visibleCount}))`;
 
             return (
-              <div key={item.id} style={{ flex: `0 0 ${basis}`, minWidth: isControl ? 0 : rail.minWidth, scrollSnapAlign: isControl ? 'none' : 'start' }}>
+              <div
+                key={item.id}
+                style={{
+                  flex: `0 0 ${basis}`,
+                  minWidth: isControl ? 0 : rail.minWidth,
+                  maxWidth: isControl ? basis : undefined,
+                  scrollSnapAlign: isControl ? 'none' : 'start',
+                }}
+              >
                 <AgentSeatCard item={item} />
               </div>
             );

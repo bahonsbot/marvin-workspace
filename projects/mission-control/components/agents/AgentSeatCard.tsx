@@ -23,24 +23,24 @@ function alertPalette(severity: AgentAlertSeverity) {
 function sectionSurfacePalette(item: AgentUnitPayload) {
   if (item.kind === 'control') {
     return {
-      card: 'rgba(231, 241, 235, 0.96)',
-      border: 'rgba(121, 166, 148, 0.3)',
-      panel: 'rgba(255, 255, 255, 0.7)',
+      card: 'rgba(241, 247, 243, 0.96)',
+      border: 'rgba(121, 166, 148, 0.2)',
+      panel: 'rgba(255, 255, 255, 0.76)',
     };
   }
 
   if (item.kind === 'team') {
     return {
-      card: 'rgba(247, 238, 228, 0.96)',
-      border: 'rgba(196, 130, 58, 0.22)',
-      panel: 'rgba(255, 255, 255, 0.7)',
+      card: 'rgba(250, 245, 239, 0.96)',
+      border: 'rgba(196, 130, 58, 0.16)',
+      panel: 'rgba(255, 255, 255, 0.76)',
     };
   }
 
   return {
-    card: 'rgba(242, 237, 248, 0.96)',
-    border: 'rgba(127, 90, 162, 0.22)',
-    panel: 'rgba(255, 255, 255, 0.72)',
+    card: 'rgba(247, 244, 250, 0.96)',
+    border: 'rgba(127, 90, 162, 0.16)',
+    panel: 'rgba(255, 255, 255, 0.78)',
   };
 }
 
@@ -292,11 +292,11 @@ export function AgentSeatCard({ item }: { item: AgentUnitPayload }) {
   } as const;
   const nameStyle = {
     margin: 0,
-    fontSize: item.kind === 'control' ? 24 : 20,
+    fontSize: 20,
     lineHeight: 1.08,
     letterSpacing: '0.08em',
     textTransform: 'uppercase',
-    fontWeight: 700,
+    fontWeight: 400,
     color: '#173128',
   } as const;
   const controlLeftColumn = (
