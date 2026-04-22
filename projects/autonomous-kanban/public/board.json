@@ -2,18 +2,13 @@
   "board": {
     "todo": [
       {
-        "id": "c10110b2",
-        "text": "[Other] Analyze: OpenClaw loop-pattern audit",
-        "column": "todo"
-      },
-      {
-        "id": "b0f34131",
-        "text": "[Other] Draft: Proactive operations guardrails",
-        "column": "todo"
-      },
-      {
         "id": "63b5a81a",
         "text": "[Career] Draft: Creative-tool automation script plan",
+        "column": "todo"
+      },
+      {
+        "id": "c10110b2",
+        "text": "[Other] Analyze: OpenClaw loop-pattern audit",
         "column": "todo"
       }
     ],
@@ -118,6 +113,13 @@
         "source": "tasks-log"
       },
       {
+        "id": "b11f7fbe",
+        "text": "Research: Real-time trading API shortlist",
+        "column": "done",
+        "outputPath": "projects/mission-control/docs/autonomous-research/trading-research-real-time-trading-api-shortlist-web-research.md",
+        "source": "tasks-log"
+      },
+      {
         "id": "c4fee0b0",
         "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
         "column": "done",
@@ -189,5 +191,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-21T01:04:14.479Z"
+  "updatedAt": "2026-04-22T01:03:23.196Z"
 }
