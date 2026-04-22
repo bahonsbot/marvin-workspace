@@ -17,6 +17,17 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260422-1534]
+
+**What failed:** completed autonomous tasks were still able to reappear in active backlog after generator reruns
+**Error:** `scripts/daily-task-generator.py` deduped against active structured tasks and recent task-log completions, but existing-backlog carry-forward could still keep or reintroduce a stale regenerated task when the completed task identity differed slightly between sources, especially around category tags like `[Career]`.
+**Context:** Apr 22 bounded cleanup of task-sync drift found one live duplicate for `Draft: Creative-tool automation script plan`, with one row already `done` and a later stale regenerated row still in `backlog`.
+**Suggested fix:** when syncing generator output against board truth, compare task identity with a category-agnostic match key as well as the legacy first-line key, and block existing-backlog carry-forward when the task already exists in recent completions or structured `done` state.
+**Resolution:** resolved the same afternoon by adding `normalize_task_match_key()`, extending completion/done-key collection to include match keys, and filtering existing-backlog carry-forward against both recent-completion and structured-done matches before rerunning the generator and reconciling the stale duplicate.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260422-0016]
 
 **What failed:** first memory-flush attempt for `memory/2026-04-22.md`
