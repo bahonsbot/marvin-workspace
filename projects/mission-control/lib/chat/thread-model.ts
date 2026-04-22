@@ -307,7 +307,12 @@ export function buildChatSurfaceModel(summary: OrchestratorIntegrationSummary): 
     contextPercent,
     contextLabel: contextPercent !== null ? `${contextPercent}% of visible context` : 'Context meter waiting on token data',
     bridgeStatus,
-    bridgeDescriptor: summary.runtimeBridge.transport.kind === 'http-poll+ws-sidecar' ? 'HTTP polling + WS sidecar' : 'HTTP polling + control handoff',
+    bridgeDescriptor:
+      summary.runtimeBridge.transport.kind === 'http-poll+ws-sidecar'
+        ? 'HTTP polling + WS sidecar'
+        : summary.runtimeBridge.transport.kind === 'http+ws-live'
+          ? 'Same-origin live runtime bridge'
+          : 'HTTP polling only',
     bridgeLimitations: summary.runtimeBridge.limitations,
     controlLabel: canHandOff ? 'Open control UI' : 'Control UI not launchable here',
     controlHref,

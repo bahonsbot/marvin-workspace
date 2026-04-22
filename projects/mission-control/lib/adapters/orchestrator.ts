@@ -1,10 +1,12 @@
 import { promises as fs } from 'node:fs';
 import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 import { runJsonCommand } from '@/lib/adapters/runtime';
+import type { RuntimeBridgeLane } from '@/lib/runtime-bridge-lane';
 import { getRuntimeBridgeSidecarDescriptor } from '@/lib/runtime-bridge-sidecar';
 
 const RUNTIME_BRIDGE_POLL_INTERVAL_MS = 15000;
 const ORCHESTRATOR_SUMMARY_CACHE_TTL_MS = 15000;
+const OPENCLAW_STATUS_TIMEOUT_MS = 30000;
 const MAIN_SESSION_KEY = 'agent:main:main';
 const MAIN_SESSION_REGISTRY_PATH = '/data/.openclaw/agents/main/sessions/sessions.json';
 
@@ -47,19 +49,24 @@ type OrchestratorSummaryCacheEntry = {
   expiresAt: number;
 };
 
-let orchestratorSummaryCache: OrchestratorSummaryCacheEntry | null = null;
-let orchestratorSummaryPromise: Promise<OrchestratorIntegrationSummary> | null = null;
+const orchestratorSummaryCache = new Map<RuntimeBridgeLane, OrchestratorSummaryCacheEntry>();
+const orchestratorSummaryPromise = new Map<RuntimeBridgeLane, Promise<OrchestratorIntegrationSummary>>();
 
 function storeOrchestratorSummary(
+  lane: RuntimeBridgeLane,
   value: OrchestratorIntegrationSummary,
   ttlMs = ORCHESTRATOR_SUMMARY_CACHE_TTL_MS,
 ): OrchestratorIntegrationSummary {
-  orchestratorSummaryCache = {
+  orchestratorSummaryCache.set(lane, {
     value,
     expiresAt: Date.now() + ttlMs,
-  };
+  });
 
   return value;
+}
+
+function readCachedOrchestratorSummary(lane: RuntimeBridgeLane): OrchestratorSummaryCacheEntry | null {
+  return orchestratorSummaryCache.get(lane) ?? null;
 }
 
 function toIso(value?: number): string | null {
@@ -142,10 +149,12 @@ async function readSessionRegistry(): Promise<SessionRegistryRaw> {
   }
 }
 
-function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['controlPath'], runtimeOk: boolean): OrchestratorIntegrationSummary['runtimeBridge'] {
+function derivePreviewRuntimeBridge(controlPath: OrchestratorIntegrationSummary['controlPath'], runtimeOk: boolean): OrchestratorIntegrationSummary['runtimeBridge'] {
   const sidecar = getRuntimeBridgeSidecarDescriptor(process.env);
   const gatewaySessionToken = process.env.MISSION_CONTROL_GATEWAY_AUTH_TOKEN?.trim() || null;
   const gatewaySessionAuthConfigured = Boolean(gatewaySessionToken);
+  const serverConnectConfigured =
+    process.env.MISSION_CONTROL_SERVER_CONNECT === '1' && sidecar.configured && gatewaySessionAuthConfigured;
 
   return {
     descriptorVersion: 'v2',
@@ -165,8 +174,10 @@ function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['contro
     auth: {
       strategy: 'mission-control-basic-auth',
       sameOriginApi: true,
+      browserTokenRelay: true,
       websocketBridgeToken: sidecar.configured,
       gatewaySessionAuthConfigured,
+      serverConnectConfigured,
     },
     capabilities: {
       runtimeSnapshot: true,
@@ -179,6 +190,7 @@ function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['contro
     },
     endpoints: {
       descriptor: '/api/runtime-bridge',
+      history: '/api/runtime-bridge/history',
       launchControl: controlPath.href,
       websocket: sidecar.browserUrl,
       websocketHealth: sidecar.localHealthUrl,
@@ -190,9 +202,11 @@ function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['contro
       sidecar.configured
         ? 'A project-local WebSocket sidecar now stays loopback-only behind a same-origin preview reverse path.'
         : 'No Mission Control WebSocket sidecar is configured for this preview process.',
-      gatewaySessionAuthConfigured
-        ? 'Mission Control can now attempt a real browser-side gateway connect handshake over the WS sidecar, but it still does not stream token deltas or replay the full event model.'
-        : 'This bridge can open the WS sidecar transport, but it cannot complete a real gateway session handshake until MISSION_CONTROL_GATEWAY_AUTH_TOKEN is configured for the preview.',
+      serverConnectConfigured
+        ? 'Mission Control preview is explicitly configured to wait for a server-owned gateway connect over the WS sidecar, without requiring the browser to hold the gateway auth token.'
+        : gatewaySessionAuthConfigured
+          ? 'Mission Control can now attempt a real browser-side gateway connect handshake over the WS sidecar, but it still does not stream token deltas or replay the full event model.'
+          : 'This bridge can open the WS sidecar transport, but it cannot complete a real gateway session handshake until MISSION_CONTROL_GATEWAY_AUTH_TOKEN is configured for the preview.',
       sidecar.configured && gatewaySessionAuthConfigured
         ? 'Mission Control now exposes one bounded chat.send path to a visible session over the same-origin bridge. Stop, reset, session creation, and the broader event model still remain outside this pass.'
         : 'Composer send, stop, and reset remain outside the Mission Control bridge until a broader runtime transport layer exists.',
@@ -200,7 +214,66 @@ function deriveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['contro
   };
 }
 
-export function createDeferredOrchestratorIntegrationSummary(): OrchestratorIntegrationSummary {
+function deriveLiveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['controlPath'], runtimeOk: boolean): OrchestratorIntegrationSummary['runtimeBridge'] {
+  const sidecar = getRuntimeBridgeSidecarDescriptor(process.env);
+
+  return {
+    descriptorVersion: 'v3',
+    status: runtimeOk || controlPath.href ? 'degraded' : 'unavailable',
+    mode: 'server-proxy-bridge',
+    transport: {
+      kind: 'http-poll',
+      liveEvents: false,
+      wsProxySupported: false,
+      pollingIntervalMs: RUNTIME_BRIDGE_POLL_INTERVAL_MS,
+      websocket: {
+        configured: false,
+        browserUrl: null,
+        browserReachability: 'unavailable',
+      },
+    },
+    auth: {
+      strategy: 'edge-auth',
+      sameOriginApi: true,
+      browserTokenRelay: false,
+      serverConnectConfigured: false,
+    },
+    capabilities: {
+      runtimeSnapshot: true,
+      sessionList: true,
+      controlHandoff: Boolean(controlPath.href),
+      composerSend: false,
+      stop: false,
+      reset: false,
+      eventStream: false,
+    },
+    endpoints: {
+      descriptor: '/api/runtime-bridge',
+      history: '/api/runtime-bridge/history',
+      launchControl: controlPath.href,
+      websocket: null,
+      websocketHealth: null,
+    },
+    limitations: [
+      'This dashboard lane uses a secret-free runtime descriptor, so browser clients do not receive gateway or bridge tokens.',
+      'History bootstrap remains same-origin HTTP only until the server-owned live runtime path replaces the preview bridge transport.',
+      'Live composer send, stop, and event streaming stay disabled here until the gateway path moves behind the trusted edge or a server-owned proxy.',
+      sidecar.configured
+        ? 'Preview WS sidecar infrastructure still exists for the preview lane, but it is intentionally withheld from the dashboard descriptor.'
+        : 'No preview WS sidecar is currently configured for this deployment.',
+    ],
+  };
+}
+
+function deriveRuntimeBridge(
+  lane: RuntimeBridgeLane,
+  controlPath: OrchestratorIntegrationSummary['controlPath'],
+  runtimeOk: boolean,
+): OrchestratorIntegrationSummary['runtimeBridge'] {
+  return lane === 'preview' ? derivePreviewRuntimeBridge(controlPath, runtimeOk) : deriveLiveRuntimeBridge(controlPath, runtimeOk);
+}
+
+export function createDeferredOrchestratorIntegrationSummary(lane: RuntimeBridgeLane = 'live'): OrchestratorIntegrationSummary {
   const controlPath: OrchestratorIntegrationSummary['controlPath'] = {
     label: 'Mission Control runtime summary is loading',
     href: null,
@@ -220,7 +293,7 @@ export function createDeferredOrchestratorIntegrationSummary(): OrchestratorInte
       'Mission Control is rendering transcript history first and deferring the heavier runtime summary until after mount.',
       'This placeholder is intentional and should be replaced by live runtime metadata within the first background refresh.',
     ],
-    runtimeBridge: deriveRuntimeBridge(controlPath, false),
+    runtimeBridge: deriveRuntimeBridge(lane, controlPath, false),
     controlPath,
     runtime: {
       defaultAgentId: null,
@@ -247,7 +320,7 @@ export function createDeferredOrchestratorIntegrationSummary(): OrchestratorInte
   };
 }
 
-function createUnavailableOrchestratorIntegrationSummary(): OrchestratorIntegrationSummary {
+function createUnavailableOrchestratorIntegrationSummary(lane: RuntimeBridgeLane = 'live'): OrchestratorIntegrationSummary {
   const controlPath: OrchestratorIntegrationSummary['controlPath'] = {
     label: 'Use the existing OpenClaw control surface',
     href: null,
@@ -267,7 +340,7 @@ function createUnavailableOrchestratorIntegrationSummary(): OrchestratorIntegrat
       'Could not read runtime/session state from local OpenClaw CLI in this environment.',
       'No fallback chat implementation is provided by Mission Control.',
     ],
-    runtimeBridge: deriveRuntimeBridge(controlPath, false),
+    runtimeBridge: deriveRuntimeBridge(lane, controlPath, false),
     controlPath,
     runtime: {
       defaultAgentId: null,
@@ -294,9 +367,9 @@ function createUnavailableOrchestratorIntegrationSummary(): OrchestratorIntegrat
   };
 }
 
-async function buildOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
+async function buildOrchestratorIntegrationSummary(lane: RuntimeBridgeLane): Promise<OrchestratorIntegrationSummary> {
   const [statusRaw, registryRaw] = (await Promise.all([
-    runJsonCommand('openclaw status --json'),
+    runJsonCommand('openclaw status --json', OPENCLAW_STATUS_TIMEOUT_MS),
     readSessionRegistry(),
   ])) as [OpenClawStatusRaw, SessionRegistryRaw];
 
@@ -360,7 +433,7 @@ async function buildOrchestratorIntegrationSummary(): Promise<OrchestratorIntegr
       'The center chat surface reuses the real OpenClaw Control UI instead of simulating a separate chat system.',
       'This runtime summary now prefers the on-disk session registry plus openclaw status so chat refreshes stay bounded.',
     ],
-    runtimeBridge: deriveRuntimeBridge(controlPath, runtimeOk),
+    runtimeBridge: deriveRuntimeBridge(lane, controlPath, runtimeOk),
     controlPath,
     runtime: {
       defaultAgentId: statusRaw.defaultAgentId ?? null,
@@ -395,46 +468,53 @@ async function buildOrchestratorIntegrationSummary(): Promise<OrchestratorIntegr
   };
 }
 
-function startOrchestratorIntegrationSummaryRefresh(): Promise<OrchestratorIntegrationSummary> {
-  if (!orchestratorSummaryPromise) {
-    orchestratorSummaryPromise = buildOrchestratorIntegrationSummary()
-      .then((summary) => storeOrchestratorSummary(summary))
+function startOrchestratorIntegrationSummaryRefresh(lane: RuntimeBridgeLane): Promise<OrchestratorIntegrationSummary> {
+  const existingPromise = orchestratorSummaryPromise.get(lane);
+  if (existingPromise) {
+    return existingPromise;
+  }
+
+  const refreshPromise = buildOrchestratorIntegrationSummary(lane)
+      .then((summary) => storeOrchestratorSummary(lane, summary))
       .catch(() => {
-        const fallback = orchestratorSummaryCache?.value ?? createUnavailableOrchestratorIntegrationSummary();
-        return storeOrchestratorSummary(fallback, Math.min(ORCHESTRATOR_SUMMARY_CACHE_TTL_MS, 5000));
+        const fallback = readCachedOrchestratorSummary(lane)?.value ?? createUnavailableOrchestratorIntegrationSummary(lane);
+        return storeOrchestratorSummary(lane, fallback, Math.min(ORCHESTRATOR_SUMMARY_CACHE_TTL_MS, 5000));
       })
       .finally(() => {
-        orchestratorSummaryPromise = null;
+        orchestratorSummaryPromise.delete(lane);
       });
-  }
 
-  return orchestratorSummaryPromise;
+  orchestratorSummaryPromise.set(lane, refreshPromise);
+
+  return refreshPromise;
 }
 
-export async function readOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
+export async function readOrchestratorIntegrationSummary(lane: RuntimeBridgeLane = 'live'): Promise<OrchestratorIntegrationSummary> {
   const now = Date.now();
-  if (orchestratorSummaryCache && orchestratorSummaryCache.expiresAt > now) {
-    return orchestratorSummaryCache.value;
+  const cached = readCachedOrchestratorSummary(lane);
+  if (cached && cached.expiresAt > now) {
+    return cached.value;
   }
 
-  void startOrchestratorIntegrationSummaryRefresh();
+  void startOrchestratorIntegrationSummaryRefresh(lane);
 
-  if (orchestratorSummaryCache) {
-    return orchestratorSummaryCache.value;
+  if (cached) {
+    return cached.value;
   }
 
-  return createDeferredOrchestratorIntegrationSummary();
+  return createDeferredOrchestratorIntegrationSummary(lane);
 }
 
-export async function getOrchestratorIntegrationSummary(): Promise<OrchestratorIntegrationSummary> {
+export async function getOrchestratorIntegrationSummary(lane: RuntimeBridgeLane = 'live'): Promise<OrchestratorIntegrationSummary> {
   const now = Date.now();
-  if (orchestratorSummaryCache && orchestratorSummaryCache.expiresAt > now) {
-    return orchestratorSummaryCache.value;
+  const cached = readCachedOrchestratorSummary(lane);
+  if (cached && cached.expiresAt > now) {
+    return cached.value;
   }
 
-  return startOrchestratorIntegrationSummaryRefresh();
+  return startOrchestratorIntegrationSummaryRefresh(lane);
 }
 
-export function primeOrchestratorIntegrationSummary(): void {
-  void startOrchestratorIntegrationSummaryRefresh();
+export function primeOrchestratorIntegrationSummary(lane: RuntimeBridgeLane = 'live'): void {
+  void startOrchestratorIntegrationSummaryRefresh(lane);
 }

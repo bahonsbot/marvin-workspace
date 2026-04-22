@@ -3,7 +3,6 @@
 const http = require('node:http');
 const net = require('node:net');
 const { URL } = require('node:url');
-const { WebSocketServer, WebSocket } = require('ws');
 
 function parsePort(value, fallback) {
   const parsed = Number.parseInt(value || '', 10);
@@ -69,31 +68,6 @@ function isSameOriginUpgrade(req, requestUrl) {
   }
 }
 
-function normalizeCloseCode(code, fallback) {
-  if (!Number.isInteger(code)) return fallback;
-  if (code >= 3000 && code <= 4999) return code;
-  const allowed = new Set([1000, 1001, 1002, 1003, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014]);
-  return allowed.has(code) ? code : fallback;
-}
-
-function normalizeCloseReason(reason, fallback) {
-  const value = typeof reason === 'string' ? reason : reason?.toString?.() || '';
-  const trimmed = value.trim();
-  return trimmed ? trimmed.slice(0, 120) : fallback;
-}
-
-function closePair(client, upstream, code, reason) {
-  const safeClientCode = normalizeCloseCode(code, 1011);
-  const safeUpstreamCode = normalizeCloseCode(code, 1000);
-  const safeReason = normalizeCloseReason(reason, 'Socket closed');
-
-  if (client.readyState === WebSocket.OPEN || client.readyState === WebSocket.CONNECTING) {
-    client.close(safeClientCode, safeReason);
-  }
-  if (upstream && (upstream.readyState === WebSocket.OPEN || upstream.readyState === WebSocket.CONNECTING)) {
-    upstream.close(safeUpstreamCode, safeReason);
-  }
-}
 
 const publicHost = (process.env.MISSION_CONTROL_PREVIEW_HOST || '0.0.0.0').trim();
 const publicPort = parsePort(process.env.MISSION_CONTROL_PREVIEW_PORT, 3005);
@@ -111,7 +85,6 @@ if (!bridgeToken) {
 }
 
 const sidecarTarget = `ws://${sidecarHost}:${sidecarPort}${sidecarPath}`;
-const wss = new WebSocketServer({ noServer: true });
 
 const server = http.createServer((req, res) => {
   const request = http.request(
@@ -200,62 +173,61 @@ server.on('upgrade', (req, socket, head) => {
     return;
   }
 
-  wss.handleUpgrade(req, socket, head, (client) => {
-    wss.emit('connection', client);
-  });
-});
-
-wss.on('connection', (client) => {
   const clientId = Math.random().toString(36).slice(2, 9);
-  console.log(`[mission-control-preview-proxy] Browser WS connected [${clientId}] total=${wss.clients.size}`);
-
-  const upstreamUrl = new URL(sidecarTarget);
-  upstreamUrl.searchParams.set('bridgeToken', bridgeToken);
-  const upstream = new WebSocket(upstreamUrl);
-
-  upstream.on('open', () => {
-    console.log(`[mission-control-preview-proxy] Sidecar WS open [${clientId}]`);
-    client.on('message', (data, isBinary) => {
-      if (upstream.readyState === WebSocket.OPEN) {
-        upstream.send(data, { binary: isBinary });
+  const upstreamSocket = net.connect(sidecarPort, sidecarHost, () => {
+    console.log(`[mission-control-preview-proxy] Runtime WS tunnel open [${clientId}]`);
+    const upstreamPath = `${sidecarPath}${requestUrl.search || ''}`;
+    let rawRequest = `${req.method || 'GET'} ${upstreamPath} HTTP/${req.httpVersion}\r\n`;
+    for (const [name, value] of Object.entries(req.headers)) {
+      if (name.toLowerCase() === 'host') continue;
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          rawRequest += `${name}: ${item}\r\n`;
+        }
+      } else if (typeof value === 'string') {
+        rawRequest += `${name}: ${value}\r\n`;
       }
-    });
+    }
+      rawRequest += `host: ${sidecarHost}:${sidecarPort}\r\n`;
+      rawRequest += '\r\n';
+      upstreamSocket.write(rawRequest);
+      if (head.length > 0) {
+        upstreamSocket.write(head);
+      }
+      socket.pipe(upstreamSocket).pipe(socket);
   });
 
-  upstream.on('message', (data, isBinary) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data, { binary: isBinary });
+  upstreamSocket.on('error', (cause) => {
+    console.error(`[mission-control-preview-proxy] Runtime WS tunnel error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
+    if (!socket.destroyed) {
+      socket.write('HTTP/1.1 502 Bad Gateway\r\n\r\n');
+      socket.destroy();
     }
   });
 
-  upstream.on('error', (cause) => {
-    console.error(`[mission-control-preview-proxy] Sidecar WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
-    closePair(client, upstream, 1011, 'Mission Control sidecar unavailable');
+  upstreamSocket.on('close', () => {
+    console.log(`[mission-control-preview-proxy] Runtime WS tunnel closed [${clientId}]`);
+    if (!socket.destroyed) {
+      socket.end();
+    }
   });
 
-  upstream.on('close', (code, reason) => {
-    console.log(`[mission-control-preview-proxy] Sidecar WS closed [${clientId}] code=${code} reason="${reason}"`);
-    closePair(client, upstream, code || 1011, reason.toString() || 'Mission Control sidecar closed');
+  socket.on('close', () => {
+    if (!upstreamSocket.destroyed) {
+      upstreamSocket.end();
+    }
   });
 
-  client.on('close', (code, reason) => {
-    console.log(`[mission-control-preview-proxy] Browser WS closed [${clientId}] code=${code} reason="${reason}" total=${wss.clients.size}`);
-    closePair(client, upstream, code || 1000, reason.toString() || 'Client closed');
-  });
-
-  client.on('error', (cause) => {
-    console.error(`[mission-control-preview-proxy] Browser WS error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
-    closePair(client, upstream, 1011, 'Browser socket error');
+  socket.on('error', (cause) => {
+    console.error(`[mission-control-preview-proxy] Browser WS tunnel error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
+    if (!upstreamSocket.destroyed) {
+      upstreamSocket.destroy();
+    }
   });
 });
 
 function shutdown() {
-  for (const client of wss.clients) {
-    client.close(1001, 'Mission Control preview proxy stopping');
-  }
-  wss.close(() => {
-    server.close(() => process.exit(0));
-  });
+  server.close(() => process.exit(0));
 }
 
 process.on('SIGINT', shutdown);

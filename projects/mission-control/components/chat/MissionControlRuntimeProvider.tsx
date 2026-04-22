@@ -101,14 +101,23 @@ export function MissionControlRuntimeProvider({ children }: { children: ReactNod
 
   const hydrateTranscriptHistory = useCallback((incoming: RuntimeBridgeTranscriptHistory) => {
     setTranscriptHistory((current) => {
-      if (
-        current?.sessionKey === incoming.sessionKey &&
-        current.entries.length === incoming.entries.length &&
-        current.entries.every((entry, index) => entry.stableKey === incoming.entries[index]?.stableKey)
-      ) {
-        return current;
+      if (!current) {
+        return incoming;
       }
-      return incoming;
+
+      const entriesMatch =
+        current.sessionKey === incoming.sessionKey &&
+        current.entries.length === incoming.entries.length &&
+        current.entries.every((entry, index) => entry.stableKey === incoming.entries[index]?.stableKey);
+
+      const metadataMatches =
+        (current.source ?? null) === (incoming.source ?? null) &&
+        (current.note ?? null) === (incoming.note ?? null) &&
+        (current.sessionId ?? null) === (incoming.sessionId ?? null) &&
+        (current.thinkingLevel ?? null) === (incoming.thinkingLevel ?? null) &&
+        Boolean(current.retryable) === Boolean(incoming.retryable);
+
+      return entriesMatch && metadataMatches ? current : incoming;
     });
   }, []);
 

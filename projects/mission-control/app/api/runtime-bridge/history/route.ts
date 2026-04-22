@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(history, {
     headers: {
       'Cache-Control': 'no-store, max-age=0',
+      'X-Mission-Control-History-Source': history.source ?? 'unavailable',
     },
   });
 }

@@ -60,9 +60,56 @@ spawn_detached "$RUNTIME_DIR/ws-sidecar.pid" "$RUNTIME_DIR/ws-sidecar.log" node 
 spawn_detached "$RUNTIME_DIR/next.pid" "$RUNTIME_DIR/next.log" npm run start -- --hostname "$INTERNAL_NEXT_HOST" --port "$INTERNAL_NEXT_PORT"
 spawn_detached "$RUNTIME_DIR/latest.pid" "$RUNTIME_DIR/latest.log" node ./scripts/preview-origin-proxy.js
 
+warm_runtime_bridge() {
+  local descriptor_json bridge_token
+  descriptor_json="$(curl -fsS "http://127.0.0.1:${PREVIEW_PORT}/api/runtime-bridge" 2>/dev/null || true)"
+  if [[ -z "$descriptor_json" ]]; then
+    return 1
+  fi
+
+  bridge_token="$(printf '%s' "$descriptor_json" | python3 - <<'PY'
+import json, sys
+try:
+    data = json.load(sys.stdin)
+    print(data.get('runtimeBridge', {}).get('endpoints', {}).get('websocketBridgeToken', '') or '')
+except Exception:
+    print('')
+PY
+)"
+
+  if [[ -z "$bridge_token" ]]; then
+    return 1
+  fi
+
+  node - "$bridge_token" "$PREVIEW_PORT" <<'NODE' >/dev/null 2>&1
+const { WebSocket } = require('./node_modules/ws');
+const token = process.argv[2];
+const port = process.argv[3];
+const url = `ws://127.0.0.1:${port}/api/runtime-bridge/ws?bridgeToken=${token}`;
+
+const ws = new WebSocket(url);
+const timer = setTimeout(() => {
+  try { ws.terminate(); } catch {}
+  process.exit(1);
+}, 10000);
+
+ws.once('message', () => {
+  clearTimeout(timer);
+  try { ws.close(); } catch {}
+  process.exit(0);
+});
+
+ws.once('error', () => {
+  clearTimeout(timer);
+  process.exit(1);
+});
+NODE
+}
+
 for _ in {1..30}; do
   if ensure_alive "$RUNTIME_DIR/ws-sidecar.pid" && ensure_alive "$RUNTIME_DIR/next.pid" && ensure_alive "$RUNTIME_DIR/latest.pid"; then
     if curl -fsS "http://127.0.0.1:${PREVIEW_PORT}/general/agents" >/dev/null 2>&1; then
+      warm_runtime_bridge || true
       cat "$RUNTIME_DIR/latest.pid"
       exit 0
     fi

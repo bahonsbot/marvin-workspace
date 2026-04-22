@@ -849,8 +849,18 @@ export function MissionControlChatSurface({
   const sessionId = bridge?.session.sessionId ?? null;
   const sessionLastEvent = bridge?.session.lastEvent ?? null;
   const live = bridge?.live;
+  const historySource = bridge?.history.source ?? 'unavailable';
+  const historyNote = bridge?.history.note ?? null;
+  const historyThinkingLevel = bridge?.history.thinkingLevel ?? null;
+  const historySessionId = bridge?.history.sessionId ?? null;
   const liveTargetSession = live?.targetSession.key ?? null;
-  const liveTargetLabel = live?.targetSession.label ?? 'No target session';
+  const summaryFallbackTargetKey = activation?.targetSessionKey ?? summary.sessionContext.mainSession.key ?? null;
+  const summaryFallbackTargetLabel = summaryFallbackTargetKey
+    ? summaryFallbackTargetKey === summary.sessionContext.mainSession.key
+      ? 'agent:main:main'
+      : summaryFallbackTargetKey
+    : 'No target session';
+  const liveTargetLabel = live?.targetSession.label ?? summaryFallbackTargetLabel;
   const mainRecentSession = useMemo(
     () => summary.sessionContext.recent.find((session) => session.key === summary.sessionContext.mainSession.key) ?? null,
     [summary.sessionContext.mainSession.key, summary.sessionContext.recent],
@@ -1707,14 +1717,27 @@ export function MissionControlChatSurface({
                     </div>
                   ) : (
                     <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                      WS sidecar socket is open. Waiting for gateway handshake.
+                      Runtime socket is open. Waiting for gateway handshake.
                     </div>
                   )}
-                  {sessionId && (
+                  <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
+                    History source: {historySource}
+                  </div>
+                  {historyNote ? (
+                    <div style={{ fontSize: 11, color: 'var(--text-ghost)', lineHeight: 1.5 }}>
+                      {historyNote}
+                    </div>
+                  ) : null}
+                  {(sessionId || historySessionId) && (
                     <div style={{ fontSize: 11, fontFamily: monoFont, color: 'var(--text-ghost)' }}>
-                      Session: {sessionId}
+                      Session: {sessionId ?? historySessionId}
                     </div>
                   )}
+                  {historyThinkingLevel ? (
+                    <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
+                      History thinking level: {historyThinkingLevel}
+                    </div>
+                  ) : null}
                   {sessionLastEvent && (
                     <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
                       Last event: {sessionLastEvent}

@@ -975,3 +975,139 @@ export function reconstructTranscriptFromHistoryRecords(
   );
   return buildTranscriptHistory(sessionKey, entries);
 }
+
+function normalizeGatewayHistoryMessage(
+  message: Record<string, unknown>,
+  sessionKey: string | null,
+): RuntimeBridgeTranscriptEntry[] {
+  const role = typeof message.role === 'string' ? message.role : null;
+  const at = toTimestamp(message.timestamp) ?? Date.now();
+  const messageId =
+    typeof message.id === 'string'
+      ? message.id
+      : typeof asRecord(message.__openclaw)?.id === 'string'
+        ? (asRecord(message.__openclaw)?.id as string)
+        : null;
+  const seq = typeof asRecord(message.__openclaw)?.seq === 'number' ? (asRecord(message.__openclaw)?.seq as number) : null;
+  const runId = typeof message.runId === 'string' ? message.runId : null;
+  const evidence: RuntimeBridgeTranscriptEvidence = {
+    messageId,
+    runId,
+    sessionKey,
+    seq,
+  };
+
+  if (role === 'user') {
+    const entry = createMessageEntry({
+      id: messageId,
+      role: 'user',
+      body: extractTextFromContentBlocks(message.content),
+      status: 'final',
+      sessionKey,
+      runId,
+      at,
+      evidence,
+    });
+    return entry ? [entry] : [];
+  }
+
+  if (role === 'assistant') {
+    const content = Array.isArray(message.content) ? message.content : [];
+    const entries: RuntimeBridgeTranscriptEntry[] = [];
+
+    content.forEach((block, index) => {
+      const recordBlock = asRecord(block);
+      if (!recordBlock) return;
+
+      if (recordBlock.type === 'thinking') {
+        const summaries = parseThinkingSummary(recordBlock);
+        summaries.forEach((summary, summaryIndex) => {
+          const entry = createProcessEntry({
+            id: `${messageId ?? 'assistant'}-thinking-${index}-${summaryIndex}`,
+            stage: 'thinking',
+            label: 'Thinking summary',
+            body: summary,
+            sessionKey,
+            runId,
+            at,
+            evidence,
+          });
+          if (entry) entries.push(entry);
+        });
+      }
+
+      if (recordBlock.type === 'toolCall') {
+        const name = typeof recordBlock.name === 'string' ? recordBlock.name : 'tool';
+        const toolCallId = typeof recordBlock.id === 'string' ? recordBlock.id : null;
+        entries.push(
+          createToolEntry({
+            id: `${messageId ?? 'assistant'}-tool-${index}`,
+            name,
+            phase: 'start',
+            status: 'running',
+            toolCallId,
+            args: asRecord(recordBlock.arguments),
+            sessionKey,
+            runId,
+            at,
+            evidence: {
+              ...evidence,
+              toolCallId,
+            },
+          }),
+        );
+      }
+    });
+
+    const textEntry = createMessageEntry({
+      id: messageId,
+      role: 'assistant',
+      body: extractTextFromContentBlocks(message.content),
+      status: 'final',
+      sessionKey,
+      runId,
+      at,
+      evidence,
+    });
+    if (textEntry) entries.push(textEntry);
+    return entries;
+  }
+
+  if (role === 'toolResult') {
+    const toolName = typeof message.toolName === 'string' ? message.toolName : 'tool';
+    const toolCallId = typeof message.toolCallId === 'string' ? message.toolCallId : null;
+    return [
+      createToolEntry({
+        id: messageId ?? `tool-result-${toolCallId ?? at}`,
+        name: toolName,
+        phase: 'result',
+        status: message.isError ? 'failed' : 'completed',
+        toolCallId,
+        sessionKey,
+        runId,
+        at,
+        meta: extractTextFromContentBlocks(message.content),
+        isError: Boolean(message.isError),
+        evidence: {
+          ...evidence,
+          toolCallId,
+        },
+      }),
+    ];
+  }
+
+  return [];
+}
+
+export function reconstructTranscriptFromGatewayHistoryMessages(
+  messages: Record<string, unknown>[],
+  sessionKey: string | null,
+  maxEntries: number,
+): RuntimeBridgeTranscriptHistory {
+  const entries = mergeTranscriptEntries(
+    [],
+    messages.flatMap((message) => normalizeGatewayHistoryMessage(message, sessionKey)),
+    { sessionKey, limit: maxEntries },
+  );
+  return buildTranscriptHistory(sessionKey, entries);
+}

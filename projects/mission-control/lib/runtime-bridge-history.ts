@@ -3,6 +3,7 @@ import 'server-only';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { reconstructTranscriptFromHistoryRecords } from '@/lib/chat/runtime-bridge-transcript';
+import { loadRuntimeBridgeSessionHistoryFromGateway } from '@/lib/runtime-bridge-gateway';
 import type { RuntimeBridgeTranscriptHistory } from '@/lib/types/contracts';
 
 const AGENTS_ROOT = '/data/.openclaw/agents';
@@ -60,6 +61,26 @@ async function readSessionRecordsFromRoot(
     });
 }
 
+async function loadRuntimeBridgeSessionHistoryFromJsonl(
+  sessionKey: string,
+): Promise<RuntimeBridgeTranscriptHistory | null> {
+  for (const sessionRoot of candidateSessionRoots(sessionKey)) {
+    try {
+      const records = await readSessionRecordsFromRoot(sessionRoot, sessionKey);
+      if (!records) continue;
+      return {
+        ...reconstructTranscriptFromHistoryRecords(records, sessionKey, MAX_HISTORY_ENTRIES),
+        source: 'jsonl',
+        note: 'Loaded from local session JSONL fallback rather than gateway history.',
+      };
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
 export async function loadRuntimeBridgeSessionHistory(
   sessionKey: string | null | undefined,
 ): Promise<RuntimeBridgeTranscriptHistory> {
@@ -68,22 +89,29 @@ export async function loadRuntimeBridgeSessionHistory(
       sessionKey: null,
       entries: [],
       messages: [],
+      source: 'unavailable',
+      note: 'No session key was provided for transcript history bootstrap.',
     };
   }
 
-  for (const sessionRoot of candidateSessionRoots(sessionKey)) {
-    try {
-      const records = await readSessionRecordsFromRoot(sessionRoot, sessionKey);
-      if (!records) continue;
-      return reconstructTranscriptFromHistoryRecords(records, sessionKey, MAX_HISTORY_ENTRIES);
-    } catch {
-      continue;
-    }
+  const gatewayHistory = await loadRuntimeBridgeSessionHistoryFromGateway(sessionKey, {
+    limit: MAX_HISTORY_ENTRIES,
+  });
+  if (gatewayHistory) {
+    return gatewayHistory;
+  }
+
+  const fallbackHistory = await loadRuntimeBridgeSessionHistoryFromJsonl(sessionKey);
+  if (fallbackHistory) {
+    return fallbackHistory;
   }
 
   return {
     sessionKey,
     entries: [],
     messages: [],
+    source: 'unavailable',
+    note: 'Neither gateway history nor local session JSONL history was available for this session.',
+    retryable: true,
   };
 }

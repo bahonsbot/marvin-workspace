@@ -42,7 +42,9 @@ const port = parsePort(process.env.MISSION_CONTROL_WS_SIDECAR_PORT, 3006);
 const path = (process.env.MISSION_CONTROL_WS_SIDECAR_PATH || '/mission-control-runtime').trim();
 const upstreamOrigin = (process.env.MISSION_CONTROL_WS_UPSTREAM_ORIGIN || '').trim();
 const bridgeToken = process.env.MISSION_CONTROL_WS_SIDECAR_TOKEN || '';
+const gatewayAuthToken = (process.env.MISSION_CONTROL_GATEWAY_AUTH_TOKEN || '').trim();
 const targetCacheTtlMs = parseMs(process.env.MISSION_CONTROL_WS_TARGET_CACHE_TTL_MS, 30000);
+const SERVER_CONNECT_REQUEST_ID = 'mc-server-connect';
 if (!bridgeToken) {
   console.error('[mission-control-ws-sidecar] Refusing to start without MISSION_CONTROL_WS_SIDECAR_TOKEN.');
   process.exit(1);
@@ -162,6 +164,35 @@ wss.on('connection', (client) => {
   }
 
   let refreshedAfterFailure = false;
+  let serverConnectSent = false;
+
+  function maybeSendServerConnect(upstream) {
+    if (serverConnectSent || !gatewayAuthToken || upstream.readyState !== WebSocket.OPEN) {
+      return;
+    }
+
+    serverConnectSent = true;
+    upstream.send(JSON.stringify({
+      type: 'req',
+      id: SERVER_CONNECT_REQUEST_ID,
+      method: 'connect',
+      params: {
+        minProtocol: 3,
+        maxProtocol: 3,
+        client: {
+          id: 'openclaw-control-ui',
+          version: '0.1.0',
+          platform: 'web',
+          mode: 'webchat',
+          instanceId: `mc-sidecar-${clientId}`,
+        },
+        role: 'operator',
+        scopes: ['operator.admin', 'operator.read', 'operator.write', 'operator.approvals', 'operator.pairing'],
+        auth: { token: gatewayAuthToken },
+        caps: ['tool-events'],
+      },
+    }));
+  }
 
   function openUpstream(currentTarget) {
     const upstream = new WebSocket(currentTarget, {
@@ -178,6 +209,15 @@ wss.on('connection', (client) => {
     });
 
     upstream.on('message', (data, isBinary) => {
+      if (!isBinary) {
+        try {
+          const parsed = JSON.parse(data.toString());
+          if (parsed?.type === 'event' && parsed?.event === 'connect.challenge') {
+            maybeSendServerConnect(upstream);
+          }
+        } catch {}
+      }
+
       if (client.readyState === WebSocket.OPEN) {
         client.send(data, { binary: isBinary });
       }

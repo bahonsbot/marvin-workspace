@@ -277,12 +277,12 @@ export interface OrchestratorIntegrationSummary {
   chatEmbeddingStatus: 'not-implemented' | 'embedded-reuse';
   honestyNotes: string[];
   runtimeBridge: {
-    descriptorVersion: 'v2';
+    descriptorVersion: 'v2' | 'v3';
     status: 'ready' | 'degraded' | 'unavailable';
-    mode: 'polling-handoff' | 'polling-ws-sidecar';
+    mode: 'polling-handoff' | 'polling-ws-sidecar' | 'server-proxy-bridge' | 'gateway-native';
     transport: {
-      kind: 'http-poll' | 'http-poll+ws-sidecar';
-      liveEvents: false;
+      kind: 'http-poll' | 'http-poll+ws-sidecar' | 'http+ws-live';
+      liveEvents: boolean;
       wsProxySupported: boolean;
       pollingIntervalMs: number;
       websocket: {
@@ -292,10 +292,12 @@ export interface OrchestratorIntegrationSummary {
       };
     };
     auth: {
-      strategy: 'mission-control-basic-auth';
+      strategy: 'mission-control-basic-auth' | 'edge-auth' | 'trusted-proxy';
       sameOriginApi: true;
-      websocketBridgeToken: boolean;
-      gatewaySessionAuthConfigured: boolean;
+      browserTokenRelay: boolean;
+      websocketBridgeToken?: boolean;
+      gatewaySessionAuthConfigured?: boolean;
+      serverConnectConfigured?: boolean;
     };
     capabilities: {
       runtimeSnapshot: boolean;
@@ -303,16 +305,17 @@ export interface OrchestratorIntegrationSummary {
       controlHandoff: boolean;
       composerSend: boolean;
       stop: boolean;
-      reset: false;
-      eventStream: false;
+      reset: boolean;
+      eventStream: boolean;
     };
     endpoints: {
       descriptor: string;
+      history?: string;
       launchControl: string | null;
       websocket: string | null;
       websocketHealth: string | null;
-      websocketBridgeToken: string | null;
-      gatewaySessionToken: string | null;
+      websocketBridgeToken?: string | null;
+      gatewaySessionToken?: string | null;
     };
     limitations: string[];
   };
@@ -477,6 +480,11 @@ export interface RuntimeBridgeTranscriptHistory {
   sessionKey: string | null;
   entries: RuntimeBridgeTranscriptEntry[];
   messages: RuntimeBridgeTranscriptMessage[];
+  source?: 'gateway' | 'jsonl' | 'unavailable';
+  sessionId?: string | null;
+  thinkingLevel?: string | null;
+  note?: string | null;
+  retryable?: boolean;
 }
 
 export type MarketIntelOutcome = 'correct' | 'incorrect' | 'duplicate' | 'pending';
