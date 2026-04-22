@@ -2,8 +2,9 @@
 
 ## Status
 - Active
-- Poll cadence: every 60 minutes
+- Poll cadence: every 180 minutes
 - Goal: quiet monitoring only
+- Current live posture: keep heartbeat sparse and low-noise; use it for monitoring, not proactive execution
 
 ## Active Hours (messaging)
 - 09:00 - 22:00 Asia/Ho_Chi_Minh (GMT+7)
@@ -31,7 +32,6 @@
 - if a proactive task exists but is not urgent, do not execute it from heartbeat
 
 ## Related Runtime
-- `auto-signal-dispatcher`: every 15 minutes
 - webhook watchdog: continuous 60s loop
 
 ## Quiet Conditions

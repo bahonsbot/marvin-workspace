@@ -28,7 +28,7 @@ For timelines and exact session history, use `memory/YYYY-MM-DD.md`.
   - `memory/YYYY-MM-DD.md`: daily timeline and decisions
   - `.learnings/*`: reusable corrections, errors, requests
   - `life/`: entity memory
-- Memory recall posture: prefer `qmd vsearch`, then `qmd search`, then `qmd query`
+- Memory recall posture: prefer `qmd search` first on this VPS, then `qmd vsearch`, then `qmd query` when deeper retrieval is worth the latency
 
 ## Durable Execution Rules
 ### Working style
@@ -39,6 +39,8 @@ For timelines and exact session history, use `memory/YYYY-MM-DD.md`.
 - Ask first for high-risk, irreversible, externally visible, restart-affecting, or security-sensitive changes
 - If risk is unclear, propose first
 - OpenClaw self-updates are manual-only unless Philippe explicitly asks
+- Keep the main user-facing session lean: avoid many tiny tool-call bursts when one bounded batch will do
+- For distinct new work lanes, prefer a fresh session/subagent over stretching one long transcript until compaction pressure builds
 
 ### Instruction-following
 - Stay tightly bound to Philippe’s stated request
@@ -84,6 +86,7 @@ Protected zones are approval-gated, not permanently off-limits.
 - After rollback/reset events, treat the rebuilt current runtime/workspace as truth first, then reconcile git/history carefully
 - Direct installed-package dist hotfixes are fragile across npm reinstall/update/rebuild events. Prefer source-level fixes or a verified reapplication checklist.
 - Backup posture is present. Do not re-flag backup/DR as missing unless there is evidence of drift, failure, or coverage change.
+- For Docker-hosted OpenClaw/plugin trust diagnostics, verify ownership and trust warnings under the actual runtime user context first. Root-run `openclaw doctor` can produce false positives for workspace plugins such as `lossless-claw`.
 
 ## Review and Validation Rules
 ### Overnight reviews
@@ -130,7 +133,13 @@ Protected zones are approval-gated, not permanently off-limits.
 - Start with the answer
 - Keep updates concise, specific, and outcome-first
 - Get explicit approval before external/public actions
+- Before planned gateway reloads, runtime restarts, or other actions likely to disconnect the UI/session, warn Philippe immediately beforehand and confirm once the system is back
 - In direct work with Philippe, do not let narration get ahead of actual writes or verified execution
+- When Mission Control preview/runtime sets an explicit websocket Origin, `gateway.controlUi.allowedOrigins` must include that real preview/browser origin; Host-header fallback alone is not a reliable substitute
+
+## Config Safety Rules
+- `~/.openclaw/openclaw.json` is gateway/runtime-critical. Do not improvise its schema or edit it from memory.
+- For OpenClaw config changes, verify the exact docs/schema first, preserve required sibling fields exactly, and if certainty is not absolute, stop and propose instead of mutating the file.
 
 ## Reference Pointers
 - Daily timeline and decisions: `memory/YYYY-MM-DD.md`
