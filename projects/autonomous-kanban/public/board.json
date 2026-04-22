@@ -2,11 +2,6 @@
   "board": {
     "todo": [
       {
-        "id": "63b5a81a",
-        "text": "[Career] Draft: Creative-tool automation script plan",
-        "column": "todo"
-      },
-      {
         "id": "c10110b2",
         "text": "[Other] Analyze: OpenClaw loop-pattern audit",
         "column": "todo"
@@ -191,5 +186,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-22T04:04:27.477Z"
+  "updatedAt": "2026-04-22T07:19:59.061Z"
 }
