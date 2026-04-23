@@ -2,8 +2,28 @@
   "board": {
     "todo": [
       {
-        "id": "c10110b2",
-        "text": "[Other] Analyze: OpenClaw loop-pattern audit",
+        "id": "ab9d602a",
+        "text": "[Trading] Draft: SEC filing ingestion pipeline",
+        "column": "todo"
+      },
+      {
+        "id": "1ae36073",
+        "text": "[Trading] Analyze: Signal evidence-verification gaps",
+        "column": "todo"
+      },
+      {
+        "id": "5e5fffd1",
+        "text": "[Career] Analyze: Creative-tool workflow friction shortlist",
+        "column": "todo"
+      },
+      {
+        "id": "faa78932",
+        "text": "[Other] Draft: Loop-mitigation gate spec",
+        "column": "todo"
+      },
+      {
+        "id": "0f83517a",
+        "text": "[Trading] Analyze: Actionable Alpha operator decision flow",
         "column": "todo"
       }
     ],
@@ -200,5 +220,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-23T04:13:45.052Z"
+  "updatedAt": "2026-04-23T04:35:33.076Z"
 }
