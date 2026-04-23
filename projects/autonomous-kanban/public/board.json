@@ -115,6 +115,20 @@
         "source": "tasks-log"
       },
       {
+        "id": "3b9f04b1",
+        "text": "Draft: Proactive operations guardrails",
+        "column": "done",
+        "outputPath": "projects/_ops/openclaw-safe-recursive-ops-loop-guardrails-2026-04-21.md",
+        "source": "tasks-log"
+      },
+      {
+        "id": "6ea8a6f4",
+        "text": "Draft: Actionable Alpha dashboard slice",
+        "column": "done",
+        "outputPath": "projects/market-intel/notes/actionable-alpha-dashboard-slice-spec-2026-04-13.md",
+        "source": "tasks-log"
+      },
+      {
         "id": "c4fee0b0",
         "text": "[Trading] 🔧 Fix: identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder | Why: Real market analysis and execution builds trading skill faster than passive learning | Proof: Spec targets a real bot-support improvement and avoids unsafe live-trading config changes | Unlocks: Unlocks a higher-quality system improvement task for the trading bots",
         "column": "done",
@@ -186,5 +200,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-22T07:19:59.061Z"
+  "updatedAt": "2026-04-23T01:02:59.842Z"
 }
