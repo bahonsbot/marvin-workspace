@@ -184,13 +184,16 @@ function derivePreviewRuntimeBridge(controlPath: OrchestratorIntegrationSummary[
       sessionList: true,
       controlHandoff: Boolean(controlPath.href),
       composerSend: sidecar.configured && gatewaySessionAuthConfigured,
-      stop: false,
+      stop: sidecar.configured && gatewaySessionAuthConfigured,
       reset: false,
       eventStream: false,
     },
     endpoints: {
       descriptor: '/api/runtime-bridge',
       history: '/api/runtime-bridge/history',
+      sessionPatch: '/api/runtime-bridge/session',
+      send: '/api/runtime-bridge/send',
+      stop: '/api/runtime-bridge/stop',
       launchControl: controlPath.href,
       websocket: sidecar.browserUrl,
       websocketHealth: sidecar.localHealthUrl,
@@ -208,7 +211,7 @@ function derivePreviewRuntimeBridge(controlPath: OrchestratorIntegrationSummary[
           ? 'Mission Control can now attempt a real browser-side gateway connect handshake over the WS sidecar, but it still does not stream token deltas or replay the full event model.'
           : 'This bridge can open the WS sidecar transport, but it cannot complete a real gateway session handshake until MISSION_CONTROL_GATEWAY_AUTH_TOKEN is configured for the preview.',
       sidecar.configured && gatewaySessionAuthConfigured
-        ? 'Mission Control now exposes one bounded chat.send path to a visible session over the same-origin bridge. Stop, reset, session creation, and the broader event model still remain outside this pass.'
+        ? 'Mission Control now exposes bounded same-origin session bootstrap, chat.send, and chat.abort paths to a visible session over the preview bridge. Reset, session creation UX, and the broader event model still remain outside this pass.'
         : 'Composer send, stop, and reset remain outside the Mission Control bridge until a broader runtime transport layer exists.',
     ],
   };
@@ -216,10 +219,11 @@ function derivePreviewRuntimeBridge(controlPath: OrchestratorIntegrationSummary[
 
 function deriveLiveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['controlPath'], runtimeOk: boolean): OrchestratorIntegrationSummary['runtimeBridge'] {
   const sidecar = getRuntimeBridgeSidecarDescriptor(process.env);
+  const serverOwnedHttpActionsAvailable = true;
 
   return {
     descriptorVersion: 'v3',
-    status: runtimeOk || controlPath.href ? 'degraded' : 'unavailable',
+    status: runtimeOk || controlPath.href || serverOwnedHttpActionsAvailable ? 'degraded' : 'unavailable',
     mode: 'server-proxy-bridge',
     transport: {
       kind: 'http-poll',
@@ -242,22 +246,26 @@ function deriveLiveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['co
       runtimeSnapshot: true,
       sessionList: true,
       controlHandoff: Boolean(controlPath.href),
-      composerSend: false,
-      stop: false,
+      composerSend: serverOwnedHttpActionsAvailable,
+      stop: serverOwnedHttpActionsAvailable,
       reset: false,
       eventStream: false,
     },
     endpoints: {
       descriptor: '/api/runtime-bridge',
       history: '/api/runtime-bridge/history',
+      sessionPatch: '/api/runtime-bridge/session',
+      send: '/api/runtime-bridge/send',
+      stop: '/api/runtime-bridge/stop',
       launchControl: controlPath.href,
       websocket: null,
       websocketHealth: null,
     },
     limitations: [
       'This dashboard lane uses a secret-free runtime descriptor, so browser clients do not receive gateway or bridge tokens.',
-      'History bootstrap remains same-origin HTTP only until the server-owned live runtime path replaces the preview bridge transport.',
-      'Live composer send, stop, and event streaming stay disabled here until the gateway path moves behind the trusted edge or a server-owned proxy.',
+      'This live dashboard slice uses same-origin server-owned HTTP actions for session bootstrap, send, stop, and history refresh, without a browser websocket session.',
+      'History bootstrap remains same-origin HTTP only until the server-owned live runtime path grows a durable live event stream.',
+      'Live event streaming is still disabled here, so completion and cross-device sync rely on bounded history refresh instead of browser-side websocket deltas.',
       sidecar.configured
         ? 'Preview WS sidecar infrastructure still exists for the preview lane, but it is intentionally withheld from the dashboard descriptor.'
         : 'No preview WS sidecar is currently configured for this deployment.',

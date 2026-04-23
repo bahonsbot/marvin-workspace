@@ -886,9 +886,11 @@ export function MissionControlChatSurface({
   const liveEntries = useMemo(() => live?.entries ?? [], [live?.entries]);
   const liveEvents = live?.events ?? [];
   const liveCanSend = Boolean(live?.canSend);
+  const liveCanAbort = Boolean(live?.canAbort);
   const liveSendState = live?.sendState ?? 'idle';
   const liveSendError = live?.sendError ?? null;
   const liveActiveRunId = live?.activeRunId ?? null;
+  const httpInteractiveRuntime = (sessionState === 'connected' && wsState !== 'open' && (liveCanSend || liveCanAbort || liveSendState === 'sending' || liveSendState === 'streaming' || Boolean(liveActiveRunId)));
   const [composerValue, setComposerValue] = useState('');
   const [composerError, setComposerError] = useState<string | null>(null);
   const [sudoOrchestrationTrigger, setSudoOrchestrationTrigger] = useState(0);
@@ -1009,7 +1011,14 @@ export function MissionControlChatSurface({
         detail: liveSendError || effectiveBridgeError || sessionDetail || 'Runtime bridge needs attention.',
       };
     }
-    if (sessionState !== 'connected' || wsState !== 'open') {
+    if (sessionState !== 'connected') {
+      return {
+        label: 'Disconnected',
+        tone: 'disconnected',
+        detail: sessionDetail || wsDetail || 'Mission Control runtime is not connected yet.',
+      };
+    }
+    if (wsState !== 'open' && !httpInteractiveRuntime) {
       return {
         label: 'Disconnected',
         tone: 'disconnected',
@@ -1020,7 +1029,9 @@ export function MissionControlChatSurface({
       return {
         label: 'Working',
         tone: 'working',
-        detail: 'Marvin is actively working on the current run.',
+        detail: httpInteractiveRuntime
+          ? 'Marvin is actively working through the server-owned HTTP bridge.'
+          : 'Marvin is actively working on the current run.',
       };
     }
     if (liveActiveRunId) {
@@ -1033,7 +1044,11 @@ export function MissionControlChatSurface({
     return {
       label: 'Ready',
       tone: 'ready',
-      detail: liveCanSend ? 'Ready for the next prompt.' : 'Ready state is waiting on runtime session targeting.',
+      detail: liveCanSend
+        ? httpInteractiveRuntime
+          ? 'Ready through the server-owned HTTP bridge. Live websocket events are unavailable.'
+          : 'Ready for the next prompt.'
+        : 'Ready state is waiting on runtime session targeting.',
     };
   })();
   const bridgeTimingSummary = useMemo(() => {
@@ -1602,7 +1617,7 @@ export function MissionControlChatSurface({
                   type="button"
                   onClick={() => void bridge.refresh()}
                   disabled={bridgeRefreshing}
-                  title="Refresh the bounded runtime bridge snapshot."
+                  title="Refresh runtime bridge state."
                   style={{
                     ...actionButtonStyle(true),
                     border: '1px solid rgba(200, 195, 188, 0.46)',
@@ -1858,13 +1873,13 @@ export function MissionControlChatSurface({
         composerValue={composerValue}
         setComposerValue={setComposerValue}
         onComposerKeyDown={handleComposerKeyDown}
-        composerDisabled={!liveTargetSession || sessionState !== 'connected' || liveSendState === 'sending' || liveSendState === 'streaming'}
+        composerDisabled={!liveTargetSession || sessionState !== 'connected' || (!liveCanSend && !httpInteractiveRuntime) || liveSendState === 'sending' || liveSendState === 'streaming'}
         composerPlaceholder={
           sessionState === 'connected'
             ? liveTargetSession
               ? `Message to ${liveTargetLabel}.`
-              : 'A connected bridge still needs one visible runtime session key before Mission Control can send.'
-            : 'Composer unlocks after the real gateway session connects.'
+              : 'A connected runtime bridge still needs one visible session key before Mission Control can send.'
+            : 'Composer unlocks after the runtime bridge becomes available.'
         }
         uploadBusy={uploadBusy}
         speechButtonEnabled={speechButtonEnabled}

@@ -62,6 +62,8 @@ type RuntimeBridgeHistoryStatus = {
   sessionId: string | null;
 };
 
+type RuntimeBridgeSendPollOutcome = 'completed' | 'expired' | 'cancelled';
+
 export type RuntimeBridgeChatMessage = {
   id: string;
   role: 'user' | 'assistant' | 'system';
@@ -417,6 +419,20 @@ function replaceTranscriptEntriesForSession(
   return [...preserved, ...rebuilt].sort((a, b) => a.at - b.at || a.id.localeCompare(b.id));
 }
 
+function hasTerminalHistoryEntryForRun(entries: RuntimeBridgeTranscriptEntry[], runId: string | null): boolean {
+  if (!runId) return false;
+  return entries.some((entry) => {
+    if (entry.runId !== runId) return false;
+    if (entry.kind === 'message') {
+      return (
+        (entry.role === 'assistant' && entry.status === 'final' && entry.body.trim().length > 0) ||
+        (entry.role === 'system' && entry.status === 'error')
+      );
+    }
+    return false;
+  });
+}
+
 function transcriptEntriesToLiveMessages(entries: RuntimeBridgeTranscriptEntry[]): RuntimeBridgeChatMessage[] {
   return entries
     .filter((entry): entry is Extract<RuntimeBridgeTranscriptEntry, { kind: 'message' }> => entry.kind === 'message')
@@ -582,6 +598,8 @@ export function useRuntimeBridge(
   const reconnectAttemptRef = useRef(0);
   const bootstrapSessionPromisesRef = useRef<Partial<Record<string, Promise<void>>>>({});
   const latestSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
+  const latestSendStateRef = useRef<RuntimeBridgeSendState>('idle');
+  const sendPollGenerationRef = useRef(0);
 
   const defaultTargetSession = useMemo(() => chooseTargetSession(summary), [summary]);
   const liveTargetSession = useMemo<RuntimeBridgeLiveSessionTarget>(() => {
@@ -592,6 +610,9 @@ export function useRuntimeBridge(
   const messages = useMemo(() => transcriptEntriesToLiveMessages(liveEntries), [liveEntries]);
   const events = useMemo(() => transcriptEntriesToLiveEvents(liveEntries), [liveEntries]);
   const notices = useMemo(() => transcriptEntriesToTransientNotices(liveEntries), [liveEntries]);
+  const runtimeBridgeSessionPatchEndpoint = summary.runtimeBridge.endpoints.sessionPatch;
+  const runtimeBridgeSendEndpoint = summary.runtimeBridge.endpoints.send;
+  const runtimeBridgeStopEndpoint = summary.runtimeBridge.endpoints.stop;
 
   const rejectPending = useCallback((reason: Error) => {
     const pending = pendingRef.current;
@@ -605,30 +626,6 @@ export function useRuntimeBridge(
       clearTimeout(timeouts[id]);
       delete timeouts[id];
     }
-  }, []);
-
-  const rpc = useCallback((method: string, params: Record<string, unknown>) => {
-    return new Promise<unknown>((resolve, reject) => {
-      const socket = socketRef.current;
-      if (!socket || socket.readyState !== WebSocket.OPEN) {
-        reject(new Error('Mission Control bridge is not connected.'));
-        return;
-      }
-
-      const id = generateId('mc-rpc');
-      pendingRef.current[id] = {
-        resolve,
-        reject: (reason) => reject(reason),
-      };
-      pendingTimeoutsRef.current[id] = setTimeout(() => {
-        if (!pendingRef.current[id]) return;
-        delete pendingRef.current[id];
-        delete pendingTimeoutsRef.current[id];
-        reject(new Error(`Gateway request timed out for ${method}.`));
-      }, 30000);
-
-      socket.send(JSON.stringify({ type: 'req', id, method, params }));
-    });
   }, []);
 
   useEffect(() => {
@@ -894,6 +891,10 @@ export function useRuntimeBridge(
     lastSessionStateRef.current = session.state;
   }, [session.detail, session.lastEvent, session.state, wsState]);
 
+  useEffect(() => {
+    latestSendStateRef.current = sendState;
+  }, [sendState]);
+
   const scheduleReconnect = useCallback((reason: string) => {
     if (!mountedRef.current) return;
     if (reconnectTimerRef.current) return;
@@ -933,7 +934,27 @@ export function useRuntimeBridge(
       }
 
       const bootstrapPromise = (async () => {
-        await rpc('sessions.patch', { key: sessionKey });
+        const endpoint = runtimeBridgeSessionPatchEndpoint;
+        if (!endpoint) {
+          throw new Error('Mission Control session bootstrap endpoint is not configured.');
+        }
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({ key: sessionKey }),
+        });
+
+        if (!response.ok) {
+          const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+          throw new Error(payload?.error || `Runtime bridge session bootstrap failed (${response.status})`);
+        }
+
+        await response.json().catch(() => null);
         if (!mountedRef.current) return;
         await load(true);
       })();
@@ -945,7 +966,7 @@ export function useRuntimeBridge(
         delete activeBootstraps[sessionKey];
       }
     },
-    [load, rpc, summary.sessionContext.mainSession.exists, summary.sessionContext.recent, summary.sessionContext.roots],
+    [load, runtimeBridgeSessionPatchEndpoint, summary.sessionContext.mainSession.exists, summary.sessionContext.recent, summary.sessionContext.roots],
   );
 
   // Auto-refresh removed — refresh is now manual-only via bridge.refresh()
@@ -1226,6 +1247,120 @@ export function useRuntimeBridge(
   const runtimeBridgeBrowserTokenRelay = summary.runtimeBridge.auth.browserTokenRelay;
   const runtimeBridgeComposerSendEnabled = summary.runtimeBridge.capabilities.composerSend;
   const runtimeBridgeStopEnabled = summary.runtimeBridge.capabilities.stop;
+  const runtimeBridgeTransportKind = summary.runtimeBridge.transport.kind;
+  const runtimeBridgeLiveEventsEnabled = summary.runtimeBridge.capabilities.eventStream;
+  const runtimeBridgeHttpActionMode =
+    runtimeBridgeTransportKind === 'http-poll' &&
+    runtimeBridgeComposerSendEnabled &&
+    Boolean(runtimeBridgeSendEndpoint) &&
+    Boolean(runtimeBridgeSessionPatchEndpoint);
+
+  const isInteractiveSessionReady =
+    session.state === 'connected' ||
+    (runtimeBridgeHttpActionMode && session.state !== 'error' && session.state !== 'rejected' && session.state !== 'closed');
+
+  const hydrateHistoryAndReturn = useCallback(async (sessionKey: string | null, options?: { force?: boolean }) => {
+    if (!sessionKey) return null;
+
+    const hasScopedTranscript = hasScopedTranscriptEntries(entriesRef.current, sessionKey);
+    if (!options?.force && hydratedSessionKeyRef.current === sessionKey && hasScopedTranscript) {
+      return {
+        sessionKey,
+        entries: scopedTranscriptEntries(entriesRef.current, sessionKey),
+        messages: [],
+        source: history.source,
+        note: history.note,
+        retryable: history.retryable,
+        thinkingLevel: history.thinkingLevel,
+        sessionId: history.sessionId,
+      } satisfies RuntimeBridgeTranscriptHistory;
+    }
+
+    const capturedGeneration = sessionGenerationRef.current;
+    const retryDelaysMs = [180, 500, 1100];
+
+    for (let attempt = 0; attempt <= retryDelaysMs.length; attempt += 1) {
+      try {
+        const res = await fetch(`/api/runtime-bridge/history?sessionKey=${encodeURIComponent(sessionKey)}`, {
+          cache: 'no-store',
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error(`Runtime bridge history request failed (${res.status})`);
+        }
+
+        const payload = (await res.json()) as RuntimeBridgeTranscriptHistory;
+        if (!mountedRef.current) return null;
+        if (capturedGeneration !== sessionGenerationRef.current) return null;
+        if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== sessionKey) return null;
+
+        const shouldRetryUnavailablePayload =
+          attempt < retryDelaysMs.length &&
+          payload.source === 'unavailable' &&
+          Boolean(payload.retryable);
+
+        if (shouldRetryUnavailablePayload) {
+          setHistory({
+            source: payload.source ?? 'unavailable',
+            note: payload.note
+              ? `${payload.note} Retrying transcript bootstrap...`
+              : 'Runtime transcript history is temporarily unavailable. Retrying transcript bootstrap...',
+            retryable: true,
+            thinkingLevel: payload.thinkingLevel ?? null,
+            sessionId: payload.sessionId ?? null,
+          });
+          await new Promise((resolve) => window.setTimeout(resolve, retryDelaysMs[attempt]));
+          continue;
+        }
+
+        setHistory({
+          source: payload.source ?? 'unavailable',
+          note: payload.note ?? null,
+          retryable: Boolean(payload.retryable),
+          thinkingLevel: payload.thinkingLevel ?? null,
+          sessionId: payload.sessionId ?? null,
+        });
+        applyHydratedHistory(sessionKey, payload, capturedGeneration, options);
+        return payload;
+      } catch (cause) {
+        if (!mountedRef.current) return null;
+        if (capturedGeneration !== sessionGenerationRef.current) return null;
+        if ((activeSessionKeyRef.current ?? defaultTargetSession.key) !== sessionKey) return null;
+
+        const message = cause instanceof Error ? cause.message : String(cause);
+        const canRetry = attempt < retryDelaysMs.length && /\b(502|503|504)\b/.test(message);
+        if (canRetry) {
+          setHistory({
+            source: 'unavailable',
+            note: `${message} Retrying transcript bootstrap...`,
+            retryable: true,
+            thinkingLevel: null,
+            sessionId: null,
+          });
+          await new Promise((resolve) => window.setTimeout(resolve, retryDelaysMs[attempt]));
+          continue;
+        }
+
+        setHistory({
+          source: 'unavailable',
+          note: message,
+          retryable: false,
+          thinkingLevel: null,
+          sessionId: null,
+        });
+        console.error('[mission-control-runtime] transcript hydration failed', {
+          sessionKey,
+          error: message,
+        });
+        return null;
+      }
+    }
+
+    return null;
+  }, [applyHydratedHistory, defaultTargetSession.key, history.note, history.retryable, history.sessionId, history.source, history.thinkingLevel]);
 
   useEffect(() => {
     const transportConfigured = runtimeBridgeWebsocketConfigured;
@@ -1239,13 +1374,19 @@ export function useRuntimeBridge(
 
     if (!transportConfigured || !baseUrl || (!serverOwnedConnect && !bridgeToken)) {
       const unavailableDetail = secretFreeDescriptor
-        ? 'Live runtime transport is intentionally unavailable in this secret-free dashboard slice. History remains available while send/connect move behind a server-owned bridge.'
+        ? runtimeBridgeHttpActionMode
+          ? 'Server-owned HTTP runtime bridge is active. Live websocket events are unavailable, so Mission Control uses same-origin actions and history refresh.'
+          : 'Live runtime transport is intentionally unavailable in this secret-free dashboard slice. History remains available while send/connect move behind a server-owned bridge.'
         : 'No Mission Control WS sidecar descriptor is available for this preview.';
       socketRef.current = null;
       setTiming(createEmptyTiming(websocketGeneration));
       setWsState('unavailable');
       setWsDetail(unavailableDetail);
-      setSession(createEmptySession('unavailable', unavailableDetail));
+      setSession(
+        runtimeBridgeHttpActionMode
+          ? createEmptySession('connected', unavailableDetail)
+          : createEmptySession('unavailable', unavailableDetail),
+      );
       setSendState('idle');
       return;
     }
@@ -1564,11 +1705,72 @@ export function useRuntimeBridge(
     runtimeBridgeBrowserTokenRelay,
     runtimeBridgeBrowserReachability,
     runtimeBridgeWebsocketConfigured,
+    runtimeBridgeHttpActionMode,
     summary.runtimeBridge.auth.serverConnectConfigured,
     scheduleReconnect,
     hydrateHistory,
+    hydrateHistoryAndReturn,
     load,
   ]);
+
+  const pollForHttpRunCompletion = useCallback(async (
+    sessionKey: string,
+    runId: string | null,
+    capturedGeneration: number,
+  ): Promise<RuntimeBridgeSendPollOutcome> => {
+    const pollGeneration = ++sendPollGenerationRef.current;
+    const delaysMs = [600, ...Array.from({ length: 39 }, () => 1200)];
+
+    for (let attempt = 0; attempt < delaysMs.length; attempt += 1) {
+      await new Promise((resolve) => window.setTimeout(resolve, delaysMs[attempt]));
+
+      if (!mountedRef.current) return 'cancelled';
+      if (capturedGeneration !== sessionGenerationRef.current) return 'cancelled';
+      if (pollGeneration !== sendPollGenerationRef.current) return 'cancelled';
+      if (activeSessionKeyRef.current !== sessionKey) return 'cancelled';
+      if (latestSendStateRef.current !== 'streaming' && latestSendStateRef.current !== 'sending') return 'cancelled';
+
+      const payload = await hydrateHistoryAndReturn(sessionKey, { force: true });
+      if (!payload) continue;
+
+      if (hasTerminalHistoryEntryForRun(payload.entries ?? [], runId)) {
+        if (capturedGeneration !== sessionGenerationRef.current) return 'cancelled';
+        if (pollGeneration !== sendPollGenerationRef.current) return 'cancelled';
+        setSendState('idle');
+        setSendError(null);
+        setActiveRunId(null);
+        void load(true);
+        return 'completed';
+      }
+    }
+
+    if (capturedGeneration === sessionGenerationRef.current && pollGeneration === sendPollGenerationRef.current) {
+      setSendState('idle');
+      setActiveRunId(null);
+      const noticeEntry = createNoticeEntry({
+        id: generateId('mc-notice'),
+        noticeKind: 'system',
+        message: 'Live response is still syncing. Use refresh if the final reply does not appear yet.',
+        sessionKey,
+        runId,
+        at: Date.now(),
+        evidence: {
+          sessionKey,
+          runId,
+        },
+      });
+      if (noticeEntry) {
+        setEntries((current) =>
+          mergeTranscriptEntries(current, [noticeEntry], {
+            sessionKey,
+            limit: MAX_LIVE_MESSAGES + MAX_LIVE_EVENTS + MAX_TRANSIENT_NOTICES + 80,
+          }),
+        );
+      }
+      void load(true);
+    }
+    return 'expired';
+  }, [hydrateHistoryAndReturn, load]);
 
   const sendPrompt = useCallback(
     async (prompt: string) => {
@@ -1577,7 +1779,7 @@ export function useRuntimeBridge(
       if (!runtimeBridgeComposerSendEnabled) {
         throw new Error('Mission Control send is not enabled for this runtime bridge yet.');
       }
-      if (session.state !== 'connected') {
+      if (!isInteractiveSessionReady) {
         throw new Error('Mission Control can only send while the gateway session is connected.');
       }
       const sessionKey = liveTargetSession.key;
@@ -1617,12 +1819,31 @@ export function useRuntimeBridge(
       }
 
       try {
-        const ack = (await rpc('chat.send', {
-          sessionKey,
-          message: trimmed,
-          deliver: false,
-          idempotencyKey: generateId('mc-chat-send'),
-        })) as Record<string, unknown> | null;
+        if (!runtimeBridgeSendEndpoint) {
+          throw new Error('Mission Control send endpoint is not configured for this runtime bridge.');
+        }
+
+        const sendResponse = await fetch(runtimeBridgeSendEndpoint, {
+          method: 'POST',
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            sessionKey,
+            message: trimmed,
+            deliver: false,
+            idempotencyKey: generateId('mc-chat-send'),
+          }),
+        });
+
+        if (!sendResponse.ok) {
+          const payload = (await sendResponse.json().catch(() => null)) as { error?: string } | null;
+          throw new Error(payload?.error || `Mission Control send failed (${sendResponse.status})`);
+        }
+
+        const ack = (await sendResponse.json()) as Record<string, unknown> | null;
         if (capturedGeneration !== sessionGenerationRef.current) return;
         if (activeSessionKeyRef.current !== sessionKey) return;
 
@@ -1653,6 +1874,11 @@ export function useRuntimeBridge(
         // chat.send ack confirms acceptance, not completion. Keep the run in-flight until
         // a completion signal (chat.final/chat.error/chat.aborted or lifecycle end) arrives.
         setSendState('streaming');
+        if (!runtimeBridgeLiveEventsEnabled) {
+          void pollForHttpRunCompletion(sessionKey, runId, capturedGeneration).catch((cause) => {
+            console.error('[mission-control-runtime] http run completion polling failed', cause);
+          });
+        }
       } catch (cause) {
         if (capturedGeneration !== sessionGenerationRef.current) return;
         if (activeSessionKeyRef.current !== sessionKey) return;
@@ -1684,7 +1910,7 @@ export function useRuntimeBridge(
         throw cause;
       }
     },
-    [ensureSessionExists, liveTargetSession.key, rpc, runtimeBridgeComposerSendEnabled, session.state],
+    [ensureSessionExists, isInteractiveSessionReady, liveTargetSession.key, pollForHttpRunCompletion, runtimeBridgeComposerSendEnabled, runtimeBridgeLiveEventsEnabled, runtimeBridgeSendEndpoint],
   );
 
   const abortPrompt = useCallback(async () => {
@@ -1692,7 +1918,7 @@ export function useRuntimeBridge(
     if (!runtimeBridgeStopEnabled) {
       throw new Error('Mission Control stop is not enabled for this runtime bridge yet.');
     }
-    if (session.state !== 'connected') {
+    if (!isInteractiveSessionReady) {
       throw new Error('Mission Control can only stop while the gateway session is connected.');
     }
     if (!sessionKey) {
@@ -1702,13 +1928,39 @@ export function useRuntimeBridge(
     const capturedGeneration = sessionGenerationRef.current;
 
     try {
-      await rpc('chat.abort', { sessionKey });
+      if (!runtimeBridgeStopEndpoint) {
+        throw new Error('Mission Control stop endpoint is not configured for this runtime bridge.');
+      }
+
+      const stopResponse = await fetch(runtimeBridgeStopEndpoint, {
+        method: 'POST',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ sessionKey, runId: activeRunId }),
+      });
+
+      if (!stopResponse.ok) {
+        const payload = (await stopResponse.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(payload?.error || `Mission Control stop failed (${stopResponse.status})`);
+      }
+
+      await stopResponse.json().catch(() => null);
       if (capturedGeneration !== sessionGenerationRef.current) return;
       if (activeSessionKeyRef.current !== sessionKey) return;
 
+      sendPollGenerationRef.current += 1;
       setSendError(null);
       setSendState('idle');
       setActiveRunId(null);
+      void Promise.all([
+        load(true),
+        hydrateHistoryAndReturn(sessionKey, { force: true }),
+      ]).catch((cause) => {
+        console.error('[mission-control-runtime] abort resync failed', cause);
+      });
       const abortEvent = createEventEntry({
         id: generateId('mc-event'),
         name: 'chat.abort',
@@ -1737,7 +1989,7 @@ export function useRuntimeBridge(
       setSendError(message);
       throw cause;
     }
-  }, [liveTargetSession.key, rpc, runtimeBridgeStopEnabled, session.state]);
+  }, [activeRunId, hydrateHistoryAndReturn, isInteractiveSessionReady, liveTargetSession.key, load, runtimeBridgeStopEnabled, runtimeBridgeStopEndpoint]);
 
   return {
     summary,
@@ -1753,13 +2005,13 @@ export function useRuntimeBridge(
       targetSession: liveTargetSession,
       canSend:
         runtimeBridgeComposerSendEnabled &&
-        session.state === 'connected' &&
+        isInteractiveSessionReady &&
         Boolean(liveTargetSession.key) &&
         sendState !== 'sending' &&
         sendState !== 'streaming',
       canAbort:
         runtimeBridgeStopEnabled &&
-        session.state === 'connected' &&
+        isInteractiveSessionReady &&
         Boolean(liveTargetSession.key) &&
         (sendState === 'sending' || sendState === 'streaming' || Boolean(activeRunId)),
       sendState,
@@ -1775,7 +2027,7 @@ export function useRuntimeBridge(
     refresh: async () => {
       await Promise.all([
         load(true),
-        hydrateHistory(activeSessionKeyRef.current ?? defaultTargetSession.key, { force: true }),
+        hydrateHistoryAndReturn(activeSessionKeyRef.current ?? defaultTargetSession.key, { force: true }),
       ]);
     },
     switchSession: async (sessionKey: string) => {
@@ -1795,7 +2047,8 @@ export function useRuntimeBridge(
       setSendError(null);
       setSendState('idle');
       setActiveRunId(null);
-      const historyPromise = hydrateHistory(sessionKey, { force: true });
+      sendPollGenerationRef.current += 1;
+      const historyPromise = hydrateHistoryAndReturn(sessionKey, { force: true });
       await ensureSessionExists(sessionKey);
       await Promise.all([historyPromise, load(true)]);
     },

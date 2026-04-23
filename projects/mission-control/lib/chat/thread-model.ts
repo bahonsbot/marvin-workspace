@@ -312,7 +312,9 @@ export function buildChatSurfaceModel(summary: OrchestratorIntegrationSummary): 
         ? 'HTTP polling + WS sidecar'
         : summary.runtimeBridge.transport.kind === 'http+ws-live'
           ? 'Same-origin live runtime bridge'
-          : 'HTTP polling only',
+          : summary.runtimeBridge.capabilities.composerSend
+            ? 'Same-origin runtime bridge (HTTP)'
+            : 'HTTP polling only',
     bridgeLimitations: summary.runtimeBridge.limitations,
     controlLabel: canHandOff ? 'Open control UI' : 'Control UI not launchable here',
     controlHref,
@@ -341,7 +343,9 @@ export function buildChatSurfaceModel(summary: OrchestratorIntegrationSummary): 
         type: 'assistant',
         title: 'Operator summary',
         body:
-          'Mission Control now owns the chat workspace chrome, thread hierarchy, and artifact rendering. Runtime and session status are real; message send/stop/reset remain separate until a richer gateway event path exists.',
+          summary.runtimeBridge.capabilities.composerSend
+            ? 'Mission Control now owns the chat workspace chrome, thread hierarchy, and artifact rendering. Runtime and session status are real, and live dashboard chat can issue server-owned HTTP send and stop actions while richer event streaming is still maturing.'
+            : 'Mission Control now owns the chat workspace chrome, thread hierarchy, and artifact rendering. Runtime and session status are real; message send/stop/reset remain separate until a richer gateway event path exists.',
         artifacts: [
           buildDiffArtifact(summary),
           buildFileArtifact(summary, primarySession),
@@ -354,7 +358,9 @@ export function buildChatSurfaceModel(summary: OrchestratorIntegrationSummary): 
         title: 'Current handoff',
         tone: 'muted',
         body: canHandOff
-          ? 'Use the control surface link when you need the live transport. This page is intentionally honest about that boundary while the custom client layer is still staged.'
+          ? summary.runtimeBridge.capabilities.composerSend
+            ? 'This page can now operate through the server-owned live bridge. Use the control surface link when you need the fuller native Gateway transport.'
+            : 'Use the control surface link when you need the live transport. This page is intentionally honest about that boundary while the custom client layer is still staged.'
           : summary.controlPath.note,
       },
     ],
