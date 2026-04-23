@@ -21,24 +21,27 @@
 
 ## Done Today
 
+- Draft: Proactive operations guardrails | ✅ Completed: Drafted the guardrail note for a bounded recursive ops loop and committed it. Artifact: `projects/_ops/openclaw-safe-recursive-ops-loop-guardrails-2026-04-21.md` What it covers: trigger conditions allowed actions and…
+- Draft: Actionable Alpha dashboard slice | ✅ Completed: Sudo completed the lane plan frontend -> qa.
 ## Needs Input
 ## In Progress
 ## Open Backlog
 
-- [Trading] Draft: Actionable Alpha dashboard slice
-**Brief:** spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support
-| Why: Turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next | Proof: Spec defines one named module, its inputs, presentation logic, and why it improves trading decisions | Unlocks: Unlocks a buildable next UI/UX implementation step for the trading dashboard
-- [Other] Analyze: OpenClaw loop-pattern audit
-**Brief:** review recent OpenClaw logs to identify one concrete repetitive prompt or looping behavior, then propose a bounded gate, prompt fix, or tool-definition improvement; deliverable: markdown audit in projects/_ops/ with evidence, root-cause hypothesis, and recommended guard
-| Why: Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output | Proof: Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift | Unlocks: Unlocks a safer token-efficiency or reliability fix with clear evidence behind it
-- [Other] Draft: Proactive operations guardrails
-**Brief:** define one safe recursive operations loop for OpenClaw that improves self-checking without overreach; deliverable: markdown guardrail note in projects/_ops/ covering trigger, allowed actions, stop conditions, rollback, and operator visibility
-| Why: Moves the proactive-operations goal toward an explicit safe operating loop instead of a vague ambition | Proof: Guardrail note defines one bounded loop with clear trigger, limits, escalation path, and rollback | Unlocks: Unlocks a safer proactive-ops prototype without blurring governance boundaries
-- [Trading] Research: Real-time trading API shortlist
-**Brief:** compare 3 candidate APIs for real-time market-data ingestion and score them on latency, coverage, pricing, integration friction, and output usefulness; deliverable: markdown shortlist in projects/market-intel/notes/ with a recommendation and integration notes
-| Why: Bridges the gap between raw market data sources and a real integration decision instead of leaving the API goal vague | Proof: Shortlist names 3 concrete APIs with decision criteria, recommendation, and next integration step | Unlocks: Unlocks a more credible real-time data integration task for the trading stack
+- [Trading] Draft: SEC filing ingestion pipeline
+**Brief:** define a first-pass pipeline that pulls SEC filings and quarterly reports for a small ticker set, extracts the inputs needed for sensitivity ranges, and maps the outputs into the dashboard; deliverable: markdown pipeline note in projects/market-intel/notes/ with source flow, parser stages, and storage/output contract
+| Why: Makes the filings-and-sensitivity goal concrete enough to implement in stages | Proof: Pipeline note defines source, extraction stages, target output fields, and one believable starter ticker set | Unlocks: Unlocks a scoped implementation task for filings ingestion instead of leaving the goal at idea level
+- [Trading] Analyze: Signal evidence-verification gaps
+**Brief:** audit the current signal tracking flow and identify the top 3 gaps in evidence capture, reviewability, or outcome linkage; deliverable: markdown audit in projects/market-intel/notes/ with the current flow, concrete gaps, and one recommended first fix
+| Why: Targets the exact signal-tracking goal directly instead of hiding it behind a generic next-step placeholder | Proof: Audit names the current flow, at least 3 concrete gaps, and one prioritized improvement with rationale | Unlocks: Unlocks a sharper implementation task for signal evidence and review quality
+- [Career] Analyze: Creative-tool workflow friction shortlist
+**Brief:** identify 3 repetitive setup steps across Blender, Unreal Engine, or After Effects and rank them by automation value and implementation simplicity; deliverable: markdown shortlist in projects/creative-practice/ with recommended first target and rationale
+| Why: Makes the automation goal smarter by choosing the highest-leverage repetitive step instead of repeating an already-finished plan | Proof: Shortlist names 3 concrete frictions, scores them, and recommends one first automation target with clear reasoning | Unlocks: Unlocks a fresher automation plan or prototype against the best remaining workflow pain point
+- [Other] Draft: Loop-mitigation gate spec
+**Brief:** define one bounded gate or tool-usage rule that should interrupt a known OpenClaw loop pattern before it burns more tokens; deliverable: markdown spec in projects/_ops/ with trigger, safe action, and rollback
+| Why: Keeps the same anti-looping goal moving by shifting from audit to one concrete mitigation concept | Proof: Spec names one loop trigger, one bounded intervention, and why it is safer than broader control-plane changes | Unlocks: Unlocks a directly implementable next step after the current backlog audit item
+- [Trading] Analyze: Actionable Alpha operator decision flow
+**Brief:** map the operator decision flow for one Actionable Alpha workflow, from inputs to go/no-go output, and identify the minimum data needed at each step; deliverable: markdown flow note in projects/market-intel/notes/
+| Why: Keeps moving the dashboard goal forward even after a module-spec task is already done | Proof: Flow note shows one full operator decision path, required inputs, and the specific bottleneck or ambiguity to solve next | Unlocks: Unlocks a sharper next dashboard build task or module spec grounded in operator behavior
 
 
 ## Review
-- [Trading] Draft: Actionable Alpha dashboard slice
-- Create a clean implementation plan to change the top section in Chat to one row

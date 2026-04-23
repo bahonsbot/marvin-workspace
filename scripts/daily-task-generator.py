@@ -10,7 +10,7 @@ Generation Rules (enforced via constants):
 - Enforce difficulty gate from skill-profile.json
 - Include strategy and build/make tasks mix
 - At most one "creative surprise MVP" task per run
-- Lightweight dedupe against recent tasks-log.md
+- Reads recent tasks-log.md completion history for dedupe only, while active state stays in AUTONOMOUS.md and Mission Control
 
 Task Format: [category] Task: ... | Why: ... | Proof: ... | Unlocks: ...
 """
@@ -45,6 +45,7 @@ TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 # Generation constants
 NUM_TASKS = 5
+GENERATION_VARIANT_ROUNDS = 4
 MAX_SURPRISE_MVP = 1  # Allowed only for useful tools/system improvements, not creative-output filler
 DISALLOWED_TASK_PHRASES = [
     "case-study",
@@ -411,7 +412,195 @@ def normalize_task_title(title, description=None):
     return f"{match.group(1)}{candidate}"
 
 
-def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
+def build_task_text(category, task_prefix, task_title, task_desc, why, proof, unlocks):
+    return (
+        f"[{category}] {task_prefix}: {task_title}\n"
+        f"**Brief:** {task_desc}\n"
+        f"| Why: {why} | Proof: {proof} | Unlocks: {unlocks}"
+    )
+
+
+def _variant_specs_for_goal(goal, goal_lower, goal_type, skill, level, why, proof, unlocks):
+    def spec(prefix, title, desc, why_override=None, proof_override=None, unlocks_override=None):
+        return {
+            "prefix": prefix,
+            "title": title,
+            "desc": desc,
+            "why": why_override or why,
+            "proof": proof_override or proof,
+            "unlocks": unlocks_override or unlocks,
+        }
+
+    if any(phrase in goal_lower for phrase in ("automation script", "automation scripts", "automating routine tasks", "procedural scene setup")):
+        return [
+            spec("Draft", "Creative-tool automation script plan", "define one scoped automation script for Blender, Unreal Engine, or After Effects that removes a real repetitive setup step; deliverable: markdown spec in projects/creative-practice/ or the relevant tool workspace with target app, inputs/outputs, edge cases, and first prototype step", "Reduces repetitive manual setup work while moving directly toward the current creative-tool automation goal", "Spec names one target app, one concrete repetitive task, the intended input/output flow, and a believable first prototype scope", "Unlocks a first real automation prototype instead of another generic practice exercise"),
+            spec("Analyze", "Creative-tool workflow friction shortlist", "identify 3 repetitive setup steps across Blender, Unreal Engine, or After Effects and rank them by automation value and implementation simplicity; deliverable: markdown shortlist in projects/creative-practice/ with recommended first target and rationale", "Makes the automation goal smarter by choosing the highest-leverage repetitive step instead of repeating an already-finished plan", "Shortlist names 3 concrete frictions, scores them, and recommends one first automation target with clear reasoning", "Unlocks a fresher automation plan or prototype against the best remaining workflow pain point"),
+            spec("Design", "Automation prototype acceptance checklist", "define the acceptance checklist for one creative-tool automation prototype, including sample inputs, expected outputs, edge cases, and rollback path; deliverable: markdown test checklist in projects/creative-practice/", "Moves the automation goal from vague planning toward a prototype Philippe can evaluate safely", "Checklist covers happy path, at least 3 edge cases, and a concrete rollback or manual fallback", "Unlocks a safer implementation pass for the next automation helper"),
+        ]
+
+    if "actionable alpha" in goal_lower or ("ui/ux" in goal_lower and "trading dashboard" in goal_lower) or ("aggregate sentiment" in goal_lower and "fundamental" in goal_lower):
+        return [
+            spec("Draft", "Actionable Alpha dashboard slice", "spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support", "Turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next", "Spec defines one named module, its inputs, presentation logic, and why it improves trading decisions", "Unlocks a buildable next UI/UX implementation step for the trading dashboard"),
+            spec("Analyze", "Actionable Alpha operator decision flow", "map the operator decision flow for one Actionable Alpha workflow, from inputs to go/no-go output, and identify the minimum data needed at each step; deliverable: markdown flow note in projects/market-intel/notes/", "Keeps moving the dashboard goal forward even after a module-spec task is already done", "Flow note shows one full operator decision path, required inputs, and the specific bottleneck or ambiguity to solve next", "Unlocks a sharper next dashboard build task or module spec grounded in operator behavior"),
+            spec("Design", "Actionable Alpha data contract map", "define the data contract for one dashboard slice, including required sentiment fields, technical indicators, refresh cadence, and fallback states; deliverable: markdown contract note in projects/market-intel/notes/", "Shifts the same dashboard goal into implementation-ready data thinking instead of repeating the same slice brief", "Contract note names the fields, source expectations, refresh behavior, and how missing data should be handled", "Unlocks a safer implementation step for the next dashboard component"),
+        ]
+
+    if "real-time data ingestion" in goal_lower or ("api" in goal_lower and "trading data" in goal_lower):
+        return [
+            spec("Research", "Real-time trading API shortlist", "compare 3 candidate APIs for real-time market-data ingestion and score them on latency, coverage, pricing, integration friction, and output usefulness; deliverable: markdown shortlist in projects/market-intel/notes/ with a recommendation and integration notes", "Bridges the gap between raw market data sources and a real integration decision instead of leaving the API goal vague", "Shortlist names 3 concrete APIs with decision criteria, recommendation, and next integration step", "Unlocks a more credible real-time data integration task for the trading stack"),
+            spec("Draft", "Market-data ingestion scorecard", "define a reusable scoring rubric for evaluating future real-time market-data APIs across latency, coverage, compliance, and integration cost; deliverable: markdown scorecard template in projects/market-intel/notes/", "Lets the API goal progress with a reusable evaluation tool instead of regenerating the same shortlist", "Scorecard defines weighted criteria, acceptable thresholds, and one example scored provider", "Unlocks faster comparison of the next API candidates without redoing the framework"),
+            spec("Design", "Real-time API adapter contract", "design a thin adapter interface for real-time trading data ingestion, including normalized symbols, timestamps, quote fields, and error handling expectations; deliverable: markdown interface note in projects/market-intel/notes/", "Turns the same ingestion goal into an integration-ready contract rather than another research note", "Interface note defines input/output shape, failure cases, and how multiple providers could plug in", "Unlocks a cleaner implementation task once the preferred API is chosen"),
+        ]
+
+    if "sec filings" in goal_lower or "quarterly reports" in goal_lower or "sensitivity-analysis" in goal_lower:
+        return [
+            spec("Draft", "SEC filing ingestion pipeline", "define a first-pass pipeline that pulls SEC filings and quarterly reports for a small ticker set, extracts the inputs needed for sensitivity ranges, and maps the outputs into the dashboard; deliverable: markdown pipeline note in projects/market-intel/notes/ with source flow, parser stages, and storage/output contract", "Makes the filings-and-sensitivity goal concrete enough to implement in stages", "Pipeline note defines source, extraction stages, target output fields, and one believable starter ticker set", "Unlocks a scoped implementation task for filings ingestion instead of leaving the goal at idea level"),
+            spec("Design", "Sensitivity-range output schema", "define the output schema for sensitivity-analysis ranges derived from filings, including core assumptions, range fields, source references, and dashboard display needs; deliverable: markdown schema note in projects/market-intel/notes/", "Pushes the filings goal into a reusable output contract instead of repeating a broad pipeline task", "Schema note names the fields, assumptions, source references, and one example output record", "Unlocks parser and dashboard tasks that can share a stable structure"),
+            spec("Analyze", "Filing parser edge-case review", "identify the top parser edge cases for SEC and quarterly report ingestion, such as missing tables, changing labels, and inconsistent periods; deliverable: markdown risk note in projects/market-intel/notes/ with mitigation ideas", "Improves the same filings goal by front-loading parser risks before implementation time is wasted", "Risk note names at least 3 edge cases, why they matter, and one mitigation per case", "Unlocks a more durable first parser implementation"),
+        ]
+
+    if "signal tracking" in goal_lower or "evidence verification" in goal_lower:
+        return [
+            spec("Analyze", "Signal evidence-verification gaps", "audit the current signal tracking flow and identify the top 3 gaps in evidence capture, reviewability, or outcome linkage; deliverable: markdown audit in projects/market-intel/notes/ with the current flow, concrete gaps, and one recommended first fix", "Targets the exact signal-tracking goal directly instead of hiding it behind a generic next-step placeholder", "Audit names the current flow, at least 3 concrete gaps, and one prioritized improvement with rationale", "Unlocks a sharper implementation task for signal evidence and review quality"),
+            spec("Draft", "Signal review evidence template", "define a reusable evidence template for signal reviews, covering screenshots, source citations, outcome logic, and ambiguity notes; deliverable: markdown template in projects/market-intel/notes/", "Keeps the same signal-tracking goal moving by turning gaps into a reusable review aid", "Template includes all required evidence fields and one filled example for a hypothetical signal", "Unlocks more consistent future verification work across signals"),
+            spec("Design", "Signal outcome-linkage checklist", "design a checklist that links each tracked signal to its verification evidence, outcome status, and follow-up review notes; deliverable: markdown checklist in projects/market-intel/notes/", "Turns signal-tracking improvement into a concrete operator checklist instead of another high-level audit", "Checklist shows how a signal moves from creation to verified outcome without losing evidence context", "Unlocks cleaner data integrity and review quality in the signal workflow"),
+        ]
+
+    if "openclaw" in goal_lower and any(phrase in goal_lower for phrase in ("logs", "looping", "repetitive prompts")):
+        return [
+            spec("Analyze", "OpenClaw loop-pattern audit", "review recent OpenClaw logs to identify one concrete repetitive prompt or looping behavior, then propose a bounded gate, prompt fix, or tool-definition improvement; deliverable: markdown audit in projects/_ops/ with evidence, root-cause hypothesis, and recommended guard", "Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output", "Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift", "Unlocks a safer token-efficiency or reliability fix with clear evidence behind it"),
+            spec("Draft", "Loop-mitigation gate spec", "define one bounded gate or tool-usage rule that should interrupt a known OpenClaw loop pattern before it burns more tokens; deliverable: markdown spec in projects/_ops/ with trigger, safe action, and rollback", "Keeps the same anti-looping goal moving by shifting from audit to one concrete mitigation concept", "Spec names one loop trigger, one bounded intervention, and why it is safer than broader control-plane changes", "Unlocks a directly implementable next step after the current backlog audit item"),
+            spec("Design", "Prompt-tool guardrail test matrix", "design a small test matrix for validating one proposed anti-looping prompt or tool guardrail against expected good and bad cases; deliverable: markdown matrix in projects/_ops/", "Improves the loop-reduction goal with a validation step instead of another near-duplicate audit", "Matrix covers at least 3 expected good paths and 3 loop-risk cases with pass criteria", "Unlocks safer evaluation of a future anti-looping change"),
+        ]
+
+    if "proactive operations manager" in goal_lower or "reactive" in goal_lower or "recursive" in goal_lower:
+        return [
+            spec("Draft", "Proactive operations guardrails", "define one safe recursive operations loop for OpenClaw that improves self-checking without overreach; deliverable: markdown guardrail note in projects/_ops/ covering trigger, allowed actions, stop conditions, rollback, and operator visibility", "Moves the proactive-operations goal toward an explicit safe operating loop instead of a vague ambition", "Guardrail note defines one bounded loop with clear trigger, limits, escalation path, and rollback", "Unlocks a safer proactive-ops prototype without blurring governance boundaries"),
+            spec("Analyze", "Recursive-ops failure modes", "analyze the top failure modes for a recursive OpenClaw operations loop, including runaway retries, stale context, and unsafe scope expansion; deliverable: markdown failure-mode note in projects/_ops/", "Keeps the same proactive-ops goal advancing after the first guardrail note is already done", "Failure-mode note names at least 3 realistic risks, why they matter, and one mitigation each", "Unlocks a more trustworthy next proactive-ops experiment"),
+            spec("Design", "Operator visibility checklist", "define the operator-visible checkpoints for any recursive operations loop, including when to notify, when to stay quiet, and what proof to record; deliverable: markdown checklist in projects/_ops/", "Strengthens the same proactive-ops goal by improving oversight rather than repeating the original guardrail task", "Checklist clearly distinguishes silent progress, notification thresholds, and required proof artifacts", "Unlocks safer execution of future proactive loops with clearer human visibility"),
+        ]
+
+    if 'blender' in goal_lower:
+        return [
+            spec("Practice", "Blender primitives exercise", "choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist"),
+            spec("Practice", "Blender lighting drill", "prepare one Blender exercise focused on simple lighting and scene readability; deliverable: practice brief in projects/creative-practice/ with setup steps and self-review rubric"),
+            spec("Practice", "Blender modifier workflow practice", "prepare one Blender exercise focused on one modifier chain and clean object organization; deliverable: practice brief in projects/creative-practice/ with execution checklist"),
+        ]
+
+    if 'after effects' in goal_lower or 'after_effects' in goal_lower:
+        return [
+            spec("Practice", "AE keyframe practice", "create one After Effects practice brief focused on keyframes, easing, or a simple loop; deliverable: markdown exercise in projects/creative-practice/ with references and execution checklist"),
+            spec("Practice", "AE easing drill", "create one After Effects practice brief focused on easing curves and timing polish for a short motion exercise; deliverable: markdown exercise in projects/creative-practice/"),
+            spec("Practice", "AE loop timing checklist", "prepare one short After Effects loop exercise with a timing and export checklist; deliverable: markdown exercise in projects/creative-practice/"),
+        ]
+
+    if 'unreal' in goal_lower:
+        return [
+            spec("Practice", "UE scene setup", "prepare one scoped Unreal practice exercise using pre-made assets and one mechanic only; deliverable: scene brief in projects/game-dev/ with setup steps and success checklist"),
+            spec("Practice", "UE single-mechanic prototype", "prepare one Unreal exercise centered on one simple mechanic and one test map only; deliverable: practice brief in projects/game-dev/"),
+            spec("Practice", "UE graybox flow drill", "prepare one Unreal graybox exercise focused on layout clarity and one interaction checkpoint; deliverable: practice brief in projects/game-dev/"),
+        ]
+
+    if 'portfolio' in goal_lower:
+        return [
+            spec("Analyze", "Portfolio direction check", "rank 3 portfolio directions or existing projects by creative relevance and personal ownership; deliverable: markdown shortlist in projects/portfolio/ with recommendation for what Philippe should build next"),
+            spec("Draft", "Portfolio build priority ladder", "define a short priority ladder for the next 3 portfolio-worthy builds, including why each one matters and what proof it should show; deliverable: markdown note in projects/portfolio/"),
+            spec("Design", "Portfolio proof checklist", "define the proof checklist a future portfolio piece should satisfy, including authorship, craft, and presentability; deliverable: markdown checklist in projects/portfolio/"),
+        ]
+
+    if 'instagram' in goal_lower or 'social' in goal_lower:
+        if not has_content_source_work():
+            return []
+        return [
+            spec("Draft", "Instagram content angles", "draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle"),
+            spec("Draft", "Process-post outline", "draft one process-post outline tied to a real current build, including hook, progress beats, and one supporting image or clip idea; deliverable: markdown note in projects/portfolio/ or projects/creative-practice/"),
+            spec("Analyze", "Source-work content shortlist", "identify 3 real current work items that are strongest candidates for content repurposing and explain the best angle for each; deliverable: markdown shortlist in projects/portfolio/"),
+        ]
+
+    if 'python' in goal_lower:
+        if level == "novice":
+            return [
+                spec("Practice", "Python practice sheet", "create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises", proof_override="Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts"),
+                spec("Practice", "Python reading drill", "create one beginner Python reading drill on small scripts using variables and if-statements; deliverable: markdown exercise in projects/python-learning/ with prediction questions and answers", proof_override="Reading drill includes multiple tiny code snippets, prediction prompts, and answer explanations"),
+                spec("Practice", "Python micro-script exercise", "create one micro-script exercise focused on input, output, and one branching decision; deliverable: markdown exercise in projects/python-learning/ with starter code and expected behavior", proof_override="Exercise stays beginner-safe and defines one tiny script Philippe can complete without advanced concepts"),
+            ]
+        if level == "beginner":
+            return [
+                spec("Practice", "Python practice sheet", "create one guided Python reading-and-practice exercise on functions, loops, or lists; deliverable: markdown exercise in projects/python-learning/ plus a small starter script", proof_override="Exercise includes code reading, prediction questions, and one guided practice task at the current level"),
+                spec("Practice", "Python function drill", "create one beginner Python function exercise with parameters, return values, and short test cases; deliverable: markdown exercise in projects/python-learning/"),
+                spec("Practice", "Python list-processing exercise", "create one beginner Python exercise focused on list iteration and simple conditionals; deliverable: markdown exercise in projects/python-learning/ with starter code"),
+            ]
+        return [
+            spec("Practice", "Python practice sheet", "create one guided Python practice task that bridges reading and small real-world application; deliverable: markdown exercise in projects/python-learning/ plus starter code", proof_override="Exercise clearly advances the next Python milestone with both comprehension and practice"),
+            spec("Practice", "Python utility drill", "create one small Python utility exercise that manipulates simple local data and prints a useful summary; deliverable: markdown exercise in projects/python-learning/ with starter code"),
+            spec("Practice", "Python testing drill", "create one guided Python exercise that adds small tests around a simple helper function; deliverable: markdown exercise in projects/python-learning/ plus starter code"),
+        ]
+
+    if 'japanese' in goal_lower:
+        return [
+            spec("Practice", "Japanese study pack", "create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts"),
+            spec("Practice", "Japanese sentence drill", "create one beginner Japanese sentence drill focused on one grammar pattern and 5 short examples; deliverable: markdown lesson in projects/language/"),
+            spec("Practice", "Japanese vocab review set", "create one beginner vocabulary review set from a single practical theme with readings and mini prompts; deliverable: markdown lesson in projects/language/"),
+        ]
+
+    if 'business analysis' in goal_lower or 'financial' in goal_lower:
+        return [
+            spec("Practice", "Business metrics lesson", "create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts", proof_override="Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice", unlocks_override="Unlocks later analysis tasks based on real followed companies once the watchlist is defined"),
+            spec("Practice", "Earnings-reading drill", "create one beginner drill on reading an earnings snapshot and identifying the few metrics that matter most; deliverable: markdown lesson in projects/company-research/"),
+            spec("Analyze", "Company metric comparison template", "create one simple comparison template for reviewing two companies on a small set of core metrics; deliverable: markdown template in projects/company-research/"),
+        ]
+
+    if 'equity' in goal_lower or 'futures' in goal_lower:
+        return [
+            spec("Fix", "Trading bot reliability spec", "identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder", proof_override="Spec targets a real bot-support improvement and avoids unsafe live-trading config changes", unlocks_override="Unlocks a higher-quality system improvement task for the trading bots"),
+            spec("Analyze", "Bot diagnostics gap review", "review the current bot support flow and identify one diagnostics or reporting blind spot worth fixing next; deliverable: markdown note in the relevant bot project notes folder"),
+            spec("Draft", "Trading review-tool improvement brief", "define one small review or reporting helper that would improve confidence in bot behavior without touching live trading config; deliverable: markdown brief in the relevant bot project notes folder"),
+        ]
+
+    if 'trading' in goal_lower:
+        return [
+            spec("Analyze", "Trading setup checklist", "prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules"),
+            spec("Draft", "Watchlist decision rubric", "define one short rubric for deciding which tickers or markets deserve attention in the next session; deliverable: markdown note in projects/trading-briefs/"),
+            spec("Analyze", "Setup invalidation checklist", "prepare one checklist focused only on invalidation and risk-exit rules for the next trading session; deliverable: markdown checklist in projects/trading-briefs/"),
+        ]
+
+    if 'automate' in goal_lower:
+        return [
+            spec("Fix", "Workspace automation helper", "build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output", proof_override="Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config"),
+            spec("Analyze", "Workspace friction shortlist", "identify 3 concrete workspace frictions that are good automation candidates and rank them by payoff and implementation safety; deliverable: markdown shortlist in projects/automation/"),
+            spec("Design", "Automation helper acceptance test", "define the acceptance test for one future workspace automation helper, including input sample, expected output, and rollback behavior; deliverable: markdown test note in projects/automation/"),
+        ]
+
+    if 'openclaw' in goal_lower:
+        return [
+            spec("Fix", "OpenClaw helper utility", "build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note", proof_override="Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations"),
+            spec("Analyze", "OpenClaw operator friction shortlist", "identify 3 concrete operator frictions in current OpenClaw use and rank them by frequency, annoyance, and implementation safety; deliverable: markdown shortlist in projects/_ops/"),
+            spec("Draft", "OpenClaw helper usage contract", "define the usage contract for one future OpenClaw helper, including inputs, expected output, and safe failure behavior; deliverable: markdown note in projects/_ops/"),
+        ]
+
+    if 'saas' in goal_lower or 'product' in goal_lower:
+        return [
+            spec("Draft", "Thin MVP increment", "define one thin MVP increment with explicit scope, dependencies, and success criteria; deliverable: spec note in the relevant project folder"),
+            spec("Analyze", "MVP dependency check", "identify the minimum dependencies and blockers for one thin MVP increment; deliverable: markdown note in the relevant project folder"),
+            spec("Design", "MVP success checklist", "define the success checklist for one thin MVP increment, including user-visible proof and rollback; deliverable: markdown note in the relevant project folder"),
+        ]
+
+    if 'partnership' in goal_lower or 'community' in goal_lower:
+        return [
+            spec("Draft", "Outreach target list", "create a ranked outreach target list of 10 relevant people or communities; deliverable: markdown list in projects/outreach/ with rationale"),
+            spec("Analyze", "Partnership fit criteria", "define the criteria that make a partnership or community target worth pursuing; deliverable: markdown note in projects/outreach/"),
+            spec("Draft", "Outreach message angle set", "draft 3 message angles suitable for future outreach to relevant people or communities; deliverable: markdown note in projects/outreach/"),
+        ]
+
+    cleaned_goal = clean_goal_title(goal)
+    return [
+        spec("Draft", cleaned_goal, f"define one concrete next-step deliverable for this goal: {goal}; deliverable: markdown note with exact output, success criteria, and next action"),
+        spec("Analyze", f"{cleaned_goal} constraints", f"identify the main constraints, unknowns, or blockers around this goal and rank them by importance; deliverable: markdown note with recommended next move for: {goal}"),
+        spec("Design", f"{cleaned_goal} success checklist", f"define the success checklist and review criteria for one believable next step toward this goal; deliverable: markdown note with proof markers and rollback for: {goal}"),
+    ]
+
+
+def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False, variant_index=0):
     """Convert a goal into a concrete autonomous task with Why/Proof/Unlocks.
 
     Generation policy:
@@ -436,136 +625,17 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
     proof = generate_proof(goal_type)
     unlocks = generate_unlocks(goal_type, skill)
 
-    task_title = None
+    variants = _variant_specs_for_goal(goal, goal_lower, goal_type, skill, level, why, proof, unlocks)
+    if variant_index >= len(variants):
+        return None
 
-    if any(phrase in goal_lower for phrase in ("automation script", "automation scripts", "automating routine tasks", "procedural scene setup")):
-        task_prefix = "Draft"
-        task_title = "Creative-tool automation script plan"
-        task_desc = "define one scoped automation script for Blender, Unreal Engine, or After Effects that removes a real repetitive setup step; deliverable: markdown spec in projects/creative-practice/ or the relevant tool workspace with target app, inputs/outputs, edge cases, and first prototype step"
-        why = "Reduces repetitive manual setup work while moving directly toward the current creative-tool automation goal"
-        proof = "Spec names one target app, one concrete repetitive task, the intended input/output flow, and a believable first prototype scope"
-        unlocks = "Unlocks a first real automation prototype instead of another generic practice exercise"
-    elif "actionable alpha" in goal_lower or ("ui/ux" in goal_lower and "trading dashboard" in goal_lower) or ("aggregate sentiment" in goal_lower and "fundamental" in goal_lower):
-        task_prefix = "Draft"
-        task_title = "Actionable Alpha dashboard slice"
-        task_desc = "spec one concrete UI module for the Actionable Alpha dashboard that combines sentiment, technical indicators, and fundamentals into one operator decision view; deliverable: markdown spec in projects/market-intel/notes/ with module layout, required inputs, and the exact decision the module should support"
-        why = "Turns the dashboard goal into one specific operator-facing slice that can actually be designed or built next"
-        proof = "Spec defines one named module, its inputs, presentation logic, and why it improves trading decisions"
-        unlocks = "Unlocks a buildable next UI/UX implementation step for the trading dashboard"
-    elif "real-time data ingestion" in goal_lower or ("api" in goal_lower and "trading data" in goal_lower):
-        task_prefix = "Research"
-        task_title = "Real-time trading API shortlist"
-        task_desc = "compare 3 candidate APIs for real-time market-data ingestion and score them on latency, coverage, pricing, integration friction, and output usefulness; deliverable: markdown shortlist in projects/market-intel/notes/ with a recommendation and integration notes"
-        why = "Bridges the gap between raw market data sources and a real integration decision instead of leaving the API goal vague"
-        proof = "Shortlist names 3 concrete APIs with decision criteria, recommendation, and next integration step"
-        unlocks = "Unlocks a more credible real-time data integration task for the trading stack"
-    elif "sec filings" in goal_lower or "quarterly reports" in goal_lower or "sensitivity-analysis" in goal_lower:
-        task_prefix = "Draft"
-        task_title = "SEC filing ingestion pipeline"
-        task_desc = "define a first-pass pipeline that pulls SEC filings and quarterly reports for a small ticker set, extracts the inputs needed for sensitivity ranges, and maps the outputs into the dashboard; deliverable: markdown pipeline note in projects/market-intel/notes/ with source flow, parser stages, and storage/output contract"
-        why = "Makes the filings-and-sensitivity goal concrete enough to implement in stages"
-        proof = "Pipeline note defines source, extraction stages, target output fields, and one believable starter ticker set"
-        unlocks = "Unlocks a scoped implementation task for filings ingestion instead of leaving the goal at idea level"
-    elif "signal tracking" in goal_lower or "evidence verification" in goal_lower:
-        task_prefix = "Analyze"
-        task_title = "Signal evidence-verification gaps"
-        task_desc = "audit the current signal tracking flow and identify the top 3 gaps in evidence capture, reviewability, or outcome linkage; deliverable: markdown audit in projects/market-intel/notes/ with the current flow, concrete gaps, and one recommended first fix"
-        why = "Targets the exact signal-tracking goal directly instead of hiding it behind a generic next-step placeholder"
-        proof = "Audit names the current flow, at least 3 concrete gaps, and one prioritized improvement with rationale"
-        unlocks = "Unlocks a sharper implementation task for signal evidence and review quality"
-    elif "openclaw" in goal_lower and any(phrase in goal_lower for phrase in ("logs", "looping", "repetitive prompts")):
-        task_prefix = "Analyze"
-        task_title = "OpenClaw loop-pattern audit"
-        task_desc = "review recent OpenClaw logs to identify one concrete repetitive prompt or looping behavior, then propose a bounded gate, prompt fix, or tool-definition improvement; deliverable: markdown audit in projects/_ops/ with evidence, root-cause hypothesis, and recommended guard"
-        why = "Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output"
-        proof = "Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift"
-        unlocks = "Unlocks a safer token-efficiency or reliability fix with clear evidence behind it"
-    elif "proactive operations manager" in goal_lower or "reactive" in goal_lower or "recursive" in goal_lower:
-        task_prefix = "Draft"
-        task_title = "Proactive operations guardrails"
-        task_desc = "define one safe recursive operations loop for OpenClaw that improves self-checking without overreach; deliverable: markdown guardrail note in projects/_ops/ covering trigger, allowed actions, stop conditions, rollback, and operator visibility"
-        why = "Moves the proactive-operations goal toward an explicit safe operating loop instead of a vague ambition"
-        proof = "Guardrail note defines one bounded loop with clear trigger, limits, escalation path, and rollback"
-        unlocks = "Unlocks a safer proactive-ops prototype without blurring governance boundaries"
-    elif 'blender' in goal_lower:
-        task_prefix = "Practice"
-        task_title = "Blender primitives exercise"
-        task_desc = "choose one beginner-intermediate Blender exercise focused on primitives, modifiers, or lighting; deliverable: practice brief in projects/creative-practice/ with steps, target outcome, and self-review checklist"
-    elif 'after effects' in goal_lower or 'after_effects' in goal_lower:
-        task_prefix = "Practice"
-        task_title = "AE keyframe practice"
-        task_desc = "create one After Effects practice brief focused on keyframes, easing, or a simple loop; deliverable: markdown exercise in projects/creative-practice/ with references and execution checklist"
-    elif 'unreal' in goal_lower:
-        task_prefix = "Practice"
-        task_title = "UE scene setup"
-        task_desc = "prepare one scoped Unreal practice exercise using pre-made assets and one mechanic only; deliverable: scene brief in projects/game-dev/ with setup steps and success checklist"
-    elif 'portfolio' in goal_lower:
-        task_prefix = "Analyze"
-        task_title = "Portfolio direction check"
-        task_desc = "rank 3 portfolio directions or existing projects by creative relevance and personal ownership; deliverable: markdown shortlist in projects/portfolio/ with recommendation for what Philippe should build next"
-    elif 'instagram' in goal_lower or 'social' in goal_lower:
-        if not has_content_source_work():
-            return None
-        task_prefix = "Draft"
-        task_title = "Instagram content angles"
-        task_desc = "draft 3 Instagram content angles tied to a specific real work item Philippe has made or is actively building; deliverable: content-plan markdown with hook, named source work item, and posting angle"
-    elif 'python' in goal_lower:
-        task_prefix = "Practice"
-        task_title = "Python practice sheet"
-        if level == "novice":
-            task_desc = "create one beginner Python study sheet on variables, input/output, and simple conditionals; deliverable: markdown lesson in projects/python-learning/ with 5 read-and-predict examples and 3 tiny exercises"
-            proof = "Lesson includes explanations, read-first examples, and beginner exercises Philippe can complete without advanced concepts"
-        elif level == "beginner":
-            task_desc = "create one guided Python reading-and-practice exercise on functions, loops, or lists; deliverable: markdown exercise in projects/python-learning/ plus a small starter script"
-            proof = "Exercise includes code reading, prediction questions, and one guided practice task at the current level"
-        else:
-            task_desc = "create one guided Python practice task that bridges reading and small real-world application; deliverable: markdown exercise in projects/python-learning/ plus starter code"
-            proof = "Exercise clearly advances the next Python milestone with both comprehension and practice"
-    elif 'japanese' in goal_lower:
-        task_prefix = "Practice"
-        task_title = "Japanese study pack"
-        task_desc = "create one focused Japanese study pack from a single beginner theme; deliverable: markdown lesson in projects/language/ with vocab, readings, and 5 short practice prompts"
-    elif 'business analysis' in goal_lower or 'financial' in goal_lower:
-        task_prefix = "Practice"
-        task_title = "Business metrics lesson"
-        task_desc = "create one beginner business-analysis lesson on reading key company metrics and earnings basics; deliverable: markdown lesson in projects/company-research/ with one guided example and 3 short practice prompts"
-        proof = "Lesson teaches a concrete beginner concept without requiring an unstated ticker list and includes guided practice"
-        unlocks = "Unlocks later analysis tasks based on real followed companies once the watchlist is defined"
-    elif 'equity' in goal_lower or 'futures' in goal_lower:
-        task_prefix = "Fix"
-        task_title = "Trading bot reliability spec"
-        task_desc = "identify one safe improvement opportunity in the trading-bot workspace, such as diagnostics, reporting, review tooling, or non-execution reliability; deliverable: markdown spec in the relevant bot project notes folder"
-        proof = "Spec targets a real bot-support improvement and avoids unsafe live-trading config changes"
-        unlocks = "Unlocks a higher-quality system improvement task for the trading bots"
-    elif 'trading' in goal_lower:
-        task_prefix = "Analyze"
-        task_title = "Trading setup checklist"
-        task_desc = "prepare one market-prep checklist for the next trading session; deliverable: markdown checklist in projects/trading-briefs/ covering watchlist, setups, invalidation, and risk rules"
-    elif 'automate' in goal_lower:
-        task_prefix = "Fix"
-        task_title = "Workspace automation helper"
-        task_desc = "build one small automation utility that addresses one specific documented workspace friction point; deliverable: working script in scripts/ or projects/automation/ with a clear run command and verifiable output"
-        proof = "Script runs on a real workspace example, is bounded to one specific task, and produces an observable result without touching openclaw.json or live config"
-    elif 'openclaw' in goal_lower:
-        task_prefix = "Fix"
-        task_title = "OpenClaw helper utility"
-        task_desc = "build one small OpenClaw helper utility, such as a diagnostics view, status reporter, or glue script that makes one known operational task faster; deliverable: working script in scripts/ plus short usage note"
-        proof = "Script runs on a real OpenClaw workspace task, has a clear use case, and avoids openclaw.json or auth/routing mutations"
-    elif 'saas' in goal_lower or 'product' in goal_lower:
-        task_prefix = "Draft"
-        task_title = "Thin MVP increment"
-        task_desc = "define one thin MVP increment with explicit scope, dependencies, and success criteria; deliverable: spec note in the relevant project folder"
-    elif 'partnership' in goal_lower or 'community' in goal_lower:
-        task_prefix = "Draft"
-        task_title = "Outreach target list"
-        task_desc = "create a ranked outreach target list of 10 relevant people or communities; deliverable: markdown list in projects/outreach/ with rationale"
-    else:
-        task_prefix = "Draft"
-        task_title = clean_goal_title(goal)
-        task_desc = (
-            f"define one concrete next-step deliverable for this goal: {goal}; "
-            "deliverable: markdown note with exact output, success criteria, and next action"
-        )
+    variant = dict(variants[variant_index])
+    task_prefix = variant["prefix"]
+    task_title = variant["title"]
+    task_desc = variant["desc"]
+    why = variant["why"]
+    proof = variant["proof"]
+    unlocks = variant["unlocks"]
 
     focus_dimension = None
     if use_assessment_bias and skill and skill in DIMENSION_FOCUS:
@@ -585,18 +655,11 @@ def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False):
         return shorten_generated_title(fallback.capitalize())
 
     task_title = task_title or _short_title(goal, category, task_prefix, task_desc)
-    task = (
-        f"[{category}] {task_prefix}: {task_title}\n"
-        f"**Brief:** {task_desc}\n"
-        f"| Why: {why} | Proof: {proof} | Unlocks: {unlocks}"
-    )
-    return task
+    return build_task_text(category, task_prefix, task_title, task_desc, why, proof, unlocks)
 
 
-def maybe_add_surprise_mvp(tasks, goals, seen):
+def maybe_add_surprise_mvp(tasks, goals, seen_keys, blocked_task_keys, blocked_deliverables):
     """Add at most one useful surprise MVP in system/tool/project-improvement lanes."""
-    import random
-
     if MAX_SURPRISE_MVP <= 0 or len(tasks) >= NUM_TASKS:
         return tasks
 
@@ -619,28 +682,11 @@ def maybe_add_surprise_mvp(tasks, goals, seen):
             "[Personal] 🎁 Surprise MVP: build a tiny learning helper for Japanese, Python, or business-analysis practice, such as a prompt generator, drill picker, or review tracker; deliverable: small working tool or spec in projects/learning-tools/ | Why: A useful learning helper can turn practice into a repeatable daily habit | Proof: Tool or spec supports one real daily exercise loop without requiring advanced setup | Unlocks: Better consistency in staged skill development"
         ])
 
-    filtered = [c for c in candidates if c.lower() not in seen]
+    filtered = [c for c in candidates if task_passes_generation_filters(c, seen_keys, blocked_task_keys, blocked_deliverables)]
     if not filtered:
         return tasks
 
-    # Prefer keeping the surprise MVP visible over weaker replaceable generated tasks.
-    surprise = random.choice(filtered)
-    if len(tasks) >= NUM_TASKS:
-        replaceable_prefixes = [
-            "[trading] 📊 analyze: prepare one market-prep checklist",
-            "[career] 📚 learn: pick one beginner-intermediate blender exercise",
-            "[personal] 📚 learn: create one focused japanese study pack",
-            "[personal] 📚 learn: build one beginner python study sheet",
-            "[other] 🔧 fix: build one small openclaw helper utility",
-            "[other] 🔧 fix: build one small automation utility that addresses one specific documented workspace friction point",
-        ]
-        for i in range(len(tasks) - 1, -1, -1):
-            lower = tasks[i].lower()
-            if any(lower.startswith(prefix) for prefix in replaceable_prefixes):
-                tasks[i] = surprise
-                return tasks[:NUM_TASKS]
-        return tasks[:NUM_TASKS]
-
+    surprise = filtered[0]
     tasks.append(surprise)
     return tasks[:NUM_TASKS]
 
@@ -677,44 +723,35 @@ def generate_tasks(goals):
     completed_deliverables = get_completed_deliverables()
     existing_deliverables = get_existing_autonomous_deliverables()
     blocked_deliverables = completed_deliverables | existing_deliverables
-
-    available_goals = []
-    for category, goal in all_goals:
-        goal_key = goal.lower().strip()
-        if goal_key not in recent_tasks:
-            available_goals.append((category, goal))
-
-    if len(available_goals) < 3:
-        available_goals = all_goals[:]
-
-    selected_goals = available_goals[:NUM_TASKS]
+    blocked_task_keys = get_generation_blocked_task_keys()
 
     use_assessment_bias = os.environ.get("TASK_ASSESSMENT_BIAS", "false").lower() == "true"
 
     tasks = []
-    seen = set()
-    for category, goal in selected_goals:
-        task = synthesize_task(goal, category, recent_tasks, use_assessment_bias=use_assessment_bias)
-        if not task:
-            continue
-        key = task.lower().strip()
+    seen_keys = set()
 
-        if any(phrase in key for phrase in DISALLOWED_TASK_PHRASES):
-            continue
+    for variant_index in range(GENERATION_VARIANT_ROUNDS):
+        if len(tasks) >= NUM_TASKS:
+            break
+        for category, goal in all_goals:
+            if len(tasks) >= NUM_TASKS:
+                break
+            task = synthesize_task(goal, category, recent_tasks, use_assessment_bias=use_assessment_bias, variant_index=variant_index)
+            if not task:
+                continue
+            if not task_passes_generation_filters(task, seen_keys, blocked_task_keys, blocked_deliverables):
+                continue
 
-        if any(phrase in key for phrase in REQUIRES_NAMED_SUBJECT_PHRASES) and "named ticker" not in key and "shortlist" not in key and "template" not in key:
-            continue
-
-        task_deliverables = extract_deliverable_paths(task)
-        if task_deliverables and task_deliverables & blocked_deliverables:
-            continue
-
-        if key not in seen:
             tasks.append(task)
-            seen.add(key)
-            blocked_deliverables.update(task_deliverables)
+            key = normalize_legacy_task_key(task)
+            match_key = normalize_task_match_key(task)
+            if key:
+                seen_keys.add(key)
+            if match_key:
+                seen_keys.add(match_key)
+            blocked_deliverables.update(extract_deliverable_paths(task))
 
-    tasks = maybe_add_surprise_mvp(tasks, goals, seen)
+    tasks = maybe_add_surprise_mvp(tasks, goals, seen_keys, blocked_task_keys, blocked_deliverables)
     return tasks[:NUM_TASKS]
 
 
@@ -791,27 +828,124 @@ def extract_deliverable_paths(text):
     return paths
 
 
+def parse_tasks_log_date(raw_timestamp):
+    try:
+        return datetime.strptime((raw_timestamp or "")[:10], "%Y-%m-%d")
+    except ValueError:
+        return None
+
+
+
+def extract_completed_task_label(log_line):
+    match = re.match(r'- ✅ \[([^\]]+)\]\s+(.*)$', (log_line or '').strip())
+    if not match:
+        return ""
+
+    remainder = match.group(2).strip()
+    remainder = re.sub(r'^\[[^\]]+\]\s+', '', remainder, count=1)
+    remainder = re.split(r'\s+\|\s+Output:\s+', remainder, maxsplit=1, flags=re.IGNORECASE)[0].strip()
+    remainder = re.sub(r'^Queue replay handled:\s*', '', remainder, flags=re.IGNORECASE)
+    return remainder.strip()
+
+
+
+def get_recent_completed_task_keys(days=14):
+    """Read recent completion-history task keys from tasks-log.md."""
+    if not TASKS_LOG_FILE.exists():
+        return set()
+
+    recent = set()
+    cutoff = datetime.now() - timedelta(days=days)
+
+    for line in TASKS_LOG_FILE.read_text().splitlines():
+        match = re.match(r'- ✅ \[([^\]]+)\]', line)
+        if not match:
+            continue
+        task_date = parse_tasks_log_date(match.group(1))
+        if not task_date or task_date < cutoff:
+            continue
+        label = extract_completed_task_label(line)
+        key = normalize_legacy_task_key(label)
+        match_key = normalize_task_match_key(label)
+        if key:
+            recent.add(key)
+        if match_key:
+            recent.add(match_key)
+
+    return recent
+
+
+
+def get_structured_active_task_keys():
+    """Return normalized keys for active structured tasks so generation does not resurrect them into backlog."""
+    store = load_structured_task_store()
+    keys = set()
+
+    for task in store.get("tasks", []):
+        if not isinstance(task, dict) or task.get("status") == "done":
+            continue
+        link = task.get("linkedAutonomyRef") or {}
+        linked_key = normalize_legacy_task_key(link.get("taskText") or "")
+        title_key = normalize_legacy_task_key(task.get("title", ""))
+        linked_match_key = normalize_task_match_key(link.get("taskText") or "")
+        title_match_key = normalize_task_match_key(task.get("title", ""))
+        if linked_key:
+            keys.add(linked_key)
+        if title_key:
+            keys.add(title_key)
+        if linked_match_key:
+            keys.add(linked_match_key)
+        if title_match_key:
+            keys.add(title_match_key)
+
+    return keys
+
+
+
+def get_structured_done_task_keys():
+    """Return normalized keys for done structured tasks to avoid stale backlog carry-forward."""
+    store = load_structured_task_store()
+    keys = set()
+
+    for task in store.get("tasks", []):
+        if not isinstance(task, dict) or task.get("status") != "done":
+            continue
+        link = task.get("linkedAutonomyRef") or {}
+        linked_key = normalize_legacy_task_key(link.get("taskText") or "")
+        title_key = normalize_legacy_task_key(task.get("title", ""))
+        linked_match_key = normalize_task_match_key(link.get("taskText") or "")
+        title_match_key = normalize_task_match_key(task.get("title", ""))
+        if linked_key:
+            keys.add(linked_key)
+        if title_key:
+            keys.add(title_key)
+        if linked_match_key:
+            keys.add(linked_match_key)
+        if title_match_key:
+            keys.add(title_match_key)
+
+    return keys
+
+
+
 def get_recent_tasks(days=14):
-    """Get tasks completed in the last N days to avoid repetition."""
+    """Get recent completion-history task labels from tasks-log.md to avoid repetition."""
     if not TASKS_LOG_FILE.exists():
         return set()
     
     recent = set()
     cutoff = datetime.now() - timedelta(days=days)
     
-    for line in TASKS_LOG_FILE.read_text().split('\n'):
-        # Parse: - ✅ [2026-03-08 08:15] [Career] task description
-        match = re.match(r'- ✅ \[(\d{4}-\d{2}-\d{2})', line)
-        if match:
-            try:
-                task_date = datetime.strptime(match.group(1), "%Y-%m-%d")
-                if task_date >= cutoff:
-                    # Add task content (everything after category)
-                    content_match = re.search(r'\].*?\] (.*)$', line)
-                    if content_match:
-                        recent.add(content_match.group(1).strip().lower())
-            except ValueError:
-                continue
+    for line in TASKS_LOG_FILE.read_text().splitlines():
+        match = re.match(r'- ✅ \[([^\]]+)\]', line)
+        if not match:
+            continue
+        task_date = parse_tasks_log_date(match.group(1))
+        if not task_date or task_date < cutoff:
+            continue
+        label = extract_completed_task_label(line)
+        if label:
+            recent.add(label.lower())
     
     return recent
 
@@ -872,6 +1006,30 @@ def normalize_task_text(text):
     return re.sub(r'\s+', ' ', (text or '').strip()).lower()
 
 
+def normalize_legacy_task_key(text):
+    if not text:
+        return ""
+    first_line = ""
+    for line in str(text).replace("\r\n", "\n").split("\n"):
+        stripped = line.strip()
+        if stripped:
+            first_line = stripped
+            break
+    if not first_line:
+        return ""
+    first_line = re.sub(r'^[-*]\s+', '', first_line)
+    return normalize_task_text(first_line)
+
+
+
+def normalize_task_match_key(text):
+    """Normalize task identity while ignoring leading category tags like [Career]."""
+    key = normalize_legacy_task_key(text)
+    if not key:
+        return ""
+    return normalize_task_text(strip_category_tag(key))
+
+
 
 def load_structured_task_store():
     if not MISSION_CONTROL_TASK_STORE.exists():
@@ -899,10 +1057,56 @@ def get_suppressed_legacy_task_keys():
 
 
 
+def get_existing_open_backlog_task_map():
+    """Read current Open Backlog task blocks from AUTONOMOUS.md keyed by normalized first line."""
+    if not AUTONOMOUS_FILE.exists():
+        return {}
+
+    content = AUTONOMOUS_FILE.read_text()
+    in_open_backlog = False
+    current_block = []
+    task_map = {}
+
+    def flush_current_block():
+        nonlocal current_block
+        if not current_block:
+            return
+        block_lines = current_block[:]
+        block_lines[0] = re.sub(r'^[-*]\s+', '', block_lines[0].lstrip())
+        block = "\n".join(block_lines).strip()
+        normalized = normalize_legacy_task_key(block)
+        if normalized:
+            existing = task_map.get(normalized, "")
+            if len(block) > len(existing):
+                task_map[normalized] = block
+        current_block = []
+
+    for line in content.splitlines():
+        stripped = line.strip()
+        if stripped == "## Open Backlog":
+            in_open_backlog = True
+            current_block = []
+            continue
+        if in_open_backlog and stripped.startswith("## "):
+            break
+        if not in_open_backlog:
+            continue
+        if stripped.startswith("- "):
+            flush_current_block()
+            current_block = [line.rstrip()]
+            continue
+        if current_block:
+            current_block.append(line.rstrip())
+
+    flush_current_block()
+    return task_map
+
+
 def get_current_open_backlog_tasks():
     """Read the current Open Backlog task texts, preferring the structured task store."""
     store = load_structured_task_store()
     tasks = []
+    markdown_task_map = get_existing_open_backlog_task_map()
 
     structured_backlog = sorted(
         [task for task in store.get("tasks", []) if task.get("status") == "backlog"],
@@ -910,7 +1114,13 @@ def get_current_open_backlog_tasks():
     )
     for task in structured_backlog:
         link = task.get("linkedAutonomyRef") or {}
-        task_text = (link.get("taskText") or task.get("title") or "").strip()
+        linked_text = (link.get("taskText") or "").strip()
+        fallback_title = (task.get("title") or "").strip()
+        normalized = normalize_legacy_task_key(linked_text or fallback_title)
+        task_text = linked_text or fallback_title
+        markdown_text = markdown_task_map.get(normalized, "")
+        if markdown_text and len(markdown_text) > len(task_text):
+            task_text = markdown_text
         if task_text:
             tasks.append(task_text)
 
@@ -939,35 +1149,99 @@ def get_current_open_backlog_tasks():
 
 
 
+def get_current_open_backlog_task_keys():
+    keys = set()
+    for task in get_current_open_backlog_tasks():
+        key = normalize_legacy_task_key(task)
+        match_key = normalize_task_match_key(task)
+        if key:
+            keys.add(key)
+        if match_key:
+            keys.add(match_key)
+    return keys
+
+
+
+def get_generation_blocked_task_keys():
+    blocked = set()
+    blocked.update(get_suppressed_legacy_task_keys())
+    blocked.update(get_structured_active_task_keys())
+    blocked.update(get_structured_done_task_keys())
+    blocked.update(get_recent_completed_task_keys())
+    blocked.update(get_current_open_backlog_task_keys())
+    return blocked
+
+
+
+def task_passes_generation_filters(task, seen_keys, blocked_task_keys, blocked_deliverables):
+    key = normalize_legacy_task_key(task)
+    match_key = normalize_task_match_key(task)
+
+    if not key or key in seen_keys or match_key in seen_keys:
+        return False
+    if key in blocked_task_keys or match_key in blocked_task_keys:
+        return False
+
+    lowered = task.lower().strip()
+    if any(phrase in lowered for phrase in DISALLOWED_TASK_PHRASES):
+        return False
+
+    if any(phrase in lowered for phrase in REQUIRES_NAMED_SUBJECT_PHRASES) and "named ticker" not in lowered and "shortlist" not in lowered and "template" not in lowered:
+        return False
+
+    task_deliverables = extract_deliverable_paths(task)
+    if task_deliverables and task_deliverables & blocked_deliverables:
+        return False
+
+    return True
+
+
+
 def build_combined_backlog_tasks(new_tasks):
     suggestion_tasks = get_active_suggestion_tasks()
     existing_backlog_tasks = get_current_open_backlog_tasks()
     suppressed = get_suppressed_legacy_task_keys()
+    active_structured_keys = get_structured_active_task_keys()
+    done_structured_keys = get_structured_done_task_keys()
+    recent_completed_keys = get_recent_completed_task_keys()
     combined = []
     seen = set()
 
-    def add_task(task):
+    def add_task(task, source="generated"):
         if len(combined) >= NUM_TASKS:
             return
-        key = normalize_task_text(task)
+        key = normalize_legacy_task_key(task)
+        match_key = normalize_task_match_key(task)
         if not key or key in seen or key in suppressed:
+            return
+        if source != "existing-backlog" and (
+            key in active_structured_keys or match_key in active_structured_keys or
+            key in recent_completed_keys or match_key in recent_completed_keys or
+            key in done_structured_keys or match_key in done_structured_keys
+        ):
+            return
+        if source == "existing-backlog" and (
+            key in recent_completed_keys or match_key in recent_completed_keys or
+            key in done_structured_keys or match_key in done_structured_keys
+        ):
             return
         combined.append(task)
         seen.add(key)
 
     # Add newly generated tasks first. This ensures fresh generated tasks are never
-    # silently dropped when suggestions or existing backlog already fill NUM_TASKS.
+    # silently dropped when suggestions or existing backlog already fill NUM_TASKS,
+    # while still avoiding active-task and recent-completion duplicates.
     for task in new_tasks:
-        add_task(task)
+        add_task(task, source="generated")
 
     # Fill remaining slots with existing backlog tasks (de-duped against new tasks).
     # This preserves older in-flight work when there's room for it.
     for task in existing_backlog_tasks:
-        add_task(task)
+        add_task(task, source="existing-backlog")
 
     # Suggestions fill any final remaining slots.
     for task in suggestion_tasks:
-        add_task(task)
+        add_task(task, source="suggestion")
 
     return combined
 
@@ -981,18 +1255,21 @@ def sync_generated_backlog_to_structured_store(backlog_tasks):
     suppressed = {entry for entry in meta.get("suppressedLegacyTaskKeys", []) if isinstance(entry, str) and entry.strip()}
     existing_ids = {task.get("id") for task in tasks if isinstance(task, dict) and task.get("id")}
     existing_norms = set()
+    existing_tasks_by_norm = {}
     backlog_max_order = -1
 
     for task in tasks:
         if not isinstance(task, dict):
             continue
         link = task.get("linkedAutonomyRef") or {}
-        linked_norm = link.get("taskTextNormalized")
-        title_norm = normalize_task_text(task.get("title", ""))
+        linked_norm = normalize_legacy_task_key(link.get("taskText") or task.get("title", ""))
+        title_norm = normalize_legacy_task_key(task.get("title", ""))
         if linked_norm:
             existing_norms.add(linked_norm)
+            existing_tasks_by_norm.setdefault(linked_norm, []).append(task)
         if title_norm:
             existing_norms.add(title_norm)
+            existing_tasks_by_norm.setdefault(title_norm, []).append(task)
         if task.get("status") == "backlog":
             backlog_max_order = max(backlog_max_order, int(task.get("columnOrder", 0) or 0))
 
@@ -1007,13 +1284,42 @@ def sync_generated_backlog_to_structured_store(backlog_tasks):
         return candidate
 
     added = 0
+    updated_existing = 0
     now_ms = int(datetime.now().timestamp() * 1000)
     for task_text in backlog_tasks:
-        normalized = normalize_task_text(task_text)
+        normalized = normalize_legacy_task_key(task_text)
+        parsed_title, parsed_description = extract_task_title_and_description(task_text)
+
+        matching_tasks = existing_tasks_by_norm.get(normalized, [])
+        preferred_match = None
+        for candidate in matching_tasks:
+            if candidate.get("status") == "backlog":
+                preferred_match = candidate
+                break
+        if preferred_match is None and matching_tasks:
+            preferred_match = matching_tasks[0]
+
+        if preferred_match is not None:
+            link = preferred_match.setdefault("linkedAutonomyRef", {})
+            existing_text = (link.get("taskText") or "").strip()
+            richer_text = task_text.strip()
+            changed = False
+            if richer_text and len(richer_text) > len(existing_text):
+                link["taskText"] = task_text
+                link["taskTextNormalized"] = normalized
+                changed = True
+            if parsed_description and (not preferred_match.get("description") or len(parsed_description) > len(preferred_match.get("description") or "")):
+                preferred_match["description"] = parsed_description
+                changed = True
+            if changed:
+                preferred_match["updatedAt"] = now_ms
+                preferred_match["version"] = int(preferred_match.get("version", 1) or 1) + 1
+                updated_existing += 1
+            continue
+
         if not normalized or normalized in suppressed or normalized in existing_norms:
             continue
         backlog_max_order += 1
-        parsed_title, parsed_description = extract_task_title_and_description(task_text)
         tasks.append({
             "id": unique_task_id(task_text),
             "title": parsed_title,
@@ -1047,7 +1353,7 @@ def sync_generated_backlog_to_structured_store(backlog_tasks):
         existing_norms.add(normalized)
         added += 1
 
-    if added > 0:
+    if added > 0 or updated_existing > 0:
         meta["updatedAt"] = now_ms
         meta["schemaVersion"] = 2
         meta["suppressedLegacyTaskKeys"] = sorted(suppressed)
@@ -1062,8 +1368,10 @@ def sync_generated_backlog_to_structured_store(backlog_tasks):
 def update_autonomous_file(new_tasks):
     """Update AUTONOMOUS.md by preserving existing backlog and only topping back up to NUM_TASKS."""
 
+    existing_backlog_keys = get_current_open_backlog_task_keys()
     combined = build_combined_backlog_tasks(new_tasks)
     content = AUTONOMOUS_FILE.read_text()
+    original_content = content
 
     new_section = "## Open Backlog\n\n"
     if combined:
@@ -1081,9 +1389,18 @@ def update_autonomous_file(new_tasks):
     # Remove known-empty structural sections so stale placeholders do not linger.
     content = re.sub(r'\n## In Progress\s*\n(?=\n##|\Z)', '\n', content, flags=re.DOTALL)
 
-    AUTONOMOUS_FILE.write_text(content)
+    markdown_changed = content != original_content
+    if markdown_changed:
+        AUTONOMOUS_FILE.write_text(content)
+
     added_to_store = sync_generated_backlog_to_structured_store(combined)
-    return len(combined), added_to_store
+    new_backlog_entries = 0
+    for task in combined:
+        key = normalize_legacy_task_key(task)
+        match_key = normalize_task_match_key(task)
+        if key not in existing_backlog_keys and match_key not in existing_backlog_keys:
+            new_backlog_entries += 1
+    return len(combined), added_to_store, markdown_changed, new_backlog_entries
 
 
 def sync_kanban_board_json():
@@ -1190,17 +1507,22 @@ if __name__ == "__main__":
 
     # Update AUTONOMOUS.md with new tasks only
     if new_tasks:
-        added_count, store_added_count = update_autonomous_file(new_tasks)
-        print(f"Generated {len(new_tasks)} tasks → AUTONOMOUS.md backlog has {added_count} items")
+        added_count, store_added_count, markdown_changed, new_backlog_entries = update_autonomous_file(new_tasks)
+        print(f"Generated {len(new_tasks)} task candidates → AUTONOMOUS.md backlog has {added_count} items")
+        print(f"New backlog entries added this run: {new_backlog_entries}")
         print(f"Structured Tasks store sync: {store_added_count} new backlog entr{'y' if store_added_count == 1 else 'ies'} added")
-        if added_count < len(new_tasks):
-            print(f"  NOTE: {len(new_tasks) - added_count} generated task(s) deduplicated against existing backlog/suggestions/suppressed deletions")
+        print(f"AUTONOMOUS.md {'updated' if markdown_changed else 'unchanged'}")
+        if new_backlog_entries < len(new_tasks):
+            print(f"  NOTE: {len(new_tasks) - new_backlog_entries} generated task candidate(s) were filtered against active tasks, recent completions, existing backlog, suggestions, or suppressed deletions")
         print("\nTasks created:")
         for i, task in enumerate(new_tasks, 1):
             # Show abbreviated version
             print(f"  {i}. {task[:100]}...")
-        
-        if sync_kanban_board_json():
-            publish_kanban_board_if_changed()
     else:
+        new_backlog_entries = 0
         print("No goals found in AUTONOMOUS.md")
+
+    if sync_kanban_board_json():
+        publish_kanban_board_if_changed()
+
+    print(f"🎯 Daily Tasks Generated: {new_backlog_entries} new tasks added to Open Backlog")
