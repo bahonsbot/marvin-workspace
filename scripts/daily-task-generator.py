@@ -47,6 +47,7 @@ TASKS_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
 NUM_TASKS = 5
 GENERATION_VARIANT_ROUNDS = 4
 MAX_SURPRISE_MVP = 1  # Allowed only for useful tools/system improvements, not creative-output filler
+COMPLETION_LINE_TEMPLATE = "🎯 Daily Tasks Generated: {count} new tasks added to Open Backlog"
 DISALLOWED_TASK_PHRASES = [
     "case-study",
     "case study",
@@ -420,6 +421,36 @@ def build_task_text(category, task_prefix, task_title, task_desc, why, proof, un
     )
 
 
+def build_completion_line(count):
+    return COMPLETION_LINE_TEMPLATE.format(count=count)
+
+
+def remember_generated_task(task, seen_keys, blocked_deliverables):
+    key = normalize_legacy_task_key(task)
+    match_key = normalize_task_match_key(task)
+    if key:
+        seen_keys.add(key)
+    if match_key:
+        seen_keys.add(match_key)
+    blocked_deliverables.update(extract_deliverable_paths(task))
+
+
+def count_new_backlog_entries(tasks, existing_backlog_keys):
+    count = 0
+    for task in tasks:
+        key = normalize_legacy_task_key(task)
+        match_key = normalize_task_match_key(task)
+        if key not in existing_backlog_keys and match_key not in existing_backlog_keys:
+            count += 1
+    return count
+
+
+def print_created_tasks(tasks):
+    print("\nTasks created:")
+    for i, task in enumerate(tasks, 1):
+        print(f"  {i}. {task[:100]}...")
+
+
 def _variant_specs_for_goal(goal, goal_lower, goal_type, skill, level, why, proof, unlocks):
     def spec(prefix, title, desc, why_override=None, proof_override=None, unlocks_override=None):
         return {
@@ -600,7 +631,7 @@ def _variant_specs_for_goal(goal, goal_lower, goal_type, skill, level, why, proo
     ]
 
 
-def synthesize_task(goal, category, recent_tasks, use_assessment_bias=False, variant_index=0):
+def synthesize_task(goal, category, use_assessment_bias=False, variant_index=0):
     """Convert a goal into a concrete autonomous task with Why/Proof/Unlocks.
 
     Generation policy:
@@ -719,7 +750,6 @@ def generate_tasks(goals):
     if not all_goals:
         return []
 
-    recent_tasks = get_recent_tasks()
     completed_deliverables = get_completed_deliverables()
     existing_deliverables = get_existing_autonomous_deliverables()
     blocked_deliverables = completed_deliverables | existing_deliverables
@@ -736,20 +766,14 @@ def generate_tasks(goals):
         for category, goal in all_goals:
             if len(tasks) >= NUM_TASKS:
                 break
-            task = synthesize_task(goal, category, recent_tasks, use_assessment_bias=use_assessment_bias, variant_index=variant_index)
+            task = synthesize_task(goal, category, use_assessment_bias=use_assessment_bias, variant_index=variant_index)
             if not task:
                 continue
             if not task_passes_generation_filters(task, seen_keys, blocked_task_keys, blocked_deliverables):
                 continue
 
             tasks.append(task)
-            key = normalize_legacy_task_key(task)
-            match_key = normalize_task_match_key(task)
-            if key:
-                seen_keys.add(key)
-            if match_key:
-                seen_keys.add(match_key)
-            blocked_deliverables.update(extract_deliverable_paths(task))
+            remember_generated_task(task, seen_keys, blocked_deliverables)
 
     tasks = maybe_add_surprise_mvp(tasks, goals, seen_keys, blocked_task_keys, blocked_deliverables)
     return tasks[:NUM_TASKS]
@@ -926,28 +950,6 @@ def get_structured_done_task_keys():
 
     return keys
 
-
-
-def get_recent_tasks(days=14):
-    """Get recent completion-history task labels from tasks-log.md to avoid repetition."""
-    if not TASKS_LOG_FILE.exists():
-        return set()
-    
-    recent = set()
-    cutoff = datetime.now() - timedelta(days=days)
-    
-    for line in TASKS_LOG_FILE.read_text().splitlines():
-        match = re.match(r'- ✅ \[([^\]]+)\]', line)
-        if not match:
-            continue
-        task_date = parse_tasks_log_date(match.group(1))
-        if not task_date or task_date < cutoff:
-            continue
-        label = extract_completed_task_label(line)
-        if label:
-            recent.add(label.lower())
-    
-    return recent
 
 
 def get_completed_deliverables(days=30):
@@ -1394,12 +1396,7 @@ def update_autonomous_file(new_tasks):
         AUTONOMOUS_FILE.write_text(content)
 
     added_to_store = sync_generated_backlog_to_structured_store(combined)
-    new_backlog_entries = 0
-    for task in combined:
-        key = normalize_legacy_task_key(task)
-        match_key = normalize_task_match_key(task)
-        if key not in existing_backlog_keys and match_key not in existing_backlog_keys:
-            new_backlog_entries += 1
+    new_backlog_entries = count_new_backlog_entries(combined, existing_backlog_keys)
     return len(combined), added_to_store, markdown_changed, new_backlog_entries
 
 
@@ -1514,10 +1511,7 @@ if __name__ == "__main__":
         print(f"AUTONOMOUS.md {'updated' if markdown_changed else 'unchanged'}")
         if new_backlog_entries < len(new_tasks):
             print(f"  NOTE: {len(new_tasks) - new_backlog_entries} generated task candidate(s) were filtered against active tasks, recent completions, existing backlog, suggestions, or suppressed deletions")
-        print("\nTasks created:")
-        for i, task in enumerate(new_tasks, 1):
-            # Show abbreviated version
-            print(f"  {i}. {task[:100]}...")
+        print_created_tasks(new_tasks)
     else:
         new_backlog_entries = 0
         print("No goals found in AUTONOMOUS.md")
@@ -1525,4 +1519,4 @@ if __name__ == "__main__":
     if sync_kanban_board_json():
         publish_kanban_board_if_changed()
 
-    print(f"🎯 Daily Tasks Generated: {new_backlog_entries} new tasks added to Open Backlog")
+    print(build_completion_line(new_backlog_entries))
