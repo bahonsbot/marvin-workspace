@@ -3,6 +3,7 @@
 const http = require('node:http');
 const net = require('node:net');
 const { URL } = require('node:url');
+const { WebSocketServer, WebSocket } = require('ws');
 
 function parsePort(value, fallback) {
   const parsed = Number.parseInt(value || '', 10);
@@ -85,6 +86,34 @@ if (!bridgeToken) {
 }
 
 const sidecarTarget = `ws://${sidecarHost}:${sidecarPort}${sidecarPath}`;
+const bridgeWss = new WebSocketServer({ noServer: true });
+
+function normalizeCloseCode(code, fallback) {
+  if (!Number.isInteger(code)) return fallback;
+  if (code >= 3000 && code <= 4999) return code;
+  const allowed = new Set([1000, 1001, 1002, 1003, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014]);
+  return allowed.has(code) ? code : fallback;
+}
+
+function normalizeCloseReason(reason, fallback) {
+  const value = typeof reason === 'string' ? reason : reason?.toString?.() || '';
+  const trimmed = value.trim();
+  return trimmed ? trimmed.slice(0, 120) : fallback;
+}
+
+function closeSocketPair(client, upstream, code, reason) {
+  const clientCode = normalizeCloseCode(code, 1011);
+  const upstreamCode = normalizeCloseCode(code, 1000);
+  const closeReason = normalizeCloseReason(reason, 'Socket closed');
+
+  if (client.readyState === WebSocket.OPEN || client.readyState === WebSocket.CONNECTING) {
+    client.close(clientCode, closeReason);
+  }
+
+  if (upstream && (upstream.readyState === WebSocket.OPEN || upstream.readyState === WebSocket.CONNECTING)) {
+    upstream.close(upstreamCode, closeReason);
+  }
+}
 
 const server = http.createServer((req, res) => {
   const request = http.request(
@@ -116,6 +145,49 @@ const server = http.createServer((req, res) => {
   });
 
   req.pipe(request);
+});
+
+bridgeWss.on('connection', (client, req, requestUrl) => {
+  const clientId = Math.random().toString(36).slice(2, 9);
+  console.log(`[mission-control-preview-proxy] Runtime WS tunnel open [${clientId}]`);
+
+  const upstreamUrl = new URL(sidecarTarget);
+  upstreamUrl.search = requestUrl.search || '';
+  const upstream = new WebSocket(upstreamUrl.toString());
+
+  upstream.on('open', () => {
+    client.on('message', (data, isBinary) => {
+      if (upstream.readyState === WebSocket.OPEN) {
+        upstream.send(data, { binary: isBinary });
+      }
+    });
+  });
+
+  upstream.on('message', (data, isBinary) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(data, { binary: isBinary });
+    }
+  });
+
+  upstream.on('error', (cause) => {
+    console.error(`[mission-control-preview-proxy] Runtime WS upstream error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
+    closeSocketPair(client, upstream, 1011, 'Runtime WS upstream unavailable');
+  });
+
+  upstream.on('close', (code, reason) => {
+    console.log(`[mission-control-preview-proxy] Runtime WS tunnel closed [${clientId}]`);
+    closeSocketPair(client, upstream, code || 1000, reason?.toString?.() || 'Runtime WS upstream closed');
+  });
+
+  client.on('close', (code, reason) => {
+    console.log(`[mission-control-preview-proxy] Browser WS tunnel closed [${clientId}]`);
+    closeSocketPair(client, upstream, code || 1000, reason?.toString?.() || 'Browser WS closed');
+  });
+
+  client.on('error', (cause) => {
+    console.error(`[mission-control-preview-proxy] Browser WS tunnel error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
+    closeSocketPair(client, upstream, 1011, 'Browser WS error');
+  });
 });
 
 server.on('upgrade', (req, socket, head) => {
@@ -173,56 +245,8 @@ server.on('upgrade', (req, socket, head) => {
     return;
   }
 
-  const clientId = Math.random().toString(36).slice(2, 9);
-  const upstreamSocket = net.connect(sidecarPort, sidecarHost, () => {
-    console.log(`[mission-control-preview-proxy] Runtime WS tunnel open [${clientId}]`);
-    const upstreamPath = `${sidecarPath}${requestUrl.search || ''}`;
-    let rawRequest = `${req.method || 'GET'} ${upstreamPath} HTTP/${req.httpVersion}\r\n`;
-    for (const [name, value] of Object.entries(req.headers)) {
-      if (name.toLowerCase() === 'host') continue;
-      if (Array.isArray(value)) {
-        for (const item of value) {
-          rawRequest += `${name}: ${item}\r\n`;
-        }
-      } else if (typeof value === 'string') {
-        rawRequest += `${name}: ${value}\r\n`;
-      }
-    }
-      rawRequest += `host: ${sidecarHost}:${sidecarPort}\r\n`;
-      rawRequest += '\r\n';
-      upstreamSocket.write(rawRequest);
-      if (head.length > 0) {
-        upstreamSocket.write(head);
-      }
-      socket.pipe(upstreamSocket).pipe(socket);
-  });
-
-  upstreamSocket.on('error', (cause) => {
-    console.error(`[mission-control-preview-proxy] Runtime WS tunnel error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
-    if (!socket.destroyed) {
-      socket.write('HTTP/1.1 502 Bad Gateway\r\n\r\n');
-      socket.destroy();
-    }
-  });
-
-  upstreamSocket.on('close', () => {
-    console.log(`[mission-control-preview-proxy] Runtime WS tunnel closed [${clientId}]`);
-    if (!socket.destroyed) {
-      socket.end();
-    }
-  });
-
-  socket.on('close', () => {
-    if (!upstreamSocket.destroyed) {
-      upstreamSocket.end();
-    }
-  });
-
-  socket.on('error', (cause) => {
-    console.error(`[mission-control-preview-proxy] Browser WS tunnel error [${clientId}]:`, cause instanceof Error ? cause.message : String(cause));
-    if (!upstreamSocket.destroyed) {
-      upstreamSocket.destroy();
-    }
+  bridgeWss.handleUpgrade(req, socket, head, (client) => {
+    bridgeWss.emit('connection', client, req, requestUrl);
   });
 });
 
