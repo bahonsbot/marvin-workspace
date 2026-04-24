@@ -2,28 +2,28 @@
   "board": {
     "todo": [
       {
-        "id": "ab9d602a",
-        "text": "[Trading] Draft: SEC filing ingestion pipeline",
+        "id": "48197348",
+        "text": "[Other] Analyze: Recursive-ops failure modes",
         "column": "todo"
       },
       {
-        "id": "1ae36073",
-        "text": "[Trading] Analyze: Signal evidence-verification gaps",
+        "id": "ab65d7bd",
+        "text": "[Trading] Draft: Market-data ingestion scorecard",
         "column": "todo"
       },
       {
-        "id": "5e5fffd1",
-        "text": "[Career] Analyze: Creative-tool workflow friction shortlist",
+        "id": "0342ef18",
+        "text": "[Trading] Design: Sensitivity-range output schema",
         "column": "todo"
       },
       {
-        "id": "faa78932",
-        "text": "[Other] Draft: Loop-mitigation gate spec",
+        "id": "48c6c2f7",
+        "text": "[Trading] Draft: Signal review evidence template",
         "column": "todo"
       },
       {
-        "id": "0f83517a",
-        "text": "[Trading] Analyze: Actionable Alpha operator decision flow",
+        "id": "071566d9",
+        "text": "[Career] Design: Automation prototype acceptance checklist",
         "column": "todo"
       }
     ],
@@ -220,5 +220,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-23T04:35:33.076Z"
+  "updatedAt": "2026-04-24T01:04:14.508Z"
 }
