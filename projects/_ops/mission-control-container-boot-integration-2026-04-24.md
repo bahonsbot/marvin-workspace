@@ -149,3 +149,6 @@ The next live change should be:
 ## Bottom line
 The exact next live boot integration patch is now clear and small:
 replace the current container command with the Mission Control wrapper command, leave `/entrypoint.sh` alone, and verify health plus rollback immediately after restart.
+
+Use this companion maintenance-window checklist during the real cutover:
+- `projects/_ops/mission-control-container-cutover-checklist-2026-04-24.md`
