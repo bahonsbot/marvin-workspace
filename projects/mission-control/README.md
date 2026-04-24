@@ -73,11 +73,13 @@ Preferred operational interface inside the OpenClaw container from `projects/mis
 ./scripts/mission-control-service-restart.sh
 ./scripts/mission-control-service-health.sh
 ./scripts/mission-control-service-run.sh
+./scripts/openclaw-container-command-with-mission-control.sh node /hostinger/server.mjs
 ```
 
 Current implementation note:
 - these wrappers currently delegate to the existing preview bundle scripts
 - `./scripts/mission-control-service-run.sh` is the foreground supervisor wrapper for container-style deployment
+- `./scripts/openclaw-container-command-with-mission-control.sh` is the draft container command integration layer
 - build still uses `./scripts/preview-build.sh`
 - preview scripts remain the underlying implementation during the transition
 

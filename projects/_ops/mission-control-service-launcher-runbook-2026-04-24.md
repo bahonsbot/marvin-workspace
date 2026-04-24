@@ -172,6 +172,22 @@ Current behavior:
 - restarts the bundle if health fails
 - stops the bundle on exit/signals
 
+### Patch 5 — add a container command wrapper
+Status: complete for phase 1 integration draft.
+
+Container command wrapper now exists:
+- `scripts/openclaw-container-command-with-mission-control.sh`
+
+Purpose:
+- launch Mission Control supervision alongside the existing primary OpenClaw command
+- avoid patching `/entrypoint.sh` directly
+- make the compose/container command the integration seam instead of the image entrypoint
+
+Current behavior:
+- starts `mission-control-service-run.sh`
+- starts the primary command, defaulting to `node /hostinger/server.mjs`
+- if either child exits, terminates the other and exits non-zero/with child status
+
 ## Operational commands for the current phase
 
 ### Build
@@ -210,12 +226,19 @@ cd /data/.openclaw/workspace/projects/mission-control
 ./scripts/mission-control-service-run.sh
 ```
 
+### Container command wrapper
+```bash
+cd /data/.openclaw/workspace/projects/mission-control
+./scripts/openclaw-container-command-with-mission-control.sh node /hostinger/server.mjs
+```
+
 ### Transitional implementation detail
 The service wrappers currently call:
 - `./scripts/preview-start.sh`
 - `./scripts/preview-stop.sh`
 - `./scripts/preview-restart.sh`
 - `./scripts/mission-control-service-run.sh` supervises those wrappers rather than replacing the underlying runtime shape
+- `./scripts/openclaw-container-command-with-mission-control.sh` is a draft container-command integration layer, not yet wired into the live container boot path
 
 ## Health checklist after restart
 
@@ -248,3 +271,5 @@ Only after this service path is stable:
 The next implementation move should not be auth surgery.
 It should be converting the already-working three-process Mission Control runtime into a named, durable service path with explicit health and rollback.
 That makes every later R5 step safer.
+
+After that, the right boot integration seam is the container command, not `/entrypoint.sh` itself.
