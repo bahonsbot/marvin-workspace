@@ -273,3 +273,6 @@ It should be converting the already-working three-process Mission Control runtim
 That makes every later R5 step safer.
 
 After that, the right boot integration seam is the container command, not `/entrypoint.sh` itself.
+
+The exact live cutover proposal is documented in:
+- `projects/_ops/mission-control-container-boot-integration-2026-04-24.md`
