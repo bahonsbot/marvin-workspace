@@ -64,10 +64,19 @@ This is honest and minimizes risk.
 ### Preferred supervision approach
 Use **one supervisor for the bundle**, not three independently managed host services.
 
-Preferred choices, in order:
-1. container entrypoint or supervisor wrapper, if that is how this OpenClaw environment is actually controlled
-2. systemd user/service wrapper for the bundle
-3. systemd root service wrapper if user services are not practical
+Confirmed best choice for this environment:
+1. container entrypoint or foreground supervisor wrapper
+2. systemd user/service wrapper only if the deployment model changes later
+3. systemd root service wrapper only if container ownership goes away
+
+### Why this is the right fit here
+This environment is currently container-owned:
+- PID 1 is `docker-init`
+- entrypoint is `/entrypoint.sh node server.mjs`
+- OpenClaw runs under that container process tree
+- Mission Control currently runs as extra node processes directly under PID 1
+
+So a container-level bundle supervisor is the honest next integration point.
 
 ### Why bundle supervision is better first
 - current scripts already own pid/log/env orchestration
@@ -150,6 +159,19 @@ Rollback should be documented as:
 3. restart previous known-good bundle
 4. verify `preview.motiondisplay.cloud` and `dashboard.motiondisplay.cloud`
 
+### Patch 4 — add a foreground supervisor entrypoint
+Status: complete for phase 1 container-supervisor draft.
+
+Foreground supervisor wrapper now exists:
+- `scripts/mission-control-service-run.sh`
+
+Current behavior:
+- starts the current Mission Control bundle
+- validates health before entering steady state
+- runs a foreground loop with repeated health checks
+- restarts the bundle if health fails
+- stops the bundle on exit/signals
+
 ## Operational commands for the current phase
 
 ### Build
@@ -182,11 +204,18 @@ cd /data/.openclaw/workspace/projects/mission-control
 ./scripts/mission-control-service-health.sh
 ```
 
+### Foreground supervisor
+```bash
+cd /data/.openclaw/workspace/projects/mission-control
+./scripts/mission-control-service-run.sh
+```
+
 ### Transitional implementation detail
 The service wrappers currently call:
 - `./scripts/preview-start.sh`
 - `./scripts/preview-stop.sh`
 - `./scripts/preview-restart.sh`
+- `./scripts/mission-control-service-run.sh` supervises those wrappers rather than replacing the underlying runtime shape
 
 ## Health checklist after restart
 
