@@ -6,6 +6,9 @@ Use this checklist during the actual maintenance window when switching the live 
 This checklist assumes the cutover follows the proposal in:
 - `projects/_ops/mission-control-container-boot-integration-2026-04-24.md`
 
+If restart persistence is still uncertain, first run:
+- `projects/_ops/mission-control-host-persistence-diagnostic-2026-04-24.md`
+
 ## Scope of this cutover
 Change only the container command.
 
@@ -107,10 +110,23 @@ Update the container runtime definition so the command becomes:
 bash -lc '/data/.openclaw/workspace/projects/mission-control/scripts/openclaw-container-command-with-mission-control.sh node /hostinger/server.mjs'
 ```
 
-### 8. Restart only the affected container
+Important: do not treat an interactive shell test as sufficient.
+The actual container/service definition must be changed so the new command survives a real container restart.
+
+### 8. Verify the configured boot command before restart
+Before restarting, confirm the host-side container definition now points at the wrapper command.
+Use whatever control surface actually owns the container startup on this VPS, for example:
+- compose file / stack definition
+- container panel startup command
+- deploy configuration
+- generated service definition
+
+The key truth to verify is that the persisted configured command is now the wrapper command, not just that the wrapper worked once in a shell.
+
+### 9. Restart only the affected container
 Do not restart unrelated services if avoidable.
 
-### 9. Watch startup closely
+### 10. Watch startup closely
 Immediately inspect container logs and process state.
 
 Expected shape after boot:
@@ -125,7 +141,13 @@ Important known failure signature from the first live attempt:
 - this means the primary Hostinger/OpenClaw app booted under a PATH that could not find the `openclaw` CLI
 - if seen, roll back or fix the wrapper PATH before continuing
 
-### 10. Run immediate local health validation
+### 11. Confirm the restarted process tree matches the wrapped boot path
+After restart, verify the process tree is no longer the old plain boot path.
+Expected shape should include the wrapper in the actual boot chain, not only ad hoc Mission Control children from a previous shell run.
+
+At minimum, inspect process state and confirm the restart did not revert to the old effective command.
+
+### 12. Run immediate local health validation
 Inside container/workspace:
 
 ```bash
@@ -143,10 +165,10 @@ If this fails, stop and evaluate rollback immediately.
 
 ## After the restart
 
-### 11. Verify OpenClaw base process still behaves normally
+### 13. Verify OpenClaw base process still behaves normally
 Check that the primary app still came up and did not get replaced by only the Mission Control bundle.
 
-### 12. Verify Mission Control local endpoints
+### 14. Verify Mission Control local endpoints
 Run:
 
 ```bash
@@ -155,7 +177,7 @@ curl -fsS http://127.0.0.1:3005/api/runtime-bridge >/dev/null
 curl -fsS http://127.0.0.1:3006/healthz
 ```
 
-### 13. Verify external surface
+### 15. Verify external surface
 Check:
 
 ```bash
@@ -167,13 +189,13 @@ Expected right after cutover:
 - still `401 Unauthorized`
 - no unexpected 502/504 persistence
 
-### 14. Quick functional smoke test
+### 16. Quick functional smoke test
 Confirm at least:
 - dashboard front door responds
 - Mission Control app redirects/loads as expected behind auth
 - runtime descriptor route still answers locally
 
-### 15. Failure-isolation rehearsal if safe
+### 17. Failure-isolation rehearsal if safe
 In rehearsal or if operationally safe, confirm the wrapper behavior is still sane:
 - if the primary process dies, the wrapper should shut down Mission Control side processes
 - container should then restart per normal restart policy
@@ -187,20 +209,21 @@ Rollback immediately if any of the following occur and do not self-resolve quick
 - wrapper process is running but `node /hostinger/server.mjs` is missing
 - wrapper causes duplicate or runaway Mission Control process trees
 - startup logs show `spawn openclaw ENOENT`
+- after restart, process tree or service definition clearly shows the old plain boot command is still in effect
 
 ## Rollback steps
 
-### 16. Revert command
+### 18. Revert command
 Restore the old container command:
 
 ```bash
 node server.mjs
 ```
 
-### 17. Restart container
+### 19. Restart container
 Restart only the affected container.
 
-### 18. Clean up leftover Mission Control bundle if needed
+### 20. Clean up leftover Mission Control bundle if needed
 Inside container/workspace:
 
 ```bash
@@ -208,7 +231,7 @@ cd /data/.openclaw/workspace/projects/mission-control
 ./scripts/mission-control-service-stop.sh || true
 ```
 
-### 19. Re-verify baseline
+### 21. Re-verify baseline
 Check:
 - primary OpenClaw process healthy
 - dashboard front door returns expected auth response
@@ -216,9 +239,10 @@ Check:
 
 ## Success criteria
 The cutover is successful only if all of these are true:
+- the persisted container/service definition really uses the new wrapper command
 - container boots with the new wrapper command
 - `node /hostinger/server.mjs` is still the primary OpenClaw process
-- Mission Control bundle auto-starts
+- Mission Control bundle auto-starts after an actual container restart, not just from a manual shell invocation
 - health wrapper passes after restart
 - dashboard and lab front doors still answer normally
 - no restart loop
