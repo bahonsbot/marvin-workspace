@@ -65,6 +65,12 @@ cd /data/.openclaw/workspace/projects/mission-control
 ./scripts/mission-control-service-health.sh
 ```
 
+If shell location is uncertain, use the absolute path instead:
+
+```bash
+/data/.openclaw/workspace/projects/mission-control/scripts/mission-control-service-health.sh
+```
+
 Expected:
 - proxy pid alive
 - next pid alive
@@ -114,12 +120,23 @@ Expected shape after boot:
 - Mission Control next server present
 - Mission Control edge proxy present
 
+Important known failure signature from the first live attempt:
+- `Error: spawn openclaw ENOENT`
+- this means the primary Hostinger/OpenClaw app booted under a PATH that could not find the `openclaw` CLI
+- if seen, roll back or fix the wrapper PATH before continuing
+
 ### 10. Run immediate local health validation
 Inside container/workspace:
 
 ```bash
 cd /data/.openclaw/workspace/projects/mission-control
 ./scripts/mission-control-service-health.sh
+```
+
+If your shell is not already in the workspace root, use:
+
+```bash
+/data/.openclaw/workspace/projects/mission-control/scripts/mission-control-service-health.sh
 ```
 
 If this fails, stop and evaluate rollback immediately.
@@ -169,6 +186,7 @@ Rollback immediately if any of the following occur and do not self-resolve quick
 - persistent 502/504 at dashboard front door
 - wrapper process is running but `node /hostinger/server.mjs` is missing
 - wrapper causes duplicate or runaway Mission Control process trees
+- startup logs show `spawn openclaw ENOENT`
 
 ## Rollback steps
 

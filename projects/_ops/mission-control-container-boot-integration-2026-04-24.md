@@ -42,6 +42,11 @@ bash -lc '/data/.openclaw/workspace/projects/mission-control/scripts/openclaw-co
 
 Because `/entrypoint.sh` already executes `runuser -u node -- "$@"`, this means the wrapper and both child processes run as the `node` user.
 
+Important cutover note from live failure testing:
+- the wrapper must preserve a PATH that still exposes the `openclaw` CLI to the primary Hostinger app process
+- otherwise `server.mjs` can fail with `spawn openclaw ENOENT` during startup
+- the wrapper now defensively prepends expected runtime bin paths such as `/data/.npm-global/bin`
+
 ## What the wrapper does
 `projects/mission-control/scripts/openclaw-container-command-with-mission-control.sh`
 
@@ -91,11 +96,17 @@ Inside the container, expect to see:
 - Mission Control edge proxy
 
 ### Mission Control health
-Run:
+Run from the workspace root or by absolute path:
 
 ```bash
 cd /data/.openclaw/workspace/projects/mission-control
 ./scripts/mission-control-service-health.sh
+```
+
+or
+
+```bash
+/data/.openclaw/workspace/projects/mission-control/scripts/mission-control-service-health.sh
 ```
 
 Expected:
@@ -131,6 +142,11 @@ If the cutover fails:
    cd /data/.openclaw/workspace/projects/mission-control
    ./scripts/mission-control-service-stop.sh || true
    ```
+
+Known failure signature from the first live attempt:
+- `Error: spawn openclaw ENOENT`
+- if seen, treat it as a primary-process boot-environment failure, not a Mission Control app failure
+- verify PATH from inside the wrapper context before retrying
 
 ## Preconditions before applying the live cutover
 - current Mission Control scripts exist in the mounted workspace
