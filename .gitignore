@@ -48,3 +48,9 @@ projects/mission-control-lab/.lab-runtime/*
 !projects/mission-control-lab/.lab-runtime/.gitkeep
 projects/mission-control-lab/mission-control-preview.log
 projects/mission-control-lab/data/skills-summary-cache.json
+
+# Mission Control physical lab runtime snapshot; source truth lives in projects/mission-control until converted to a worktree
+projects/mission-control-lab/**
+!projects/mission-control-lab/
+!projects/mission-control-lab/scripts/
+!projects/mission-control-lab/scripts/mission-control-service-run.sh
