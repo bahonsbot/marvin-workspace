@@ -54,3 +54,7 @@ projects/mission-control-lab/**
 !projects/mission-control-lab/
 !projects/mission-control-lab/scripts/
 !projects/mission-control-lab/scripts/mission-control-service-run.sh
+
+# Mission Control runtime UI state. Source code owns schemas/adapters; live JSON stays on disk.
+projects/mission-control/data/*.json
+!projects/mission-control/data/.gitkeep

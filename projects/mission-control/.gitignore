@@ -26,3 +26,7 @@ scripts/__pycache__/
 # Runtime/generated local state
 mission-control-preview.log
 data/skills-summary-cache.json
+
+# Mission Control runtime state. Keep live files on disk, but do not version mutable UI state.
+data/*.json
+!data/.gitkeep
