@@ -2,28 +2,28 @@
   "board": {
     "todo": [
       {
-        "id": "48197348",
-        "text": "[Other] Analyze: Recursive-ops failure modes",
+        "id": "470bef74",
+        "text": "[Other] Design: Prompt-tool guardrail test matrix",
         "column": "todo"
       },
       {
-        "id": "ab65d7bd",
-        "text": "[Trading] Draft: Market-data ingestion scorecard",
+        "id": "797fe47e",
+        "text": "[Trading] Design: Actionable Alpha data contract map",
         "column": "todo"
       },
       {
-        "id": "0342ef18",
-        "text": "[Trading] Design: Sensitivity-range output schema",
+        "id": "8eea990d",
+        "text": "[Other] Design: Operator visibility checklist",
         "column": "todo"
       },
       {
-        "id": "48c6c2f7",
-        "text": "[Trading] Draft: Signal review evidence template",
+        "id": "ac65bfb7",
+        "text": "[Trading] Design: Real-time API adapter contract",
         "column": "todo"
       },
       {
-        "id": "071566d9",
-        "text": "[Career] Design: Automation prototype acceptance checklist",
+        "id": "1d7080e1",
+        "text": "[Trading] Analyze: Filing parser edge-case review",
         "column": "todo"
       }
     ],
@@ -220,5 +220,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-24T01:04:14.508Z"
+  "updatedAt": "2026-04-25T01:04:23.080Z"
 }
