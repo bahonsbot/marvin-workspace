@@ -156,6 +156,11 @@ type PendingRequest = {
   reject: (reason: Error) => void;
 };
 
+type PendingSubscribeState = {
+  sessionEvents: boolean;
+  messageSessionKey: string | null;
+};
+
 const CLIENT_ID = 'openclaw-control-ui';
 const CLIENT_VERSION = '0.1.0';
 const CLIENT_MODE = 'webchat';
@@ -591,10 +596,18 @@ export function useRuntimeBridge(
   const socketRef = useRef<WebSocket | null>(null);
   const websocketGenerationRef = useRef(0);
   const handleGatewayEventRef = useRef<(message: GatewayEventMessage) => void>(() => {});
+  const loadRef = useRef<(isBackgroundRefresh: boolean) => Promise<void>>(async () => {});
+  const hydrateHistoryRef = useRef<(sessionKey: string | null, options?: { force?: boolean }) => Promise<void>>(async () => {});
+  const subscribeToActiveSessionRef = useRef<(sessionKey: string | null) => Promise<void>>(async () => {});
   const pendingRef = useRef<Record<string, PendingRequest>>({});
-  const pendingTimeoutsRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const pendingTimeoutsRef = useRef<Record<string, number>>({});
+  const subscribedSessionKeyRef = useRef<string | null>(null);
+  const pendingSubscribeStateRef = useRef<PendingSubscribeState>({
+    sessionEvents: false,
+    messageSessionKey: null,
+  });
   const lastSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
-  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectTimerRef = useRef<number | null>(null);
   const reconnectAttemptRef = useRef(0);
   const bootstrapSessionPromisesRef = useRef<Partial<Record<string, Promise<void>>>>({});
   const latestSessionStateRef = useRef<RuntimeBridgeSessionState>('unavailable');
@@ -836,7 +849,7 @@ export function useRuntimeBridge(
     }
 
     try {
-      const res = await fetch('/api/runtime-bridge', {
+      const res = await fetch(`/api/runtime-bridge${isBackgroundRefresh ? '' : '?fresh=1'}`, {
         cache: 'no-store',
         headers: {
           Accept: 'application/json',
@@ -901,7 +914,7 @@ export function useRuntimeBridge(
 
     const attempt = reconnectAttemptRef.current + 1;
     reconnectAttemptRef.current = attempt;
-    const delayMs = Math.min(1000 * 2 ** Math.min(attempt - 1, 4), 15000);
+    const delayMs = Math.min(500 * 2 ** Math.min(attempt - 1, 4), 8000);
 
     console.info('[mission-control-runtime] scheduling reconnect', {
       reason,
@@ -909,7 +922,7 @@ export function useRuntimeBridge(
       delayMs,
     });
 
-    reconnectTimerRef.current = setTimeout(() => {
+    reconnectTimerRef.current = window.setTimeout(() => {
       reconnectTimerRef.current = null;
       if (!mountedRef.current) return;
       setReconnectNonce((current) => current + 1);
@@ -1004,6 +1017,8 @@ export function useRuntimeBridge(
       const shouldRecordEvent =
         Boolean(tool) ||
         eventName === 'chat' ||
+        eventName === 'session.message' ||
+        eventName === 'sessions.changed' ||
         (eventName === 'agent' && agentStream === 'lifecycle' && (lifecyclePhase === 'start' || lifecyclePhase === 'end'));
 
       if (shouldRecordEvent) {
@@ -1114,6 +1129,25 @@ export function useRuntimeBridge(
           load(true),
           hydrateHistory(targetSessionKey, { force: true }),
         ]);
+      }
+
+      if (eventName === 'session.message' || eventName === 'sessions.changed') {
+        if (!sessionMatchesTarget) return;
+
+        if (eventName === 'session.message') {
+          void hydrateHistory(targetSessionKey, { force: true }).catch((cause) => {
+            console.error('[mission-control-runtime] session.message hydrate failed', cause);
+          });
+          return;
+        }
+
+        void Promise.all([
+          load(true),
+          hydrateHistory(targetSessionKey, { force: true }),
+        ]).catch((cause) => {
+          console.error('[mission-control-runtime] sessions.changed resync failed', cause);
+        });
+        return;
       }
 
       if (eventName !== 'chat') return;
@@ -1238,6 +1272,93 @@ export function useRuntimeBridge(
     handleGatewayEventRef.current = handleGatewayEvent;
   }, [handleGatewayEvent]);
 
+  const sendGatewayRequest = useCallback(
+    (method: string, params: Record<string, unknown>, options?: { timeoutMs?: number }) => {
+      const socket = socketRef.current;
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
+        return Promise.reject(new Error('Mission Control websocket transport is not connected.'));
+      }
+
+      const requestId = generateId('mc-req');
+      const timeoutMs = options?.timeoutMs ?? 8000;
+
+      return new Promise<unknown>((resolve, reject) => {
+        pendingRef.current[requestId] = { resolve, reject };
+        pendingTimeoutsRef.current[requestId] = window.setTimeout(() => {
+          delete pendingRef.current[requestId];
+          delete pendingTimeoutsRef.current[requestId];
+          reject(new Error(`Gateway request timed out: ${method}`));
+        }, timeoutMs);
+
+        try {
+          socket.send(
+            JSON.stringify({
+              type: 'req',
+              id: requestId,
+              method,
+              params,
+            }),
+          );
+        } catch (cause) {
+          const timeout = pendingTimeoutsRef.current[requestId];
+          if (timeout) {
+            clearTimeout(timeout);
+            delete pendingTimeoutsRef.current[requestId];
+          }
+          delete pendingRef.current[requestId];
+          reject(cause instanceof Error ? cause : new Error(String(cause)));
+        }
+      });
+    },
+    [],
+  );
+
+  const subscribeToActiveSession = useCallback(
+    async (sessionKey: string | null) => {
+      if (!sessionKey) return;
+      if (latestSessionStateRef.current !== 'connected') return;
+      if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) return;
+
+      const pending = pendingSubscribeStateRef.current;
+      const needsSessionEvents = !pending.sessionEvents;
+      const currentMessageSessionKey = pending.messageSessionKey;
+      const currentSubscribedSessionKey = subscribedSessionKeyRef.current;
+      const needsMessageSwitch = currentMessageSessionKey !== sessionKey || currentSubscribedSessionKey !== sessionKey;
+
+      if (!needsSessionEvents && !needsMessageSwitch) {
+        return;
+      }
+
+      if (needsSessionEvents) {
+        await sendGatewayRequest('sessions.subscribe', {}, { timeoutMs: 6000 });
+        pending.sessionEvents = true;
+      }
+
+      if (currentMessageSessionKey && currentMessageSessionKey !== sessionKey) {
+        await sendGatewayRequest('sessions.messages.unsubscribe', { key: currentMessageSessionKey }, { timeoutMs: 6000 }).catch(() => undefined);
+      }
+
+      if (needsMessageSwitch) {
+        await sendGatewayRequest('sessions.messages.subscribe', { key: sessionKey }, { timeoutMs: 6000 });
+        pending.messageSessionKey = sessionKey;
+        subscribedSessionKeyRef.current = sessionKey;
+      }
+    },
+    [sendGatewayRequest],
+  );
+
+  useEffect(() => {
+    loadRef.current = load;
+  }, [load]);
+
+  useEffect(() => {
+    hydrateHistoryRef.current = hydrateHistory;
+  }, [hydrateHistory]);
+
+  useEffect(() => {
+    subscribeToActiveSessionRef.current = subscribeToActiveSession;
+  }, [subscribeToActiveSession]);
+
   const runtimeBridgeWebsocketConfigured = summary.runtimeBridge.transport.websocket.configured;
   const runtimeBridgeBrowserReachability = summary.runtimeBridge.transport.websocket.browserReachability;
   const runtimeBridgeWebsocketBridgeToken = summary.runtimeBridge.endpoints.websocketBridgeToken;
@@ -1247,17 +1368,15 @@ export function useRuntimeBridge(
   const runtimeBridgeBrowserTokenRelay = summary.runtimeBridge.auth.browserTokenRelay;
   const runtimeBridgeComposerSendEnabled = summary.runtimeBridge.capabilities.composerSend;
   const runtimeBridgeStopEnabled = summary.runtimeBridge.capabilities.stop;
-  const runtimeBridgeTransportKind = summary.runtimeBridge.transport.kind;
   const runtimeBridgeLiveEventsEnabled = summary.runtimeBridge.capabilities.eventStream;
   const runtimeBridgeHttpActionMode =
-    runtimeBridgeTransportKind === 'http-poll' &&
     runtimeBridgeComposerSendEnabled &&
     Boolean(runtimeBridgeSendEndpoint) &&
     Boolean(runtimeBridgeSessionPatchEndpoint);
 
   const isInteractiveSessionReady =
     session.state === 'connected' ||
-    (runtimeBridgeHttpActionMode && session.state !== 'error' && session.state !== 'rejected' && session.state !== 'closed');
+    (runtimeBridgeHttpActionMode && session.state !== 'rejected' && session.state !== 'unavailable');
 
   const hydrateHistoryAndReturn = useCallback(async (sessionKey: string | null, options?: { force?: boolean }) => {
     if (!sessionKey) return null;
@@ -1388,6 +1507,11 @@ export function useRuntimeBridge(
           : createEmptySession('unavailable', unavailableDetail),
       );
       setSendState('idle');
+      pendingSubscribeStateRef.current = {
+        sessionEvents: false,
+        messageSessionKey: null,
+      };
+      subscribedSessionKeyRef.current = null;
       return;
     }
 
@@ -1598,8 +1722,9 @@ export function useRuntimeBridge(
 
           const reconnectSessionKey = activeSessionKeyRef.current ?? MAIN_SESSION_KEY;
           void Promise.all([
-            load(true),
-            hydrateHistory(reconnectSessionKey, { force: true }),
+            subscribeToActiveSessionRef.current(reconnectSessionKey),
+            loadRef.current(true),
+            hydrateHistoryRef.current(reconnectSessionKey, { force: true }),
           ]).catch((cause) => {
             console.error('[mission-control-runtime] reconnect resync failed', cause);
           });
@@ -1638,8 +1763,10 @@ export function useRuntimeBridge(
       setWsDetail('Mission Control could not keep a browser socket attached to the WS sidecar. Retrying shortly.');
       setSession((current) => ({
         ...current,
-        state: 'error',
-        detail: 'Transport error while negotiating or maintaining the gateway session. Retrying shortly.',
+        state: runtimeBridgeHttpActionMode ? 'connecting' : 'error',
+        detail: runtimeBridgeHttpActionMode
+          ? 'Live websocket transport dropped. Retrying shortly while the server-owned HTTP bridge stays available.'
+          : 'Transport error while negotiating or maintaining the gateway session. Retrying shortly.',
       }));
       scheduleReconnect('socket-error');
     };
@@ -1648,8 +1775,16 @@ export function useRuntimeBridge(
       if (cancelled || websocketGeneration !== websocketGenerationRef.current) return;
       const closedAt = Date.now();
       socketRef.current = null;
+      pendingSubscribeStateRef.current = {
+        sessionEvents: false,
+        messageSessionKey: null,
+      };
+      subscribedSessionKeyRef.current = null;
       const latestSessionState = latestSessionStateRef.current;
+      const latestSendState = latestSendStateRef.current;
       const shouldRetry = latestSessionState !== 'rejected';
+      const preserveInteractiveSession = runtimeBridgeHttpActionMode && shouldRetry;
+      const hadActiveSend = latestSendState === 'streaming' || latestSendState === 'sending';
       rejectPending(new Error('Mission Control gateway transport closed.'));
       setTiming((current) => ({
         ...current,
@@ -1670,21 +1805,31 @@ export function useRuntimeBridge(
       );
       setSession((current) => ({
         ...current,
-        state: current.state === 'rejected' ? 'rejected' : event.wasClean ? 'closed' : 'error',
-        detail: event.reason
-          ? `Gateway transport closed: ${event.reason}${shouldRetry ? ' Retrying…' : ''}`
-          : event.wasClean
-            ? current.state === 'connected'
-              ? shouldRetry
-                ? 'Gateway session transport closed after connect. Retrying…'
-                : 'Gateway session transport closed after connect.'
-              : shouldRetry
-                ? 'Gateway session transport closed before connect completed. Retrying…'
-                : 'Gateway session transport closed before connect completed.'
-            : 'Gateway session transport dropped unexpectedly. Retrying…',
+        state: current.state === 'rejected'
+          ? 'rejected'
+          : preserveInteractiveSession
+            ? 'connecting'
+            : event.wasClean
+              ? 'closed'
+              : 'error',
+        detail: preserveInteractiveSession
+          ? 'Live websocket transport closed. Reconnecting now while the server-owned HTTP bridge remains available.'
+          : event.reason
+            ? `Gateway transport closed: ${event.reason}${shouldRetry ? ' Retrying…' : ''}`
+            : event.wasClean
+              ? current.state === 'connected'
+                ? shouldRetry
+                  ? 'Gateway session transport closed after connect. Retrying…'
+                  : 'Gateway session transport closed after connect.'
+                : shouldRetry
+                  ? 'Gateway session transport closed before connect completed. Retrying…'
+                  : 'Gateway session transport closed before connect completed.'
+              : 'Gateway session transport dropped unexpectedly. Retrying…',
       }));
       setSendState((current) => (current === 'streaming' || current === 'sending' ? 'error' : current));
-      setSendError((current) => current ?? 'Bridge transport closed before the live response completed.');
+      if (hadActiveSend) {
+        setSendError((current) => current ?? 'Bridge transport closed before the live response completed.');
+      }
       if (shouldRetry) {
         scheduleReconnect(`socket-close-${event.code || 'unknown'}`);
       }
@@ -1693,6 +1838,11 @@ export function useRuntimeBridge(
     return () => {
       cancelled = true;
       socketRef.current = null;
+      pendingSubscribeStateRef.current = {
+        sessionEvents: false,
+        messageSessionKey: null,
+      };
+      subscribedSessionKeyRef.current = null;
       socket?.close();
     };
   }, [
@@ -1708,10 +1858,15 @@ export function useRuntimeBridge(
     runtimeBridgeHttpActionMode,
     summary.runtimeBridge.auth.serverConnectConfigured,
     scheduleReconnect,
-    hydrateHistory,
-    hydrateHistoryAndReturn,
-    load,
   ]);
+
+  useEffect(() => {
+    if (session.state !== 'connected') return;
+    const sessionKey = activeSessionKeyRef.current ?? defaultTargetSession.key;
+    void subscribeToActiveSession(sessionKey).catch((cause) => {
+      console.error('[mission-control-runtime] subscribe/resubscribe failed', cause);
+    });
+  }, [defaultTargetSession.key, session.state, subscribeToActiveSession, liveTargetSession.key]);
 
   const pollForHttpRunCompletion = useCallback(async (
     sessionKey: string,
@@ -2034,6 +2189,7 @@ export function useRuntimeBridge(
       sessionGenerationRef.current += 1;
       activeSessionKeyRef.current = sessionKey;
       hydratedSessionKeyRef.current = null;
+      subscribedSessionKeyRef.current = null;
       setActiveSessionKey(sessionKey);
       setEntries([]);
       setHistory({

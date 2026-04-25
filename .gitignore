@@ -42,3 +42,9 @@ blender-test/
 
 # Environment secrets
 **/.env
+
+# Mission Control lab runtime snapshot generated state
+projects/mission-control-lab/.lab-runtime/*
+!projects/mission-control-lab/.lab-runtime/.gitkeep
+projects/mission-control-lab/mission-control-preview.log
+projects/mission-control-lab/data/skills-summary-cache.json

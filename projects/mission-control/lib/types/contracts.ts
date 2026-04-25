@@ -276,6 +276,7 @@ export interface OrchestratorIntegrationSummary {
   integrationMode: 'hybrid-reuse';
   chatEmbeddingStatus: 'not-implemented' | 'embedded-reuse';
   honestyNotes: string[];
+  runtimeBridgeLane?: 'preview' | 'lab' | 'live';
   runtimeBridge: {
     descriptorVersion: 'v2' | 'v3';
     status: 'ready' | 'degraded' | 'unavailable';
@@ -314,6 +315,9 @@ export interface OrchestratorIntegrationSummary {
       launchControl: string | null;
       websocket: string | null;
       websocketHealth: string | null;
+      sessionPatch?: string;
+      send?: string;
+      stop?: string;
       websocketBridgeToken?: string | null;
       gatewaySessionToken?: string | null;
     };

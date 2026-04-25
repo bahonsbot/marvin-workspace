@@ -11,6 +11,9 @@ This checklist is ordered for execution, not just discussion.
 Related docs:
 - `projects/_ops/mission-control-dashboard-live-rollout-plan-2026-04-21.md`
 - `projects/_ops/mission-control-auth-proxy-design-2026-04-22.md`
+- `projects/_ops/mission-control-pomerium-cutover-spec-2026-04-22.md`
+- `projects/_ops/mission-control-deployment-topology-spec-2026-04-22.md`
+- `projects/_ops/mission-control-pomerium-nginx-cutover-config-2026-04-22.md`
 - `docs/runbooks/mission-control-runtime-preview-runbook.md`
 
 ## Success criteria
@@ -229,7 +232,8 @@ This is the most important implementation block.
 4. [ ] Decide whether `dashboard` launches first as a temporary HTTPS-wrapped intermediate or only after the first Chat/runtime migration slice
 
 ## Best next implementation artifact after this checklist
-- [ ] a proxy-specific cutover spec, for example nginx/Caddy/Pomerium exact config shape
+- [x] a proxy-specific cutover spec, for example nginx/Caddy/Pomerium exact config shape
+  - completed as `projects/_ops/mission-control-pomerium-nginx-cutover-config-2026-04-22.md`
 - [ ] a Chat/runtime migration spec by file and function
 - [ ] a rollback runbook for dashboard cutover
 

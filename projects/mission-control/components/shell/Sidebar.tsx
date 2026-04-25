@@ -66,14 +66,14 @@ export function Sidebar() {
         borderRight: '1px solid var(--border)',
         display: 'flex',
         flexDirection: 'column',
-        padding: sidebarCollapsed ? '14px 8px 16px' : '20px 14px',
+        padding: '16px 10px 16px',
         gap: 6,
         overflowX: 'visible',
         overflowY: 'auto',
-        transition: 'width 280ms cubic-bezier(0.4, 0, 0.2, 1), padding 280ms cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'width 320ms cubic-bezier(0.22, 1, 0.36, 1)',
       }}
     >
-      <div style={{ marginBottom: 8 }}>
+      <div style={{ marginBottom: 8, height: 30, display: 'flex', alignItems: 'center' }}>
         <button
           type="button"
           onClick={toggleSidebarCollapsed}
@@ -90,7 +90,7 @@ export function Sidebar() {
             justifyContent: sidebarCollapsed ? 'center' : 'flex-end',
             padding: sidebarCollapsed ? 0 : '0 8px',
             cursor: 'pointer',
-            transition: 'all 180ms ease',
+            transition: 'background 220ms ease, border-color 220ms ease, color 220ms ease',
           }}
         >
           <ChevronLeft
@@ -104,26 +104,6 @@ export function Sidebar() {
         </button>
       </div>
 
-      <div style={{ marginBottom: 8, minHeight: 18 }}>
-        <div
-          style={{
-            fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: 'var(--text-muted)',
-            opacity: sidebarCollapsed ? 0 : 1,
-            transform: sidebarCollapsed ? 'translateX(-8px)' : 'translateX(0px)',
-            width: sidebarCollapsed ? 0 : 'auto',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            transition: 'opacity 180ms ease, transform 180ms ease, width 180ms ease',
-          }}
-        >
-          {domain === 'trading' ? 'Trading Domain' : 'General Domain'}
-        </div>
-      </div>
-
       {navItems.map((item) => {
         const isActive = isItemActive(pathname, item);
         const Icon = item.icon;
@@ -132,15 +112,18 @@ export function Sidebar() {
           <Link
             key={item.href}
             href={item.href}
+            prefetch={false}
             title={sidebarCollapsed ? item.label : undefined}
+            className="sidebar-item"
             style={{
               position: 'relative',
               display: 'flex',
               alignItems: 'center',
               justifyContent: sidebarCollapsed ? 'center' : 'flex-start',
               gap: sidebarCollapsed ? 0 : 10,
+              height: 40,
               minHeight: 40,
-              padding: sidebarCollapsed ? '8px 0' : '9px 12px',
+              padding: sidebarCollapsed ? '0' : '0 12px',
               borderRadius: 'var(--radius-md)',
               fontSize: 13,
               fontWeight: isActive ? 600 : 500,
@@ -148,13 +131,14 @@ export function Sidebar() {
               background: isActive ? 'var(--bg-sidebar-active)' : 'transparent',
               border: isActive ? '1px solid var(--border-accent)' : '1px solid transparent',
               textDecoration: 'none',
-              transition: 'background 180ms ease, color 180ms ease, border-color 180ms ease',
+              transition: 'background 220ms ease, color 220ms ease, border-color 220ms ease, box-shadow 220ms ease',
               overflow: 'visible',
             }}
           >
             {!sidebarCollapsed ? (
               <span
                 aria-hidden
+                className="sidebar-active-rail"
                 style={{
                   position: 'absolute',
                   left: -1,
@@ -172,6 +156,7 @@ export function Sidebar() {
             ) : null}
 
             <span
+              className="sidebar-icon"
               style={{
                 width: 20,
                 height: 20,
@@ -179,33 +164,35 @@ export function Sidebar() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: isActive ? 'var(--accent-deep)' : 'var(--text-muted)',
-                transform: isActive ? 'translateY(-1px)' : 'translateY(0px)',
-                transition: 'transform 180ms ease, color 180ms ease',
-                borderBottom: sidebarCollapsed && isActive ? '2px solid var(--accent-mid)' : '2px solid transparent',
+                transform: 'translateY(0px)',
+                transition: 'color 220ms ease, opacity 220ms ease, border-color 220ms ease',
+                boxShadow: sidebarCollapsed && isActive ? '0 0 0 1px rgba(93, 120, 106, 0.12), 0 6px 14px rgba(93, 120, 106, 0.08)' : 'none',
               }}
             >
               <Icon size={18} strokeWidth={1.9} />
             </span>
 
-            <span
-              style={{
-                color: isActive ? 'var(--accent-deep)' : 'var(--text-muted)',
-                fontWeight: isActive ? 600 : 500,
-                opacity: sidebarCollapsed ? 0 : 1,
-                transform: sidebarCollapsed ? 'translateX(-8px)' : 'translateX(0px)',
-                width: sidebarCollapsed ? 0 : 'auto',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                transition: 'opacity 180ms ease, transform 180ms ease, width 180ms ease, color 180ms ease',
-                pointerEvents: sidebarCollapsed ? 'none' : 'auto',
-              }}
-            >
-              {item.label}
-            </span>
+            {sidebarCollapsed ? null : (
+              <span
+                className="sidebar-label"
+                style={{
+                  color: isActive ? 'var(--accent-deep)' : 'var(--text-muted)',
+                  fontWeight: isActive ? 600 : 500,
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  opacity: 1,
+                  transform: 'translateX(0px)',
+                  transition: 'color 220ms ease, opacity 180ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
+              >
+                {item.label}
+              </span>
+            )}
 
             {sidebarCollapsed ? (
               <span
                 role="tooltip"
+                className="sidebar-collapsed-tooltip"
                 style={{
                   position: 'absolute',
                   left: 'calc(100% + 10px)',
@@ -225,7 +212,6 @@ export function Sidebar() {
                   boxShadow: '0 8px 22px rgba(0,0,0,0.22)',
                   zIndex: 20,
                 }}
-                className="sidebar-collapsed-tooltip"
               >
                 {item.label}
               </span>
@@ -237,22 +223,34 @@ export function Sidebar() {
       <SidebarAmbientWidget collapsed={sidebarCollapsed} />
 
       <style jsx>{`
-        a:hover {
-          background: var(--bg-sidebar-hover) !important;
+        .sidebar-item:hover {
+          background: rgba(255, 255, 255, 0.74) !important;
+          border-color: rgba(197, 138, 73, 0.22) !important;
+          box-shadow: 0 10px 22px rgba(41, 61, 52, 0.08), inset 0 0 0 1px rgba(197, 138, 73, 0.08);
         }
 
-        a:hover span:first-of-type {
-          color: var(--accent-warm) !important;
-          transform: translateY(-1px);
-        }
-
-        a:hover .sidebar-collapsed-tooltip,
-        a:focus-visible .sidebar-collapsed-tooltip {
+        .sidebar-item:hover .sidebar-icon {
+          color: #c58a49 !important;
           opacity: 1;
         }
 
-        a:hover [aria-hidden='true'] {
+        .sidebar-item:hover .sidebar-label {
+          color: rgba(54, 86, 73, 0.98) !important;
+          transform: translateX(1px);
+        }
+
+        .sidebar-item:hover .sidebar-collapsed-tooltip,
+        .sidebar-item:focus-visible .sidebar-collapsed-tooltip {
+          opacity: 1;
+        }
+
+        .sidebar-item:hover .sidebar-active-rail {
           transform: scaleY(1) !important;
+        }
+
+        button:hover {
+          background: rgba(255, 255, 255, 0.58);
+          border-color: rgba(93, 120, 106, 0.18);
         }
       `}</style>
     </aside>

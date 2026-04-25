@@ -1,4 +1,4 @@
-export type RuntimeBridgeLane = 'preview' | 'live';
+export type RuntimeBridgeLane = 'preview' | 'lab' | 'live';
 
 type HeaderReader = {
   get(name: string): string | null | undefined;
@@ -15,13 +15,24 @@ function normalizeHost(rawHost: string | null | undefined): string | null {
   }
 }
 
+function isLoopbackHost(hostname: string | null): boolean {
+  return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1';
+}
+
 function isPreviewHost(hostname: string | null): boolean {
   if (!hostname) return false;
-  return hostname === 'preview.motiondisplay.cloud' || hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1';
+  return hostname === 'preview.motiondisplay.cloud' || isLoopbackHost(hostname);
+}
+
+function isLabHost(hostname: string | null): boolean {
+  return hostname === 'lab.motiondisplay.cloud';
 }
 
 export function resolveRuntimeBridgeLaneFromHost(host: string | null | undefined): RuntimeBridgeLane {
-  return isPreviewHost(normalizeHost(host)) ? 'preview' : 'live';
+  const hostname = normalizeHost(host);
+  if (isPreviewHost(hostname)) return 'preview';
+  if (isLabHost(hostname)) return 'lab';
+  return 'live';
 }
 
 export function resolveRuntimeBridgeLaneFromHeaders(headers: HeaderReader): RuntimeBridgeLane {

@@ -14,6 +14,7 @@ import { renderResearchMarkdown, resolveWebResearchProvider, runWebResearch, wri
 
 const execFileAsync = promisify(execFile);
 const workspaceRoot = '/data/.openclaw/workspace';
+const missionControlPathPrefix = '/data/.npm-global/bin:/data/.local/bin:/data/bin:/data/.bun/bin';
 const storePath = path.join(workspaceRoot, 'projects', 'mission-control', 'data', 'autonomous-tasks.json');
 const lifecycleEventsPath = path.join(workspaceRoot, 'projects', 'mission-control', 'data', 'task-lifecycle-events.json');
 const autonomyPath = path.join(workspaceRoot, 'AUTONOMOUS.md');
@@ -28,6 +29,10 @@ const defaultAgentModelAlias = {
   reviewer: 'minimax2.7',
   'content-creator': null,
 };
+
+function withMissionControlPath(command) {
+  return `export PATH=${missionControlPathPrefix}:$PATH; ${command}`;
+}
 
 function now() {
   return Date.now();
@@ -713,7 +718,7 @@ try {
 
   const result = await execFileAsync(
     'bash',
-    ['-lc', `openclaw agent --session-id ${JSON.stringify(preparedSession.sessionId)} --message ${JSON.stringify(message)} --thinking ${JSON.stringify(thinking)} --json --timeout 600`],
+    ['-lc', withMissionControlPath(`openclaw agent --session-id ${JSON.stringify(preparedSession.sessionId)} --message ${JSON.stringify(message)} --thinking ${JSON.stringify(thinking)} --json --timeout 600`)],
     {
       cwd: workspaceRoot,
       timeout: 620000,

@@ -318,6 +318,23 @@ function normalizeGeneratedTitle(rawTitle: string, description?: string): string
   return `${genericPrefixMatch[1]}${(candidate || genericPrefixMatch[2].trim()).trim()}`;
 }
 
+function extractLegacyTaskLineText(rawTaskText: unknown, fallbackTitle: unknown): string {
+  if (typeof rawTaskText === 'string') {
+    const firstLine = rawTaskText
+      .replace(/\r\n/g, '\n')
+      .split('\n')
+      .map((line) => line.trim())
+      .find(Boolean);
+    if (firstLine) return firstLine;
+  }
+
+  if (typeof fallbackTitle === 'string' && fallbackTitle.trim()) {
+    return fallbackTitle.trim();
+  }
+
+  return 'Untitled task';
+}
+
 function extractEmbeddedTaskTitleAndDescription(rawTitle: unknown, rawDescription: unknown): { title: string; description?: string } {
   const fallbackTitle = typeof rawTitle === 'string' && rawTitle.trim() ? rawTitle.trim() : 'Untitled task';
   const explicitDescription = normalizeGeneratedBrief(typeof rawDescription === 'string' ? rawDescription : undefined);
@@ -473,6 +490,9 @@ function normalizeTask(task: Partial<MCAutoTask>): MCAutoTask {
     linkedAutonomyRef: task.linkedAutonomyRef?.kind === 'autonomous-md'
       ? {
           ...task.linkedAutonomyRef,
+          taskTextNormalized: normalizeLegacyTaskText(
+            extractLegacyTaskLineText(task.linkedAutonomyRef.taskText, task.title),
+          ),
           queueLinked: task.linkedAutonomyRef.queueLinked === true,
           queueLabel: typeof task.linkedAutonomyRef.queueLabel === 'string' ? task.linkedAutonomyRef.queueLabel : undefined,
           completedInTasksLog: task.linkedAutonomyRef.completedInTasksLog === true,
@@ -697,6 +717,67 @@ function findLinkedTask(store: MCAutoTaskStore, entry: LegacyTaskEntry): MCAutoT
   );
 }
 
+function activeLinkedLegacyTaskPriority(task: MCAutoTask): number {
+  switch (task.status) {
+    case 'review':
+      return 4;
+    case 'in-progress':
+      return 3;
+    case 'todo':
+      return 2;
+    case 'backlog':
+      return 1;
+    default:
+      return 0;
+  }
+}
+
+function compareActiveLinkedLegacyTasks(a: MCAutoTask, b: MCAutoTask): number {
+  return (
+    activeLinkedLegacyTaskPriority(b) - activeLinkedLegacyTaskPriority(a)
+    || Number(Boolean(b.run)) - Number(Boolean(a.run))
+    || Number((b.artifacts?.length ?? 0) > 0) - Number((a.artifacts?.length ?? 0) > 0)
+    || Number((b.feedback?.length ?? 0) > 0) - Number((a.feedback?.length ?? 0) > 0)
+    || b.updatedAt - a.updatedAt
+    || b.createdAt - a.createdAt
+    || b.version - a.version
+    || a.id.localeCompare(b.id)
+  );
+}
+
+export function dedupeActiveLinkedLegacyTasks(store: MCAutoTaskStore): { removed: number; keptIds: string[]; removedIds: string[] } {
+  const groups = new Map<string, MCAutoTask[]>();
+
+  for (const task of store.tasks) {
+    const link = task.linkedAutonomyRef;
+    if (!link || link.kind !== 'autonomous-md' || link.sourceFile !== AUTONOMOUS_PATH) continue;
+    if (task.status === 'done') continue;
+    if (!link.taskTextNormalized) continue;
+
+    const group = groups.get(link.taskTextNormalized) ?? [];
+    group.push(task);
+    groups.set(link.taskTextNormalized, group);
+  }
+
+  const idsToRemove = new Set<string>();
+  const keptIds: string[] = [];
+
+  for (const tasks of groups.values()) {
+    if (tasks.length < 2) continue;
+    const ranked = [...tasks].sort(compareActiveLinkedLegacyTasks);
+    const [kept, ...duplicates] = ranked;
+    keptIds.push(kept.id);
+    for (const duplicate of duplicates) idsToRemove.add(duplicate.id);
+  }
+
+  if (idsToRemove.size === 0) {
+    return { removed: 0, keptIds: [], removedIds: [] };
+  }
+
+  store.tasks = store.tasks.filter((task) => !idsToRemove.has(task.id));
+  return { removed: idsToRemove.size, keptIds, removedIds: [...idsToRemove] };
+}
+
 function insertTaskIntoSection(markdown: string, section: MCAutoLegacySection, taskText: string): string {
   const lines = markdown.split('\n');
   const header = SECTION_HEADERS[section];
@@ -768,7 +849,7 @@ async function safelyReadAutonomousMarkdown(): Promise<string | null> {
   }
 }
 
-export async function importLegacyAutonomousTasks(): Promise<{ imported: number; updated: number; store: MCAutoTaskStore }> {
+export async function importLegacyAutonomousTasks(): Promise<{ imported: number; updated: number; deduped: number; store: MCAutoTaskStore }> {
   // The structured JSON store is the only current-state authority.
   // Import only seeds missing legacy tasks and refreshes queue-backed tasks that still match the active run identity.
   const [store, markdown, queueEntries] = await Promise.all([
@@ -784,9 +865,18 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
   let nextMarkdown = markdown;
   let imported = 0;
   let updated = 0;
+  let metaChanged = false;
+  const dedupe = dedupeActiveLinkedLegacyTasks(store);
+  if (dedupe.removed > 0) {
+    metaChanged = true;
+  }
 
   for (const entry of legacyTasks) {
     if (findLinkedTask(store, entry)) {
+      if (suppressed.has(entry.normalizedText)) {
+        suppressed.delete(entry.normalizedText);
+        metaChanged = true;
+      }
       clearSuppressedKey(store, entry.normalizedText);
       continue;
     }
@@ -984,14 +1074,14 @@ export async function importLegacyAutonomousTasks(): Promise<{ imported: number;
     await fs.writeFile(AUTONOMOUS_PATH, nextMarkdown, 'utf8');
   }
 
-  if (imported > 0 || updated > 0) {
+  if (imported > 0 || updated > 0 || metaChanged) {
     await saveStructuredTasks(store);
   }
   if (lifecycleEvents.length > 0) {
     await Promise.all(lifecycleEvents);
   }
 
-  return { imported, updated, store };
+  return { imported, updated, deduped: dedupe.removed, store };
 }
 
 export async function createManualAutonomousTask(input: {

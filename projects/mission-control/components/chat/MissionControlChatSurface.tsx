@@ -45,10 +45,10 @@ import type { OrchestratorIntegrationSummary } from '@/lib/types/contracts';
 const TOOL_BURST_WINDOW_MS = 10000;
 
 type TopControlMenu = 'agent' | 'model' | 'effort' | null;
-type RuntimeStatusTone = 'ready' | 'working' | 'finalizing' | 'attention' | 'disconnected';
+type RuntimeStatusTone = 'ready' | 'working' | 'finalizing' | 'attention' | 'recovering' | 'disconnected';
 
 type RuntimeStatus = {
-  label: 'Ready' | 'Working' | 'Finalizing' | 'Attention' | 'Disconnected';
+  label: 'Ready' | 'Working' | 'Finalizing' | 'Attention' | 'Recovering' | 'Disconnected';
   tone: RuntimeStatusTone;
   detail: string;
 };
@@ -202,6 +202,14 @@ function runtimeStatusStyle(tone: RuntimeStatusTone): CSSProperties {
       border: '1px solid rgba(181, 88, 74, 0.34)',
       background: 'rgba(244, 224, 220, 0.88)',
       color: '#7c2e24',
+    };
+  }
+  if (tone === 'recovering') {
+    return {
+      ...pillStyle(),
+      border: '1px solid rgba(96, 118, 145, 0.32)',
+      background: 'rgba(230, 236, 245, 0.9)',
+      color: '#314b66',
     };
   }
   if (tone === 'disconnected') {
@@ -854,6 +862,8 @@ export function MissionControlChatSurface({
   const historyThinkingLevel = bridge?.history.thinkingLevel ?? null;
   const historySessionId = bridge?.history.sessionId ?? null;
   const liveTargetSession = live?.targetSession.key ?? null;
+  const runtimeBridgeLane = summary.runtimeBridgeLane ?? 'live';
+  const runtimeBridgeLaneLabel = runtimeBridgeLane === 'preview' ? 'Preview' : runtimeBridgeLane === 'lab' ? 'Lab' : 'Live';
   const summaryFallbackTargetKey = activation?.targetSessionKey ?? summary.sessionContext.mainSession.key ?? null;
   const summaryFallbackTargetLabel = summaryFallbackTargetKey
     ? summaryFallbackTargetKey === summary.sessionContext.mainSession.key
@@ -891,6 +901,8 @@ export function MissionControlChatSurface({
   const liveSendError = live?.sendError ?? null;
   const liveActiveRunId = live?.activeRunId ?? null;
   const httpInteractiveRuntime = (sessionState === 'connected' && wsState !== 'open' && (liveCanSend || liveCanAbort || liveSendState === 'sending' || liveSendState === 'streaming' || Boolean(liveActiveRunId)));
+  const handshakeRuntime = wsState === 'open' && (sessionState === 'waiting' || sessionState === 'connecting' || sessionState === 'challenged');
+  const recoveringRuntime = (sessionState === 'connecting' || sessionState === 'waiting') && wsState !== 'unavailable' && (liveCanSend || liveCanAbort || Boolean(liveActiveRunId) || liveSendState === 'idle' || wsState === 'connecting' || wsState === 'open');
   const [composerValue, setComposerValue] = useState('');
   const [composerError, setComposerError] = useState<string | null>(null);
   const [sudoOrchestrationTrigger, setSudoOrchestrationTrigger] = useState(0);
@@ -1008,21 +1020,30 @@ export function MissionControlChatSurface({
       return {
         label: 'Attention',
         tone: 'attention',
-        detail: liveSendError || effectiveBridgeError || sessionDetail || 'Runtime bridge needs attention.',
+        detail: liveSendError || effectiveBridgeError || sessionDetail || `${runtimeBridgeLaneLabel} runtime bridge needs attention.`,
+      };
+    }
+    if (handshakeRuntime || recoveringRuntime) {
+      return {
+        label: 'Recovering',
+        tone: 'recovering',
+        detail: handshakeRuntime
+          ? sessionDetail || wsDetail || `Mission Control is negotiating the ${runtimeBridgeLane === 'lab' ? 'lab' : 'live'} gateway handshake.`
+          : sessionDetail || wsDetail || `Mission Control is reattaching the ${runtimeBridgeLane === 'lab' ? 'lab' : 'live'} websocket while the HTTP bridge remains available.`,
       };
     }
     if (sessionState !== 'connected') {
       return {
         label: 'Disconnected',
         tone: 'disconnected',
-        detail: sessionDetail || wsDetail || 'Mission Control runtime is not connected yet.',
+        detail: sessionDetail || wsDetail || `${runtimeBridgeLaneLabel} runtime is not connected yet.`,
       };
     }
     if (wsState !== 'open' && !httpInteractiveRuntime) {
       return {
         label: 'Disconnected',
         tone: 'disconnected',
-        detail: sessionDetail || wsDetail || 'Mission Control runtime is not connected yet.',
+        detail: sessionDetail || wsDetail || `${runtimeBridgeLaneLabel} runtime is not connected yet.`,
       };
     }
     if (liveSendState === 'sending' || liveSendState === 'streaming') {
@@ -1030,7 +1051,7 @@ export function MissionControlChatSurface({
         label: 'Working',
         tone: 'working',
         detail: httpInteractiveRuntime
-          ? 'Marvin is actively working through the server-owned HTTP bridge.'
+          ? `Marvin is actively working through the server-owned ${runtimeBridgeLane === 'lab' ? 'lab' : 'live'} HTTP bridge.`
           : 'Marvin is actively working on the current run.',
       };
     }
@@ -1046,8 +1067,10 @@ export function MissionControlChatSurface({
       tone: 'ready',
       detail: liveCanSend
         ? httpInteractiveRuntime
-          ? 'Ready through the server-owned HTTP bridge. Live websocket events are unavailable.'
-          : 'Ready for the next prompt.'
+          ? `Ready through the server-owned ${runtimeBridgeLane === 'lab' ? 'lab' : 'live'} HTTP bridge. Live websocket events are unavailable.`
+          : runtimeBridgeLane === 'lab'
+            ? 'Lab lane is ready for the next prompt.'
+            : 'Ready for the next prompt.'
         : 'Ready state is waiting on runtime session targeting.',
     };
   })();
@@ -1239,6 +1262,8 @@ export function MissionControlChatSurface({
   async function submitComposerPrompt(nextPrompt: string) {
     if (!nextPrompt && attachedFiles.length === 0) return;
 
+    const draftComposerValue = composerValue;
+    const draftAttachedFiles = attachedFiles;
     const attachmentNote = attachedFiles.length
       ? `\n\nAttached files uploaded to workspace:\n${attachedFiles.map((file) => `- ${file.path}`).join('\n')}`
       : '';
@@ -1252,6 +1277,8 @@ export function MissionControlChatSurface({
         setAttachedFiles([]);
         setSudoOrchestrationTrigger((current) => current + 1);
       } catch (cause) {
+        setComposerValue(draftComposerValue);
+        setAttachedFiles(draftAttachedFiles);
         setComposerError(cause instanceof Error ? cause.message : 'Mission Control could not hand the brief to Sudo.');
       }
       return;
@@ -1261,10 +1288,12 @@ export function MissionControlChatSurface({
 
     try {
       setComposerError(null);
-      await live.sendPrompt(finalPrompt);
       setComposerValue('');
       setAttachedFiles([]);
+      await live.sendPrompt(finalPrompt);
     } catch (cause) {
+      setComposerValue(draftComposerValue);
+      setAttachedFiles(draftAttachedFiles);
       setComposerError(cause instanceof Error ? cause.message : 'Mission Control could not send the prompt.');
     }
   }
@@ -1873,7 +1902,7 @@ export function MissionControlChatSurface({
         composerValue={composerValue}
         setComposerValue={setComposerValue}
         onComposerKeyDown={handleComposerKeyDown}
-        composerDisabled={!liveTargetSession || sessionState !== 'connected' || (!liveCanSend && !httpInteractiveRuntime) || liveSendState === 'sending' || liveSendState === 'streaming'}
+        composerDisabled={!liveTargetSession || (sessionState !== 'connected' && !recoveringRuntime) || (!liveCanSend && !httpInteractiveRuntime && !recoveringRuntime) || liveSendState === 'sending' || liveSendState === 'streaming'}
         composerPlaceholder={
           sessionState === 'connected'
             ? liveTargetSession
@@ -1890,8 +1919,8 @@ export function MissionControlChatSurface({
           void toggleRecording();
         }}
         onNewSession={() => void handleNewSession()}
-        canCreateNewSession={liveCanSend && liveSendState !== 'sending' && liveSendState !== 'streaming'}
-        canSubmit={((activation?.seatSlug === 'dev-team') || liveCanSend) && (composerValue.trim().length > 0 || attachedFiles.length > 0)}
+        canCreateNewSession={(liveCanSend || recoveringRuntime) && liveSendState !== 'sending' && liveSendState !== 'streaming'}
+        canSubmit={((activation?.seatSlug === 'dev-team') || liveCanSend || recoveringRuntime) && (composerValue.trim().length > 0 || attachedFiles.length > 0)}
         sendButtonLabel={activation?.seatSlug === 'dev-team' ? 'Let Sudo handle this' : liveSendState === 'sending' ? 'Sending' : liveSendState === 'streaming' ? 'Waiting' : 'Send'}
         sendButtonTitle={activation?.seatSlug === 'dev-team' ? 'Let Sudo handle this' : liveSendState === 'sending' ? 'Sending...' : liveSendState === 'streaming' ? 'Waiting...' : 'Send'}
         speechSupportReason={speechSupportReason}

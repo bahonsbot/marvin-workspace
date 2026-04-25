@@ -7,6 +7,7 @@ import { useMissionControlRuntime } from '@/components/chat/MissionControlRuntim
 import { Sidebar } from './Sidebar';
 import { TopTabBar } from './TopTabBar';
 import { useShellContext } from './ShellContext';
+import styles from './shell.module.css';
 
 function toastSummary(event: { summary?: string; artifactPath?: string; type: string }) {
   const raw = String(event.summary || '').trim();
@@ -28,18 +29,7 @@ function ToastRail() {
   if (orderedToasts.length === 0) return null;
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 86,
-        right: 20,
-        zIndex: 80,
-        display: 'grid',
-        gap: 10,
-        width: 'min(360px, calc(100vw - 32px))',
-        pointerEvents: 'none',
-      }}
-    >
+    <div className={styles.toastRail}>
       {orderedToasts.map(({ event }) => {
         const title =
           event.type === 'task.moved_to_review'
@@ -123,23 +113,15 @@ function ToastRail() {
   );
 }
 
-export function AppShellClient({
-  children,
-  bottomStrip,
-}: {
-  children: ReactNode;
-  bottomStrip: ReactNode;
-}) {
+export function AppShellClient({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isChatRoute = pathname === '/general/chat' || pathname === '/chat';
-  const bottomStripEnabled = false;
-  const hideBottomStrip = isChatRoute || !bottomStripEnabled;
   const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/skills', '/general/crons', '/general/memory', '/general/files']);
   const isCompactTopRoute = compactTopRoutes.has(pathname);
   const { sidebarCollapsed } = useShellContext();
 
   return (
-    <div style={{ minHeight: '100vh', height: '100vh', overflow: 'hidden' }}>
+    <div className={styles.appShellRoot}>
       <TopTabBar />
       <ToastRail />
       <div
@@ -150,26 +132,16 @@ export function AppShellClient({
         }}
       >
         <Sidebar />
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateRows: hideBottomStrip ? '1fr' : '1fr auto',
-            minWidth: 0,
-            minHeight: 0,
-            height: '100%',
-          }}
-        >
+        <div className={styles.appShellContentColumn}>
           <main
-            className="app-shell-main"
+            className={`app-shell-main ${styles.appShellMain}`}
             style={{
-              minHeight: 0,
               overflow: isChatRoute ? 'hidden' : 'auto',
               padding: isCompactTopRoute ? '14px 32px 12px' : undefined,
             }}
           >
             {children}
           </main>
-          {hideBottomStrip ? null : bottomStrip}
         </div>
       </div>
     </div>

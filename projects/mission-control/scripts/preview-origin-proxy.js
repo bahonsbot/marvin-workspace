@@ -54,6 +54,10 @@ function hasValidBasicAuth(req) {
 }
 
 function isSameOriginUpgrade(req, requestUrl) {
+  return isSameOriginUpgradeForPath(req, requestUrl, requestUrl.pathname);
+}
+
+function isSameOriginUpgradeForPath(req, requestUrl, expectedPath) {
   const originHeader = Array.isArray(req.headers.origin) ? req.headers.origin[0] : req.headers.origin;
   const hostHeader = Array.isArray(req.headers.host) ? req.headers.host[0] : req.headers.host;
 
@@ -63,10 +67,18 @@ function isSameOriginUpgrade(req, requestUrl) {
 
   try {
     const originUrl = new URL(originHeader);
-    return originUrl.host === hostHeader && originUrl.pathname === '/' && requestUrl.pathname === publicWsPath;
+    return originUrl.host === hostHeader && originUrl.pathname === '/' && requestUrl.pathname === expectedPath;
   } catch {
     return false;
   }
+}
+
+function normalizeHostHeader(value) {
+  return (value || '').split(',')[0].trim().replace(/:\d+$/, '').toLowerCase();
+}
+
+function isPreviewHost(hostname) {
+  return hostname === 'preview.motiondisplay.cloud';
 }
 
 
@@ -75,6 +87,7 @@ const publicPort = parsePort(process.env.MISSION_CONTROL_PREVIEW_PORT, 3005);
 const internalNextHost = (process.env.MISSION_CONTROL_PREVIEW_INTERNAL_HOST || '127.0.0.1').trim();
 const internalNextPort = parsePort(process.env.MISSION_CONTROL_PREVIEW_INTERNAL_PORT, 3007);
 const publicWsPath = (process.env.MISSION_CONTROL_WS_PUBLIC_PATH || '/api/runtime-bridge/ws').trim();
+const liveWsPath = (process.env.MISSION_CONTROL_WS_LIVE_PUBLIC_PATH || '/api/runtime-bridge/live').trim();
 const sidecarHost = (process.env.MISSION_CONTROL_WS_SIDECAR_HOST || '127.0.0.1').trim();
 const sidecarPort = parsePort(process.env.MISSION_CONTROL_WS_SIDECAR_PORT, 3006);
 const sidecarPath = (process.env.MISSION_CONTROL_WS_SIDECAR_PATH || '/mission-control-runtime').trim();
@@ -152,11 +165,21 @@ bridgeWss.on('connection', (client, req, requestUrl) => {
   console.log(`[mission-control-preview-proxy] Runtime WS tunnel open [${clientId}]`);
 
   const upstreamUrl = new URL(sidecarTarget);
-  upstreamUrl.search = requestUrl.search || '';
+  const upstreamParams = new URLSearchParams(requestUrl.search || '');
+  upstreamParams.set('bridgeToken', bridgeToken);
+  upstreamUrl.search = upstreamParams.toString() ? `?${upstreamParams.toString()}` : '';
+  console.log(`[mission-control-preview-proxy] Runtime WS upstream target [${clientId}] ${upstreamUrl.toString()}`);
   const upstream = new WebSocket(upstreamUrl.toString());
+  let sawClientMessage = false;
+  let sawUpstreamMessage = false;
 
   upstream.on('open', () => {
+    console.log(`[mission-control-preview-proxy] Runtime WS upstream open [${clientId}]`);
     client.on('message', (data, isBinary) => {
+      if (!sawClientMessage) {
+        sawClientMessage = true;
+        console.log(`[mission-control-preview-proxy] First browser->sidecar WS frame [${clientId}] binary=${isBinary}`);
+      }
       if (upstream.readyState === WebSocket.OPEN) {
         upstream.send(data, { binary: isBinary });
       }
@@ -164,6 +187,11 @@ bridgeWss.on('connection', (client, req, requestUrl) => {
   });
 
   upstream.on('message', (data, isBinary) => {
+    if (!sawUpstreamMessage) {
+      sawUpstreamMessage = true;
+      const preview = isBinary ? '<binary>' : data.toString().slice(0, 200);
+      console.log(`[mission-control-preview-proxy] First sidecar->browser WS frame [${clientId}] ${preview}`);
+    }
     if (client.readyState === WebSocket.OPEN) {
       client.send(data, { binary: isBinary });
     }
@@ -201,7 +229,10 @@ server.on('upgrade', (req, socket, head) => {
     return;
   }
 
-  if (requestUrl.pathname !== publicWsPath) {
+  const previewWsRequest = requestUrl.pathname === publicWsPath;
+  const liveWsRequest = requestUrl.pathname === liveWsPath;
+
+  if (!previewWsRequest && !liveWsRequest) {
     const upstreamSocket = net.connect(internalNextPort, internalNextHost, () => {
       let rawRequest = `${req.method || 'GET'} ${req.url || '/'} HTTP/${req.httpVersion}\r\n`;
       for (const [name, value] of Object.entries(req.headers)) {
@@ -228,21 +259,40 @@ server.on('upgrade', (req, socket, head) => {
     return;
   }
 
-  const tokenMatches = requestUrl.searchParams.get('bridgeToken') === bridgeToken;
   const localRequest = isLocalRequest(req);
   const basicAuthValid = hasValidBasicAuth(req);
   const sameOrigin = isSameOriginUpgrade(req, requestUrl);
+  const requestHost = normalizeHostHeader(req.headers.host);
+  const previewHostRequest = isPreviewHost(requestHost) && !localRequest;
+  console.log(
+    `[mission-control-preview-proxy] Upgrade request path=${requestUrl.pathname} previewPath=${previewWsRequest} livePath=${liveWsRequest} local=${localRequest} basicAuth=${basicAuthValid} sameOrigin=${sameOrigin} previewHost=${previewHostRequest}`,
+  );
 
-  if (!tokenMatches) {
-    socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-    socket.destroy();
-    return;
-  }
+  if (previewWsRequest) {
+    const tokenMatches = requestUrl.searchParams.get('bridgeToken') === bridgeToken;
+    if (!tokenMatches) {
+      socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+      socket.destroy();
+      return;
+    }
 
-  if (!localRequest && !basicAuthValid && !sameOrigin) {
-    socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
-    socket.destroy();
-    return;
+    if (!localRequest && !basicAuthValid && !sameOrigin) {
+      socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
+      socket.destroy();
+      return;
+    }
+  } else {
+    if (previewHostRequest) {
+      socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
+      socket.destroy();
+      return;
+    }
+
+    if (!localRequest && !basicAuthValid && !sameOrigin) {
+      socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
+      socket.destroy();
+      return;
+    }
   }
 
   bridgeWss.handleUpgrade(req, socket, head, (client) => {
@@ -264,5 +314,5 @@ server.on('error', (cause) => {
 server.listen(publicPort, publicHost, () => {
   console.log(`[mission-control-preview-proxy] Listening on http://${publicHost}:${publicPort}`);
   console.log(`[mission-control-preview-proxy] Forwarding HTTP to http://${internalNextHost}:${internalNextPort}`);
-  console.log(`[mission-control-preview-proxy] Forwarding ${publicWsPath} to ${sidecarTarget}`);
+  console.log(`[mission-control-preview-proxy] Forwarding ${publicWsPath} and ${liveWsPath} to ${sidecarTarget}`);
 });

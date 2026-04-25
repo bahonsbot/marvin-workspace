@@ -104,9 +104,13 @@ function parseDoneTodayEntries(markdown: string): string[] {
       if (!state.inDoneToday) return state;
       const trimmed = line.trim();
       if (!trimmed.startsWith('- ')) return state;
-      state.entries.push(normalizeLegacyTaskText(trimmed.slice(2)));
+      state.entries.push(normalizeDoneTodayTaskText(trimmed.slice(2)));
       return state;
     }, { entries: [], inDoneToday: false }).entries;
+}
+
+function normalizeDoneTodayTaskText(text: string): string {
+  return normalizeLegacyTaskText(text.replace(/\s+\|\s*✅.*$/u, ''));
 }
 
 function removeStaleDoneTodayEntries(markdown: string, structuredDoneKeys: Set<string>): { markdown: string; removed: number } {
@@ -115,7 +119,8 @@ function removeStaleDoneTodayEntries(markdown: string, structuredDoneKeys: Set<s
   let inDoneToday = false;
   let removed = 0;
 
-  for (const line of lines) {
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
     if (line.startsWith('## Done Today')) {
       inDoneToday = true;
       nextLines.push(line);
@@ -135,9 +140,12 @@ function removeStaleDoneTodayEntries(markdown: string, structuredDoneKeys: Set<s
       nextLines.push(line);
       continue;
     }
-    const normalized = normalizeLegacyTaskText(trimmed.slice(2));
+    const normalized = normalizeDoneTodayTaskText(trimmed.slice(2));
     if (!structuredDoneKeys.has(normalized)) {
       removed += 1;
+      while (lines[index + 1] && !lines[index + 1].startsWith('## ') && !lines[index + 1].trim().startsWith('- ')) {
+        index += 1;
+      }
       continue;
     }
     nextLines.push(line);

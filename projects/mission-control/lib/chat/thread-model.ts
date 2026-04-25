@@ -311,9 +311,13 @@ export function buildChatSurfaceModel(summary: OrchestratorIntegrationSummary): 
       summary.runtimeBridge.transport.kind === 'http-poll+ws-sidecar'
         ? 'HTTP polling + WS sidecar'
         : summary.runtimeBridge.transport.kind === 'http+ws-live'
-          ? 'Same-origin live runtime bridge'
+          ? summary.runtimeBridgeLane === 'lab'
+            ? 'Same-origin lab runtime bridge'
+            : 'Same-origin live runtime bridge'
           : summary.runtimeBridge.capabilities.composerSend
-            ? 'Same-origin runtime bridge (HTTP)'
+            ? summary.runtimeBridgeLane === 'lab'
+              ? 'Same-origin lab runtime bridge (HTTP)'
+              : 'Same-origin runtime bridge (HTTP)'
             : 'HTTP polling only',
     bridgeLimitations: summary.runtimeBridge.limitations,
     controlLabel: canHandOff ? 'Open control UI' : 'Control UI not launchable here',

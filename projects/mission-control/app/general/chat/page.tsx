@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { MissionControlChatRuntime } from '@/components/chat/MissionControlChatRuntime';
 import { resolveChatSeatActivation } from '@/lib/agents/chat-activation';
-import { primeOrchestratorIntegrationSummary, readOrchestratorIntegrationSummary } from '@/lib/adapters/orchestrator';
+import { getOrchestratorIntegrationSummary, primeOrchestratorIntegrationSummary } from '@/lib/adapters/orchestrator';
 import { resolveRuntimeBridgeLaneFromHeaders } from '@/lib/runtime-bridge-lane';
 import { loadRuntimeBridgeSessionHistory } from '@/lib/runtime-bridge-history';
 
@@ -20,7 +20,7 @@ export default async function GeneralChatPage({
   const runtimeBridgeLane = resolveRuntimeBridgeLaneFromHeaders(requestHeaders);
   primeOrchestratorIntegrationSummary(runtimeBridgeLane);
   const [initialSummary, initialTranscriptHistory] = await Promise.all([
-    readOrchestratorIntegrationSummary(runtimeBridgeLane),
+    getOrchestratorIntegrationSummary(runtimeBridgeLane),
     loadRuntimeBridgeSessionHistory(initialSessionKey),
   ]);
 

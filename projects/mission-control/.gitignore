@@ -22,3 +22,7 @@ yarn-error.log*
 
 # Local caches
 scripts/__pycache__/
+
+# Runtime/generated local state
+mission-control-preview.log
+data/skills-summary-cache.json

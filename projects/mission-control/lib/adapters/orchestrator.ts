@@ -167,7 +167,7 @@ function derivePreviewRuntimeBridge(controlPath: OrchestratorIntegrationSummary[
       pollingIntervalMs: RUNTIME_BRIDGE_POLL_INTERVAL_MS,
       websocket: {
         configured: sidecar.configured,
-        browserUrl: sidecar.browserUrl,
+        browserUrl: sidecar.previewBrowserUrl,
         browserReachability: sidecar.browserReachability,
       },
     },
@@ -195,7 +195,7 @@ function derivePreviewRuntimeBridge(controlPath: OrchestratorIntegrationSummary[
       send: '/api/runtime-bridge/send',
       stop: '/api/runtime-bridge/stop',
       launchControl: controlPath.href,
-      websocket: sidecar.browserUrl,
+      websocket: sidecar.previewBrowserUrl,
       websocketHealth: sidecar.localHealthUrl,
       websocketBridgeToken: sidecar.token,
       gatewaySessionToken,
@@ -217,30 +217,45 @@ function derivePreviewRuntimeBridge(controlPath: OrchestratorIntegrationSummary[
   };
 }
 
-function deriveLiveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['controlPath'], runtimeOk: boolean): OrchestratorIntegrationSummary['runtimeBridge'] {
+function deriveLiveLikeRuntimeBridge(
+  lane: Extract<RuntimeBridgeLane, 'lab' | 'live'>,
+  controlPath: OrchestratorIntegrationSummary['controlPath'],
+  runtimeOk: boolean,
+): OrchestratorIntegrationSummary['runtimeBridge'] {
   const sidecar = getRuntimeBridgeSidecarDescriptor(process.env);
+  const laneLabel = lane === 'lab' ? 'lab sandbox lane' : 'dashboard lane';
   const serverOwnedHttpActionsAvailable = true;
+  const gatewaySessionAuthConfigured = Boolean(process.env.MISSION_CONTROL_GATEWAY_AUTH_TOKEN?.trim());
+  const liveWebsocketConfigured = sidecar.configured && Boolean(sidecar.liveBrowserUrl);
+  const serverConnectConfigured =
+    process.env.MISSION_CONTROL_SERVER_CONNECT === '1' && liveWebsocketConfigured && gatewaySessionAuthConfigured;
 
   return {
     descriptorVersion: 'v3',
-    status: runtimeOk || controlPath.href || serverOwnedHttpActionsAvailable ? 'degraded' : 'unavailable',
+    status:
+      runtimeOk && liveWebsocketConfigured
+        ? 'ready'
+        : runtimeOk || liveWebsocketConfigured || controlPath.href || serverOwnedHttpActionsAvailable
+          ? 'degraded'
+          : 'unavailable',
     mode: 'server-proxy-bridge',
     transport: {
-      kind: 'http-poll',
-      liveEvents: false,
-      wsProxySupported: false,
+      kind: liveWebsocketConfigured ? 'http+ws-live' : 'http-poll',
+      liveEvents: liveWebsocketConfigured,
+      wsProxySupported: liveWebsocketConfigured,
       pollingIntervalMs: RUNTIME_BRIDGE_POLL_INTERVAL_MS,
       websocket: {
-        configured: false,
-        browserUrl: null,
-        browserReachability: 'unavailable',
+        configured: liveWebsocketConfigured,
+        browserUrl: liveWebsocketConfigured ? sidecar.liveBrowserUrl : null,
+        browserReachability: liveWebsocketConfigured ? sidecar.browserReachability : 'unavailable',
       },
     },
     auth: {
       strategy: 'edge-auth',
       sameOriginApi: true,
       browserTokenRelay: false,
-      serverConnectConfigured: false,
+      gatewaySessionAuthConfigured,
+      serverConnectConfigured,
     },
     capabilities: {
       runtimeSnapshot: true,
@@ -249,7 +264,7 @@ function deriveLiveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['co
       composerSend: serverOwnedHttpActionsAvailable,
       stop: serverOwnedHttpActionsAvailable,
       reset: false,
-      eventStream: false,
+      eventStream: liveWebsocketConfigured,
     },
     endpoints: {
       descriptor: '/api/runtime-bridge',
@@ -258,16 +273,27 @@ function deriveLiveRuntimeBridge(controlPath: OrchestratorIntegrationSummary['co
       send: '/api/runtime-bridge/send',
       stop: '/api/runtime-bridge/stop',
       launchControl: controlPath.href,
-      websocket: null,
-      websocketHealth: null,
+      websocket: liveWebsocketConfigured ? sidecar.liveBrowserUrl : null,
+      websocketHealth: liveWebsocketConfigured ? sidecar.localHealthUrl : null,
     },
     limitations: [
-      'This dashboard lane uses a secret-free runtime descriptor, so browser clients do not receive gateway or bridge tokens.',
-      'This live dashboard slice uses same-origin server-owned HTTP actions for session bootstrap, send, stop, and history refresh, without a browser websocket session.',
-      'History bootstrap remains same-origin HTTP only until the server-owned live runtime path grows a durable live event stream.',
-      'Live event streaming is still disabled here, so completion and cross-device sync rely on bounded history refresh instead of browser-side websocket deltas.',
+      `This ${laneLabel} uses a secret-free runtime descriptor, so browser clients do not receive gateway or bridge tokens.`,
+      liveWebsocketConfigured
+        ? `This ${laneLabel} now exposes a same-origin websocket path for durable runtime events while keeping browser auth token relay disabled.`
+        : `This ${laneLabel} currently relies on same-origin server-owned HTTP actions for session bootstrap, send, stop, and history refresh, without a browser websocket session.`,
+      liveWebsocketConfigured
+        ? 'Server-owned connect remains sidecar-backed, so the browser never receives the gateway auth token even when websocket transport is active.'
+        : 'History bootstrap remains same-origin HTTP only until the server-owned live runtime path grows a durable live event stream.',
+      liveWebsocketConfigured
+        ? 'HTTP history and server-owned actions remain active as fallback truth for bootstrap and recovery.'
+        : 'Live event streaming is still disabled here, so completion and cross-device sync rely on bounded history refresh instead of browser-side websocket deltas.',
+      lane === 'lab'
+        ? 'Lab is the durable sandbox lane for testing and rollout verification before promoting changes to dashboard.'
+        : 'Dashboard is the canonical live lane and should stay aligned with the hardened production path.',
       sidecar.configured
-        ? 'Preview WS sidecar infrastructure still exists for the preview lane, but it is intentionally withheld from the dashboard descriptor.'
+        ? liveWebsocketConfigured
+          ? 'Preview keeps its tokenized websocket path, while dashboard and lab use a separate same-origin live websocket route.'
+          : 'Preview WS sidecar infrastructure still exists for the preview lane, but the live websocket route is not configured yet.'
         : 'No preview WS sidecar is currently configured for this deployment.',
     ],
   };
@@ -278,7 +304,11 @@ function deriveRuntimeBridge(
   controlPath: OrchestratorIntegrationSummary['controlPath'],
   runtimeOk: boolean,
 ): OrchestratorIntegrationSummary['runtimeBridge'] {
-  return lane === 'preview' ? derivePreviewRuntimeBridge(controlPath, runtimeOk) : deriveLiveRuntimeBridge(controlPath, runtimeOk);
+  if (lane === 'preview') {
+    return derivePreviewRuntimeBridge(controlPath, runtimeOk);
+  }
+
+  return deriveLiveLikeRuntimeBridge(lane, controlPath, runtimeOk);
 }
 
 export function createDeferredOrchestratorIntegrationSummary(lane: RuntimeBridgeLane = 'live'): OrchestratorIntegrationSummary {
@@ -301,6 +331,7 @@ export function createDeferredOrchestratorIntegrationSummary(lane: RuntimeBridge
       'Mission Control is rendering transcript history first and deferring the heavier runtime summary until after mount.',
       'This placeholder is intentional and should be replaced by live runtime metadata within the first background refresh.',
     ],
+    runtimeBridgeLane: lane,
     runtimeBridge: deriveRuntimeBridge(lane, controlPath, false),
     controlPath,
     runtime: {
@@ -348,6 +379,7 @@ function createUnavailableOrchestratorIntegrationSummary(lane: RuntimeBridgeLane
       'Could not read runtime/session state from local OpenClaw CLI in this environment.',
       'No fallback chat implementation is provided by Mission Control.',
     ],
+    runtimeBridgeLane: lane,
     runtimeBridge: deriveRuntimeBridge(lane, controlPath, false),
     controlPath,
     runtime: {
@@ -441,6 +473,7 @@ async function buildOrchestratorIntegrationSummary(lane: RuntimeBridgeLane): Pro
       'The center chat surface reuses the real OpenClaw Control UI instead of simulating a separate chat system.',
       'This runtime summary now prefers the on-disk session registry plus openclaw status so chat refreshes stay bounded.',
     ],
+    runtimeBridgeLane: lane,
     runtimeBridge: deriveRuntimeBridge(lane, controlPath, runtimeOk),
     controlPath,
     runtime: {

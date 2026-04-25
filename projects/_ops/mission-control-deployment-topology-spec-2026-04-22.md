@@ -284,12 +284,15 @@ Use:
 - **`preview.motiondisplay.cloud`** as temporary rollback/preview only
 
 ## Immediate next implementation doc after this
-The next useful artifact should be a **configuration-oriented cutover doc** with:
-- exact Pomerium route entries
-- exact nginx vhost/upstream structure
-- exact OpenClaw config mutations required for trusted-proxy mode
-- exact firewall/network expectations
-- exact rollout and rollback sequence
+This next artifact is now created:
+- `projects/_ops/mission-control-pomerium-nginx-cutover-config-2026-04-22.md`
+
+It should be used as the configuration-oriented bridge doc covering:
+- exact Pomerium route intent
+- exact nginx vhost/upstream structure guidance
+- exact OpenClaw config mutation intent for trusted-proxy mode
+- firewall/network expectations
+- rollout and rollback sequence guidance
 
 ## Bottom line
 If you want the short version:

@@ -8,6 +8,7 @@ export async function POST() {
       status: 'ok',
       imported: result.imported,
       updated: result.updated,
+      deduped: result.deduped,
       total: result.store.tasks.length,
     });
   } catch (error) {

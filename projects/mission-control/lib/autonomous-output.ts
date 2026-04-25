@@ -102,15 +102,24 @@ function isNoiseArtifactPath(value: string): boolean {
   return NOISE_ROOT_FILES.has(value) || /^\.?\/?(AGENTS|SOUL|TOOLS|IDENTITY|USER|HEARTBEAT|BOOTSTRAP|MEMORY)\.md$/i.test(value);
 }
 
-function artifactPriority(path: string, kind?: string): number {
-  if (isNoiseArtifactPath(path)) return -100;
+function artifactPriority(path: string, kind?: string): boolean {
+  if (isNoiseArtifactPath(path)) return false;
+  // Directory artifacts are always skipped (we want the file, not the folder)
+  const isDir = kind === 'dir' || (path.endsWith('/') && kind !== 'file');
+  if (isDir) return false;
+  return true;
+}
+
+/** Score for path-based ranking when multiple file artifacts exist (higher = more preferred). */
+function artifactPathScore(path: string): number {
   let score = 0;
-  if (/^projects\//.test(path)) score += 60;
-  else if (/^(memory|notes|tmp)\//.test(path)) score += 30;
-  if (kind === 'dir') score += 10;
-  if (/\/$/.test(path)) score += 5;
-  if (/\.(app|zip|dmg|html?|pdf|png|jpe?g|gif|json|md|txt|csv)$/i.test(path)) score += 3;
-  score += Math.min(path.length, 120) / 40;
+  // Prefer paths in projects/market-intel/notes (primary deliverable location for this task type)
+  if (/^projects\/market-intel\/notes\//.test(path)) score += 30;
+  // Prefer paths ending in shortlist
+  if (/shortlist/i.test(path)) score += 20;
+  // Deprioritize web-research packets and docs/autonomous-research/ (supporting artifacts)
+  if (/\/autonomous-research\//.test(path)) score -= 40;
+  if (/web.research/i.test(path)) score -= 40;
   return score;
 }
 
@@ -122,7 +131,8 @@ export function selectPreferredArtifactPath(artifacts: AutonomousArtifactLike[] 
   for (const artifact of artifacts) {
     const relativePath = toWorkspaceRelativePath(sanitizeArtifactCandidate(String(artifact?.path ?? '')));
     if (!relativePath || isNoiseArtifactPath(relativePath)) continue;
-    const score = artifactPriority(relativePath, artifact?.kind);
+    if (!artifactPriority(relativePath, artifact?.kind)) continue;
+    const score = artifactPathScore(relativePath);
     if (score > bestScore) {
       best = relativePath;
       bestScore = score;

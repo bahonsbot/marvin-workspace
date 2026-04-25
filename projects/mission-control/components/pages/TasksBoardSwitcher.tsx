@@ -624,15 +624,16 @@ function AutonomousTaskDrawer({ task, onClose, onExecute, onApprove, onReject, o
   );
 }
 
-function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onRefreshImport, onCleanupSync, refreshBusy, cleanupBusy, onOpenTask, selectedTaskId, webResearchEnabled }: { columns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; onOpenNewTask: () => void; onRefreshImport: () => Promise<void>; onCleanupSync: () => Promise<void>; refreshBusy: boolean; cleanupBusy: boolean; onOpenTask: (task: Task) => void; selectedTaskId: string | null; webResearchEnabled?: boolean; }) {
+function AutonomousContent({ columns, syncState, syncDetails, onOpenNewTask, onRefreshImport, onCleanupSync, refreshBusy, cleanupBusy, onOpenTask, selectedTaskId, webResearchEnabled, refreshResult }: { columns: Column[]; syncState: 'unknown' | 'ok' | 'drift'; syncDetails: string; onOpenNewTask: () => void; onRefreshImport: () => Promise<void>; onCleanupSync: () => Promise<void>; refreshBusy: boolean; cleanupBusy: boolean; onOpenTask: (task: Task) => void; selectedTaskId: string | null; webResearchEnabled?: boolean; refreshResult?: string | null; }) {
   return (
     <div style={{ display: 'grid', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <CompactSyncStatus state={syncState} details={syncDetails} onCleanup={onCleanupSync} cleanupBusy={cleanupBusy} />
+          {refreshResult ? <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: 0.02, color: '#6f756f' }}>{refreshResult}</span> : null}
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-          <button onClick={() => void onRefreshImport()} disabled={refreshBusy} style={{ height: 40, padding: '0 14px', borderRadius: 999, border: '1px solid rgba(200, 195, 188, 0.45)', background: 'rgba(255,255,255,0.84)', color: refreshBusy ? '#9a9a9a' : '#1f2f29', cursor: refreshBusy ? 'progress' : 'pointer', fontSize: 12, fontWeight: 700, letterSpacing: 0.02 }} aria-label="Pull from AUTONOMOUS.md" title="Pull from AUTONOMOUS.md">{refreshBusy ? 'Pulling…' : 'Pull from md'}</button>
+          <button onClick={() => void onRefreshImport()} disabled={refreshBusy} style={{ height: 26, padding: '0 10px', borderRadius: 999, border: '1px solid rgba(200,195,188,0.45)', background: 'rgba(255,255,255,0.82)', color: refreshBusy ? '#9a9a9a' : '#5f655f', cursor: refreshBusy ? 'progress' : 'pointer', fontSize: 11, fontWeight: 700, lineHeight: 1, textTransform: 'uppercase', letterSpacing: 0.04 }} aria-label="Import missing tasks from AUTONOMOUS.md" title="Import missing tasks from AUTONOMOUS.md">{refreshBusy ? 'Pulling…' : 'Pull from .md'}</button>
           <button onClick={onOpenNewTask} style={{ width: 40, height: 40, borderRadius: 999, border: 'none', background: '#0f1f19', color: '#fff', cursor: 'pointer', fontSize: 20, fontWeight: 700, boxShadow: '0 8px 22px rgba(15, 31, 25, 0.16)' }} aria-label="New task" title="New task">+</button>
         </div>
       </div>
@@ -665,6 +666,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails, 
   const [autoModalMode, setAutoModalMode] = useState<'create' | 'edit'>('create');
   const [autoModalTask, setAutoModalTask] = useState<Task | null>(null);
   const [autoRefreshBusy, setAutoRefreshBusy] = useState(false);
+  const [autoRefreshResult, setAutoRefreshResult] = useState<string | null>(null);
   const [autoCleanupBusy, setAutoCleanupBusy] = useState(false);
   const [selectedAutoTask, setSelectedAutoTask] = useState<Task | null>(null);
   const [autoActionBusy, setAutoActionBusy] = useState(false);
@@ -694,8 +696,16 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails, 
   const refreshAutonomousBoard = useCallback(async () => {
     setAutoRefreshBusy(true);
     try {
+      setAutoRefreshResult(null);
       const importRes = await fetch('/api/tasks/autonomous/import', { method: 'POST' });
       if (!importRes.ok) throw new Error('Import refresh failed.');
+      const importJson = await importRes.json().catch(() => ({}));
+      const imported = typeof importJson?.imported === 'number' ? importJson.imported : 0;
+      const updated = typeof importJson?.updated === 'number' ? importJson.updated : 0;
+      const deduped = typeof importJson?.deduped === 'number' ? importJson.deduped : 0;
+      const parts = [`${imported} imported`, `${updated} updated`];
+      if (deduped > 0) parts.push(`${deduped} deduped`);
+      setAutoRefreshResult(parts.join(', '));
       await Promise.all([fetchAutonomousBoard(), fetchSyncStatus()]);
     } finally { setAutoRefreshBusy(false); }
   }, [fetchAutonomousBoard, fetchSyncStatus]);
@@ -951,7 +961,7 @@ export function TasksBoardSwitcher({ autonomousColumns, syncState, syncDetails, 
   return (
     <div style={{ display: 'grid', gap: 14 }}>
       <div role="tablist" aria-label="Task boards" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 6px', borderRadius: 999, background: 'rgba(255, 255, 255, 0.74)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(200, 195, 188, 0.4)', width: 'fit-content', boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)', marginInline: 'auto' }}>{BOARDS.map(board => { const isActive = activeBoard === board.id; return <button key={board.id} role="tab" aria-selected={isActive} onClick={() => setActiveBoard(board.id)} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 16px', borderRadius: 999, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: isActive ? 700 : 500, transition: 'all 0.15s ease', background: isActive ? 'var(--accent-deep, #0f1f19)' : 'transparent', color: isActive ? '#ffffff' : '#7a7a7a', boxShadow: isActive ? '0 2px 8px rgba(15, 31, 25, 0.18)' : 'none' }}><span>{board.icon}</span><span>{board.label}</span></button>; })}</div>
-      <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={autoSyncState} syncDetails={autoSyncDetails} onOpenNewTask={() => { setAutoModalMode('create'); setAutoModalTask(null); setAutoModalOpen(true); }} onRefreshImport={refreshAutonomousBoard} onCleanupSync={cleanupAutonomousSync} refreshBusy={autoRefreshBusy} cleanupBusy={autoCleanupBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} webResearchEnabled={webResearchEnabled} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
+      <div role="tabpanel">{activeBoard === 'autonomous' && <AutonomousContent columns={autoColumns} syncState={autoSyncState} syncDetails={autoSyncDetails} onOpenNewTask={() => { setAutoModalMode('create'); setAutoModalTask(null); setAutoModalOpen(true); }} onRefreshImport={refreshAutonomousBoard} onCleanupSync={cleanupAutonomousSync} refreshBusy={autoRefreshBusy} cleanupBusy={autoCleanupBusy} onOpenTask={setSelectedAutoTask} selectedTaskId={selectedAutoTask?.id ?? null} webResearchEnabled={webResearchEnabled} refreshResult={autoRefreshResult} />}{activeBoard === 'personal' && <ManualBoardContent board={personalBoard} label="Personal" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('personal', task.id)} onCreateTask={showNewTaskModal} />}{activeBoard === 'projects' && <ManualBoardContent board={projectsBoard} label="Projects" onMove={handleMove} onEdit={showEditModal} onDelete={task => handleDelete('projects', task.id)} onCreateTask={showNewTaskModal} />}</div>
       <TaskModal modal={modal} onClose={() => setModal(null)} onSave={handleSave} />
       <AutonomousTaskModal open={autoModalOpen} mode={autoModalMode} initialTask={autoModalTask} onClose={() => { setAutoModalOpen(false); setAutoModalTask(null); }} onSubmit={async (input) => { if (autoModalMode === 'edit' && autoModalTask) { await updateAutonomousTask(autoModalTask.id, input); setAutoModalOpen(false); return; } await createAutonomousTask(input); }} />
       <AutonomousTaskDrawer task={selectedAutoTask} onClose={() => setSelectedAutoTask(null)} onExecute={executeAutonomousTask} onApprove={approveAutonomousTask} onReject={rejectAutonomousTask} onRemove={removeAutonomousTask} onEdit={(task) => { setAutoModalMode('edit'); setAutoModalTask(task); setAutoModalOpen(true); }} busy={autoActionBusy} webResearchEnabled={webResearchEnabled} />

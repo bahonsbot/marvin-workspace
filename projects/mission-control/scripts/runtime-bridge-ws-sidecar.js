@@ -165,6 +165,8 @@ wss.on('connection', (client) => {
 
   let refreshedAfterFailure = false;
   let serverConnectSent = false;
+  let sawClientMessage = false;
+  let sawUpstreamMessage = false;
 
   function maybeSendServerConnect(upstream) {
     if (serverConnectSent || !gatewayAuthToken || upstream.readyState !== WebSocket.OPEN) {
@@ -172,6 +174,7 @@ wss.on('connection', (client) => {
     }
 
     serverConnectSent = true;
+    console.log(`[mission-control-ws-sidecar] Sending mc-server-connect [${clientId}]`);
     upstream.send(JSON.stringify({
       type: 'req',
       id: SERVER_CONNECT_REQUEST_ID,
@@ -195,6 +198,7 @@ wss.on('connection', (client) => {
   }
 
   function openUpstream(currentTarget) {
+    console.log(`[mission-control-ws-sidecar] Opening upstream WS [${clientId}] target=${currentTarget}`);
     const upstream = new WebSocket(currentTarget, {
       headers: upstreamOrigin ? { origin: upstreamOrigin } : undefined,
     });
@@ -202,6 +206,10 @@ wss.on('connection', (client) => {
     upstream.on('open', () => {
       console.log(`[mission-control-ws-sidecar] Upstream WS open [${clientId}]`);
       client.on('message', (data, isBinary) => {
+        if (!sawClientMessage) {
+          sawClientMessage = true;
+          console.log(`[mission-control-ws-sidecar] First client->gateway WS frame [${clientId}] binary=${isBinary}`);
+        }
         if (upstream.readyState === WebSocket.OPEN) {
           upstream.send(data, { binary: isBinary });
         }
@@ -209,6 +217,11 @@ wss.on('connection', (client) => {
     });
 
     upstream.on('message', (data, isBinary) => {
+      if (!sawUpstreamMessage) {
+        sawUpstreamMessage = true;
+        const preview = isBinary ? '<binary>' : data.toString().slice(0, 200);
+        console.log(`[mission-control-ws-sidecar] First gateway->client WS frame [${clientId}] ${preview}`);
+      }
       if (!isBinary) {
         try {
           const parsed = JSON.parse(data.toString());

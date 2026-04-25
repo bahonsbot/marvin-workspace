@@ -38,12 +38,13 @@ export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, 
 
   useEffect(() => {
     syncedValueRef.current = value;
-  }, []);
+  }, [value]);
 
   useEffect(() => {
     if (!editorContainerRef.current) return;
 
     let disposed = false;
+    const initialValue = syncedValueRef.current;
 
     async function setupEditor() {
       const language = await getLanguageExtension(filename);
@@ -88,7 +89,7 @@ export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, 
       }
 
       const state = EditorState.create({
-        doc: value,
+        doc: initialValue,
         extensions,
       });
 
@@ -113,7 +114,7 @@ export function CodeMirrorEditor({ filename, value, readOnly = false, onChange, 
         viewRef.current = null;
       }
     };
-  }, [filename]);
+  }, [filename, readOnly]);
 
   useEffect(() => {
     const view = viewRef.current;
