@@ -162,6 +162,7 @@ Do not reintroduce broad `pgrep -f` kill behavior in the lab lane.
 4. Fix `preview.motiondisplay.cloud` public certificate mismatch.
 5. Add a stricter public lab smoke script if recurring checks are needed.
 6. Review `npm audit` dependency findings in the lab snapshot: 4 vulnerabilities were reported after `npm ci`.
+7. Apply the lab persistence patch with a safe container restart: `projects/mission-control/scripts/openclaw-container-command-with-mission-control.sh` now starts the optional lab supervisor (`projects/mission-control-lab/scripts/mission-control-service-run.sh`) after restart. Until the container restarts, the currently running wrapper process will not supervise lab.
 
 ## Recommended next session start
 
