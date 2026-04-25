@@ -17,6 +17,39 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260424-1142]
+
+**What failed:** Mission Control live dashboard websocket stayed stuck after the socket opened on the real host
+**Error:** `dashboard.motiondisplay.cloud` could open the runtime socket and receive `connect.challenge`, but Chat flickered through repeated reconnects and could remain stuck on `Runtime socket is open. Waiting for gateway handshake.` even though the sidecar was already sending `mc-server-connect` server-side.
+**Context:** After landing the first R5 live-websocket slice, Philippe tested the real dashboard host and reported handshake flicker plus a stuck waiting-for-handshake state. Local proxy/sidecar logs showed the browser websocket closing repeatedly right after challenge, pointing to a client-side stability bug rather than a pure routing failure.
+**Suggested fix:** keep post-connect websocket subscription helpers stable during server-owned handshake. Avoid closing over volatile React state like `session.state` inside the callback that the websocket effect depends on; use the latest session-state ref instead so the effect does not tear down and recreate the socket mid-handshake.
+**Resolution:** partially resolved the same day in multiple steps: first by changing `subscribeToActiveSession(...)` in `projects/mission-control/hooks/useRuntimeBridge.ts` to read `latestSessionStateRef.current` and to drop `session.state` from the callback dependency list, which restored a proper hello on `dashboard.motiondisplay.cloud`; later by widening HTTP-backed recovery behavior, fixing the handshake badge to show `Recovering`, and finally changing the chat boot path plus first runtime-bridge load path to use a fresh orchestrator summary instead of a deferred placeholder. Philippe's live hard-refresh handshake improved from roughly 43.6s to 22.5s and then 19.4s, but the remaining slow post-challenge gap is not fully eliminated yet.
+
+**Priority:** high
+**Status:** pending
+
+## [ERR-20260424-0955]
+
+**What failed:** canonical daily memory stayed clean after several savepoint/session-preservation passes
+**Error:** non-canonical date-suffixed memory sidecar files accumulated alongside normal daily notes, for example `memory/2026-04-23-task-generator.md`, `memory/2026-04-23-runtime-bridge.md`, `memory/2026-04-23-bridge-proof.md`, and `memory/2026-04-24-ws-patch.md`. They contained partial transcript spillover / session-export style content and later forced a manual merge back into `memory/YYYY-MM-DD.md`.
+**Context:** Apr 24 Morning Meeting self-improvement cleanup found duplicated chronology inside `memory/2026-04-23.md` and several adjacent sidecar files that were not part of the intended canonical memory layout.
+**Suggested fix:** if session-preservation or pre-compaction helpers need temporary spillover artifacts, keep them outside the canonical `memory/YYYY-MM-DD.md` lane or add an explicit bounded merge/cleanup step so raw sidecars do not accumulate as if they are first-class daily memory.
+**Resolution:** operationally resolved Apr 24 by merging unique content into canonical daily memory, deleting the redundant sidecar files, and preserving only the canonical notes. Root creating mechanism still uncertain, but this sidecar pattern should be treated as cleanup-required rather than canonical.
+
+**Priority:** medium
+**Status:** resolved
+
+## [ERR-20260423-1205]
+
+**What failed:** `daily-task-generator` successful morning run gave no Telegram announcement and left backlog underfilled
+**Error:** the job finished with `summary: NO_REPLY` / `deliveryStatus: not-delivered`, because the cron contract combined announce-style delivery with `NO_REPLY`; separately, `scripts/daily-task-generator.py` generated a shallow first-pass set of tasks that were all later filtered as recent/done/suppressed duplicates, but it did not keep searching for alternate same-goal tasks, so the backlog could stay at 1 even after a nominally successful run.
+**Context:** Philippe noticed there was no usual `goal-tasks` Telegram message and no fresh Mission Control tasks on Apr 23 morning, even though cron status showed the job had run `ok`.
+**Suggested fix:** keep delivery and reply contract aligned, for example by having the generator emit one canonical completion line for announce delivery instead of `NO_REPLY`; during generation, search alternate deterministic task variants for the same goal/genre when exact candidates are blocked so backlog refill survives dedupe/history filters.
+**Resolution:** resolved the same day by patching `scripts/daily-task-generator.py` to generate alternate same-goal variants and print a final `🎯 Daily Tasks Generated: N new tasks added to Open Backlog` line, then updating the cron contract to announce that line to Telegram instead of suppressing delivery with `NO_REPLY`.
+
+**Priority:** high
+**Status:** resolved
+
 ## [ERR-20260422-1534]
 
 **What failed:** completed autonomous tasks were still able to reappear in active backlog after generator reruns
@@ -1174,5 +1207,85 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 **Suggested fix:** before destructive git actions in this workspace, check whether any dirty files are script-managed and root-owned. For `memory/cron-context.json`, use a bounded recovery path: `sudo` backup the file, temporarily `chown` only that file to `node:node`, complete the stash/reset, then restore `root:root` and `600` immediately afterward.
 **Resolution:** resolved the same evening with that bounded ownership flip plus explicit ownership/mode restoration.
 
+**Priority:** medium
+**Status:** resolved
+
+## [ERR-20260422-1800]
+
+**What failed:** OpenClaw gateway `bind: "0.0.0.0"` config not actually applied at socket level inside Docker container
+**Error:** Even with `gateway.bind: "0.0.0.0"` in `openclaw.json`, the gateway process binds to `127.0.0.1:18789` only. `openclaw gateway run --bind lan --force` also falls back to loopback. `docker restart` of the container does not fix it.
+**Context:** Apr 22 afternoon session trying to expose the OpenClaw gateway Control UI externally. The gateway is inside a Docker container on a bridge network (`172.18.0.2`). The gateway's loopback-only bind means traffic from the host to `172.18.0.2:18789` arrives at the container's bridge interface but is never delivered to the loopback-bound gateway socket.
+**Root cause:** Docker bridge networking — container has an external interface (`172.18.0.2`) separate from its loopback. The gateway binds to `127.0.0.1` only. Packets from host → `172.18.0.2:18789` reach the bridge interface but no service there to accept them. The gateway's loopback socket never sees that traffic.
+**Suggested fix:** A TCP proxy inside the container listening on `172.18.0.2:18790` forwarding to `127.0.0.1:18789` would make the gateway reachable from the host. Alternatively, configure the Docker container to publish port 18789 and have the gateway bind to `0.0.0.0` with that port mapping.
+**Priority:** medium
+**Status:** active — workaround identified but not yet deployed
+
+## [ERR-20260422-1815]
+
+**What failed:** Misread of Philippe's goal for `dashboard.motiondisplay.cloud`
+**Error:** Assumed Philippe wanted the OpenClaw Control UI surfaced at `dashboard.motiondisplay.cloud`. He actually wants Mission Control (the custom Next.js app) surfaced at that URL, live whenever the gateway is up.
+**Context:** Apr 22 afternoon. Spent time researching and planning a TCP proxy to expose the OpenClaw Control UI externally. This was the wrong goal.
+**Lesson:** When Philippe says "function a similar role as the default OpenClaw Gateway UI", he means the *operator-facing dashboard function* (Mission Control) — not the OpenClaw Control UI product itself. The keyword is "role", not "product".
+**Resolution:** Philippe clarified: dashboard should surface Mission Control, not the OpenClaw Control UI. TCP proxy for gateway was abandoned.
+**Priority:** low
+**Status:** resolved — but the TCP proxy approach remains valid for future gateway-exposure needs
+
+
+## [ERR-20260425-2032]
+
+**What failed:** Mission Control runtime bridge routes had a longer outer Node wrapper timeout but still let the inner `openclaw gateway call` use its 10s default timeout.
+**Error:** During OpenClaw gateway warm-up/lossless compaction load, `chat.history` and `sessions.patch` could fail around 10s even though the Mission Control route process timeout was 30s. The visible symptom was Mission Control showing reconnecting/recovering while backend processes and descriptors looked healthy.
+**Context:** Apr 25 post-OpenClaw-2026.4.23 smoke follow-up after Philippe reported Mission Control was visibly reconnecting. Descriptors, sidecar, proxy, and live websocket handshake were healthy; the failure narrowed to slow gateway RPCs and CLI-default timeout behavior.
+**Suggested fix:** when Mission Control shells out through `openclaw gateway call`, set an explicit CLI `--timeout` that is lower than but close to the wrapper timeout, e.g. `--timeout 40000` with a 45s `runShellCommand` timeout. Do not assume the outer process timeout changes the gateway RPC timeout.
+**Resolution:** Fixed Apr 25 in commit `23138d9` by adding explicit 40s gateway-call timeouts and 45s wrapper timeouts for history, session bootstrap, send, and stop routes. Build and post-restart health/API/websocket checks passed.
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260425-2033]
+
+**What failed:** Nexos cleanup initially removed the active config/provider entries but did not update OpenClaw's config recovery baselines.
+**Error:** `openclaw config validate`, `openclaw models list`, and `openclaw status` restored Nexos into `/data/.openclaw/openclaw.json` because the cleaned config was much smaller than `/data/.openclaw/openclaw.json.bak` / `.last-good`, triggering OpenClaw's suspicious config clobber recovery (`size-drop-vs-last-good`).
+**Context:** Apr 25 post-update cleanup after Nexos aliases/provider reappeared with credential-bearing model config but no active routing usage.
+**Suggested fix:** for large config removals, update the active config and accepted recovery baselines together, after creating timestamped backups. Verify after running the OpenClaw commands that previously triggered recovery. Also check agent-local `models.json` and `auth-profiles.json` separately.
+**Resolution:** Fixed Apr 25 by backing up and writing the Nexos-free config to `/data/.openclaw/openclaw.json`, `/data/.openclaw/openclaw.json.bak`, and `/data/.openclaw/openclaw.json.last-good`, then cleaning agent-local model/auth files and re-verifying Nexos count stayed 0 after validation/model listing.
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260425-2034]
+
+**What failed:** Mission Control restart script can return non-zero from a transient Next `.next/static/...tmp` ENOENT during rebuild even when the runtime comes back healthy.
+**Error:** A restart attempt after the timeout patch exited with a Next build/regeneration ENOENT, but immediate service health showed proxy, Next, and websocket sidecar were alive and responding.
+**Context:** Apr 25 Mission Control-only restart after runtime bridge timeout hardening. OpenClaw gateway was not restarted.
+**Suggested fix:** after a Mission Control restart-script failure, check actual runtime health (`scripts/mission-control-service-health.sh`, relevant pids, and app/runtime-bridge/sidecar endpoints) before declaring the service down. If health is green, treat the ENOENT as a restart/build-script reliability issue rather than an outage.
+**Priority:** medium
+**Status:** active
+
+## [ERR-20260425-2158]
+
+**What failed:** first attempt to create a physical Mission Control lab lane assumed a clean git worktree could mirror the live dashboard state.
+**Error:** the active dashboard checkout was broadly dirty and included untracked runtime-transition files, so a clean worktree from HEAD would have produced a stale lab that did not match what was actually working in production.
+**Context:** Apr 25 physical split of `lab.motiondisplay.cloud` from the live dashboard lane.
+**Suggested fix:** before creating an isolated lane from a repo, compare HEAD against the working runtime. If the working runtime depends on uncommitted/untracked files, either reconcile/commit first or make an explicit runtime snapshot and label it as such. Do not pretend a snapshot is a clean promotion branch.
+**Resolution:** used `/data/.openclaw/workspace/projects/mission-control-lab` as a runtime snapshot, excluding `.git`, `.next`, `node_modules`, `.preview-runtime`, and logs; documented the caveat for future source reconciliation.
+**Priority:** high
+**Status:** active until Mission Control source-of-truth is reconciled
+
+## [ERR-20260425-2159]
+
+**What failed:** copied Mission Control stop scripts were initially unsafe for a physically split lab runtime.
+**Error:** the copied `preview-stop.sh` contained broad process-name kill fallbacks for `node ./scripts/preview-origin-proxy.js` and `node ./scripts/runtime-bridge-ws-sidecar.js`. Dashboard and lab use the same script names, so a lab stop could have killed dashboard processes.
+**Context:** Apr 25 lab runtime snapshot hardening before starting lab on ports `3015/3016/3017`.
+**Suggested fix:** for duplicated/split service lanes, stop scripts must be scoped by pid files and lane-specific ports/runtime dirs. Avoid broad `pgrep -f` patterns when multiple lanes run identical command names.
+**Resolution:** removed broad process-name kill fallbacks from the lab copy and scoped lab cleanup to `.lab-runtime` pid files plus lab-only ports.
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260425-2200]
+
+**What failed:** initial host-routing handoff assumed `lab.motiondisplay.cloud` already had its own nginx server block.
+**Error:** `sudo grep -RIn "server_name lab.motiondisplay.cloud" ...` returned nothing; lab had been falling through to the dashboard/default HTTPS vhost, including the dashboard certificate and dashboard upstream.
+**Context:** Apr 25 public lab cutover after local lab was healthy on port `3015`.
+**Suggested fix:** when adding a new public lane, verify the loaded nginx config with `sudo nginx -T` and certificate SANs before editing. If no server block exists, create a dedicated vhost and run Certbot rather than editing a non-existent file.
+**Resolution:** Philippe created `/etc/nginx/sites-enabled/lab.motiondisplay.cloud`, Certbot provisioned a lab-specific certificate, and lab now proxies to `172.18.0.2:3015`.
 **Priority:** medium
 **Status:** resolved

@@ -729,3 +729,10 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Priority:** medium
 **Status:** resolved
 **Closed:** 2026-04-14 (preference is now explicit and does not need to remain open as a pending correction)
+
+## [CORR-20260425-2201]
+
+**Trigger:** Philippe pushed for a physical lab split sooner because separate files/setups felt safer than a logical lane sharing dashboard runtime.
+**Correction:** when the user explicitly values operational isolation for a sandbox lane, prefer a staged physical split over keeping the lane purely logical, provided the first phase can be proven locally without touching live routing.
+**Lesson:** the safe posture is not always “delay infrastructure split.” For feature velocity, a separate lab app/build/runtime can be the lower-risk path if it is scaffolded beside the live dashboard, verified locally, and only then routed publicly.
+**Status:** active
