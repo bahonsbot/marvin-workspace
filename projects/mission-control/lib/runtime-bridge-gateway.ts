@@ -5,7 +5,8 @@ import { runShellCommand } from '@/lib/adapters/runtime';
 import type { RuntimeBridgeTranscriptHistory } from '@/lib/types/contracts';
 
 const DEFAULT_HISTORY_LIMIT = 160;
-const GATEWAY_HISTORY_TIMEOUT_MS = 30000;
+const GATEWAY_HISTORY_TIMEOUT_MS = 45000;
+const GATEWAY_HISTORY_CALL_TIMEOUT_MS = 40000;
 const RETRY_DELAYS_MS = [150, 400, 900] as const;
 const RETRYABLE_HISTORY_ERROR = /(\bUNAVAILABLE\b|startup-unavailable|temporarily unavailable|becomes available after gateway sidecars start)/i;
 
@@ -62,7 +63,7 @@ export async function loadRuntimeBridgeSessionHistoryFromGateway(
     params.cursor = options.cursor.trim();
   }
 
-  const command = `openclaw gateway call chat.history --json --params ${shellQuote(JSON.stringify(params))}`;
+  const command = `openclaw gateway call chat.history --json --timeout ${GATEWAY_HISTORY_CALL_TIMEOUT_MS} --params ${shellQuote(JSON.stringify(params))}`;
   let lastError: unknown = null;
 
   for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt += 1) {
