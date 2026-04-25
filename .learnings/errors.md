@@ -1289,3 +1289,12 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 **Resolution:** Philippe created `/etc/nginx/sites-enabled/lab.motiondisplay.cloud`, Certbot provisioned a lab-specific certificate, and lab now proxies to `172.18.0.2:3015`.
 **Priority:** medium
 **Status:** resolved
+
+## [ERR-20260425-2258]
+
+**What failed:** Mission Control source reconciliation was harder because runtime app state, generated caches/logs, a lab runtime snapshot, and source changes were all visible as one broad dirty worktree.
+**Context:** Apr 25 Mission Control became the main operational UI and required cleanup after lab split/live bridge work.
+**Suggested fix:** before committing operational UI changes, classify dirt into: source, docs/runbooks, runtime state, generated cache/logs, snapshots, and unrelated historical ops debris. Commit source in coherent slices; ignore or separately manage runtime state. Do not use a broad `git add -A` in a mixed operational workspace.
+**Resolution:** committed source/runtime-service changes in focused nested/root checkpoints, untracked Mission Control live JSON as runtime state, ignored the lab runtime snapshot, and separately removed the approved obsolete preupdate checkpoint.
+**Priority:** high
+**Status:** active

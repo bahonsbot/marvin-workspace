@@ -736,3 +736,10 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Correction:** when the user explicitly values operational isolation for a sandbox lane, prefer a staged physical split over keeping the lane purely logical, provided the first phase can be proven locally without touching live routing.
 **Lesson:** the safe posture is not always “delay infrastructure split.” For feature velocity, a separate lab app/build/runtime can be the lower-risk path if it is scaffolded beside the live dashboard, verified locally, and only then routed publicly.
 **Status:** active
+
+## [CORR-20260425-2257]
+
+**Correction:** Mission Control `data/*.json` should be treated as runtime app state now that Mission Control is the main operational UI.
+**Context:** During Apr 25 source reconciliation, live task/news/skills/delegation JSON changes were mixed into source dirt. Philippe agreed they should not be casually versioned as source.
+**Rule:** Source repos should own schemas, adapters, migrations, and seed examples. Live Mission Control JSON stores should stay on disk, be backed up/migrated deliberately, and be ignored by git unless a curated snapshot is explicitly approved.
+**Status:** active
