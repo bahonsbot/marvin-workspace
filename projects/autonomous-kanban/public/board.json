@@ -2,28 +2,28 @@
   "board": {
     "todo": [
       {
-        "id": "470bef74",
-        "text": "[Other] Design: Prompt-tool guardrail test matrix",
+        "id": "d9b9884d",
+        "text": "[Trading] Design: Signal outcome-linkage checklist",
         "column": "todo"
       },
       {
-        "id": "797fe47e",
-        "text": "[Trading] Design: Actionable Alpha data contract map",
+        "id": "c10110b2",
+        "text": "[Other] Analyze: OpenClaw loop-pattern audit",
         "column": "todo"
       },
       {
-        "id": "8eea990d",
-        "text": "[Other] Design: Operator visibility checklist",
+        "id": "ab9d602a",
+        "text": "[Trading] Draft: SEC filing ingestion pipeline",
         "column": "todo"
       },
       {
-        "id": "ac65bfb7",
-        "text": "[Trading] Design: Real-time API adapter contract",
+        "id": "1ae36073",
+        "text": "[Trading] Analyze: Signal evidence-verification gaps",
         "column": "todo"
       },
       {
-        "id": "1d7080e1",
-        "text": "[Trading] Analyze: Filing parser edge-case review",
+        "id": "5e5fffd1",
+        "text": "[Career] Analyze: Creative-tool workflow friction shortlist",
         "column": "todo"
       }
     ],
@@ -220,5 +220,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-25T01:04:23.080Z"
+  "updatedAt": "2026-04-26T01:00:15.102Z"
 }
