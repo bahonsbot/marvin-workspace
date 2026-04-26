@@ -61,10 +61,6 @@ TASKS = {
         "description": "Marvin deterministic task: audit sensitive snapshot",
         "on_calendar": ["Sun *-*-* 03:15:00 Asia/Ho_Chi_Minh"],
     },
-    "enrichment-ab-review": {
-        "description": "Marvin deterministic task: enrichment ab review",
-        "on_calendar": ["Mon *-*-* 10:00:00 Asia/Ho_Chi_Minh"],
-    },
 }
 
 SERVICE_TEMPLATE = f"""[Unit]
