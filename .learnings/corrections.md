@@ -208,6 +208,17 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 <!-- New entries go at top -->
 
+
+## [CORR-20260426-1611]
+
+**Trigger:** Philippe asked for a quick save to daily memory and learnings so the work could continue cleanly in a new session after the Dashboard/Lab UI pass got messy.
+**What was wrong:** I had live source/runtime changes across the stable Dashboard, experimental Lab, service supervisors, and transcript test rows, but the state was not yet cleanly summarized for handoff. That risks the next session either repeating the mess, committing unrelated drift, or assuming the long exec-row fix was visually proven when it is only mitigated/watchlisted.
+**Lesson:** Before ending or compacting after risky Mission Control UI/runtime work, save an explicit handoff covering: fixed vs mitigated vs open, exact files changed, validation evidence, active runtime health, unrelated drift to avoid, and whether visual confirmation came from Philippe or only from code/health checks.
+
+**Priority:** high
+**Status:** active
+
+
 ## [CORR-20260426-1451]
 
 **Trigger:** Philippe confirmed Dashboard was back after the Mission Control restore, then said the incident was exactly why Dashboard should be stable and Lab experimental, and asked that this be clearly marked in runbooks/learnings/self-instructions.

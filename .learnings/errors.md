@@ -17,6 +17,19 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+
+## [ERR-20260426-1611]
+
+**What failed:** Mission Control Lab rebuild under active supervisor
+**Error:** Lab `next build` hit file-race failures such as `ENOENT ... .next/static/.../_buildManifest.js.tmp...` because the Lab foreground supervisor auto-restarted the runtime while a manual clean build was manipulating `.next`. Earlier build attempts also risked double-build locks.
+**Context:** While validating a small Mission Control chat UI patch, Lab was correctly used as the experimental surface, but the newly persistent Lab supervisor kept trying to heal/restart during manual rebuilds. That made the experimental lane noisy and could have caused misleading app/build failures.
+**Suggested fix:** Supervisors for Dashboard and Lab should respect explicit maintenance locks before health-check restarts. Manual promotion should create the lock, stop the bundle, rebuild and verify artifacts, then remove the lock and let the supervisor resume/start cleanly.
+**Resolution:** implemented maintenance-lock awareness in both Mission Control service runners using `.preview-runtime/maintenance.lock` for Dashboard and `.lab-runtime/maintenance.lock` for Lab. Lab rebuild under lock then passed lint/build/artifact checks, health, and lane smoke. Dashboard promotion used a guarded stop/build/artifact/start/health/smoke sequence.
+
+**Priority:** high
+**Status:** resolved
+
+
 ## [ERR-20260426-1451]
 
 **What failed:** Mission Control Dashboard promotion/restart after Lab-first UI patch
