@@ -148,3 +148,4 @@ Protected zones are approval-gated, not permanently off-limits.
 - Project implementation detail: `projects/*/docs/`, `projects/*/notes/`, `projects/*/PRD.md`
 
 Keep this file lean. Promote only rules and truths that should still matter after the current week is forgotten.
+
