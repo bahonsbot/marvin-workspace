@@ -17,6 +17,18 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260426-1451]
+
+**What failed:** Mission Control Dashboard promotion/restart after Lab-first UI patch
+**Error:** `dashboard.motiondisplay.cloud` showed `Mission Control preview proxy could not reach the Next.js server`; dashboard proxy stayed alive on `3005`, but internal Next on `3007` was not running. Dashboard `.next` was missing production artifacts including `build-manifest.json`, `prerender-manifest.json`, `routes-manifest.json`, `server/pages-manifest.json`, and `server/app-paths-manifest.json`.
+**Context:** While applying a small Mission Control chat UI patch, Lab remained available but Dashboard was touched before the stable-lane promotion gates were strict enough. A build/restart race and incomplete `.next` state caused Dashboard to break even though the proxy process was still up.
+**Suggested fix:** enforce a stable Dashboard promotion gate: source lint/build first, Lab copy/build/restart/health/lane-smoke second, then Dashboard-only stop, clean build, artifact verification, start, service health, and public lane smoke. Do not claim success from proxy PID or partial local health. If `.next` artifacts are missing, stop Dashboard bundle, `rm -rf .next`, rebuild, verify artifacts, then start.
+**Resolution:** operationally recovered the same day by stopping the Dashboard bundle, deleting `.next`, running `npm run build`, verifying required artifacts, starting the service, and passing Dashboard health plus lane smoke for dashboard/lab/preview.
+
+**Priority:** high
+**Status:** resolved
+
+
 ## [ERR-20260424-1142]
 
 **What failed:** Mission Control live dashboard websocket stayed stuck after the socket opened on the real host

@@ -208,6 +208,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 <!-- New entries go at top -->
 
+## [CORR-20260426-1451]
+
+**Trigger:** Philippe confirmed Dashboard was back after the Mission Control restore, then said the incident was exactly why Dashboard should be stable and Lab experimental, and asked that this be clearly marked in runbooks/learnings/self-instructions.
+**What was wrong:** I let an experimental Lab validation/promotion flow spill risk into the stable Dashboard lane. Dashboard was restarted against an incomplete `.next` build, leaving the preview proxy alive while the internal Next server on `3007` died with missing production build artifacts such as `.next/prerender-manifest.json`. I also claimed recovery before verifying required build artifacts and public lane smoke.
+**Lesson:** Treat Dashboard as the stable lane and Lab as the experimental lane. Never promote Mission Control UI/runtime changes to Dashboard until Lab has passed, the Dashboard `.next` build artifacts have been verified, and Dashboard health plus public lane smoke have passed. Proxy-alive is not proof of Dashboard health; verify internal Next, sidecar, app route, runtime bridge, and public lane before saying it is fixed.
+
+**Priority:** high
+**Status:** active
+
+
 ## [CORR-20260422-0038]
 
 **Trigger:** During the Mission Control live-rollout planning, the reverse-proxy recommendation wobbled between nginx-only, nginx plus oauth2-proxy, Pomerium-first, Pomerium-direct, and Pomerium plus nginx before the actual OpenClaw trusted-proxy and current-stack constraints were fully grounded.

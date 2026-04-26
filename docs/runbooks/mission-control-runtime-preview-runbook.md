@@ -295,6 +295,48 @@ When debugging Mission Control:
 
 ---
 
+## Stable Dashboard / Experimental Lab promotion gate
+
+Dashboard is the stable operator surface. Lab is the experimental validation surface. Do not let Lab rebuild/restart work mutate or destabilize Dashboard.
+
+For Mission Control UI/runtime changes, use this order:
+
+1. Patch source in `projects/mission-control`.
+2. Run source validation: `npm run lint` and `npm run build`.
+3. Copy/deploy only the focused change to Lab when needed.
+4. Build/restart Lab and require:
+   - `projects/mission-control-lab/scripts/lab-health.sh`
+   - `projects/mission-control-lab/scripts/lab-lane-smoke.sh`
+5. Only after Lab is green, touch Dashboard.
+6. Before starting Dashboard, verify production build artifacts exist after build:
+   - `.next/build-manifest.json`
+   - `.next/prerender-manifest.json`
+   - `.next/routes-manifest.json`
+   - `.next/server/pages-manifest.json`
+   - `.next/server/app-paths-manifest.json`
+7. Start Dashboard and require both:
+   - `projects/mission-control/scripts/mission-control-service-health.sh`
+   - `projects/mission-control/scripts/mission-control-lane-smoke.sh`
+
+Important: `preview-origin-proxy` alive on port `3005` is not proof that Dashboard is healthy. The proxy can remain up while internal Next on `3007` is dead. If Dashboard shows `Mission Control preview proxy could not reach the Next.js server`, inspect `.preview-runtime/next.log` and verify internal Next plus `.next` artifacts before claiming recovery.
+
+Recovery when Dashboard `.next` is incomplete:
+
+```bash
+cd /data/.openclaw/workspace/projects/mission-control
+bash scripts/mission-control-service-stop.sh || true
+rm -rf .next
+npm run build
+for f in build-manifest.json prerender-manifest.json routes-manifest.json server/pages-manifest.json server/app-paths-manifest.json; do
+  test -s ".next/$f" || exit 1
+done
+bash scripts/mission-control-service-start.sh
+bash scripts/mission-control-service-health.sh
+bash scripts/mission-control-lane-smoke.sh
+```
+
+Do not report Dashboard fixed until the service health and public lane smoke have passed.
+
 ## 8. Related references
 
 - `projects/_ops/mission-control-broad-savepoint-2026-03-18.md`
