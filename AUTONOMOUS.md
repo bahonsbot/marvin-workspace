@@ -1,5 +1,12 @@
 # Autonomous Daily Tasks
 
+<!--
+Role: Mission Control autonomous task-board mirror and markdown sync surface.
+Authoritative task store: projects/mission-control/data/autonomous-tasks.json.
+Manual edits made on the Mission Control task board are authoritative and must not be silently overwritten from this file.
+This file is not autonomy policy; operational autonomy rules live in AUTONOMY.md and HEARTBEAT.md.
+-->
+
 ## Goals
 
 ### Career
