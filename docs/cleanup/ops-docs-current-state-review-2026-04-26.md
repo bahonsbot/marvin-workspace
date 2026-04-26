@@ -1,0 +1,264 @@
+# Ops docs current-state review - 2026-04-26
+
+Mode: content-aware tagging only. No files deleted by this pass.
+
+## Current-state anchors used
+- Current OpenClaw runtime baseline is 2026.4.23, Docker/Hostinger, explicit CLI path /data/.npm-global/bin/openclaw.
+- Current Mission Control runtime is Next 16.2.0 / React 19.2.0 with Dashboard ports 3005/3006/3007 and Lab ports 3015/3016/3017.
+- Current Mission Control truth is in projects/mission-control, docs/runbooks/mission-control-runtime-preview-runbook.md, MEMORY.md, TOOLS.md, and recent daily memory.
+- Current cron truth: OpenClaw owns model-backed jobs; deterministic scheduler owns script-only jobs via scripts/deterministic_scheduler.py and scripts/cron_runner.py.
+- Recent cron cleanup removed enrichment-ab-review and disabled skill-level-check.
+- Current governance truth is AGENTS.md, AUTONOMY.md, SUBAGENT-POLICY.md, HEARTBEAT.md, MEMORY.md, and TOOLS.md.
+
+## Already deleted in working tree by Philippe
+These were observed as deleted before this pass. I did not restore or alter them.
+
+- `projects/_ops/mc-auto-sync-contract-2026-03-30.md`
+- `projects/_ops/mc-auto-task-schema-2026-03-30.md`
+- `projects/_ops/mc-savepoint-2026-04-04-night.md`
+- `projects/_ops/mc-savepoint-2026-04-06-afternoon.md`
+- `projects/_ops/mc-savepoint-2026-04-06-night.md`
+- `projects/_ops/mc-savepoint-2026-04-07-evening.md`
+- `projects/_ops/mc-savepoint-2026-04-08-night.md`
+- `projects/_ops/mc-savepoint-2026-04-09-evening.md`
+- `projects/_ops/mc-savepoint-2026-04-12-afternoon.md`
+- `projects/_ops/mc-savepoint-2026-04-12-chat-seat-bridge.md`
+- `projects/_ops/mc-savepoint-2026-04-12-evening-post-rollback.md`
+- `projects/_ops/mc-savepoint-2026-04-12-late-night.md`
+- `projects/_ops/mc-savepoint-2026-04-12-night-tasks-generator-stabilized.md`
+- `projects/_ops/mc-savepoint-2026-04-13-transcript-foundation.md`
+- `projects/_ops/mc-savepoint-2026-04-14-actual-slice3-chat-renderer.md`
+- `projects/_ops/mc-savepoint-2026-04-15-afternoon.md`
+- `projects/_ops/mc-savepoint-2026-04-16-late-evening.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-24.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-25-evening.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-25.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-26-midnight.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-27-night.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-28-night.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-29-afternoon.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-30-evening.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-31-lunch.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-03-31-midnight.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-04-01-late-night.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-04-01-night.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-04-02-night.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-04-04-afternoon.md`
+- `projects/_ops/mission-control-comprehensive-savepoint-2026-04-11-evening.md`
+- `projects/_ops/openclaw-v2026.4.12-feature-delta-2026-04-16.md`
+- `projects/_ops/openclaw-v2026.4.12-live-execution-checklist-2026-04-16.md`
+- `projects/_ops/openclaw-v2026.4.12-live-operator-script-2026-04-16.md`
+- `projects/_ops/openclaw-v2026.4.12-live-upgrade-window-plan-2026-04-16.md`
+- `projects/_ops/openclaw-v2026.4.12-rehearsal-execution-plan-2026-04-16.md`
+- `projects/_ops/openclaw-v2026.4.12-retry-preflight-2026-04-16.md`
+- `projects/_ops/openclaw-v2026.4.12-upgrade-audit-2026-04-16.md`
+
+## Superseded / outdated docs (40)
+These are stronger cleanup candidates because their content/role is superseded by current source-of-truth docs, runtime, or newer runbooks.
+
+- `projects/_ops/cron-migration-status-2026-03-16.md` — Cron Migration Status
+  - Why: Cron migration planning/status from Mar 16 is superseded by current deterministic scheduler ownership in TOOLS.md and scripts/deterministic_scheduler.py.
+- `projects/_ops/cron-mixed-jobs-assessment-2026-03-16.md` — Cron Mixed Jobs Assessment
+  - Why: Cron migration planning/status from Mar 16 is superseded by current deterministic scheduler ownership in TOOLS.md and scripts/deterministic_scheduler.py.
+- `projects/_ops/cron-runner-wave1-note-2026-03-16.md` — Cron Runner Wave 1 Scaffold Note
+  - Why: Cron migration planning/status from Mar 16 is superseded by current deterministic scheduler ownership in TOOLS.md and scripts/deterministic_scheduler.py.
+- `projects/_ops/cron-savepoint-2026-03-16.md` — Cron Save Point
+  - Why: Cron migration planning/status from Mar 16 is superseded by current deterministic scheduler ownership in TOOLS.md and scripts/deterministic_scheduler.py.
+- `projects/_ops/cron-script-first-migration-plan-2026-03-16.md` — Cron Script-First Migration Plan
+  - Why: Cron migration planning/status from Mar 16 is superseded by current deterministic scheduler ownership in TOOLS.md and scripts/deterministic_scheduler.py.
+- `projects/_ops/cron-wave1-migration-brief-2026-03-16.md` — Cron Wave 1 Migration Brief
+  - Why: Cron migration planning/status from Mar 16 is superseded by current deterministic scheduler ownership in TOOLS.md and scripts/deterministic_scheduler.py.
+- `projects/_ops/cron-wave2a-migration-brief-2026-03-16.md` — Cron Wave 2A Migration Brief
+  - Why: Cron migration planning/status from Mar 16 is superseded by current deterministic scheduler ownership in TOOLS.md and scripts/deterministic_scheduler.py.
+- `projects/_ops/cron-wave2b-dispatcher-brief-2026-03-16.md` — Cron Wave 2B Dispatcher Brief
+  - Why: Cron migration planning/status from Mar 16 is superseded by current deterministic scheduler ownership in TOOLS.md and scripts/deterministic_scheduler.py.
+- `projects/_ops/daily-check-readme.md` — ⚠️ DEPRECATED — Use Mission Control instead
+  - Why: File title explicitly says deprecated and Mission Control replaced it.
+- `projects/_ops/marvin-governance-v1.1.md` — Marvin Governance v1.1
+  - Why: Governance is now split into AGENTS.md, AUTONOMY.md, SUBAGENT-POLICY.md, HEARTBEAT.md, MEMORY.md, TOOLS.md; old monolithic governance docs are superseded.
+- `projects/_ops/marvin-governance-v1.md` — Marvin Governance v1
+  - Why: Governance is now split into AGENTS.md, AUTONOMY.md, SUBAGENT-POLICY.md, HEARTBEAT.md, MEMORY.md, TOOLS.md; old monolithic governance docs are superseded.
+- `projects/_ops/mission-control-agents-build-brief-2026-03-26.md` — Mission Control — Agents Build Brief
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-autonomous-hybrid-board-v1-spec-2026-03-30.md` — Mission Control Autonomous Hybrid Board v1 — Implementation Spec
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-broad-savepoint-2026-03-18.md` — Mission Control Broad Save Point
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-chat-implementation-brief-2026-03-28.md` — Mission Control Chat Implementation Brief
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-chat-integration-audit-2026-03-18.md` — Mission Control Chat Integration Audit
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-chat-phase1-execution-spec-2026-03-28.md` — Mission Control Chat Phase 1 Execution Spec
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-chat-product-decision-brief-2026-03-18.md` — Mission Control Chat Product Decision Brief
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-control-ui-embed-proposal-2026-03-19.md` — Mission Control → Control UI Embed Proposal (2026-03-19)
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-dev-sandbox-lane-plan-2026-03-31.md` — Mission Control Dev / Sandbox Lane Plan — 2026-03-31
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-execution-spec-2026-03-25.md` — Mission Control Execution Spec — 2026-03-25
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-handover-next-session-2026-04-23.md` — Mission Control Handover for New Session — 2026-04-23
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-implementation-roadmap-2026-03-20.md` — Mission Control Implementation Roadmap
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-live-readiness-plan-2026-04-11.md` — Mission Control Live-Readiness Plan — 2026-04-11
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-next-implementation-brief-2026-03-17.md` — Mission Control Next Implementation Brief
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-phase1-core-operating-surface-build-brief-2026-03-27.md` — Mission Control — Phase 1 Core Operating Surface Build Brief
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-post-rollback-baseline-2026-04-12.md` — Mission Control Post-Rollback Baseline — 2026-04-12
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-product-brief-2026-03-16.md` — Mission Control Product Brief
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-savepoint-after-r2-verification-2026-04-23.md` — Mission Control Savepoint After R2 Verification — 2026-04-23
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-savepoint-before-r2-2026-04-22-night.md` — Mission Control Savepoint Before R2 — 2026-04-22 Night
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-savepoint-for-tomorrow-2026-04-22.md` — Mission Control Savepoint for Tomorrow — 2026-04-22
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-savepoint-r3-http-bridge-pivot-2026-04-23.md` — Mission Control Savepoint — R3 HTTP Bridge Pivot — 2026-04-23
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-savepoint-r3-preview-ws-debug-2026-04-23.md` — Mission Control Savepoint — R3 Preview WS Debug — 2026-04-23
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-savepoint-r4-http-live-lane-2026-04-23.md` — Mission Control savepoint — R4 HTTP live lane — 2026-04-23
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-savepoint-r5-live-ws-seam-2026-04-24.md` — Mission Control savepoint — R5 live WS seam — 2026-04-24
+  - Why: Session savepoint/handover/baseline; current state has moved on and newer daily memory/runbooks carry durable lessons.
+- `projects/_ops/mission-control-v1-app-scaffold-brief-2026-03-16.md` — Mission Control V1 App Scaffold Brief
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-v1-architecture-spec-2026-03-16.md` — Mission Control V1 Architecture Spec
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-v1-data-contract-spec-2026-03-16.md` — Mission Control V1 Data Contract Spec
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-v1-modules-implementation-plan-2026-03-16.md` — Mission Control V1 Modules Implementation Plan
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+- `projects/_ops/mission-control-v1-technical-integration-plan-2026-03-16.md` — Mission Control V1 Technical Integration Plan
+  - Why: Early Mission Control design/build plan is superseded by the current built runtime and current runbook/TOOLS state.
+
+## Review before deleting (50)
+These look old or partially stale, but I would not call them safe to delete without mining/deciding whether their rationale still matters.
+
+- `projects/_ops/PROACTIVE-RUNBOOK.md` — Proactive Execution Runbook
+  - Note: Mentions old proactive execution concepts and skill-level-check, but may contain reusable workflow history; compare to AUTONOMY.md before deleting.
+- `projects/_ops/agent-team/README.md` — Agent Team Hybrid v1
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/START-HERE.md` — START HERE — Hybrid Agent Team v1
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/builder-prompt.md` — Live Builder Delegation Prompt
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/builder.md` — Builder Role Template
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/delegation-rules.md` — Delegation Rules
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/example-handoffs.md` — Example Handoffs
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/handoff-contracts.md` — Handoff Contracts
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/launch-path-spec.md` — Hybrid Agent Launch Path Spec
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/live-usage.md` — Live Usage Pattern
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/operator-checklist.md` — Operator Checklist
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/package-map.md` — Package Map
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/reusable-workflow-package.md` — Reusable Workflow Package Notes
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/reviewer-prompt.md` — Live Reviewer Delegation Prompt
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team/reviewer.md` — Reviewer Role Template
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/agent-team-v1.md` — Agent Team v1 Proposal
+  - Note: Agent-team proposal/package docs may be conceptually superseded by current subagent policy, but not safe to delete without deciding whether this package is still wanted.
+- `projects/_ops/cron-runner-spec-2026-03-16.md` — Cron Runner Spec
+  - Note: Old runner spec may still document design rationale, but current truth is scripts/cron_runner.py and scripts/cron_runner_tasks.py.
+- `projects/_ops/dependency-scan-runbook.md` — Dependency Scan Runbook
+  - Note: Generic ops runbook; may still be useful unless replaced by docs/runbooks or current automation.
+- `projects/_ops/incident-response-runbook.md` — Incident Response Runbook
+  - Note: Generic ops runbook; may still be useful unless replaced by docs/runbooks or current automation.
+- `projects/_ops/memory-architecture-option-a-checklist-2026-04-18.md` — Memory Architecture Option A, Implementation Checklist
+  - Note: Memory architecture checklist after Apr 15; likely historical but too recent/central to delete without checking current memory stack.
+- `projects/_ops/mission-control-auth-proxy-design-2026-04-22.md` — Mission Control Auth and Proxy Design — 2026-04-22
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-autonomous-hybrid-board-phase0-truth-audit-2026-03-30.md` — Mission Control Autonomous Hybrid Board v1 — Phase 0 Truth Audit
+  - Note: Task-board architecture/history; current truth is MEMORY.md and Mission Control data store, but delete only after confirming lessons are migrated.
+- `projects/_ops/mission-control-chat-runtime-migration-spec-2026-04-22.md` — Mission Control Chat/Runtime Migration Spec — 2026-04-22
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-daily-learnings-2026-04-22.md` — Mission Control — Daily Learnings 2026-04-22 (Evening)
+  - Note: Learnings doc may contain durable lessons; should be mined into .learnings/MEMORY before deletion.
+- `projects/_ops/mission-control-dashboard-cutover-checklist-2026-04-22.md` — Mission Control Dashboard Cutover Checklist — 2026-04-22
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-dashboard-learnings-2026-04-22.md` — Mission Control / Dashboard Learnings — 2026-04-22 Evening
+  - Note: Learnings doc may contain durable lessons; should be mined into .learnings/MEMORY before deletion.
+- `projects/_ops/mission-control-dashboard-live-rollout-plan-2026-04-21.md` — Mission Control Dashboard Live Rollout Plan — 2026-04-21
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-deployment-specific-cutover-2026-04-22.md` — Mission Control Live Dashboard Cutover — Deployment-Specific Config Doc
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-deployment-specific-cutover-draft-2026-04-22.md` — Mission Control Deployment-Specific Cutover Draft — 2026-04-22
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-deployment-topology-spec-2026-04-22.md` — Mission Control Deployment Topology Spec — 2026-04-22
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-market-intel-gap-audit-2026-03-23.md` — Mission Control Market Intel Gap Audit — 2026-03-23
+  - Note: Trading/Mission Control research context; not safely obsolete by runtime comparison alone.
+- `projects/_ops/mission-control-pomerium-cutover-spec-2026-04-22.md` — Mission Control Pomerium Cutover Spec — 2026-04-22
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-pomerium-nginx-cutover-config-2026-04-22.md` — Mission Control Pomerium + nginx Cutover Config — 2026-04-22
+  - Note: Apr 21-22 cutover/design doc may be partly superseded by current Dashboard/Lab runtime, but may still contain deployment rationale. Keep unless replaced by runbook.
+- `projects/_ops/mission-control-tasks-board-model-2026-03-25.md` — Mission Control Tasks — Board Model + Redesign Plan
+  - Note: Task-board architecture/history; current truth is MEMORY.md and Mission Control data store, but delete only after confirming lessons are migrated.
+- `projects/_ops/mission-control-trading-data-feasibility-2026-03-23.md` — Mission Control Trading Data Feasibility — 2026-03-23
+  - Note: Trading/Mission Control research context; not safely obsolete by runtime comparison alone.
+- `projects/_ops/mission-control-trading-data-shapes-2026-03-23.md` — Mission Control Trading Data Shapes — 2026-03-23
+  - Note: Trading/Mission Control research context; not safely obsolete by runtime comparison alone.
+- `projects/_ops/model-benchmarks/README.md` — Model Benchmarks: MiniMax M2.7 vs qwen3.5-plus
+  - Note: Old model-benchmark docs; likely stale but may be useful if model routing/cost comparisons are revisited.
+- `projects/_ops/model-benchmarks/cases.md` — Benchmark Cases
+  - Note: Old model-benchmark docs; likely stale but may be useful if model routing/cost comparisons are revisited.
+- `projects/_ops/model-benchmarks/live-job-prompts.md` — Live Job Prompt Reference
+  - Note: Old model-benchmark docs; likely stale but may be useful if model routing/cost comparisons are revisited.
+- `projects/_ops/model-benchmarks/runner-notes.md` — Runner Notes
+  - Note: Old model-benchmark docs; likely stale but may be useful if model routing/cost comparisons are revisited.
+- `projects/_ops/model-benchmarks/summary-2026-03-22.md` — Benchmark Summary — 2026-03-22
+  - Note: Old model-benchmark docs; likely stale but may be useful if model routing/cost comparisons are revisited.
+- `projects/_ops/searxng-vs-brave-evaluation-sheet-2026-03-17.md` — SearxNG vs Brave Evaluation Sheet
+  - Note: Search-provider evaluation conflicts with current memory posture only if stale; current MEMORY says Brave primary/SearXNG fallback. Mine/compare before deletion.
+- `projects/_ops/tasks-truth-flow-map-2026-04-12.md` — Tasks Truth Flow Map — 2026-04-12
+  - Note: No high-confidence stale rule matched.
+- `projects/_ops/trading-ai-value-chain-framework-2026-03-23.md` — Trading AI Value-Chain Framework
+  - Note: Trading strategy/research docs are domain knowledge, not obviously obsolete runtime docs.
+- `projects/_ops/trading-ai-value-chain-implementation-brief-2026-03-23.md` — Trading AI Value-Chain Implementation Brief
+  - Note: Trading strategy/research docs are domain knowledge, not obviously obsolete runtime docs.
+- `projects/_ops/trading-cross-sector-expansion-research-2026-03-23.md` — Trading Cross-Sector Expansion Research
+  - Note: Trading strategy/research docs are domain knowledge, not obviously obsolete runtime docs.
+- `projects/_ops/trading-cross-sector-sufficiency-audit-2026-03-23.md` — Trading Cross-Sector Sufficiency Audit — 2026-03-23
+  - Note: Trading strategy/research docs are domain knowledge, not obviously obsolete runtime docs.
+- `projects/_ops/trading-live-flow-observation-plan-2026-03-23.md` — Trading Live-Flow Observation Plan — 2026-03-23
+  - Note: Trading strategy/research docs are domain knowledge, not obviously obsolete runtime docs.
+- `projects/_ops/trading-research-stack-audit-2026-03-23.md` — Trading Research Stack Audit — 2026-03-23
+  - Note: Trading strategy/research docs are domain knowledge, not obviously obsolete runtime docs.
+- `projects/_ops/trading-systems-improvement-plan.md` — Market Intel ↔ Equity Bot Improvement Plan
+  - Note: Trading strategy/research docs are domain knowledge, not obviously obsolete runtime docs.
+
+## Keep / active reference (9)
+These should not be targeted by this cleanup pass.
+
+- `projects/_ops/mission-control-container-boot-integration-2026-04-24.md` — Mission Control container boot integration — 2026-04-24
+  - Keep: Recent/current Mission Control runtime work from Apr 24-25; may still explain live Dashboard/Lab/container supervision state.
+- `projects/_ops/mission-control-container-cutover-checklist-2026-04-24.md` — Mission Control container cutover checklist — 2026-04-24
+  - Keep: Recent/current Mission Control runtime work from Apr 24-25; may still explain live Dashboard/Lab/container supervision state.
+- `projects/_ops/mission-control-host-persistence-diagnostic-2026-04-24.md` — Mission Control host-side persistence diagnostic — 2026-04-24
+  - Keep: Recent/current Mission Control runtime work from Apr 24-25; may still explain live Dashboard/Lab/container supervision state.
+- `projects/_ops/mission-control-lab-handover-2026-04-25.md` — Mission Control Lab Handover — 2026-04-25
+  - Keep: Recent/current Mission Control runtime work from Apr 24-25; may still explain live Dashboard/Lab/container supervision state.
+- `projects/_ops/mission-control-persistence-and-auth-recommendation-2026-04-24.md` — Mission Control persistence and auth recommendation — 2026-04-24
+  - Keep: Recent/current Mission Control runtime work from Apr 24-25; may still explain live Dashboard/Lab/container supervision state.
+- `projects/_ops/mission-control-service-launcher-runbook-2026-04-24.md` — Mission Control service launcher runbook — 2026-04-24
+  - Keep: Recent/current Mission Control runtime work from Apr 24-25; may still explain live Dashboard/Lab/container supervision state.
+- `projects/_ops/openclaw-docker-stale-audit-2026-04-18.md` — OpenClaw Docker stale-file audit (2026-04-18)
+  - Keep: OpenClaw-specific ops/history; user requested non-OpenClaw cleanup and these may still be useful as audit/proposal records.
+- `projects/_ops/openclaw-exec-completion-leak-patch-proposal-2026-04-17.md` — OpenClaw exec-completion / heartbeat prompt leak patch proposal — 2026-04-17
+  - Keep: OpenClaw-specific ops/history; user requested non-OpenClaw cleanup and these may still be useful as audit/proposal records.
+- `projects/_ops/openclaw-safe-recursive-ops-loop-guardrails-2026-04-21.md` — OpenClaw Safe Recursive Operations Loop Guardrails
+  - Keep: OpenClaw-specific ops/history; user requested non-OpenClaw cleanup and these may still be useful as audit/proposal records.
