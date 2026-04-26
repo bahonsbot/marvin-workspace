@@ -109,6 +109,7 @@ Script-only jobs belong on the host deterministic scheduler.
   - proxy/helper: `3007`
 - Preview stop rule: `projects/mission-control/scripts/preview-stop.sh` must remain PID-file scoped. Do not revert to broad `pkill` patterns.
 - Runtime bridge dependencies: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` and `projects/mission-control/scripts/preview-origin-proxy.js` require the `ws` package
+- Preview public TLS note: `preview.motiondisplay.cloud` currently has a certificate/hostname mismatch under strict TLS; local preview smoke can still pass, and this is deferred/non-blocking for dashboard/lab.
 - Tasks truth rule:
   - authoritative store: `projects/mission-control/data/autonomous-tasks.json`
   - mirror/sync surface: `AUTONOMOUS.md`
