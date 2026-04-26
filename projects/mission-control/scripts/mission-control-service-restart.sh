@@ -2,4 +2,8 @@
 set -euo pipefail
 
 cd /data/.openclaw/workspace/projects/mission-control
-exec ./scripts/preview-restart.sh
+
+# Runtime supervision should not rebuild. Rebuilds are deliberate promotion/dev
+# actions and can destabilize the live bundle if triggered by a watchdog.
+./scripts/preview-stop.sh || true
+exec ./scripts/preview-start.sh

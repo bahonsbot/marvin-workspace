@@ -4,6 +4,7 @@ set -euo pipefail
 PROJECT_DIR="/data/.openclaw/workspace/projects/mission-control-lab"
 cd "$PROJECT_DIR"
 
+MAINTENANCE_LOCK="$PROJECT_DIR/.lab-runtime/maintenance.lock"
 HEALTH_LOG="/tmp/mission-control-lab-service-health.log"
 STARTED_BY_RUNNER=0
 
@@ -15,7 +16,16 @@ cleanup() {
 
 trap cleanup EXIT INT TERM
 
+
+wait_for_maintenance_window() {
+  while [[ -e "$MAINTENANCE_LOCK" ]]; do
+    echo "[mission-control-lab-service-run] maintenance lock present, pausing supervision: $MAINTENANCE_LOCK"
+    sleep 15
+  done
+}
+
 start_bundle() {
+  wait_for_maintenance_window
   ./scripts/mission-control-service-stop.sh >/dev/null 2>&1 || true
   ./scripts/mission-control-service-start.sh
   ./scripts/mission-control-service-health.sh
@@ -27,9 +37,11 @@ start_bundle
 echo "[mission-control-lab-service-run] bundle started, entering foreground supervisor loop"
 
 while true; do
+  wait_for_maintenance_window
   if ! ./scripts/mission-control-service-health.sh >"$HEALTH_LOG" 2>&1; then
     echo "[mission-control-lab-service-run] health check failed, restarting bundle" >&2
     cat "$HEALTH_LOG" >&2 || true
+    wait_for_maintenance_window
     ./scripts/mission-control-service-restart.sh
     ./scripts/mission-control-service-health.sh
     STARTED_BY_RUNNER=1

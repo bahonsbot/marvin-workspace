@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ChatActivityStrip } from '@/components/chat/chat-activity-strip';
+import { ReadAloudButton } from '@/components/chat/chat-read-aloud';
 import { LiveEventBlock } from '@/components/chat/chat-message-blocks';
 import { renderRichText } from '@/components/chat/chat-rich-text';
 import { ChatThinkingBlock } from '@/components/chat/chat-thinking-block';
@@ -133,30 +134,33 @@ function MessageEntryBlock({
             ) : null}
           </div>
           {!isOperator ? (
-            <button
-              type="button"
-              onClick={() => {
-                const ok = copyTextToClipboard(item.entry.body);
-                setCopied(ok);
-                window.setTimeout(() => setCopied(false), 1400);
-              }}
-              aria-label="Copy message"
-              title={copied ? 'Copied' : 'Copy'}
-              style={{
-                border: '1px solid rgba(200, 195, 188, 0.28)',
-                background: 'rgba(255, 255, 255, 0.72)',
-                color: copied ? '#163b31' : 'var(--text-muted)',
-                borderRadius: 999,
-                minWidth: 34,
-                height: 34,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
-            >
-              <CopyIcon />
-            </button>
+            <div style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}>
+              {item.presentation === 'final' ? <ReadAloudButton text={item.entry.body} /> : null}
+              <button
+                type="button"
+                onClick={() => {
+                  const ok = copyTextToClipboard(item.entry.body);
+                  setCopied(ok);
+                  window.setTimeout(() => setCopied(false), 1400);
+                }}
+                aria-label="Copy message"
+                title={copied ? 'Copied' : 'Copy'}
+                style={{
+                  border: '1px solid rgba(200, 195, 188, 0.28)',
+                  background: 'rgba(255, 255, 255, 0.72)',
+                  color: copied ? '#163b31' : 'var(--text-muted)',
+                  borderRadius: 999,
+                  minWidth: 34,
+                  height: 34,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+                <CopyIcon />
+              </button>
+            </div>
           ) : null}
         </div>
         <div

@@ -29,6 +29,7 @@
     "next": "16.2.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "sherpa-onnx": "^1.12.37",
     "ws": "^8.20.0"
   },
   "devDependencies": {

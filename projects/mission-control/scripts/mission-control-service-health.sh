@@ -6,10 +6,16 @@ RUNTIME_DIR="${MISSION_CONTROL_PREVIEW_RUNTIME_DIR:-$PROJECT_DIR/.preview-runtim
 ENV_FILE="$RUNTIME_DIR/mission-control-preview.env"
 PID_FILE="$RUNTIME_DIR/latest.pid"
 SIDECAR_PID_FILE="$RUNTIME_DIR/ws-sidecar.pid"
+PIPER_TTS_PID_FILE="$RUNTIME_DIR/piper-tts-worker.pid"
+MOONSHINE_STT_PID_FILE="$RUNTIME_DIR/moonshine-stt-worker.pid"
 NEXT_PID_FILE="$RUNTIME_DIR/next.pid"
 PREVIEW_PORT="${MISSION_CONTROL_PREVIEW_PORT:-3005}"
 SIDECAR_HOST="${MISSION_CONTROL_WS_SIDECAR_HOST:-127.0.0.1}"
 SIDECAR_PORT="${MISSION_CONTROL_WS_SIDECAR_PORT:-3006}"
+PIPER_TTS_HOST="${MISSION_CONTROL_PIPER_TTS_HOST:-127.0.0.1}"
+PIPER_TTS_PORT="${MISSION_CONTROL_PIPER_TTS_PORT:-3024}"
+MOONSHINE_STT_HOST="${MISSION_CONTROL_MOONSHINE_STT_HOST:-127.0.0.1}"
+MOONSHINE_STT_PORT="${MISSION_CONTROL_MOONSHINE_STT_PORT:-3025}"
 
 if [[ -f "$ENV_FILE" ]]; then
   set -a
@@ -19,6 +25,10 @@ if [[ -f "$ENV_FILE" ]]; then
   PREVIEW_PORT="${MISSION_CONTROL_PREVIEW_PORT:-$PREVIEW_PORT}"
   SIDECAR_HOST="${MISSION_CONTROL_WS_SIDECAR_HOST:-$SIDECAR_HOST}"
   SIDECAR_PORT="${MISSION_CONTROL_WS_SIDECAR_PORT:-$SIDECAR_PORT}"
+  PIPER_TTS_HOST="${MISSION_CONTROL_PIPER_TTS_HOST:-$PIPER_TTS_HOST}"
+  PIPER_TTS_PORT="${MISSION_CONTROL_PIPER_TTS_PORT:-$PIPER_TTS_PORT}"
+  MOONSHINE_STT_HOST="${MISSION_CONTROL_MOONSHINE_STT_HOST:-$MOONSHINE_STT_HOST}"
+  MOONSHINE_STT_PORT="${MISSION_CONTROL_MOONSHINE_STT_PORT:-$MOONSHINE_STT_PORT}"
 fi
 
 check_pid() {
@@ -86,8 +96,12 @@ PY
 check_pid "proxy" "$PID_FILE"
 check_pid "next" "$NEXT_PID_FILE"
 check_pid "ws-sidecar" "$SIDECAR_PID_FILE"
+check_pid "piper-tts-worker" "$PIPER_TTS_PID_FILE"
+check_pid "moonshine-stt-worker" "$MOONSHINE_STT_PID_FILE"
 check_http "app" "http://127.0.0.1:${PREVIEW_PORT}/general/agents"
 check_json_field "runtime-bridge" "http://127.0.0.1:${PREVIEW_PORT}/api/runtime-bridge" "payload.get('runtimeBridge', {}).get('descriptorVersion')"
 check_json_field "ws-sidecar-health" "http://${SIDECAR_HOST}:${SIDECAR_PORT}/healthz" "payload.get('ok')"
+check_json_field "piper-tts-worker-health" "http://${PIPER_TTS_HOST}:${PIPER_TTS_PORT}/healthz" "payload.get('ok')"
+check_json_field "moonshine-stt-worker-health" "http://${MOONSHINE_STT_HOST}:${MOONSHINE_STT_PORT}/healthz" "payload.get('ok')"
 
 echo "[ok] Mission Control service health passed"

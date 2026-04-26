@@ -1,4 +1,4 @@
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { accessSync, unlinkSync, writeFileSync } from 'node:fs';
 import { homedir, tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -12,6 +12,12 @@ const DEFAULT_OPENAI_MODEL = 'gpt-4o-mini-transcribe';
 const DEFAULT_TIMEOUT_MS = 45_000;
 const DEFAULT_WHISPER_MODEL = 'base.en';
 const DEFAULT_WHISPER_MODEL_DIR = join(homedir(), '.nerve', 'models');
+const DEFAULT_MOONSHINE_MODEL = 'tiny-streaming';
+const DEFAULT_MOONSHINE_SCRIPT = '/data/.openclaw/workspace/projects/mission-control/scripts/moonshine-transcribe.py';
+const DEFAULT_MOONSHINE_PYTHONPATH = '/data/.openclaw/tools/moonshine-voice-python';
+const DEFAULT_MOONSHINE_CACHE_DIR = '/data/.openclaw/tools/moonshine-voice-cache';
+const DEFAULT_MOONSHINE_WORKER_HOST = '127.0.0.1';
+const DEFAULT_MOONSHINE_WORKER_PORT = '3023';
 
 const WHISPER_MODEL_FILES: Record<string, string> = {
   'tiny.en': 'ggml-tiny.en.bin',
@@ -47,6 +53,7 @@ let whisperContext: WhisperContext | null = null;
 let whisperContextModelPath: string | null = null;
 let whisperContextInitializing: Promise<WhisperContext> | null = null;
 let ffmpegAvailable: boolean | null = null;
+let ffmpegCommand: string | null = null;
 
 function normalizeBaseUrl(raw: string | undefined): string {
   const input = (raw || DEFAULT_BASE_URL).trim();
@@ -103,28 +110,51 @@ function resolveWhisperModelPath(): { model: string; path: string } {
   };
 }
 
-function ensureFfmpegAvailable() {
-  if (ffmpegAvailable === true) return;
+function ffmpegMissingError(details?: string): TranscribeProviderError {
+  return new TranscribeProviderError({
+    status: 503,
+    code: 'ffmpeg_missing',
+    message: 'ffmpeg is not available for local transcription.',
+    details: details || 'Install ffmpeg, set MISSION_CONTROL_FFMPEG_PATH, or switch MISSION_CONTROL_TRANSCRIBE_PROVIDER=openai.',
+  });
+}
+
+function ffmpegCandidates(): string[] {
+  const explicit = (process.env.MISSION_CONTROL_FFMPEG_PATH || '').trim();
+  return Array.from(new Set([
+    ...(explicit ? [explicit] : []),
+    'ffmpeg',
+    '/home/linuxbrew/.linuxbrew/bin/ffmpeg',
+    '/usr/local/bin/ffmpeg',
+    '/usr/bin/ffmpeg',
+  ]));
+}
+
+function resolveFfmpegCommand(): string {
+  if (ffmpegAvailable === true && ffmpegCommand) return ffmpegCommand;
   if (ffmpegAvailable === false) {
-    throw new TranscribeProviderError({
-      status: 503,
-      code: 'ffmpeg_missing',
-      message: 'ffmpeg is not available for local transcription.',
-      details: 'Install ffmpeg or switch MISSION_CONTROL_TRANSCRIBE_PROVIDER=openai.',
-    });
+    throw ffmpegMissingError();
   }
-  try {
-    execFileSync('ffmpeg', ['-version'], { stdio: 'pipe', timeout: 5000 });
-    ffmpegAvailable = true;
-  } catch {
-    ffmpegAvailable = false;
-    throw new TranscribeProviderError({
-      status: 503,
-      code: 'ffmpeg_missing',
-      message: 'ffmpeg is not available for local transcription.',
-      details: 'Install ffmpeg or switch MISSION_CONTROL_TRANSCRIBE_PROVIDER=openai.',
-    });
+
+  const checked: string[] = [];
+  for (const candidate of ffmpegCandidates()) {
+    checked.push(candidate);
+    try {
+      execFileSync(candidate, ['-version'], { stdio: 'pipe', timeout: 5000 });
+      ffmpegAvailable = true;
+      ffmpegCommand = candidate;
+      return candidate;
+    } catch {
+      // Try the next known runtime location before surfacing the missing-tool error.
+    }
   }
+
+  ffmpegAvailable = false;
+  throw ffmpegMissingError(`Checked: ${checked.join(', ')}. Install ffmpeg, set MISSION_CONTROL_FFMPEG_PATH, or switch MISSION_CONTROL_TRANSCRIBE_PROVIDER=openai.`);
+}
+
+function ensureFfmpegAvailable() {
+  resolveFfmpegCommand();
 }
 
 function ensureWhisperModelExists(modelPath: string) {
@@ -174,7 +204,7 @@ async function getWhisperContext(modelPath: string): Promise<WhisperContext> {
 }
 
 function convertToWav(inputPath: string, outputPath: string) {
-  execFileSync('ffmpeg', [
+  execFileSync(resolveFfmpegCommand(), [
     '-i', inputPath,
     '-ar', '16000',
     '-ac', '1',
@@ -183,6 +213,147 @@ function convertToWav(inputPath: string, outputPath: string) {
     '-y',
     outputPath,
   ], { stdio: 'pipe', timeout: 30_000 });
+}
+
+function runMoonshineScript(wavPath: string): Promise<{ text: string; model: string; durationMs?: number }> {
+  return new Promise((resolve, reject) => {
+    const script = (process.env.MISSION_CONTROL_MOONSHINE_SCRIPT || DEFAULT_MOONSHINE_SCRIPT).trim();
+    const child = spawn('python3', [script, wavPath], {
+      env: {
+        ...process.env,
+        PYTHONPATH: process.env.MISSION_CONTROL_MOONSHINE_PYTHONPATH || DEFAULT_MOONSHINE_PYTHONPATH,
+        MISSION_CONTROL_MOONSHINE_PYTHONPATH: process.env.MISSION_CONTROL_MOONSHINE_PYTHONPATH || DEFAULT_MOONSHINE_PYTHONPATH,
+        MISSION_CONTROL_MOONSHINE_CACHE_DIR: process.env.MISSION_CONTROL_MOONSHINE_CACHE_DIR || DEFAULT_MOONSHINE_CACHE_DIR,
+        MISSION_CONTROL_MOONSHINE_MODEL: process.env.MISSION_CONTROL_MOONSHINE_MODEL || DEFAULT_MOONSHINE_MODEL,
+      },
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    const timeoutMs = parseTimeoutMs(process.env.MISSION_CONTROL_MOONSHINE_TIMEOUT_MS || '60000');
+    const timer = setTimeout(() => {
+      child.kill('SIGKILL');
+      reject(new TranscribeProviderError({
+        status: 504,
+        code: 'provider_timeout',
+        message: 'Moonshine transcription timed out.',
+      }));
+    }, timeoutMs);
+
+    let stdout = '';
+    let stderr = '';
+    child.stdout.setEncoding('utf8');
+    child.stderr.setEncoding('utf8');
+    child.stdout.on('data', (chunk) => { stdout += chunk; });
+    child.stderr.on('data', (chunk) => { stderr += chunk; });
+    child.on('error', (error) => {
+      clearTimeout(timer);
+      reject(error);
+    });
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      let payload: Record<string, unknown> | null = null;
+      try {
+        payload = JSON.parse(stdout.trim().split('\n').filter(Boolean).at(-1) || '{}') as Record<string, unknown>;
+      } catch {
+        payload = null;
+      }
+
+      if (code !== 0 || !payload?.ok) {
+        reject(new TranscribeProviderError({
+          status: 502,
+          code: 'provider_unreachable',
+          message: 'Moonshine transcription failed.',
+          details: typeof payload?.error === 'string' ? payload.error : stderr.trim() || stdout.trim() || undefined,
+        }));
+        return;
+      }
+
+      const text = typeof payload.text === 'string' ? payload.text.trim() : '';
+      const model = typeof payload.model === 'string' ? payload.model : `moonshine-voice/${DEFAULT_MOONSHINE_MODEL}`;
+      const durationMs = typeof payload.durationMs === 'number' ? payload.durationMs : undefined;
+      resolve({ text, model, durationMs });
+    });
+  });
+}
+
+async function transcribeWithMoonshineWorker(wavPath: string): Promise<{ text: string; model: string; durationMs?: number } | null> {
+  const host = (process.env.MISSION_CONTROL_MOONSHINE_STT_HOST || DEFAULT_MOONSHINE_WORKER_HOST).trim();
+  const port = (process.env.MISSION_CONTROL_MOONSHINE_STT_PORT || DEFAULT_MOONSHINE_WORKER_PORT).trim();
+  const timeoutMs = parseTimeoutMs(process.env.MISSION_CONTROL_MOONSHINE_WORKER_TIMEOUT_MS || '60000');
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(`http://${host}:${port}/transcribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ wavPath }),
+      signal: controller.signal,
+    });
+    const payload = await response.json().catch(() => null) as Record<string, unknown> | null;
+    if (!response.ok || !payload?.ok) {
+      return null;
+    }
+    return {
+      text: typeof payload.text === 'string' ? payload.text.trim() : '',
+      model: typeof payload.model === 'string' ? payload.model : `moonshine-voice/${DEFAULT_MOONSHINE_MODEL}`,
+      durationMs: typeof payload.durationMs === 'number' ? payload.durationMs : undefined,
+    };
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function transcribeMoonshine(file: File): Promise<TranscribeSuccess> {
+  ensureFfmpegAvailable();
+  const id = randomUUID().slice(0, 8);
+  const inputTmp = join(tmpdir(), `mc-moonshine-in-${id}-${file.name || 'recording.webm'}`);
+  const wavTmp = join(tmpdir(), `mc-moonshine-${id}.wav`);
+  const startedAt = Date.now();
+
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    writeFileSync(inputTmp, Buffer.from(arrayBuffer));
+
+    try {
+      convertToWav(inputTmp, wavTmp);
+    } catch (error) {
+      throw new TranscribeProviderError({
+        status: 500,
+        code: 'audio_conversion_failed',
+        message: 'Audio format conversion failed.',
+        details: error instanceof Error ? error.message : undefined,
+      });
+    }
+
+    const result = await transcribeWithMoonshineWorker(wavTmp) ?? await runMoonshineScript(wavTmp);
+    if (!result.text) {
+      throw new TranscribeProviderError({
+        status: 502,
+        code: 'provider_empty_transcript',
+        message: 'Moonshine returned an empty transcript.',
+      });
+    }
+
+    return {
+      provider: 'moonshine',
+      model: result.model,
+      text: result.text,
+      durationMs: Date.now() - startedAt,
+    };
+  } catch (error) {
+    if (error instanceof TranscribeProviderError) throw error;
+    throw new TranscribeProviderError({
+      status: 502,
+      code: 'provider_unreachable',
+      message: 'Moonshine transcription failed.',
+      details: error instanceof Error ? error.message : undefined,
+    });
+  } finally {
+    try { unlinkSync(inputTmp); } catch {}
+    try { unlinkSync(wavTmp); } catch {}
+  }
 }
 
 async function transcribeLocal(file: File): Promise<TranscribeSuccess> {
@@ -355,6 +526,9 @@ export async function transcribeAudio(file: File): Promise<TranscribeSuccess> {
   const provider = resolveProvider();
   if (provider === 'local') {
     return transcribeLocal(file);
+  }
+  if (provider === 'moonshine') {
+    return transcribeMoonshine(file);
   }
   if (provider === 'openai') {
     return transcribeOpenAi(file);

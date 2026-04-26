@@ -22,6 +22,10 @@ LIVE_PUBLIC_WS_PATH="${MISSION_CONTROL_WS_LIVE_PUBLIC_PATH:-/api/runtime-bridge/
 PREVIEW_PORT="${MISSION_CONTROL_PREVIEW_PORT:-3005}"
 INTERNAL_NEXT_HOST="${MISSION_CONTROL_PREVIEW_INTERNAL_HOST:-127.0.0.1}"
 INTERNAL_NEXT_PORT="${MISSION_CONTROL_PREVIEW_INTERNAL_PORT:-3007}"
+PIPER_TTS_HOST="${MISSION_CONTROL_PIPER_TTS_HOST:-127.0.0.1}"
+PIPER_TTS_PORT="${MISSION_CONTROL_PIPER_TTS_PORT:-3024}"
+MOONSHINE_STT_HOST="${MISSION_CONTROL_MOONSHINE_STT_HOST:-127.0.0.1}"
+MOONSHINE_STT_PORT="${MISSION_CONTROL_MOONSHINE_STT_PORT:-3025}"
 
 export MISSION_CONTROL_WS_SIDECAR_HOST="$SIDECAR_HOST"
 export MISSION_CONTROL_WS_SIDECAR_PORT="$SIDECAR_PORT"
@@ -31,6 +35,10 @@ export MISSION_CONTROL_WS_LIVE_PUBLIC_PATH="$LIVE_PUBLIC_WS_PATH"
 export MISSION_CONTROL_PREVIEW_PORT="$PREVIEW_PORT"
 export MISSION_CONTROL_PREVIEW_INTERNAL_HOST="$INTERNAL_NEXT_HOST"
 export MISSION_CONTROL_PREVIEW_INTERNAL_PORT="$INTERNAL_NEXT_PORT"
+export MISSION_CONTROL_PIPER_TTS_HOST="$PIPER_TTS_HOST"
+export MISSION_CONTROL_PIPER_TTS_PORT="$PIPER_TTS_PORT"
+export MISSION_CONTROL_MOONSHINE_STT_HOST="$MOONSHINE_STT_HOST"
+export MISSION_CONTROL_MOONSHINE_STT_PORT="$MOONSHINE_STT_PORT"
 
 if [[ -z "${MISSION_CONTROL_WS_SIDECAR_TOKEN:-}" ]]; then
   MISSION_CONTROL_WS_SIDECAR_TOKEN="$(node -e "console.log(require('node:crypto').randomBytes(24).toString('hex'))")"
@@ -59,6 +67,8 @@ ensure_alive() {
 }
 
 spawn_detached "$RUNTIME_DIR/ws-sidecar.pid" "$RUNTIME_DIR/ws-sidecar.log" node ./scripts/runtime-bridge-ws-sidecar.js
+spawn_detached "$RUNTIME_DIR/piper-tts-worker.pid" "$RUNTIME_DIR/piper-tts-worker.log" node ./scripts/piper-tts-worker.mjs
+spawn_detached "$RUNTIME_DIR/moonshine-stt-worker.pid" "$RUNTIME_DIR/moonshine-stt-worker.log" python3 ./scripts/moonshine-stt-worker.py
 spawn_detached "$RUNTIME_DIR/next.pid" "$RUNTIME_DIR/next.log" npm run start -- --hostname "$INTERNAL_NEXT_HOST" --port "$INTERNAL_NEXT_PORT"
 spawn_detached "$RUNTIME_DIR/latest.pid" "$RUNTIME_DIR/latest.log" node ./scripts/preview-origin-proxy.js
 
@@ -109,8 +119,10 @@ NODE
 }
 
 for _ in {1..30}; do
-  if ensure_alive "$RUNTIME_DIR/ws-sidecar.pid" && ensure_alive "$RUNTIME_DIR/next.pid" && ensure_alive "$RUNTIME_DIR/latest.pid"; then
+  if ensure_alive "$RUNTIME_DIR/ws-sidecar.pid" && ensure_alive "$RUNTIME_DIR/piper-tts-worker.pid" && ensure_alive "$RUNTIME_DIR/moonshine-stt-worker.pid" && ensure_alive "$RUNTIME_DIR/next.pid" && ensure_alive "$RUNTIME_DIR/latest.pid"; then
     if curl -fsS "http://127.0.0.1:${PREVIEW_PORT}/general/agents" >/dev/null 2>&1; then
+      curl -fsS -X POST "http://${PIPER_TTS_HOST}:${PIPER_TTS_PORT}/warm" >/dev/null 2>&1 || true
+      curl -fsS -X POST "http://${MOONSHINE_STT_HOST}:${MOONSHINE_STT_PORT}/warm" >/dev/null 2>&1 || true
       warm_runtime_bridge || true
       cat "$RUNTIME_DIR/latest.pid"
       exit 0
@@ -126,4 +138,8 @@ echo "--- next.log ---" >&2
 tail -n 40 "$RUNTIME_DIR/next.log" >&2 || true
 echo "--- ws-sidecar.log ---" >&2
 tail -n 40 "$RUNTIME_DIR/ws-sidecar.log" >&2 || true
+echo "--- piper-tts-worker.log ---" >&2
+tail -n 40 "$RUNTIME_DIR/piper-tts-worker.log" >&2 || true
+echo "--- moonshine-stt-worker.log ---" >&2
+tail -n 40 "$RUNTIME_DIR/moonshine-stt-worker.log" >&2 || true
 exit 1

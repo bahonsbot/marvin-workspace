@@ -14,6 +14,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ---
 
+
+## [CORR-20260426-2334]
+
+**Trigger:** Philippe pointed out that tightening Lab supervision by killing/restarting around the build race was not the best approach because it caused both Dashboard and Lab to lose Gateway connection, requiring a manual Gateway restart.
+**What was wrong:** I treated a Lab-only runtime/build race as if broad process-group intervention was acceptable inside the shared OpenClaw container. That violated the stable Dashboard/Lab separation and created avoidable operator disruption.
+**Lesson:** When fixing Mission Control runtime issues, especially around Dashboard/Lab/Gateway, default to the least disruptive recovery path: inspect ownership, use maintenance locks, pid-file scoped scripts, and port-specific cleanup. Do not use broad process-group/global process kills in shared runtime contexts. If the next action could affect Gateway or both lanes, stop and warn Philippe before acting.
+
+**Priority:** critical
+**Status:** active
+
 ## [CORR-20260421-2327]
 
 **Trigger:** Philippe said the latest Agents-page change had altered Marvin's height/empty space instead of fixing the requested width, and pointed out that the avatars still sat on rounded-rectangle tiles despite being transparent PNGs.

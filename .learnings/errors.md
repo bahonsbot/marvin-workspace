@@ -17,6 +17,18 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260426-2334]
+
+**What failed:** Mission Control Lab recovery used a broad/shared process-group kill during a live Gateway/Dashboard/Lab session
+**Error:** Killing the supervisor process group while trying to resolve a Lab build/restart race disrupted Gateway connectivity and forced Philippe to manually restart the Gateway.
+**Context:** During Moonshine STT worker optimization, Lab supervision had invoked a rebuild-heavy restart path. I correctly identified the restart/build race, but recovery crossed the safety boundary by using a process-group kill in a shared container instead of pid-file/port-scoped service scripts.
+**Suggested fix:** For Mission Control Dashboard/Lab recovery, never kill broad/shared process groups or global process patterns. Use maintenance locks, pid-file scoped stop/start scripts, and port-scoped cleanup only. If process ownership is unclear, inspect and pause instead of acting. Runtime supervisor restarts must not rebuild; rebuilds are deliberate promotion/dev actions.
+**Resolution:** Recovered Gateway after Philippe's manual restart, restored Dashboard and Lab health, changed service restart paths to avoid rebuild-on-supervisor-restart, and validated Dashboard/Lab with worker health plus lane smoke.
+
+**Priority:** critical
+**Status:** resolved
+
+
 
 ## [ERR-20260426-1611]
 
