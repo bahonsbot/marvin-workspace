@@ -457,9 +457,18 @@
 
 @media (max-width: 640px) {
   .toastRail {
-    top: 76px;
-    right: 12px;
-    width: min(320px, calc(100vw - 24px));
+    top: 60px;
+    right: 10px;
+    left: 66px;
+    width: auto;
+    max-height: 34vh;
+    overflow: hidden;
+  }
+
+  .toastRail button {
+    max-height: 132px;
+    overflow: hidden;
+    padding: 11px 12px 10px !important;
   }
 }
 
@@ -486,5 +495,21 @@
     outline: 2px solid Highlight;
     outline-offset: 2px;
     box-shadow: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .chatShellMain {
+    padding: 10px 10px 10px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .appShellRoot .app-shell-grid {
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+  }
+
+  .chatShellMain {
+    overflow: hidden !important;
   }
 }

@@ -11,11 +11,14 @@ import styles from './shell.module.css';
 
 function toastSummary(event: { summary?: string; artifactPath?: string; type: string }) {
   const raw = String(event.summary || '').trim();
-  if (raw && !/^[\[{]/.test(raw) && !/"runId"\s*:/.test(raw) && !/systemPromptReport|injectedWorkspaceFiles/.test(raw)) {
-    return raw;
+  const looksInternal = /^[\[{]/.test(raw) || /"runId"\s*:/.test(raw) || /systemPromptReport|injectedWorkspaceFiles|openclaw|bash|timeoutSeconds|command=/i.test(raw);
+  if (raw && !looksInternal) {
+    return raw.length > 180 ? `${raw.slice(0, 177)}…` : raw;
   }
-  if (event.artifactPath) return `Created output: ${event.artifactPath}`;
-  return event.type === 'task.moved_to_review' ? 'Task completed and moved to Review.' : undefined;
+  if (event.artifactPath) return 'Created an output artifact.';
+  if (event.type === 'task.moved_to_review') return 'Task completed and moved to Review.';
+  if (event.type === 'task.needs_input') return 'Open Tasks to review the requested input.';
+  return undefined;
 }
 
 function ToastRail() {
@@ -125,7 +128,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
       <TopTabBar />
       <ToastRail />
       <div
-        className="app-shell-grid"
+        className={`app-shell-grid ${isChatRoute ? 'chat-shell-grid' : ''}`}
         style={{
           height: 'calc(100vh - 72px)',
           ['--sidebar-width' as string]: sidebarCollapsed ? '76px' : '220px',
@@ -134,7 +137,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
         <Sidebar />
         <div className={styles.appShellContentColumn}>
           <main
-            className={`app-shell-main ${styles.appShellMain}`}
+            className={`app-shell-main ${styles.appShellMain} ${isChatRoute ? `${styles.chatShellMain} chat-shell-main` : ''}`}
             style={{
               overflow: isChatRoute ? 'hidden' : 'auto',
               padding: isCompactTopRoute ? '14px 32px 12px' : undefined,

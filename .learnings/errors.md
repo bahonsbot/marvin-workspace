@@ -1357,3 +1357,9 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 **Resolution:** committed source/runtime-service changes in focused nested/root checkpoints, untracked Mission Control live JSON as runtime state, ignored the lab runtime snapshot, and separately removed the approved obsolete preupdate checkpoint.
 **Priority:** high
 **Status:** active
+
+## Mission Control lane restart supervisor race
+- Date: 2026-04-27
+- Symptom: Manual Lab/Dashboard restart during Mission Control promotion caused temporary `Mission Control preview proxy could not reach the Next.js server` and/or `EADDRINUSE` on lane ports.
+- Cause: The lane supervisor was still running and auto-restarted the bundle while manual restart/build/start steps were also trying to bind the same ports.
+- Prevention: Before manual lane restart work, create the lane maintenance lock (`.lab-runtime/maintenance.lock` for Lab, `.preview-runtime/maintenance.lock` for Dashboard), then stop, clear only that lane's ports if needed, start, run health/smoke, and remove the lock. Do not trust proxy PID alone; verify internal Next and lane smoke.

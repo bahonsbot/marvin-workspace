@@ -114,8 +114,12 @@ export function ChatComposer({
   liveTargetSession: string | null;
   sessionState: string;
 }) {
+  const friendlyComposerError = (composerError || liveSendError || effectiveBridgeError || (!liveTargetSession && sessionState === 'connected'))
+    ? composerError || liveSendError || (effectiveBridgeError ? `Last refresh error: ${effectiveBridgeError}` : 'The chat connection is live, but Mission Control still needs an active chat before it can send.')
+    : null;
+
   return (
-    <form onSubmit={onSubmit} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop} style={{ border: isDraggingFiles ? '1px solid rgba(121, 166, 148, 0.54)' : '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: isDraggingFiles ? 'rgba(244, 249, 246, 0.96)' : 'rgba(255, 255, 255, 0.9)', padding: 12, display: 'grid', gap: 8, zIndex: 11, boxShadow: '0 -8px 24px rgba(26, 61, 50, 0.08)' }}>
+    <form className="mc-chat-composer" onSubmit={onSubmit} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop} style={{ border: isDraggingFiles ? '1px solid rgba(121, 166, 148, 0.54)' : '1px solid rgba(200, 195, 188, 0.32)', borderRadius: 18, background: isDraggingFiles ? 'rgba(244, 249, 246, 0.96)' : 'rgba(255, 255, 255, 0.9)', padding: 12, display: 'grid', gap: 8, zIndex: 11, boxShadow: '0 -8px 24px rgba(26, 61, 50, 0.08)', minWidth: 0 }}>
       <input ref={fileInputRef} type="file" multiple onChange={onFileInputChange} style={{ display: 'none' }} />
       {attachedFiles.length > 0 ? (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -128,7 +132,7 @@ export function ChatComposer({
         </div>
       ) : null}
       {isDraggingFiles ? <div style={{ fontSize: 12, color: '#163b31', padding: '2px 2px 0' }}>Drop files here to upload them into <span style={{ fontFamily: monoFont }}>uploads/mission-control/</span>.</div> : null}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 12, alignItems: 'end' }}>
+      <div className="mc-chat-composer-row" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 12, alignItems: 'end', minWidth: 0 }}>
         <textarea
           value={composerValue}
           onChange={(event) => setComposerValue(event.target.value)}
@@ -151,7 +155,7 @@ export function ChatComposer({
             boxSizing: 'border-box',
           }}
         />
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center', paddingBottom: 2 }}>
+        <div className="mc-chat-composer-actions" style={{ display: 'flex', gap: 8, alignItems: 'center', paddingBottom: 2, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
@@ -217,9 +221,9 @@ export function ChatComposer({
                   : speechMessage}
         </div>
       ) : null}
-      {(composerError || liveSendError || effectiveBridgeError || (!liveTargetSession && sessionState === 'connected')) ? (
+      {friendlyComposerError ? (
         <div style={{ fontSize: 12, color: composerError || liveSendError || effectiveBridgeError ? '#9a4b43' : 'var(--text-muted)', maxWidth: 720 }}>
-          {composerError || liveSendError || (effectiveBridgeError ? `Last refresh error: ${effectiveBridgeError}` : 'The gateway session is live, but Mission Control still needs one visible runtime session key before it can issue a real prompt.')}
+          {friendlyComposerError}
         </div>
       ) : null}
     </form>

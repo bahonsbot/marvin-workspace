@@ -7,6 +7,12 @@ import { pillStyle } from '@/components/chat/chat-ui-helpers';
 import type { RuntimeBridgeLiveEvent } from '@/hooks/useRuntimeBridge';
 import type { RuntimeBridgeTranscriptRenderItem } from '@/lib/chat/runtime-bridge-transcript';
 
+function friendlySessionLabel(value: string): string {
+  if (value === 'agent:main:main') return 'Marvin';
+  if (/^agent:[^:]+:main$/.test(value)) return 'Selected chat';
+  return value;
+}
+
 function InfoIcon() {
   return <span aria-hidden="true">ⓘ</span>;
 }
@@ -42,7 +48,7 @@ export function LiveTranscriptSection({
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-body)' }}>Live bridge session</div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={pillStyle()}>{liveTargetLabel}</span>
+            <span style={pillStyle()}>{friendlySessionLabel(liveTargetLabel)}</span>
             <div ref={bridgeEventsRef} style={{ position: 'relative' }}>
               <button
                 type="button"
@@ -92,7 +98,7 @@ export function LiveTranscriptSection({
             ))
           ) : (
             <div style={{ padding: '6px 2px', fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8 }}>
-              No live transcript yet. Send one prompt after the gateway session is connected to this target: <span style={{ fontFamily: monoFont }}>{liveTargetLabel}</span>.
+              No live transcript yet. Send one prompt after the chat connection is ready for <span style={{ fontFamily: monoFont }}>{friendlySessionLabel(liveTargetLabel)}</span>.
             </div>
           )}
         </div>

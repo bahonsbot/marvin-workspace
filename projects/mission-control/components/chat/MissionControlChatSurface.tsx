@@ -53,6 +53,12 @@ type RuntimeStatus = {
   detail: string;
 };
 
+type RunStatus = {
+  label: 'Idle' | 'Running' | 'Syncing';
+  tone: RuntimeStatusTone;
+  detail: string;
+};
+
 type AgentMenuOption = {
   id: string;
   seatSlug: string | null;
@@ -63,12 +69,13 @@ type AgentMenuOption = {
 };
 
 type ModelMenuOption = {
-  id: 'codex5.4' | 'codex' | 'minimax2.7';
+  id: 'codex5.5' | 'codex5.4' | 'codex' | 'minimax2.7';
   label: string;
   command: string;
 };
 
 function runtimeModelCommand(modelAlias: ModelMenuOption['id'] | ChatSeatActivation['defaultModel']): string {
+  if (modelAlias === 'codex5.5') return '/model openai-codex/gpt-5.5';
   if (modelAlias === 'codex5.4') return '/model openai-codex/gpt-5.4';
   if (modelAlias === 'codex5.4mini') return '/model openai-codex/gpt-5.4-mini';
   if (modelAlias === 'codex') return '/model codex';
@@ -77,6 +84,7 @@ function runtimeModelCommand(modelAlias: ModelMenuOption['id'] | ChatSeatActivat
 }
 
 const modelMenuOptions: ModelMenuOption[] = [
+  { id: 'codex5.5', label: 'gpt-5.5', command: runtimeModelCommand('codex5.5') },
   { id: 'codex5.4', label: 'gpt-5.4', command: runtimeModelCommand('codex5.4') },
   { id: 'codex', label: 'codex-5.3', command: runtimeModelCommand('codex') },
   { id: 'minimax2.7', label: 'minimax-2.7', command: runtimeModelCommand('minimax2.7') },
@@ -237,6 +245,44 @@ function runtimeStatusStyle(tone: RuntimeStatusTone): CSSProperties {
     };
   }
   return pillStyle({ active: true });
+}
+
+function friendlySessionLabel(key: string | null | undefined, fallback = 'Marvin'): string {
+  if (!key) return 'No active chat';
+  if (key === 'agent:main:main') return fallback;
+  if (key.startsWith('agent:') && key.endsWith(':main')) return fallback;
+  return 'Selected chat';
+}
+
+function friendlyRuntimeDetail(text: string | null | undefined): string | null {
+  if (!text) return null;
+  return text
+    .replace(/server-owned\s+/gi, '')
+    .replace(/HTTP runtime bridge/gi, 'chat connection')
+    .replace(/runtime bridge/gi, 'chat connection')
+    .replace(/gateway session/gi, 'chat session')
+    .replace(/gateway handshake/gi, 'chat handshake')
+    .replace(/websocket/gi, 'live connection')
+    .replace(/sidecar/gi, 'service')
+    .replace(/visible runtime session key/gi, 'active chat')
+    .replace(/agent:main:main/g, 'Marvin')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function iconCircleButtonStyle(active = true): CSSProperties {
+  return {
+    ...actionButtonStyle(active),
+    border: '1px solid rgba(200, 195, 188, 0.46)',
+    background: 'rgba(255, 255, 255, 0.78)',
+    color: active ? 'var(--text-body)' : 'var(--text-muted)',
+    width: 30,
+    height: 30,
+    padding: 0,
+    fontSize: 12,
+    borderRadius: 999,
+    flexShrink: 0,
+  };
 }
 
 function buildSudoReviewPrompt(run: SudoOrchestrationRun) {
@@ -900,6 +946,14 @@ export function MissionControlChatSurface({
   const liveSendState = live?.sendState ?? 'idle';
   const liveSendError = live?.sendError ?? null;
   const liveActiveRunId = live?.activeRunId ?? null;
+  const recentTranscriptCutoff = Date.now() - 45_000;
+  const hasRunningTranscriptActivity = liveEntries.some((entry) => {
+    if (entry.at < recentTranscriptCutoff) return false;
+    if (entry.kind === 'tool') return entry.status === 'running';
+    if (entry.kind === 'message') return entry.status === 'streaming';
+    return false;
+  });
+  const userFacingTargetLabel = friendlySessionLabel(liveTargetSession ?? summaryFallbackTargetKey, assistantLabelForSeat(activation?.seatSlug));
   const httpInteractiveRuntime = (sessionState === 'connected' && wsState !== 'open' && (liveCanSend || liveCanAbort || liveSendState === 'sending' || liveSendState === 'streaming' || Boolean(liveActiveRunId)));
   const handshakeRuntime = wsState === 'open' && (sessionState === 'waiting' || sessionState === 'connecting' || sessionState === 'challenged');
   const recoveringRuntime = (sessionState === 'connecting' || sessionState === 'waiting') && wsState !== 'unavailable' && (liveCanSend || liveCanAbort || Boolean(liveActiveRunId) || liveSendState === 'idle' || wsState === 'connecting' || wsState === 'open');
@@ -976,15 +1030,18 @@ export function MissionControlChatSurface({
 
 
   const topRailModelLabel = topRailSession?.model ?? summary.sessionContext.mainSession.model ?? model.modelLabel;
-  const runtimeModelLabel = topRailModelLabel.includes('gpt-5.4')
-    ? 'gpt-5.4'
-    : topRailModelLabel.toLowerCase().includes('minimax')
-      ? 'minimax-2.7'
-      : topRailModelLabel.toLowerCase().includes('codex') || topRailModelLabel.toLowerCase().includes('5.3')
-        ? 'codex-5.3'
-        : topRailModelLabel;
+  const normalizedTopRailModelLabel = topRailModelLabel.toLowerCase();
+  const runtimeModelLabel = normalizedTopRailModelLabel.includes('gpt-5.5')
+    ? 'gpt-5.5'
+    : normalizedTopRailModelLabel.includes('gpt-5.4')
+      ? 'gpt-5.4'
+      : normalizedTopRailModelLabel.includes('minimax')
+        ? 'minimax-2.7'
+        : normalizedTopRailModelLabel.includes('codex') || normalizedTopRailModelLabel.includes('5.3')
+          ? 'codex-5.3'
+          : topRailModelLabel;
   const modelMenuLabel = optimisticModelLabel ?? pendingModelLabel ?? runtimeModelLabel;
-  const xhighCapable = modelMenuLabel === 'gpt-5.4' || modelMenuLabel === 'codex-5.3';
+  const xhighCapable = modelMenuLabel === 'gpt-5.5' || modelMenuLabel === 'gpt-5.4' || modelMenuLabel === 'codex-5.3';
   const boundedThinkCapable = modelMenuLabel === 'minimax-2.7';
   const effortInteractive = xhighCapable || boundedThinkCapable;
   const availableEffortOptions = xhighCapable ? effortMenuOptions : boundedThinkCapable ? effortMenuOptions.filter((level) => level !== 'xhigh') : [];
@@ -1074,6 +1131,29 @@ export function MissionControlChatSurface({
         : 'Ready state is waiting on runtime session targeting.',
     };
   })();
+  const runStatus: RunStatus = (() => {
+    if (liveSendState === 'sending' || liveSendState === 'streaming') {
+      return {
+        label: 'Running',
+        tone: 'working',
+        detail: 'A chat response is currently active.',
+      };
+    }
+
+    if (liveActiveRunId || hasRunningTranscriptActivity) {
+      return {
+        label: 'Syncing',
+        tone: 'finalizing',
+        detail: 'Recent activity is still being reconciled into the transcript.',
+      };
+    }
+
+    return {
+      label: 'Idle',
+      tone: 'ready',
+      detail: 'No active chat response is running.',
+    };
+  })();
   const bridgeTimingSummary = useMemo(() => {
     if (!bridgeTiming?.connectStartedAt) return null;
     const socketOpenMs = bridgeTiming.socketOpenedAt ? bridgeTiming.socketOpenedAt - bridgeTiming.connectStartedAt : null;
@@ -1096,6 +1176,7 @@ export function MissionControlChatSurface({
   const modelTriggerLabel = (() => {
     const source = (optimisticModelLabel ?? displayModelLabel).trim();
     const lower = source.toLowerCase();
+    if (lower.includes('gpt-5.5')) return 'gpt-5.5';
     if (lower.includes('gpt-5.4')) return 'gpt-5.4';
     if (lower.includes('minimax')) return 'minimax-2.7';
     if (lower.includes('codex') || lower.includes('5.3')) return 'codex-5.3';
@@ -1424,6 +1505,7 @@ export function MissionControlChatSurface({
       >
         <div
           ref={topControlMenuRef}
+          className="mc-chat-control-bar"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -1433,7 +1515,7 @@ export function MissionControlChatSurface({
             overflow: 'visible',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, minWidth: 0, flex: '1 1 auto' }}>
+          <div className="mc-chat-primary-controls" style={{ display: 'flex', alignItems: 'center', gap: 5, minWidth: 0, flex: '1 1 auto' }}>
             <div style={{ position: 'relative', minWidth: 0, flex: '0 1 128px' }}>
               <button
                 type="button"
@@ -1577,159 +1659,78 @@ export function MissionControlChatSurface({
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 50, flexShrink: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
-              <span style={runtimeStatusStyle(runtimeStatus.tone)} title={runtimeStatus.detail}>
-                {runtimeStatus.label}
-              </span>
+          <div className="mc-chat-status-controls" style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, minWidth: 0 }}>
+            <span style={runtimeStatusStyle(runtimeStatus.tone)} title={friendlyRuntimeDetail(runtimeStatus.detail) ?? runtimeStatus.detail}>
+              {runtimeStatus.label}
+            </span>
+            <span style={runtimeStatusStyle(runStatus.tone)} title={runStatus.detail}>
+              {runStatus.label}
+            </span>
+            <button
+              type="button"
+              onClick={() => void handleStop()}
+              disabled={!live?.canAbort}
+              title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a chat response is active.'}
+              style={{
+                ...actionButtonStyle(Boolean(live?.canAbort)),
+                border: '1px solid rgba(200, 195, 188, 0.46)',
+                background: 'rgba(255, 255, 255, 0.78)',
+                color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)',
+                padding: '7px 10px',
+                fontSize: 11,
+                flexShrink: 0,
+              }}
+            >
+              Stop
+            </button>
+
+            <div
+              className="mc-chat-context-chip"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 9px',
+                border: '1px solid rgba(200, 195, 188, 0.34)',
+                borderRadius: 999,
+                background: 'rgba(255, 255, 255, 0.7)',
+                flexShrink: 0,
+              }}
+              title={topRailContextPercent !== null ? `Context used ${topRailContextPercent}%` : 'Context usage unavailable'}
+            >
+              <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Context used</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{topRailContextPercent !== null ? `${topRailContextPercent}%` : 'n/a'}</span>
+              <div style={{ width: 40, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
+                <div style={{ width: `${topRailContextPercent ?? 18}%`, minWidth: topRailContextPercent === null ? 22 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
+              </div>
+            </div>
+
+            <div ref={statusDropdownRef} style={{ position: 'relative', display: 'flex', gap: 6, flexShrink: 0 }}>
               <button
                 type="button"
-                onClick={() => void handleStop()}
-                disabled={!live?.canAbort}
-                title={live?.canAbort ? 'Stop the active Mission Control chat response.' : 'Stop becomes available while a Mission Control chat response is active.'}
+                onClick={() => setStatusDropdownOpen((value) => !value)}
+                aria-label={effectiveBridgeError ? 'Connection details need attention' : 'Connection details'}
+                title="Connection details"
                 style={{
-                  ...actionButtonStyle(Boolean(live?.canAbort)),
-                  border: '1px solid rgba(200, 195, 188, 0.46)',
-                  background: 'rgba(255, 255, 255, 0.78)',
-                  color: live?.canAbort ? 'var(--text-body)' : 'var(--text-muted)',
-                  padding: '7px 10px',
-                  fontSize: 11,
-                  flexShrink: 0,
+                  ...iconCircleButtonStyle(true),
+                  border: effectiveBridgeError ? '1px solid rgba(181, 88, 74, 0.34)' : iconCircleButtonStyle(true).border,
+                  background: effectiveBridgeError ? 'rgba(244, 224, 220, 0.88)' : iconCircleButtonStyle(true).background,
+                  color: effectiveBridgeError ? '#7c2e24' : iconCircleButtonStyle(true).color,
                 }}
               >
-                Stop
+                {effectiveBridgeError ? '!' : 'ⓘ'}
               </button>
-
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  padding: '6px 9px',
-                  border: '1px solid rgba(200, 195, 188, 0.34)',
-                  borderRadius: 999,
-                  background: 'rgba(255, 255, 255, 0.7)',
-                  flexShrink: 0,
-                }}
-                title={topRailContextPercent !== null ? `${topRailContextPercent}% of visible context` : 'Context usage unavailable'}
-              >
-                <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Context</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: contextStyles.text }}>{topRailContextPercent !== null ? `${topRailContextPercent}%` : 'n/a'}</span>
-                <div style={{ width: 40, height: 6, borderRadius: 999, background: 'rgba(221, 215, 209, 0.62)', overflow: 'hidden' }}>
-                  <div style={{ width: `${topRailContextPercent ?? 18}%`, minWidth: topRailContextPercent === null ? 22 : undefined, height: '100%', borderRadius: 999, background: contextStyles.bar }} />
-                </div>
-              </div>
-
-              {bridgeTimingSummary ? (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    padding: '6px 9px',
-                    border: '1px solid rgba(200, 195, 188, 0.34)',
-                    borderRadius: 999,
-                    background: 'rgba(255, 255, 255, 0.7)',
-                    flexShrink: 0,
-                  }}
-                  title="Socket open, challenge arrival, and connect-ack timing for the current bridge session."
-                >
-                  <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Handshake</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-body)' }}>
-                    {bridgeTimingSummary.challengeMs != null ? bridgeTimingSummary.challengeMs / 1000 >= 1 ? `${(bridgeTimingSummary.challengeMs / 1000).toFixed(1)}s` : `${bridgeTimingSummary.challengeMs}ms` : '…'}
-                  </span>
-                </div>
-              ) : null}
-
               {bridge ? (
                 <button
                   type="button"
                   onClick={() => void bridge.refresh()}
                   disabled={bridgeRefreshing}
-                  title="Refresh runtime bridge state."
-                  style={{
-                    ...actionButtonStyle(true),
-                    border: '1px solid rgba(200, 195, 188, 0.46)',
-                    background: 'rgba(255, 255, 255, 0.78)',
-                    color: 'var(--text-body)',
-                    cursor: bridgeRefreshing ? 'progress' : 'pointer',
-                    width: 30,
-                    height: 30,
-                    padding: 0,
-                    fontSize: 12,
-                    borderRadius: 999,
-                    flexShrink: 0,
-                  }}
+                  title="Refresh chat state."
+                  style={{ ...iconCircleButtonStyle(true), cursor: bridgeRefreshing ? 'progress' : 'pointer' }}
                 >
                   {bridgeRefreshing ? '…' : '↻'}
                 </button>
               ) : null}
-            </div>
-
-          <div ref={statusDropdownRef} style={{ position: 'relative', display: 'flex', gap: 6, flexShrink: 0 }}>
-              <button
-                type="button"
-                onClick={() => setStatusDropdownOpen((value) => !value)}
-                aria-label={`WS ${wsState}`}
-                title={`WS ${wsState}`}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 999,
-                  border: wsState === 'open' ? '1px solid rgba(121, 166, 148, 0.42)' : wsState === 'error' ? '1px solid rgba(181, 88, 74, 0.34)' : '1px solid rgba(200, 195, 188, 0.42)',
-                  background: wsState === 'open' ? 'rgba(212, 231, 221, 0.68)' : wsState === 'error' ? 'rgba(244, 224, 220, 0.88)' : 'rgba(255, 255, 255, 0.72)',
-                  color: wsState === 'open' ? '#1a3d32' : wsState === 'error' ? '#7c2e24' : 'var(--text-muted)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  fontSize: 13,
-                }}
-              >
-                ⌁
-              </button>
-              <button
-                type="button"
-                onClick={() => setStatusDropdownOpen((value) => !value)}
-                aria-label={`Session ${sessionState}`}
-                title={`Session ${sessionState}`}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 999,
-                  border: sessionState === 'connected' ? '1px solid rgba(121, 166, 148, 0.42)' : sessionState === 'error' || sessionState === 'rejected' ? '1px solid rgba(181, 88, 74, 0.34)' : '1px solid rgba(200, 195, 188, 0.42)',
-                  background: sessionState === 'connected' ? 'rgba(212, 231, 221, 0.68)' : sessionState === 'error' || sessionState === 'rejected' ? 'rgba(244, 224, 220, 0.88)' : 'rgba(255, 255, 255, 0.72)',
-                  color: sessionState === 'connected' ? '#1a3d32' : sessionState === 'error' || sessionState === 'rejected' ? '#7c2e24' : 'var(--text-muted)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  fontSize: 13,
-                }}
-              >
-                ◎
-              </button>
-              <button
-                type="button"
-                onClick={() => setStatusDropdownOpen((value) => !value)}
-                aria-label={effectiveBridgeError ? 'Bridge error' : 'Bridge details'}
-                title={effectiveBridgeError ? 'Bridge error' : wsDetail || sessionDetail || 'Bridge details'}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 999,
-                  border: '1px solid rgba(200, 195, 188, 0.4)',
-                  background: effectiveBridgeError ? 'rgba(244, 224, 220, 0.88)' : 'rgba(255, 255, 255, 0.72)',
-                  color: effectiveBridgeError ? '#7c2e24' : 'var(--text-body)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  fontSize: 13,
-                }}
-              >
-                {effectiveBridgeError ? '!' : 'ⓘ'}
-              </button>
               {statusDropdownOpen && (
                 <div
                   style={{
@@ -1749,27 +1750,29 @@ export function MissionControlChatSurface({
                 >
                   {effectiveBridgeError ? (
                     <div style={{ fontSize: 12, color: '#9a4b43', lineHeight: 1.6 }}>
-                      Bridge refresh failed: {effectiveBridgeError}
+                      Chat connection needs attention: {friendlyRuntimeDetail(effectiveBridgeError) ?? effectiveBridgeError}
                     </div>
                   ) : wsDetail ? (
                     <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                      {wsDetail}
+                      {friendlyRuntimeDetail(wsDetail) ?? wsDetail}
                     </div>
                   ) : sessionDetail ? (
                     <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                      {sessionDetail}
+                      {friendlyRuntimeDetail(sessionDetail) ?? sessionDetail}
                     </div>
                   ) : (
                     <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                      Runtime socket is open. Waiting for gateway handshake.
+                      Chat connection is opening and waiting for confirmation.
                     </div>
                   )}
-                  <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
-                    History source: {historySource}
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    <span style={pillStyle()}>Live: {wsState}</span>
+                    <span style={pillStyle()}>Session: {sessionState}</span>
+                    <span style={pillStyle()}>History: {historySource}</span>
                   </div>
                   {historyNote ? (
                     <div style={{ fontSize: 11, color: 'var(--text-ghost)', lineHeight: 1.5 }}>
-                      {historyNote}
+                      {friendlyRuntimeDetail(historyNote) ?? historyNote}
                     </div>
                   ) : null}
                   {(sessionId || historySessionId) && (
@@ -1779,7 +1782,7 @@ export function MissionControlChatSurface({
                   )}
                   {historyThinkingLevel ? (
                     <div style={{ fontSize: 11, color: 'var(--text-ghost)' }}>
-                      History thinking level: {historyThinkingLevel}
+                      Thinking level: {historyThinkingLevel}
                     </div>
                   ) : null}
                   {sessionLastEvent && (
@@ -1790,7 +1793,7 @@ export function MissionControlChatSurface({
                   {bridgeTimingSummary ? (
                     <div style={{ display: 'grid', gap: 4, paddingTop: 4, borderTop: '1px solid rgba(200, 195, 188, 0.28)' }}>
                       <div style={{ fontSize: 11, color: 'var(--text-ghost)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                        Handshake timing
+                        Connection timing
                       </div>
                       <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
                         Socket open: {bridgeTimingSummary.socketOpenMs != null ? `${bridgeTimingSummary.socketOpenMs}ms` : '—'}
@@ -1906,9 +1909,9 @@ export function MissionControlChatSurface({
         composerPlaceholder={
           sessionState === 'connected'
             ? liveTargetSession
-              ? `Message to ${liveTargetLabel}.`
-              : 'A connected runtime bridge still needs one visible session key before Mission Control can send.'
-            : 'Composer unlocks after the runtime bridge becomes available.'
+              ? `Message ${userFacingTargetLabel}.`
+              : 'Select an active chat before sending.'
+            : 'Chat unlocks once the connection is ready.'
         }
         uploadBusy={uploadBusy}
         speechButtonEnabled={speechButtonEnabled}

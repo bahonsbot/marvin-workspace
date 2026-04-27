@@ -774,3 +774,8 @@ User corrections and feedback. Log when user explicitly corrects you.
 **Context:** During Apr 25 source reconciliation, live task/news/skills/delegation JSON changes were mixed into source dirt. Philippe agreed they should not be casually versioned as source.
 **Rule:** Source repos should own schemas, adapters, migrations, and seed examples. Live Mission Control JSON stores should stay on disk, be backed up/migrated deliberately, and be ignored by git unless a curated snapshot is explicitly approved.
 **Status:** active
+
+## Mission Control Chat mobile selector reliability
+- Date: 2026-04-27
+- Correction: For mobile Chat-specific shell rules, do not rely only on CSS-module class names from `shell.module.css`; global selectors cannot reliably target hashed module class names unless an explicit global class is also present.
+- Use an explicit global class such as `chat-shell-grid` / `chat-shell-main` when global responsive CSS must target a route-specific shell state.

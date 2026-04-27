@@ -1085,3 +1085,89 @@ pre {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+@media (max-width: 760px) {
+  .app-shell-main.chat-shell-main {
+    padding: 8px 8px 10px !important;
+  }
+
+  .app-shell-grid:has(.chat-shell-main) {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-shell-grid.chat-shell-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-shell-grid:has(.chat-shell-main) > aside {
+    display: none !important;
+  }
+
+  .app-shell-grid.chat-shell-grid > aside {
+    display: none !important;
+  }
+
+  .mc-chat-control-bar {
+    align-items: stretch !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .mc-chat-primary-controls,
+  .mc-chat-status-controls {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .mc-chat-primary-controls > div {
+    flex: 1 1 96px !important;
+    min-width: 0 !important;
+  }
+
+  .mc-chat-status-controls {
+    justify-content: space-between !important;
+  }
+
+  .mc-chat-status-controls > div:last-child {
+    display: none !important;
+  }
+
+  .mc-chat-context-chip {
+    display: none !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .mc-chat-primary-controls > div {
+    flex-basis: calc(33.333% - 6px) !important;
+  }
+
+  .mc-chat-status-controls > span {
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+  }
+
+  .toastRail {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .mc-chat-composer-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .mc-chat-composer-actions {
+    justify-content: space-between !important;
+    padding-bottom: 0 !important;
+  }
+
+  .mc-chat-composer-actions button {
+    width: 38px !important;
+    height: 38px !important;
+  }
+}

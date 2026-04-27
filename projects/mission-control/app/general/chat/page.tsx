@@ -1,9 +1,9 @@
 import { headers } from 'next/headers';
 import { MissionControlChatRuntime } from '@/components/chat/MissionControlChatRuntime';
 import { resolveChatSeatActivation } from '@/lib/agents/chat-activation';
-import { getOrchestratorIntegrationSummary, primeOrchestratorIntegrationSummary } from '@/lib/adapters/orchestrator';
+import { primeOrchestratorIntegrationSummary, readOrchestratorIntegrationSummary } from '@/lib/adapters/orchestrator';
 import { resolveRuntimeBridgeLaneFromHeaders } from '@/lib/runtime-bridge-lane';
-import { loadRuntimeBridgeSessionHistory } from '@/lib/runtime-bridge-history';
+import type { RuntimeBridgeTranscriptHistory } from '@/lib/types/contracts';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,13 +16,17 @@ export default async function GeneralChatPage({
   const requestHeaders = await headers();
   const seatParam = Array.isArray(params?.seat) ? params.seat[0] : params?.seat;
   const activation = resolveChatSeatActivation(seatParam);
-  const initialSessionKey = activation?.targetSessionKey ?? 'agent:main:main';
   const runtimeBridgeLane = resolveRuntimeBridgeLaneFromHeaders(requestHeaders);
   primeOrchestratorIntegrationSummary(runtimeBridgeLane);
-  const [initialSummary, initialTranscriptHistory] = await Promise.all([
-    getOrchestratorIntegrationSummary(runtimeBridgeLane),
-    loadRuntimeBridgeSessionHistory(initialSessionKey),
-  ]);
+  const initialSummary = await readOrchestratorIntegrationSummary(runtimeBridgeLane);
+  const initialTranscriptHistory: RuntimeBridgeTranscriptHistory = {
+    sessionKey: activation?.targetSessionKey ?? 'agent:main:main',
+    entries: [],
+    messages: [],
+    source: 'unavailable',
+    note: 'Transcript history loads after the Chat page appears.',
+    retryable: false,
+  };
 
   return (
     <MissionControlChatRuntime
