@@ -13,7 +13,7 @@ function toastSummary(event: { summary?: string; artifactPath?: string; type: st
   const raw = String(event.summary || '').trim();
   const looksInternal = /^[\[{]/.test(raw) || /"runId"\s*:/.test(raw) || /systemPromptReport|injectedWorkspaceFiles|openclaw|bash|timeoutSeconds|command=/i.test(raw);
   if (raw && !looksInternal) {
-    return raw.length > 180 ? `${raw.slice(0, 177)}…` : raw;
+    return raw.length > 96 ? `${raw.slice(0, 93)}…` : raw;
   }
   if (event.artifactPath) return 'Created an output artifact.';
   if (event.type === 'task.moved_to_review') return 'Task completed and moved to Review.';
@@ -65,9 +65,9 @@ function ToastRail() {
               background: 'rgba(255, 252, 248, 0.9)',
               boxShadow: '0 18px 42px rgba(17, 32, 26, 0.14)',
               backdropFilter: 'blur(16px)',
-              padding: '14px 14px 12px',
+              padding: '10px 12px',
               display: 'grid',
-              gap: 8,
+              gap: 5,
               textAlign: 'left',
               cursor: 'pointer',
             }}
@@ -90,7 +90,7 @@ function ToastRail() {
                 <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
                   {title}
                 </div>
-                <div style={{ marginTop: 4, fontSize: 14, lineHeight: 1.45, color: 'var(--text-body)' }}>{detail}</div>
+                <div style={{ marginTop: 3, fontSize: 12.5, lineHeight: 1.35, color: 'var(--text-body)' }}>{detail}</div>
               </div>
               <span
                 onClick={(clickEvent) => {
@@ -109,7 +109,7 @@ function ToastRail() {
               </span>
             </div>
             {summary ? (
-              <div style={{ fontSize: 12, lineHeight: 1.45, color: 'var(--text-muted)' }}>{summary}</div>
+              <div style={{ fontSize: 11.5, lineHeight: 1.35, color: 'var(--text-muted)' }}>{summary}</div>
             ) : null}
           </button>
         );
@@ -121,6 +121,7 @@ function ToastRail() {
 export function AppShellClient({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isChatRoute = pathname === '/general/chat' || pathname === '/chat';
+  const isTasksRoute = pathname === '/general/tasks' || pathname === '/tasks';
   const isHomeRoute = pathname === '/general/home' || pathname === '/home';
   const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/skills', '/general/crons', '/general/memory', '/general/files']);
   const isCompactTopRoute = compactTopRoutes.has(pathname);
@@ -131,7 +132,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
       <TopTabBar />
       <ToastRail />
       <div
-        className={`app-shell-grid ${isChatRoute ? 'chat-shell-grid' : ''} ${isHomeRoute ? 'home-shell-grid' : ''}`}
+        className={`app-shell-grid ${isChatRoute ? 'chat-shell-grid' : ''} ${isTasksRoute ? 'tasks-shell-grid' : ''} ${isHomeRoute ? 'home-shell-grid' : ''}`}
         style={{
           height: 'calc(100vh - 72px)',
           ['--sidebar-width' as string]: sidebarCollapsed ? '76px' : '220px',
@@ -140,7 +141,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
         <Sidebar />
         <div className={styles.appShellContentColumn}>
           <main
-            className={`app-shell-main ${styles.appShellMain} ${isChatRoute ? `${styles.chatShellMain} chat-shell-main` : ''} ${isHomeRoute ? 'home-shell-main' : ''}`}
+            className={`app-shell-main ${styles.appShellMain} ${isChatRoute ? `${styles.chatShellMain} chat-shell-main` : ''} ${isTasksRoute ? 'tasks-shell-main' : ''} ${isHomeRoute ? 'home-shell-main' : ''}`}
             style={{
               overflow: isChatRoute ? 'hidden' : 'auto',
               padding: isCompactTopRoute ? '14px 32px 12px' : undefined,

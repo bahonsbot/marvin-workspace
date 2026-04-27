@@ -457,18 +457,20 @@
 
 @media (max-width: 640px) {
   .toastRail {
-    top: 60px;
-    right: 10px;
-    left: 66px;
+    top: 58px;
+    right: 8px;
+    left: auto;
     width: auto;
-    max-height: 34vh;
+    max-width: min(280px, calc(100vw - 16px));
+    max-height: 24vh;
     overflow: hidden;
   }
 
   .toastRail button {
-    max-height: 132px;
+    max-height: 96px;
     overflow: hidden;
-    padding: 11px 12px 10px !important;
+    border-radius: 14px !important;
+    padding: 9px 10px !important;
   }
 }
 

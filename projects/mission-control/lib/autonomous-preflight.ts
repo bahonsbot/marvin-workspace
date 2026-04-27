@@ -6,7 +6,7 @@ export function isResearchTaskLike(input: {
   const combined = [input.title, input.description, input.agentTarget]
     .map((value) => String(value || '').toLowerCase())
     .join(' | ');
-  return /\bresearch\b|\binvestigate\b|\banaly[sz]e\b|\bmarket intel\b|\bdeep research\b|\blive sources\b|\bcompetitor\b|\bweb\b/.test(combined);
+  return /\bweb\b|\bweb-backed\b|\bonline\b|\blive sources?\b|\bexternal sources?\b|\bsearch the web\b|\bsearx\b|\bnews\b|\bcompetitor\b|\bmarket intel\b|\bdeep research\b|\bweb research\b/.test(combined);
 }
 
 export function resolveWebResearchProvider(): string | null {
