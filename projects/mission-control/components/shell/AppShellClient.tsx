@@ -122,6 +122,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isChatRoute = pathname === '/general/chat' || pathname === '/chat';
   const isTasksRoute = pathname === '/general/tasks' || pathname === '/tasks';
+  const isAgentsRoute = pathname === '/general/agents' || pathname === '/agents';
   const isHomeRoute = pathname === '/general/home' || pathname === '/home';
   const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/skills', '/general/crons', '/general/memory', '/general/files']);
   const isCompactTopRoute = compactTopRoutes.has(pathname);
@@ -132,7 +133,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
       <TopTabBar />
       <ToastRail />
       <div
-        className={`app-shell-grid ${isChatRoute ? 'chat-shell-grid' : ''} ${isTasksRoute ? 'tasks-shell-grid' : ''} ${isHomeRoute ? 'home-shell-grid' : ''}`}
+        className={`app-shell-grid ${isChatRoute ? 'chat-shell-grid' : ''} ${isTasksRoute ? 'tasks-shell-grid' : ''} ${isAgentsRoute ? 'agents-shell-grid' : ''} ${isHomeRoute ? 'home-shell-grid' : ''}`}
         style={{
           height: 'calc(100vh - 72px)',
           ['--sidebar-width' as string]: sidebarCollapsed ? '76px' : '220px',
@@ -141,7 +142,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
         <Sidebar />
         <div className={styles.appShellContentColumn}>
           <main
-            className={`app-shell-main ${styles.appShellMain} ${isChatRoute ? `${styles.chatShellMain} chat-shell-main` : ''} ${isTasksRoute ? 'tasks-shell-main' : ''} ${isHomeRoute ? 'home-shell-main' : ''}`}
+            className={`app-shell-main ${styles.appShellMain} ${isChatRoute ? `${styles.chatShellMain} chat-shell-main` : ''} ${isTasksRoute ? 'tasks-shell-main' : ''} ${isAgentsRoute ? 'agents-shell-main' : ''} ${isHomeRoute ? 'home-shell-main' : ''}`}
             style={{
               overflow: isChatRoute ? 'hidden' : 'auto',
               padding: isCompactTopRoute ? '14px 32px 12px' : undefined,

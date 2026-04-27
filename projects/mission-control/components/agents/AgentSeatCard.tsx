@@ -129,7 +129,7 @@ function actionToneForItem(item: AgentUnitPayload): AgentActionButtonTone {
 }
 
 function visibleActions(actions: AgentUnitPayload['actions']) {
-  return actions.filter((action) => action.availability === 'live' && action.href);
+  return actions.filter((action) => action.availability === 'live' && action.href && (action.id.endsWith('.chat') || action.id.endsWith('.workspace')));
 }
 
 function ActionCluster({ actions, tone }: { actions: AgentUnitPayload['actions']; tone: AgentActionButtonTone }) {

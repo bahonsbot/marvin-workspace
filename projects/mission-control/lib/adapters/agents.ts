@@ -505,7 +505,7 @@ function buildActions(definition: AgentDefinition, controlPath: ControlPath, wor
 
   if (definition.actionMode === 'internal') {
     return [
-      { id: `${definition.id}.chat`, label: 'Open in chat seat', availability: 'live', href: activationHref },
+      { id: `${definition.id}.chat`, label: 'Open chat', availability: 'live', href: activationHref },
       ...workspaceLinks,
       controlPath.href
         ? { id: `${definition.id}.control`, label: 'Inspect in Control UI', availability: 'live', href: controlPath.href, external: true }
@@ -520,7 +520,7 @@ function buildActions(definition: AgentDefinition, controlPath: ControlPath, wor
 
   if (definition.actionMode === 'marvin-routed') {
     return [
-      { id: `${definition.id}.chat`, label: 'Open in chat seat', availability: 'live', href: activationHref },
+      { id: `${definition.id}.chat`, label: 'Open chat', availability: 'live', href: activationHref },
       ...workspaceLinks,
       {
         id: `${definition.id}.direct`,

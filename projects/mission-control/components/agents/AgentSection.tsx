@@ -17,7 +17,7 @@ export function AgentSection({ section }: { section: AgentSectionPayload }) {
   const controlBasis = `max(${teamRail.minWidth}px, calc((100% - ${teamRail.peek}px - ${(teamRail.visibleCount - 1) * RAIL_GAP}px) / ${teamRail.visibleCount}))`;
 
   return (
-    <section style={{ display: 'grid', gap: showHeading ? 16 : 0 }}>
+    <section className={`agents-section agents-section-${section.id}`} style={{ display: 'grid', gap: showHeading ? 16 : 0 }}>
       {showHeading ? (
         <div style={{ display: 'grid', gap: 4 }}>
           <h2
@@ -35,8 +35,11 @@ export function AgentSection({ section }: { section: AgentSectionPayload }) {
         </div>
       ) : null}
 
-      <div style={{ position: 'relative' }}>
+      {showHeading ? <div className="agents-rail-hint">Swipe sideways to see all agents</div> : null}
+
+      <div className="agents-rail-frame" style={{ position: 'relative' }}>
         <div
+          className="agents-rail"
           style={{
             display: 'flex',
             gap: RAIL_GAP,
@@ -55,6 +58,7 @@ export function AgentSection({ section }: { section: AgentSectionPayload }) {
             return (
               <div
                 key={item.id}
+                className="agents-rail-item"
                 style={{
                   flex: isControl ? '0 0 auto' : `0 0 ${basis}`,
                   width: isControl ? basis : undefined,
@@ -71,6 +75,7 @@ export function AgentSection({ section }: { section: AgentSectionPayload }) {
 
         {showHeading ? (
           <div
+            className="agents-rail-fade"
             aria-hidden="true"
             style={{
               position: 'absolute',

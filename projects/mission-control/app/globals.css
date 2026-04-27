@@ -1567,3 +1567,98 @@ pre {
     padding-top: 104px;
   }
 }
+
+/* Agents mobile: keep desktop rails intact, make mobile usable. */
+.agents-rail-hint {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .app-shell-main.agents-shell-main {
+    padding: 8px 8px 10px !important;
+  }
+
+  .app-shell-grid.agents-shell-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-shell-grid.agents-shell-grid > aside {
+    display: none !important;
+  }
+
+  .agents-shell-main,
+  .agents-shell-main > section,
+  .agents-shell-main .page-scaffold-panel {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .agents-shell-main .page-scaffold-panel {
+    padding: 8px !important;
+  }
+
+  .agents-shell-main .agents-section {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .agents-shell-main .agents-rail-frame {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .agents-shell-main .agents-rail {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    gap: 12px !important;
+    padding: 0 18px 10px 0 !important;
+    scroll-snap-type: x proximity !important;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box !important;
+  }
+
+  .agents-shell-main .agents-section-control .agents-rail {
+    overflow-x: hidden !important;
+    padding-right: 0 !important;
+  }
+
+  .agents-shell-main .agents-rail-item {
+    flex: 0 0 min(326px, calc(100vw - 34px)) !important;
+    width: min(326px, calc(100vw - 34px)) !important;
+    min-width: 0 !important;
+    max-width: min(326px, calc(100vw - 34px)) !important;
+    scroll-snap-align: start !important;
+  }
+
+  .agents-shell-main .agents-section-control .agents-rail-item {
+    flex-basis: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .agents-shell-main .agents-rail-hint {
+    display: inline-flex;
+    width: fit-content;
+    margin-top: -4px;
+    margin-bottom: -2px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: rgba(15, 31, 25, 0.08);
+    color: #4f5d55;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .agents-shell-main .agents-rail-fade {
+    display: none !important;
+  }
+}
