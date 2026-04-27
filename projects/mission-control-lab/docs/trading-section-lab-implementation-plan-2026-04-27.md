@@ -27,8 +27,10 @@ A quiet institutional terminal with editorial finance density: cream paper, dark
 - **Overview:** market tape, account/portfolio snapshot, day/all-time P/L, watchlists, sector/health snapshot, market movers/news/earnings.
 - **Ticker detail:** quote header, chart, tabs, company profile, financial highlights, news/resources, fundamentals, technical summary, dividends/ownership/SEC.
 - **Portfolio/X-ray:** IBKR/manual holdings, P/L, allocation, weights, sector/industry/country/currency/strategy/broker, ETF exposure drilldown, closed positions.
+- **Health:** Atreus-style portfolio health: concentration, diversification, risk, thesis alignment, rule compliance, drawdown posture, and warnings.
+- **Analytics:** portfolio/account analytics: performance attribution, allocation drift, sector/industry/country/currency exposure, realized vs unrealized P/L, dividends, and benchmark comparisons.
+- **News:** market and ticker-specific news stream with earnings/calendar context and source/freshness labels.
 - **Chart/Technical:** TradingView Lightweight Charts style chart terminal, indicators, timeframes, watchlist sidebar, technical scorecard.
-- **Market Intel/Research:** current existing Mission Control market-intel files, but reframed into this new UI language.
 - **Bots/Dispatch:** future equity and futures bot surfaces, clearly separated from research/read-only portfolio views.
 
 ### Interaction thesis
@@ -44,7 +46,7 @@ A quiet institutional terminal with editorial finance density: cream paper, dark
 Use:
 
 - Thin global market ticker strip across the very top: S&P 500, Nasdaq, Dow, VIX, 10Y, oil, gold, USD index.
-- Left sidebar with section nav and bottom market-status chip.
+- Left sidebar with section nav and bottom market-status chip. Health, Analytics, and News should be explicit first-class entries, not hidden under Research.
 - Large greeting/account block with total account value, day P/L, all-time P/L, and large line chart.
 - Time range tabs on charts: 1D, 1W, 1M, YTD, 1Y, ALL.
 - Portfolio health snapshot as stacked rows: concentration, ESG/alignment substitute, risk level, diversification.
@@ -116,6 +118,13 @@ Adapt:
 - Add X-ray mode: decompose ETFs/funds into underlying sector/country/issuer exposure where data allows.
 - IBKR should supply account/positions/trades when available. Market/fundamental data should not depend solely on IBKR.
 
+
+## Correction: Atreus side menu is primary
+
+Philippe explicitly called out that the Atreus screenshots include left-menu pages such as **Health**, **Analytics**, and **News**. The plan should follow that Atreus structure more closely. Those pages are first-class surfaces in the Trading rebuild, not accidental subfeatures.
+
+Also: remove the idea of redesigning “existing Mission Control Market Intel” as a destination. Old Market Intel data can be mined as an input if useful, but the product direction is Atreus-style Trading, not legacy artifact preservation.
+
 ## Information architecture
 
 Recommended Lab route structure:
@@ -125,10 +134,12 @@ Recommended Lab route structure:
 /trading/ticker/[symbol]          Ticker detail and research object
 /trading/portfolio                Portfolio, dividends, exposure, X-ray
 /trading/watchlist                Watchlists and tracked names
+/trading/health                   Portfolio/account health dashboard
+/trading/analytics                Performance, exposure, attribution, dividends
+/trading/news                     Market and ticker news stream
 /trading/screener                 Filters, movers, candidates
 /trading/chart                    Chart terminal
 /trading/technical                Technical scoring and setups
-/trading/market-intel             Existing Mission Control market-intel, redesigned
 /trading/signals                  Signal review and tracked signals
 /trading/bots                     Equity/futures bot dispatch hub
 /trading/reports                  Generated reports, journals, post-trade review
@@ -139,11 +150,13 @@ Initial nav should be smaller than the full future map:
 1. Overview
 2. Portfolio
 3. Watchlist
-4. Screener
-5. Chart
-6. Research
-7. Bots
-8. Reports
+4. Health
+5. Analytics
+6. News
+7. Screener
+8. Chart
+9. Bots
+10. Reports
 
 Keep deeper tools reachable from pages before promoting them to top-level nav.
 
@@ -183,7 +196,6 @@ Recommended baseline:
 
 - **Yahoo/yfinance or defeat-beta-style Yahoo wrapper** for fast free baseline: quotes, OHLCV, profile-ish data, fundamentals where available.
 - **SEC/EDGAR** for filings/resources and source-backed company documents.
-- **Existing Market Intel files** for current signal/watch/research surfaces.
 - Optional **Alpha Vantage free key** as fallback for time series, indicators, fundamentals, news/sentiment, earnings, dividends, commodities/economic data.
 
 Important caveat: yfinance/Yahoo is unofficial and can be rate-limited or blocked. It is fine for a personal cached research dashboard, not for high-frequency live trading or mission-critical execution.
@@ -325,7 +337,7 @@ Files likely added:
 Build:
 
 - Use local sample data, no provider integration yet.
-- Overview should match the product shape from Atreus + Zero Sum: market tape, portfolio snapshot, watchlists, sector/movers/news/earnings.
+- Overview should match the product shape from Atreus first: market tape, portfolio/account snapshot, health preview, watchlists, analytics preview, news/earnings modules.
 - Ticker detail should match the Atreus/Zero Sum ticker shape with chart placeholder and real tabs.
 - Design desktop and mobile in the same slice.
 
@@ -341,8 +353,8 @@ Build:
 
 - Server-side normalized contracts.
 - Yahoo/yfinance or defeat-beta-style local adapter for quotes/OHLCV/profile.
-- Existing Market Intel adapter integration.
 - SEC resource links.
+- Fresh Atreus-shaped data contracts for Overview, Health, Analytics, News, Portfolio, Watchlist, and Ticker detail.
 - Cache files under a Lab/runtime-safe data path.
 
 Validation:
@@ -379,12 +391,11 @@ Validation:
 
 - Browser render checks; chart libraries often pass build and still look wrong.
 
-### Phase 6 — Research intelligence and bots
+### Phase 6 — Intelligence and bots
 
 Build:
 
-- AI ticker notes with source citations and freshness.
-- Existing Market Intel rewritten into the Boiler Room UI language.
+- AI ticker notes with source citations and freshness, shaped around the Atreus ticker/detail experience rather than old Market Intel screens.
 - Bot dispatch hub separated into equity and futures lanes.
 - Any execution path must be approval-gated and safety-reviewed.
 
