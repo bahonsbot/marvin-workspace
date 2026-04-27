@@ -29,8 +29,8 @@ A quiet institutional terminal with editorial finance density: cream paper, dark
 - **Portfolio/X-ray:** IBKR/manual holdings, P/L, allocation, weights, sector/industry/country/currency/strategy/broker, ETF exposure drilldown, closed positions.
 - **Health:** Atreus-style portfolio health: concentration, diversification, risk, thesis alignment, rule compliance, drawdown posture, and warnings.
 - **Analytics:** portfolio/account analytics: performance attribution, allocation drift, sector/industry/country/currency exposure, realized vs unrealized P/L, dividends, and benchmark comparisons.
-- **News:** market and ticker-specific news stream with earnings/calendar context and source/freshness labels.
-- **Chart/Technical:** TradingView Lightweight Charts style chart terminal, indicators, timeframes, watchlist sidebar, technical scorecard.
+- **News / Reports:** market and ticker-specific news, earnings/calendar context, filings, and generated reports as tabbed views inside News.
+- **Analytics / Charts:** performance, attribution, exposure, dividends, chart terminal, indicators, timeframes, and technical scorecards as tabbed views inside Analytics.
 - **Bots/Dispatch:** future equity and futures bot surfaces, clearly separated from research/read-only portfolio views.
 
 ### Interaction thesis
@@ -135,14 +135,11 @@ Recommended Lab route structure:
 /trading/portfolio                Portfolio, dividends, exposure, X-ray
 /trading/watchlist                Watchlists and tracked names
 /trading/health                   Portfolio/account health dashboard
-/trading/analytics                Performance, exposure, attribution, dividends
-/trading/news                     Market and ticker news stream
+/trading/analytics                Performance, exposure, attribution, dividends, charts, technicals
+/trading/news                     Market/ticker news, earnings/calendar, filings, reports
 /trading/screener                 Filters, movers, candidates
-/trading/chart                    Chart terminal
-/trading/technical                Technical scoring and setups
 /trading/signals                  Signal review and tracked signals
 /trading/bots                     Equity/futures bot dispatch hub
-/trading/reports                  Generated reports, journals, post-trade review
 ```
 
 Initial nav should be smaller than the full future map:
@@ -154,18 +151,28 @@ Initial nav should be smaller than the full future map:
 5. Analytics
 6. News
 7. Screener
-8. Chart
-9. Bots
-10. Reports
+8. Bots
 
 Keep deeper tools reachable from pages before promoting them to top-level nav.
+
+
+## Navigation consolidation decision
+
+Keep the left sidebar close to Atreus and avoid a long list of half-empty rooms. **Analytics** and **News** should absorb the deeper tool views through tabs:
+
+- **Analytics** tabs: Performance, Attribution, Exposure, Dividends, Charts / Technical.
+- **News** tabs: Market News, Watchlist News, Earnings / Calendar, Reports, Filings.
+
+This means Chart/Technical and Reports can still exist as internal views or future direct routes if usage proves they deserve it, but they should not start as top-level sidebar items.
+
+Recommended initial sidebar: **Overview, Portfolio, Watchlist, Health, Analytics, News, Screener, Bots**.
 
 ## Shell changes required in Lab
 
 Current Lab shell findings:
 
 - `components/shell/TopTabBar.tsx` hardcodes `Marvin’s Room`.
-- `components/shell/navigation.ts` already has `ShellDomain = 'general' | 'trading'` and separate `TRADING_NAV_ITEMS`.
+- `components/shell/navigation.ts` already has `ShellDomain = 'general' | 'trading'` and separate `TRADING_NAV_ITEMS`; update this to the consolidated sidebar list.
 - `components/shell/Sidebar.tsx` chooses nav items by domain.
 - `components/shell/AppShellClient.tsx` has many General-specific mobile/layout classes; Trading has not been given its own intentional compact/mobile treatment.
 
@@ -294,6 +301,23 @@ Rules:
 - Cache aggressively. A personal dashboard does not need to hammer providers every render.
 - Keep account/execution secrets server-side only.
 
+
+## Best starting point
+
+Start with **Phase 1 + a static Overview skeleton**, not APIs.
+
+Reason: the main risk is not whether we can fetch stock data. The main risk is whether BOILER ROOM feels like a coherent Atreus-style product surface across desktop and mobile. The first implementation pass should prove the shell, sidebar, room label, spacing, top market tape, and page composition before we wire providers.
+
+First build slice:
+
+1. Shell identity: `BOILER ROOM` when active domain is Trading.
+2. Consolidated Trading sidebar: Overview, Portfolio, Watchlist, Health, Analytics, News, Screener, Bots.
+3. Static Overview page with sample data: account value, P/L, performance chart placeholder, health preview, watchlists, news/earnings preview.
+4. Placeholder pages for Portfolio, Watchlist, Health, Analytics, News, Screener, and Bots with correct tab scaffolds where relevant.
+5. Desktop and mobile responsive rules in the same pass.
+
+Do not add market-data dependencies or IBKR integration in this first slice.
+
 ## Implementation phases
 
 ### Phase 0 — Plan and scaffolding only
@@ -316,7 +340,7 @@ Build:
 - `BOILER ROOM` active brand label for Trading.
 - Trading-specific shell classes.
 - Desktop and mobile constraints from the beginning.
-- Replace placeholder Trading nav with planned first-stage nav.
+- Replace placeholder Trading nav with the consolidated first-stage nav: Overview, Portfolio, Watchlist, Health, Analytics, News, Screener, Bots.
 
 Validation:
 
@@ -378,14 +402,14 @@ Validation:
 - Real manual file with sensitive values handled carefully.
 - No order execution.
 
-### Phase 5 — Chart/Technical v1
+### Phase 5 — Analytics chart/technical tab v1
 
 Build:
 
-- Add chart library.
-- Price chart with timeframes and moving averages.
-- Technical scorecard: RSI, MACD, moving averages, support/resistance later.
-- Link ticker detail to chart terminal.
+- Add chart library only when the Analytics tab needs it.
+- Price/performance charts with timeframes and moving averages.
+- Technical scorecard tab: RSI, MACD, moving averages, support/resistance later.
+- Link ticker detail into the Analytics chart/technical tab rather than promoting Chart to the initial sidebar.
 
 Validation:
 
@@ -412,7 +436,7 @@ Build mobile with desktop from day one.
 - Sidebar should not consume mobile viewport.
 - Data tables should either horizontal-scroll with sticky first column or collapse to row cards.
 - Ticker detail tabs should become scrollable segmented nav.
-- Chart areas need explicit minimum heights for mobile.
+- Chart and analytics tab areas need explicit minimum heights for mobile.
 - Portfolio allocation header should stack: donut, exposure list, then holdings table.
 - Avoid dense three-column desktop layouts becoming unreadable compressed columns.
 
@@ -434,7 +458,7 @@ until Philippe explicitly approves after Lab screenshots/validation.
 
 ## Open decisions for Philippe
 
-1. First implementation slice: I recommend **Phase 1 + static Phase 2 prototype** before real data integration.
+1. First implementation slice: I recommend **Phase 1 + static Overview skeleton + placeholder page shells** before real data integration.
 2. Portfolio source: start with manual CSV/JSON, then IBKR read-only when approved.
 3. Paid provider threshold: start free/cached; consider FMP only after the static prototype proves which fields matter.
 4. Visual direction: use cream institutional terminal as default, with dark mode reserved for Portfolio/X-ray depth surfaces.
