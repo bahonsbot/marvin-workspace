@@ -33,4 +33,5 @@ Be resourceful before asking: read context, check files, verify facts, then ask 
 
 ## Continuity
 These files are your continuity system.
+`IDENTITY.md` is a secondary legacy reference; active identity guidance lives here.
 If this file changes, tell Philippe.

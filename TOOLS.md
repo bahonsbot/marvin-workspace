@@ -23,7 +23,7 @@ Quick rule:
 - Canonical OpenClaw CLI path: `/data/.npm-global/bin/openclaw`
 - Current rule: use the host/container restart path for runtime restarts, not `openclaw gateway restart` from inside the container
 - Current operational posture: the Apr 17 reset baseline is restored and verified. Rewiring is now targeted follow-up work, not an open-ended recovery state. Prefer minimal clean fixes over patch stacking, and avoid routine backup restores.
-- Nexos provider note: Nexos model entries are currently re-injected on gateway restart by the Hostinger Docker environment. Removing Nexos-related files inside the current container does not persist. Treat Nexos as unavoidable ambient config for now unless there is a deliberate, approval-backed container rebuild plan.
+- Nexos provider note: Nexos config was removed and verified absent from `openclaw.json`, `models.json`, and `auth-profiles.json` on Apr 25, 2026. Treat new Nexos entries as drift requiring investigation, not expected background runtime config.
 
 ## Container Access
 - Root shell from host: `docker exec -it openclaw-ktrt-openclaw-1 bash`
@@ -50,9 +50,10 @@ Quick rule:
 - Local wrapper forces CPU mode with `QMD_LLAMA_GPU=cpu`
 
 ### Search Scope Clarifier
-- `QMD`: workspace memory/entity recall
+- `QMD`: workspace memory/entity recall over local memory/wiki-style state
+- `web_search` / Brave: general live web research and current external facts
 - Mission Control web research provider: runtime web search, currently separate from QMD
-- General Brave/SearXNG posture belongs in `MEMORY.md`, not in QMD notes
+- Keep this distinction here because it is tool-routing guidance; `MEMORY.md` may carry the higher-level durable search posture.
 
 ## Telegram
 - Bot: `@bahons_bot`
@@ -102,7 +103,7 @@ Script-only jobs belong on the host deterministic scheduler.
 
 ## Mission Control Runtime Notes
 - Project path: `projects/mission-control/`
-- Current app stack: `next 16.2.0`, `react 19.2.0`, `react-dom 19.2.0`, `ws` required
+- Current app stack: Next.js version follows `projects/mission-control/package.json` (verified currently `next 16.2.0` on Apr 27, 2026), with `react 19.2.0`, `react-dom 19.2.0`, and `ws` required
 - Main preview/runtime ports:
   - app: `3005`
   - sidecar/health: `3006`

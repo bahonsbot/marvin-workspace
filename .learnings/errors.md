@@ -17,6 +17,28 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+## [ERR-20260427-1212]
+
+**What failed:** Ad-hoc Mission Control ops learnings were saved as a standalone project `_ops` note instead of structured `.learnings/` entries
+**Error:** `projects/_ops/mission-control-dashboard-learnings-2026-04-22.md` mixed reusable lessons, stale operational state, and sensitive access details in a clutter-prone project doc.
+**Context:** During Morning Meeting cleanup, Philippe found the file and asked to mirror useful content into the real learnings system, then remove the stray note.
+**Suggested fix:** Put reusable failures and operating lessons in `.learnings/errors.md` or `.learnings/corrections.md`; keep project `_ops` docs for current runbooks/savepoints only. Never store raw gateway tokens, Basic Auth credentials, or similar live access details in ad-hoc learnings docs; use redacted placeholders and point to the proper secret store/runtime config.
+**Resolution:** Mirrored the durable lessons into structured learnings and removed the stray `_ops` dashboard-learnings file.
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260422-2200]
+
+**What failed:** Mission Control Dashboard and native OpenClaw Control UI were blurred during early dashboard exposure planning
+**Error:** `dashboard.motiondisplay.cloud` successfully exposed the custom Mission Control Next.js app, while the native OpenClaw gateway/control UI remained a separate loopback-bound surface. Treating them as one product confused routing and access expectations.
+**Context:** Apr 22 dashboard work brought Mission Control live behind nginx/HTTPS/Basic Auth, but the OpenClaw gateway socket was still only reachable on container loopback despite config/status suggesting a broader bind.
+**Suggested fix:** Keep the two browser surfaces explicit: Mission Control is the custom operator app on the 3005/3006/3007 lane; native OpenClaw Control UI/Gateway is the gateway surface on its own port and auth model. When exposing or diagnosing either, verify the actual socket and route path instead of relying on config/status wording alone.
+**Resolution:** Later Mission Control lane docs and runtime notes separated Dashboard/Lab/Preview surfaces; this entry preserves the reusable lesson from the stray ops note.
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260426-2334]
 
 **What failed:** Mission Control Lab recovery used a broad/shared process-group kill during a live Gateway/Dashboard/Lab session

@@ -4,7 +4,7 @@
 Always read, in this order:
 1. `SOUL.md`
 2. `USER.md`
-3. `memory/YYYY-MM-DD.md` for today and yesterday by default; for overnight review/suppression-sensitive work, read today plus at least the previous 3 daily notes when available
+3. `memory/YYYY-MM-DD.md` for today by default; during the morning or afternoon, also read yesterday's daily note when it is useful for continuity. In the evening, today's daily note is usually enough. Read older daily notes only when a task refers to another day, continuity requires it, or risk is high.
 4. `SUBAGENT-POLICY.md`
 5. `AUTONOMY.md`
 6. In main/direct chat only: `MEMORY.md`
