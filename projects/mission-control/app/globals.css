@@ -1662,3 +1662,130 @@ pre {
     display: none !important;
   }
 }
+
+/* Mobile workspace pages: Skills, Crons, Memory, Files. Desktop stays unchanged. */
+@media (max-width: 760px) {
+  .app-shell-grid.mobile-workspace-shell-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-shell-grid.mobile-workspace-shell-grid > aside {
+    display: none !important;
+  }
+
+  .app-shell-main.mobile-workspace-shell-main {
+    padding: 8px 8px 10px !important;
+  }
+
+  .mobile-workspace-shell-main,
+  .mobile-workspace-shell-main > section,
+  .mobile-workspace-shell-main .page-scaffold-panel {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-workspace-shell-main .page-scaffold-panel {
+    padding: 8px !important;
+  }
+
+  .mobile-workspace-shell-main .general-two-col-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+    min-height: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .mobile-workspace-shell-main .general-two-col-layout > aside {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .mobile-workspace-shell-main .general-two-col-layout > aside > div,
+  .mobile-workspace-shell-main .general-two-col-layout > aside a {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-workspace-shell-main .general-two-col-layout > section {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 14px !important;
+    overflow-x: hidden !important;
+  }
+
+  .mobile-workspace-shell-main h2 {
+    font-size: clamp(24px, 8vw, 32px) !important;
+    overflow-wrap: anywhere;
+  }
+
+  .mobile-workspace-shell-main .floating-pill-row {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    padding-bottom: 4px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-workspace-shell-main .floating-pill-row > * {
+    flex: 0 0 auto !important;
+  }
+
+  .mobile-workspace-shell-main input,
+  .mobile-workspace-shell-main select,
+  .mobile-workspace-shell-main textarea {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .mobile-workspace-shell-main .directory-table-shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-workspace-shell-main .directory-table {
+    min-width: 640px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .mobile-workspace-shell-main [data-mobile-skill-filters] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .mobile-workspace-shell-main [data-mobile-skills-grid] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .mobile-workspace-shell-main [data-mobile-skill-card] {
+    padding: 12px !important;
+    border-radius: 16px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .mobile-workspace-shell-main [data-mobile-skills-grid] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .mobile-workspace-shell-main [data-mobile-skill-card] summary > div {
+    gap: 9px !important;
+  }
+
+  .mobile-workspace-shell-main [data-mobile-skill-card] p,
+  .mobile-workspace-shell-main [data-mobile-skill-card] [data-mobile-skill-description] {
+    display: none !important;
+  }
+}

@@ -1363,3 +1363,14 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 - Symptom: Manual Lab/Dashboard restart during Mission Control promotion caused temporary `Mission Control preview proxy could not reach the Next.js server` and/or `EADDRINUSE` on lane ports.
 - Cause: The lane supervisor was still running and auto-restarted the bundle while manual restart/build/start steps were also trying to bind the same ports.
 - Prevention: Before manual lane restart work, create the lane maintenance lock (`.lab-runtime/maintenance.lock` for Lab, `.preview-runtime/maintenance.lock` for Dashboard), then stop, clear only that lane's ports if needed, start, run health/smoke, and remove the lock. Do not trust proxy PID alone; verify internal Next and lane smoke.
+
+## [ERR-20260427-2302]
+
+**What failed:** First immediate Dashboard route sweep after restart reported `/general/memory` connection failure even though the service recovered moments later.
+**Error:** `curl: (7) Failed to connect to 127.0.0.1 port 3005 after 10 ms: Could not connect to server` during the first post-restart local route sweep.
+**Context:** After promoting mobile-only Skills/Crons/Memory/Files changes from Lab to Dashboard, the Dashboard service was restarted with the maintenance-lock pattern. Service health subsequently showed all Dashboard processes healthy and the full route sweep/lane smoke passed on retry.
+**Suggested fix:** After Dashboard restarts, run `mission-control-service-health.sh` before treating a fast local route-sweep connection refusal as a code regression. If health is recovering, retry the route sweep once before escalating. Continue to inspect logs if the same route fails after health is green.
+**Resolution:** Rechecked service health, reran route checks, and all targeted Dashboard routes plus lane smoke passed.
+
+**Priority:** low
+**Status:** resolved

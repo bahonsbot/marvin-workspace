@@ -23,6 +23,20 @@ Capabilities the user wanted but don't exist.
 
 ## Recent Requests
 
+## [REQ-20260424-1058]
+
+**Request:** Before ending a meaningful work block, save the day cleanly into canonical daily memory and structured learnings so the next session can restart from one clean source of truth.
+**What triggered it:** After finishing the Apr 24 Morning Meeting, cleanup, and memory consolidation, Philippe asked to save everything neatly into daily memory, learnings, and core docs if needed before starting fresh later.
+**Outcome:** Implemented by appending the Morning Meeting wrap-up and next-session restart truth to `memory/2026-04-24.md`, and recording the non-canonical memory-sidecar cleanup lesson in `.learnings/errors.md`.
+**Status:** implemented
+
+## [REQ-20260423-1341]
+
+**Request:** Before ending a meaningful session, save everything done into daily memory and add learnings if needed so the next session can start cleanly.
+**What triggered it:** After the daily-task-generator investigation, fix, cleanup, and Morning Meeting work were complete, Philippe asked to neatly organize the session state for a fresh future session.
+**Outcome:** Implemented by appending a full session wrap-up to `memory/2026-04-23.md` and recording the new generator failure mode/fix in `.learnings/errors.md`.
+**Status:** implemented
+
 ## [REQ-20260422-0048]
 
 **Request:** After producing planning docs, also create a comprehensive "tomorrow-you" savepoint plus daily memory and learnings cleanup so a future agent can resume without Philippe re-explaining the architecture, findings, created docs, or next work.
@@ -191,3 +205,10 @@ Capabilities the user wanted but don't exist.
 **Status:** implemented — all 24 IEX items now show English article content.
 
 **Lesson:** When scraping IEX article pages, strip page-structure artifacts (nav/branding headers, photo credits, bylines) *before* sentence splitting, not after. The IEX page concatenates these into a single text node without sentence boundaries, so naive sentence-splitting produces one giant "sentence" that fails the meaningful-length filter.
+
+## [REQ-20260427-2302]
+
+**Request:** After finishing a meaningful Mission Control audit/promotion session, save the work into the canonical daily memory and structured learnings before starting a new session.
+**What triggered it:** After approving the Skills/Crons/Memory/Files mobile promotion from Lab to Dashboard, Philippe asked to save everything done in the session to daily memory and learnings so the next session starts clean.
+**Outcome:** Added the Dashboard promotion closeout to `memory/2026-04-27.md` and recorded reusable lessons about post-restart route sweeps and route-specific mobile shell classes in `.learnings/`.
+**Status:** implemented

@@ -281,6 +281,7 @@ function SkillCard({
   return (
     <details
       open={false}
+      data-mobile-skill-card
       style={{
         ...cardStyle(hidden, skill.needsAttention),
         position: 'relative',
@@ -348,7 +349,7 @@ function SkillCard({
           </div>
 
           <div style={{ display: 'grid', gap: 8 }}>
-            <div style={{ fontSize: 12.5, color: 'var(--muted-strong)', lineHeight: 1.62 }}>{conciseDescription}</div>
+            <div data-mobile-skill-description style={{ fontSize: 12.5, color: 'var(--muted-strong)', lineHeight: 1.62 }}>{conciseDescription}</div>
           </div>
 
           {tags.length > 0 ? (
@@ -814,6 +815,7 @@ export function SkillsWorkspaceClient({ initialSummary }: { initialSummary: Skil
         </div>
 
         <div
+          data-mobile-skill-filters
           style={{
             display: 'grid',
             gridTemplateColumns: 'minmax(0, 1.2fr) minmax(300px, 0.95fr)',
@@ -1000,7 +1002,7 @@ export function SkillsWorkspaceClient({ initialSummary }: { initialSummary: Skil
                     </div>
                   </div>
                 </summary>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14, marginTop: 14 }}>
+                <div data-mobile-skills-grid style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14, marginTop: 14 }}>
                   {group.skills.map((skill) => (
                     <SkillCard
                       key={skill.name}

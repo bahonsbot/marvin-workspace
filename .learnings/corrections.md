@@ -788,3 +788,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 - Date: 2026-04-27
 - Correction: For mobile Chat-specific shell rules, do not rely only on CSS-module class names from `shell.module.css`; global selectors cannot reliably target hashed module class names unless an explicit global class is also present.
 - Use an explicit global class such as `chat-shell-grid` / `chat-shell-main` when global responsive CSS must target a route-specific shell state.
+
+## [CORR-20260427-2302]
+
+**Trigger:** Mission Control mobile optimization for Skills, Crons, Memory, and Files succeeded only after adding route-specific shell classes, not just page-level CSS.
+**What was wrong:** The initial mobile issue was shared shell behavior: pages listed in `compactTopRoutes` still lacked route-specific classes, so the desktop sidebar stayed visible and squeezed content into a narrow strip. Page-level tweaks alone would not have fixed Memory/Files usability.
+**Lesson:** For Mission Control mobile page audits, first verify the shell class and sidebar behavior for the route. If a page is mobile-compacted but lacks a route-specific shell class, add the shell/main class first, then tune page-level layout. Validate at 390px with rendered geometry: sidebar hidden, `docScroll/bodyScroll` equal viewport width, and any intentional inner overflow confined to its own scroll container.
+
+**Priority:** high
+**Status:** active
