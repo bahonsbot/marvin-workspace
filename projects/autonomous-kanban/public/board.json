@@ -30,13 +30,6 @@
     "inprogress": [],
     "done": [
       {
-        "id": "dace22c7",
-        "text": "🎁 Surprise MVP: build a lightweight daily check page or script for one recurring workspace status view; deliverable: runnable utility in projects/automation/ or scripts/",
-        "column": "done",
-        "outputPath": "projects/_ops/daily-check.html, projects/_ops/daily-check-readme.md",
-        "source": "tasks-log"
-      },
-      {
         "id": "873f553c",
         "text": "[Career] 🔨 Build: create a daily creative challenge generator page or tool that gives Philippe one finishable same-day assignment; deliverable: working page or tool in projects/creative-challenges/ that automatically chooses the daily category across Blender, After Effects, Unreal Engine, Illustrator, commercial copywriting, and storytelling/novel writing, then shows only the assigned challenge with optional light visual support | Why: Structured daily challenge generation turns broad creative goals into consistent, scoped practice without decision friction | Proof: Tool assigns one different day-sized challenge per day without user category selection and shows only the prompt/challenge for that day | Unlocks: Reusable daily practice system for portfolio, writing, and creative skill growth",
         "column": "done",
@@ -220,5 +213,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-26T01:00:15.102Z"
+  "updatedAt": "2026-04-27T01:00:19.112Z"
 }
