@@ -15,6 +15,15 @@ User corrections and feedback. Log when user explicitly corrects you.
 ---
 
 
+## [CORR-20260427-1955]
+
+**Trigger:** Philippe pointed out that after the Home mobile cleanup, hiding the sidebar removed the only visible way to access the side menu on mobile.
+**What was wrong:** I solved mobile clutter by suppressing the desktop sidebar, but did not preserve the navigation access path with a mobile replacement. That made the page cleaner while creating a usability regression.
+**Lesson:** When making Mission Control pages mobile-friendly, never remove or hide a primary navigation/control surface without adding an equivalent mobile affordance in the same pass. Visual cleanup must preserve route access, not just reduce clutter. Verify the full mobile interaction path, including opening navigation, not only the static layout.
+
+**Priority:** high
+**Status:** active
+
 ## [CORR-20260426-2334]
 
 **Trigger:** Philippe pointed out that tightening Lab supervision by killing/restarting around the build race was not the best approach because it caused both Dashboard and Lab to lose Gateway connection, requiring a manual Gateway restart.

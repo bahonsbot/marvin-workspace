@@ -513,3 +513,104 @@
     overflow: hidden !important;
   }
 }
+
+.mobileMenuButton {
+  display: none;
+  width: 36px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 195, 188, 0.58);
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--accent-deep);
+  padding: 0;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileMenuLayer {
+  position: fixed;
+  inset: 52px 0 0;
+  z-index: 140;
+  background: rgba(15, 31, 25, 0.24);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 12px 10px 10px;
+}
+
+.mobileMenuPanel {
+  width: min(216px, calc(100vw - 20px));
+  max-height: calc(100svh - 72px);
+  overflow-y: auto;
+  border-radius: 22px;
+  border: 1px solid rgba(200, 195, 188, 0.58);
+  background: rgba(255, 253, 251, 0.96);
+  box-shadow: 0 24px 70px rgba(17, 32, 26, 0.2);
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.mobileMenuHead {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.mobileMenuKicker {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.mobileMenuClose {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 195, 188, 0.58);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.mobileMenuLinks {
+  display: grid;
+  gap: 4px;
+}
+
+.mobileMenuLink {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right;
+  gap: 11px;
+  min-height: 40px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  padding: 0 11px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mobileMenuLinkActive {
+  border-color: var(--border-accent);
+  background: var(--bg-sidebar-active);
+  color: var(--accent-deep);
+}
+
+@media (max-width: 760px) {
+  .mobileMenuButton {
+    display: inline-flex;
+  }
+}

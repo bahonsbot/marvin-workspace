@@ -1171,3 +1171,201 @@ pre {
     height: 38px !important;
   }
 }
+
+@media (max-width: 760px) {
+  .app-shell-grid.home-shell-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .app-shell-grid.home-shell-grid > aside {
+    display: none !important;
+  }
+
+  .app-shell-main.home-shell-main {
+    padding: 8px 8px 10px !important;
+  }
+
+  .home-shell-main,
+  .home-shell-main * {
+    max-width: 100%;
+  }
+
+  .home-shell-main .general-home-v3-shell {
+    min-height: auto;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    gap: 18px;
+    padding: 18px 8px 94px;
+  }
+
+  .home-shell-main .general-home-v3-hero-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px;
+  }
+
+  .home-shell-main .general-home-v3-hero-main {
+    gap: 10px;
+    padding-top: 0;
+  }
+
+  .home-shell-main .general-home-v3-date {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+  }
+
+  .home-shell-main .general-home-v3-headline {
+    max-width: 100%;
+    font-size: clamp(32px, 12vw, 46px);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  .home-shell-main .general-home-v3-weather-quote {
+    border-radius: 20px;
+    padding: 14px;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .home-shell-main .general-home-v3-weather-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    min-width: 0;
+  }
+
+  .home-shell-main .general-home-v3-weather-temp {
+    font-size: 40px;
+  }
+
+  .home-shell-main .general-home-v3-weather-meta {
+    min-width: 0;
+    text-align: right;
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    overflow-wrap: anywhere;
+  }
+
+  .home-shell-main .general-home-v3-quote {
+    font-size: 18px;
+    line-height: 1.28;
+    overflow-wrap: break-word;
+  }
+
+  .home-shell-main .general-home-v3-lower-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .home-shell-main .general-home-v3-market,
+  .home-shell-main .general-home-v3-custom-news {
+    min-height: 0;
+    border-radius: 20px;
+    padding: 14px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .home-shell-main .general-home-v3-market-head,
+  .home-shell-main .general-home-v3-custom-news-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+    min-width: 0;
+  }
+
+  .home-shell-main .general-home-v3-market-head h2,
+  .home-shell-main .general-home-v3-custom-news-head h2 {
+    font-size: 22px;
+  }
+
+  .home-shell-main .general-home-v3-market-refresh {
+    padding-inline: 9px;
+    white-space: nowrap;
+  }
+
+  .home-shell-main .general-home-v3-news-list,
+  .home-shell-main .general-home-v3-custom-news-list {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .home-shell-main .general-home-v3-news-item:nth-child(n + 7),
+  .home-shell-main .general-home-v3-custom-news-item:nth-child(n + 4) {
+    display: none;
+  }
+
+  .home-shell-main .general-home-v3-news-kicker {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .home-shell-main .general-home-v3-news-kicker span,
+  .home-shell-main .general-home-v3-news-link,
+  .home-shell-main .general-home-v3-custom-news-item h3,
+  .home-shell-main .general-home-v3-custom-news-item p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .home-shell-main .general-home-v3-bottom-strip {
+    position: sticky;
+    left: auto;
+    right: auto;
+    bottom: 8px;
+    z-index: 20;
+    justify-content: flex-start;
+    gap: 6px 8px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 18px;
+    padding: 8px 10px;
+    font-size: 10.5px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .home-shell-main .general-home-v3-bottom-strip span:not(:last-child)::after {
+    display: none;
+  }
+}
+
+@media (min-width: 761px) {
+  .general-home-v3-shell {
+    padding-bottom: 148px;
+  }
+
+  .general-home-v3-lower-grid {
+    margin-top: clamp(28px, 4.5vw, 58px);
+  }
+}
+
+@media (max-width: 640px) {
+  .home-toast-rail {
+    position: fixed !important;
+    top: 56px !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: 88px !important;
+  }
+
+  .home-toast-rail button {
+    max-height: 82px !important;
+    overflow: hidden !important;
+  }
+
+  .home-shell-main .general-home-v3-shell {
+    padding-top: 104px;
+  }
+}

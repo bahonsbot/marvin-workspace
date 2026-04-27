@@ -23,6 +23,8 @@ function toastSummary(event: { summary?: string; artifactPath?: string; type: st
 
 function ToastRail() {
   const router = useRouter();
+  const pathname = usePathname();
+  const isHomeRoute = pathname === '/general/home' || pathname === '/home';
   const { visibleToasts, dismissToast } = useMissionControlRuntime();
   const orderedToasts = useMemo(
     () => visibleToasts.slice().sort((a, b) => Date.parse(b.event.at) - Date.parse(a.event.at)),
@@ -32,7 +34,7 @@ function ToastRail() {
   if (orderedToasts.length === 0) return null;
 
   return (
-    <div className={styles.toastRail}>
+    <div className={`${styles.toastRail} ${isHomeRoute ? 'home-toast-rail' : ''}`}>
       {orderedToasts.map(({ event }) => {
         const title =
           event.type === 'task.moved_to_review'
@@ -119,6 +121,7 @@ function ToastRail() {
 export function AppShellClient({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isChatRoute = pathname === '/general/chat' || pathname === '/chat';
+  const isHomeRoute = pathname === '/general/home' || pathname === '/home';
   const compactTopRoutes = new Set(['/general/chat', '/chat', '/general/tasks', '/general/agents', '/general/skills', '/general/crons', '/general/memory', '/general/files']);
   const isCompactTopRoute = compactTopRoutes.has(pathname);
   const { sidebarCollapsed } = useShellContext();
@@ -128,7 +131,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
       <TopTabBar />
       <ToastRail />
       <div
-        className={`app-shell-grid ${isChatRoute ? 'chat-shell-grid' : ''}`}
+        className={`app-shell-grid ${isChatRoute ? 'chat-shell-grid' : ''} ${isHomeRoute ? 'home-shell-grid' : ''}`}
         style={{
           height: 'calc(100vh - 72px)',
           ['--sidebar-width' as string]: sidebarCollapsed ? '76px' : '220px',
@@ -137,7 +140,7 @@ export function AppShellClient({ children }: { children: ReactNode }) {
         <Sidebar />
         <div className={styles.appShellContentColumn}>
           <main
-            className={`app-shell-main ${styles.appShellMain} ${isChatRoute ? `${styles.chatShellMain} chat-shell-main` : ''}`}
+            className={`app-shell-main ${styles.appShellMain} ${isChatRoute ? `${styles.chatShellMain} chat-shell-main` : ''} ${isHomeRoute ? 'home-shell-main' : ''}`}
             style={{
               overflow: isChatRoute ? 'hidden' : 'auto',
               padding: isCompactTopRoute ? '14px 32px 12px' : undefined,
