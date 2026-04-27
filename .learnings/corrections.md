@@ -797,3 +797,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** high
 **Status:** active
+
+## [CORR-20260427-2356]
+
+**Trigger:** Philippe confirmed the BOILER ROOM scaffolding works but noted it is still very rough and will need proper polishing/painting tomorrow to match the Atreus-style screenshots.
+**What was wrong:** Nothing was functionally wrong after the restart, but the implementation should not be treated as visually complete just because the shell, routes, lint, build, and runtime markers are correct.
+**Lesson:** For Mission Control Trading, the first BOILER ROOM slice is foundation only. Next visual work must use screenshot truth: compare rendered Lab pages against the Atreus/stock-dashboard references and improve composition, spacing, typography, density, chart treatment, and mobile behavior before calling the Trading surface polished. Build success is not visual success.
+
+**Priority:** high
+**Status:** active

@@ -1374,3 +1374,14 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** low
 **Status:** resolved
+
+## [ERR-20260427-2358]
+
+**What failed:** Mission Control Lab initially kept serving the old Trading section after the BOILER ROOM source changes were committed
+**Error:** The running Lab bundle was stale. `http://127.0.0.1:3005/trading` still showed old markers like `Market Intel` and `Bot / Dispatch`, while the real Lab lane was configured through `.lab-runtime` on public port `3015` and internal Next port `3017`.
+**Context:** After implementing the first Lab-only Trading scaffolding slice, Philippe refreshed Lab and still saw the old Trading UI. The source/build had changed, but the served runtime had not been rebuilt/restarted on the correct Lab lane.
+**Suggested fix:** For Mission Control Lab visual/UI changes, verify the actual user-facing Lab route from `.lab-runtime/mission-control-lab.env`, not hard-coded `3005`. Use the maintenance-lock flow: create `.lab-runtime/maintenance.lock`, run `scripts/lab-stop.sh`, `scripts/lab-build.sh`, `scripts/lab-start.sh`, run `scripts/mission-control-service-health.sh`, remove the lock, then check public `https://lab.motiondisplay.cloud/<route>` with auth for expected markers. Treat `3005` as possibly stale/wrong-lane unless the env says it is current.
+**Resolution:** Rebuilt and restarted the Lab lane under maintenance lock, verified `3015/trading` and public Lab showed `BOILER ROOM`, `Health`, `Analytics`, `Screener`, and `Bots`; Philippe confirmed it worked.
+
+**Priority:** high
+**Status:** resolved
