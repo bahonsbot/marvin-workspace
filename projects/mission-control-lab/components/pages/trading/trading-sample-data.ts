@@ -124,3 +124,116 @@ export const newsPreview = [
 
 export const analyticsTabs = ['Performance', 'Attribution', 'Exposure', 'Dividends', 'Charts / Technical'];
 export const newsTabs = ['Market News', 'Watchlist News', 'Earnings / Calendar', 'Reports', 'Filings'];
+
+export const tickerPriceSeries = [31, 34, 37, 39, 42, 46, 49, 51, 55, 58, 63, 67, 70, 72, 78, 82, 86, 83, 88, 92, 95, 93, 99, 103];
+
+export const tickerFinancialOverviewSeries = [
+  { year: '2018', revenue: 117, netIncome: 30 },
+  { year: '2019', revenue: 109, netIncome: 27 },
+  { year: '2020', revenue: 166, netIncome: 43 },
+  { year: '2021', revenue: 269, netIncome: 97 },
+  { year: '2022', revenue: 270, netIncome: 44 },
+  { year: '2023', revenue: 609, netIncome: 297 },
+  { year: '2024', revenue: 1305, netIncome: 728 },
+];
+
+export const tickerDetailSample = {
+  symbol: 'NVDA',
+  name: 'NVIDIA Corporation',
+  exchange: 'NASDAQ',
+  price: '$1,037.89',
+  change: '+18.62',
+  changePct: '+1.83%',
+  priceTime: 'At close · May 16, 2025 · 4:00 PM ET',
+  headerStats: [
+    { label: 'Market Cap', value: '$2.54T' },
+    { label: 'P/E (TTM)', value: '58.21' },
+    { label: 'Sector', value: 'Technology' },
+    { label: 'Industry', value: 'Semiconductors' },
+  ],
+  tabs: ['Overview', 'Financials', 'News', 'Metrics', 'Estimates', 'Dividends', 'Ownership', 'SEC Filings'],
+  priceRanges: ['1D', '5D', '1M', '6M', 'YTD', '1Y', '5Y', 'MAX'],
+  chartAxis: ["May '24", "Jul '24", "Sep '24", "Nov '24", "Jan '25", "Mar '25", "May '25"],
+  chartStats: [
+    { label: 'Open', value: '1,023.50' },
+    { label: 'High', value: '1,044.30' },
+    { label: 'Low', value: '1,014.26' },
+    { label: 'Prev Close', value: '1,019.27' },
+    { label: 'Volume', value: '29.83M' },
+    { label: 'Avg Volume (30D)', value: '35.41M' },
+    { label: '52 Week Low', value: '384.30' },
+    { label: '52 Week High', value: '1,153.13' },
+  ],
+  profile: {
+    summary:
+      'NVIDIA designs accelerated computing platforms, graphics processors, networking systems, and software used across gaming, data center, professional visualization, automotive, and AI infrastructure markets.',
+    facts: [
+      { label: 'Founded', value: '1993' },
+      { label: 'Headquarters', value: 'Santa Clara, CA, USA' },
+      { label: 'CEO', value: 'Jensen Huang' },
+      { label: 'Employees', value: '29,600' },
+      { label: 'Website', value: 'nvidia.com' },
+      { label: 'Next Earnings', value: 'May 28, 2025 · After Market' },
+    ],
+  },
+  financialHighlights: [
+    { label: 'Revenue (TTM)', value: '$60.92B', delta: '+125.9% YoY', tone: 'positive', trend: [12, 13, 15, 18, 22, 31, 41, 57] },
+    { label: 'Net Income (TTM)', value: '$33.09B', delta: '+581.3% YoY', tone: 'positive', trend: [3, 4, 4, 7, 11, 18, 25, 34] },
+    { label: 'Gross Margin', value: '75.9%', delta: '+5.1 pp YoY', tone: 'positive', trend: [63, 61, 66, 68, 72, 74, 73, 76] },
+    { label: 'Operating Margin', value: '62.7%', delta: '+20.4 pp YoY', tone: 'positive', trend: [31, 34, 39, 41, 50, 58, 61, 63] },
+    { label: 'EPS (TTM)', value: '$2.66', delta: '+586.5% YoY', tone: 'positive', trend: [0.4, 0.5, 0.7, 1.1, 1.6, 2.1, 2.4, 2.7] },
+    { label: 'Free Cash Flow', value: '$27.30B', delta: '+380.6% YoY', tone: 'positive', trend: [4, 5, 7, 10, 15, 20, 24, 27] },
+    { label: 'ROE (TTM)', value: '114.3%', delta: '+63.1 pp YoY', tone: 'positive', trend: [38, 41, 47, 58, 69, 82, 99, 114] },
+    { label: 'ROIC (TTM)', value: '116.7%', delta: '+59.4 pp YoY', tone: 'positive', trend: [34, 37, 49, 55, 71, 84, 101, 117] },
+    { label: 'Debt / Equity', value: '0.10', delta: '-0.05 YoY', tone: 'neutral', trend: [0.21, 0.2, 0.18, 0.16, 0.15, 0.13, 0.11, 0.1] },
+  ],
+  recentNews: [
+    {
+      source: "Barron's",
+      time: '2h ago',
+      title: 'NVIDIA rallies as AI demand fuels record data center growth',
+      summary: 'Analysts continue to revise expectations after another strong infrastructure demand cycle.',
+    },
+    {
+      source: 'CNBC',
+      time: '5h ago',
+      title: 'NVIDIA unveils next-gen Blackwell Ultra chip at Computex 2025',
+      summary: 'Management framed the launch as an acceleration point for large-scale model training and inference.',
+    },
+    {
+      source: 'Reuters',
+      time: '1d ago',
+      title: 'U.S. to allow certain NVIDIA chip sales to UAE in win for AI expansion',
+      summary: 'Export policy remains a key watch item as sovereign AI demand grows outside the U.S.',
+    },
+  ],
+  resources: [
+    {
+      label: 'Financial statements',
+      items: [
+        { name: 'Annual Reports', meta: 'Company IR', href: '#' },
+        { name: 'Quarterly Reports', meta: 'Company IR', href: '#' },
+        { name: '10-K Filings', meta: 'SEC EDGAR', href: '#' },
+        { name: '10-Q Filings', meta: 'SEC EDGAR', href: '#' },
+      ],
+    },
+    {
+      label: 'Investor presentations',
+      items: [
+        { name: 'Q1 FY2025 Earnings Presentation', meta: 'May 22, 2024', href: '#' },
+        { name: 'Q4 FY2024 Earnings Presentation', meta: 'Feb 21, 2024', href: '#' },
+        { name: 'GTC 2024 Keynote Presentation', meta: 'Mar 18, 2024', href: '#' },
+      ],
+    },
+  ],
+  keyRatios: [
+    { label: 'P/E Ratio', value: '58.21' },
+    { label: 'Forward P/E', value: '42.31' },
+    { label: 'PEG Ratio', value: '0.68' },
+    { label: 'Price / Sales', value: '20.35' },
+    { label: 'EV / EBITDA', value: '34.54' },
+    { label: 'Price / Book', value: '53.27' },
+    { label: 'Current Ratio', value: '2.87' },
+    { label: 'Quick Ratio', value: '2.28' },
+  ],
+};
