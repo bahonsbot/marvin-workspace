@@ -691,11 +691,13 @@
 }
 
 @media (max-width: 760px) {
-  :global(.app-shell-grid.trading-shell-grid) {
+  :global(.app-shell-grid.trading-shell-grid),
+  :global(.app-shell-grid:has(.trading-shell-main)) {
     grid-template-columns: 1fr !important;
   }
 
-  :global(.app-shell-grid.trading-shell-grid > aside) {
+  :global(.app-shell-grid.trading-shell-grid > aside),
+  :global(.app-shell-grid:has(.trading-shell-main) > aside) {
     display: none !important;
   }
 
@@ -1286,4 +1288,277 @@
   border-color: rgba(23, 36, 30, 0.32);
   background: rgba(255, 253, 249, 0.94);
   color: #17241e;
+}
+
+@media (max-width: 560px) {
+  :global(.trading-room-shell) {
+    gap: 13px;
+  }
+
+  :global(.trading-market-tape) {
+    margin-inline: 0;
+    padding-inline: 1px 10px;
+    scroll-snap-type: x proximity;
+  }
+
+  :global(.trading-market-tape-item) {
+    min-width: 138px;
+    padding: 8px 12px;
+    scroll-snap-align: start;
+  }
+
+  :global(.trading-ticker-back) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 2px 4px;
+    font-size: 12px;
+  }
+
+  :global(.trading-ticker-quote-panel) {
+    gap: 13px;
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  :global(.trading-ticker-identity) {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  :global(.trading-ticker-mark) {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    font-size: 18px;
+  }
+
+  :global(.trading-ticker-identity h1) {
+    font-size: clamp(24px, 8.6vw, 34px);
+    line-height: 1.02;
+    overflow-wrap: anywhere;
+  }
+
+  :global(.trading-ticker-identity p) {
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  :global(.trading-ticker-price-block) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 9px;
+    padding: 12px 0;
+  }
+
+  :global(.trading-ticker-price-block strong) {
+    flex: 0 0 auto;
+    font-size: clamp(25px, 9vw, 32px);
+  }
+
+  :global(.trading-ticker-price-block em) {
+    font-size: 12px;
+  }
+
+  :global(.trading-ticker-price-block span) {
+    flex-basis: 100%;
+    font-size: 10px;
+  }
+
+  :global(.trading-ticker-stat-strip) {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid rgba(28, 37, 32, 0.1);
+    border-left: 1px solid rgba(28, 37, 32, 0.1);
+  }
+
+  :global(.trading-ticker-stat-strip div) {
+    padding: 10px;
+    border-right: 1px solid rgba(28, 37, 32, 0.1);
+    border-bottom: 1px solid rgba(28, 37, 32, 0.1);
+    min-height: 58px;
+  }
+
+  :global(.trading-ticker-stat-strip dd) {
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  :global(.trading-ticker-tabs-row) {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 8px;
+    padding-bottom: 8px;
+    overflow: hidden;
+  }
+
+  :global(.trading-ticker-tabs-row .trading-tab-row) {
+    margin-inline: 0;
+    padding-inline: 1px 14px;
+    padding-bottom: 8px;
+    scroll-padding-inline: 1px 14px;
+    scroll-snap-type: x proximity;
+  }
+
+  :global(.trading-ticker-tabs-row .trading-tab-row button) {
+    min-height: 40px;
+    padding-inline: 13px;
+    scroll-snap-align: start;
+  }
+
+  :global(.trading-watchlist-toggle) {
+    justify-self: stretch;
+    width: 100%;
+    min-height: 42px;
+    margin: 0;
+  }
+
+  :global(.trading-ticker-primary-grid),
+  :global(.trading-ticker-secondary-grid),
+  :global(.trading-ticker-lower-grid) {
+    gap: 13px;
+  }
+
+  :global(.trading-ticker-primary-grid > section),
+  :global(.trading-ticker-secondary-grid > section),
+  :global(.trading-ticker-lower-grid > section),
+  :global(.trading-room-shell > section) {
+    border-radius: 18px !important;
+    padding: 14px !important;
+    min-height: 0 !important;
+  }
+
+  :global(.trading-ticker-chart-head) {
+    display: grid;
+    gap: 10px;
+  }
+
+  :global(.trading-ticker-range-tabs) {
+    width: 100%;
+    justify-content: flex-start;
+    margin: 0;
+    padding-bottom: 2px;
+  }
+
+  :global(.trading-mini-chart) {
+    height: 168px;
+  }
+
+  :global(.trading-ticker-chart-axis) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    font-size: 9px;
+  }
+
+  :global(.trading-ticker-chart-axis span:nth-child(n+5)) {
+    display: none;
+  }
+
+  :global(.trading-ticker-chart-stats) {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-left: 1px solid rgba(28, 37, 32, 0.1);
+  }
+
+  :global(.trading-ticker-chart-stats div) {
+    padding: 9px;
+    border-right: 1px solid rgba(28, 37, 32, 0.1);
+    border-bottom: 1px solid rgba(28, 37, 32, 0.1);
+  }
+
+  :global(.trading-ticker-profile-copy) {
+    margin: 12px 0 14px;
+    font-size: 12px;
+    line-height: 1.58;
+  }
+
+  :global(.trading-profile-facts) {
+    gap: 0;
+  }
+
+  :global(.trading-profile-facts div),
+  :global(.trading-key-ratio-grid div) {
+    padding-block: 9px;
+  }
+
+  :global(.trading-financial-highlight-grid) {
+    grid-template-columns: 1fr;
+    border-left: 0;
+  }
+
+  :global(.trading-financial-highlight-card) {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 12px 0;
+    border-right: 0;
+  }
+
+  :global(.trading-financial-highlight-card span),
+  :global(.trading-financial-highlight-card em) {
+    grid-column: 1;
+  }
+
+  :global(.trading-financial-highlight-card strong) {
+    grid-column: 1;
+    font-size: 24px;
+  }
+
+  :global(.trading-small-sparkline) {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    width: 88px;
+  }
+
+  :global(.trading-ticker-source-note) {
+    font-size: 9px;
+    line-height: 1.4;
+  }
+
+  :global(.trading-ticker-news-list article) {
+    padding: 11px 0;
+  }
+
+  :global(.trading-ticker-news-list strong) {
+    font-size: 14px;
+  }
+
+  :global(.trading-resource-list) {
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  :global(.trading-resource-list a) {
+    padding: 10px 0;
+  }
+
+  :global(.trading-financial-legend) {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  :global(.trading-financial-bars) {
+    min-width: 0;
+    width: 100%;
+    height: 176px;
+    gap: 8px;
+    padding-left: 8px;
+  }
+
+  :global(.trading-financial-bars-pair) {
+    gap: 3px;
+  }
+
+  :global(.trading-financial-bars-pair i),
+  :global(.trading-financial-bars-pair b) {
+    width: 10px;
+  }
+
+  :global(.trading-key-ratio-grid) {
+    grid-template-columns: 1fr;
+    margin-top: 10px;
+    gap: 0;
+  }
 }
