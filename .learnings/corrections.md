@@ -16,6 +16,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 
 
+
+## [CORR-20260428-1505]
+
+**Trigger:** Philippe reviewed the BOILER ROOM Overview polish and pointed out that a scrollbar fix made the Pinned Watchlists DAY header no longer align with the sparkline cells.
+**What was wrong:** I fixed a tiny table overflow by reallocating space to the sparkline column, but initially aligned the sparkline content differently from the table header, creating a visual mismatch despite removing the scrollbar.
+**Lesson:** For financial/dashboard tables, header and body cells must share the same column sizing and alignment rules. Do not fix micro-overflow by pushing cell content independently; align numeric columns, header labels, and visualization cells from one shared table geometry, then verify visually.
+
+**Priority:** medium
+**Status:** active
+
 ## [CORR-20260428-1212]
 
 **Trigger:** Philippe approved fixing the safe Mission Control middleware convention warning, but explicitly warned not to touch the dynamic autonomous runner trace or NFT tracing build warnings because those areas had caused issues in the past, eventually contributing to a VPS rollback.

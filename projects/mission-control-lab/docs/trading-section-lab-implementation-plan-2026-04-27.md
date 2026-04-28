@@ -466,3 +466,102 @@ until Philippe explicitly approves after Lab screenshots/validation.
 ## Strong recommendation
 
 Start with the shell identity and static Lab prototype. It will force the design, IA, and mobile behavior to prove themselves before we spend time wiring APIs. Data is important, but wiring data into a weak layout just gives us a fast spreadsheet with delusions of grandeur.
+
+---
+
+## Addendum — 2026-04-28 Overview visual prototype completed
+
+### Status update
+
+The first BOILER ROOM Overview page in `projects/mission-control-lab` is now **done for now** as a static visual prototype. It remains Lab-only and must not be promoted to the live Dashboard until Philippe explicitly approves a focused promotion.
+
+This addendum supersedes the older “rough scaffolding” state for `/trading`. The current Overview implementation should be treated as the durable visual truth for the next Trading pages.
+
+Relevant focused commits:
+
+- `16939b5 Polish Lab trading overview`
+- `1b566bf Fix Lab watchlist overflow`
+- `74fd60b Align Lab watchlist day column`
+
+### Visual direction clarified
+
+The Trading section should not become a dark terminal by default. Philippe clarified that the Portfolio Dividend Tracker screenshot is useful mainly for future portfolio/X-ray concepts, not for the main BOILER ROOM visual style.
+
+Current direction:
+
+- primary surface: light/cream institutional finance UI;
+- mood: hybrid of Mission Control General / MARVIN'S ROOM polish and Atreus layout discipline;
+- content/layout truth: Atreus first;
+- Zero Sum influence: graphs, analytical density, and insight modules only;
+- dark treatments: reserve, if needed, for future Portfolio/X-ray depth surfaces, not the default Overview.
+
+### Overview implementation state
+
+Current `/trading` Overview includes:
+
+- macro market ribbon across the top;
+- Total Account Value card as the first main content block, with no redundant page title/header above it;
+- account card content intentionally limited to:
+  - Total account value;
+  - Day P/L;
+  - All-time P/L;
+- green Atreus-style performance line/area chart with subtle grid lines and endpoint marker;
+- centered range controls: `1D`, `1W`, `1M`, `YTD`, `1Y`, `ALL`;
+- Portfolio Health preview using Atreus-style categories:
+  - Concentration;
+  - ESG Alignment;
+  - Risk Level;
+  - Diversification;
+- health rows use stroke-style icons, short summaries, and right-side text rating badges;
+- Pinned Watchlists with aligned columns and ticker links into `/trading/ticker/[symbol]`;
+- compact secondary modules:
+  - Top Movers;
+  - Earnings;
+  - News Pulse.
+
+Removed from the Overview during polish:
+
+- redundant top page title block (`BOILER ROOM`, `Trading Overview`, descriptive intro copy);
+- extra account metrics such as cash, buying power, and net liquidity, which belong on Portfolio;
+- extra subtitles such as `Snapshot`, `Names on deck`, `Where momentum sits`, `Upcoming`, and `What changed`;
+- random quick-link block under News Pulse, because Portfolio / Analytics / Bots already live in the left navigation.
+
+### Layout and UI lessons from the Overview pass
+
+1. **Keep Overview scan-first.** Detailed portfolio/account data belongs on Portfolio, Health, and Analytics. The Overview should orient quickly, not become the entire product in one page.
+2. **Use restrained typography.** Bold text works for section labels and watchlist names, but financial values, links, and table rows should stay lighter unless emphasis is truly needed.
+3. **Tables need shared geometry.** The Pinned Watchlists scrollbar and DAY-column mismatch showed that table headers, numeric cells, and sparkline cells must share the same width/alignment rules. Do not fix micro-overflow by pushing one column independently.
+4. **Charts must look product-real even before data is live.** The first placeholder chart felt too artificial. Static charts should still use realistic line, fill, grid, endpoint, and tab placement so the UI can be judged honestly before provider wiring.
+5. **Pixel references are useful, but current implementation is truth.** `uploads/mission-control/atreus-style-guide.md` is useful for color/spacing hints, but the current Lab Overview is the durable working reference, not a requirement for absolute pixel-copying.
+
+### Validation completed
+
+The Overview polish was repeatedly validated with:
+
+- `npm run lint` in `projects/mission-control-lab`;
+- `npm run build` in `projects/mission-control-lab`;
+- Lab runtime refresh using the `.lab-runtime/maintenance.lock` flow;
+- live `/trading` checks after restart;
+- Philippe's visual review after the final Pinned Watchlists DAY-column alignment fix.
+
+Known build warnings remain unrelated and intentionally untouched:
+
+- deprecated `middleware` convention warning in Lab;
+- dynamic autonomous runner trace warning;
+- NFT tracing warning from existing files/config path behavior.
+
+Do not opportunistically fix those warnings as part of Trading UI polish.
+
+### Next recommended step
+
+Move next to `/trading/ticker/[symbol]` and use `uploads/mission-control/2026-04-27T15-56-18-514Z-stock-dashboard-2.jpg` as the primary reference.
+
+Recommended ticker-detail priorities:
+
+1. Atreus-style quote header: company name, ticker, exchange, follow/watch affordance, price/change, sector/industry, market cap, P/E.
+2. Horizontal tabs: Overview, Financials, News, Metrics, Estimates, Dividends, Ownership, SEC Filings.
+3. Main chart area with the same restrained chart language as the Overview, but shaped for a single ticker.
+4. Company profile, financial highlights, recent news/resources, and key ratios.
+5. Honest static/sample data only until provider contracts are deliberately added.
+
+Keep Dashboard untouched until Lab screenshots and behavior are approved.
