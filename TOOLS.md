@@ -100,7 +100,7 @@ Script-only jobs belong on the host deterministic scheduler.
 
 ## Mission Control Runtime Notes
 - Project path: `projects/mission-control/`
-- Current app stack: Next.js version follows `projects/mission-control/package.json` (verified currently `next 16.2.0` on Apr 27, 2026), with `react 19.2.0`, `react-dom 19.2.0`, and `ws` required
+- Current app stack: Next.js version follows each lane's `package.json`; `projects/mission-control` and `projects/mission-control-lab` are aligned on `next 16.2.4` with `postcss 8.5.12` override, `react 19.2.0`, `react-dom 19.2.0`, and `ws` required (verified Apr 29, 2026)
 - Main preview/runtime ports:
   - app: `3005`
   - sidecar/health: `3006`
