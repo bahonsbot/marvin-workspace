@@ -150,9 +150,10 @@ Command/tool failures and exceptions.
 - `models.providers.openai-codex.models.0.name: Invalid input: expected string, received undefined`
 **Context:** after an earlier unsuccessful attempt to raise GPT-5.4 from 200k to 250k, I made a bad follow-up edit to the provider config and broke the gateway-critical config shape.
 **Suggested fix:** for OpenClaw config changes, do not improvise provider/model structure from memory. Verify the exact docs/schema first, preserve required keys like `baseUrl` and model `name`, and if full certainty is missing, stop and propose instead of mutating `openclaw.json`.
+**Resolution:** Closed during the Apr 29 Morning Meeting because the durable safety rule is now captured in `MEMORY.md` Config Safety Rules and `TOOLS.md` Safety Constraints. Future OpenClaw config changes must verify docs/schema first, preserve required sibling fields, and stop/propose if certainty is not absolute.
 
 **Priority:** critical
-**Status:** pending
+**Status:** resolved
 
 ## [ERR-20260421-1216]
 
