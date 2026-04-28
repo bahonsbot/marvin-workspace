@@ -2,34 +2,18 @@
 
 ## Purpose
 This file governs proactive execution outside heartbeat.
-- `HEARTBEAT.md` = monitoring only
-- `AUTONOMY.md` = proactive execution policy
+- `HEARTBEAT.md` = monitoring and alerts
+- `AUTONOMY.md` = bounded proactive execution policy
 
-## Trigger Model
-Preferred triggers:
-- dedicated cron wakeups
-- explicit autonomy runs
+Autonomy is for Marvin's Workspace Lane only.
+Heartbeat must not be the normal trigger for proactive execution.
 
-Rules:
-- heartbeat must not be the normal trigger for proactive execution
-- each run should decide whether exactly one bounded task should happen, then either execute one chunk or exit quietly
-- backlog execution and workspace home-improvement use separate triggers
+## Live Modes
+Current autonomy is limited to two live modes:
+1. **Task-board autonomy** — bounded work tied to the autonomous task system, including generator/executor flows and compatible `AUTONOMOUS.md` sync where relevant
+2. **Home improvement** — one bounded workspace cleanup or improvement pass that is useful even when not backlog-first
 
-## Scope
-Autonomy is mainly for Marvin’s Workspace Lane.
-
-Two allowed modes:
-1. **Backlog execution** — work from `AUTONOMOUS.md` and the delegation queue
-2. **Home improvement** — bounded workspace maintenance that is useful even when not backlog-first
-
-Typical targets:
-- docs / runbooks / prompts
-- memory and logging process
-- helper scripts / internal tooling
-- workflow cleanup / local organization
-- low-risk internal infrastructure improvements
-
-## Default Boundaries
+## Boundaries
 Autonomous work is allowed without approval only when it is:
 - low-risk
 - bounded
@@ -40,40 +24,54 @@ Autonomous work is allowed without approval only when it is:
 - inside Workspace Lane authority
 
 Do not autonomously execute anything that could materially affect:
-- external access
 - security posture
+- auth or access
 - routing
-- uptime
+- uptime or restart behavior
 - persistent runtime behavior
 - host/VPS operations
-- public/external behavior
+- public or external behavior
 - destructive data integrity
 - broad irreversible project structure
 
 If risk is unclear, propose first.
 
-## Exclusions
-Do not autonomously execute these without approval:
-- persistent config changes
-- cron creation/removal or major cron-behavior changes
-- auth changes
-- channel-behavior changes
-- restart-affecting runtime mutations
-- security-sensitive infrastructure changes
-- host/VPS administration
-- public-facing or external sends outside already-approved flows
-
-Those belong to the Control-Plane Lane or approval-gated work.
-
-## Execution Contract
+## Run Contract
 When triggered:
-1. check whether autonomy is eligible
-2. select at most one bounded task
-3. confirm no concurrency conflict / stale active slot problem
+1. confirm the run is eligible
+2. choose at most one bounded chunk
+3. respect queue and concurrency guards
 4. execute one bounded chunk only
 5. verify the result
-6. log it to daily memory
+6. log the outcome to daily memory
 7. stay quiet unless there is a blocker, milestone, or explicit reporting rule
+
+Default target: one bounded chunk, usually 10 to 20 minutes.
+If the task expands beyond that, stop and convert it into a proposal, queued follow-up, or blocker.
+
+## No-Progress Pivot Gate
+During autonomous investigation or execution, treat two consecutive empty or low-information probes for the same question as a pivot trigger.
+
+Examples of low-information results include `ENOENT`, `(no output)`, trivial aggregate counts, repeated broad greps, or probe output that does not materially narrow the task.
+
+After the second low-information probe, do not issue a third same-class probe until you change strategy by doing at least one of:
+- switch to a different evidence source
+- inspect the current session transcript or known output artifact
+- use a prepared research packet or source URL
+- narrow the file/query scope materially
+- record an explicit blocker or proposal
+
+## Task-Board Guidance
+Use autonomy here for:
+- bounded backlog execution
+- task generation or maintenance that supports the live autonomous task system
+- low-risk support work that improves task throughput or clarity
+
+Do not use it for:
+- broad speculative side quests
+- stealth expansion of project scope
+- forcing the board or executor into states that need human review
+- overriding manual task-board authority
 
 ## Queue Safety
 For `memory/executor-subagent-queue.json`:
@@ -81,63 +79,45 @@ For `memory/executor-subagent-queue.json`:
 - if a recent `spawned` entry exists, do nothing
 - if a `spawned` entry is stale, convert it to `blocked` with a note
 - never silently discard queued work
-- after stale recovery, the next wakeup may start exactly one pending task
 
-## Time Budget
-- default target: one bounded chunk only
-- typical size: 10 to 20 minutes
-- avoid multi-branch investigations unless explicitly requested
-- if the task expands beyond the bounded window, stop and convert it into a proposal, queued task, or blocker
-
-## Reporting
-All autonomous work must be traceable.
-
-Required:
-- append outcome to `memory/YYYY-MM-DD.md`
-- include what changed, why, expected benefit, and rollback if relevant
-- report autonomous low-risk changes in the next Morning Meeting
-
-## Decision Heuristic
-Run autonomous work only if all answers are yes:
-- is it within Workspace Lane authority?
-- is it low-risk?
-- is it bounded?
-- is it useful?
-- is it not blocked on Philippe?
-- is it unlikely to interfere with active work?
-- can the result be verified?
-
-If any answer is no or unclear, skip or propose first.
-
-## Home Improvement Heuristic
-Good home-improvement targets:
-- doc/runbook clarification
-- stale workflow friction
-- prompt/operator-guidance tightening
+## Home Improvement Guidance
+Good targets:
+- doc or runbook clarification
+- prompt or operator-guidance tightening
 - helper-script or glue-logic improvement
 - bounded local cleanup with clear benefit
 
-Do not use home-improvement for:
+Do not use home improvement for:
 - filler cleanup
-- stealth project expansion
 - control-plane mutation
-- public/external actions
+- public or external actions
 - broad refactors without a clear bounded payoff
 
-## Model Posture
-- Marvin judgment/orchestration: `codex5.4`
-- coding-heavy implementation may delegate to `codex`
-- use reviewer support when the task is substantial enough to justify it
-- do not default governance-sensitive autonomy to cheap lightweight models when judgment quality is the main risk
+## Reporting
+All autonomous work must be traceable.
+- append outcomes to `memory/YYYY-MM-DD.md`
+- include what changed, why, expected benefit, and rollback if relevant
+- report autonomous low-risk changes in the next Morning Meeting
+
+## Gate Modes
+`scripts/autonomy_gate.py` is the deterministic preflight for autonomy runs.
+
+- `workspace` = backlog-tied Workspace Lane execution during the normal active window
+- `queue` = delegated executor queue wakeup, including stale `spawned` auto-healing before decisions
+- `improve` = one bounded home-improvement pass; this mode may run outside the normal active window but still respects queue concurrency safety
+
+Use the gate result as authority:
+- `decision = run` → execute at most one bounded chunk
+- `decision = skip` or non-zero exit → do nothing else
 
 ## Related Files
-- `AGENTS.md` = primary authority for startup sequence and lane definitions; overall operating policy and lane authority
-- `HEARTBEAT.md` = monitoring pulse
-- `AUTONOMY.md` = proactive execution policy
-- `AUTONOMOUS.md` = active task backlog
-- `scripts/autonomy_gate.py` = deterministic preflight for autonomy runs
+- `AGENTS.md` = overall operating policy and approval boundary
+- `HEARTBEAT.md` = monitoring pulse, not the default execution trigger
+- `AUTONOMOUS.md` = compatibility or sync surface for active task lanes where relevant
+- `scripts/autonomy_gate.py` = deterministic preflight
+- `projects/mission-control/data/autonomous-tasks.json` = current structured task store
 
 ## Design Principle
 Heartbeat should notice.
-Autonomy should improve.
-Control-plane work should be proposed before it mutates high-impact behavior.
+Autonomy should improve one bounded thing.
+High-impact control-plane work should be proposed before it mutates behavior.

@@ -853,3 +853,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** medium
 **Status:** resolved
+
+## [CORR-20260429-0626]
+
+**Trigger:** Apr 29 Morning Meeting reviewed `projects/_ops/openclaw-loop-pattern-audit-2026-04-27.md`, which documented an autonomous session repeating low-information diagnostic probes after a missing reference file.
+**What was wrong:** The autonomous task session treated `ENOENT`, `(no output)`, and trivial broad-scan results as reasons to keep probing the same evidence class instead of pivoting to a better source or declaring a blocker.
+**Lesson:** During autonomous investigation, after two consecutive empty or low-information probes aimed at the same question, pivot before probing again. Acceptable pivots include switching evidence source, inspecting the current session transcript/output artifact, using the prepared research packet or source URL, narrowing the query materially, or recording an explicit blocker/proposal.
+
+**Priority:** high
+**Status:** active
