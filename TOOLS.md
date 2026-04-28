@@ -15,14 +15,15 @@ Quick rule:
 - If it answers "what happened today, and why?" put it in daily memory.
 
 ## Current Runtime Baseline
-- OpenClaw CLI version: `2026.4.15` (`openclaw --version`, verified Apr 17, 2026)
+- Active OpenClaw CLI version: `2026.4.23` via `/data/.npm-global/bin/openclaw --version` (verified Apr 25, 2026)
+- Legacy OpenClaw CLI still present: `/usr/local/bin/openclaw` reports `2026.3.8`; current shell resolution still prefers `/usr/local/bin/openclaw`, so use the explicit `/data/.npm-global/bin/openclaw` path for maintenance until PATH/service cleanup is deliberately handled
 - Workspace: `/data/.openclaw/workspace`
 - Host: Hostinger VPS
 - Runtime: Docker
 - Primary operator user inside container: `node`
 - Canonical OpenClaw CLI path: `/data/.npm-global/bin/openclaw`
 - Current rule: use the host/container restart path for runtime restarts, not `openclaw gateway restart` from inside the container
-- Current operational posture: the Apr 17 reset baseline is restored and verified. Rewiring is now targeted follow-up work, not an open-ended recovery state. Prefer minimal clean fixes over patch stacking, and avoid routine backup restores.
+- Current operational posture: OpenClaw `2026.4.23` is installed and smoke-tested, but post-update follow-up is still in progress. Prefer targeted cleanup and validation over broad `doctor --fix` or patch stacking.
 - Nexos provider note: Nexos config was removed and verified absent from `openclaw.json`, `models.json`, and `auth-profiles.json` on Apr 25, 2026. Treat new Nexos entries as drift requiring investigation, not expected background runtime config.
 
 ## Container Access
@@ -37,15 +38,19 @@ Quick rule:
 
 ## Memory and Recall
 ### QMD
-- Preferred recall order:
-  1. `qmd vsearch "query" -c life -n 3`
-  2. `qmd search "query" -c life -n 3`
+- Preferred recall order on this box:
+  1. `qmd search "query" -c life -n 3`
+  2. `qmd vsearch "query" -c life -n 3`
   3. `qmd query "query"`
+- Reason: lexical `qmd search` is the more reliable first pass here; `qmd vsearch` can still hang locally and may need CPU-mode fallback.
 - Useful checks:
   - `qmd status`
   - `qmd collection list`
   - `bash scripts/index_memory_health.sh`
   - `bash scripts/memory_recall_smoke_test.sh`
+- Remediation when collections are stale or embeddings are pending:
+  - run `qmd embed`
+  - if vector search hangs locally, retry with CPU mode via `QMD_LLAMA_GPU=cpu qmd embed` or use the local wrapper path that already forces CPU mode
 - Categories: `life`, `projects`, `people`, `companies`
 - Local wrapper forces CPU mode with `QMD_LLAMA_GPU=cpu`
 
@@ -75,18 +80,10 @@ Quick rule:
 ## Scheduler Ownership
 ### OpenClaw cron
 OpenClaw cron should own model-backed reasoning/review jobs.
-Verified enabled jobs from `/data/.openclaw/cron/jobs.json` on Apr 17, 2026:
-- `nightly-memory-extraction`
-- `platform-health-council`
-- `nightly-security-review`
-- `self-improvement`
-- `market-signal-generator`
-- `signal-accuracy-review`
-- `daily-task-generator`
-- `autonomous-task-executor`
-- `autonomous-queue-wakeup`
-- `workspace-home-improvement`
-- `skill-level-check`
+Use the live cron registry as runtime truth instead of trusting a fixed snapshot here.
+- Inspect current jobs: `/data/.openclaw/cron/jobs.json`
+- Prefer live checks when needed: `openclaw gateway call status --json`, `openclaw cron list`
+- Do not rely on stale job counts or legacy wrapper entries in docs
 
 ### Deterministic scheduler
 Script-only jobs belong on the host deterministic scheduler.
@@ -127,7 +124,11 @@ Script-only jobs belong on the host deterministic scheduler.
 
 ## Trading Bot Operations
 - Receiver launcher: `projects/autonomous-trading-bot/scripts/run_webhook_receiver_foreground.sh`
-- Host service: `marvin-webhook-receiver.service`
+- Current verified local supervision launcher: `projects/autonomous-trading-bot/scripts/run_webhook_watchdog.sh`
+- Local watchdog loop implementation: `projects/autonomous-trading-bot/scripts/webhook_watchdog.sh`
+- Receiver helper: `projects/autonomous-trading-bot/scripts/ensure_webhook_receiver.sh`
+- Host-service status note: host-service install artifacts and runbook exist for `marvin-webhook-receiver.service` (`deploy/marvin-webhook-receiver.service`, `deploy/install-marvin-webhook-receiver.sh`, `docs/runbooks/webhook-receiver-host-service.md`), and older daily memory recorded it as active under host systemd. From inside this container we cannot verify host systemd state directly, so do not claim the host service is current runtime truth without a host-side check. Current verified container-local truth is the receiver health endpoints plus the local recovery paths below.
+- Current fragility note: ad-hoc watchdog/receiver launches can be lost across broader gateway/runtime restart work while stale PID files remain behind. Treat `/health` and `/health/auth` as source of truth, not PID file presence alone.
 - Health endpoints:
   - `http://127.0.0.1:8000/health`
   - `http://127.0.0.1:8000/health/auth`
@@ -136,9 +137,14 @@ Script-only jobs belong on the host deterministic scheduler.
 - Quick recovery:
   ```bash
   cd /data/.openclaw/workspace/projects/autonomous-trading-bot
-  pkill -f webhook_receiver.py
-  bash scripts/run_webhook_receiver.sh
+  bash scripts/ensure_webhook_receiver.sh
   ```
+- Durable recovery when supervision is missing:
+  ```bash
+  cd /data/.openclaw/workspace/projects/autonomous-trading-bot
+  bash scripts/run_webhook_watchdog.sh
+  ```
+- After any gateway/runtime restart sequence that may have touched local process trees, re-check both health endpoints before assuming the watchdog is still alive.
 
 ## Key Scripts and Runbooks
 ### Scripts
