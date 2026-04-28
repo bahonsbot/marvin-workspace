@@ -29,7 +29,7 @@ function misconfiguredResponse(): NextResponse {
   });
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   if (isLocalRequest(request)) {
     return NextResponse.next();
   }
