@@ -121,8 +121,12 @@ function chartAxisFromTimestamps(timestamps: number[]) {
   return Array.from(new Set(indices)).map((index) => formatter.format(new Date(timestamps[index] * 1000)));
 }
 
+function validNumbers(values: Array<number | null | undefined> | undefined) {
+  return (values ?? []).filter((value): value is number => typeof value === 'number' && Number.isFinite(value));
+}
+
 function compactPriceSeries(closes: Array<number | null | undefined>) {
-  const valid = closes.filter((value): value is number => typeof value === 'number' && Number.isFinite(value));
+  const valid = validNumbers(closes);
   if (valid.length <= 36) return valid.map((value) => Number(value.toFixed(2)));
   const output: number[] = [];
   const last = valid.length - 1;
@@ -178,7 +182,7 @@ function buildHeaderStats(sample: TickerProfile, search: Awaited<ReturnType<type
 }
 
 function buildChartStats(meta: YahooChartMeta, quote: { close?: Array<number | null>; open?: Array<number | null>; high?: Array<number | null>; low?: Array<number | null>; volume?: Array<number | null> }) {
-  const lastNumber = (values?: Array<number | null>) => [...(values ?? [])].reverse().find((value): value is number => typeof value === 'number' && Number.isFinite(value));
+  const lastNumber = (values?: Array<number | null>) => validNumbers(values).at(-1);
   return [
     { label: 'Open', value: formatMoney(lastNumber(quote.open), meta.currency || 'USD') },
     { label: 'High', value: formatMoney(meta.regularMarketDayHigh ?? lastNumber(quote.high), meta.currency || 'USD') },
@@ -203,8 +207,9 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     const sample = buildSampleTickerProfile(symbol);
     const asOf = formatAsOf(meta.regularMarketTime);
     const sourceMap = buildYahooSourceMap(asOf);
-    const price = meta.regularMarketPrice;
-    const previousClose = meta.previousClose ?? meta.chartPreviousClose;
+    const closes = validNumbers(quote.close);
+    const price = meta.regularMarketPrice ?? closes.at(-1);
+    const previousClose = closes.length >= 2 ? closes.at(-2) : meta.previousClose;
     const change = price != null && previousClose != null ? price - previousClose : 0;
     const changePct = previousClose ? (change / previousClose) * 100 : 0;
     const tone = change < 0 ? 'negative' : change > 0 ? 'positive' : 'neutral';
