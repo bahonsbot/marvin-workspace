@@ -15,6 +15,16 @@ User corrections and feedback. Log when user explicitly corrects you.
 ---
 
 
+
+## [CORR-20260428-1212]
+
+**Trigger:** Philippe approved fixing the safe Mission Control middleware convention warning, but explicitly warned not to touch the dynamic autonomous runner trace or NFT tracing build warnings because those areas had caused issues in the past, eventually contributing to a VPS rollback.
+**What was wrong:** The risky pattern would be treating build warnings as generic cleanup and attempting opportunistic fixes in fragile Mission Control runtime/tracing paths.
+**Lesson:** For Mission Control builds, distinguish safe framework-convention cleanup from fragile runtime/tracing warnings. The middleware-to-proxy convention warning is safe to fix with a narrow rename/export change. Do not touch the dynamic autonomous runner trace or NFT tracing warnings unless Philippe explicitly approves a dedicated recovery-safe plan, because prior attempts around those areas have caused serious runtime instability and rollback risk.
+
+**Priority:** critical
+**Status:** active
+
 ## [CORR-20260427-1955]
 
 **Trigger:** Philippe pointed out that after the Home mobile cleanup, hiding the sidebar removed the only visible way to access the side menu on mobile.
