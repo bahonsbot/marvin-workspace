@@ -7,11 +7,6 @@
         "column": "todo"
       },
       {
-        "id": "c10110b2",
-        "text": "[Other] Analyze: OpenClaw loop-pattern audit",
-        "column": "todo"
-      },
-      {
         "id": "ab9d602a",
         "text": "[Trading] Draft: SEC filing ingestion pipeline",
         "column": "todo"
@@ -213,5 +208,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-27T01:00:19.112Z"
+  "updatedAt": "2026-04-28T01:03:20.765Z"
 }
