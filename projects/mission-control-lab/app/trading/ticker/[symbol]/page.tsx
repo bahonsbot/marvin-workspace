@@ -1,11 +1,8 @@
 import Link from 'next/link';
 import { MarketTape, MiniLineChart, TabScaffold, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
-import {
-  marketTape,
-  tickerDetailSample,
-  tickerFinancialOverviewSeries,
-  tickerPriceSeries,
-} from '@/components/pages/trading/trading-sample-data';
+import { marketTape } from '@/components/pages/trading/trading-sample-data';
+import { getTickerProfile } from '@/lib/trading/ticker-profile';
+import type { TickerFinancialBar } from '@/lib/trading/contracts';
 
 type SparklineTone = 'positive' | 'negative' | 'neutral';
 
@@ -37,11 +34,11 @@ function SmallSparkline({ values, tone = 'positive' }: { values: number[]; tone?
   );
 }
 
-function FinancialBarChart() {
-  const max = Math.max(...tickerFinancialOverviewSeries.map((item) => Math.max(item.revenue, item.netIncome)));
+function FinancialBarChart({ series }: { series: TickerFinancialBar[] }) {
+  const max = Math.max(...series.map((item) => Math.max(item.revenue, item.netIncome)));
   return (
-    <div className="trading-financial-bars" aria-label="Sample annual revenue and net income chart">
-      {tickerFinancialOverviewSeries.map((item) => (
+    <div className="trading-financial-bars" aria-label="Annual revenue and net income chart">
+      {series.map((item) => (
         <div key={item.year} className="trading-financial-bar-group">
           <div className="trading-financial-bars-pair">
             <i style={{ height: `${(item.revenue / max) * 100}%` }} aria-label={`${item.year} revenue`} />
@@ -57,7 +54,7 @@ function FinancialBarChart() {
 export default async function TradingTickerPage({ params }: { params: Promise<{ symbol: string }> }) {
   const { symbol } = await params;
   const upperSymbol = symbol.toUpperCase();
-  const ticker = { ...tickerDetailSample, symbol: upperSymbol };
+  const ticker = await getTickerProfile(upperSymbol);
 
   return (
     <TradingPageFrame
@@ -83,9 +80,9 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </div>
 
         <div className="trading-ticker-price-block">
-          <strong>{ticker.price}</strong>
-          <em className="positive">{ticker.change} ({ticker.changePct})</em>
-          <span>{ticker.priceTime}</span>
+          <strong>{ticker.quote.price}</strong>
+          <em className={ticker.quote.tone}>{ticker.quote.change} ({ticker.quote.changePct})</em>
+          <span>{ticker.quote.priceTime}</span>
         </div>
 
         <dl className="trading-ticker-stat-strip">
@@ -113,21 +110,21 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
               <h2>{upperSymbol} performance</h2>
             </div>
             <div className="trading-range-tabs trading-ticker-range-tabs" role="tablist" aria-label="Ticker price range">
-              {ticker.priceRanges.map((range) => (
-                <button key={range} type="button" className={range === '1Y' ? 'active' : ''} role="tab" aria-selected={range === '1Y'}>
+              {ticker.priceSeries.ranges.map((range) => (
+                <button key={range} type="button" className={range === ticker.priceSeries.activeRange ? 'active' : ''} role="tab" aria-selected={range === ticker.priceSeries.activeRange}>
                   {range}
                 </button>
               ))}
             </div>
           </div>
-          <MiniLineChart values={tickerPriceSeries} />
+          <MiniLineChart values={ticker.priceSeries.values} />
           <div className="trading-ticker-chart-axis" aria-hidden="true">
-            {ticker.chartAxis.map((item) => (
+            {ticker.priceSeries.axis.map((item) => (
               <span key={item}>{item}</span>
             ))}
           </div>
           <dl className="trading-ticker-chart-stats">
-            {ticker.chartStats.map((stat) => (
+            {ticker.priceSeries.stats.map((stat) => (
               <div key={stat.label}>
                 <dt>{stat.label}</dt>
                 <dd>{stat.value}</dd>
@@ -138,9 +135,9 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
 
         <section style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>
           <div className="trading-section-label">Company profile</div>
-          <p className="trading-ticker-profile-copy">{ticker.profile.summary}</p>
+          <p className="trading-ticker-profile-copy">{ticker.companyProfile.summary}</p>
           <dl className="trading-profile-facts">
-            {ticker.profile.facts.map((fact) => (
+            {ticker.companyProfile.facts.map((fact) => (
               <div key={fact.label}>
                 <dt>{fact.label}</dt>
                 <dd>{fact.value}</dd>
@@ -155,7 +152,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div>
             <div className="trading-section-label">Financial highlights</div>
           </div>
-          <span className="trading-ticker-source-note">Static sample · source-ready contract later</span>
+          <span className="trading-ticker-source-note">{ticker.sourceMap.financials.freshness} · {ticker.sourceMap.financials.source} · contract-ready</span>
         </div>
         <div className="trading-financial-highlight-grid">
           {ticker.financialHighlights.map((metric) => (
@@ -221,7 +218,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
               <span><b /> Net income</span>
             </div>
           </div>
-          <FinancialBarChart />
+          <FinancialBarChart series={ticker.financialOverview} />
         </section>
 
         <section style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
