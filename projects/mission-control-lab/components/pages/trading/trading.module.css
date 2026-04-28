@@ -778,6 +778,10 @@
     text-align: left;
     font-size: 30px;
   }
+
+  :global(.trading-ticker-tabs-row) {
+    align-items: start;
+  }
 }
 
 :global(.trading-ticker-back) {
@@ -839,18 +843,6 @@
 :global(.trading-ticker-identity p span) {
   color: rgba(34, 48, 41, 0.34);
 }
-
-:global(.trading-ticker-identity button) {
-  border: 1px solid rgba(28, 37, 32, 0.14);
-  border-radius: 9px;
-  background: rgba(255, 253, 249, 0.92);
-  color: #17241e;
-  padding: 8px 12px;
-  font-size: 12px;
-  margin-left: 4px;
-  white-space: nowrap;
-}
-
 :global(.trading-ticker-price-block) {
   display: grid;
   gap: 2px;
@@ -861,8 +853,8 @@
 
 :global(.trading-ticker-price-block strong) {
   font-family: var(--font-serif);
-  font-size: clamp(34px, 3.4vw, 52px);
-  line-height: 0.96;
+  font-size: clamp(26px, 2.5vw, 34px);
+  line-height: 1;
   letter-spacing: -0.045em;
   font-weight: 400;
 }
@@ -1212,13 +1204,6 @@
     display: grid;
     grid-template-columns: 54px minmax(0, 1fr);
   }
-
-  :global(.trading-ticker-identity button) {
-    grid-column: 1 / -1;
-    margin-left: 0;
-    width: fit-content;
-  }
-
   :global(.trading-ticker-stat-strip),
   :global(.trading-ticker-chart-stats),
   :global(.trading-financial-highlight-grid),
@@ -1249,4 +1234,56 @@
     overflow-x: auto;
     min-width: 520px;
   }
+
+  :global(.trading-ticker-tabs-row) {
+    display: grid;
+  }
+
+  :global(.trading-watchlist-toggle) {
+    justify-self: end;
+    margin-bottom: 0;
+  }
+}
+
+:global(.trading-ticker-tabs-row) {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  border-bottom: 1px solid rgba(28, 37, 32, 0.18);
+}
+
+:global(.trading-ticker-tabs-row .trading-tab-row) {
+  flex: 1 1 auto;
+  min-width: 0;
+  border-bottom: 0;
+}
+
+:global(.trading-watchlist-toggle) {
+  flex: 0 0 auto;
+  border: 1px solid rgba(28, 37, 32, 0.14);
+  border-radius: 999px;
+  padding: 7px 12px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+:global(.trading-watchlist-toggle.in-watchlist) {
+  border-color: rgba(22, 163, 74, 0.28);
+  background: rgba(22, 163, 74, 0.1);
+  color: #14733a;
+}
+
+:global(.trading-watchlist-toggle.not-watched) {
+  border-color: rgba(28, 37, 32, 0.16);
+  background: rgba(255, 253, 249, 0.72);
+  color: rgba(23, 36, 30, 0.74);
+}
+
+:global(.trading-watchlist-toggle:hover) {
+  border-color: rgba(23, 36, 30, 0.32);
+  background: rgba(255, 253, 249, 0.94);
+  color: #17241e;
 }

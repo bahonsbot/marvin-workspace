@@ -145,6 +145,7 @@ export const tickerDetailSample = {
   change: '+18.62',
   changePct: '+1.83%',
   priceTime: 'At close · May 16, 2025 · 4:00 PM ET',
+  inWatchlist: true,
   headerStats: [
     { label: 'Market Cap', value: '$2.54T' },
     { label: 'P/E (TTM)', value: '58.21' },

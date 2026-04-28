@@ -80,7 +80,6 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
               {upperSymbol} <span>·</span> {ticker.exchange}
             </p>
           </div>
-          <button type="button">＋ Follow</button>
         </div>
 
         <div className="trading-ticker-price-block">
@@ -99,7 +98,12 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </dl>
       </section>
 
-      <TabScaffold tabs={ticker.tabs} />
+      <div className="trading-ticker-tabs-row">
+        <TabScaffold tabs={ticker.tabs} />
+        <button type="button" className={`trading-watchlist-toggle ${ticker.inWatchlist ? 'in-watchlist' : 'not-watched'}`}>
+          {ticker.inWatchlist ? '− Watchlist' : '+ Watchlist'}
+        </button>
+      </div>
 
       <div className="trading-ticker-primary-grid">
         <section style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>
