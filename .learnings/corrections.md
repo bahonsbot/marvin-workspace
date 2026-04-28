@@ -826,3 +826,30 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** high
 **Status:** active
+
+## [CORR-20260428-1750]
+
+**Trigger:** Philippe noticed that arbitrary ticker routes such as TSM still showed `NVIDIA Corporation` and NVIDIA company profile text even though some route labels updated.
+**What was wrong:** The first mock adapter only changed the requested symbol while reusing one NVIDIA fixture for company identity/profile data, making the UI look source-ready in some places while still lying in core identity fields.
+**Lesson:** For provider-ready UI prototypes, mock data must be coherent per entity. If a route is dynamic, do not only swap the symbol; company name, profile, facts, quote snippets, and fallback states must either be symbol-aware or explicitly labeled provider-pending. Clear runtime caches before verifying mocked/provider-backed identity fixes.
+
+**Priority:** high
+**Status:** resolved
+
+## [CORR-20260428-1815]
+
+**Trigger:** Philippe caught that AMZN showed a clearly impossible daily move (`+38.17%`) in the ticker header.
+**What was wrong:** I trusted Yahoo chart metadata semantics too quickly and used `chartPreviousClose` from a 1Y range as if it were yesterday's close.
+**Lesson:** For market-data adapters, endpoint field names are not enough. Validate semantics with real tickers and sanity checks, especially for headline values like daily change, percentage change, market cap, P/E, and volume. If a number looks surprising, inspect raw provider fields and compare against alternate derivations before accepting it.
+
+**Priority:** high
+**Status:** resolved
+
+## [CORR-20260428-1911]
+
+**Trigger:** Philippe asked to fix ticker mobile before continuing because Overview was mobile-friendly but the ticker page was not.
+**What was wrong:** The ticker page had been built desktop-first and more modules were about to be added, which would have compounded responsive debt.
+**Lesson:** For Mission Control Trading pages, mobile friendliness is not a final polish pass. Every new BOILER ROOM module should include its mobile behavior in the same slice and be verified in a real rendered viewport. Overview's mobile quality is the bar for companion pages.
+
+**Priority:** medium
+**Status:** resolved

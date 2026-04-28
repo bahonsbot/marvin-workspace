@@ -212,3 +212,10 @@ Capabilities the user wanted but don't exist.
 **What triggered it:** After approving the Skills/Crons/Memory/Files mobile promotion from Lab to Dashboard, Philippe asked to save everything done in the session to daily memory and learnings so the next session starts clean.
 **Outcome:** Added the Dashboard promotion closeout to `memory/2026-04-27.md` and recorded reusable lessons about post-restart route sweeps and route-specific mobile shell classes in `.learnings/`.
 **Status:** implemented
+
+## [REQ-20260428-1929]
+
+**Request:** Before pausing a major BOILER ROOM / Mission Control Lab work block, save a comprehensive continuation package: daily memory, structured learnings, and a detailed future-agent savepoint addendum next to the implementation plan.
+**What triggered it:** Philippe had to leave for dinner after the Lab ticker mobile pass and wanted future continuation to preserve all details, bugs solved, decisions, next steps, and implementation context so he does not need to re-explain.
+**Outcome:** Implemented by appending to `memory/2026-04-28.md`, adding structured entries to `.learnings/corrections.md` and `.learnings/errors.md`, and creating `projects/mission-control-lab/docs/trading-section-lab-savepoint-addendum-2026-04-28.md`.
+**Status:** implemented

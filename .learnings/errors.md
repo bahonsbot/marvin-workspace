@@ -1396,3 +1396,25 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** medium
 **Status:** resolved
+
+## [ERR-20260428-1815]
+
+**What failed:** Lab Yahoo ticker adapter displayed a fake daily percentage for AMZN.
+**Error:** AMZN rendered around `$261.12 +72.13 (+38.17%)`, because the adapter compared `regularMarketPrice` against Yahoo chart `chartPreviousClose` from a `range=1y` response. For that endpoint/range, `chartPreviousClose` is effectively the start-of-range/pre-range close, not the previous trading day's close.
+**Context:** While testing `/trading/ticker/AMZN`, Philippe noticed the header percentage was obviously not a daily move.
+**Suggested fix:** For Yahoo chart-backed daily change on a 1Y daily series, derive day change from the last two valid daily closes in `indicators.quote[0].close`; use metadata only as a fallback after understanding endpoint semantics. Verify against a known ticker and inspect cache contents, not just rendered formatting.
+**Resolution:** Fixed in `projects/mission-control-lab/lib/trading/sources/yahoo.ts`; AMZN verified as `$261.12 -2.87 -1.09%` after cache clear.
+
+**Priority:** high
+**Status:** resolved
+
+## [ERR-20260428-1911]
+
+**What failed:** First BOILER ROOM ticker mobile pass improved page internals but still showed the Lab shell sidebar at 390px, squeezing the content.
+**Error:** The original Trading mobile CSS targeted `.app-shell-grid.trading-shell-grid`, but the shell's CSS-module class composition meant the sidebar collapse rule did not reliably apply in the rendered mobile screenshot.
+**Context:** Philippe asked to make `/trading/ticker/[symbol]` mobile-friendly before adding more modules. A Chromium mobile screenshot showed the desktop sidebar consuming much of the viewport.
+**Suggested fix:** For Mission Control Lab/Dashboard responsive work, verify the real rendered shell, not just page-level CSS. When route shell classes are composed with CSS modules, add robust selectors/fallbacks such as `:has(.trading-shell-main)` when appropriate. Use screenshot/CDP checks for mobile, including `documentElement.scrollWidth` and `body.scrollWidth`.
+**Resolution:** Hardened Trading shell mobile collapse and added a 560px ticker-specific mobile layout. Final CDP check at 390px showed no true page-wide horizontal overflow.
+
+**Priority:** high
+**Status:** resolved
