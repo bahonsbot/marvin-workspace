@@ -5,6 +5,7 @@ Integrates with Knowledge Graph for outcome prediction
 """
 import json
 import os
+from pathlib import Path
 from datetime import datetime
 from typing import List, Dict
 
@@ -24,19 +25,24 @@ class ReasoningEngine:
         self.feedback = {}
         self.kg = KnowledgeGraph()  # Initialize knowledge graph
         self.minimum_actionable_score = 50.0
+        self.data_dir = Path(__file__).resolve().parent.parent / 'data'
         self.load_data()
     
     def load_data(self):
         """Load patterns and signals"""
-        with open('data/patterns.json', 'r') as f:
+        patterns_path = self.data_dir / 'patterns.json'
+        signals_path = self.data_dir / 'signals.json'
+        feedback_path = self.data_dir / 'model_feedback.json'
+
+        with patterns_path.open('r') as f:
             self.patterns = json.load(f)['patterns']
         
-        if os.path.exists('data/signals.json'):
-            with open('data/signals.json', 'r') as f:
+        if signals_path.exists():
+            with signals_path.open('r') as f:
                 self.signals = json.load(f)
 
-        if os.path.exists('data/model_feedback.json'):
-            with open('data/model_feedback.json', 'r') as f:
+        if feedback_path.exists():
+            with feedback_path.open('r') as f:
                 self.feedback = json.load(f)
     
     def calculate_source_credibility(self, source: str) -> float:
