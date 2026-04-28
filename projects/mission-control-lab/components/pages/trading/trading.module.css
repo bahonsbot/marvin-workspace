@@ -521,22 +521,26 @@
 :global(.trading-watchlist-table th:nth-child(3)),
 :global(.trading-watchlist-table td:nth-child(3)) {
   width: 15%;
+  text-align: right;
 }
 
 :global(.trading-watchlist-table th:nth-child(4)),
 :global(.trading-watchlist-table td:nth-child(4)) {
   width: 13%;
+  text-align: right;
 }
 
 :global(.trading-watchlist-table th:nth-child(5)),
 :global(.trading-watchlist-table td:nth-child(5)) {
   width: 11%;
+  text-align: right;
 }
 
 :global(.trading-watchlist-table td:last-child),
 :global(.trading-watchlist-table th:last-child) {
   width: 24%;
   padding-right: 0;
+  text-align: center;
 }
 
 :global(.trading-watchlist-table td),
@@ -550,7 +554,7 @@
   width: min(72px, 100%);
   height: 24px;
   display: block;
-  margin-left: auto;
+  margin-inline: auto;
 }
 
 :global(.trading-exposure-list-compact) {
