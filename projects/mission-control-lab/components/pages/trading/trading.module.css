@@ -426,6 +426,12 @@
   padding-inline: 4px;
 }
 
+:global(.trading-watchlist-block .trading-table-shell) {
+  overflow-x: hidden;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
 :global(.trading-insight-grid .trading-table-shell) {
   overflow-x: visible;
 }
@@ -504,38 +510,47 @@
 
 :global(.trading-watchlist-table th:nth-child(1)),
 :global(.trading-watchlist-table td:nth-child(1)) {
-  width: 13%;
+  width: 12%;
 }
 
 :global(.trading-watchlist-table th:nth-child(2)),
 :global(.trading-watchlist-table td:nth-child(2)) {
-  width: 27%;
+  width: 25%;
 }
 
 :global(.trading-watchlist-table th:nth-child(3)),
 :global(.trading-watchlist-table td:nth-child(3)) {
-  width: 16%;
+  width: 15%;
 }
 
 :global(.trading-watchlist-table th:nth-child(4)),
 :global(.trading-watchlist-table td:nth-child(4)) {
-  width: 14%;
+  width: 13%;
 }
 
 :global(.trading-watchlist-table th:nth-child(5)),
 :global(.trading-watchlist-table td:nth-child(5)) {
-  width: 12%;
+  width: 11%;
 }
 
 :global(.trading-watchlist-table td:last-child),
 :global(.trading-watchlist-table th:last-child) {
-  width: 18%;
+  width: 24%;
+  padding-right: 0;
+}
+
+:global(.trading-watchlist-table td),
+:global(.trading-watchlist-table th) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 :global(.trading-sparkline) {
-  width: 72px;
+  width: min(72px, 100%);
   height: 24px;
   display: block;
+  margin-left: auto;
 }
 
 :global(.trading-exposure-list-compact) {
@@ -731,6 +746,10 @@
 
   :global(.trading-watchlist-table) {
     min-width: 620px;
+  }
+
+  :global(.trading-watchlist-block .trading-table-shell) {
+    overflow-x: auto;
   }
 
   :global(.trading-insight-grid .trading-table-shell) {
