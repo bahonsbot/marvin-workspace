@@ -1385,3 +1385,14 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** high
 **Status:** resolved
+
+## [ERR-20260428-1022]
+
+**What failed:** `nightly-memory-extraction` still partially failed even after earlier forbidden-path hardening
+**Error:** the cron prompt correctly forbade `~/.openclaw/workspace/...`, but entity-target selection was still too permissive, so the model attempted a legacy summary file (`life/projects/mission-control.md`) instead of the canonical fact store (`life/projects/mission-control/items.json`) and tripped the run
+**Context:** Apr 28 Morning Meeting after Platform Health Council flagged `nightly-memory-extraction` as error while the daily memory file had still been updated
+**Suggested fix:** for model-backed entity-writing jobs, do not rely on generic root-path allowlists alone when legacy summary files and canonical structured stores coexist. Constrain writes to the canonical file type explicitly, for example existing `items.json` entity files only, and make ambiguous targets skip-only.
+**Resolution:** Fixed on 2026-04-28 by tightening the live `nightly-memory-extraction` cron payload to allow entity writes only to existing `items.json` files under `/data/.openclaw/workspace/life/...` and to explicitly ignore legacy `.md` entity summaries
+
+**Priority:** medium
+**Status:** resolved
