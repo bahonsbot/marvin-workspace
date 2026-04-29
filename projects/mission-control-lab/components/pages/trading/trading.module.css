@@ -1345,6 +1345,19 @@
   padding: 13px 0;
 }
 
+:global(.trading-ticker-news-list a) {
+  display: grid;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+}
+
+:global(.trading-ticker-news-list a:hover strong) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 :global(.trading-ticker-news-list article:first-child) {
   padding-top: 4px;
   border-top: 0;

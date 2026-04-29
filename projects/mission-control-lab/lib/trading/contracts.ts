@@ -65,6 +65,8 @@ export interface TickerNewsItem {
   summary: string;
   url?: string;
   sourceMeta?: TickerSourceMeta;
+  relatedTickers?: string[];
+  kind?: 'story' | 'video' | 'press-release' | 'news';
 }
 
 export interface TickerResourceItem {

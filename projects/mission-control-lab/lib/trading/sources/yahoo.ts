@@ -3,6 +3,7 @@ import type {
   TickerCashDebtSnapshot,
   TickerDisplayMetric,
   TickerFinancialHighlight,
+  TickerNewsItem,
   TickerPriceRangeSeries,
   TickerProfile,
   TickerProfileSourceMap,
@@ -67,6 +68,17 @@ interface YahooSearchResponse {
     industry?: string;
     industryDisp?: string;
   }>;
+  news?: YahooNewsItem[];
+}
+
+interface YahooNewsItem {
+  uuid?: string;
+  title?: string;
+  publisher?: string;
+  link?: string;
+  providerPublishTime?: number;
+  type?: string;
+  relatedTickers?: string[];
 }
 
 const YAHOO_USER_AGENT = 'Mozilla/5.0 (compatible; MissionControlLab/1.0; +https://motiondisplay.cloud)';
@@ -89,13 +101,22 @@ function sampleFallbackSource(asOf: string, note: string): TickerSourceMeta {
   };
 }
 
+function missingYahooSource(asOf: string, note: string): TickerSourceMeta {
+  return {
+    source: 'yahoo',
+    asOf,
+    freshness: 'missing',
+    note,
+  };
+}
+
 function buildYahooSourceMap(asOf: string): TickerProfileSourceMap {
   return {
     quote: yahooSource(asOf, 'Yahoo Finance chart endpoint. Cached server-side.'),
     profile: yahooSource(asOf, 'Yahoo Finance search/chart metadata with sample fallback for profile narrative.'),
     prices: yahooSource(asOf, 'Yahoo Finance chart endpoint. Cached server-side.'),
     financials: sampleFallbackSource(asOf, 'Sample financial modules retained until a fundamentals provider is enabled.'),
-    news: sampleFallbackSource(asOf, 'Sample news retained until a news provider is enabled.'),
+    news: yahooSource(asOf, 'Yahoo Finance search news. Headlines are provider-backed; summaries are omitted unless supplied by a future news provider.'),
     resources: sampleFallbackSource(asOf, 'Static resource links retained until source adapters are enabled.'),
     filings: sampleFallbackSource(asOf, 'SEC adapter pending.'),
   };
@@ -193,10 +214,13 @@ async function fetchYahooChart(symbol: string, range: (typeof YAHOO_PRICE_RANGES
 }
 
 async function fetchYahooSearch(symbol: string) {
-  const url = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(symbol)}&quotesCount=1&newsCount=0`;
+  const url = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(symbol)}&quotesCount=1&newsCount=6`;
   const data = await fetchJson<YahooSearchResponse>(url);
   const exact = data?.quotes?.find((quote) => quote.symbol?.toUpperCase() === symbol.toUpperCase());
-  return exact ?? data?.quotes?.[0] ?? null;
+  return {
+    quote: exact ?? data?.quotes?.[0] ?? null,
+    news: data?.news ?? [],
+  };
 }
 
 function buildFinancialHighlights(sample: TickerProfile, sourceMap: TickerProfileSourceMap): TickerFinancialHighlight[] {
@@ -212,13 +236,65 @@ function buildBalanceSheetSnapshot(sample: TickerProfile, sourceMap: TickerProfi
 }
 
 function buildHeaderStats(sample: TickerProfile, search: Awaited<ReturnType<typeof fetchYahooSearch>>, meta: YahooChartMeta): TickerDisplayMetric[] {
-  const sector = search?.sectorDisp || search?.sector || sample.headerStats.find((item) => item.label === 'Sector')?.value || '—';
-  const industry = search?.industryDisp || search?.industry || sample.headerStats.find((item) => item.label === 'Industry')?.value || '—';
+  const quote = search?.quote;
+  const sector = quote?.sectorDisp || quote?.sector || sample.headerStats.find((item) => item.label === 'Sector')?.value || '—';
+  const industry = quote?.industryDisp || quote?.industry || sample.headerStats.find((item) => item.label === 'Industry')?.value || '—';
   return [
     { label: 'Market Cap', value: meta.marketCap ? `$${formatLarge(meta.marketCap)}` : 'Provider pending', status: meta.marketCap ? 'available' : 'unavailable' },
     { label: 'P/E (TTM)', value: meta.trailingPE ? meta.trailingPE.toFixed(2) : 'Provider pending', status: meta.trailingPE ? 'available' : 'unavailable' },
     { label: 'Sector', value: sector },
     { label: 'Industry', value: industry },
+  ];
+}
+
+function formatNewsTime(epochSeconds: number | undefined) {
+  if (!epochSeconds) return 'Time pending';
+  const diffMs = Date.now() - epochSeconds * 1000;
+  const diffMinutes = Math.max(0, Math.round(diffMs / 60_000));
+  if (diffMinutes < 60) return `${diffMinutes || 1}m ago`;
+  const diffHours = Math.round(diffMinutes / 60);
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.round(diffHours / 24);
+  if (diffDays <= 7) return `${diffDays}d ago`;
+  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date(epochSeconds * 1000));
+}
+
+function newsKind(type: string | undefined): TickerNewsItem['kind'] {
+  const normalized = type?.toUpperCase();
+  if (normalized === 'VIDEO') return 'video';
+  if (normalized === 'PRESS_RELEASE') return 'press-release';
+  if (normalized === 'STORY') return 'story';
+  return 'news';
+}
+
+function buildYahooNews(news: YahooNewsItem[], source: TickerSourceMeta): TickerNewsItem[] {
+  return news
+    .filter((item) => item.title && item.link)
+    .slice(0, 6)
+    .map((item) => ({
+      source: item.publisher ?? 'Yahoo Finance',
+      time: formatNewsTime(item.providerPublishTime),
+      title: item.title!,
+      summary: item.relatedTickers?.length
+        ? `Related tickers: ${item.relatedTickers.slice(0, 6).join(', ')}`
+        : 'Provider-backed headline from Yahoo Finance. Full article opens at source.',
+      url: item.link,
+      sourceMeta: source,
+      relatedTickers: item.relatedTickers,
+      kind: newsKind(item.type),
+    }));
+}
+
+function buildMissingNews(symbol: string, source: TickerSourceMeta): TickerNewsItem[] {
+  return [
+    {
+      source: 'Yahoo Finance',
+      time: 'Provider pending',
+      title: `${symbol.toUpperCase()} headlines unavailable`,
+      summary: 'Yahoo Finance returned no usable linked headlines for this ticker. Keep the slot visible for a future news provider or retry after cache refresh.',
+      sourceMeta: source,
+      kind: 'news',
+    },
   ];
 }
 
@@ -328,8 +404,9 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     const change = price != null && previousClose != null ? price - previousClose : 0;
     const changePct = previousClose ? (change / previousClose) * 100 : 0;
     const tone = change < 0 ? 'negative' : change > 0 ? 'positive' : 'neutral';
-    const name = meta.longName || search?.longname || meta.shortName || search?.shortname || sample.name;
-    const exchange = search?.exchDisp || meta.fullExchangeName || meta.exchangeName || sample.exchange;
+    const searchQuote = search?.quote;
+    const name = meta.longName || searchQuote?.longname || meta.shortName || searchQuote?.shortname || sample.name;
+    const exchange = searchQuote?.exchDisp || meta.fullExchangeName || meta.exchangeName || sample.exchange;
     const [companyLogoResult, companyProfileResult, rangeSeries, secFundamentals] = await Promise.all([
       fetchWikipediaCompanyLogo(symbol, name),
       fetchWikipediaCompanyProfile(symbol, name, sample.companyProfile.facts),
@@ -345,6 +422,10 @@ export const yahooTickerProfileSource: TickerProfileSource = {
       sourceMap.financials = secFundamentals.source;
       sourceMap.resources = secFundamentals.source;
       sourceMap.filings = secFundamentals.source;
+    }
+    const yahooNews = buildYahooNews(search.news, sourceMap.news);
+    if (!yahooNews.length) {
+      sourceMap.news = missingYahooSource(asOf, 'Yahoo Finance returned no usable linked headlines for this ticker. No sample headlines are shown for provider-backed symbols.');
     }
 
     const profile: TickerProfile = {
@@ -378,7 +459,7 @@ export const yahooTickerProfileSource: TickerProfileSource = {
       financialHighlights: secFundamentals?.financialHighlights ?? buildFinancialHighlights(sample, sourceMap),
       cashDebtSnapshot: secFundamentals?.cashDebtSnapshot ?? buildCashDebtSnapshot(sample, sourceMap),
       balanceSheetSnapshot: secFundamentals?.balanceSheetSnapshot ?? buildBalanceSheetSnapshot(sample, sourceMap),
-      recentNews: sample.recentNews.map((item) => ({ ...item, sourceMeta: sourceMap.news })),
+      recentNews: yahooNews.length ? yahooNews : buildMissingNews(symbol, sourceMap.news),
       resources: secFundamentals?.resources ?? sample.resources.map((group) => ({
         ...group,
         items: group.items.map((item) => ({ ...item, source: sourceMap.resources })),

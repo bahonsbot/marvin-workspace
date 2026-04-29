@@ -359,9 +359,19 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div className="trading-ticker-news-list">
             {ticker.recentNews.map((item) => (
               <article key={item.title}>
-                <span>{item.source} · {item.time}</span>
-                <strong>{item.title}</strong>
-                <p>{item.summary}</p>
+                {item.url ? (
+                  <a href={item.url} target="_blank" rel="noreferrer" aria-label={`${item.title} source link`}>
+                    <span>{item.source} · {item.time}{item.kind === 'video' ? ' · Video' : ''}</span>
+                    <strong>{item.title}</strong>
+                    <p>{item.summary}</p>
+                  </a>
+                ) : (
+                  <>
+                    <span>{item.source} · {item.time}</span>
+                    <strong>{item.title}</strong>
+                    <p>{item.summary}</p>
+                  </>
+                )}
               </article>
             ))}
           </div>
@@ -370,7 +380,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <section id="resources" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
           <div className="trading-section-head">
             <div>
-              <h2>SEC filings</h2>
+              <div className="trading-section-label">SEC filings</div>
             </div>
             <span className="trading-ticker-source-note">{ticker.sourceMap.filings.freshness} · {ticker.sourceMap.filings.source}</span>
           </div>
