@@ -132,7 +132,7 @@ export interface TickerBalanceSheetSnapshot {
 }
 
 export interface TickerPricePoint {
-  time: string;
+  time: string | number;
   value: number;
 }
 

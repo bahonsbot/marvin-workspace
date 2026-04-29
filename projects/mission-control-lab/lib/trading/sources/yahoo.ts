@@ -237,9 +237,8 @@ function buildChartStats(meta: YahooChartMeta, quote: { close?: Array<number | n
 }
 
 function formatChartTime(epochSeconds: number, intraday = false) {
-  const date = new Date(epochSeconds * 1000);
-  if (intraday) return date.toISOString();
-  return date.toISOString().slice(0, 10);
+  if (intraday) return epochSeconds;
+  return new Date(epochSeconds * 1000).toISOString().slice(0, 10);
 }
 
 function formatAxisForRange(timestamps: number[], range: string) {
@@ -285,11 +284,13 @@ function buildRangeSeries(range: string, chart: NonNullable<Awaited<ReturnType<t
       if (typeof close !== 'number' || !Number.isFinite(close)) return null;
       return { time: formatChartTime(timestamp, intraday), value: Number(close.toFixed(2)) };
     })
-    .filter((item): item is { time: string; value: number } => Boolean(item));
-  if (points.length === 0) return null;
+    .filter((item): item is { time: string | number; value: number } => Boolean(item))
+    .sort((a, b) => (typeof a.time === 'number' ? a.time : Date.parse(a.time) / 1000) - (typeof b.time === 'number' ? b.time : Date.parse(b.time) / 1000));
+  const dedupedPoints = Array.from(new Map(points.map((point) => [point.time, point])).values());
+  if (dedupedPoints.length === 0) return null;
   return {
     range,
-    points,
+    points: dedupedPoints,
     axis: formatAxisForRange(timestamps, range),
     stats: buildRangeStats(meta, quote, meta.currency || 'USD'),
     source,

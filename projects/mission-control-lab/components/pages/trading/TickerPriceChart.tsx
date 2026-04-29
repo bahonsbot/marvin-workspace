@@ -10,8 +10,16 @@ type PriceChartProps = {
   rangeSeries?: Record<string, TickerPriceRangeSeries>;
 };
 
+function numericTime(point: { time: string | number }) {
+  return typeof point.time === 'number' ? point.time : Date.parse(point.time) / 1000;
+}
+
 function toLineData(series: TickerPriceRangeSeries | undefined): LineData<Time>[] {
-  return (series?.points ?? []).map((point) => ({ time: point.time as Time, value: point.value }));
+  return [...(series?.points ?? [])]
+    .map((point) => ({ time: point.time as Time, value: point.value, sortTime: numericTime(point) }))
+    .filter((point) => Number.isFinite(point.sortTime) && Number.isFinite(point.value))
+    .sort((a, b) => a.sortTime - b.sortTime)
+    .map(({ time, value }) => ({ time, value }));
 }
 
 export function TickerPriceChart({ ranges, activeRange, rangeSeries = {} }: PriceChartProps) {
@@ -46,8 +54,9 @@ export function TickerPriceChart({ ranges, activeRange, rangeSeries = {} }: Pric
       },
       timeScale: {
         borderColor: 'rgba(28, 37, 32, 0.12)',
-        timeVisible: selectedRange === '1D' || selectedRange === '5D',
+        timeVisible: true,
         secondsVisible: false,
+        rightOffset: 4,
       },
       crosshair: {
         vertLine: { color: 'rgba(23, 36, 30, 0.24)', labelBackgroundColor: '#17241e' },
@@ -74,14 +83,15 @@ export function TickerPriceChart({ ranges, activeRange, rangeSeries = {} }: Pric
       chartRef.current = null;
       seriesRef.current = null;
     };
-  }, [selectedRange]);
+  }, []);
 
   useEffect(() => {
     seriesRef.current?.setData(lineData);
     chartRef.current?.applyOptions({
       timeScale: {
-        timeVisible: selectedRange === '1D' || selectedRange === '5D',
+        timeVisible: true,
         secondsVisible: false,
+        rightOffset: 4,
       },
     });
     chartRef.current?.timeScale().fitContent();
@@ -108,11 +118,6 @@ export function TickerPriceChart({ ranges, activeRange, rangeSeries = {} }: Pric
         })}
       </div>
       <div ref={containerRef} className="trading-lightweight-chart" aria-label={`${selectedRange} price chart`} />
-      <div className="trading-ticker-chart-axis" aria-hidden="true">
-        {(selectedSeries?.axis ?? []).map((item) => (
-          <span key={item}>{item}</span>
-        ))}
-      </div>
       <dl className="trading-ticker-chart-stats">
         {(selectedSeries?.stats ?? []).map((stat) => (
           <div key={stat.label}>
