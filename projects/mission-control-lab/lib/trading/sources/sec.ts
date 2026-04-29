@@ -47,6 +47,8 @@ interface SecSubmissionsResponse {
       reportDate?: string[];
       form?: string[];
       primaryDocument?: string[];
+      primaryDocDescription?: string[];
+      items?: string[];
     };
   };
 }
@@ -400,6 +402,63 @@ function filingUrl(cik: string, accession: string, primaryDocument: string) {
   return `${SEC_COMPANY_URL}/${compactCik}/${compactAccession}/${primaryDocument}`;
 }
 
+function formatFilingDate(value: string | undefined) {
+  if (!value) return 'SEC filing';
+  const parsed = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(parsed);
+}
+
+function filingKind(form: string, items = ''): 'annual' | 'quarterly' | 'current' | 'event' {
+  if (form === '10-K') return 'annual';
+  if (form === '10-Q') return 'quarterly';
+  if (items.split(',').map((item) => item.trim()).includes('2.02')) return 'event';
+  return 'current';
+}
+
+function filingTitle(form: string, reportDate: string | undefined, items = '') {
+  if (form === '10-K') return reportDate ? `Annual report · FY ${reportDate.slice(0, 4)}` : 'Annual report';
+  if (form === '10-Q') return reportDate ? `Quarterly report · ${reportDate.slice(0, 7)}` : 'Quarterly report';
+  const itemSet = new Set(items.split(',').map((item) => item.trim()).filter(Boolean));
+  if (itemSet.has('2.02')) return 'Earnings release / results 8-K';
+  if (itemSet.has('5.07')) return 'Shareholder vote 8-K';
+  if (itemSet.has('5.02')) return 'Leadership / governance 8-K';
+  if (itemSet.has('7.01')) return 'Investor update 8-K';
+  if (itemSet.has('1.01')) return 'Material agreement 8-K';
+  if (itemSet.has('8.01')) return 'Other material event 8-K';
+  return 'Current report 8-K';
+}
+
+function filingMeta(form: string, filed: string | undefined, reportDate: string | undefined, items = '', description = '') {
+  const parts = [`${form} filed ${formatFilingDate(filed)}`];
+  if (reportDate && reportDate !== filed) parts.push(`period ${formatFilingDate(reportDate)}`);
+  if (items) parts.push(`items ${items}`);
+  if (description && description !== form && description !== `FORM ${form}`) parts.push(description);
+  return parts.join(' · ');
+}
+
+function filingItems(items = '') {
+  return new Set(items.split(',').map((part) => part.trim()).filter(Boolean));
+}
+
+function selectFilings<T extends { form: string; items?: string; filed?: string }>(items: T[]) {
+  const byNewest = [...items].sort((a, b) => (b.filed ?? '').localeCompare(a.filed ?? ''));
+  const selected: T[] = [];
+  const seen = new Set<T>();
+  const add = (item: T | undefined) => {
+    if (!item || seen.has(item)) return;
+    seen.add(item);
+    selected.push(item);
+  };
+
+  add(byNewest.find((item) => item.form === '10-K'));
+  byNewest.filter((item) => item.form === '10-Q').slice(0, 3).forEach(add);
+  byNewest.filter((item) => filingItems(item.items).has('2.02')).slice(0, 3).forEach(add);
+  byNewest.filter((item) => item.form === '8-K' && !filingItems(item.items).has('2.02')).slice(0, 2).forEach(add);
+
+  return selected.slice(0, 8).sort((a, b) => (b.filed ?? '').localeCompare(a.filed ?? ''));
+}
+
 function buildResources(profile: TickerProfile, cik: string, submissions: SecSubmissionsResponse | null, source: TickerSourceMeta): TickerResourceGroup[] {
   const recent = submissions?.filings?.recent;
   const forms = recent?.form ?? [];
@@ -407,26 +466,34 @@ function buildResources(profile: TickerProfile, cik: string, submissions: SecSub
     .map((form, index) => ({
       form,
       filed: recent?.filingDate?.[index] ?? recent?.reportDate?.[index] ?? 'SEC filing',
+      reportDate: recent?.reportDate?.[index],
       accession: recent?.accessionNumber?.[index],
       primaryDocument: recent?.primaryDocument?.[index],
+      description: recent?.primaryDocDescription?.[index] ?? '',
+      items: recent?.items?.[index] ?? '',
     }))
-    .filter((item) => ['10-K', '10-Q', '8-K'].includes(item.form) && item.accession && item.primaryDocument)
-    .slice(0, 6)
-    .map((item) => ({
-      name: item.form,
-      meta: item.filed,
-      href: filingUrl(cik, item.accession!, item.primaryDocument!),
-      source,
-    }));
+    .filter((item) => ['10-K', '10-Q', '8-K'].includes(item.form) && item.accession && item.primaryDocument);
 
-  if (filings.length === 0) return profile.resources;
+  const selected = selectFilings(filings);
+  if (selected.length === 0) return profile.resources;
 
   const secGroup: TickerResourceGroup = {
     label: 'SEC filings',
-    items: filings,
+    items: selected.map((item) => ({
+      name: filingTitle(item.form, item.reportDate, item.items),
+      meta: filingMeta(item.form, item.filed, item.reportDate, item.items, item.description),
+      href: filingUrl(cik, item.accession!, item.primaryDocument!),
+      source,
+      kind: filingKind(item.form, item.items),
+      form: item.form,
+      filedAt: item.filed,
+      reportDate: item.reportDate,
+      accession: item.accession,
+      document: item.primaryDocument,
+    })),
   };
 
-  return [secGroup, ...profile.resources.filter((group) => group.label !== 'Financial statements')];
+  return [secGroup];
 }
 
 export async function fetchSecTickerFundamentals(symbol: string, baseProfile: TickerProfile): Promise<SecTickerFundamentals | null> {

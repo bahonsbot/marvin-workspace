@@ -72,6 +72,12 @@ export interface TickerResourceItem {
   meta: string;
   href: string;
   source?: TickerSourceMeta;
+  kind?: 'annual' | 'quarterly' | 'current' | 'event' | 'resource';
+  form?: string;
+  filedAt?: string;
+  reportDate?: string;
+  accession?: string;
+  document?: string;
 }
 
 export interface TickerResourceGroup {
