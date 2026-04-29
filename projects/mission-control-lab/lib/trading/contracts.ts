@@ -131,6 +131,21 @@ export interface TickerBalanceSheetSnapshot {
   source: TickerSourceMeta;
 }
 
+export interface TickerPricePoint {
+  time: string;
+  value: number;
+}
+
+export interface TickerPriceRangeSeries {
+  range: string;
+  points: TickerPricePoint[];
+  axis: string[];
+  stats: TickerDisplayMetric[];
+  source: TickerSourceMeta;
+  status: TickerDataStatus;
+  note?: string;
+}
+
 export interface TickerPriceSeries {
   values: number[];
   ranges: string[];
@@ -138,6 +153,7 @@ export interface TickerPriceSeries {
   axis: string[];
   stats: TickerDisplayMetric[];
   source: TickerSourceMeta;
+  rangeSeries?: Record<string, TickerPriceRangeSeries>;
 }
 
 export interface TickerProfileSourceMap {

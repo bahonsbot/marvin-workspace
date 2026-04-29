@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { MarketTape, MiniLineChart, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
+import { TickerPriceChart } from '@/components/pages/trading/TickerPriceChart';
+import { MarketTape, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { marketTape } from '@/components/pages/trading/trading-sample-data';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
 import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerFinancialHighlight, TickerFinancialOverview } from '@/lib/trading/contracts';
@@ -243,28 +244,8 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
             <div>
               <div className="trading-section-label">Price history</div>
             </div>
-            <div className="trading-range-tabs trading-ticker-range-tabs" role="tablist" aria-label="Ticker price range">
-              {ticker.priceSeries.ranges.map((range) => (
-                <button key={range} type="button" className={range === ticker.priceSeries.activeRange ? 'active' : ''} role="tab" aria-selected={range === ticker.priceSeries.activeRange}>
-                  {range}
-                </button>
-              ))}
-            </div>
           </div>
-          <MiniLineChart values={ticker.priceSeries.values} />
-          <div className="trading-ticker-chart-axis" aria-hidden="true">
-            {ticker.priceSeries.axis.map((item) => (
-              <span key={item}>{item}</span>
-            ))}
-          </div>
-          <dl className="trading-ticker-chart-stats">
-            {ticker.priceSeries.stats.map((stat) => (
-              <div key={stat.label}>
-                <dt>{stat.label}</dt>
-                <dd>{stat.value}</dd>
-              </div>
-            ))}
-          </dl>
+          <TickerPriceChart ranges={ticker.priceSeries.ranges} activeRange={ticker.priceSeries.activeRange} rangeSeries={ticker.priceSeries.rangeSeries} />
         </section>
 
         <section id="company-profile" style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>

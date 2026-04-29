@@ -3,6 +3,7 @@ import type {
   TickerCashDebtSnapshot,
   TickerDisplayMetric,
   TickerFinancialHighlight,
+  TickerPriceRangeSeries,
   TickerProfile,
   TickerProfileSourceMap,
   TickerSourceMeta,
@@ -172,8 +173,21 @@ async function fetchJson<T>(url: string): Promise<T | null> {
   }
 }
 
-async function fetchYahooChart(symbol: string) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=1y&interval=1d`;
+const YAHOO_PRICE_RANGES = ['1D', '5D', '1M', '6M', 'YTD', '1Y', '5Y'] as const;
+
+const yahooRangeParams: Record<(typeof YAHOO_PRICE_RANGES)[number], { range: string; interval: string }> = {
+  '1D': { range: '1d', interval: '5m' },
+  '5D': { range: '5d', interval: '15m' },
+  '1M': { range: '1mo', interval: '1d' },
+  '6M': { range: '6mo', interval: '1d' },
+  YTD: { range: 'ytd', interval: '1d' },
+  '1Y': { range: '1y', interval: '1d' },
+  '5Y': { range: '5y', interval: '1wk' },
+};
+
+async function fetchYahooChart(symbol: string, range: (typeof YAHOO_PRICE_RANGES)[number] = '1Y') {
+  const params = yahooRangeParams[range];
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${params.range}&interval=${params.interval}`;
   const data = await fetchJson<YahooChartResponse>(url);
   return data?.chart?.result?.[0] ?? null;
 }
@@ -222,11 +236,84 @@ function buildChartStats(meta: YahooChartMeta, quote: { close?: Array<number | n
   ];
 }
 
+function formatChartTime(epochSeconds: number, intraday = false) {
+  const date = new Date(epochSeconds * 1000);
+  if (intraday) return date.toISOString();
+  return date.toISOString().slice(0, 10);
+}
+
+function formatAxisForRange(timestamps: number[], range: string) {
+  if (timestamps.length === 0) return [];
+  const intraday = range === '1D' || range === '5D';
+  const formatter = intraday
+    ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' })
+    : new Intl.DateTimeFormat('en-US', { month: 'short', year: '2-digit', timeZone: 'UTC' });
+  const indices = [0, 0.16, 0.33, 0.5, 0.66, 0.83, 1].map((ratio) => Math.min(timestamps.length - 1, Math.round((timestamps.length - 1) * ratio)));
+  return Array.from(new Set(indices)).map((index) => formatter.format(new Date(timestamps[index] * 1000)));
+}
+
+function buildRangeStats(meta: YahooChartMeta, quote: { close?: Array<number | null>; open?: Array<number | null>; high?: Array<number | null>; low?: Array<number | null>; volume?: Array<number | null> }, currency: string) {
+  const closes = validNumbers(quote.close);
+  const highs = validNumbers(quote.high);
+  const lows = validNumbers(quote.low);
+  const volumes = validNumbers(quote.volume);
+  const first = closes.at(0);
+  const last = closes.at(-1);
+  const change = first != null && last != null ? last - first : null;
+  const changePct = change != null && first ? (change / first) * 100 : null;
+  return [
+    { label: 'Range Start', value: formatMoney(first, currency) },
+    { label: 'Range End', value: formatMoney(last, currency) },
+    { label: 'Range Change', value: change == null ? '$—' : `${formatSigned(change)} (${formatPct(changePct ?? 0)})` },
+    { label: 'Range High', value: formatMoney(highs.length ? Math.max(...highs) : undefined, currency) },
+    { label: 'Range Low', value: formatMoney(lows.length ? Math.min(...lows) : undefined, currency) },
+    { label: 'Range Volume', value: formatLarge(volumes.reduce((sum, item) => sum + item, 0)) },
+    { label: '52 Week Low', value: formatMoney(meta.fiftyTwoWeekLow, currency) },
+    { label: '52 Week High', value: formatMoney(meta.fiftyTwoWeekHigh, currency) },
+  ];
+}
+
+function buildRangeSeries(range: string, chart: NonNullable<Awaited<ReturnType<typeof fetchYahooChart>>>, source: TickerSourceMeta): TickerPriceRangeSeries | null {
+  const quote = chart.indicators?.quote?.[0];
+  const meta = chart.meta ?? {};
+  const timestamps = chart.timestamp ?? [];
+  if (!quote?.close?.length || timestamps.length === 0) return null;
+  const intraday = range === '1D' || range === '5D';
+  const points = timestamps
+    .map((timestamp, index) => {
+      const close = quote.close?.[index];
+      if (typeof close !== 'number' || !Number.isFinite(close)) return null;
+      return { time: formatChartTime(timestamp, intraday), value: Number(close.toFixed(2)) };
+    })
+    .filter((item): item is { time: string; value: number } => Boolean(item));
+  if (points.length === 0) return null;
+  return {
+    range,
+    points,
+    axis: formatAxisForRange(timestamps, range),
+    stats: buildRangeStats(meta, quote, meta.currency || 'USD'),
+    source,
+    status: 'available',
+  };
+}
+
+async function fetchYahooRangeSeries(symbol: string, source: TickerSourceMeta) {
+  const entries = await Promise.all(
+    YAHOO_PRICE_RANGES.map(async (range) => {
+      const chart = await fetchYahooChart(symbol, range);
+      if (!chart) return null;
+      const series = buildRangeSeries(range, chart, source);
+      return series ? [range, series] as const : null;
+    }),
+  );
+  return Object.fromEntries(entries.filter((entry): entry is readonly [(typeof YAHOO_PRICE_RANGES)[number], TickerPriceRangeSeries] => Boolean(entry)));
+}
+
 export const yahooTickerProfileSource: TickerProfileSource = {
   id: 'yahoo',
   label: 'Yahoo Finance chart/search adapter',
   async fetchProfile({ symbol }) {
-    const [chart, search] = await Promise.all([fetchYahooChart(symbol), fetchYahooSearch(symbol)]);
+    const [chart, search] = await Promise.all([fetchYahooChart(symbol, '1Y'), fetchYahooSearch(symbol)]);
     const meta = chart?.meta;
     const quote = chart?.indicators?.quote?.[0];
     if (!meta || !quote?.close?.length || meta.instrumentType !== 'EQUITY') return null;
@@ -242,8 +329,12 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     const tone = change < 0 ? 'negative' : change > 0 ? 'positive' : 'neutral';
     const name = meta.longName || search?.longname || meta.shortName || search?.shortname || sample.name;
     const exchange = search?.exchDisp || meta.fullExchangeName || meta.exchangeName || sample.exchange;
-    const companyLogo = (await fetchWikipediaCompanyLogo(symbol, name)) ?? sample.companyLogo;
-    const secFundamentals = await fetchSecTickerFundamentals(symbol, sample);
+    const [companyLogoResult, rangeSeries, secFundamentals] = await Promise.all([
+      fetchWikipediaCompanyLogo(symbol, name),
+      fetchYahooRangeSeries(symbol, sourceMap.prices),
+      fetchSecTickerFundamentals(symbol, sample),
+    ]);
+    const companyLogo = companyLogoResult ?? sample.companyLogo;
     if (secFundamentals) {
       sourceMap.financials = secFundamentals.source;
       sourceMap.resources = secFundamentals.source;
@@ -270,9 +361,12 @@ export const yahooTickerProfileSource: TickerProfileSource = {
       priceSeries: {
         ...sample.priceSeries,
         values: compactPriceSeries(quote.close),
-        axis: chartAxisFromTimestamps(chart.timestamp ?? []),
-        stats: buildChartStats(meta, quote),
+        ranges: YAHOO_PRICE_RANGES.filter((range) => rangeSeries[range]).length ? YAHOO_PRICE_RANGES.filter((range) => rangeSeries[range]) : sample.priceSeries.ranges,
+        activeRange: rangeSeries['1Y'] ? '1Y' : Object.keys(rangeSeries)[0] ?? sample.priceSeries.activeRange,
+        axis: rangeSeries['1Y']?.axis ?? chartAxisFromTimestamps(chart.timestamp ?? []),
+        stats: rangeSeries['1Y']?.stats ?? buildChartStats(meta, quote),
         source: sourceMap.prices,
+        rangeSeries,
       },
       companyProfile: {
         ...sample.companyProfile,

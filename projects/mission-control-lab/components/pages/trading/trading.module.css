@@ -1928,3 +1928,18 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
+
+:global(.trading-price-chart-shell) {
+  display: grid;
+  gap: 12px;
+}
+
+:global(.trading-lightweight-chart) {
+  min-height: 220px;
+  width: 100%;
+}
+
+:global(.trading-ticker-range-tabs button:disabled) {
+  opacity: 0.38;
+  cursor: not-allowed;
+}

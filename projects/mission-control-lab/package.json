@@ -25,6 +25,7 @@
     "@fugood/node-whisper-linux-x64": "^1.0.18",
     "@fugood/whisper.node": "^1.0.18",
     "@lezer/highlight": "^1.2.1",
+    "lightweight-charts": "^5.2.0",
     "lucide-react": "^0.511.0",
     "next": "16.2.4",
     "react": "19.2.0",
