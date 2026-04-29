@@ -1,6 +1,6 @@
 import 'server-only';
 
-import type { TickerCompanyLogo, TickerSourceMeta } from '../contracts';
+import type { TickerCompanyLogo, TickerCompanyProfile, TickerProfileFact, TickerSourceMeta } from '../contracts';
 
 interface WikipediaSearchResponse {
   query?: {
@@ -14,17 +14,24 @@ interface WikipediaPageResponse {
       pageid?: number;
       title?: string;
       fullurl?: string;
+      extract?: string;
       pageprops?: { wikibase_item?: string };
     }>;
   };
 }
 
+interface WikidataClaim {
+  rank?: 'deprecated' | 'normal' | 'preferred';
+  mainsnak?: {
+    datavalue?: {
+      value?: string | number | { id?: string; time?: string; amount?: string };
+    };
+  };
+}
+
 interface WikidataEntityResponse {
   entities?: Record<string, {
-    claims?: Record<string, Array<{
-      rank?: 'deprecated' | 'normal' | 'preferred';
-      mainsnak?: { datavalue?: { value?: string } };
-    }>>;
+    claims?: Record<string, WikidataClaim[]>;
   }>;
 }
 
@@ -36,7 +43,7 @@ interface CommonsImageInfoResponse {
   };
 }
 
-const WIKI_USER_AGENT = 'MissionControlLab/1.0 (https://motiondisplay.cloud; ticker-logo-enrichment)';
+const WIKI_USER_AGENT = 'MissionControlLab/1.0 (https://motiondisplay.cloud; ticker-profile-enrichment)';
 
 const knownWikipediaTitles: Record<string, string> = {
   AAPL: 'Apple Inc.',
@@ -104,7 +111,8 @@ function pickCurrentLogoFile(entity: WikidataEntityResponse, wikidataId: string,
   const logoClaims = entity.entities?.[wikidataId]?.claims?.P154 ?? [];
   const usable = logoClaims.filter((claim) => claim.rank !== 'deprecated' && typeof claim.mainsnak?.datavalue?.value === 'string');
   const preferred = usable.find((claim) => claim.rank === 'preferred') ?? usable.at(-1);
-  return preferred?.mainsnak?.datavalue?.value ?? null;
+  const value = preferred?.mainsnak?.datavalue?.value;
+  return typeof value === 'string' ? value : null;
 }
 
 async function resolveCommonsImageUrl(fileName: string) {
@@ -138,5 +146,114 @@ export async function fetchWikipediaCompanyLogo(symbol: string, companyName: str
     alt: `${companyName} logo`,
     source: wikipediaSource(asOf, `Resolved from Wikipedia/Wikidata entity ${wikidataId} and Wikimedia Commons file ${logoFile}.`),
     attribution: 'Wikimedia Commons',
+  };
+}
+
+
+function firstClaim(entity: WikidataEntityResponse, wikidataId: string, property: string) {
+  const claims = entity.entities?.[wikidataId]?.claims?.[property] ?? [];
+  const usable = claims.filter((claim) => claim.rank !== 'deprecated' && claim.mainsnak?.datavalue?.value != null);
+  return usable.find((claim) => claim.rank === 'preferred') ?? usable[0] ?? null;
+}
+
+function claimText(entity: WikidataEntityResponse, wikidataId: string, property: string) {
+  const value = firstClaim(entity, wikidataId, property)?.mainsnak?.datavalue?.value;
+  return typeof value === 'string' ? value : null;
+}
+
+function claimTime(entity: WikidataEntityResponse, wikidataId: string, property: string) {
+  const value = firstClaim(entity, wikidataId, property)?.mainsnak?.datavalue?.value;
+  if (typeof value === 'object' && value && 'time' in value && typeof value.time === 'string') {
+    const match = value.time.match(/([+-]?\d{4})/);
+    return match?.[1]?.replace(/^\+/, '') ?? null;
+  }
+  return null;
+}
+
+async function resolveWikidataLabel(entityId: string) {
+  const data = await fetchJson<{ entities?: Record<string, { labels?: { en?: { value?: string } } }> }>(
+    `https://www.wikidata.org/wiki/Special:EntityData/${encodeURIComponent(entityId)}.json`,
+  );
+  return data?.entities?.[entityId]?.labels?.en?.value ?? null;
+}
+
+async function claimEntityLabel(entity: WikidataEntityResponse, wikidataId: string, property: string) {
+  const value = firstClaim(entity, wikidataId, property)?.mainsnak?.datavalue?.value;
+  if (typeof value === 'object' && value && 'id' in value && typeof value.id === 'string') {
+    return resolveWikidataLabel(value.id);
+  }
+  return null;
+}
+
+function compactSummary(extract: string | undefined, fallbackName: string) {
+  const protectedText = (extract ?? '')
+    .replace(/\.com/gi, '§com')
+    .replace(/\([^)]*(?:pronounced|IPA|ə|ɪ|ʊ|ˈ|VID|ee)[^)]*\)/gi, '');
+  const cleaned = protectedText.replace(/\s+/g, ' ').trim();
+  if (!cleaned) return `${fallbackName} profile data is unavailable from Wikipedia right now.`;
+  const sentences = cleaned.match(/[^.!?]+[.!?]+/g) ?? [cleaned];
+  return sentences.slice(0, 2).join(' ').replace(/§com/g, '.com').replace(/\s+/g, ' ').trim();
+}
+
+function domainFromUrl(url: string | null) {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
+  }
+}
+
+function upsertFact(facts: TickerProfileFact[], label: string, value: string | null) {
+  if (!value) return;
+  const existing = facts.find((fact) => fact.label === label);
+  if (existing) existing.value = value;
+  else facts.push({ label, value });
+}
+
+async function fetchWikipediaPage(title: string) {
+  const page = await fetchJson<WikipediaPageResponse>(
+    `https://en.wikipedia.org/w/api.php?action=query&prop=pageprops|info|extracts&exintro=1&explaintext=1&titles=${encodeURIComponent(title)}&inprop=url&format=json&origin=*`,
+  );
+  return firstPage(page?.query?.pages);
+}
+
+export interface WikipediaCompanyProfileResult {
+  profile: TickerCompanyProfile;
+  title: string;
+  wikidataId: string;
+}
+
+export async function fetchWikipediaCompanyProfile(symbol: string, companyName: string, baseFacts: TickerProfileFact[] = []): Promise<WikipediaCompanyProfileResult | null> {
+  const title = await resolveWikipediaTitle(symbol, companyName);
+  if (!title) return null;
+
+  const page = await fetchWikipediaPage(title);
+  const wikidataId = page?.pageprops?.wikibase_item;
+  if (!wikidataId) return null;
+
+  const entity = await fetchJson<WikidataEntityResponse>(`https://www.wikidata.org/wiki/Special:EntityData/${encodeURIComponent(wikidataId)}.json`);
+  if (!entity) return null;
+
+  void baseFacts;
+  const facts: TickerProfileFact[] = [];
+  const headquarters = await claimEntityLabel(entity, wikidataId, 'P159');
+  const website = domainFromUrl(claimText(entity, wikidataId, 'P856'));
+  const founded = claimTime(entity, wikidataId, 'P571');
+
+  upsertFact(facts, 'Founded', founded);
+  upsertFact(facts, 'Headquarters', headquarters);
+  upsertFact(facts, 'Website', website);
+  upsertFact(facts, 'Wikidata', wikidataId);
+
+  const asOf = new Date().toISOString();
+  return {
+    title,
+    wikidataId,
+    profile: {
+      summary: compactSummary(page?.extract, companyName),
+      facts,
+      source: wikipediaSource(asOf, `Profile summary and company facts resolved from Wikipedia page ${title} and Wikidata entity ${wikidataId}.`),
+    },
   };
 }

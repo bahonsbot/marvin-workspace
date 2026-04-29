@@ -259,6 +259,9 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
               </div>
             ))}
           </dl>
+          <p className="trading-financial-caption">
+            {ticker.companyProfile.source.freshness} · {ticker.companyProfile.source.source}: {ticker.companyProfile.source.note}
+          </p>
         </section>
       </div>
 

@@ -12,7 +12,7 @@ import type { TickerProfileSource } from '../sources';
 import { withProfileSource } from '../sources';
 import { buildSampleTickerProfile } from './sample';
 import { fetchSecTickerFundamentals } from './sec';
-import { fetchWikipediaCompanyLogo } from './wikipedia';
+import { fetchWikipediaCompanyLogo, fetchWikipediaCompanyProfile } from './wikipedia';
 
 interface YahooChartResponse {
   chart?: {
@@ -215,8 +215,8 @@ function buildHeaderStats(sample: TickerProfile, search: Awaited<ReturnType<type
   const sector = search?.sectorDisp || search?.sector || sample.headerStats.find((item) => item.label === 'Sector')?.value || '—';
   const industry = search?.industryDisp || search?.industry || sample.headerStats.find((item) => item.label === 'Industry')?.value || '—';
   return [
-    { label: 'Market Cap', value: meta.marketCap ? `$${formatLarge(meta.marketCap)}` : sample.headerStats.find((item) => item.label === 'Market Cap')?.value ?? 'Provider pending' },
-    { label: 'P/E (TTM)', value: meta.trailingPE ? meta.trailingPE.toFixed(2) : sample.headerStats.find((item) => item.label === 'P/E (TTM)')?.value ?? 'Provider pending' },
+    { label: 'Market Cap', value: meta.marketCap ? `$${formatLarge(meta.marketCap)}` : 'Provider pending', status: meta.marketCap ? 'available' : 'unavailable' },
+    { label: 'P/E (TTM)', value: meta.trailingPE ? meta.trailingPE.toFixed(2) : 'Provider pending', status: meta.trailingPE ? 'available' : 'unavailable' },
     { label: 'Sector', value: sector },
     { label: 'Industry', value: industry },
   ];
@@ -330,12 +330,17 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     const tone = change < 0 ? 'negative' : change > 0 ? 'positive' : 'neutral';
     const name = meta.longName || search?.longname || meta.shortName || search?.shortname || sample.name;
     const exchange = search?.exchDisp || meta.fullExchangeName || meta.exchangeName || sample.exchange;
-    const [companyLogoResult, rangeSeries, secFundamentals] = await Promise.all([
+    const [companyLogoResult, companyProfileResult, rangeSeries, secFundamentals] = await Promise.all([
       fetchWikipediaCompanyLogo(symbol, name),
+      fetchWikipediaCompanyProfile(symbol, name, sample.companyProfile.facts),
       fetchYahooRangeSeries(symbol, sourceMap.prices),
       fetchSecTickerFundamentals(symbol, sample),
     ]);
     const companyLogo = companyLogoResult ?? sample.companyLogo;
+    const companyProfile = companyProfileResult?.profile ?? { ...sample.companyProfile, source: sourceMap.profile };
+    if (companyProfileResult) {
+      sourceMap.profile = companyProfileResult.profile.source;
+    }
     if (secFundamentals) {
       sourceMap.financials = secFundamentals.source;
       sourceMap.resources = secFundamentals.source;
@@ -369,10 +374,7 @@ export const yahooTickerProfileSource: TickerProfileSource = {
         source: sourceMap.prices,
         rangeSeries,
       },
-      companyProfile: {
-        ...sample.companyProfile,
-        source: sourceMap.profile,
-      },
+      companyProfile,
       financialHighlights: secFundamentals?.financialHighlights ?? buildFinancialHighlights(sample, sourceMap),
       cashDebtSnapshot: secFundamentals?.cashDebtSnapshot ?? buildCashDebtSnapshot(sample, sourceMap),
       balanceSheetSnapshot: secFundamentals?.balanceSheetSnapshot ?? buildBalanceSheetSnapshot(sample, sourceMap),
