@@ -29,6 +29,13 @@ export interface TickerProfileFact {
   value: string;
 }
 
+export interface TickerCompanyLogo {
+  url: string | null;
+  alt: string;
+  source: TickerSourceMeta;
+  attribution?: string;
+}
+
 export interface TickerCompanyProfile {
   summary: string;
   facts: TickerProfileFact[];
@@ -140,6 +147,7 @@ export interface TickerProfile {
   headerStats: TickerDisplayMetric[];
   tabs: string[];
   priceSeries: TickerPriceSeries;
+  companyLogo: TickerCompanyLogo;
   companyProfile: TickerCompanyProfile;
   financialHighlights: TickerFinancialHighlight[];
   cashDebtSnapshot: TickerCashDebtSnapshot;

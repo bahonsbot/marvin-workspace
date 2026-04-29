@@ -6,10 +6,10 @@ import type { TickerBalanceSheetSnapshot, TickerFinancialBar } from '@/lib/tradi
 
 type SparklineTone = 'positive' | 'negative' | 'neutral';
 
-function TickerMark({ symbol }: { symbol: string }) {
+function TickerMark({ symbol, logoUrl, logoAlt }: { symbol: string; logoUrl: string | null; logoAlt: string }) {
   return (
-    <div className="trading-ticker-mark" aria-hidden="true">
-      <span>{symbol.slice(0, 2)}</span>
+    <div className={`trading-ticker-mark ${logoUrl ? 'has-logo' : 'initials-only'}`} aria-hidden={logoUrl ? undefined : true}>
+      {logoUrl ? <img src={logoUrl} alt={logoAlt} loading="lazy" decoding="async" /> : <span>{symbol.slice(0, 2)}</span>}
     </div>
   );
 }
@@ -122,7 +122,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
 
       <section className="trading-ticker-quote-panel">
         <div className="trading-ticker-identity">
-          <TickerMark symbol={upperSymbol} />
+          <TickerMark symbol={upperSymbol} logoUrl={ticker.companyLogo.url} logoAlt={ticker.companyLogo.alt} />
           <div>
             <h1>{ticker.name}</h1>
             <p>

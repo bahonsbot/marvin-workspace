@@ -19,6 +19,7 @@ const sampleAsOf = '2025-05-16T20:00:00.000Z';
 
 interface SampleTickerIdentity {
   name: string;
+  logoUrl?: string;
   exchange: string;
   marketCap: string;
   pe: string;
@@ -56,6 +57,7 @@ interface BalanceSheetInput {
 const sampleTickerIdentities: Record<string, SampleTickerIdentity> = {
   NVDA: {
     name: 'NVIDIA Corporation',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/NVIDIA_logo.svg/250px-NVIDIA_logo.svg.png',
     exchange: 'NASDAQ',
     marketCap: '$2.54T',
     pe: '58.21',
@@ -86,6 +88,7 @@ const sampleTickerIdentities: Record<string, SampleTickerIdentity> = {
   },
   TSM: {
     name: 'Taiwan Semiconductor Manufacturing Company Limited',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/TSMC_wordmark.svg/250px-TSMC_wordmark.svg.png',
     exchange: 'NYSE',
     marketCap: '$946.40B',
     pe: '27.84',
@@ -151,6 +154,7 @@ const sampleTickerIdentities: Record<string, SampleTickerIdentity> = {
   },
   MSFT: {
     name: 'Microsoft Corporation',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/250px-Microsoft_logo.svg.png',
     exchange: 'NASDAQ',
     marketCap: '$3.16T',
     pe: '36.60',
@@ -216,6 +220,7 @@ const sampleTickerIdentities: Record<string, SampleTickerIdentity> = {
   },
   AAPL: {
     name: 'Apple Inc.',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/250px-Apple_logo_black.svg.png',
     exchange: 'NASDAQ',
     marketCap: '$3.01T',
     pe: '31.90',
@@ -296,6 +301,12 @@ function sampleSource(note: string): TickerSourceMeta {
   };
 }
 
+function buildSampleLogoSource(identity: SampleTickerIdentity): TickerSourceMeta {
+  return identity.logoUrl
+    ? sampleSource('Wikimedia Commons logo fixture. Replace with live Wikipedia/Wikidata logo adapter when available.')
+    : sampleSource('Logo provider pending; using ticker initials fallback.');
+}
+
 function buildSampleSourceMap(): TickerProfileSourceMap {
   return {
     quote: sampleSource('Static symbol-aware quote fixture. Replace with cached quote provider.'),
@@ -373,6 +384,7 @@ function buildBalanceSheetSnapshot(identity: SampleTickerIdentity, source: Ticke
 function getIdentity(symbol: string): SampleTickerIdentity {
   return sampleTickerIdentities[symbol] ?? {
     ...sampleTickerIdentities.NVDA,
+    logoUrl: undefined,
     cashDebt: fallbackCashDebt,
     balanceSheet: fallbackBalanceSheet,
     name: `${symbol} Holdings`,
@@ -430,6 +442,12 @@ export function buildSampleTickerProfile(symbol: string): TickerProfile {
       { label: 'Industry', value: identity.industry },
     ],
     tabs: tickerDetailSample.tabs,
+    companyLogo: {
+      url: identity.logoUrl ?? null,
+      alt: `${identity.name} logo`,
+      source: buildSampleLogoSource(identity),
+      attribution: identity.logoUrl ? 'Wikimedia Commons' : undefined,
+    },
     priceSeries: {
       values: tickerPriceSeries,
       ranges: tickerDetailSample.priceRanges,

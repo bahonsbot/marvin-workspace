@@ -11,6 +11,7 @@ import type {
 import type { TickerProfileSource } from '../sources';
 import { withProfileSource } from '../sources';
 import { buildSampleTickerProfile } from './sample';
+import { fetchWikipediaCompanyLogo } from './wikipedia';
 
 interface YahooChartResponse {
   chart?: {
@@ -241,6 +242,7 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     const tone = change < 0 ? 'negative' : change > 0 ? 'positive' : 'neutral';
     const name = meta.longName || search?.longname || meta.shortName || search?.shortname || sample.name;
     const exchange = search?.exchDisp || meta.fullExchangeName || meta.exchangeName || sample.exchange;
+    const companyLogo = (await fetchWikipediaCompanyLogo(symbol, name)) ?? sample.companyLogo;
 
     const profile: TickerProfile = {
       ...sample,
@@ -258,6 +260,7 @@ export const yahooTickerProfileSource: TickerProfileSource = {
         source: sourceMap.quote,
       },
       headerStats: buildHeaderStats(sample, search, meta),
+      companyLogo,
       priceSeries: {
         ...sample.priceSeries,
         values: compactPriceSeries(quote.close),
