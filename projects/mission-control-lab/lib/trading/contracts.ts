@@ -71,6 +71,46 @@ export interface TickerFinancialBar {
   netIncome: number;
 }
 
+export interface TickerCashDebtSnapshot {
+  period: string;
+  currency: string;
+  cashPercent: number;
+  debtPercent: number;
+  totalCash: string;
+  totalDebt: string;
+  netCash: string;
+  netCashLabel: 'Net Cash' | 'Net Debt';
+  freeCashFlow: string;
+  operatingCashFlow: string;
+  interpretation: string;
+  source: TickerSourceMeta;
+}
+
+export interface TickerBalanceSheetKpi {
+  label: string;
+  value: string;
+  caption: string;
+  tone: 'positive' | 'negative' | 'neutral';
+}
+
+export interface TickerBalanceSheetYear {
+  fiscalYear: string;
+  totalAssets: number;
+  totalLiabilities: number;
+  shareholderEquity: number;
+  cashAndEquivalents: number;
+  totalDebt: number;
+}
+
+export interface TickerBalanceSheetSnapshot {
+  period: string;
+  currency: string;
+  kpis: TickerBalanceSheetKpi[];
+  annual: TickerBalanceSheetYear[];
+  note: string;
+  source: TickerSourceMeta;
+}
+
 export interface TickerPriceSeries {
   values: number[];
   ranges: string[];
@@ -102,6 +142,8 @@ export interface TickerProfile {
   priceSeries: TickerPriceSeries;
   companyProfile: TickerCompanyProfile;
   financialHighlights: TickerFinancialHighlight[];
+  cashDebtSnapshot: TickerCashDebtSnapshot;
+  balanceSheetSnapshot: TickerBalanceSheetSnapshot;
   recentNews: TickerNewsItem[];
   resources: TickerResourceGroup[];
   financialOverview: TickerFinancialBar[];

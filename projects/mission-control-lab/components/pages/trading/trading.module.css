@@ -1027,6 +1027,214 @@
   gap: 18px;
 }
 
+:global(.trading-ticker-balance-grid) {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.18fr);
+  gap: 18px;
+}
+
+:global(.trading-cash-debt-ratio) {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(28, 37, 32, 0.12);
+}
+
+:global(.trading-cash-debt-ratio-labels) {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(34, 48, 41, 0.62);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+:global(.trading-cash-debt-bar) {
+  display: flex;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(28, 37, 32, 0.08);
+}
+
+:global(.trading-cash-debt-bar i),
+:global(.trading-cash-debt-bar b) {
+  min-width: 2px;
+  display: block;
+}
+
+:global(.trading-cash-debt-bar i) {
+  background: #2f8f60;
+}
+
+:global(.trading-cash-debt-bar b) {
+  background: #9a6b46;
+}
+
+:global(.trading-cash-debt-list) {
+  margin: 0;
+  display: grid;
+}
+
+:global(.trading-cash-debt-list div) {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid rgba(28, 37, 32, 0.1);
+  padding: 12px 0;
+}
+
+:global(.trading-cash-debt-list dt) {
+  color: rgba(34, 48, 41, 0.6);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+:global(.trading-cash-debt-list dd) {
+  margin: 0;
+  color: #17241e;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+:global(.trading-financial-caption) {
+  margin: 14px 0 0;
+  color: rgba(34, 48, 41, 0.56);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+:global(.trading-balance-kpi-grid) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+:global(.trading-balance-kpi-grid article) {
+  border: 1px solid rgba(28, 37, 32, 0.1);
+  border-radius: 14px;
+  background: rgba(244, 240, 232, 0.52);
+  padding: 11px;
+  display: grid;
+  gap: 5px;
+}
+
+:global(.trading-balance-kpi-grid article::before) {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #547968;
+}
+
+:global(.trading-balance-kpi-grid article.positive::before) {
+  background: #16a34a;
+}
+
+:global(.trading-balance-kpi-grid article.negative::before) {
+  background: #b4533a;
+}
+
+:global(.trading-balance-kpi-grid span) {
+  color: rgba(34, 48, 41, 0.56);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+:global(.trading-balance-kpi-grid strong) {
+  font-family: var(--font-serif);
+  font-size: 25px;
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  font-weight: 400;
+}
+
+:global(.trading-balance-kpi-grid p) {
+  margin: 0;
+  color: rgba(34, 48, 41, 0.58);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+:global(.trading-balance-sheet-stack) {
+  display: grid;
+  gap: 14px;
+}
+
+:global(.trading-balance-bars),
+:global(.trading-cash-debt-trend) {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+  border-left: 1px solid rgba(28, 37, 32, 0.1);
+  border-bottom: 1px solid rgba(28, 37, 32, 0.14);
+  background-image: linear-gradient(to top, rgba(28, 37, 32, 0.07) 1px, transparent 1px);
+  background-size: 100% 36px;
+}
+
+:global(.trading-balance-bars) {
+  height: 156px;
+  padding: 10px 6px 0 12px;
+}
+
+:global(.trading-cash-debt-trend) {
+  height: 92px;
+  padding: 8px 6px 0 12px;
+}
+
+:global(.trading-balance-bars-group),
+:global(.trading-cash-debt-trend-group) {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 7px;
+  justify-items: center;
+  color: rgba(34, 48, 41, 0.5);
+  font-size: 10px;
+}
+
+:global(.trading-balance-bars-triplet),
+:global(.trading-cash-debt-trend-group div) {
+  height: 100%;
+  display: flex;
+  align-items: end;
+  gap: 5px;
+}
+
+:global(.trading-balance-bars-triplet i),
+:global(.trading-balance-bars-triplet b),
+:global(.trading-balance-bars-triplet em),
+:global(.trading-cash-debt-trend-group i),
+:global(.trading-cash-debt-trend-group b) {
+  display: block;
+  width: 13px;
+  min-height: 5px;
+  border-radius: 4px 4px 0 0;
+}
+
+:global(.trading-balance-bars-triplet i),
+:global(.trading-balance-legend i) {
+  background: #9ca3af;
+}
+
+:global(.trading-balance-bars-triplet b),
+:global(.trading-balance-legend b),
+:global(.trading-cash-debt-trend-group b) {
+  background: #9a6b46;
+}
+
+:global(.trading-balance-bars-triplet em),
+:global(.trading-balance-legend em),
+:global(.trading-cash-debt-trend-group i) {
+  background: #2f8f60;
+}
+
 :global(.trading-ticker-news-list) {
   display: grid;
   gap: 0;
@@ -1118,7 +1326,8 @@
 }
 
 :global(.trading-financial-legend i),
-:global(.trading-financial-legend b) {
+:global(.trading-financial-legend b),
+:global(.trading-financial-legend em) {
   width: 8px;
   height: 8px;
   border-radius: 2px;
@@ -1184,6 +1393,7 @@
   :global(.trading-ticker-quote-panel),
   :global(.trading-ticker-primary-grid),
   :global(.trading-ticker-secondary-grid),
+  :global(.trading-ticker-balance-grid),
   :global(.trading-ticker-lower-grid) {
     grid-template-columns: 1fr;
   }
@@ -1417,12 +1627,14 @@
 
   :global(.trading-ticker-primary-grid),
   :global(.trading-ticker-secondary-grid),
+  :global(.trading-ticker-balance-grid),
   :global(.trading-ticker-lower-grid) {
     gap: 13px;
   }
 
   :global(.trading-ticker-primary-grid > section),
   :global(.trading-ticker-secondary-grid > section),
+  :global(.trading-ticker-balance-grid > section),
   :global(.trading-ticker-lower-grid > section),
   :global(.trading-room-shell > section) {
     border-radius: 18px !important;
@@ -1537,6 +1749,34 @@
   :global(.trading-financial-legend) {
     flex-wrap: wrap;
     gap: 8px;
+  }
+
+  :global(.trading-balance-kpi-grid) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  :global(.trading-cash-debt-list div) {
+    padding: 10px 0;
+  }
+
+  :global(.trading-balance-bars),
+  :global(.trading-cash-debt-trend) {
+    gap: 8px;
+    padding-left: 8px;
+  }
+
+  :global(.trading-balance-bars-triplet),
+  :global(.trading-cash-debt-trend-group div) {
+    gap: 3px;
+  }
+
+  :global(.trading-balance-bars-triplet i),
+  :global(.trading-balance-bars-triplet b),
+  :global(.trading-balance-bars-triplet em),
+  :global(.trading-cash-debt-trend-group i),
+  :global(.trading-cash-debt-trend-group b) {
+    width: 10px;
   }
 
   :global(.trading-financial-bars) {

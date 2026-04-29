@@ -1,4 +1,13 @@
-import type { TickerDisplayMetric, TickerFinancialBar, TickerFinancialHighlight, TickerProfile, TickerProfileSourceMap, TickerSourceMeta } from '../contracts';
+import type {
+  TickerBalanceSheetSnapshot,
+  TickerCashDebtSnapshot,
+  TickerDisplayMetric,
+  TickerFinancialBar,
+  TickerFinancialHighlight,
+  TickerProfile,
+  TickerProfileSourceMap,
+  TickerSourceMeta,
+} from '../contracts';
 import type { TickerProfileSource } from '../sources';
 import { withProfileSource } from '../sources';
 import { buildSampleTickerProfile } from './sample';
@@ -69,15 +78,24 @@ function yahooSource(asOf: string, note: string): TickerSourceMeta {
   };
 }
 
+function sampleFallbackSource(asOf: string, note: string): TickerSourceMeta {
+  return {
+    source: 'sample',
+    asOf,
+    freshness: 'sample',
+    note,
+  };
+}
+
 function buildYahooSourceMap(asOf: string): TickerProfileSourceMap {
   return {
     quote: yahooSource(asOf, 'Yahoo Finance chart endpoint. Cached server-side.'),
     profile: yahooSource(asOf, 'Yahoo Finance search/chart metadata with sample fallback for profile narrative.'),
     prices: yahooSource(asOf, 'Yahoo Finance chart endpoint. Cached server-side.'),
-    financials: yahooSource(asOf, 'Sample financial modules retained until a fundamentals provider is enabled.'),
-    news: yahooSource(asOf, 'Sample news retained until a news provider is enabled.'),
-    resources: yahooSource(asOf, 'Static resource links retained until source adapters are enabled.'),
-    filings: yahooSource(asOf, 'SEC adapter pending.'),
+    financials: sampleFallbackSource(asOf, 'Sample financial modules retained until a fundamentals provider is enabled.'),
+    news: sampleFallbackSource(asOf, 'Sample news retained until a news provider is enabled.'),
+    resources: sampleFallbackSource(asOf, 'Static resource links retained until source adapters are enabled.'),
+    filings: sampleFallbackSource(asOf, 'SEC adapter pending.'),
   };
 }
 
@@ -170,6 +188,14 @@ function buildFinancialHighlights(sample: TickerProfile, sourceMap: TickerProfil
   return sample.financialHighlights.map((item) => ({ ...item, source: sourceMap.financials }));
 }
 
+function buildCashDebtSnapshot(sample: TickerProfile, sourceMap: TickerProfileSourceMap): TickerCashDebtSnapshot {
+  return { ...sample.cashDebtSnapshot, source: sourceMap.financials };
+}
+
+function buildBalanceSheetSnapshot(sample: TickerProfile, sourceMap: TickerProfileSourceMap): TickerBalanceSheetSnapshot {
+  return { ...sample.balanceSheetSnapshot, source: sourceMap.financials };
+}
+
 function buildHeaderStats(sample: TickerProfile, search: Awaited<ReturnType<typeof fetchYahooSearch>>, meta: YahooChartMeta): TickerDisplayMetric[] {
   const sector = search?.sectorDisp || search?.sector || sample.headerStats.find((item) => item.label === 'Sector')?.value || '—';
   const industry = search?.industryDisp || search?.industry || sample.headerStats.find((item) => item.label === 'Industry')?.value || '—';
@@ -244,6 +270,8 @@ export const yahooTickerProfileSource: TickerProfileSource = {
         source: sourceMap.profile,
       },
       financialHighlights: buildFinancialHighlights(sample, sourceMap),
+      cashDebtSnapshot: buildCashDebtSnapshot(sample, sourceMap),
+      balanceSheetSnapshot: buildBalanceSheetSnapshot(sample, sourceMap),
       recentNews: sample.recentNews.map((item) => ({ ...item, sourceMeta: sourceMap.news })),
       resources: sample.resources.map((group) => ({
         ...group,

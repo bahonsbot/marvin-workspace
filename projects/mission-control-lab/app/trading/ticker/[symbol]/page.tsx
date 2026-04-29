@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { MarketTape, MiniLineChart, TabScaffold, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { marketTape } from '@/components/pages/trading/trading-sample-data';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
-import type { TickerFinancialBar } from '@/lib/trading/contracts';
+import type { TickerBalanceSheetSnapshot, TickerFinancialBar } from '@/lib/trading/contracts';
 
 type SparklineTone = 'positive' | 'negative' | 'neutral';
 
@@ -31,6 +31,58 @@ function SmallSparkline({ values, tone = 'positive' }: { values: number[]; tone?
     <svg className={`trading-small-sparkline ${tone}`} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
       <polyline points={points} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
+  );
+}
+
+
+function StackedRatioBar({ cashPercent, debtPercent }: { cashPercent: number; debtPercent: number }) {
+  return (
+    <div className="trading-cash-debt-ratio" aria-label={`Cash ${cashPercent} percent, debt ${debtPercent} percent`}>
+      <div className="trading-cash-debt-ratio-labels">
+        <span>Cash {cashPercent}%</span>
+        <span>Debt {debtPercent}%</span>
+      </div>
+      <div className="trading-cash-debt-bar" aria-hidden="true">
+        <i style={{ width: `${cashPercent}%` }} />
+        <b style={{ width: `${debtPercent}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function BalanceSheetBars({ snapshot }: { snapshot: TickerBalanceSheetSnapshot }) {
+  const max = Math.max(
+    ...snapshot.annual.flatMap((item) => [item.totalAssets, item.totalLiabilities, item.shareholderEquity, item.cashAndEquivalents, item.totalDebt]),
+    1,
+  );
+
+  return (
+    <div className="trading-balance-sheet-stack">
+      <div className="trading-balance-bars" aria-label="Annual assets, liabilities, and shareholder equity chart">
+        {snapshot.annual.map((item) => (
+          <div key={item.fiscalYear} className="trading-balance-bars-group">
+            <div className="trading-balance-bars-triplet">
+              <i style={{ height: `${(item.totalAssets / max) * 100}%` }} aria-label={`${item.fiscalYear} assets`} />
+              <b style={{ height: `${(item.totalLiabilities / max) * 100}%` }} aria-label={`${item.fiscalYear} liabilities`} />
+              <em style={{ height: `${(item.shareholderEquity / max) * 100}%` }} aria-label={`${item.fiscalYear} equity`} />
+            </div>
+            <span>{item.fiscalYear}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="trading-cash-debt-trend" aria-label="Annual cash versus debt chart">
+        {snapshot.annual.map((item) => (
+          <div key={item.fiscalYear} className="trading-cash-debt-trend-group">
+            <div>
+              <i style={{ height: `${(item.cashAndEquivalents / max) * 100}%` }} aria-label={`${item.fiscalYear} cash and equivalents`} />
+              <b style={{ height: `${(item.totalDebt / max) * 100}%` }} aria-label={`${item.fiscalYear} total debt`} />
+            </div>
+            <span>{item.fiscalYear}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -165,6 +217,67 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           ))}
         </div>
       </section>
+
+      <div className="trading-ticker-balance-grid">
+        <section style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+          <div className="trading-section-head">
+            <div>
+              <div className="trading-section-label">Cash & Debt</div>
+              <h2>{ticker.cashDebtSnapshot.interpretation}</h2>
+            </div>
+            <span className="trading-ticker-source-note">{ticker.cashDebtSnapshot.period}</span>
+          </div>
+          <StackedRatioBar cashPercent={ticker.cashDebtSnapshot.cashPercent} debtPercent={ticker.cashDebtSnapshot.debtPercent} />
+          <dl className="trading-cash-debt-list">
+            <div>
+              <dt>Total Cash</dt>
+              <dd>{ticker.cashDebtSnapshot.totalCash}</dd>
+            </div>
+            <div>
+              <dt>Total Debt</dt>
+              <dd>{ticker.cashDebtSnapshot.totalDebt}</dd>
+            </div>
+            <div>
+              <dt>{ticker.cashDebtSnapshot.netCashLabel}</dt>
+              <dd>{ticker.cashDebtSnapshot.netCash}</dd>
+            </div>
+            <div>
+              <dt>Free Cash Flow</dt>
+              <dd>{ticker.cashDebtSnapshot.freeCashFlow}</dd>
+            </div>
+            <div>
+              <dt>Operating Cash Flow</dt>
+              <dd>{ticker.cashDebtSnapshot.operatingCashFlow}</dd>
+            </div>
+          </dl>
+          <p className="trading-financial-caption">{ticker.cashDebtSnapshot.source.freshness} · {ticker.cashDebtSnapshot.source.source}: {ticker.cashDebtSnapshot.source.note}</p>
+        </section>
+
+        <section style={tradingCardStyle({ minHeight: 420, maxHeight: 'none' })}>
+          <div className="trading-section-head">
+            <div>
+              <div className="trading-section-label">Balance sheet</div>
+              <h2>{ticker.balanceSheetSnapshot.period}</h2>
+            </div>
+            <div className="trading-financial-legend trading-balance-legend" aria-hidden="true">
+              <span><i /> Assets</span>
+              <span><b /> Liabilities</span>
+              <span><em /> Equity</span>
+            </div>
+          </div>
+          <div className="trading-balance-kpi-grid">
+            {ticker.balanceSheetSnapshot.kpis.map((kpi) => (
+              <article key={kpi.label} className={kpi.tone}>
+                <span>{kpi.label}</span>
+                <strong>{kpi.value}</strong>
+                <p>{kpi.caption}</p>
+              </article>
+            ))}
+          </div>
+          <BalanceSheetBars snapshot={ticker.balanceSheetSnapshot} />
+          <p className="trading-financial-caption">{ticker.balanceSheetSnapshot.note}</p>
+        </section>
+      </div>
 
       <div className="trading-ticker-secondary-grid">
         <section style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
