@@ -1,6 +1,5 @@
 import {
   tickerDetailSample,
-  tickerFinancialOverviewSeries,
   tickerPriceSeries,
 } from '@/components/pages/trading/trading-sample-data';
 import type {
@@ -319,6 +318,28 @@ function buildSampleSourceMap(): TickerProfileSourceMap {
   };
 }
 
+function unavailableFinancialHighlight(item: (typeof tickerDetailSample.financialHighlights)[number], source: TickerSourceMeta): TickerFinancialHighlight {
+  return {
+    label: item.label,
+    value: 'Unavailable',
+    delta: 'Provider required',
+    tone: 'neutral',
+    trend: [],
+    source,
+    status: 'unavailable',
+    note: 'No reliable provider-backed value is available yet. Awaiting SEC concept coverage or a richer fundamentals provider.',
+  };
+}
+
+function unavailableKeyRatio(ratio: { label: string }): TickerProfile['keyRatios'][number] {
+  return {
+    label: ratio.label,
+    value: 'Unavailable',
+    status: 'unavailable',
+    note: 'Awaiting richer valuation/fundamentals provider such as FMP.',
+  };
+}
+
 function formatBillions(value: number) {
   const sign = value < 0 ? '-' : '';
   return `${sign}$${Math.abs(value).toFixed(Math.abs(value) >= 100 ? 0 : 1)}B`;
@@ -461,11 +482,7 @@ export function buildSampleTickerProfile(symbol: string): TickerProfile {
       facts: identity.facts,
       source: sourceMap.profile,
     },
-    financialHighlights: tickerDetailSample.financialHighlights.map((item) => ({
-      ...item,
-      tone: item.tone as TickerFinancialHighlight['tone'],
-      source: sourceMap.financials,
-    })),
+    financialHighlights: tickerDetailSample.financialHighlights.map((item) => unavailableFinancialHighlight(item, sourceMap.financials)),
     cashDebtSnapshot: buildCashDebtSnapshot(identity, sourceMap.financials),
     balanceSheetSnapshot: buildBalanceSheetSnapshot(identity, sourceMap.financials),
     recentNews: identity.news.map((item) => ({
@@ -473,8 +490,12 @@ export function buildSampleTickerProfile(symbol: string): TickerProfile {
       sourceMeta: sourceMap.news,
     })),
     resources: tickerDetailSample.resources,
-    financialOverview: tickerFinancialOverviewSeries,
-    keyRatios: identity.ratios ?? tickerDetailSample.keyRatios,
+    financialOverview: {
+      bars: [],
+      status: 'unavailable',
+      note: 'Revenue/net income chart retained as target layout; provider-backed fundamentals required.',
+    },
+    keyRatios: (identity.ratios ?? tickerDetailSample.keyRatios).map(unavailableKeyRatio),
     sourceMap,
     asOf: sampleAsOf,
     freshness: 'sample',

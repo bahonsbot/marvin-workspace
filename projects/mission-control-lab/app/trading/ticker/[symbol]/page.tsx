@@ -1,10 +1,89 @@
 import Link from 'next/link';
-import { MarketTape, MiniLineChart, TabScaffold, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
+import { MarketTape, MiniLineChart, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { marketTape } from '@/components/pages/trading/trading-sample-data';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
-import type { TickerBalanceSheetSnapshot, TickerFinancialBar } from '@/lib/trading/contracts';
+import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerFinancialHighlight, TickerFinancialOverview } from '@/lib/trading/contracts';
 
 type SparklineTone = 'positive' | 'negative' | 'neutral';
+
+type SectionNavItem = { label: string; href: string; status?: TickerDataStatus; note?: string };
+
+const requiredFinancialHighlights = [
+  'Revenue',
+  'Net Income',
+  'Gross Margin',
+  'Operating Margin',
+  'EPS',
+  'Free Cash Flow',
+  'ROE',
+  'ROIC',
+  'Debt / Equity',
+];
+
+const unavailableHighlightSource = {
+  source: 'sample' as const,
+  asOf: new Date(0).toISOString(),
+  freshness: 'missing' as const,
+  note: 'No reliable provider-backed value is available yet. Keep the metric visible for future fundamentals coverage.',
+};
+
+function makeSectionNav(): SectionNavItem[] {
+  return [
+    { label: 'Overview', href: '#overview' },
+    { label: 'Price', href: '#price-history' },
+    { label: 'Profile', href: '#company-profile', status: 'partial', note: 'Provider enrichment pending' },
+    { label: 'Financials', href: '#financial-highlights' },
+    { label: 'Balance Sheet', href: '#balance-sheet' },
+    { label: 'News', href: '#recent-news', status: 'partial', note: 'Provider decision pending' },
+    { label: 'Filings', href: '#resources' },
+    { label: 'Ratios', href: '#key-ratios', status: 'partial' },
+    { label: 'Estimates', href: '#estimates', status: 'unavailable' },
+    { label: 'Dividends', href: '#dividends', status: 'unavailable' },
+    { label: 'Ownership', href: '#ownership', status: 'unavailable' },
+  ];
+}
+
+function SectionJumpNav({ items }: { items: SectionNavItem[] }) {
+  return (
+    <nav className="trading-section-jump-row" aria-label="Ticker page sections">
+      {items.map((item, index) => (
+        <a key={item.href} href={item.href} className={`${index === 0 ? 'active' : ''} ${item.status === 'unavailable' ? 'unavailable' : ''}`} title={item.note}>
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+function normalizeHighlightLabel(label: string) {
+  return label.replace(/\s*\(TTM\)/gi, '').trim().toLowerCase();
+}
+
+function buildFinancialHighlightSlots(metrics: TickerFinancialHighlight[]) {
+  const byLabel = new Map(metrics.map((metric) => [normalizeHighlightLabel(metric.label), metric]));
+  return requiredFinancialHighlights.map((label) => {
+    const metric = byLabel.get(normalizeHighlightLabel(label));
+    if (metric) return { ...metric, label: metric.label.replace(/\s*\(TTM\)/gi, '') };
+    return {
+      label,
+      value: 'Unavailable',
+      delta: 'Provider required',
+      tone: 'neutral' as const,
+      trend: [],
+      source: unavailableHighlightSource,
+      status: 'unavailable' as const,
+      note: 'Awaiting richer fundamentals provider such as FMP or a validated SEC concept mapping.',
+    };
+  });
+}
+
+function EmptySparkline({ label }: { label: string }) {
+  return (
+    <div className="trading-empty-sparkline" role="img" aria-label={`${label} data unavailable`}>
+      <span>Data unavailable</span>
+    </div>
+  );
+}
 
 function TickerMark({ symbol, logoUrl, logoAlt }: { symbol: string; logoUrl: string | null; logoAlt: string }) {
   return (
@@ -68,7 +147,7 @@ function BalanceSheetBars({ snapshot }: { snapshot: TickerBalanceSheetSnapshot }
             </div>
             <span>{item.fiscalYear}</span>
           </div>
-        ))}
+          ))}
       </div>
 
       <div className="trading-cash-debt-trend" aria-label="Annual cash versus debt chart">
@@ -80,26 +159,30 @@ function BalanceSheetBars({ snapshot }: { snapshot: TickerBalanceSheetSnapshot }
             </div>
             <span>{item.fiscalYear}</span>
           </div>
-        ))}
+          ))}
       </div>
     </div>
   );
 }
 
-function FinancialBarChart({ series }: { series: TickerFinancialBar[] }) {
+function FinancialBarChart({ overview }: { overview: TickerFinancialOverview }) {
+  const series = overview.bars;
   const max = Math.max(...series.map((item) => Math.max(Math.abs(item.revenue), Math.abs(item.netIncome))), 1);
   return (
-    <div className="trading-financial-bars" aria-label="Annual revenue and net income chart">
-      {series.map((item) => (
-        <div key={item.year} className="trading-financial-bar-group">
-          <div className="trading-financial-bars-pair">
-            <i style={{ height: `${Math.max((Math.abs(item.revenue) / max) * 100, 2)}%` }} aria-label={`${item.year} revenue`} />
-            <b style={{ height: `${Math.max((Math.abs(item.netIncome) / max) * 100, 2)}%` }} aria-label={`${item.year} net income`} data-negative={item.netIncome < 0 ? 'true' : undefined} />
+    <>
+      {overview.status !== 'available' || overview.note ? <p className="trading-financial-caption">{overview.status} · {overview.note}</p> : null}
+      <div className={`trading-financial-bars ${series.length ? '' : 'is-empty'}`} aria-label="Annual revenue and net income chart">
+        {series.length ? series.map((item) => (
+          <div key={item.year} className="trading-financial-bar-group">
+            <div className="trading-financial-bars-pair">
+              <i style={{ height: `${Math.max((Math.abs(item.revenue) / max) * 100, 2)}%` }} aria-label={`${item.year} revenue`} />
+              <b style={{ height: `${Math.max((Math.abs(item.netIncome) / max) * 100, 2)}%` }} aria-label={`${item.year} net income`} data-negative={item.netIncome < 0 ? 'true' : undefined} />
+            </div>
+            <span>{item.year}</span>
           </div>
-          <span>{item.year}</span>
-        </div>
-      ))}
-    </div>
+        )) : <div className="trading-chart-unavailable">Data unavailable</div>}
+      </div>
+    </>
   );
 }
 
@@ -120,7 +203,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         ← Back to Overview
       </Link>
 
-      <section className="trading-ticker-quote-panel">
+      <section id="overview" className="trading-ticker-quote-panel">
         <div className="trading-ticker-identity">
           <TickerMark symbol={upperSymbol} logoUrl={ticker.companyLogo.url} logoAlt={ticker.companyLogo.alt} />
           <div>
@@ -148,18 +231,17 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       </section>
 
       <div className="trading-ticker-tabs-row">
-        <TabScaffold tabs={ticker.tabs} />
+        <SectionJumpNav items={makeSectionNav()} />
         <button type="button" className={`trading-watchlist-toggle ${ticker.inWatchlist ? 'in-watchlist' : 'not-watched'}`}>
           {ticker.inWatchlist ? '− Watchlist' : '+ Watchlist'}
         </button>
       </div>
 
       <div className="trading-ticker-primary-grid">
-        <section style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>
+        <section id="price-history" style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>
           <div className="trading-section-head trading-ticker-chart-head">
             <div>
               <div className="trading-section-label">Price history</div>
-              <h2>{upperSymbol} performance</h2>
             </div>
             <div className="trading-range-tabs trading-ticker-range-tabs" role="tablist" aria-label="Ticker price range">
               {ticker.priceSeries.ranges.map((range) => (
@@ -185,7 +267,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           </dl>
         </section>
 
-        <section style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>
+        <section id="company-profile" style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>
           <div className="trading-section-label">Company profile</div>
           <p className="trading-ticker-profile-copy">{ticker.companyProfile.summary}</p>
           <dl className="trading-profile-facts">
@@ -199,7 +281,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </section>
       </div>
 
-      <section style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+      <section id="financial-highlights" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
         <div className="trading-section-head">
           <div>
             <div className="trading-section-label">Financial highlights</div>
@@ -207,19 +289,20 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <span className="trading-ticker-source-note">{ticker.sourceMap.financials.freshness} · {ticker.sourceMap.financials.source} · contract-ready</span>
         </div>
         <div className="trading-financial-highlight-grid">
-          {ticker.financialHighlights.map((metric) => (
-            <article key={metric.label} className="trading-financial-highlight-card">
+          {buildFinancialHighlightSlots(ticker.financialHighlights).map((metric) => (
+            <article key={metric.label} className={`trading-financial-highlight-card ${metric.status === 'unavailable' ? 'is-unavailable' : ''}`}>
               <span>{metric.label}</span>
               <strong>{metric.value}</strong>
               <em className={metric.tone}>{metric.delta}</em>
-              <SmallSparkline values={metric.trend} tone={metric.tone as SparklineTone} />
+              {metric.trend.length ? <SmallSparkline values={metric.trend} tone={metric.tone as SparklineTone} /> : <EmptySparkline label={metric.label} />}
+              {metric.note ? <p>{metric.note}</p> : null}
             </article>
           ))}
         </div>
       </section>
 
       <div className="trading-ticker-balance-grid">
-        <section style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+        <section id="cash-debt" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
           <div className="trading-section-head">
             <div>
               <div className="trading-section-label">Cash & Debt</div>
@@ -253,7 +336,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <p className="trading-financial-caption">{ticker.cashDebtSnapshot.source.freshness} · {ticker.cashDebtSnapshot.source.source}: {ticker.cashDebtSnapshot.source.note}</p>
         </section>
 
-        <section style={tradingCardStyle({ minHeight: 420, maxHeight: 'none' })}>
+        <section id="balance-sheet" style={tradingCardStyle({ minHeight: 420, maxHeight: 'none' })}>
           <div className="trading-section-head">
             <div>
               <div className="trading-section-label">Balance sheet</div>
@@ -280,7 +363,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       </div>
 
       <div className="trading-ticker-secondary-grid">
-        <section style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+        <section id="recent-news" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
           <div className="trading-section-head">
             <div>
               <div className="trading-section-label">Recent news</div>
@@ -300,7 +383,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           </div>
         </section>
 
-        <section style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+        <section id="resources" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
           <div className="trading-section-label">Resources</div>
           <div className="trading-resource-list">
             {ticker.resources.map((group) => (
@@ -320,7 +403,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       </div>
 
       <div className="trading-ticker-lower-grid">
-        <section style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
+        <section id="financial-overview" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
           <div className="trading-section-head">
             <div>
               <div className="trading-section-label">Financials overview</div>
@@ -331,20 +414,37 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
               <span><b /> Net income</span>
             </div>
           </div>
-          <FinancialBarChart series={ticker.financialOverview} />
+          <FinancialBarChart overview={ticker.financialOverview} />
         </section>
 
-        <section style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
+        <section id="key-ratios" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
           <div className="trading-section-label">Key ratios (TTM)</div>
           <dl className="trading-key-ratio-grid">
             {ticker.keyRatios.map((ratio) => (
               <div key={ratio.label}>
                 <dt>{ratio.label}</dt>
-                <dd>{ratio.value}</dd>
+                <dd className={ratio.status === 'unavailable' ? 'unavailable' : undefined}>{ratio.value}</dd>
+                {ratio.note ? <dd className="trading-ratio-note">{ratio.note}</dd> : null}
               </div>
             ))}
           </dl>
         </section>
+      </div>
+
+      <div className="trading-ticker-placeholder-grid">
+        {[
+          ['estimates', 'Estimates', 'Analyst estimates require a validated estimates provider. Keep this slot visible for FMP or another fundamentals package.'],
+          ['dividends', 'Dividends', 'Dividend history, yield, payout ratio, and ex-date need a provider-backed feed before display.'],
+          ['ownership', 'Ownership', 'Institutional ownership and insider activity need a dedicated holdings/source adapter.'],
+        ].map(([id, title, body]) => (
+          <section key={id} id={id} style={tradingCardStyle({ minHeight: 160, maxHeight: 'none' })}>
+            <div className="trading-section-label">{title}</div>
+            <div className="trading-unavailable-panel">
+              <strong>Data unavailable</strong>
+              <p>{body}</p>
+            </div>
+          </section>
+          ))}
       </div>
     </TradingPageFrame>
   );

@@ -9,9 +9,14 @@ export interface TickerSourceMeta {
   note?: string;
 }
 
+export type TickerDataStatus = 'available' | 'partial' | 'unavailable';
+
 export interface TickerDisplayMetric {
   label: string;
   value: string;
+  status?: TickerDataStatus;
+  note?: string;
+  source?: TickerSourceMeta;
 }
 
 export interface TickerQuote {
@@ -49,6 +54,8 @@ export interface TickerFinancialHighlight {
   tone: 'positive' | 'negative' | 'neutral';
   trend: number[];
   source?: TickerSourceMeta;
+  status?: TickerDataStatus;
+  note?: string;
 }
 
 export interface TickerNewsItem {
@@ -76,6 +83,12 @@ export interface TickerFinancialBar {
   year: string;
   revenue: number;
   netIncome: number;
+}
+
+export interface TickerFinancialOverview {
+  bars: TickerFinancialBar[];
+  status: TickerDataStatus;
+  note?: string;
 }
 
 export interface TickerCashDebtSnapshot {
@@ -154,7 +167,7 @@ export interface TickerProfile {
   balanceSheetSnapshot: TickerBalanceSheetSnapshot;
   recentNews: TickerNewsItem[];
   resources: TickerResourceGroup[];
-  financialOverview: TickerFinancialBar[];
+  financialOverview: TickerFinancialOverview;
   keyRatios: TickerDisplayMetric[];
   sourceMap: TickerProfileSourceMap;
   asOf: string;

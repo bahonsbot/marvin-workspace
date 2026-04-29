@@ -4,7 +4,7 @@ import type {
   TickerBalanceSheetSnapshot,
   TickerCashDebtSnapshot,
   TickerDisplayMetric,
-  TickerFinancialBar,
+  TickerFinancialOverview,
   TickerFinancialHighlight,
   TickerProfile,
   TickerResourceGroup,
@@ -72,7 +72,7 @@ export interface SecTickerFundamentals {
   asOf: string;
   source: TickerSourceMeta;
   financialHighlights: TickerFinancialHighlight[];
-  financialOverview: TickerFinancialBar[];
+  financialOverview: TickerFinancialOverview;
   cashDebtSnapshot: TickerCashDebtSnapshot;
   balanceSheetSnapshot: TickerBalanceSheetSnapshot;
   keyRatios: TickerDisplayMetric[];
@@ -242,6 +242,7 @@ function buildFinancialHighlights(statements: SecAnnualStatements, source: Ticke
       tone: toneFromDelta(statements.revenue[last], statements.revenue[previous]),
       trend: trendForYears(years, statements.revenue),
       source,
+      status: 'available',
     },
     {
       label: 'Net Income',
@@ -250,6 +251,7 @@ function buildFinancialHighlights(statements: SecAnnualStatements, source: Ticke
       tone: toneFromDelta(statements.netIncome[last], statements.netIncome[previous]),
       trend: trendForYears(years, statements.netIncome),
       source,
+      status: 'available',
     },
   ];
 
@@ -261,18 +263,25 @@ function buildFinancialHighlights(statements: SecAnnualStatements, source: Ticke
       tone: toneFromDelta(fcf, prevFcf),
       trend: years.map((year) => Number(((statements.operatingCashFlow[year] ?? 0) - Math.abs(statements.capex[year] ?? 0)) / 1_000_000_000).toFixed(1)).map(Number),
       source,
+      status: 'available',
     });
   }
 
   return highlights;
 }
 
-function buildFinancialOverview(statements: SecAnnualStatements): TickerFinancialBar[] {
-  return intersectYears(statements.revenue, statements.netIncome).map((year) => ({
+function buildFinancialOverview(statements: SecAnnualStatements): TickerFinancialOverview {
+  const bars = intersectYears(statements.revenue, statements.netIncome).map((year) => ({
     year,
     revenue: Number((statements.revenue[year] / 1_000_000_000).toFixed(1)),
     netIncome: Number((statements.netIncome[year] / 1_000_000_000).toFixed(1)),
   }));
+
+  return {
+    bars,
+    status: bars.length >= 3 ? 'available' : bars.length > 0 ? 'partial' : 'unavailable',
+    note: bars.length >= 3 ? 'SEC annual 10-K XBRL facts.' : 'Revenue/net income trend requires at least three annual SEC facts.',
+  };
 }
 
 function buildCashDebtSnapshot(statements: SecAnnualStatements, source: TickerSourceMeta): TickerCashDebtSnapshot | null {
@@ -367,13 +376,21 @@ function buildBalanceSheetSnapshot(statements: SecAnnualStatements, source: Tick
   };
 }
 
-function buildKeyRatios(profile: TickerProfile, snapshot: TickerBalanceSheetSnapshot | null) {
-  if (!snapshot) return profile.keyRatios;
-  const replacements = new Map(snapshot.kpis.map((item) => [item.label, item.value]));
+function buildKeyRatios(profile: TickerProfile, snapshot: TickerBalanceSheetSnapshot | null, source: TickerSourceMeta) {
+  const replacements = snapshot ? new Map(snapshot.kpis.map((item) => [item.label, item.value])) : new Map<string, string>();
   return profile.keyRatios.map((ratio) => {
-    if (ratio.label === 'Current Ratio' && replacements.has('Current Ratio')) return { ...ratio, value: replacements.get('Current Ratio')! };
-    if (ratio.label === 'Debt / Equity' && replacements.has('Debt / Equity')) return { ...ratio, value: replacements.get('Debt / Equity')! };
-    return ratio;
+    if (ratio.label === 'Current Ratio' && replacements.has('Current Ratio')) {
+      return { ...ratio, value: replacements.get('Current Ratio')!, status: 'available' as const, source };
+    }
+    if ((ratio.label === 'Debt / Equity' || ratio.label === 'Debt / Equity Ratio') && replacements.has('Debt / Equity')) {
+      return { ...ratio, value: replacements.get('Debt / Equity')!, status: 'available' as const, source };
+    }
+    return {
+      ...ratio,
+      value: 'Unavailable',
+      status: 'unavailable' as const,
+      note: 'Awaiting richer fundamentals/valuation provider such as FMP.',
+    };
   });
 }
 
@@ -430,7 +447,7 @@ export async function fetchSecTickerFundamentals(symbol: string, baseProfile: Ti
   const cashDebtSnapshot = buildCashDebtSnapshot(statements, source);
   const balanceSheetSnapshot = buildBalanceSheetSnapshot(statements, source);
 
-  if (!cashDebtSnapshot && !balanceSheetSnapshot && financialOverview.length === 0) return null;
+  if (!cashDebtSnapshot && !balanceSheetSnapshot && financialOverview.bars.length === 0) return null;
 
   return {
     cik: resolved.cik,
@@ -438,10 +455,10 @@ export async function fetchSecTickerFundamentals(symbol: string, baseProfile: Ti
     asOf,
     source,
     financialHighlights: financialHighlights.length ? financialHighlights : baseProfile.financialHighlights,
-    financialOverview: financialOverview.length ? financialOverview : baseProfile.financialOverview,
+    financialOverview: financialOverview.bars.length ? financialOverview : baseProfile.financialOverview,
     cashDebtSnapshot: cashDebtSnapshot ?? baseProfile.cashDebtSnapshot,
     balanceSheetSnapshot: balanceSheetSnapshot ?? baseProfile.balanceSheetSnapshot,
-    keyRatios: buildKeyRatios(baseProfile, balanceSheetSnapshot),
+    keyRatios: buildKeyRatios(baseProfile, balanceSheetSnapshot, source),
     resources: buildResources(baseProfile, resolved.cik, submissions, source),
   };
 }
