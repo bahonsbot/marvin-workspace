@@ -862,3 +862,21 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** high
 **Status:** active
+
+## [CORR-20260429-1530]
+
+**Trigger:** Philippe noticed that after Yahoo-backed real headlines landed, the Recent News card grew taller while SEC Filings still had a fixed-height internal scroll, making adjacent cards visually uneven.
+**What was wrong:** I optimized the SEC Filings card in isolation for a previous state, then left that fixed-height treatment in place after the neighboring card's content model changed. The local component still looked neat by itself, but the paired row no longer worked as a composition.
+**Lesson:** For Mission Control Trading paired/grid modules, validate the whole adjacent row after provider or content-density changes. A fixed-height/internal-scroll solution can be correct in isolation and wrong once the neighboring card grows. Prefer row-level visual balance over local containment when two cards are designed as a pair.
+
+**Priority:** high
+**Status:** active
+
+## [CORR-20260429-1525]
+
+**Trigger:** Philippe asked for SEC Filings to match the smaller sans/mono `RECENT NEWS` treatment after the duplicate label cleanup removed too much hierarchy.
+**What was wrong:** I removed the duplicate label and left the serif `SEC filings` heading, which solved duplication but weakened visual alignment with the adjacent News card.
+**Lesson:** When fixing duplicate labels in Mission Control product UI, preserve the surrounding section hierarchy. If two sibling cards use label-style headings, match the label treatment instead of defaulting one card back to a larger serif heading.
+
+**Priority:** medium
+**Status:** active

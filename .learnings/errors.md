@@ -1419,3 +1419,23 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** high
 **Status:** resolved
+
+## [ERR-20260429-1538]
+
+**What failed:** `lab.motiondisplay.cloud` appeared to serve an old Lab build after the Apr 29 ticker phases.
+**Error:** Philippe saw a build from the previous morning even after hard refresh. Local Lab source and `127.0.0.1:3015` were current, but the running/public lane had to be restarted and verified explicitly. The workspace also still had an older main Mission Control preview lane on `3005/3007`, while the real Lab lane is `3015/3017`, creating an easy wrong-port/wrong-build trap.
+**Context:** After many Lab-only ticker commits, the CSS/source state was correct and local health was green, but user-facing public verification initially failed from Philippe's browser. Authenticated curl to `lab.motiondisplay.cloud` later confirmed current HTML only after a clean Lab-lane restart/cache refresh.
+**Suggested fix:** For Mission Control Lab UI work, source commits, build success, and local route checks are not enough. Verify the authenticated public Lab domain for expected markers after restarting the correct Lab lane. Use `.lab-runtime/mission-control-lab.env` as port truth: public proxy `3015`, internal Next `3017`, sidecar `3016`, voice workers `3022/3023`. Treat `3005/3007` as the main/older preview lane unless the env says otherwise. When restart scripts hit PID/EADDRINUSE noise, use Lab port-scoped cleanup only, then rerun `scripts/lab-health.sh` and public authenticated marker checks.
+
+**Priority:** high
+**Status:** active
+
+## [ERR-20260429-1536]
+
+**What failed:** Lab restart flow briefly reported failure around `latest.pid` / port binding even though the lane later came up.
+**Error:** `scripts/lab-start.sh`/`preview-start.sh` can hit stale PID/EADDRINUSE timing around ports `3015/3016/3017/3022/3023` and may exit noisily while processes/logs indicate the lane is starting or already bound.
+**Context:** During public stale-build recovery, a first restart hit port collisions; a second port-scoped cleanup/start left the runtime files and processes present even though the command path had emitted a `latest.pid` timing error.
+**Suggested fix:** After Lab restart noise, inspect `.lab-runtime/*.pid`, `latest.log`, `next.log`, and actual port owners before escalating. Do not broad-kill. Clear only Lab ports if needed, restart, then trust `scripts/lab-health.sh` plus route/public marker checks over wrapper chatter alone.
+
+**Priority:** medium
+**Status:** active
