@@ -370,7 +370,6 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <section id="resources" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
           <div className="trading-section-head">
             <div>
-              <div className="trading-section-label">Resources</div>
               <h2>SEC filings</h2>
             </div>
             <span className="trading-ticker-source-note">{ticker.sourceMap.filings.freshness} · {ticker.sourceMap.filings.source}</span>
@@ -378,7 +377,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div className="trading-resource-list">
             {ticker.resources.map((group) => (
               <div key={group.label}>
-                <h3>{group.label}</h3>
+                {group.label !== 'SEC filings' ? <h3>{group.label}</h3> : null}
                 {group.items.map((item) => (
                   <a key={`${item.name}-${item.href}`} href={item.href} aria-label={`${item.name} source link`} className={item.kind ? `filing-${item.kind}` : undefined}>
                     <i>{item.form ?? item.kind ?? 'LINK'}</i>
