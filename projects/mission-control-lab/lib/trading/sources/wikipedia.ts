@@ -185,14 +185,41 @@ async function claimEntityLabel(entity: WikidataEntityResponse, wikidataId: stri
   return null;
 }
 
-function compactSummary(extract: string | undefined, fallbackName: string) {
-  const protectedText = (extract ?? '')
+function protectAbbreviations(text: string) {
+  return text
     .replace(/\.com/gi, '§com')
+    .replace(/\bU\.S\./g, 'U§S§')
+    .replace(/\bU\.K\./g, 'U§K§')
+    .replace(/\bU\.A\.E\./g, 'U§A§E§')
+    .replace(/\bE\.U\./g, 'E§U§')
+    .replace(/\bNo\./g, 'No§')
+    .replace(/\bInc\./g, 'Inc§')
+    .replace(/\bLtd\./g, 'Ltd§')
+    .replace(/\bCo\./g, 'Co§')
+    .replace(/\bCorp\./g, 'Corp§');
+}
+
+function restoreAbbreviations(text: string) {
+  return text
+    .replace(/§com/g, '.com')
+    .replace(/U§S§/g, 'U.S.')
+    .replace(/U§K§/g, 'U.K.')
+    .replace(/U§A§E§/g, 'U.A.E.')
+    .replace(/E§U§/g, 'E.U.')
+    .replace(/No§/g, 'No.')
+    .replace(/Inc§/g, 'Inc.')
+    .replace(/Ltd§/g, 'Ltd.')
+    .replace(/Co§/g, 'Co.')
+    .replace(/Corp§/g, 'Corp.');
+}
+
+function compactSummary(extract: string | undefined, fallbackName: string) {
+  const protectedText = protectAbbreviations(extract ?? '')
     .replace(/\([^)]*(?:pronounced|IPA|ə|ɪ|ʊ|ˈ|VID|ee)[^)]*\)/gi, '');
   const cleaned = protectedText.replace(/\s+/g, ' ').trim();
   if (!cleaned) return `${fallbackName} profile data is unavailable from Wikipedia right now.`;
   const sentences = cleaned.match(/[^.!?]+[.!?]+/g) ?? [cleaned];
-  return sentences.slice(0, 2).join(' ').replace(/§com/g, '.com').replace(/\s+/g, ' ').trim();
+  return restoreAbbreviations(sentences.slice(0, 2).join(' ')).replace(/\s+/g, ' ').trim();
 }
 
 function domainFromUrl(url: string | null) {
