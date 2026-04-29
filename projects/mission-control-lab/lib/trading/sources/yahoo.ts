@@ -11,6 +11,7 @@ import type {
 import type { TickerProfileSource } from '../sources';
 import { withProfileSource } from '../sources';
 import { buildSampleTickerProfile } from './sample';
+import { fetchSecTickerFundamentals } from './sec';
 import { fetchWikipediaCompanyLogo } from './wikipedia';
 
 interface YahooChartResponse {
@@ -243,6 +244,12 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     const name = meta.longName || search?.longname || meta.shortName || search?.shortname || sample.name;
     const exchange = search?.exchDisp || meta.fullExchangeName || meta.exchangeName || sample.exchange;
     const companyLogo = (await fetchWikipediaCompanyLogo(symbol, name)) ?? sample.companyLogo;
+    const secFundamentals = await fetchSecTickerFundamentals(symbol, sample);
+    if (secFundamentals) {
+      sourceMap.financials = secFundamentals.source;
+      sourceMap.resources = secFundamentals.source;
+      sourceMap.filings = secFundamentals.source;
+    }
 
     const profile: TickerProfile = {
       ...sample,
@@ -272,15 +279,16 @@ export const yahooTickerProfileSource: TickerProfileSource = {
         ...sample.companyProfile,
         source: sourceMap.profile,
       },
-      financialHighlights: buildFinancialHighlights(sample, sourceMap),
-      cashDebtSnapshot: buildCashDebtSnapshot(sample, sourceMap),
-      balanceSheetSnapshot: buildBalanceSheetSnapshot(sample, sourceMap),
+      financialHighlights: secFundamentals?.financialHighlights ?? buildFinancialHighlights(sample, sourceMap),
+      cashDebtSnapshot: secFundamentals?.cashDebtSnapshot ?? buildCashDebtSnapshot(sample, sourceMap),
+      balanceSheetSnapshot: secFundamentals?.balanceSheetSnapshot ?? buildBalanceSheetSnapshot(sample, sourceMap),
       recentNews: sample.recentNews.map((item) => ({ ...item, sourceMeta: sourceMap.news })),
-      resources: sample.resources.map((group) => ({
+      resources: secFundamentals?.resources ?? sample.resources.map((group) => ({
         ...group,
         items: group.items.map((item) => ({ ...item, source: sourceMap.resources })),
       })),
-      financialOverview: sample.financialOverview.map((item): TickerFinancialBar => ({ ...item })),
+      financialOverview: secFundamentals?.financialOverview ?? sample.financialOverview.map((item): TickerFinancialBar => ({ ...item })),
+      keyRatios: secFundamentals?.keyRatios ?? sample.keyRatios,
       sourceMap,
       asOf,
       freshness: 'fresh',

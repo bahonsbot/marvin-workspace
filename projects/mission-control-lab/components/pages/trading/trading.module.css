@@ -1356,6 +1356,10 @@
   background: #19a86b;
 }
 
+:global(.trading-financial-bars-pair b[data-negative="true"]) {
+  background: #b75c4a;
+}
+
 :global(.trading-financial-bars) {
   height: 210px;
   display: grid;

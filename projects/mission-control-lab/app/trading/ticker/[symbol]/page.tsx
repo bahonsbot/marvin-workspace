@@ -87,14 +87,14 @@ function BalanceSheetBars({ snapshot }: { snapshot: TickerBalanceSheetSnapshot }
 }
 
 function FinancialBarChart({ series }: { series: TickerFinancialBar[] }) {
-  const max = Math.max(...series.map((item) => Math.max(item.revenue, item.netIncome)));
+  const max = Math.max(...series.map((item) => Math.max(Math.abs(item.revenue), Math.abs(item.netIncome))), 1);
   return (
     <div className="trading-financial-bars" aria-label="Annual revenue and net income chart">
       {series.map((item) => (
         <div key={item.year} className="trading-financial-bar-group">
           <div className="trading-financial-bars-pair">
-            <i style={{ height: `${(item.revenue / max) * 100}%` }} aria-label={`${item.year} revenue`} />
-            <b style={{ height: `${(item.netIncome / max) * 100}%` }} aria-label={`${item.year} net income`} />
+            <i style={{ height: `${Math.max((Math.abs(item.revenue) / max) * 100, 2)}%` }} aria-label={`${item.year} revenue`} />
+            <b style={{ height: `${Math.max((Math.abs(item.netIncome) / max) * 100, 2)}%` }} aria-label={`${item.year} net income`} data-negative={item.netIncome < 0 ? 'true' : undefined} />
           </div>
           <span>{item.year}</span>
         </div>
