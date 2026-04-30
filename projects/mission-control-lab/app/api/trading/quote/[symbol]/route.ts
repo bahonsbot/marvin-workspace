@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import {
   EODHD_DELAY_NOTE,
   fetchEodhdRealtimeQuote,
+  fetchEodhdSearch,
   formatEodhdMoney,
   formatEodhdPct,
   formatEodhdQuoteTime,
@@ -23,7 +24,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ sym
 
   const now = new Date().toISOString();
   const updatedAt = quote.timestamp ? new Date(quote.timestamp * 1000).toISOString() : now;
-  const currency = normalized.endsWith('.VN') ? 'VND' : undefined;
+  const [code, exchange] = normalized.split('.');
+  const searchResult = code && exchange
+    ? (await fetchEodhdSearch(code)).find((item) => item.Code?.toUpperCase() === code && item.Exchange?.toUpperCase() === exchange)
+    : undefined;
+  const currency = searchResult?.Currency ?? (normalized.endsWith('.VN') ? 'VND' : 'USD');
   const previousClose = quote.previousClose;
   const change = quote.change ?? (previousClose != null ? quote.close - previousClose : 0);
   const changePct = quote.change_p ?? (previousClose ? (change / previousClose) * 100 : 0);

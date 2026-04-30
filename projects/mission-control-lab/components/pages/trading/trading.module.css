@@ -2443,3 +2443,84 @@
     grid-column: auto;
   }
 }
+
+:global(.trading-estimate-summary-row.compact) {
+  grid-template-columns: minmax(160px, 1fr) minmax(110px, 0.55fr) minmax(150px, 0.8fr);
+}
+
+:global(.trading-estimate-range-head em) {
+  color: rgba(34, 48, 41, 0.58);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 650;
+}
+
+:global(.trading-estimate-target-table.ordered) {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+:global(.trading-recommendation-bar.tall) {
+  height: 28px;
+}
+
+:global(.trading-recommendation-bar.tall i) {
+  display: grid;
+  min-width: 2px;
+  place-items: center;
+  overflow: hidden;
+}
+
+:global(.trading-recommendation-bar.tall span) {
+  color: rgba(255, 253, 249, 0.92);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+
+:global(.trading-estimate-eps-row.standalone) {
+  border-top: 0;
+  grid-template-columns: 1fr;
+  margin-top: 14px;
+  padding-top: 0;
+}
+
+:global(.trading-estimate-eps-row.standalone div) {
+  border-top: 1px solid rgba(28, 37, 32, 0.12);
+  padding-top: 10px;
+}
+
+:global(.trading-ticker-provider-grid) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+:global(.trading-ticker-provider-grid #estimates) {
+  grid-column: 1 / -1;
+}
+
+:global(.trading-ticker-provider-grid #eps),
+:global(.trading-ticker-provider-grid #dividends),
+:global(.trading-ticker-provider-grid #ownership),
+:global(.trading-ticker-provider-grid #technicals) {
+  grid-column: auto;
+}
+
+@media (max-width: 1180px) {
+  :global(.trading-estimate-summary-row.compact),
+  :global(.trading-ticker-provider-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  :global(.trading-ticker-provider-grid #estimates) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  :global(.trading-recommendation-bar.tall span) {
+    display: none;
+  }
+}

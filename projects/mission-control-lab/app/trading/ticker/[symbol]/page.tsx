@@ -304,20 +304,24 @@ function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
   }
 
   const metrics = stripMetricSourceNotes(section.metrics);
-  const targetMetrics = metrics.filter((metric) => metric.label.toLowerCase().startsWith('target '));
-  const targetNumbers = targetMetrics.map((metric) => ({ ...metric, numeric: parseNumber(metric.value) })).filter((metric) => metric.numeric != null) as Array<TickerDisplayMetric & { numeric: number }>;
-  const minTarget = targetNumbers.length ? Math.min(...targetNumbers.map((metric) => metric.numeric)) : 0;
-  const maxTarget = targetNumbers.length ? Math.max(...targetNumbers.map((metric) => metric.numeric)) : 1;
+  const targetMetrics = metrics
+    .filter((metric) => metric.label.toLowerCase().startsWith('target '))
+    .map((metric) => ({ ...metric, numeric: parseNumber(metric.value) }))
+    .filter((metric) => metric.numeric != null) as Array<TickerDisplayMetric & { numeric: number }>;
+  const sortedTargets = [...targetMetrics].sort((a, b) => a.numeric - b.numeric);
+  const minTarget = sortedTargets[0]?.numeric ?? 0;
+  const maxTarget = sortedTargets.at(-1)?.numeric ?? 1;
+  const meanTarget = targetMetrics.find((metric) => metric.label === 'Target mean');
+  const medianTarget = targetMetrics.find((metric) => metric.label === 'Target median');
   const recommendation = metrics.find((metric) => metric.label === 'Recommendation');
   const analystCount = metrics.find((metric) => metric.label === 'Analyst count');
-  const epsMetrics = metrics.filter((metric) => metric.label.toLowerCase().startsWith('eps'));
   const trendMetric = metrics.find((metric) => metric.label === 'Recommendation trend');
   const trend = trendMetric ? parseRecommendationTrend(trendMetric.value) : [];
   const trendTotal = trend.reduce((sum, item) => sum + item.count, 0);
 
   return (
     <div className="trading-estimates-panel">
-      <div className="trading-estimate-summary-row">
+      <div className="trading-estimate-summary-row compact">
         <div>
           <span>Consensus</span>
           <strong>{recommendation?.value ?? 'Unavailable'}</strong>
@@ -326,22 +330,28 @@ function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
           <span>Analysts</span>
           <strong>{analystCount?.value ?? '—'}</strong>
         </div>
+        {medianTarget ? (
+          <div>
+            <span>Median target</span>
+            <strong>{cleanEstimateValue(medianTarget.value)}</strong>
+          </div>
+        ) : null}
       </div>
 
-      {targetNumbers.length ? (
+      {sortedTargets.length ? (
         <div className="trading-estimate-range-card">
           <div className="trading-estimate-range-head">
             <span>Price target range</span>
-            <strong>{cleanEstimateValue(targetNumbers.find((metric) => metric.label === 'Target median')?.value ?? targetNumbers[0].value)}</strong>
+            {meanTarget ? <em>Mean {cleanEstimateValue(meanTarget.value)}</em> : null}
           </div>
           <div className="trading-estimate-range-rail" aria-label="Analyst target range">
-            {targetNumbers.map((metric) => {
+            {sortedTargets.map((metric) => {
               const left = maxTarget === minTarget ? 50 : ((metric.numeric - minTarget) / (maxTarget - minTarget)) * 100;
               return <i key={metric.label} style={{ left: `${left}%` }} title={`${metric.label}: ${metric.value}`} />;
             })}
           </div>
-          <dl className="trading-estimate-target-table">
-            {targetMetrics.map((metric) => (
+          <dl className="trading-estimate-target-table ordered">
+            {sortedTargets.map((metric) => (
               <div key={metric.label}>
                 <dt>{metric.label.replace('Target ', '')}</dt>
                 <dd>{cleanEstimateValue(metric.value)}</dd>
@@ -353,30 +363,36 @@ function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
 
       {trend.length ? (
         <div className="trading-recommendation-stack">
-          <div className="trading-recommendation-bar" aria-label="Recommendation trend">
+          <div className="trading-recommendation-bar tall" aria-label="Recommendation trend">
             {trend.map((item) => (
-              <i key={item.key} className={`rec-${item.key}`} style={{ width: `${trendTotal ? (item.count / trendTotal) * 100 : 0}%` }} title={`${item.label}: ${item.count}`} />
+              <i key={item.key} className={`rec-${item.key}`} style={{ width: `${trendTotal ? (item.count / trendTotal) * 100 : 0}%` }} title={`${item.label}: ${item.count}`}>
+                <span>{item.count ? `${item.label} ${item.count}` : ''}</span>
+              </i>
             ))}
-          </div>
-          <div className="trading-recommendation-legend">
-            {trend.map((item) => <span key={item.key}>{item.label} {item.count}</span>)}
           </div>
         </div>
       ) : null}
 
-      {epsMetrics.length ? (
-        <dl className="trading-estimate-eps-row">
-          {epsMetrics.map((metric) => (
-            <div key={metric.label}>
-              <dt>{metric.label.replace('EPS ', '')}</dt>
-              <dd>{metric.value}</dd>
-            </div>
-          ))}
-        </dl>
-      ) : null}
-
       <p className="trading-financial-caption">{sourceList(section.metrics, section.source)}</p>
     </div>
+  );
+}
+
+function EpsPanel({ section }: { section?: TickerSupplementalSection }) {
+  const metrics = stripMetricSourceNotes(section?.metrics ?? []).filter((metric) => metric.label.toLowerCase().startsWith('eps'));
+  if (!metrics.length) return <EmptySectionState note="EPS estimates are not available from the current provider." />;
+  return (
+    <>
+      <dl className="trading-estimate-eps-row standalone">
+        {metrics.map((metric) => (
+          <div key={metric.label}>
+            <dt>{metric.label.replace('EPS ', '')}</dt>
+            <dd>{metric.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="trading-financial-caption">{sourceList(section?.metrics ?? [], section?.source)}</p>
+    </>
   );
 }
 
@@ -688,6 +704,10 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <section id="estimates" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
           <div className="trading-section-label">Estimates</div>
           <EstimatesPanel section={estimatesSection} />
+        </section>
+        <section id="eps" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+          <div className="trading-section-label">EPS estimates</div>
+          <EpsPanel section={estimatesSection} />
         </section>
         <section id="dividends" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
           <div className="trading-section-label">Dividends</div>
