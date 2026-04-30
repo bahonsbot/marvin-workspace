@@ -27,6 +27,12 @@ export interface TickerQuote {
   currency: string;
   tone: 'positive' | 'negative' | 'neutral';
   source: TickerSourceMeta;
+  symbol?: string;
+  rawPrice?: number | null;
+  rawChange?: number | null;
+  rawChangePct?: number | null;
+  updatedAt?: string | null;
+  providerDelay?: string;
 }
 
 export interface TickerProfileFact {

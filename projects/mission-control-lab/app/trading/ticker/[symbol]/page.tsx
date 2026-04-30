@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { TickerPriceChart } from '@/components/pages/trading/TickerPriceChart';
+import { TickerQuoteRefresh } from '@/components/pages/trading/TickerQuoteRefresh';
 import { MarketTape, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { marketTape } from '@/components/pages/trading/trading-sample-data';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
@@ -241,11 +242,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        <div className="trading-ticker-price-block">
-          <strong>{ticker.quote.price}</strong>
-          <em className={ticker.quote.tone}>{ticker.quote.change} ({ticker.quote.changePct})</em>
-          <span>{ticker.quote.priceTime}</span>
-        </div>
+        <TickerQuoteRefresh initialQuote={ticker.quote} />
 
         <dl className="trading-ticker-stat-strip">
           {ticker.headerStats.map((stat) => (

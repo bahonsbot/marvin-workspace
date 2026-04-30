@@ -49,7 +49,7 @@ interface EodhdIntradayRow {
   volume?: number;
 }
 
-interface EodhdQuoteResponse {
+export interface EodhdQuoteResponse {
   code?: string;
   timestamp?: number;
   open?: number;
@@ -166,7 +166,7 @@ function compact(value: number | null | undefined, digits = 2) {
   return Number(value.toFixed(digits));
 }
 
-function formatMoney(value: number | null | undefined, currency = 'USD') {
+export function formatEodhdMoney(value: number | null | undefined, currency = 'USD') {
   if (value == null || Number.isNaN(value)) return '$—';
   try {
     return new Intl.NumberFormat('en-US', {
@@ -179,20 +179,22 @@ function formatMoney(value: number | null | undefined, currency = 'USD') {
   }
 }
 
-function formatQuoteTime(epochSeconds: number | undefined, fallback: string) {
+export function formatEodhdQuoteTime(epochSeconds: number | undefined, fallback: string) {
   const asOf = epochSeconds ? new Date(epochSeconds * 1000) : new Date(fallback);
   return `EODHD · ${new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' }).format(asOf)}`;
 }
 
-function formatSigned(value: number) {
+export function formatEodhdSigned(value: number) {
   const prefix = value > 0 ? '+' : '';
   return `${prefix}${value.toFixed(2)}`;
 }
 
-function formatPct(value: number) {
+export function formatEodhdPct(value: number) {
   const prefix = value > 0 ? '+' : '';
   return `${prefix}${value.toFixed(2)}%`;
 }
+
+export const EODHD_DELAY_NOTE = 'EODHD delayed quote, exact exchange delay not reported by this endpoint.';
 
 function formatLarge(value: number | null | undefined) {
   if (value == null || Number.isNaN(value)) return '—';
@@ -251,7 +253,7 @@ function endpoint(path: string, params: Record<string, string | number | undefin
   return `${EODHD_BASE_URL}${path}?${search.toString()}`;
 }
 
-async function fetchEodhdJson<T>(path: string, params: Record<string, string | number | undefined | null> = {}): Promise<T | null> {
+export async function fetchEodhdJson<T>(path: string, params: Record<string, string | number | undefined | null> = {}): Promise<T | null> {
   const url = endpoint(path, params);
   if (!url) return null;
 
@@ -339,11 +341,11 @@ function statsForPoints(points: EodhdPoint[], currency: string): TickerDisplayMe
   const lows = points.map((point) => point.low).filter((value): value is number => typeof value === 'number' && Number.isFinite(value));
   const volume = points.reduce((sum, point) => sum + (point.volume ?? 0), 0);
   return [
-    { label: 'Range Start', value: formatMoney(first?.value, currency) },
-    { label: 'Range End', value: formatMoney(last?.value, currency) },
-    { label: 'Range Change', value: change == null ? '$—' : `${formatSigned(change)} (${formatPct(changePct ?? 0)})` },
-    { label: 'Range High', value: formatMoney(highs.length ? Math.max(...highs) : undefined, currency) },
-    { label: 'Range Low', value: formatMoney(lows.length ? Math.min(...lows) : undefined, currency) },
+    { label: 'Range Start', value: formatEodhdMoney(first?.value, currency) },
+    { label: 'Range End', value: formatEodhdMoney(last?.value, currency) },
+    { label: 'Range Change', value: change == null ? '$—' : `${formatEodhdSigned(change)} (${formatEodhdPct(changePct ?? 0)})` },
+    { label: 'Range High', value: formatEodhdMoney(highs.length ? Math.max(...highs) : undefined, currency) },
+    { label: 'Range Low', value: formatEodhdMoney(lows.length ? Math.min(...lows) : undefined, currency) },
     { label: 'Range Volume', value: formatLarge(volume) },
   ];
 }
@@ -420,6 +422,12 @@ export async function fetchEodhdSearch(query: string) {
 
 async function fetchEodhdExchangeDetails(exchange: string) {
   return fetchEodhdJson<EodhdExchangeDetails>(`/exchange-details/${encodeURIComponent(exchange)}`);
+}
+
+export async function fetchEodhdRealtimeQuote(symbol: string) {
+  const normalized = safeSymbol(symbol);
+  if (!normalized || !normalized.includes('.')) return null;
+  return fetchEodhdJson<EodhdQuoteResponse>(`/real-time/${encodeURIComponent(normalized)}`);
 }
 
 export async function resolveEodhdSymbol(symbol: string) {
@@ -515,14 +523,14 @@ export function buildEodhdDividendMetrics(bundle: EodhdMarketDataBundle): Ticker
   return [
     {
       label: 'Latest dividend',
-      value: latest?.value != null ? formatMoney(latest.value, latest.currency ?? bundle.searchResult?.Currency ?? 'USD') : 'Data unavailable',
+      value: latest?.value != null ? formatEodhdMoney(latest.value, latest.currency ?? bundle.searchResult?.Currency ?? 'USD') : 'Data unavailable',
       status: latest ? 'available' : 'unavailable',
       note: latest?.date ? `Ex-date ${latest.date}${latest.paymentDate ? ` · paid ${latest.paymentDate}` : ''}` : 'EODHD returned no dividend rows for this symbol.',
       source: bundle.source,
     },
     {
       label: 'Trailing 12M dividends',
-      value: trailing.length ? formatMoney(trailingTotal, latest?.currency ?? bundle.searchResult?.Currency ?? 'USD') : 'Data unavailable',
+      value: trailing.length ? formatEodhdMoney(trailingTotal, latest?.currency ?? bundle.searchResult?.Currency ?? 'USD') : 'Data unavailable',
       status: trailing.length ? 'available' : 'unavailable',
       note: trailing.length ? `${trailing.length} payment${trailing.length === 1 ? '' : 's'} in the last year.` : 'No trailing dividend payments found.',
       source: bundle.source,
@@ -555,9 +563,9 @@ export function buildEodhdTechnicalMetrics(bundle: EodhdMarketDataBundle): Ticke
   const returnPct = latest != null && first ? ((latest - first) / first) * 100 : null;
   const currency = bundle.quote?.code?.endsWith('.VN') ? 'VND' : bundle.searchResult?.Currency ?? 'USD';
   return [
-    { label: '1Y range high', value: formatMoney(yearHigh, currency), status: yearHigh == null ? 'unavailable' : 'available', source: bundle.source },
-    { label: '1Y range low', value: formatMoney(yearLow, currency), status: yearLow == null ? 'unavailable' : 'available', source: bundle.source },
-    { label: '1Y return', value: returnPct == null ? 'Data unavailable' : formatPct(returnPct), status: returnPct == null ? 'unavailable' : 'available', source: bundle.source },
+    { label: '1Y range high', value: formatEodhdMoney(yearHigh, currency), status: yearHigh == null ? 'unavailable' : 'available', source: bundle.source },
+    { label: '1Y range low', value: formatEodhdMoney(yearLow, currency), status: yearLow == null ? 'unavailable' : 'available', source: bundle.source },
+    { label: '1Y return', value: returnPct == null ? 'Data unavailable' : formatEodhdPct(returnPct), status: returnPct == null ? 'unavailable' : 'available', source: bundle.source },
   ];
 }
 
@@ -731,13 +739,19 @@ export const eodhdTickerProfileSource: TickerProfileSource = {
       currency,
       inWatchlist: false,
       quote: {
-        price: formatMoney(price, currency),
-        change: formatSigned(change),
-        changePct: formatPct(changePct),
-        priceTime: formatQuoteTime(bundle.quote.timestamp, asOf),
+        price: formatEodhdMoney(price, currency),
+        change: formatEodhdSigned(change),
+        changePct: formatEodhdPct(changePct),
+        priceTime: formatEodhdQuoteTime(bundle.quote.timestamp, asOf),
         currency,
         tone,
         source: bundle.source,
+        symbol: bundle.resolvedSymbol,
+        rawPrice: price ?? null,
+        rawChange: change,
+        rawChangePct: changePct,
+        updatedAt: bundle.quote.timestamp ? new Date(bundle.quote.timestamp * 1000).toISOString() : asOf,
+        providerDelay: EODHD_DELAY_NOTE,
       },
       headerStats: buildHeaderStats(bundle),
       tabs: ['Overview', 'Financials', 'News', 'Metrics', 'Estimates', 'Dividends', 'Ownership', 'SEC Filings'],
