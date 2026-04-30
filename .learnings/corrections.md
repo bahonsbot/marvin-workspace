@@ -889,3 +889,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** medium
 **Status:** active
+
+## [CORR-20260430-1419]
+
+**Trigger:** Philippe warned that a previous "safe cleanup" had broken parts of the Lab runway and destabilized Dashboard, and asked for an ultra-conservative retry.
+**What was wrong:** I initially treated too many dirty paths as cleanup candidates based on file type or apparent disposability instead of proving they were operationally isolated. In this workspace, screenshots, caches, runtime directories, and tracked deletions can all carry different levels of blast radius.
+**Lesson:** For cleanup in shared Mission Control / Lab environments, do a read-only triage first and separate items into `110% safe`, `probably safe`, and `hands off`. Default runtime folders, build outputs, logs, tracked deletions, and audit artifacts to `hands off` unless Philippe explicitly approves that exact bucket.
+
+**Priority:** high
+**Status:** active
