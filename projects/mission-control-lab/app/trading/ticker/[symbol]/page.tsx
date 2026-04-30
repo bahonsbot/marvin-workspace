@@ -72,6 +72,37 @@ function formatCaptionSource(source: TickerSourceMeta | undefined, options: { in
   return `Source: ${label} · Updated: ${updated}`;
 }
 
+
+
+function normalizeCompanyName(value: string) {
+  return value.replace(/\s+N\.\s*V\.?/gi, ' N.V.').replace(/\s+/g, ' ').trim();
+}
+
+function profileSummaryText(summary: string, displayName: string) {
+  const normalizedSummary = normalizeCompanyName(summary);
+  const normalizedName = normalizeCompanyName(displayName);
+  if (!normalizedSummary || normalizedSummary === normalizedName) return null;
+  return normalizedSummary;
+}
+
+function metricCurrency(metrics: TickerDisplayMetric[] = []) {
+  for (const metric of metrics) {
+    const match = /^([A-Z]{3})\s+/.exec(metric.value);
+    if (match) return match[1];
+  }
+  return null;
+}
+
+function normalizeMetricCurrencies(metrics: TickerDisplayMetric[], currency?: string) {
+  if (!currency) return metrics;
+  return metrics.map((metric) => ({ ...metric, value: metric.value.replace(/^[A-Z]{3}\s+/, `${currency} `) }));
+}
+
+function normalizeSupplementalCurrencies(section: TickerSupplementalSection | undefined, currency?: string): TickerSupplementalSection | undefined {
+  if (!section || !currency) return section;
+  return { ...section, metrics: normalizeMetricCurrencies(section.metrics, currency) };
+}
+
 function sourceList(metrics: Array<{ source?: TickerSourceMeta }> = [], fallback?: TickerSourceMeta) {
   const labels = new Set<string>();
   for (const metric of metrics) {
@@ -83,7 +114,15 @@ function sourceList(metrics: Array<{ source?: TickerSourceMeta }> = [], fallback
 }
 
 function cleanProfileFacts(facts: TickerProfileFact[]) {
-  return facts.filter((fact) => !['wikidata', 'industry group', 'company name'].includes(fact.label.toLowerCase()));
+  const hidden = new Set(['wikidata', 'industry group', 'company name', 'quote type']);
+  const preferred = new Map<string, TickerProfileFact>();
+  for (const fact of facts) {
+    const key = fact.label.toLowerCase();
+    if (hidden.has(key)) continue;
+    const current = preferred.get(key);
+    if (!current || current.value === 'Provider pending' || current.value.length > fact.value.length) preferred.set(key, fact);
+  }
+  return Array.from(preferred.values());
 }
 
 function profileFactValue(fact: TickerProfileFact) {
@@ -95,8 +134,8 @@ function profileFactValue(fact: TickerProfileFact) {
 function titleFromProfile(tickerName: string, summary: string, facts: TickerProfileFact[]) {
   if (!tickerName.includes('.')) return tickerName;
   const companyName = facts.find((fact) => fact.label.toLowerCase() === 'company name')?.value;
-  if (companyName) return companyName;
-  const firstSentence = summary.split(/\.\s+/)[0]?.trim().replace(/\s+N\.\s*V\.?$/i, ' N.V.');
+  if (companyName) return normalizeCompanyName(companyName);
+  const firstSentence = normalizeCompanyName(summary.split(/\.\s+/)[0] ?? '');
   if (firstSentence && firstSentence.length <= 80 && !firstSentence.includes('Provider-backed')) return firstSentence;
   return tickerName;
 }
@@ -234,61 +273,119 @@ function BalanceSheetBars({ snapshot }: { snapshot: TickerBalanceSheetSnapshot }
   );
 }
 
-function SupplementalDataPanel({ section, visual = false }: { section?: TickerSupplementalSection; visual?: boolean }) {
+function cleanEstimateValue(value: string) {
+  return value.replace(/^[A-Z]{3}\s+/, '');
+}
+
+function parseNumber(value: string) {
+  const cleaned = value.replace(/^[A-Z]{3}\s+/, '').replace(/,/g, '').replace(/%$/, '');
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseRecommendationTrend(value: string) {
+  const labels: Record<string, string> = {
+    strongBuy: 'Strong buy',
+    buy: 'Buy',
+    hold: 'Hold',
+    sell: 'Sell',
+    strongSell: 'Strong sell',
+  };
+  return value.split('·').map((part) => {
+    const [rawKey, rawValue] = part.trim().split(':').map((item) => item.trim());
+    const count = Number(rawValue);
+    return { key: rawKey, label: labels[rawKey] ?? rawKey, count: Number.isFinite(count) ? count : 0 };
+  }).filter((item) => item.key);
+}
+
+function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
   if (!section || !section.metrics.length) {
     return <EmptySectionState note={section?.note ?? 'Provider-backed data is not available for this module yet.'} />;
   }
 
   const metrics = stripMetricSourceNotes(section.metrics);
   const targetMetrics = metrics.filter((metric) => metric.label.toLowerCase().startsWith('target '));
+  const targetNumbers = targetMetrics.map((metric) => ({ ...metric, numeric: parseNumber(metric.value) })).filter((metric) => metric.numeric != null) as Array<TickerDisplayMetric & { numeric: number }>;
+  const minTarget = targetNumbers.length ? Math.min(...targetNumbers.map((metric) => metric.numeric)) : 0;
+  const maxTarget = targetNumbers.length ? Math.max(...targetNumbers.map((metric) => metric.numeric)) : 1;
   const recommendation = metrics.find((metric) => metric.label === 'Recommendation');
   const analystCount = metrics.find((metric) => metric.label === 'Analyst count');
   const epsMetrics = metrics.filter((metric) => metric.label.toLowerCase().startsWith('eps'));
-  const otherMetrics = metrics.filter((metric) => !targetMetrics.includes(metric) && metric !== recommendation && metric !== analystCount && !epsMetrics.includes(metric));
+  const trendMetric = metrics.find((metric) => metric.label === 'Recommendation trend');
+  const trend = trendMetric ? parseRecommendationTrend(trendMetric.value) : [];
+  const trendTotal = trend.reduce((sum, item) => sum + item.count, 0);
 
-  if (visual && (targetMetrics.length || recommendation || epsMetrics.length)) {
-    return (
-      <>
-        {targetMetrics.length ? (
-          <div className="trading-estimate-target-strip">
+  return (
+    <div className="trading-estimates-panel">
+      <div className="trading-estimate-summary-row">
+        <div>
+          <span>Consensus</span>
+          <strong>{recommendation?.value ?? 'Unavailable'}</strong>
+        </div>
+        <div>
+          <span>Analysts</span>
+          <strong>{analystCount?.value ?? '—'}</strong>
+        </div>
+      </div>
+
+      {targetNumbers.length ? (
+        <div className="trading-estimate-range-card">
+          <div className="trading-estimate-range-head">
+            <span>Price target range</span>
+            <strong>{cleanEstimateValue(targetNumbers.find((metric) => metric.label === 'Target median')?.value ?? targetNumbers[0].value)}</strong>
+          </div>
+          <div className="trading-estimate-range-rail" aria-label="Analyst target range">
+            {targetNumbers.map((metric) => {
+              const left = maxTarget === minTarget ? 50 : ((metric.numeric - minTarget) / (maxTarget - minTarget)) * 100;
+              return <i key={metric.label} style={{ left: `${left}%` }} title={`${metric.label}: ${metric.value}`} />;
+            })}
+          </div>
+          <dl className="trading-estimate-target-table">
             {targetMetrics.map((metric) => (
-              <article key={metric.label}>
-                <span>{metric.label.replace('Target ', '')}</span>
-                <strong>{metric.value}</strong>
-              </article>
-            ))}
-          </div>
-        ) : null}
-        {recommendation || analystCount ? (
-          <div className="trading-estimate-consensus">
-            {recommendation ? <strong>{recommendation.value}</strong> : null}
-            {analystCount ? <span>{analystCount.value} analysts</span> : null}
-          </div>
-        ) : null}
-        {epsMetrics.length ? (
-          <dl className="trading-supplemental-metric-grid compact">
-            {epsMetrics.map((metric) => (
               <div key={metric.label}>
-                <dt>{metric.label}</dt>
-                <dd>{metric.value}</dd>
+                <dt>{metric.label.replace('Target ', '')}</dt>
+                <dd>{cleanEstimateValue(metric.value)}</dd>
               </div>
             ))}
           </dl>
-        ) : null}
-        {otherMetrics.length ? (
-          <dl className="trading-supplemental-metric-grid compact">
-            {otherMetrics.map((metric) => (
-              <div key={metric.label}>
-                <dt>{metric.label}</dt>
-                <dd>{metric.value}</dd>
-              </div>
+        </div>
+      ) : null}
+
+      {trend.length ? (
+        <div className="trading-recommendation-stack">
+          <div className="trading-recommendation-bar" aria-label="Recommendation trend">
+            {trend.map((item) => (
+              <i key={item.key} className={`rec-${item.key}`} style={{ width: `${trendTotal ? (item.count / trendTotal) * 100 : 0}%` }} title={`${item.label}: ${item.count}`} />
             ))}
-          </dl>
-        ) : null}
-        <p className="trading-financial-caption">{sourceList(section.metrics, section.source)}</p>
-      </>
-    );
+          </div>
+          <div className="trading-recommendation-legend">
+            {trend.map((item) => <span key={item.key}>{item.label} {item.count}</span>)}
+          </div>
+        </div>
+      ) : null}
+
+      {epsMetrics.length ? (
+        <dl className="trading-estimate-eps-row">
+          {epsMetrics.map((metric) => (
+            <div key={metric.label}>
+              <dt>{metric.label.replace('EPS ', '')}</dt>
+              <dd>{metric.value}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
+
+      <p className="trading-financial-caption">{sourceList(section.metrics, section.source)}</p>
+    </div>
+  );
+}
+
+function SupplementalDataPanel({ section }: { section?: TickerSupplementalSection }) {
+  if (!section || !section.metrics.length) {
+    return <EmptySectionState note={section?.note ?? 'Provider-backed data is not available for this module yet.'} />;
   }
+
+  const metrics = stripMetricSourceNotes(section.metrics);
 
   return (
     <>
@@ -330,10 +427,27 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const { symbol } = await params;
   const upperSymbol = symbol.toUpperCase();
   const ticker = await getTickerProfile(upperSymbol);
-  const profileFacts = cleanProfileFacts(ticker.companyProfile.facts);
-  const displayName = titleFromProfile(ticker.name, ticker.companyProfile.summary, profileFacts);
-  const headerStats = normalizeHeaderStats(ticker.headerStats, profileFacts);
+  const rawProfileFacts = ticker.companyProfile.facts;
+  const profileFacts = cleanProfileFacts(rawProfileFacts);
+  const displayName = titleFromProfile(ticker.name, ticker.companyProfile.summary, rawProfileFacts);
+  const headerStats = normalizeHeaderStats(ticker.headerStats, rawProfileFacts);
+  const profileFactsByLabel = new Map(profileFacts.map((fact) => [fact.label.toLowerCase(), fact]));
+  for (const stat of headerStats) {
+    const key = stat.label.toLowerCase();
+    if ((key === 'sector' || key === 'industry' || key === 'country') && stat.value && stat.value !== 'Provider pending') {
+      profileFactsByLabel.set(key, { label: stat.label, value: stat.value });
+    }
+  }
+  const displayProfileFacts = Array.from(profileFactsByLabel.values());
   const hasResources = ticker.resources.some((group) => group.items.length);
+  const profileSummary = profileSummaryText(ticker.companyProfile.summary, displayName);
+  const displayCurrency = ticker.currency || metricCurrency(ticker.supplemental?.estimates.metrics) || metricCurrency(ticker.supplemental?.dividends.metrics) || undefined;
+  const priceRangeSeries = ticker.priceSeries.rangeSeries
+    ? Object.fromEntries(Object.entries(ticker.priceSeries.rangeSeries).map(([range, series]) => [range, { ...series, stats: normalizeMetricCurrencies(series.stats, displayCurrency) }]))
+    : undefined;
+  const estimatesSection = normalizeSupplementalCurrencies(ticker.supplemental?.estimates, displayCurrency);
+  const dividendsSection = normalizeSupplementalCurrencies(ticker.supplemental?.dividends, displayCurrency);
+  const technicalsSection = normalizeSupplementalCurrencies(ticker.supplemental?.technicals, displayCurrency);
 
 
   return (
@@ -385,14 +499,14 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
               <div className="trading-section-label">Price history</div>
             </div>
           </div>
-          <TickerPriceChart ranges={ticker.priceSeries.ranges} activeRange={ticker.priceSeries.activeRange} rangeSeries={ticker.priceSeries.rangeSeries} />
+          <TickerPriceChart ranges={ticker.priceSeries.ranges} activeRange={ticker.priceSeries.activeRange} rangeSeries={priceRangeSeries} />
         </section>
 
         <section id="company-profile" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
           <div className="trading-section-label">Company profile</div>
-          <p className="trading-ticker-profile-copy">{ticker.companyProfile.summary}</p>
+          {profileSummary ? <p className="trading-ticker-profile-copy">{profileSummary}</p> : null}
           <dl className="trading-profile-facts">
-            {profileFacts.map((fact) => (
+            {displayProfileFacts.map((fact) => (
               <div key={fact.label}>
                 <dt>{fact.label}</dt>
                 <dd>{profileFactValue(fact)}</dd>
@@ -573,11 +687,11 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       <div className="trading-ticker-placeholder-grid trading-ticker-provider-grid">
         <section id="estimates" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
           <div className="trading-section-label">Estimates</div>
-          <SupplementalDataPanel section={ticker.supplemental?.estimates} visual />
+          <EstimatesPanel section={estimatesSection} />
         </section>
         <section id="dividends" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
           <div className="trading-section-label">Dividends</div>
-          <SupplementalDataPanel section={ticker.supplemental?.dividends} />
+          <SupplementalDataPanel section={dividendsSection} />
         </section>
         <section id="ownership" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
           <div className="trading-section-label">Ownership</div>
@@ -585,7 +699,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </section>
         <section id="technicals" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
           <div className="trading-section-label">Technicals</div>
-          <SupplementalDataPanel section={ticker.supplemental?.technicals} />
+          <SupplementalDataPanel section={technicalsSection} />
         </section>
       </div>
     </TradingPageFrame>

@@ -167,15 +167,16 @@ function compact(value: number | null | undefined, digits = 2) {
 }
 
 export function formatEodhdMoney(value: number | null | undefined, currency = 'USD') {
-  if (value == null || Number.isNaN(value)) return '$—';
+  if (value == null || Number.isNaN(value)) return '—';
+  const decimals = Math.abs(value) >= 100 ? 2 : 4;
   try {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      maximumFractionDigits: value >= 100 ? 2 : 2,
+    const formatted = new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: decimals,
+      minimumFractionDigits: Math.abs(value) >= 100 ? 2 : 0,
     }).format(value);
+    return `${currency} ${formatted}`;
   } catch {
-    return `${currency} ${value.toFixed(value >= 100 ? 2 : 4)}`;
+    return `${currency} ${value.toFixed(decimals)}`;
   }
 }
 
@@ -345,7 +346,7 @@ function statsForPoints(points: EodhdPoint[], currency: string): TickerDisplayMe
   return [
     { label: 'Range Start', value: formatEodhdMoney(first?.value, currency) },
     { label: 'Range End', value: formatEodhdMoney(last?.value, currency) },
-    { label: 'Range Change', value: change == null ? '$—' : `${formatEodhdSigned(change)} (${formatEodhdPct(changePct ?? 0)})` },
+    { label: 'Range Change', value: change == null ? '—' : `${formatEodhdSigned(change)} (${formatEodhdPct(changePct ?? 0)})` },
     { label: 'Range High', value: formatEodhdMoney(highs.length ? Math.max(...highs) : undefined, currency) },
     { label: 'Range Low', value: formatEodhdMoney(lows.length ? Math.min(...lows) : undefined, currency) },
     { label: 'Range Volume', value: formatLarge(volume) },
@@ -563,7 +564,7 @@ export function buildEodhdTechnicalMetrics(bundle: EodhdMarketDataBundle): Ticke
   const yearLow = values.length ? Math.min(...values) : null;
   const first = values.at(0);
   const returnPct = latest != null && first ? ((latest - first) / first) * 100 : null;
-  const currency = bundle.quote?.code?.endsWith('.VN') ? 'VND' : bundle.searchResult?.Currency ?? 'USD';
+  const currency = bundle.searchResult?.Currency ?? (bundle.quote?.code?.endsWith('.VN') ? 'VND' : 'USD');
   return [
     { label: '1Y range high', value: formatEodhdMoney(yearHigh, currency), status: yearHigh == null ? 'unavailable' : 'available', source: bundle.source },
     { label: '1Y range low', value: formatEodhdMoney(yearLow, currency), status: yearLow == null ? 'unavailable' : 'available', source: bundle.source },
