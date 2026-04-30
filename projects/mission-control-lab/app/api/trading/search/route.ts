@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchEodhdSearch, type EodhdSearchResult } from '@/lib/trading/sources/eodhd';
+import { searchFinanceDatabase } from '@/lib/trading/sources/finance-database';
 
 const FALLBACK_EXPANSIONS: Record<string, string[]> = {
   TSM: ['Taiwan Semiconductor Manufacturing'],
@@ -45,10 +46,11 @@ async function expandedEodhdSearch(query: string) {
     ...companyNameFromPrimary(primary, query),
   ])).slice(0, 2);
 
-  if (!expansions.length) return primary;
+  const financeDatabaseResults = searchFinanceDatabase(query);
+  if (!expansions.length) return [...primary, ...financeDatabaseResults];
   const expanded = await Promise.all(expansions.map((term) => fetchEodhdSearch(term)));
   const merged = new Map<string, EodhdSearchResult>();
-  for (const item of [...primary, ...expanded.flat()]) {
+  for (const item of [...primary, ...expanded.flat(), ...financeDatabaseResults]) {
     const key = resultKey(item);
     if (!item.Code || !item.Exchange || !key.includes('.')) continue;
     if (!merged.has(key)) merged.set(key, item);

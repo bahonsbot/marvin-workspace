@@ -1,2 +1,3 @@
 # Runtime ticker-profile cache. Generated on demand by lib/trading/cache.ts.
 ticker-profiles/
+finance-database-symbol-index.json

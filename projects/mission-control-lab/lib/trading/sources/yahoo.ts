@@ -13,9 +13,11 @@ import type {
 import type { TickerProfileSource } from '../sources';
 import { withProfileSource } from '../sources';
 import { buildEodhdDividendMetrics, buildEodhdTechnicalMetrics, eodhdSource, fetchEodhdMarketData } from './eodhd';
+import { financeDatabaseFacts, financeDatabaseSource, findFinanceDatabaseProfile } from './finance-database';
 import { buildSampleTickerProfile } from './sample';
 import { fetchSecTickerFundamentals } from './sec';
 import { fetchWikipediaCompanyLogo, fetchWikipediaCompanyProfile } from './wikipedia';
+import { bridgeMetricsToDisplay, fetchYfinanceBridge, mergeFacts, mergeHeaderStats, mergeKeyRatios, yfinanceSource } from './yfinance-bridge';
 
 interface YahooChartResponse {
   chart?: {
@@ -440,6 +442,7 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     if (!meta || !quote?.close?.length || meta.instrumentType !== 'EQUITY') return null;
 
     const sample = buildSampleTickerProfile(symbol);
+    const financeDatabaseProfile = findFinanceDatabaseProfile(symbol);
     const asOf = formatAsOf(meta.regularMarketTime);
     const sourceMap = buildYahooSourceMap(asOf);
     const closes = validNumbers(quote.close);
@@ -452,15 +455,25 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     const name = meta.longName || searchQuote?.longname || meta.shortName || searchQuote?.shortname || sample.name;
     const exchange = searchQuote?.exchDisp || meta.fullExchangeName || meta.exchangeName || sample.exchange;
     const eodhdSymbol = searchQuote?.symbol && !symbol.includes('.') ? searchQuote.symbol : symbol;
-    const [companyLogoResult, companyProfileResult, yahooRangeSeries, eodhdMarketData, secFundamentals] = await Promise.all([
+    const [companyLogoResult, companyProfileResult, yahooRangeSeries, eodhdMarketData, secFundamentals, yfinanceData] = await Promise.all([
       fetchWikipediaCompanyLogo(symbol, name),
       fetchWikipediaCompanyProfile(symbol, name, sample.companyProfile.facts),
       fetchYahooRangeSeries(symbol, sourceMap.prices),
       fetchEodhdMarketData(eodhdSymbol),
       fetchSecTickerFundamentals(symbol, sample),
+      fetchYfinanceBridge(symbol),
     ]);
     const companyLogo = companyLogoResult ?? sample.companyLogo;
+    const yfinanceMetaSource = yfinanceData ? yfinanceSource(yfinanceData.asOf, yfinanceData.sourceNote) : null;
     const companyProfile = companyProfileResult?.profile ?? { ...sample.companyProfile, source: sourceMap.profile };
+    if (financeDatabaseProfile) {
+      companyProfile.facts = mergeFacts(companyProfile.facts, financeDatabaseFacts(financeDatabaseProfile));
+      if (!companyProfileResult) companyProfile.source = financeDatabaseSource('FinanceDatabase static equities index used for company reference facts.');
+    }
+    if (yfinanceData?.facts?.length) {
+      companyProfile.facts = mergeFacts(companyProfile.facts, yfinanceData.facts);
+      if (!companyProfileResult && yfinanceMetaSource) companyProfile.source = yfinanceMetaSource;
+    }
     if (companyProfileResult) {
       sourceMap.profile = companyProfileResult.profile.source;
     }
@@ -480,6 +493,26 @@ export const yahooTickerProfileSource: TickerProfileSource = {
       sourceMap.news = missingYahooSource(asOf, 'Market-data providers returned no usable linked headlines for this ticker. No sample headlines are shown for provider-backed symbols.');
     }
     const supplemental = buildUnavailableSupplemental(asOf);
+    if (yfinanceMetaSource) {
+      const estimateMetrics = bridgeMetricsToDisplay(yfinanceData?.estimates, yfinanceMetaSource);
+      if (estimateMetrics.length) {
+        supplemental.estimates = {
+          status: estimateMetrics.some((metric) => metric.status === 'available') ? 'available' : 'partial',
+          note: 'Analyst estimates, price targets, and recommendation trend from yfinance/Yahoo Finance.',
+          source: yfinanceMetaSource,
+          metrics: estimateMetrics,
+        };
+      }
+      const ownershipMetrics = bridgeMetricsToDisplay(yfinanceData?.ownership, yfinanceMetaSource);
+      if (ownershipMetrics.length) {
+        supplemental.ownership = {
+          status: ownershipMetrics.some((metric) => metric.status === 'available') ? 'available' : 'partial',
+          note: 'Ownership summary from yfinance/Yahoo Finance holder endpoints.',
+          source: yfinanceMetaSource,
+          metrics: ownershipMetrics,
+        };
+      }
+    }
     if (eodhdMarketData) {
       const dividendMetrics = buildEodhdDividendMetrics(eodhdMarketData);
       supplemental.dividends = {
@@ -515,7 +548,7 @@ export const yahooTickerProfileSource: TickerProfileSource = {
         tone,
         source: sourceMap.quote,
       },
-      headerStats: buildHeaderStats(sample, search, meta),
+      headerStats: mergeHeaderStats(buildHeaderStats(sample, search, meta), yfinanceData?.headerStats, yfinanceMetaSource ?? sourceMap.profile),
       companyLogo,
       priceSeries: {
         ...sample.priceSeries,
@@ -537,7 +570,7 @@ export const yahooTickerProfileSource: TickerProfileSource = {
         items: group.items.map((item) => ({ ...item, source: sourceMap.resources })),
       })),
       financialOverview: secFundamentals?.financialOverview ?? sample.financialOverview,
-      keyRatios: secFundamentals?.keyRatios ?? sample.keyRatios,
+      keyRatios: secFundamentals?.keyRatios ?? mergeKeyRatios(sample.keyRatios, yfinanceData?.keyRatios, yfinanceMetaSource ?? sourceMap.financials),
       supplemental,
       sourceMap,
       asOf,
