@@ -75,6 +75,21 @@ For app UI, organize around:
 - secondary context or inspector
 - one clear accent for action or state
 
+Default to the actual usable product surface as the first screen. Do not open with a marketing hero, executive-summary banner, or explanatory splash unless the user explicitly asks for that pattern.
+
+Use familiar control semantics:
+
+- icon buttons for tools when the symbol is standard and obvious
+- icon + text or text buttons for explicit commands
+- segmented controls for modes
+- toggles or checkboxes for binary settings
+- sliders, steppers, or direct inputs for numeric values
+- menus for option sets
+- tabs for real view switching
+- tooltips for ambiguous icons
+
+Prefer the app's existing icon library when one exists. Otherwise prefer a clean standard set such as Lucide over ad hoc custom SVG icons.
+
 Avoid:
 
 - dashboard-card mosaics
@@ -82,6 +97,7 @@ Avoid:
 - decorative gradients behind routine product UI
 - multiple competing accent colors
 - ornamental icons that do not improve scanning
+- visible in-app instructional copy explaining features, shortcuts, or how to use obvious UI
 
 If a panel can become plain layout without losing meaning, remove the card treatment.
 
@@ -95,6 +111,7 @@ Imagery must do narrative work.
 - Do not use images with embedded signage, logos, or typographic clutter fighting the UI.
 - Do not generate images with built-in UI frames, splits, cards, or panels.
 - If multiple moments are needed, use multiple images, not one collage.
+- Avoid dark, blurred, generic stock-like, or purely atmospheric media when the user needs to inspect the real product, place, object, or person.
 
 The first viewport needs a real visual anchor. Decorative texture is not enough.
 
@@ -155,6 +172,8 @@ Motion rules:
 - No cards by default.
 - No hero cards by default.
 - No boxed or center-column hero when the brief calls for full bleed.
+- No UI cards inside other UI cards.
+- Do not style full page sections as floating cards.
 - No more than one dominant idea per section.
 - No section should need many tiny UI devices to explain itself.
 - No headline should overpower the brand on branded pages.
@@ -162,6 +181,9 @@ Motion rules:
 - No split-screen hero unless text sits on a calm, unified side.
 - No more than two typefaces without a clear reason.
 - No more than one accent color unless the product already has a strong system.
+- No decorative gradient or bokeh orbs.
+- Do not scale font size with viewport width.
+- Do not use negative letter spacing.
 
 ## Reject These Failures
 
@@ -173,6 +195,14 @@ Motion rules:
 - Carousel with no narrative purpose
 - App UI made of stacked cards instead of layout
 
+## Layout Stability And Fit
+
+- Text must fit within its container on common mobile and desktop viewports.
+- If text does not fit, wrap first, then tighten structure before shrinking type excessively.
+- Fixed-format UI elements such as boards, toolbars, icon buttons, counters, tiles, and control rows should use stable dimensions or responsive constraints so hover states, loading text, or dynamic content do not shift layout.
+- Match display text to its container: hero-scale type belongs in real heroes, not compact panels, sidebars, dashboards, or tool surfaces.
+- Check for overlap explicitly. Text, controls, media, and sticky elements must not collide awkwardly at any viewport.
+
 ## Litmus Checks
 
 - Is the brand or product unmistakable in the first screen?
@@ -182,3 +212,6 @@ Motion rules:
 - Are cards actually necessary?
 - Does motion improve hierarchy or atmosphere?
 - Would the design still feel premium if all decorative shadows were removed?
+- For apps and tools, does the first screen let the user actually do the job?
+- Do the controls look native to the domain rather than improvised?
+- Is the layout still stable with long labels, empty states, and real data?
