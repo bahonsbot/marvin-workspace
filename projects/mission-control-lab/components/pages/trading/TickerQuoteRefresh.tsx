@@ -12,13 +12,13 @@ type QuoteRefreshResponse = Pick<TickerQuote, 'price' | 'change' | 'changePct' |
   provider: string;
 };
 
+const DELAY_FALLBACK = 'Delayed quote, exact delay not reported';
+
 function formatLocalTime(value: string | null | undefined) {
   if (!value) return 'Unknown';
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return 'Unknown';
   return new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    month: 'short',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -29,12 +29,18 @@ function formatLocalTime(value: string | null | undefined) {
 function statusText(state: RefreshState) {
   if (state === 'refreshing') return 'Refreshing…';
   if (state === 'updated') return 'Updated';
-  if (state === 'error') return 'Refresh failed';
-  return 'Auto-refresh on';
+  if (state === 'error') return 'Retry';
+  return 'Refresh';
 }
 
-export function TickerQuoteRefresh({ initialQuote }: { initialQuote: TickerQuote }) {
-  const symbol = initialQuote.symbol;
+function shortDelayText(value: string | null | undefined) {
+  if (!value) return DELAY_FALLBACK;
+  if (value.toLowerCase().includes('exact exchange delay not reported')) return DELAY_FALLBACK;
+  return value.replace(/^EODHD\s*/i, 'EODHD ');
+}
+
+export function TickerQuoteRefresh({ initialQuote, symbol: profileSymbol }: { initialQuote: TickerQuote; symbol: string }) {
+  const symbol = initialQuote.symbol ?? profileSymbol;
   const [quote, setQuote] = useState<TickerQuote>(initialQuote);
   const [state, setState] = useState<RefreshState>('idle');
   const [lastFetchedAt, setLastFetchedAt] = useState<string | null>(initialQuote.source.asOf ?? null);
@@ -42,14 +48,14 @@ export function TickerQuoteRefresh({ initialQuote }: { initialQuote: TickerQuote
   const inFlightRef = useRef(false);
   const timerRef = useRef<number | null>(null);
 
-  const delayText = quote.providerDelay ?? 'EODHD delayed quote, exact exchange delay not reported by this endpoint.';
+  const delayText = shortDelayText(quote.providerDelay);
   const canRefresh = Boolean(symbol?.includes('.'));
 
   const metaLine = useMemo(() => {
     const quoteTime = formatLocalTime(quote.updatedAt ?? quote.source.asOf);
     const fetchedTime = formatLocalTime(lastFetchedAt);
-    return `Quote ${quoteTime} · fetched ${fetchedTime}`;
-  }, [lastFetchedAt, quote.source.asOf, quote.updatedAt]);
+    return `${state === 'refreshing' ? 'Refreshing' : 'Updated'} ${quoteTime} · checked ${fetchedTime} · ${delayText}`;
+  }, [delayText, lastFetchedAt, quote.source.asOf, quote.updatedAt, state]);
 
   async function refreshQuote(manual = false) {
     if (!canRefresh || !symbol || inFlightRef.current) return;
@@ -89,11 +95,8 @@ export function TickerQuoteRefresh({ initialQuote }: { initialQuote: TickerQuote
 
   useEffect(() => {
     if (!canRefresh) return;
-    const schedule = () => {
-      if (timerRef.current) window.clearInterval(timerRef.current);
-      timerRef.current = window.setInterval(() => void refreshQuote(false), 90_000);
-    };
-    schedule();
+    void refreshQuote(false);
+    timerRef.current = window.setInterval(() => void refreshQuote(false), 60_000);
     const onVisible = () => {
       if (document.visibilityState === 'visible') void refreshQuote(false);
     };
@@ -109,21 +112,20 @@ export function TickerQuoteRefresh({ initialQuote }: { initialQuote: TickerQuote
     <div className="trading-ticker-price-block" data-refresh-state={state}>
       <strong>{quote.price}</strong>
       <em className={quote.tone}>{quote.change} ({quote.changePct})</em>
-      <span>{quote.priceTime}</span>
-      <div className="trading-quote-refresh-meta">
-        <span>{metaLine}</span>
-        <span>{delayText}</span>
+      <div className="trading-quote-refresh-line">
+        <span title={quote.priceTime}>{metaLine}</span>
+        <button
+          type="button"
+          className="trading-quote-refresh-button"
+          onClick={() => void refreshQuote(true)}
+          disabled={state === 'refreshing'}
+          aria-label="Refresh current quote"
+          title={canRefresh ? 'Refresh current quote' : 'Canonical ticker required for quote refresh'}
+        >
+          <RefreshCw size={12} strokeWidth={2.2} />
+          {statusText(state)}
+        </button>
       </div>
-      <button
-        type="button"
-        className="trading-quote-refresh-button"
-        onClick={() => void refreshQuote(true)}
-        disabled={!canRefresh || state === 'refreshing'}
-        aria-label="Refresh current quote"
-      >
-        <RefreshCw size={12} strokeWidth={2.2} />
-        {statusText(state)}
-      </button>
       {error ? <small className="trading-quote-refresh-error">{error}</small> : null}
     </div>
   );

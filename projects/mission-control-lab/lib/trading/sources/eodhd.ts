@@ -241,11 +241,12 @@ function safeSymbol(input: string) {
   return input.trim().toUpperCase().replace(/[^A-Z0-9.\-]/g, '');
 }
 
-function endpoint(path: string, params: Record<string, string | number | undefined | null> = {}) {
+function endpoint(path: string, params: Record<string, string | number | undefined | null | boolean> = {}) {
   const apiToken = eodhdApiKey();
   if (!apiToken) return null;
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
+    if (key.startsWith('__')) continue;
     if (value != null && value !== '') search.set(key, String(value));
   }
   search.set('api_token', apiToken);
@@ -253,7 +254,7 @@ function endpoint(path: string, params: Record<string, string | number | undefin
   return `${EODHD_BASE_URL}${path}?${search.toString()}`;
 }
 
-export async function fetchEodhdJson<T>(path: string, params: Record<string, string | number | undefined | null> = {}): Promise<T | null> {
+export async function fetchEodhdJson<T>(path: string, params: Record<string, string | number | undefined | null | boolean> = {}): Promise<T | null> {
   const url = endpoint(path, params);
   if (!url) return null;
 
@@ -263,7 +264,8 @@ export async function fetchEodhdJson<T>(path: string, params: Record<string, str
         accept: 'application/json',
         'user-agent': EODHD_USER_AGENT,
       },
-      next: { revalidate: 300 },
+      cache: params.__noStore === 1 ? 'no-store' : undefined,
+      next: params.__noStore === 1 ? undefined : { revalidate: 300 },
     });
     if (!response.ok) return null;
     return (await response.json()) as T;
@@ -427,7 +429,7 @@ async function fetchEodhdExchangeDetails(exchange: string) {
 export async function fetchEodhdRealtimeQuote(symbol: string) {
   const normalized = safeSymbol(symbol);
   if (!normalized || !normalized.includes('.')) return null;
-  return fetchEodhdJson<EodhdQuoteResponse>(`/real-time/${encodeURIComponent(normalized)}`);
+  return fetchEodhdJson<EodhdQuoteResponse>(`/real-time/${encodeURIComponent(normalized)}`, { __noStore: 1 });
 }
 
 export async function resolveEodhdSymbol(symbol: string) {

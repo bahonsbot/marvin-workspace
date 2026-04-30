@@ -242,7 +242,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        <TickerQuoteRefresh initialQuote={ticker.quote} />
+        <TickerQuoteRefresh initialQuote={ticker.quote} symbol={ticker.symbol} />
 
         <dl className="trading-ticker-stat-strip">
           {ticker.headerStats.map((stat) => (
