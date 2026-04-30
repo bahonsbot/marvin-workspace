@@ -12,7 +12,7 @@ type QuoteRefreshResponse = Pick<TickerQuote, 'price' | 'change' | 'changePct' |
   provider: string;
 };
 
-const DELAY_FALLBACK = 'Delayed quote, exact delay not reported';
+const DELAY_FALLBACK = 'Delayed quote';
 
 function formatLocalTime(value: string | null | undefined) {
   if (!value) return 'Unknown';
@@ -21,7 +21,6 @@ function formatLocalTime(value: string | null | undefined) {
   return new Intl.DateTimeFormat('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
     timeZone: 'Asia/Ho_Chi_Minh',
   }).format(date);
 }
@@ -54,8 +53,8 @@ export function TickerQuoteRefresh({ initialQuote, symbol: profileSymbol }: { in
   const metaLine = useMemo(() => {
     const quoteTime = formatLocalTime(quote.updatedAt ?? quote.source.asOf);
     const fetchedTime = formatLocalTime(lastFetchedAt);
-    return `${state === 'refreshing' ? 'Refreshing' : 'Updated'} ${quoteTime} · checked ${fetchedTime} · ${delayText}`;
-  }, [delayText, lastFetchedAt, quote.source.asOf, quote.updatedAt, state]);
+    return `${state === 'refreshing' ? 'Refreshing' : 'Updated'} ${quoteTime} · checked ${fetchedTime}`;
+  }, [lastFetchedAt, quote.source.asOf, quote.updatedAt, state]);
 
   async function refreshQuote(manual = false) {
     if (!canRefresh || !symbol || inFlightRef.current) return;
@@ -112,8 +111,11 @@ export function TickerQuoteRefresh({ initialQuote, symbol: profileSymbol }: { in
     <div className="trading-ticker-price-block" data-refresh-state={state}>
       <strong>{quote.price}</strong>
       <em className={quote.tone}>{quote.change} ({quote.changePct})</em>
-      <div className="trading-quote-refresh-line">
-        <span title={quote.priceTime}>{metaLine}</span>
+      <div className="trading-quote-refresh-stack">
+        <div className="trading-quote-refresh-lines" title={quote.priceTime}>
+          <span>{metaLine}</span>
+          <span>{delayText}</span>
+        </div>
         <button
           type="button"
           className="trading-quote-refresh-button"
