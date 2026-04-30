@@ -2,10 +2,11 @@ import 'server-only';
 
 import { getCachedTickerProfile, writeTickerProfileCache } from './cache';
 import type { TickerProfile } from './contracts';
+import { eodhdTickerProfileSource } from './sources/eodhd';
 import { sampleTickerProfileSource } from './sources/sample';
 import { yahooTickerProfileSource } from './sources/yahoo';
 
-const profileSources = [yahooTickerProfileSource, sampleTickerProfileSource];
+const profileSources = [eodhdTickerProfileSource, yahooTickerProfileSource, sampleTickerProfileSource];
 const TICKER_PROFILE_TTL_MS = 15 * 60 * 1000;
 
 export async function getTickerProfile(symbol: string): Promise<TickerProfile> {

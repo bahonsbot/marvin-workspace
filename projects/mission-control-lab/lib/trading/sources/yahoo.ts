@@ -8,9 +8,11 @@ import type {
   TickerProfile,
   TickerProfileSourceMap,
   TickerSourceMeta,
+  TickerSupplementalData,
 } from '../contracts';
 import type { TickerProfileSource } from '../sources';
 import { withProfileSource } from '../sources';
+import { buildEodhdDividendMetrics, buildEodhdTechnicalMetrics, eodhdSource, fetchEodhdMarketData } from './eodhd';
 import { buildSampleTickerProfile } from './sample';
 import { fetchSecTickerFundamentals } from './sec';
 import { fetchWikipediaCompanyLogo, fetchWikipediaCompanyProfile } from './wikipedia';
@@ -97,6 +99,15 @@ function sampleFallbackSource(asOf: string, note: string): TickerSourceMeta {
     source: 'sample',
     asOf,
     freshness: 'sample',
+    note,
+  };
+}
+
+function unavailableSource(asOf: string, note: string): TickerSourceMeta {
+  return {
+    source: 'sample',
+    asOf,
+    freshness: 'missing',
     note,
   };
 }
@@ -285,6 +296,39 @@ function buildYahooNews(news: YahooNewsItem[], source: TickerSourceMeta): Ticker
     }));
 }
 
+function buildUnavailableSupplemental(asOf: string): TickerSupplementalData {
+  const estimates = unavailableSource(asOf, 'Current EODHD plan does not include Fundamental or Calendar APIs. Analyst estimates remain a manual broker-check slot until another provider is enabled.');
+  const ownership = unavailableSource(asOf, 'Ownership requires a dedicated holdings/insider adapter. EODHD Extended does not include this as a clean fundamentals feed.');
+  const dividends = unavailableSource(asOf, 'Dividend feed not available for this symbol yet.');
+  const technicals = unavailableSource(asOf, 'Technical market-data feed not available for this symbol yet.');
+  return {
+    dividends: {
+      status: 'unavailable',
+      note: 'No provider-backed dividend history is available for this symbol yet.',
+      source: dividends,
+      metrics: [],
+    },
+    technicals: {
+      status: 'unavailable',
+      note: 'No provider-backed technical/range data is available for this symbol yet.',
+      source: technicals,
+      metrics: [],
+    },
+    estimates: {
+      status: 'unavailable',
+      note: 'Analyst estimates are not included in the current EODHD plan. Check broker apps manually for now.',
+      source: estimates,
+      metrics: [],
+    },
+    ownership: {
+      status: 'unavailable',
+      note: 'Ownership and insider activity need a dedicated provider before display.',
+      source: ownership,
+      metrics: [],
+    },
+  };
+}
+
 function buildMissingNews(symbol: string, source: TickerSourceMeta): TickerNewsItem[] {
   return [
     {
@@ -407,10 +451,12 @@ export const yahooTickerProfileSource: TickerProfileSource = {
     const searchQuote = search?.quote;
     const name = meta.longName || searchQuote?.longname || meta.shortName || searchQuote?.shortname || sample.name;
     const exchange = searchQuote?.exchDisp || meta.fullExchangeName || meta.exchangeName || sample.exchange;
-    const [companyLogoResult, companyProfileResult, rangeSeries, secFundamentals] = await Promise.all([
+    const eodhdSymbol = searchQuote?.symbol && !symbol.includes('.') ? searchQuote.symbol : symbol;
+    const [companyLogoResult, companyProfileResult, yahooRangeSeries, eodhdMarketData, secFundamentals] = await Promise.all([
       fetchWikipediaCompanyLogo(symbol, name),
       fetchWikipediaCompanyProfile(symbol, name, sample.companyProfile.facts),
       fetchYahooRangeSeries(symbol, sourceMap.prices),
+      fetchEodhdMarketData(eodhdSymbol),
       fetchSecTickerFundamentals(symbol, sample),
     ]);
     const companyLogo = companyLogoResult ?? sample.companyLogo;
@@ -423,9 +469,35 @@ export const yahooTickerProfileSource: TickerProfileSource = {
       sourceMap.resources = secFundamentals.source;
       sourceMap.filings = secFundamentals.source;
     }
+    const providerRangeSeries = eodhdMarketData?.priceSeries?.rangeSeries ?? yahooRangeSeries;
+    if (eodhdMarketData?.priceSeries) {
+      sourceMap.prices = eodhdMarketData.source;
+      sourceMap.news = eodhdMarketData.news.length ? eodhdMarketData.source : sourceMap.news;
+    }
     const yahooNews = buildYahooNews(search.news, sourceMap.news);
-    if (!yahooNews.length) {
-      sourceMap.news = missingYahooSource(asOf, 'Yahoo Finance returned no usable linked headlines for this ticker. No sample headlines are shown for provider-backed symbols.');
+    const providerNews = eodhdMarketData?.news.length ? eodhdMarketData.news : yahooNews;
+    if (!providerNews.length) {
+      sourceMap.news = missingYahooSource(asOf, 'Market-data providers returned no usable linked headlines for this ticker. No sample headlines are shown for provider-backed symbols.');
+    }
+    const supplemental = buildUnavailableSupplemental(asOf);
+    if (eodhdMarketData) {
+      const dividendMetrics = buildEodhdDividendMetrics(eodhdMarketData);
+      supplemental.dividends = {
+        status: dividendMetrics.some((metric) => metric.status === 'available') ? 'available' : 'unavailable',
+        note: 'Historical dividends from EODHD Extended. Upcoming calendar events are not included in this plan.',
+        source: eodhdMarketData.source,
+        metrics: dividendMetrics,
+      };
+      const technicalMetrics = buildEodhdTechnicalMetrics(eodhdMarketData);
+      supplemental.technicals = {
+        status: technicalMetrics.some((metric) => metric.status === 'available') ? 'available' : 'unavailable',
+        note: 'Range-derived technical context from EODHD EOD/intraday data.',
+        source: eodhdMarketData.source,
+        metrics: technicalMetrics,
+      };
+    } else {
+      supplemental.dividends.source = eodhdSource(asOf, 'EODHD token missing or provider returned no rows for this symbol.', 'missing');
+      supplemental.technicals.source = eodhdSource(asOf, 'EODHD token missing or provider returned no rows for this symbol.', 'missing');
     }
 
     const profile: TickerProfile = {
@@ -447,25 +519,26 @@ export const yahooTickerProfileSource: TickerProfileSource = {
       companyLogo,
       priceSeries: {
         ...sample.priceSeries,
-        values: compactPriceSeries(quote.close),
-        ranges: YAHOO_PRICE_RANGES.filter((range) => rangeSeries[range]).length ? YAHOO_PRICE_RANGES.filter((range) => rangeSeries[range]) : sample.priceSeries.ranges,
-        activeRange: rangeSeries['1Y'] ? '1Y' : Object.keys(rangeSeries)[0] ?? sample.priceSeries.activeRange,
-        axis: rangeSeries['1Y']?.axis ?? chartAxisFromTimestamps(chart.timestamp ?? []),
-        stats: rangeSeries['1Y']?.stats ?? buildChartStats(meta, quote),
+        values: eodhdMarketData?.priceSeries?.values ?? compactPriceSeries(quote.close),
+        ranges: eodhdMarketData?.priceSeries?.ranges ?? (YAHOO_PRICE_RANGES.filter((range) => providerRangeSeries[range]).length ? YAHOO_PRICE_RANGES.filter((range) => providerRangeSeries[range]) : sample.priceSeries.ranges),
+        activeRange: eodhdMarketData?.priceSeries?.activeRange ?? (providerRangeSeries['1Y'] ? '1Y' : Object.keys(providerRangeSeries)[0] ?? sample.priceSeries.activeRange),
+        axis: eodhdMarketData?.priceSeries?.axis ?? providerRangeSeries['1Y']?.axis ?? chartAxisFromTimestamps(chart.timestamp ?? []),
+        stats: eodhdMarketData?.priceSeries?.stats ?? providerRangeSeries['1Y']?.stats ?? buildChartStats(meta, quote),
         source: sourceMap.prices,
-        rangeSeries,
+        rangeSeries: providerRangeSeries,
       },
       companyProfile,
       financialHighlights: secFundamentals?.financialHighlights ?? buildFinancialHighlights(sample, sourceMap),
       cashDebtSnapshot: secFundamentals?.cashDebtSnapshot ?? buildCashDebtSnapshot(sample, sourceMap),
       balanceSheetSnapshot: secFundamentals?.balanceSheetSnapshot ?? buildBalanceSheetSnapshot(sample, sourceMap),
-      recentNews: yahooNews.length ? yahooNews : buildMissingNews(symbol, sourceMap.news),
+      recentNews: providerNews.length ? providerNews : buildMissingNews(symbol, sourceMap.news),
       resources: secFundamentals?.resources ?? sample.resources.map((group) => ({
         ...group,
         items: group.items.map((item) => ({ ...item, source: sourceMap.resources })),
       })),
       financialOverview: secFundamentals?.financialOverview ?? sample.financialOverview,
       keyRatios: secFundamentals?.keyRatios ?? sample.keyRatios,
+      supplemental,
       sourceMap,
       asOf,
       freshness: 'fresh',

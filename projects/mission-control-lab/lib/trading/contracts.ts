@@ -1,6 +1,6 @@
 export type TickerFreshness = 'fresh' | 'stale' | 'sample' | 'missing';
 
-export type TickerSourceName = 'sample' | 'cache' | 'yahoo' | 'sec' | 'wikipedia' | 'defeatbeta';
+export type TickerSourceName = 'sample' | 'cache' | 'yahoo' | 'eodhd' | 'sec' | 'wikipedia' | 'defeatbeta';
 
 export interface TickerSourceMeta {
   source: TickerSourceName;
@@ -174,6 +174,20 @@ export interface TickerProfileSourceMap {
   filings: TickerSourceMeta;
 }
 
+export interface TickerSupplementalSection {
+  status: TickerDataStatus;
+  note: string;
+  source: TickerSourceMeta;
+  metrics: TickerDisplayMetric[];
+}
+
+export interface TickerSupplementalData {
+  dividends: TickerSupplementalSection;
+  technicals: TickerSupplementalSection;
+  estimates: TickerSupplementalSection;
+  ownership: TickerSupplementalSection;
+}
+
 export interface TickerProfile {
   symbol: string;
   name: string;
@@ -193,6 +207,7 @@ export interface TickerProfile {
   resources: TickerResourceGroup[];
   financialOverview: TickerFinancialOverview;
   keyRatios: TickerDisplayMetric[];
+  supplemental?: TickerSupplementalData;
   sourceMap: TickerProfileSourceMap;
   asOf: string;
   freshness: TickerFreshness;

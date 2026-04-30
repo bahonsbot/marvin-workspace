@@ -3,7 +3,7 @@ import { TickerPriceChart } from '@/components/pages/trading/TickerPriceChart';
 import { MarketTape, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { marketTape } from '@/components/pages/trading/trading-sample-data';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
-import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerFinancialHighlight, TickerFinancialOverview } from '@/lib/trading/contracts';
+import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerFinancialHighlight, TickerFinancialOverview, TickerSupplementalSection } from '@/lib/trading/contracts';
 
 type SparklineTone = 'positive' | 'negative' | 'neutral';
 
@@ -163,6 +163,32 @@ function BalanceSheetBars({ snapshot }: { snapshot: TickerBalanceSheetSnapshot }
           ))}
       </div>
     </div>
+  );
+}
+
+function SupplementalDataPanel({ section }: { section?: TickerSupplementalSection }) {
+  if (!section || !section.metrics.length) {
+    return (
+      <div className="trading-unavailable-panel">
+        <strong>Data unavailable</strong>
+        <p>{section?.note ?? 'Provider-backed data is not available for this module yet.'}</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <dl className="trading-supplemental-metric-grid">
+        {section.metrics.map((metric) => (
+          <div key={metric.label} className={metric.status === 'unavailable' ? 'is-unavailable' : undefined}>
+            <dt>{metric.label}</dt>
+            <dd>{metric.value}</dd>
+            {metric.note ? <p>{metric.note}</p> : null}
+          </div>
+        ))}
+      </dl>
+      <p className="trading-financial-caption">{section.status} · {section.source.source}: {section.note}</p>
+    </>
   );
 }
 
@@ -431,20 +457,23 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </section>
       </div>
 
-      <div className="trading-ticker-placeholder-grid">
-        {[
-          ['estimates', 'Estimates', 'Analyst estimates require a validated estimates provider. Keep this slot visible for FMP or another fundamentals package.'],
-          ['dividends', 'Dividends', 'Dividend history, yield, payout ratio, and ex-date need a provider-backed feed before display.'],
-          ['ownership', 'Ownership', 'Institutional ownership and insider activity need a dedicated holdings/source adapter.'],
-        ].map(([id, title, body]) => (
-          <section key={id} id={id} style={tradingCardStyle({ minHeight: 160, maxHeight: 'none' })}>
-            <div className="trading-section-label">{title}</div>
-            <div className="trading-unavailable-panel">
-              <strong>Data unavailable</strong>
-              <p>{body}</p>
-            </div>
-          </section>
-          ))}
+      <div className="trading-ticker-placeholder-grid trading-ticker-provider-grid">
+        <section id="estimates" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+          <div className="trading-section-label">Estimates</div>
+          <SupplementalDataPanel section={ticker.supplemental?.estimates} />
+        </section>
+        <section id="dividends" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+          <div className="trading-section-label">Dividends</div>
+          <SupplementalDataPanel section={ticker.supplemental?.dividends} />
+        </section>
+        <section id="ownership" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+          <div className="trading-section-label">Ownership</div>
+          <SupplementalDataPanel section={ticker.supplemental?.ownership} />
+        </section>
+        <section id="technicals" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+          <div className="trading-section-label">Technicals</div>
+          <SupplementalDataPanel section={ticker.supplemental?.technicals} />
+        </section>
       </div>
     </TradingPageFrame>
   );

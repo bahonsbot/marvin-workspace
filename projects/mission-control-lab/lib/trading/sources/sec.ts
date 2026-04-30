@@ -378,9 +378,19 @@ function buildBalanceSheetSnapshot(statements: SecAnnualStatements, source: Tick
   };
 }
 
-function buildKeyRatios(profile: TickerProfile, snapshot: TickerBalanceSheetSnapshot | null, source: TickerSourceMeta) {
+function buildKeyRatios(profile: TickerProfile | null, snapshot: TickerBalanceSheetSnapshot | null, source: TickerSourceMeta) {
   const replacements = snapshot ? new Map(snapshot.kpis.map((item) => [item.label, item.value])) : new Map<string, string>();
-  return profile.keyRatios.map((ratio) => {
+  const ratios = profile?.keyRatios ?? [
+    { label: 'P/E Ratio', value: 'Unavailable' },
+    { label: 'Forward P/E', value: 'Unavailable' },
+    { label: 'PEG Ratio', value: 'Unavailable' },
+    { label: 'Price / Sales', value: 'Unavailable' },
+    { label: 'EV / EBITDA', value: 'Unavailable' },
+    { label: 'Price / Book', value: 'Unavailable' },
+    { label: 'Current Ratio', value: 'Unavailable' },
+    { label: 'Debt / Equity', value: 'Unavailable' },
+  ];
+  return ratios.map((ratio) => {
     if (ratio.label === 'Current Ratio' && replacements.has('Current Ratio')) {
       return { ...ratio, value: replacements.get('Current Ratio')!, status: 'available' as const, source };
     }
@@ -459,7 +469,7 @@ function selectFilings<T extends { form: string; items?: string; filed?: string 
   return selected.slice(0, 8).sort((a, b) => (b.filed ?? '').localeCompare(a.filed ?? ''));
 }
 
-function buildResources(profile: TickerProfile, cik: string, submissions: SecSubmissionsResponse | null, source: TickerSourceMeta): TickerResourceGroup[] {
+function buildResources(profile: TickerProfile | null, cik: string, submissions: SecSubmissionsResponse | null, source: TickerSourceMeta): TickerResourceGroup[] {
   const recent = submissions?.filings?.recent;
   const forms = recent?.form ?? [];
   const filings = forms
@@ -475,7 +485,7 @@ function buildResources(profile: TickerProfile, cik: string, submissions: SecSub
     .filter((item) => ['10-K', '10-Q', '8-K'].includes(item.form) && item.accession && item.primaryDocument);
 
   const selected = selectFilings(filings);
-  if (selected.length === 0) return profile.resources;
+  if (selected.length === 0) return profile?.resources ?? [];
 
   const secGroup: TickerResourceGroup = {
     label: 'SEC filings',
@@ -496,7 +506,7 @@ function buildResources(profile: TickerProfile, cik: string, submissions: SecSub
   return [secGroup];
 }
 
-export async function fetchSecTickerFundamentals(symbol: string, baseProfile: TickerProfile): Promise<SecTickerFundamentals | null> {
+export async function fetchSecTickerFundamentals(symbol: string, baseProfile: TickerProfile | null): Promise<SecTickerFundamentals | null> {
   const resolved = await resolveSecTicker(symbol);
   if (!resolved) return null;
 
@@ -515,16 +525,17 @@ export async function fetchSecTickerFundamentals(symbol: string, baseProfile: Ti
   const balanceSheetSnapshot = buildBalanceSheetSnapshot(statements, source);
 
   if (!cashDebtSnapshot && !balanceSheetSnapshot && financialOverview.bars.length === 0) return null;
+  if (!baseProfile && (!cashDebtSnapshot || !balanceSheetSnapshot)) return null;
 
   return {
     cik: resolved.cik,
     companyName: submissions?.name ?? resolved.title,
     asOf,
     source,
-    financialHighlights: financialHighlights.length ? financialHighlights : baseProfile.financialHighlights,
-    financialOverview: financialOverview.bars.length ? financialOverview : baseProfile.financialOverview,
-    cashDebtSnapshot: cashDebtSnapshot ?? baseProfile.cashDebtSnapshot,
-    balanceSheetSnapshot: balanceSheetSnapshot ?? baseProfile.balanceSheetSnapshot,
+    financialHighlights: financialHighlights.length ? financialHighlights : baseProfile?.financialHighlights ?? [],
+    financialOverview: financialOverview.bars.length ? financialOverview : baseProfile?.financialOverview ?? { bars: [], status: 'unavailable', note: 'SEC returned no revenue/net income bars.' },
+    cashDebtSnapshot: cashDebtSnapshot ?? baseProfile!.cashDebtSnapshot,
+    balanceSheetSnapshot: balanceSheetSnapshot ?? baseProfile!.balanceSheetSnapshot,
     keyRatios: buildKeyRatios(baseProfile, balanceSheetSnapshot, source),
     resources: buildResources(baseProfile, resolved.cik, submissions, source),
   };
