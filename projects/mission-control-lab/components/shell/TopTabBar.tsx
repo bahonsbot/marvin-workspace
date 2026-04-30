@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
+import { TickerSearch } from './TickerSearch';
 import {
   DOMAIN_META,
   DOMAIN_TABS,
@@ -52,9 +53,7 @@ export function TopTabBar() {
         })}
       </nav>
       <div aria-hidden="true" style={{ flex: 1, minWidth: 12 }} />
-      <button className={styles.topTabSearchButton} aria-label="Search">
-        ⌕
-      </button>
+      <TickerSearch />
       <button
         type="button"
         className={styles.mobileMenuButton}
