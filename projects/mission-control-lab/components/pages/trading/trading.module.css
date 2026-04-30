@@ -2524,3 +2524,102 @@
     display: none;
   }
 }
+
+:global(.trading-estimate-target-table.ordered) {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+:global(.trading-estimate-target-table.ordered div:nth-child(2)) {
+  text-align: center;
+}
+
+:global(.trading-estimate-target-table.ordered div:nth-child(3)) {
+  text-align: right;
+}
+
+:global(.trading-recommendation-bar.tall span) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+:global(.trading-ticker-provider-grid) {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+:global(.trading-ticker-provider-grid #estimates) {
+  grid-column: 1 / -1;
+}
+
+:global(.trading-ticker-provider-grid #eps),
+:global(.trading-ticker-provider-grid #dividends),
+:global(.trading-ticker-provider-grid #ownership),
+:global(.trading-ticker-provider-grid #technicals) {
+  min-width: 0;
+}
+
+:global(.trading-ticker-provider-grid #eps .trading-estimate-eps-row.standalone),
+:global(.trading-ticker-provider-grid #dividends .trading-supplemental-metric-grid),
+:global(.trading-ticker-provider-grid #ownership .trading-supplemental-metric-grid),
+:global(.trading-ticker-provider-grid #technicals .trading-supplemental-metric-grid) {
+  margin-top: 12px;
+  display: grid;
+  gap: 0;
+}
+
+:global(.trading-ticker-provider-grid #eps .trading-estimate-eps-row.standalone div),
+:global(.trading-ticker-provider-grid #dividends .trading-supplemental-metric-grid div),
+:global(.trading-ticker-provider-grid #ownership .trading-supplemental-metric-grid div),
+:global(.trading-ticker-provider-grid #technicals .trading-supplemental-metric-grid div) {
+  min-height: 38px;
+  display: grid;
+  align-content: center;
+  border-top: 1px solid rgba(28, 37, 32, 0.1);
+  padding: 7px 0;
+}
+
+:global(.trading-ticker-provider-grid #eps dt),
+:global(.trading-ticker-provider-grid #dividends dt),
+:global(.trading-ticker-provider-grid #ownership dt),
+:global(.trading-ticker-provider-grid #technicals dt) {
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:global(.trading-ticker-provider-grid #eps dd),
+:global(.trading-ticker-provider-grid #dividends dd),
+:global(.trading-ticker-provider-grid #ownership dd),
+:global(.trading-ticker-provider-grid #technicals dd) {
+  margin-top: 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+:global(.trading-ticker-provider-grid #eps .trading-financial-caption),
+:global(.trading-ticker-provider-grid #dividends .trading-financial-caption),
+:global(.trading-ticker-provider-grid #ownership .trading-financial-caption),
+:global(.trading-ticker-provider-grid #technicals .trading-financial-caption) {
+  margin-top: 10px;
+}
+
+@media (max-width: 1280px) {
+  :global(.trading-ticker-provider-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  :global(.trading-ticker-provider-grid) {
+    grid-template-columns: 1fr;
+  }
+}

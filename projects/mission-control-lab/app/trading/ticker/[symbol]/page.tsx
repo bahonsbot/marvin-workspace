@@ -330,10 +330,10 @@ function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
           <span>Analysts</span>
           <strong>{analystCount?.value ?? '—'}</strong>
         </div>
-        {medianTarget ? (
+        {meanTarget ? (
           <div>
-            <span>Median target</span>
-            <strong>{cleanEstimateValue(medianTarget.value)}</strong>
+            <span>Mean</span>
+            <strong>{cleanEstimateValue(meanTarget.value)}</strong>
           </div>
         ) : null}
       </div>
@@ -342,7 +342,6 @@ function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
         <div className="trading-estimate-range-card">
           <div className="trading-estimate-range-head">
             <span>Price target range</span>
-            {meanTarget ? <em>Mean {cleanEstimateValue(meanTarget.value)}</em> : null}
           </div>
           <div className="trading-estimate-range-rail" aria-label="Analyst target range">
             {sortedTargets.map((metric) => {
@@ -351,10 +350,10 @@ function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
             })}
           </div>
           <dl className="trading-estimate-target-table ordered">
-            {sortedTargets.map((metric) => (
-              <div key={metric.label}>
-                <dt>{metric.label.replace('Target ', '')}</dt>
-                <dd>{cleanEstimateValue(metric.value)}</dd>
+            {[sortedTargets[0], medianTarget, sortedTargets.at(-1)].filter(Boolean).map((metric) => (
+              <div key={metric!.label}>
+                <dt>{metric!.label.replace('Target ', '')}</dt>
+                <dd>{cleanEstimateValue(metric!.value)}</dd>
               </div>
             ))}
           </dl>
@@ -705,19 +704,19 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div className="trading-section-label">Estimates</div>
           <EstimatesPanel section={estimatesSection} />
         </section>
-        <section id="eps" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+        <section id="eps" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
           <div className="trading-section-label">EPS estimates</div>
           <EpsPanel section={estimatesSection} />
         </section>
-        <section id="dividends" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+        <section id="dividends" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
           <div className="trading-section-label">Dividends</div>
           <SupplementalDataPanel section={dividendsSection} />
         </section>
-        <section id="ownership" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+        <section id="ownership" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
           <div className="trading-section-label">Ownership</div>
           <SupplementalDataPanel section={ticker.supplemental?.ownership} />
         </section>
-        <section id="technicals" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+        <section id="technicals" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
           <div className="trading-section-label">Technicals</div>
           <SupplementalDataPanel section={technicalsSection} />
         </section>
