@@ -93,6 +93,7 @@ def main() -> int:
 
     facts = []
     for label, key in [
+        ("Company Name", "longName"),
         ("Sector", "sector"),
         ("Industry", "industry"),
         ("Country", "country"),

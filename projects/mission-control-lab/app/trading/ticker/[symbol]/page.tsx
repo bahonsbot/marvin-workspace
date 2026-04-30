@@ -4,7 +4,7 @@ import { TickerQuoteRefresh } from '@/components/pages/trading/TickerQuoteRefres
 import { MarketTape, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { marketTape } from '@/components/pages/trading/trading-sample-data';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
-import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerFinancialHighlight, TickerFinancialOverview, TickerSupplementalSection } from '@/lib/trading/contracts';
+import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerDisplayMetric, TickerFinancialHighlight, TickerFinancialOverview, TickerProfileFact, TickerSourceMeta, TickerSupplementalSection } from '@/lib/trading/contracts';
 
 type SparklineTone = 'positive' | 'negative' | 'neutral';
 
@@ -54,6 +54,73 @@ function SectionJumpNav({ items }: { items: SectionNavItem[] }) {
         </a>
       ))}
     </nav>
+  );
+}
+
+
+function formatCaptionSource(source: TickerSourceMeta | undefined, options: { includeUpdated?: boolean } = {}) {
+  if (!source) return 'Source: Provider pending';
+  const label = source.source === 'eodhd' ? 'EODHD' : source.source === 'yahoo' ? 'Yahoo / yfinance' : source.source.toUpperCase();
+  if (!options.includeUpdated || !source.asOf) return `Source: ${label}`;
+  const date = new Date(source.asOf);
+  if (Number.isNaN(date.getTime())) return `Source: ${label}`;
+  const updated = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Asia/Ho_Chi_Minh',
+  }).format(date);
+  return `Source: ${label} · Updated: ${updated}`;
+}
+
+function sourceList(metrics: Array<{ source?: TickerSourceMeta }> = [], fallback?: TickerSourceMeta) {
+  const labels = new Set<string>();
+  for (const metric of metrics) {
+    if (!metric.source?.source) continue;
+    labels.add(metric.source.source === 'eodhd' ? 'EODHD' : metric.source.source === 'yahoo' ? 'Yahoo / yfinance' : metric.source.source.toUpperCase());
+  }
+  if (!labels.size && fallback?.source) labels.add(fallback.source === 'eodhd' ? 'EODHD' : fallback.source === 'yahoo' ? 'Yahoo / yfinance' : fallback.source.toUpperCase());
+  return labels.size ? `Sources: ${Array.from(labels).join(', ')}` : 'Sources: Provider pending';
+}
+
+function cleanProfileFacts(facts: TickerProfileFact[]) {
+  return facts.filter((fact) => !['wikidata', 'industry group', 'company name'].includes(fact.label.toLowerCase()));
+}
+
+function profileFactValue(fact: TickerProfileFact) {
+  if (fact.label.toLowerCase() !== 'website' || !fact.value || fact.value === 'Provider pending') return fact.value;
+  const href = /^https?:\/\//i.test(fact.value) ? fact.value : `https://${fact.value}`;
+  return <a href={href} target="_blank" rel="noreferrer">{fact.value.replace(/^https?:\/\//i, '')}</a>;
+}
+
+function titleFromProfile(tickerName: string, summary: string, facts: TickerProfileFact[]) {
+  if (!tickerName.includes('.')) return tickerName;
+  const companyName = facts.find((fact) => fact.label.toLowerCase() === 'company name')?.value;
+  if (companyName) return companyName;
+  const firstSentence = summary.split(/\.\s+/)[0]?.trim().replace(/\s+N\.\s*V\.?$/i, ' N.V.');
+  if (firstSentence && firstSentence.length <= 80 && !firstSentence.includes('Provider-backed')) return firstSentence;
+  return tickerName;
+}
+
+function normalizeHeaderStats(stats: TickerDisplayMetric[], facts: TickerProfileFact[]) {
+  const quoteType = facts.find((fact) => fact.label.toLowerCase() === 'quote type')?.value;
+  return stats.map((stat) => {
+    if (stat.label !== 'Type') return stat;
+    if (!quoteType || quoteType === 'Provider pending') return stat;
+    const value = quoteType.toLowerCase() === 'equity' ? 'Equity' : quoteType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+    return { ...stat, value, status: 'available' as const, note: undefined };
+  });
+}
+
+function stripMetricSourceNotes(metrics: TickerDisplayMetric[]) {
+  return metrics.map((metric) => ({ ...metric, note: undefined, source: undefined }));
+}
+
+function EmptySectionState({ note = 'Data not available' }: { note?: string }) {
+  return (
+    <div className="trading-section-empty-state">
+      <strong>Data not available</strong>
+      {note !== 'Data not available' ? <p>{note}</p> : null}
+    </div>
   );
 }
 
@@ -167,20 +234,66 @@ function BalanceSheetBars({ snapshot }: { snapshot: TickerBalanceSheetSnapshot }
   );
 }
 
-function SupplementalDataPanel({ section }: { section?: TickerSupplementalSection }) {
+function SupplementalDataPanel({ section, visual = false }: { section?: TickerSupplementalSection; visual?: boolean }) {
   if (!section || !section.metrics.length) {
+    return <EmptySectionState note={section?.note ?? 'Provider-backed data is not available for this module yet.'} />;
+  }
+
+  const metrics = stripMetricSourceNotes(section.metrics);
+  const targetMetrics = metrics.filter((metric) => metric.label.toLowerCase().startsWith('target '));
+  const recommendation = metrics.find((metric) => metric.label === 'Recommendation');
+  const analystCount = metrics.find((metric) => metric.label === 'Analyst count');
+  const epsMetrics = metrics.filter((metric) => metric.label.toLowerCase().startsWith('eps'));
+  const otherMetrics = metrics.filter((metric) => !targetMetrics.includes(metric) && metric !== recommendation && metric !== analystCount && !epsMetrics.includes(metric));
+
+  if (visual && (targetMetrics.length || recommendation || epsMetrics.length)) {
     return (
-      <div className="trading-unavailable-panel">
-        <strong>Data unavailable</strong>
-        <p>{section?.note ?? 'Provider-backed data is not available for this module yet.'}</p>
-      </div>
+      <>
+        {targetMetrics.length ? (
+          <div className="trading-estimate-target-strip">
+            {targetMetrics.map((metric) => (
+              <article key={metric.label}>
+                <span>{metric.label.replace('Target ', '')}</span>
+                <strong>{metric.value}</strong>
+              </article>
+            ))}
+          </div>
+        ) : null}
+        {recommendation || analystCount ? (
+          <div className="trading-estimate-consensus">
+            {recommendation ? <strong>{recommendation.value}</strong> : null}
+            {analystCount ? <span>{analystCount.value} analysts</span> : null}
+          </div>
+        ) : null}
+        {epsMetrics.length ? (
+          <dl className="trading-supplemental-metric-grid compact">
+            {epsMetrics.map((metric) => (
+              <div key={metric.label}>
+                <dt>{metric.label}</dt>
+                <dd>{metric.value}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
+        {otherMetrics.length ? (
+          <dl className="trading-supplemental-metric-grid compact">
+            {otherMetrics.map((metric) => (
+              <div key={metric.label}>
+                <dt>{metric.label}</dt>
+                <dd>{metric.value}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
+        <p className="trading-financial-caption">{sourceList(section.metrics, section.source)}</p>
+      </>
     );
   }
 
   return (
     <>
       <dl className="trading-supplemental-metric-grid">
-        {section.metrics.map((metric) => (
+        {metrics.map((metric) => (
           <div key={metric.label} className={metric.status === 'unavailable' ? 'is-unavailable' : undefined}>
             <dt>{metric.label}</dt>
             <dd>{metric.value}</dd>
@@ -188,7 +301,7 @@ function SupplementalDataPanel({ section }: { section?: TickerSupplementalSectio
           </div>
         ))}
       </dl>
-      <p className="trading-financial-caption">{section.status} · {section.source.source}: {section.note}</p>
+      <p className="trading-financial-caption">{sourceList(section.metrics, section.source)}</p>
     </>
   );
 }
@@ -198,7 +311,6 @@ function FinancialBarChart({ overview }: { overview: TickerFinancialOverview }) 
   const max = Math.max(...series.map((item) => Math.max(Math.abs(item.revenue), Math.abs(item.netIncome))), 1);
   return (
     <>
-      {overview.status !== 'available' || overview.note ? <p className="trading-financial-caption">{overview.status} · {overview.note}</p> : null}
       <div className={`trading-financial-bars ${series.length ? '' : 'is-empty'}`} aria-label="Annual revenue and net income chart">
         {series.length ? series.map((item) => (
           <div key={item.year} className="trading-financial-bar-group">
@@ -218,6 +330,11 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const { symbol } = await params;
   const upperSymbol = symbol.toUpperCase();
   const ticker = await getTickerProfile(upperSymbol);
+  const profileFacts = cleanProfileFacts(ticker.companyProfile.facts);
+  const displayName = titleFromProfile(ticker.name, ticker.companyProfile.summary, profileFacts);
+  const headerStats = normalizeHeaderStats(ticker.headerStats, profileFacts);
+  const hasResources = ticker.resources.some((group) => group.items.length);
+
 
   return (
     <TradingPageFrame
@@ -235,7 +352,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <div className="trading-ticker-identity">
           <TickerMark symbol={upperSymbol} logoUrl={ticker.companyLogo.url} logoAlt={ticker.companyLogo.alt} />
           <div>
-            <h1>{ticker.name}</h1>
+            <h1>{displayName}</h1>
             <p>
               {upperSymbol} <span>·</span> {ticker.exchange}
             </p>
@@ -245,7 +362,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <TickerQuoteRefresh initialQuote={ticker.quote} symbol={ticker.symbol} />
 
         <dl className="trading-ticker-stat-strip">
-          {ticker.headerStats.map((stat) => (
+          {headerStats.map((stat) => (
             <div key={stat.label}>
               <dt>{stat.label}</dt>
               <dd>{stat.value}</dd>
@@ -262,7 +379,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       </div>
 
       <div className="trading-ticker-primary-grid">
-        <section id="price-history" style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>
+        <section id="price-history" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
           <div className="trading-section-head trading-ticker-chart-head">
             <div>
               <div className="trading-section-label">Price history</div>
@@ -271,20 +388,17 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <TickerPriceChart ranges={ticker.priceSeries.ranges} activeRange={ticker.priceSeries.activeRange} rangeSeries={ticker.priceSeries.rangeSeries} />
         </section>
 
-        <section id="company-profile" style={tradingCardStyle({ minHeight: 410, maxHeight: 'none' })}>
+        <section id="company-profile" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
           <div className="trading-section-label">Company profile</div>
           <p className="trading-ticker-profile-copy">{ticker.companyProfile.summary}</p>
           <dl className="trading-profile-facts">
-            {ticker.companyProfile.facts.map((fact) => (
+            {profileFacts.map((fact) => (
               <div key={fact.label}>
                 <dt>{fact.label}</dt>
-                <dd>{fact.value}</dd>
+                <dd>{profileFactValue(fact)}</dd>
               </div>
             ))}
           </dl>
-          <p className="trading-financial-caption">
-            {ticker.companyProfile.source.freshness} · {ticker.companyProfile.source.source}: {ticker.companyProfile.source.note}
-          </p>
         </section>
       </div>
 
@@ -293,7 +407,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div>
             <div className="trading-section-label">Financial highlights</div>
           </div>
-          <span className="trading-ticker-source-note">{ticker.sourceMap.financials.freshness} · {ticker.sourceMap.financials.source} · contract-ready</span>
+          <span className="trading-ticker-source-note">{formatCaptionSource(ticker.sourceMap.financials)}</span>
         </div>
         <div className="trading-financial-highlight-grid">
           {buildFinancialHighlightSlots(ticker.financialHighlights).map((metric) => (
@@ -340,7 +454,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
               <dd>{ticker.cashDebtSnapshot.operatingCashFlow}</dd>
             </div>
           </dl>
-          <p className="trading-financial-caption">{ticker.cashDebtSnapshot.source.freshness} · {ticker.cashDebtSnapshot.source.source}: {ticker.cashDebtSnapshot.source.note}</p>
+          <p className="trading-financial-caption">{formatCaptionSource(ticker.cashDebtSnapshot.source)}</p>
         </section>
 
         <section id="balance-sheet" style={tradingCardStyle({ minHeight: 420, maxHeight: 'none' })}>
@@ -365,7 +479,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
             ))}
           </div>
           <BalanceSheetBars snapshot={ticker.balanceSheetSnapshot} />
-          <p className="trading-financial-caption">{ticker.balanceSheetSnapshot.note}</p>
+          <p className="trading-financial-caption">{formatCaptionSource(ticker.balanceSheetSnapshot.source)}</p>
         </section>
       </div>
 
@@ -403,25 +517,27 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <section id="resources" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
           <div className="trading-section-head">
             <div>
-              <div className="trading-section-label">SEC filings</div>
+              <div className="trading-section-label">Filings & reports</div>
             </div>
-            <span className="trading-ticker-source-note">{ticker.sourceMap.filings.freshness} · {ticker.sourceMap.filings.source}</span>
+            <span className="trading-ticker-source-note">{hasResources ? formatCaptionSource(ticker.sourceMap.filings) : 'Data not available'}</span>
           </div>
-          <div className="trading-resource-list">
-            {ticker.resources.map((group) => (
-              <div key={group.label}>
-                {group.label !== 'SEC filings' ? <h3>{group.label}</h3> : null}
-                {group.items.map((item) => (
-                  <a key={`${item.name}-${item.href}`} href={item.href} aria-label={`${item.name} source link`} className={item.kind ? `filing-${item.kind}` : undefined}>
-                    <i>{item.form ?? item.kind ?? 'LINK'}</i>
-                    <span>{item.name}</span>
-                    <em>{item.meta}</em>
-                    <b>↗</b>
-                  </a>
-                ))}
-              </div>
-            ))}
-          </div>
+          {hasResources ? (
+            <div className="trading-resource-list">
+              {ticker.resources.map((group) => (
+                <div key={group.label}>
+                  {group.label !== 'SEC filings' ? <h3>{group.label}</h3> : null}
+                  {group.items.map((item) => (
+                    <a key={`${item.name}-${item.href}`} href={item.href} aria-label={`${item.name} source link`} className={item.kind ? `filing-${item.kind}` : undefined}>
+                      <i>{item.form ?? item.kind ?? 'LINK'}</i>
+                      <span>{item.name}</span>
+                      <em>{item.meta}</em>
+                      <b>↗</b>
+                    </a>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ) : <EmptySectionState />}
         </section>
       </div>
 
@@ -443,21 +559,21 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <section id="key-ratios" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
           <div className="trading-section-label">Key ratios (TTM)</div>
           <dl className="trading-key-ratio-grid">
-            {ticker.keyRatios.map((ratio) => (
+            {stripMetricSourceNotes(ticker.keyRatios).map((ratio) => (
               <div key={ratio.label}>
                 <dt>{ratio.label}</dt>
                 <dd className={ratio.status === 'unavailable' ? 'unavailable' : undefined}>{ratio.value}</dd>
-                {ratio.note ? <dd className="trading-ratio-note">{ratio.note}</dd> : null}
               </div>
             ))}
           </dl>
+          <p className="trading-financial-caption">{sourceList(ticker.keyRatios, ticker.sourceMap.financials)}</p>
         </section>
       </div>
 
       <div className="trading-ticker-placeholder-grid trading-ticker-provider-grid">
         <section id="estimates" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
           <div className="trading-section-label">Estimates</div>
-          <SupplementalDataPanel section={ticker.supplemental?.estimates} />
+          <SupplementalDataPanel section={ticker.supplemental?.estimates} visual />
         </section>
         <section id="dividends" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
           <div className="trading-section-label">Dividends</div>

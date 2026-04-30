@@ -126,7 +126,7 @@ export function TickerPriceChart({ ranges, activeRange, rangeSeries = {} }: Pric
           </div>
         ))}
       </dl>
-      <p className="trading-financial-caption">{selectedSeries?.source.freshness ?? 'missing'} · {selectedSeries?.source.source ?? 'yahoo'}: {selectedSeries?.source.note ?? 'Yahoo chart range data unavailable.'}</p>
+      <p className="trading-financial-caption">Source: {(selectedSeries?.source.source ?? 'yahoo').toUpperCase()}{selectedSeries?.source.asOf ? ` · Updated: ${new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date(selectedSeries.source.asOf))}` : ''}</p>
     </div>
   );
 }

@@ -50,10 +50,13 @@ export function TickerQuoteRefresh({ initialQuote, symbol: profileSymbol }: { in
   const delayText = shortDelayText(quote.providerDelay);
   const canRefresh = Boolean(symbol?.includes('.'));
 
-  const metaLine = useMemo(() => {
+  const metaLines = useMemo(() => {
     const quoteTime = formatLocalTime(quote.updatedAt ?? quote.source.asOf);
     const fetchedTime = formatLocalTime(lastFetchedAt);
-    return `${state === 'refreshing' ? 'Refreshing' : 'Updated'} ${quoteTime} · checked ${fetchedTime}`;
+    return {
+      updated: `${state === 'refreshing' ? 'Updating' : 'Updated'}: ${quoteTime}`,
+      refreshed: `Refreshed: ${fetchedTime}`,
+    };
   }, [lastFetchedAt, quote.source.asOf, quote.updatedAt, state]);
 
   async function refreshQuote(manual = false) {
@@ -113,8 +116,9 @@ export function TickerQuoteRefresh({ initialQuote, symbol: profileSymbol }: { in
       <em className={quote.tone}>{quote.change} ({quote.changePct})</em>
       <div className="trading-quote-refresh-stack">
         <div className="trading-quote-refresh-lines" title={quote.priceTime}>
-          <span>{metaLine}</span>
-          <span>{delayText}</span>
+          <span>{metaLines.updated}</span>
+          <span>{metaLines.refreshed}</span>
+          <span className="trading-quote-delay-line">{delayText}</span>
         </div>
         <button
           type="button"
