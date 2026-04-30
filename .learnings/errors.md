@@ -17,6 +17,18 @@ Command/tool failures and exceptions.
 
 ## Recent Errors
 
+
+## [ERR-20260430-1807]
+
+**What failed:** Initial Lab provider-enrichment validation briefly read stale runtime/cache behavior after source changes.
+**Error:** The existing Lab preview could still serve older compiled code or old ticker-profile cache JSON, making AAPL.US appear unenriched even after the new yfinance/FinanceDatabase code path compiled.
+**Context:** During the Mission Control Lab Trading FinanceDatabase + yfinance integration, provider code was changed under `projects/mission-control-lab`, then ticker pages were checked while the running preview/caches had not fully reflected the new build path.
+**Suggested fix:** For provider/source changes, validate against a fresh build/start or restarted Lab preview, clear the relevant `data/trading/ticker-profiles/*.json` cache files, then inspect both route status and generated cache JSON before concluding enrichment failed. Treat stale preview evidence as weaker than fresh-server/cache evidence.
+**Resolution:** Resolved the same block by running `npx tsc --noEmit`, `npm run lint`, `npm run build`, smoking a fresh production server on port 3099, restarting Lab preview, running `scripts/lab-health.sh`, clearing affected ticker caches, and confirming AAPL.US / ASML.AS / VCB.VN had yfinance-backed market cap, P/E, estimates, and ownership.
+
+**Priority:** medium
+**Status:** resolved
+
 ## [ERR-20260427-1212]
 
 **What failed:** Ad-hoc Mission Control ops learnings were saved as a standalone project `_ops` note instead of structured `.learnings/` entries
