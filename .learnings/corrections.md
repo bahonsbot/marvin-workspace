@@ -880,3 +880,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** medium
 **Status:** active
+
+## [CORR-20260430-1326]
+
+**Trigger:** Philippe reviewed the proposed second-pass tightening of `skills/frontend-skill/SKILL.md` and preferred keeping the current document intact because some repeated rules usefully reinforce each other.
+**What was wrong:** I leaned toward trimming overlap for neatness before checking whether the repetition was actually serving emphasis and recall. In skill docs, not every repeated idea is accidental bloat.
+**Lesson:** When tightening a skill, prompt, or operating doc, do not optimize purely for minimalism. Remove true duplication, but keep intentional reinforcement when repeated rules make the guidance stickier or harder to misread.
+
+**Priority:** medium
+**Status:** active

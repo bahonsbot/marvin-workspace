@@ -99,14 +99,22 @@ Script-only jobs belong on the host deterministic scheduler.
 - Human-readable queue diagnosis: `python3 scripts/queue_triage.py --json`
 
 ## Mission Control Runtime Notes
-- Project path: `projects/mission-control/`
+- Dashboard / live-stable lane: `projects/mission-control/`
+- Lab / experimental lane: `projects/mission-control-lab/`
 - Current app stack: Next.js version follows each lane's `package.json`; `projects/mission-control` and `projects/mission-control-lab` are aligned on `next 16.2.4` with `postcss 8.5.12` override, `react 19.2.0`, `react-dom 19.2.0`, and `ws` required (verified Apr 29, 2026)
-- Main preview/runtime ports:
+- Dashboard preview/runtime ports:
   - app: `3005`
   - sidecar/health: `3006`
   - proxy/helper: `3007`
-- Preview stop rule: `projects/mission-control/scripts/preview-stop.sh` must remain PID-file scoped. Do not revert to broad `pkill` patterns.
-- Runtime bridge dependencies: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js` and `projects/mission-control/scripts/preview-origin-proxy.js` require the `ws` package
+- Lab preview/runtime ports:
+  - proxy/helper: `3015`
+  - sidecar/health: `3016`
+  - internal Next server: `3017`
+  - Piper TTS: `3022`
+  - Moonshine STT: `3023`
+- Lane role rule: treat Dashboard as the live/stable Mission Control surface; treat Lab as the experimental Mission Control lane for sandboxed work and new sections until Philippe explicitly approves promotion. Trading / BOILER ROOM is the current active Lab project, not the only intended Lab scope.
+- Preview stop rule: `projects/mission-control/scripts/preview-stop.sh` and Lab equivalents must remain PID-file scoped. Do not revert to broad `pkill` patterns.
+- Runtime bridge dependencies: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js`, `projects/mission-control/scripts/preview-origin-proxy.js`, and Lab equivalents require the `ws` package
 - Preview public TLS note: `preview.motiondisplay.cloud` currently has a certificate/hostname mismatch under strict TLS; local preview smoke can still pass, and this is deferred/non-blocking for dashboard/lab.
 - Tasks truth rule:
   - authoritative store: `projects/mission-control/data/autonomous-tasks.json`
