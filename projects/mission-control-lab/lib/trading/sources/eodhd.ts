@@ -407,8 +407,12 @@ async function fetchRange(symbol: string, range: EodhdPriceRange, now: Date, sou
   return rangeFromEodRows(range, Array.isArray(rows) ? rows : [], source, currency);
 }
 
+function safeSearchQuery(input: string) {
+  return input.trim().replace(/[^A-Za-z0-9.\-\s]/g, '').replace(/\s+/g, ' ').trim();
+}
+
 export async function fetchEodhdSearch(query: string) {
-  const normalized = safeSymbol(query);
+  const normalized = safeSearchQuery(query);
   if (!normalized) return [];
   const data = await fetchEodhdJson<EodhdSearchResult[]>(`/search/${encodeURIComponent(normalized)}`);
   return Array.isArray(data) ? data : [];

@@ -161,6 +161,7 @@ export function TickerSearch() {
             {!loading && error ? <div className={styles.tickerSearchState}>{error}</div> : null}
             {!loading && !error && trimmedQuery && !hasResults ? <div className={styles.tickerSearchState}>No matching symbols found.</div> : null}
             {!loading && !error && !trimmedQuery ? <div className={styles.tickerSearchState}>Start typing a ticker, company, or exchange symbol.</div> : null}
+            {!loading && !error && hasResults ? <div className={styles.tickerSearchState}>Showing ADRs plus local listings when EODHD can infer the company name.</div> : null}
             {results.map((result, index) => (
               <button
                 key={result.symbol}
