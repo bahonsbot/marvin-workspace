@@ -53,6 +53,8 @@ const knownWikipediaTitles: Record<string, string> = {
   'MU.US': 'Micron Technology',
   NVDA: 'Nvidia',
   TSM: 'TSMC',
+  VRT: 'Vertiv',
+  'VRT.US': 'Vertiv',
 };
 
 const knownLogoFiles: Record<string, string> = {
@@ -254,6 +256,10 @@ function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefi
   const cleanedExtract = (extract ?? '').trim().toLowerCase();
   const cleanedCompany = companyName.trim().toLowerCase();
   if (cleanedExtract.includes(' may refer to:')) return true;
+  if (title.startsWith('list of ')) return true;
+  if (title.includes('s&p 500') || title.includes('stock market index')) return true;
+  if (cleanedExtract.includes(' is a stock market index ')) return true;
+  if (cleanedExtract.includes(' comprises ') && cleanedExtract.includes(' companies traded on')) return true;
   if (title.length <= 4 && !cleanedCompany.startsWith(title)) return true;
   return false;
 }

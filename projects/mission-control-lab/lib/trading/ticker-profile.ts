@@ -13,7 +13,10 @@ const TICKER_PROFILE_TTL_MS = 15 * 60 * 1000;
 
 
 function hasAmbiguousCompanyProfile(profile: TickerProfile) {
-  return profile.companyProfile.summary.toLowerCase().includes(' may refer to:');
+  const summary = profile.companyProfile.summary.toLowerCase();
+  return summary.includes(' may refer to:') ||
+    summary.includes(' is a stock market index ') ||
+    (summary.includes(' comprises ') && summary.includes(' companies traded on'));
 }
 
 
