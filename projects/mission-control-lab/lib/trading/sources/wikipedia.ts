@@ -49,6 +49,8 @@ const knownWikipediaTitles: Record<string, string> = {
   AAPL: 'Apple Inc.',
   AMZN: 'Amazon (company)',
   MSFT: 'Microsoft',
+  MU: 'Micron Technology',
+  'MU.US': 'Micron Technology',
   NVDA: 'Nvidia',
   TSM: 'TSMC',
 };
@@ -88,7 +90,8 @@ function firstPage<T extends object>(pages: Record<string, T> | undefined): T | 
 }
 
 async function resolveWikipediaTitle(symbol: string, companyName: string) {
-  const known = knownWikipediaTitles[symbol.toUpperCase()];
+  const normalizedSymbol = symbol.toUpperCase();
+  const known = knownWikipediaTitles[normalizedSymbol] ?? knownWikipediaTitles[normalizedSymbol.replace(/\.US$/, '')];
   if (known) return known;
 
   const search = await fetchJson<WikipediaSearchResponse>(
@@ -245,6 +248,16 @@ async function fetchWikipediaPage(title: string) {
   return firstPage(page?.query?.pages);
 }
 
+
+function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefined, companyName: string) {
+  const title = pageTitle.trim().toLowerCase();
+  const cleanedExtract = (extract ?? '').trim().toLowerCase();
+  const cleanedCompany = companyName.trim().toLowerCase();
+  if (cleanedExtract.includes(' may refer to:')) return true;
+  if (title.length <= 4 && !cleanedCompany.startsWith(title)) return true;
+  return false;
+}
+
 export interface WikipediaCompanyProfileResult {
   profile: TickerCompanyProfile;
   title: string;
@@ -256,6 +269,7 @@ export async function fetchWikipediaCompanyProfile(symbol: string, companyName: 
   if (!title) return null;
 
   const page = await fetchWikipediaPage(title);
+  if (isAmbiguousWikipediaProfile(page?.title ?? title, page?.extract, companyName)) return null;
   const wikidataId = page?.pageprops?.wikibase_item;
   if (!wikidataId) return null;
 

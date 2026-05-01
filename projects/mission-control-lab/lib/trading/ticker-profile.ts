@@ -11,6 +11,11 @@ import { yahooTickerProfileSource } from './sources/yahoo';
 const profileSources = [eodhdTickerProfileSource, yahooTickerProfileSource, sampleTickerProfileSource];
 const TICKER_PROFILE_TTL_MS = 15 * 60 * 1000;
 
+
+function hasAmbiguousCompanyProfile(profile: TickerProfile) {
+  return profile.companyProfile.summary.toLowerCase().includes(' may refer to:');
+}
+
 function shouldRefreshCachedReferenceData(profile: TickerProfile) {
   return hasRegisteredNonUsFilingsSymbol(profile.symbol) && profile.sourceMap.filings.source !== 'sec' && (
     profile.sourceMap.filings.freshness === 'missing' ||
@@ -23,7 +28,7 @@ export async function getTickerProfile(symbol: string): Promise<TickerProfile> {
   const normalizedSymbol = symbol.trim().toUpperCase();
   const cached = await getCachedTickerProfile(normalizedSymbol, TICKER_PROFILE_TTL_MS);
   if (cached) {
-    if (!shouldRefreshCachedReferenceData(cached)) return cached;
+    if (!shouldRefreshCachedReferenceData(cached) && !hasAmbiguousCompanyProfile(cached)) return cached;
     const enrichedCached = await enrichTickerProfileWithReferenceData(cached);
     await writeTickerProfileCache(enrichedCached, TICKER_PROFILE_TTL_MS);
     return enrichedCached;
