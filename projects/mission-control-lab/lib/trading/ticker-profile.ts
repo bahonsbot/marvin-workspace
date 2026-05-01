@@ -16,6 +16,7 @@ function hasAmbiguousCompanyProfile(profile: TickerProfile) {
   const summary = profile.companyProfile.summary.toLowerCase();
   return summary.includes(' may refer to:') ||
     summary.includes(' is a stock market index ') ||
+    summary.includes(' is covered by eodhd market-data endpoints') ||
     (summary.includes(' comprises ') && summary.includes(' companies traded on'));
 }
 
@@ -36,16 +37,7 @@ function shouldRefreshCachedReferenceData(profile: TickerProfile) {
 }
 
 
-export async function getTickerProfile(symbol: string): Promise<TickerProfile> {
-  const normalizedSymbol = symbol.trim().toUpperCase();
-  const cached = await getCachedTickerProfile(normalizedSymbol, TICKER_PROFILE_TTL_MS);
-  if (cached) {
-    if (!shouldRefreshCachedReferenceData(cached) && !hasAmbiguousCompanyProfile(cached) && !hasMissingUsYfinanceEnrichment(cached)) return cached;
-    const enrichedCached = await enrichTickerProfileWithReferenceData(cached);
-    await writeTickerProfileCache(enrichedCached, TICKER_PROFILE_TTL_MS);
-    return enrichedCached;
-  }
-
+async function fetchFreshTickerProfile(normalizedSymbol: string) {
   for (const source of profileSources) {
     const result = await source.fetchProfile({ symbol: normalizedSymbol, now: new Date() });
     if (!result) continue;
@@ -56,4 +48,18 @@ export async function getTickerProfile(symbol: string): Promise<TickerProfile> {
   }
 
   throw new Error(`No ticker profile source produced data for ${normalizedSymbol || 'unknown symbol'}`);
+}
+
+export async function getTickerProfile(symbol: string): Promise<TickerProfile> {
+  const normalizedSymbol = symbol.trim().toUpperCase();
+  const cached = await getCachedTickerProfile(normalizedSymbol, TICKER_PROFILE_TTL_MS);
+  if (cached) {
+    if (hasAmbiguousCompanyProfile(cached)) return fetchFreshTickerProfile(normalizedSymbol);
+    if (!shouldRefreshCachedReferenceData(cached) && !hasMissingUsYfinanceEnrichment(cached)) return cached;
+    const enrichedCached = await enrichTickerProfileWithReferenceData(cached);
+    await writeTickerProfileCache(enrichedCached, TICKER_PROFILE_TTL_MS);
+    return enrichedCached;
+  }
+
+  return fetchFreshTickerProfile(normalizedSymbol);
 }

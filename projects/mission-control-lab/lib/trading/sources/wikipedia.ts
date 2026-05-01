@@ -55,6 +55,7 @@ const knownWikipediaTitles: Record<string, string> = {
   TSM: 'TSMC',
   VRT: 'Vertiv',
   'VRT.US': 'Vertiv',
+  'WAWI.OL': 'Wallenius Wilhelmsen',
 };
 
 const knownLogoFiles: Record<string, string> = {
