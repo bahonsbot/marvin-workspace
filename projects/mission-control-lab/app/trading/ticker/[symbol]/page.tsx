@@ -115,11 +115,33 @@ function sourceList(metrics: Array<{ source?: TickerSourceMeta }> = [], fallback
   return labels.size ? `Sources: ${Array.from(labels).join(', ')}` : 'Sources: Provider pending';
 }
 
+
+function compactSourceList(metrics: Array<{ source?: TickerSourceMeta; status?: TickerDataStatus }> = [], fallback?: TickerSourceMeta) {
+  const eligible = metrics.filter((metric) => metric.status !== 'unavailable' && metric.source?.source !== 'sample');
+  return sourceList(eligible, eligible.length ? undefined : fallback).replace('Yahoo / yfinance', 'yfinance').replace('Sources:', 'Source:');
+}
+
+function cleanYearLabel(value: string) {
+  return value.slice(0, 4);
+}
+
+function keyRatioHighlightKey(label: string) {
+  const normalized = normalizeHighlightLabel(label);
+  if (normalized === 'return on equity') return 'roe';
+  return normalized;
+}
+
+function highlightedRatioLabels(metrics: TickerFinancialHighlight[]) {
+  return new Set(buildFinancialHighlightSlots(metrics)
+    .filter((metric) => metric.status !== 'unavailable' && metric.value !== 'Unavailable')
+    .map((metric) => normalizeHighlightLabel(metric.label)));
+}
+
 function cleanProfileFacts(facts: TickerProfileFact[]) {
-  const hidden = new Set(['wikidata', 'industry group', 'company name', 'quote type']);
+  const hidden = new Set(['wikidata', 'industry group', 'company name', 'quote type', 'sector', 'industry', 'currency']);
   const preferred = new Map<string, TickerProfileFact>();
   for (const fact of facts) {
-    const key = fact.label.toLowerCase();
+    const key = fact.label.trim().toLowerCase();
     if (hidden.has(key)) continue;
     const current = preferred.get(key);
     if (!current || current.value === 'Provider pending' || current.value.length > fact.value.length) preferred.set(key, fact);
@@ -144,7 +166,7 @@ function titleFromProfile(tickerName: string, summary: string, facts: TickerProf
 
 function normalizeHeaderStats(stats: TickerDisplayMetric[], facts: TickerProfileFact[]) {
   const quoteType = facts.find((fact) => fact.label.toLowerCase() === 'quote type')?.value;
-  return stats.map((stat) => {
+  return stats.filter((stat) => !['Sector', 'Industry'].includes(stat.label)).map((stat) => {
     if (stat.label !== 'Type') return stat;
     if (!quoteType || quoteType === 'Provider pending') return stat;
     const value = quoteType.toLowerCase() === 'equity' ? 'Equity' : quoteType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
@@ -177,12 +199,12 @@ function buildFinancialHighlightSlots(metrics: TickerFinancialHighlight[]) {
     return {
       label,
       value: 'Unavailable',
-      delta: 'Provider required',
+      delta: '',
       tone: 'neutral' as const,
       trend: [],
       source: unavailableHighlightSource,
       status: 'unavailable' as const,
-      note: 'Awaiting richer fundamentals provider such as FMP or a validated SEC concept mapping.',
+      note: undefined,
     };
   });
 }
@@ -201,7 +223,7 @@ function TickerMark({ symbol, logoUrl, logoAlt }: { symbol: string; logoUrl: str
   );
 }
 
-function SmallSparkline({ values, tone = 'positive' }: { values: number[]; tone?: SparklineTone }) {
+function SmallSparkline({ values, years = [], tone = 'positive' }: { values: number[]; years?: string[]; tone?: SparklineTone }) {
   const cleanValues = values.filter((value) => Number.isFinite(value));
   if (cleanValues.length < 2) return <EmptySparkline label="trend" />;
   const width = 112;
@@ -216,12 +238,22 @@ function SmallSparkline({ values, tone = 'positive' }: { values: number[]; tone?
     })
     .join(' ');
   const areaPoints = `2,${height - 3} ${points} ${width - 2},${height - 3}`;
+  const firstYear = years[0] ? cleanYearLabel(years[0]) : null;
+  const lastYear = years.at(-1) ? cleanYearLabel(years.at(-1)!) : null;
 
   return (
-    <svg className={`trading-small-sparkline ${tone}`} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
-      <polygon points={areaPoints} />
-      <polyline points={points} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <div className="trading-small-sparkline-wrap">
+      <svg className={`trading-small-sparkline ${tone}`} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
+        <polygon points={areaPoints} />
+        <polyline points={points} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {firstYear && lastYear ? (
+        <div className="trading-highlight-years" aria-hidden="true">
+          <span>{firstYear}</span>
+          <span>{lastYear}</span>
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -452,11 +484,14 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const profileFactsByLabel = new Map(profileFacts.map((fact) => [fact.label.toLowerCase(), fact]));
   for (const stat of headerStats) {
     const key = stat.label.toLowerCase();
-    if ((key === 'sector' || key === 'industry' || key === 'country') && stat.value && stat.value !== 'Provider pending') {
+    if (key === 'country' && stat.value && stat.value !== 'Provider pending') {
       profileFactsByLabel.set(key, { label: stat.label, value: stat.value });
     }
   }
-  const displayProfileFacts = Array.from(profileFactsByLabel.values());
+  const displayProfileFacts = Array.from(profileFactsByLabel.values()).filter((fact) => !['sector', 'industry', 'currency'].includes(fact.label.trim().toLowerCase()));
+  const financialHighlightSlots = buildFinancialHighlightSlots(ticker.financialHighlights);
+  const visibleHighlightRatioLabels = highlightedRatioLabels(ticker.financialHighlights);
+  const keyRatios = stripMetricSourceNotes(ticker.keyRatios).filter((ratio) => !visibleHighlightRatioLabels.has(keyRatioHighlightKey(ratio.label)));
   const hasResources = ticker.resources.some((group) => group.items.length);
   const profileSummary = profileSummaryText(ticker.companyProfile.summary, displayName);
   const displayCurrency = ticker.currency || metricCurrency(ticker.supplemental?.estimates.metrics) || metricCurrency(ticker.supplemental?.dividends.metrics) || undefined;
@@ -539,16 +574,15 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div>
             <div className="trading-section-label">Financial highlights</div>
           </div>
-          <span className="trading-ticker-source-note">{formatCaptionSource(ticker.sourceMap.financials)}</span>
+          <span className="trading-ticker-source-note">{compactSourceList(financialHighlightSlots, ticker.sourceMap.financials)}</span>
         </div>
         <div className="trading-financial-highlight-grid">
-          {buildFinancialHighlightSlots(ticker.financialHighlights).map((metric) => (
+          {financialHighlightSlots.map((metric) => (
             <article key={metric.label} className={`trading-financial-highlight-card ${metric.status === 'unavailable' ? 'is-unavailable' : ''}`}>
               <span>{metric.label}</span>
               <strong>{metric.value}</strong>
-              <em className={metric.tone}>{metric.delta}</em>
-              {metric.trend.length ? <SmallSparkline values={metric.trend} tone={metric.tone as SparklineTone} /> : <EmptySparkline label={metric.label} />}
-              {metric.note && metric.status === 'unavailable' ? <p>{metric.note}</p> : null}
+              {metric.status !== 'unavailable' && metric.delta ? <em className={metric.tone}>{metric.delta}</em> : null}
+              {metric.status !== 'unavailable' && metric.trend.length ? <SmallSparkline values={metric.trend} years={metric.trendYears} tone={metric.tone as SparklineTone} /> : null}
             </article>
           ))}
         </div>
@@ -691,14 +725,14 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <section id="key-ratios" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
           <div className="trading-section-label">Key ratios (TTM)</div>
           <dl className="trading-key-ratio-grid">
-            {stripMetricSourceNotes(ticker.keyRatios).map((ratio) => (
+            {keyRatios.map((ratio) => (
               <div key={ratio.label}>
                 <dt>{ratio.label}</dt>
                 <dd className={ratio.status === 'unavailable' ? 'unavailable' : undefined}>{ratio.value}</dd>
               </div>
             ))}
           </dl>
-          <p className="trading-financial-caption">{sourceList(ticker.keyRatios, ticker.sourceMap.financials)}</p>
+          <p className="trading-financial-caption">{sourceList(ticker.keyRatios.filter((ratio) => !visibleHighlightRatioLabels.has(keyRatioHighlightKey(ratio.label))), ticker.sourceMap.financials)}</p>
         </section>
       </div>
 

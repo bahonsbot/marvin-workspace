@@ -1099,16 +1099,16 @@
 
 :global(.trading-financial-highlight-grid) {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid rgba(28, 37, 32, 0.12);
   border-left: 1px solid rgba(28, 37, 32, 0.12);
 }
 
 :global(.trading-financial-highlight-card) {
-  min-height: 136px;
+  min-height: 132px;
   border-right: 1px solid rgba(28, 37, 32, 0.12);
   border-bottom: 1px solid rgba(28, 37, 32, 0.12);
-  padding: 13px;
+  padding: 12px;
   display: grid;
   gap: 6px;
   align-content: start;
@@ -1161,10 +1161,15 @@
   opacity: 0.55;
 }
 
+:global(.trading-small-sparkline-wrap) {
+  display: grid;
+  gap: 2px;
+  margin-top: 2px;
+}
+
 :global(.trading-small-sparkline) {
   width: 100%;
-  height: 38px;
-  margin-top: 4px;
+  height: 34px;
   color: #16a34a;
   overflow: visible;
 }
@@ -1180,6 +1185,15 @@
 
 :global(.trading-small-sparkline.neutral) {
   color: #547968;
+}
+
+:global(.trading-highlight-years) {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(34, 48, 41, 0.36);
+  font-size: 9px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 :global(.trading-ticker-secondary-grid),
@@ -1699,6 +1713,10 @@
     justify-self: start;
     max-width: min(100%, 360px);
   }
+
+  :global(.trading-financial-highlight-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -2022,9 +2040,13 @@
     font-size: 24px;
   }
 
-  :global(.trading-small-sparkline) {
+  :global(.trading-small-sparkline-wrap) {
     grid-column: 2;
     grid-row: 1 / span 3;
+    width: 88px;
+  }
+
+  :global(.trading-small-sparkline) {
     width: 88px;
   }
 

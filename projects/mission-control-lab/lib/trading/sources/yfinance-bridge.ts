@@ -37,6 +37,7 @@ interface YfinanceYearValue {
   year?: string | null;
   value?: number | null;
   trend?: number[] | null;
+  trendYears?: string[] | null;
 }
 
 interface YfinanceBalanceSheetAnnualRow {
@@ -217,12 +218,14 @@ export function yfinanceFinancialHighlights(data: YfinanceBridgeResult | null, s
     if ((!year || value == null || !Number.isFinite(value)) && !ratioValue) return [];
     const currency = data?.fundamentals?.currency || 'USD';
     const trend = (item.node?.trend ?? []).filter((point): point is number => Number.isFinite(point));
+    const trendYears = (item.node?.trendYears ?? []).filter((year): year is string => Boolean(year));
     return [{
       label: item.label,
       value: ratioValue ?? (item.label === 'EPS' && value != null ? `${currency} ${value.toFixed(2)}` : formatBillions(value, currency)),
       delta: ratioValue ? 'TTM ratio from yfinance fundamentals.' : `${year} FY from yfinance annual statements.`,
       tone: item.ratioTone ?? 'neutral',
       trend,
+      trendYears,
       source,
       status: 'available',
       note: undefined,

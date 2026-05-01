@@ -59,6 +59,7 @@ export interface TickerFinancialHighlight {
   delta: string;
   tone: 'positive' | 'negative' | 'neutral';
   trend: number[];
+  trendYears?: string[];
   source?: TickerSourceMeta;
   status?: TickerDataStatus;
   note?: string;
