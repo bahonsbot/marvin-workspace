@@ -3,6 +3,7 @@ import 'server-only';
 import { getCachedTickerProfile, writeTickerProfileCache } from './cache';
 import type { TickerProfile } from './contracts';
 import { enrichTickerProfileWithReferenceData } from './sources/reference-enrichment';
+import { hasRegisteredNonUsFilingsSymbol } from './sources/xbrl-filings';
 import { eodhdTickerProfileSource } from './sources/eodhd';
 import { sampleTickerProfileSource } from './sources/sample';
 import { yahooTickerProfileSource } from './sources/yahoo';
@@ -10,10 +11,23 @@ import { yahooTickerProfileSource } from './sources/yahoo';
 const profileSources = [eodhdTickerProfileSource, yahooTickerProfileSource, sampleTickerProfileSource];
 const TICKER_PROFILE_TTL_MS = 15 * 60 * 1000;
 
+function shouldRefreshCachedReferenceData(profile: TickerProfile) {
+  return hasRegisteredNonUsFilingsSymbol(profile.symbol) && profile.sourceMap.filings.source !== 'sec' && (
+    profile.sourceMap.filings.freshness === 'missing' ||
+    !profile.resources.some((group) => group.items.length)
+  );
+}
+
+
 export async function getTickerProfile(symbol: string): Promise<TickerProfile> {
   const normalizedSymbol = symbol.trim().toUpperCase();
   const cached = await getCachedTickerProfile(normalizedSymbol, TICKER_PROFILE_TTL_MS);
-  if (cached) return cached;
+  if (cached) {
+    if (!shouldRefreshCachedReferenceData(cached)) return cached;
+    const enrichedCached = await enrichTickerProfileWithReferenceData(cached);
+    await writeTickerProfileCache(enrichedCached, TICKER_PROFILE_TTL_MS);
+    return enrichedCached;
+  }
 
   for (const source of profileSources) {
     const result = await source.fetchProfile({ symbol: normalizedSymbol, now: new Date() });

@@ -62,6 +62,10 @@ const XBRL_ENTITY_REGISTRY: Record<string, XbrlRegistryEntry> = {
   },
 };
 
+export function hasRegisteredNonUsFilingsSymbol(symbol: string) {
+  return Boolean(XBRL_ENTITY_REGISTRY[symbol.trim().toUpperCase()]);
+}
+
 function xbrlSource(asOf: string, note: string, freshness: TickerSourceMeta['freshness'] = 'fresh'): TickerSourceMeta {
   return {
     source: 'xbrl',
