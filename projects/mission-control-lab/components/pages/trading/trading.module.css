@@ -53,13 +53,27 @@
   font-size: 13px;
 }
 
+:global(.trading-market-tape-shell) {
+  border-block: 1px solid rgba(28, 37, 32, 0.2);
+  background: rgba(255, 253, 249, 0.54);
+  max-width: 100%;
+}
+
+:global(.trading-market-tape-status) {
+  border-bottom: 1px solid rgba(28, 37, 32, 0.1);
+  padding: 6px 14px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(38, 58, 49, 0.5);
+  font-weight: 800;
+}
+
 :global(.trading-market-tape) {
   display: flex;
   gap: 0;
   overflow-x: auto;
   overflow-y: hidden;
-  border-block: 1px solid rgba(28, 37, 32, 0.2);
-  background: rgba(255, 253, 249, 0.54);
   max-width: 100%;
   scrollbar-width: thin;
 }
