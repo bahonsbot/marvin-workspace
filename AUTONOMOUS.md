@@ -32,8 +32,13 @@ This file is not autonomy policy; operational autonomy rules live in AUTONOMY.md
 - Draft: Actionable Alpha dashboard slice | ✅ Completed: Sudo completed the lane plan frontend -> qa.
 ## Needs Input
 ## In Progress
+**Brief:** review recent OpenClaw logs to identify one concrete repetitive prompt or looping behavior, then propose a bounded gate, prompt fix, or tool-definition improvement; deliverable: markdown audit in projects/_ops/ with evidence, root-cause hypothesis, and recommended guard
+| Why: Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output | Proof: Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift | Unlocks: Unlocks a safer token-efficiency or reliability fix with clear evidence behind it
 ## Open Backlog
 
+- [Trading] Design: Signal outcome-linkage checklist
+**Brief:** design a checklist that links each tracked signal to its verification evidence, outcome status, and follow-up review notes; deliverable: markdown checklist in projects/market-intel/notes/
+| Why: Turns signal-tracking improvement into a concrete operator checklist instead of another high-level audit | Proof: Checklist shows how a signal moves from creation to verified outcome without losing evidence context | Unlocks: Unlocks cleaner data integrity and review quality in the signal workflow
 - [Trading] Draft: SEC filing ingestion pipeline
 **Brief:** define a first-pass pipeline that pulls SEC filings and quarterly reports for a small ticker set, extracts the inputs needed for sensitivity ranges, and maps the outputs into the dashboard; deliverable: markdown pipeline note in projects/market-intel/notes/ with source flow, parser stages, and storage/output contract
 | Why: Makes the filings-and-sensitivity goal concrete enough to implement in stages | Proof: Pipeline note defines source, extraction stages, target output fields, and one believable starter ticker set | Unlocks: Unlocks a scoped implementation task for filings ingestion instead of leaving the goal at idea level
@@ -43,12 +48,12 @@ This file is not autonomy policy; operational autonomy rules live in AUTONOMY.md
 - [Career] Analyze: Creative-tool workflow friction shortlist
 **Brief:** identify 3 repetitive setup steps across Blender, Unreal Engine, or After Effects and rank them by automation value and implementation simplicity; deliverable: markdown shortlist in projects/creative-practice/ with recommended first target and rationale
 | Why: Makes the automation goal smarter by choosing the highest-leverage repetitive step instead of repeating an already-finished plan | Proof: Shortlist names 3 concrete frictions, scores them, and recommends one first automation target with clear reasoning | Unlocks: Unlocks a fresher automation plan or prototype against the best remaining workflow pain point
-- [Other] Draft: Loop-mitigation gate spec
-**Brief:** define one bounded gate or tool-usage rule that should interrupt a known OpenClaw loop pattern before it burns more tokens; deliverable: markdown spec in projects/_ops/ with trigger, safe action, and rollback
-| Why: Keeps the same anti-looping goal moving by shifting from audit to one concrete mitigation concept | Proof: Spec names one loop trigger, one bounded intervention, and why it is safer than broader control-plane changes | Unlocks: Unlocks a directly implementable next step after the current backlog audit item
-- [Trading] Analyze: Actionable Alpha operator decision flow
-**Brief:** map the operator decision flow for one Actionable Alpha workflow, from inputs to go/no-go output, and identify the minimum data needed at each step; deliverable: markdown flow note in projects/market-intel/notes/
-| Why: Keeps moving the dashboard goal forward even after a module-spec task is already done | Proof: Flow note shows one full operator decision path, required inputs, and the specific bottleneck or ambiguity to solve next | Unlocks: Unlocks a sharper next dashboard build task or module spec grounded in operator behavior
+- [Trading] Implement: Global official filings adapters
+**Brief:** after the yfinance fundamentals backfill is verified, design and implement the next official-filings adapter slice for Lab Trading. Priority source order: Europe filings.xbrl.org/ESEF, Korea OpenDART, Japan EDINET, Taiwan MOPS/TWSE; evaluate Brazil CVM next; keep South Africa CIPC/JSE as a candidate only after public iXBRL retrieval is confirmed. Deliverable: provider-backed filings/fundamentals adapter plan or implementation in projects/mission-control-lab, with no fake numeric data and clear unavailable states where public retrieval is not proven.
+| Why: Turns the global filings research into a sequenced implementation task without interrupting the current yfinance slice | Proof: Adapter work starts only after yfinance verification and uses official machine-readable sources where public retrieval is proven | Unlocks: Unlocks non-US filings and global fundamentals coverage beyond Yahoo/yfinance without adding a paid provider
 
 
 ## Review
+- [Other] Analyze: OpenClaw loop-pattern audit
+**Brief:** review recent OpenClaw logs to identify one concrete repetitive prompt or looping behavior, then propose a bounded gate, prompt fix, or tool-definition improvement; deliverable: markdown audit in projects/_ops/ with evidence, root-cause hypothesis, and recommended guard
+| Why: Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output | Proof: Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift | Unlocks: Unlocks a safer token-efficiency or reliability fix with clear evidence behind it
