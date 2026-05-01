@@ -700,7 +700,14 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
                 <div key={group.label}>
                   {group.label !== 'SEC filings' ? <h3>{group.label}</h3> : null}
                   {group.items.map((item) => (
-                    <a key={`${item.name}-${item.href}`} href={item.href} aria-label={`${item.name} source link`} className={item.kind ? `filing-${item.kind}` : undefined}>
+                    <a
+                      key={`${item.name}-${item.href}`}
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${item.name} source link`}
+                      className={item.kind ? `filing-${item.kind}` : undefined}
+                    >
                       <i>{item.form ?? item.kind ?? 'LINK'}</i>
                       <span>{item.name}</span>
                       <em>{item.meta}</em>
