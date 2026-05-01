@@ -73,6 +73,33 @@ def df_metric(df: Any, period: str, column: str) -> Any:
         return None
 
 
+def read_statement_row(df: Any, labels: list[str]) -> dict[str, float]:
+    output: dict[str, float] = {}
+    try:
+        if df is None or getattr(df, "empty", True):
+            return output
+        for label in labels:
+            if label not in df.index:
+                continue
+            row = df.loc[label]
+            for column, raw in row.items():
+                number = safe_float(raw)
+                if number is None:
+                    continue
+                key = str(getattr(column, "date", lambda: column)())
+                output[key] = number
+            if output:
+                return output
+    except Exception:
+        return {}
+    return output
+
+
+def latest_year(values: dict[str, float]) -> str | None:
+    years = sorted(values.keys())
+    return years[-1] if years else None
+
+
 def main() -> int:
     symbol = sys.argv[1].strip().upper() if len(sys.argv) > 1 else ""
     if not symbol:
@@ -90,6 +117,18 @@ def main() -> int:
         info = dict(ticker.info or {})
     except Exception:
         info = {}
+    try:
+        annual_income_stmt = ticker.get_income_stmt(freq="yearly")
+    except Exception:
+        annual_income_stmt = None
+    try:
+        annual_balance_sheet = ticker.get_balance_sheet(freq="yearly")
+    except Exception:
+        annual_balance_sheet = None
+    try:
+        annual_cashflow = ticker.get_cashflow(freq="yearly")
+    except Exception:
+        annual_cashflow = None
 
     facts = []
     for label, key in [
@@ -200,6 +239,48 @@ def main() -> int:
         if value:
             dividends.append({"label": label, "value": value, "status": "available", "note": "Dividend field from yfinance."})
 
+    revenue_by_year = read_statement_row(annual_income_stmt, ["Total Revenue", "Operating Revenue"])
+    net_income_by_year = read_statement_row(annual_income_stmt, ["Net Income", "Net Income Common Stockholders"])
+    gross_profit_by_year = read_statement_row(annual_income_stmt, ["Gross Profit"])
+    operating_income_by_year = read_statement_row(annual_income_stmt, ["Operating Income"])
+    total_assets_by_year = read_statement_row(annual_balance_sheet, ["Total Assets"])
+    total_liabilities_by_year = read_statement_row(annual_balance_sheet, ["Total Liabilities Net Minority Interest", "Total Liabilities"])
+    total_equity_by_year = read_statement_row(annual_balance_sheet, ["Stockholders Equity", "Total Equity Gross Minority Interest"])
+    cash_by_year = read_statement_row(annual_balance_sheet, ["Cash And Cash Equivalents", "Cash Cash Equivalents And Short Term Investments"])
+    debt_current_by_year = read_statement_row(annual_balance_sheet, ["Current Debt", "Current Debt And Capital Lease Obligation"])
+    debt_noncurrent_by_year = read_statement_row(annual_balance_sheet, ["Long Term Debt", "Long Term Debt And Capital Lease Obligation"])
+    operating_cashflow_by_year = read_statement_row(annual_cashflow, ["Operating Cash Flow", "Cash Flow From Continuing Operating Activities"])
+    capex_by_year = read_statement_row(annual_cashflow, ["Capital Expenditure", "Capital Expenditures"])
+    free_cashflow_by_year = read_statement_row(annual_cashflow, ["Free Cash Flow"])
+
+    debt_by_year: dict[str, float] = {}
+    for year in set(debt_current_by_year.keys()) | set(debt_noncurrent_by_year.keys()):
+        debt_by_year[year] = debt_current_by_year.get(year, 0.0) + debt_noncurrent_by_year.get(year, 0.0)
+
+    ratio_values = {
+        "P/E Ratio": fmt_number(info.get("trailingPE")),
+        "Forward P/E": fmt_number(info.get("forwardPE")),
+        "PEG Ratio": fmt_number(info.get("pegRatio")),
+        "Price / Sales": fmt_number(info.get("priceToSalesTrailing12Months")),
+        "Price / Book": fmt_number(info.get("priceToBook")),
+        "Enterprise Value / EBITDA": fmt_number(info.get("enterpriseToEbitda")),
+        "Current Ratio": fmt_number(info.get("currentRatio")),
+        "Quick Ratio": fmt_number(info.get("quickRatio")),
+        "Debt / Equity": fmt_number(info.get("debtToEquity")),
+        "Return on Equity": fmt_pct(info.get("returnOnEquity")),
+        "Return on Assets": fmt_pct(info.get("returnOnAssets")),
+        "Gross Margin": fmt_pct(info.get("grossMargins")),
+        "Operating Margin": fmt_pct(info.get("operatingMargins")),
+        "Profit Margin": fmt_pct(info.get("profitMargins")),
+    }
+
+    latest_rev_year = latest_year(revenue_by_year)
+    latest_net_income_year = latest_year(net_income_by_year)
+    latest_balance_year = latest_year(total_assets_by_year)
+    latest_cash_year = latest_year(cash_by_year)
+    latest_ocf_year = latest_year(operating_cashflow_by_year)
+    latest_fcf_year = latest_year(free_cashflow_by_year)
+
     result = {
         "symbol": symbol,
         "asOf": datetime.now(timezone.utc).isoformat(),
@@ -211,6 +292,70 @@ def main() -> int:
         "estimates": estimates[:10],
         "ownership": ownership[:6],
         "dividends": dividends[:5],
+        "fundamentals": {
+            "currency": str(info.get("financialCurrency") or info.get("currency") or "USD"),
+            "highlights": {
+                "revenue": {"year": latest_rev_year, "value": revenue_by_year.get(latest_rev_year) if latest_rev_year else None},
+                "netIncome": {"year": latest_net_income_year, "value": net_income_by_year.get(latest_net_income_year) if latest_net_income_year else None},
+                "grossProfit": {"year": latest_year(gross_profit_by_year), "value": gross_profit_by_year.get(latest_year(gross_profit_by_year) or "")},
+                "operatingIncome": {"year": latest_year(operating_income_by_year), "value": operating_income_by_year.get(latest_year(operating_income_by_year) or "")},
+                "freeCashFlow": {"year": latest_fcf_year, "value": free_cashflow_by_year.get(latest_fcf_year) if latest_fcf_year else None},
+            },
+            "cashDebtSnapshot": {
+                "year": latest_cash_year,
+                "cash": cash_by_year.get(latest_cash_year) if latest_cash_year else None,
+                "debt": debt_by_year.get(latest_cash_year) if latest_cash_year else None,
+                "operatingCashFlow": operating_cashflow_by_year.get(latest_ocf_year) if latest_ocf_year else None,
+                "freeCashFlow": free_cashflow_by_year.get(latest_fcf_year) if latest_fcf_year else None,
+            },
+            "balanceSheet": {
+                "latestYear": latest_balance_year,
+                "assets": total_assets_by_year.get(latest_balance_year) if latest_balance_year else None,
+                "liabilities": total_liabilities_by_year.get(latest_balance_year) if latest_balance_year else None,
+                "equity": total_equity_by_year.get(latest_balance_year) if latest_balance_year else None,
+                "cash": cash_by_year.get(latest_balance_year) if latest_balance_year else None,
+                "debt": debt_by_year.get(latest_balance_year) if latest_balance_year else None,
+                "annual": [
+                    {
+                        "year": year,
+                        "assets": total_assets_by_year.get(year),
+                        "liabilities": total_liabilities_by_year.get(year),
+                        "equity": total_equity_by_year.get(year),
+                        "cash": cash_by_year.get(year),
+                        "debt": debt_by_year.get(year),
+                    }
+                    for year in sorted(set(total_assets_by_year.keys()) | set(total_liabilities_by_year.keys()) | set(total_equity_by_year.keys()))[-4:]
+                ],
+            },
+            "financialOverview": {
+                "annual": [
+                    {"year": year, "revenue": revenue_by_year.get(year), "netIncome": net_income_by_year.get(year)}
+                    for year in sorted(set(revenue_by_year.keys()) & set(net_income_by_year.keys()))[-4:]
+                ],
+            },
+            "ratios": [{"label": label, "value": value} for label, value in ratio_values.items() if value],
+            "statements": {
+                "annualIncomeStatement": {
+                    "revenueByYear": revenue_by_year,
+                    "netIncomeByYear": net_income_by_year,
+                    "grossProfitByYear": gross_profit_by_year,
+                    "operatingIncomeByYear": operating_income_by_year,
+                },
+                "annualBalanceSheet": {
+                    "assetsByYear": total_assets_by_year,
+                    "liabilitiesByYear": total_liabilities_by_year,
+                    "equityByYear": total_equity_by_year,
+                    "cashByYear": cash_by_year,
+                    "debtByYear": debt_by_year,
+                },
+                "annualCashFlow": {
+                    "operatingCashFlowByYear": operating_cashflow_by_year,
+                    "capitalExpenditureByYear": capex_by_year,
+                    "freeCashFlowByYear": free_cashflow_by_year,
+                },
+            },
+            "source": {"provider": "yfinance", "asOf": datetime.now(timezone.utc).isoformat(), "note": "Derived from yfinance info and annual statements endpoints."},
+        },
     }
     print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
     return 0

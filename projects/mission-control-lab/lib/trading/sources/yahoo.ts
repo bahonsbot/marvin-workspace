@@ -17,7 +17,19 @@ import { financeDatabaseFacts, financeDatabaseSource, findFinanceDatabaseProfile
 import { buildSampleTickerProfile } from './sample';
 import { fetchSecTickerFundamentals } from './sec';
 import { fetchWikipediaCompanyLogo, fetchWikipediaCompanyProfile } from './wikipedia';
-import { bridgeMetricsToDisplay, fetchYfinanceBridge, mergeFacts, mergeHeaderStats, mergeKeyRatios, yfinanceSource } from './yfinance-bridge';
+import {
+  bridgeMetricsToDisplay,
+  fetchYfinanceBridge,
+  mergeFacts,
+  mergeHeaderStats,
+  mergeKeyRatios,
+  mergeKeyRatiosFromFundamentals,
+  yfinanceBalanceSheetSnapshot,
+  yfinanceCashDebtSnapshot,
+  yfinanceFinancialHighlights,
+  yfinanceFinancialOverview,
+  yfinanceSource,
+} from './yfinance-bridge';
 
 interface YahooChartResponse {
   chart?: {
@@ -128,10 +140,10 @@ function buildYahooSourceMap(asOf: string): TickerProfileSourceMap {
     quote: yahooSource(asOf, 'Yahoo Finance chart endpoint. Cached server-side.'),
     profile: yahooSource(asOf, 'Yahoo Finance search/chart metadata with sample fallback for profile narrative.'),
     prices: yahooSource(asOf, 'Yahoo Finance chart endpoint. Cached server-side.'),
-    financials: sampleFallbackSource(asOf, 'Sample financial modules retained until a fundamentals provider is enabled.'),
+    financials: sampleFallbackSource(asOf, 'Sample financial modules retained until provider-backed statements are available.'),
     news: yahooSource(asOf, 'Yahoo Finance search news. Headlines are provider-backed; summaries are omitted unless supplied by a future news provider.'),
-    resources: sampleFallbackSource(asOf, 'Static resource links retained until source adapters are enabled.'),
-    filings: sampleFallbackSource(asOf, 'SEC adapter pending.'),
+    resources: sampleFallbackSource(asOf, 'Provider-backed links are unavailable here; SEC is US-only and the non-US filings/resources adapter is not wired yet.'),
+    filings: sampleFallbackSource(asOf, 'SEC filings are US-only; the non-US filings adapter is not wired yet.'),
   };
 }
 
@@ -521,7 +533,7 @@ export const yahooTickerProfileSource: TickerProfileSource = {
         source: eodhdMarketData.source,
         metrics: dividendMetrics,
       };
-      const technicalMetrics = buildEodhdTechnicalMetrics(eodhdMarketData);
+      const technicalMetrics = buildEodhdTechnicalMetrics(eodhdMarketData, meta.currency || sample.currency);
       supplemental.technicals = {
         status: technicalMetrics.some((metric) => metric.status === 'available') ? 'available' : 'unavailable',
         note: 'Range-derived technical context from EODHD EOD/intraday data.',
@@ -532,6 +544,12 @@ export const yahooTickerProfileSource: TickerProfileSource = {
       supplemental.dividends.source = eodhdSource(asOf, 'EODHD token missing or provider returned no rows for this symbol.', 'missing');
       supplemental.technicals.source = eodhdSource(asOf, 'EODHD token missing or provider returned no rows for this symbol.', 'missing');
     }
+
+    const yfinanceFinancialsMissingOnly = !secFundamentals && yfinanceMetaSource;
+    const yfinanceHighlights = yfinanceFinancialsMissingOnly ? yfinanceFinancialHighlights(yfinanceData, yfinanceMetaSource) : [];
+    const yfinanceCashDebt = yfinanceFinancialsMissingOnly ? yfinanceCashDebtSnapshot(yfinanceData, yfinanceMetaSource) : null;
+    const yfinanceBalanceSheet = yfinanceFinancialsMissingOnly ? yfinanceBalanceSheetSnapshot(yfinanceData, yfinanceMetaSource) : null;
+    const yfinanceOverview = yfinanceFinancialsMissingOnly ? yfinanceFinancialOverview(yfinanceData) : null;
 
     const profile: TickerProfile = {
       ...sample,
@@ -561,16 +579,20 @@ export const yahooTickerProfileSource: TickerProfileSource = {
         rangeSeries: providerRangeSeries,
       },
       companyProfile,
-      financialHighlights: secFundamentals?.financialHighlights ?? buildFinancialHighlights(sample, sourceMap),
-      cashDebtSnapshot: secFundamentals?.cashDebtSnapshot ?? buildCashDebtSnapshot(sample, sourceMap),
-      balanceSheetSnapshot: secFundamentals?.balanceSheetSnapshot ?? buildBalanceSheetSnapshot(sample, sourceMap),
+      financialHighlights: secFundamentals?.financialHighlights ?? (yfinanceHighlights.length ? yfinanceHighlights : buildFinancialHighlights(sample, sourceMap)),
+      cashDebtSnapshot: secFundamentals?.cashDebtSnapshot ?? (yfinanceCashDebt ?? buildCashDebtSnapshot(sample, sourceMap)),
+      balanceSheetSnapshot: secFundamentals?.balanceSheetSnapshot ?? (yfinanceBalanceSheet ?? buildBalanceSheetSnapshot(sample, sourceMap)),
       recentNews: providerNews.length ? providerNews : buildMissingNews(symbol, sourceMap.news),
       resources: secFundamentals?.resources ?? sample.resources.map((group) => ({
         ...group,
         items: group.items.map((item) => ({ ...item, source: sourceMap.resources })),
       })),
-      financialOverview: secFundamentals?.financialOverview ?? sample.financialOverview,
-      keyRatios: secFundamentals?.keyRatios ?? mergeKeyRatios(sample.keyRatios, yfinanceData?.keyRatios, yfinanceMetaSource ?? sourceMap.financials),
+      financialOverview: secFundamentals?.financialOverview ?? (yfinanceOverview ?? sample.financialOverview),
+      keyRatios: secFundamentals?.keyRatios ?? (
+        yfinanceMetaSource
+          ? mergeKeyRatiosFromFundamentals(mergeKeyRatios(sample.keyRatios, yfinanceData?.keyRatios, yfinanceMetaSource), yfinanceData, yfinanceMetaSource)
+          : sample.keyRatios
+      ),
       supplemental,
       sourceMap,
       asOf,

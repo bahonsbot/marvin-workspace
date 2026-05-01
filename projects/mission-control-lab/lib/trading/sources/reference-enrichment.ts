@@ -2,7 +2,19 @@ import 'server-only';
 
 import type { TickerProfile, TickerSupplementalData } from '../contracts';
 import { financeDatabaseFacts, financeDatabaseSource, findFinanceDatabaseProfile } from './finance-database';
-import { bridgeMetricsToDisplay, fetchYfinanceBridge, mergeFacts, mergeHeaderStats, mergeKeyRatios, yfinanceSource } from './yfinance-bridge';
+import {
+  bridgeMetricsToDisplay,
+  fetchYfinanceBridge,
+  mergeFacts,
+  mergeHeaderStats,
+  mergeKeyRatios,
+  mergeKeyRatiosFromFundamentals,
+  yfinanceBalanceSheetSnapshot,
+  yfinanceCashDebtSnapshot,
+  yfinanceFinancialHighlights,
+  yfinanceFinancialOverview,
+  yfinanceSource,
+} from './yfinance-bridge';
 
 function yahooSymbolCandidates(symbol: string) {
   const normalized = symbol.toUpperCase();
@@ -14,7 +26,7 @@ function yahooSymbolCandidates(symbol: string) {
 async function fetchFirstYfinance(symbol: string) {
   for (const candidate of yahooSymbolCandidates(symbol)) {
     const result = await fetchYfinanceBridge(candidate);
-    if (result && ((result.headerStats?.length ?? 0) || (result.estimates?.length ?? 0) || (result.facts?.length ?? 0))) return result;
+    if (result && ((result.headerStats?.length ?? 0) || (result.estimates?.length ?? 0) || (result.facts?.length ?? 0) || result.fundamentals)) return result;
   }
   return null;
 }
@@ -86,11 +98,23 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     }
   }
 
+  const shouldBackfillFinancials = profile.sourceMap.financials.freshness === 'missing' && Boolean(yfinanceMetaSource);
+  const yfinanceHighlights = shouldBackfillFinancials ? yfinanceFinancialHighlights(yfinanceData, yfinanceMetaSource!) : [];
+  const yfinanceCashDebt = shouldBackfillFinancials ? yfinanceCashDebtSnapshot(yfinanceData, yfinanceMetaSource!) : null;
+  const yfinanceBalanceSheet = shouldBackfillFinancials ? yfinanceBalanceSheetSnapshot(yfinanceData, yfinanceMetaSource!) : null;
+  const yfinanceOverview = shouldBackfillFinancials ? yfinanceFinancialOverview(yfinanceData) : null;
+
   return {
     ...profile,
     headerStats: mergeHeaderStats(profile.headerStats, yfinanceData?.headerStats, yfinanceMetaSource ?? profile.sourceMap.profile),
     companyProfile,
-    keyRatios: mergeKeyRatios(profile.keyRatios, yfinanceData?.keyRatios, yfinanceMetaSource ?? profile.sourceMap.financials),
+    keyRatios: yfinanceMetaSource
+      ? mergeKeyRatiosFromFundamentals(mergeKeyRatios(profile.keyRatios, yfinanceData?.keyRatios, yfinanceMetaSource), yfinanceData, yfinanceMetaSource)
+      : profile.keyRatios,
+    financialHighlights: yfinanceHighlights.length ? yfinanceHighlights : profile.financialHighlights,
+    cashDebtSnapshot: yfinanceCashDebt ?? profile.cashDebtSnapshot,
+    balanceSheetSnapshot: yfinanceBalanceSheet ?? profile.balanceSheetSnapshot,
+    financialOverview: yfinanceOverview ?? profile.financialOverview,
     supplemental,
   };
 }

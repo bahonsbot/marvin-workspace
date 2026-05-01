@@ -555,7 +555,7 @@ export function buildEodhdDividendMetrics(bundle: EodhdMarketDataBundle): Ticker
   ];
 }
 
-export function buildEodhdTechnicalMetrics(bundle: EodhdMarketDataBundle): TickerDisplayMetric[] {
+export function buildEodhdTechnicalMetrics(bundle: EodhdMarketDataBundle, fallbackCurrency?: string): TickerDisplayMetric[] {
   const active = bundle.priceSeries?.rangeSeries?.['1Y'];
   const points = active?.points ?? [];
   const values = points.map((point) => point.value).filter((value) => Number.isFinite(value));
@@ -564,7 +564,7 @@ export function buildEodhdTechnicalMetrics(bundle: EodhdMarketDataBundle): Ticke
   const yearLow = values.length ? Math.min(...values) : null;
   const first = values.at(0);
   const returnPct = latest != null && first ? ((latest - first) / first) * 100 : null;
-  const currency = bundle.searchResult?.Currency ?? (bundle.quote?.code?.endsWith('.VN') ? 'VND' : 'USD');
+  const currency = bundle.searchResult?.Currency ?? fallbackCurrency ?? (bundle.quote?.code?.endsWith('.VN') ? 'VND' : 'USD');
   return [
     { label: '1Y range high', value: formatEodhdMoney(yearHigh, currency), status: yearHigh == null ? 'unavailable' : 'available', source: bundle.source },
     { label: '1Y range low', value: formatEodhdMoney(yearLow, currency), status: yearLow == null ? 'unavailable' : 'available', source: bundle.source },
