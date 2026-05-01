@@ -1165,6 +1165,7 @@
   display: grid;
   gap: 2px;
   margin-top: 2px;
+  width: min(100%, 118px);
 }
 
 :global(.trading-small-sparkline) {
@@ -2047,7 +2048,7 @@
   }
 
   :global(.trading-small-sparkline) {
-    width: 88px;
+    width: 100%;
   }
 
   :global(.trading-ticker-source-note) {

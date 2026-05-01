@@ -193,7 +193,7 @@ function formatBillions(raw: number | null | undefined, currency = 'USD') {
   const value = raw / 1_000_000_000;
   const sign = value < 0 ? '-' : '';
   const abs = Math.abs(value);
-  return `${sign}${currency} ${abs >= 100 ? abs.toFixed(0) : abs.toFixed(1)}B`;
+  return `${currency} ${sign}${abs >= 100 ? abs.toFixed(0) : abs.toFixed(1)}B`;
 }
 
 export function yfinanceFinancialHighlights(data: YfinanceBridgeResult | null, source: TickerSourceMeta): TickerFinancialHighlight[] {
@@ -222,7 +222,7 @@ export function yfinanceFinancialHighlights(data: YfinanceBridgeResult | null, s
     return [{
       label: item.label,
       value: ratioValue ?? (item.label === 'EPS' && value != null ? `${currency} ${value.toFixed(2)}` : formatBillions(value, currency)),
-      delta: ratioValue ? 'TTM ratio from yfinance fundamentals.' : `${year} FY from yfinance annual statements.`,
+      delta: '',
       tone: item.ratioTone ?? 'neutral',
       trend,
       trendYears,

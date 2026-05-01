@@ -166,7 +166,7 @@ function titleFromProfile(tickerName: string, summary: string, facts: TickerProf
 
 function normalizeHeaderStats(stats: TickerDisplayMetric[], facts: TickerProfileFact[]) {
   const quoteType = facts.find((fact) => fact.label.toLowerCase() === 'quote type')?.value;
-  return stats.filter((stat) => !['Sector', 'Industry'].includes(stat.label)).map((stat) => {
+  return stats.map((stat) => {
     if (stat.label !== 'Type') return stat;
     if (!quoteType || quoteType === 'Provider pending') return stat;
     const value = quoteType.toLowerCase() === 'equity' ? 'Equity' : quoteType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
