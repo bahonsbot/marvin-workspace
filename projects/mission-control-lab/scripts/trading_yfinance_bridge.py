@@ -106,6 +106,10 @@ def latest_year(values: dict[str, float]) -> str | None:
     return years[0] if years else None
 
 
+def recent_trend(values: dict[str, float], limit: int = 4) -> list[float]:
+    return [values[year] for year in sorted(values.keys())[-limit:] if values.get(year) is not None]
+
+
 def main() -> int:
     symbol = sys.argv[1].strip().upper() if len(sys.argv) > 1 else ""
     if not symbol:
@@ -260,12 +264,30 @@ def main() -> int:
     operating_cashflow_by_year = read_statement_row(annual_cashflow, ["Operating Cash Flow", "Cash Flow From Continuing Operating Activities"])
     capex_by_year = read_statement_row(annual_cashflow, ["Capital Expenditure", "Capital Expenditures"])
     free_cashflow_by_year = read_statement_row(annual_cashflow, ["Free Cash Flow"])
+    eps_by_year = read_statement_row(annual_income_stmt, ["Diluted EPS", "Basic EPS"])
 
     debt_by_year: dict[str, float] = dict(debt_total_by_year)
     for year in set(debt_current_by_year.keys()) | set(debt_noncurrent_by_year.keys()):
         debt_by_year.setdefault(year, debt_current_by_year.get(year, 0.0) + debt_noncurrent_by_year.get(year, 0.0))
     for year, value in net_debt_by_year.items():
         debt_by_year.setdefault(year, value)
+
+
+    def ratio_by_year(numerator: dict[str, float], denominator: dict[str, float], multiplier: float = 1.0) -> dict[str, float]:
+        output: dict[str, float] = {}
+        for year in sorted(set(numerator.keys()) & set(denominator.keys())):
+            denom = denominator.get(year)
+            num = numerator.get(year)
+            if denom in (None, 0) or num is None:
+                continue
+            output[year] = (num / denom) * multiplier
+        return output
+
+    gross_margin_by_year = ratio_by_year(gross_profit_by_year, revenue_by_year, 100.0)
+    operating_margin_by_year = ratio_by_year(operating_income_by_year, revenue_by_year, 100.0)
+    roe_by_year = ratio_by_year(net_income_by_year, total_equity_by_year, 100.0)
+    debt_equity_by_year = ratio_by_year(debt_by_year, total_equity_by_year)
+    current_ratio_by_year = ratio_by_year(total_assets_by_year, total_liabilities_by_year)
 
     ratio_values = {
         "P/E Ratio": fmt_number(info.get("trailingPE")),
@@ -305,11 +327,17 @@ def main() -> int:
         "fundamentals": {
             "currency": str(info.get("financialCurrency") or info.get("currency") or "USD"),
             "highlights": {
-                "revenue": {"year": latest_rev_year, "value": revenue_by_year.get(latest_rev_year) if latest_rev_year else None},
-                "netIncome": {"year": latest_net_income_year, "value": net_income_by_year.get(latest_net_income_year) if latest_net_income_year else None},
-                "grossProfit": {"year": latest_year(gross_profit_by_year), "value": gross_profit_by_year.get(latest_year(gross_profit_by_year) or "")},
-                "operatingIncome": {"year": latest_year(operating_income_by_year), "value": operating_income_by_year.get(latest_year(operating_income_by_year) or "")},
-                "freeCashFlow": {"year": latest_fcf_year, "value": free_cashflow_by_year.get(latest_fcf_year) if latest_fcf_year else None},
+                "revenue": {"year": latest_rev_year, "value": revenue_by_year.get(latest_rev_year) if latest_rev_year else None, "trend": recent_trend(revenue_by_year)},
+                "netIncome": {"year": latest_net_income_year, "value": net_income_by_year.get(latest_net_income_year) if latest_net_income_year else None, "trend": recent_trend(net_income_by_year)},
+                "grossProfit": {"year": latest_year(gross_profit_by_year), "value": gross_profit_by_year.get(latest_year(gross_profit_by_year) or ""), "trend": recent_trend(gross_profit_by_year)},
+                "operatingIncome": {"year": latest_year(operating_income_by_year), "value": operating_income_by_year.get(latest_year(operating_income_by_year) or ""), "trend": recent_trend(operating_income_by_year)},
+                "freeCashFlow": {"year": latest_fcf_year, "value": free_cashflow_by_year.get(latest_fcf_year) if latest_fcf_year else None, "trend": recent_trend(free_cashflow_by_year)},
+                "eps": {"year": latest_year(eps_by_year), "value": eps_by_year.get(latest_year(eps_by_year) or ""), "trend": recent_trend(eps_by_year)},
+                "grossMargin": {"year": latest_year(gross_margin_by_year), "value": gross_margin_by_year.get(latest_year(gross_margin_by_year) or ""), "trend": recent_trend(gross_margin_by_year)},
+                "operatingMargin": {"year": latest_year(operating_margin_by_year), "value": operating_margin_by_year.get(latest_year(operating_margin_by_year) or ""), "trend": recent_trend(operating_margin_by_year)},
+                "roe": {"year": latest_year(roe_by_year), "value": roe_by_year.get(latest_year(roe_by_year) or ""), "trend": recent_trend(roe_by_year)},
+                "debtEquity": {"year": latest_year(debt_equity_by_year), "value": debt_equity_by_year.get(latest_year(debt_equity_by_year) or ""), "trend": recent_trend(debt_equity_by_year)},
+                "currentRatio": {"year": latest_year(current_ratio_by_year), "value": current_ratio_by_year.get(latest_year(current_ratio_by_year) or ""), "trend": recent_trend(current_ratio_by_year)},
             },
             "cashDebtSnapshot": {
                 "year": latest_cash_year,
@@ -362,6 +390,7 @@ def main() -> int:
                     "operatingCashFlowByYear": operating_cashflow_by_year,
                     "capitalExpenditureByYear": capex_by_year,
                     "freeCashFlowByYear": free_cashflow_by_year,
+                    "epsByYear": eps_by_year,
                 },
             },
             "source": {"provider": "yfinance", "asOf": datetime.now(timezone.utc).isoformat(), "note": "Derived from yfinance info and annual statements endpoints."},

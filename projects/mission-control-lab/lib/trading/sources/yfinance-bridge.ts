@@ -36,6 +36,7 @@ export interface YfinanceBridgeResult {
 interface YfinanceYearValue {
   year?: string | null;
   value?: number | null;
+  trend?: number[] | null;
 }
 
 interface YfinanceBalanceSheetAnnualRow {
@@ -55,6 +56,12 @@ interface YfinanceBridgeFundamentals {
     grossProfit?: YfinanceYearValue;
     operatingIncome?: YfinanceYearValue;
     freeCashFlow?: YfinanceYearValue;
+    eps?: YfinanceYearValue;
+    grossMargin?: YfinanceYearValue;
+    operatingMargin?: YfinanceYearValue;
+    roe?: YfinanceYearValue;
+    debtEquity?: YfinanceYearValue;
+    currentRatio?: YfinanceYearValue;
   };
   cashDebtSnapshot?: {
     year?: string | null;
@@ -188,35 +195,37 @@ function formatBillions(raw: number | null | undefined, currency = 'USD') {
   return `${sign}${currency} ${abs >= 100 ? abs.toFixed(0) : abs.toFixed(1)}B`;
 }
 
-function ratio(raw: number | null | undefined) {
-  if (raw == null || !Number.isFinite(raw)) return '—';
-  return `${raw.toFixed(2)}x`;
-}
-
 export function yfinanceFinancialHighlights(data: YfinanceBridgeResult | null, source: TickerSourceMeta): TickerFinancialHighlight[] {
   const h = data?.fundamentals?.highlights;
   if (!h) return [];
-  const items: Array<{ label: string; node?: YfinanceYearValue }> = [
+  const ratioByLabel = new Map((data?.fundamentals?.ratios ?? []).map((item) => [item.label.toLowerCase(), item.value]));
+  const items: Array<{ label: string; node?: YfinanceYearValue; ratioLabel?: string; ratioTone?: 'positive' | 'negative' | 'neutral' }> = [
     { label: 'Revenue', node: h.revenue },
     { label: 'Net Income', node: h.netIncome },
-    { label: 'Gross Profit', node: h.grossProfit },
-    { label: 'Operating Income', node: h.operatingIncome },
+    { label: 'Gross Margin', node: h.grossMargin ?? h.grossProfit, ratioLabel: 'Gross Margin', ratioTone: 'positive' },
+    { label: 'Operating Margin', node: h.operatingMargin ?? h.operatingIncome, ratioLabel: 'Operating Margin', ratioTone: 'positive' },
+    { label: 'EPS', node: h.eps, ratioTone: 'positive' },
     { label: 'Free Cash Flow', node: h.freeCashFlow },
+    { label: 'ROE', node: h.roe, ratioLabel: 'Return on Equity', ratioTone: 'positive' },
+    { label: 'Debt / Equity', node: h.debtEquity, ratioLabel: 'Debt / Equity', ratioTone: 'negative' },
+    { label: 'Current Ratio', node: h.currentRatio, ratioLabel: 'Current Ratio', ratioTone: 'positive' },
   ];
   return items.flatMap((item) => {
     const year = item.node?.year;
     const value = item.node?.value;
-    if (!year || value == null || !Number.isFinite(value)) return [];
+    const ratioValue = item.ratioLabel ? ratioByLabel.get(item.ratioLabel.toLowerCase()) : null;
+    if ((!year || value == null || !Number.isFinite(value)) && !ratioValue) return [];
     const currency = data?.fundamentals?.currency || 'USD';
+    const trend = (item.node?.trend ?? []).filter((point): point is number => Number.isFinite(point));
     return [{
       label: item.label,
-      value: formatBillions(value, currency),
-      delta: 'Derived from annual yfinance statements.',
-      tone: 'neutral',
-      trend: [],
+      value: ratioValue ?? (item.label === 'EPS' && value != null ? `${currency} ${value.toFixed(2)}` : formatBillions(value, currency)),
+      delta: ratioValue ? 'TTM ratio from yfinance fundamentals.' : `${year} FY from yfinance annual statements.`,
+      tone: item.ratioTone ?? 'neutral',
+      trend,
       source,
       status: 'available',
-      note: `${year} FY from yfinance annual statements.`,
+      note: undefined,
     }];
   });
 }
@@ -256,19 +265,13 @@ export function yfinanceBalanceSheetSnapshot(data: YfinanceBridgeResult | null, 
     cashAndEquivalents: Number(item.cash ?? 0),
     totalDebt: Number(item.debt ?? 0),
   }));
-  const currentRatioValue = (balance.liabilities ?? 0) > 0 ? (balance.assets ?? 0) / (balance.liabilities ?? 1) : null;
-  const debtToEquityValue = (balance.equity ?? 0) > 0 ? (balance.debt ?? 0) / (balance.equity ?? 1) : null;
   return {
-    period: `${balance.latestYear} FY · yfinance annual statements`,
+    period: `${balance.latestYear} FY`,
     currency: data?.fundamentals?.currency || 'USD',
     kpis: [
       { label: 'Assets', value: formatBillions(balance.assets, data?.fundamentals?.currency || 'USD'), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
-      { label: 'Liabilities', value: formatBillions(balance.liabilities, data?.fundamentals?.currency || 'USD'), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
-      { label: 'Equity', value: formatBillions(balance.equity, data?.fundamentals?.currency || 'USD'), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
-      { label: 'Cash', value: formatBillions(balance.cash, data?.fundamentals?.currency || 'USD'), caption: 'Cash and equivalents', tone: 'positive' },
-      { label: 'Debt', value: formatBillions(balance.debt, data?.fundamentals?.currency || 'USD'), caption: 'Current + long-term debt', tone: 'negative' },
-      { label: 'Current Ratio', value: ratio(currentRatioValue), caption: 'Assets / liabilities (proxy)', tone: 'neutral' },
-      { label: 'Debt / Equity', value: ratio(debtToEquityValue), caption: 'Debt / equity', tone: 'neutral' },
+      { label: 'Liabilities', value: formatBillions(balance.liabilities, data?.fundamentals?.currency || 'USD'), caption: `FY ${balance.latestYear}`, tone: 'negative' },
+      { label: 'Equity', value: formatBillions(balance.equity, data?.fundamentals?.currency || 'USD'), caption: `FY ${balance.latestYear}`, tone: 'positive' },
     ],
     annual,
     note: 'Provider-backed annual balance-sheet rows from yfinance. SEC concepts are US-only; non-US filings adapter is not wired yet.',

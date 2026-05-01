@@ -21,6 +21,7 @@ const requiredFinancialHighlights = [
   'ROE',
   'ROIC',
   'Debt / Equity',
+  'Current Ratio',
 ];
 
 const unavailableHighlightSource = {
@@ -188,9 +189,7 @@ function buildFinancialHighlightSlots(metrics: TickerFinancialHighlight[]) {
 
 function EmptySparkline({ label }: { label: string }) {
   return (
-    <div className="trading-empty-sparkline" role="img" aria-label={`${label} data unavailable`}>
-      <span>Data unavailable</span>
-    </div>
+    <div className="trading-empty-sparkline" role="img" aria-label={`${label} trend unavailable`} />
   );
 }
 
@@ -203,20 +202,24 @@ function TickerMark({ symbol, logoUrl, logoAlt }: { symbol: string; logoUrl: str
 }
 
 function SmallSparkline({ values, tone = 'positive' }: { values: number[]; tone?: SparklineTone }) {
+  const cleanValues = values.filter((value) => Number.isFinite(value));
+  if (cleanValues.length < 2) return <EmptySparkline label="trend" />;
   const width = 112;
   const height = 34;
-  const max = Math.max(...values);
-  const min = Math.min(...values);
-  const points = values
+  const max = Math.max(...cleanValues);
+  const min = Math.min(...cleanValues);
+  const points = cleanValues
     .map((value, index) => {
-      const x = (index / Math.max(values.length - 1, 1)) * (width - 4) + 2;
+      const x = (index / Math.max(cleanValues.length - 1, 1)) * (width - 4) + 2;
       const y = height - ((value - min) / Math.max(max - min, 1)) * (height - 8) - 4;
       return `${x.toFixed(1)},${y.toFixed(1)}`;
     })
     .join(' ');
+  const areaPoints = `2,${height - 3} ${points} ${width - 2},${height - 3}`;
 
   return (
     <svg className={`trading-small-sparkline ${tone}`} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
+      <polygon points={areaPoints} />
       <polyline points={points} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -545,7 +548,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
               <strong>{metric.value}</strong>
               <em className={metric.tone}>{metric.delta}</em>
               {metric.trend.length ? <SmallSparkline values={metric.trend} tone={metric.tone as SparklineTone} /> : <EmptySparkline label={metric.label} />}
-              {metric.note ? <p>{metric.note}</p> : null}
+              {metric.note && metric.status === 'unavailable' ? <p>{metric.note}</p> : null}
             </article>
           ))}
         </div>
@@ -590,7 +593,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div className="trading-section-head">
             <div>
               <div className="trading-section-label">Balance sheet</div>
-              <h2>{ticker.balanceSheetSnapshot.period}</h2>
+              <h2>Assets, liabilities, equity</h2>
             </div>
             <div className="trading-financial-legend trading-balance-legend" aria-hidden="true">
               <span><i /> Assets</span>
