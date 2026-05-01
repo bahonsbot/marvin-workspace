@@ -11,6 +11,7 @@ export type MarketTapeItem = {
 export type MarketTapeData = {
   items: MarketTapeItem[];
   status: string;
+  isMarketOpen: boolean;
 };
 
 type TapeInstrument = {
@@ -46,6 +47,23 @@ function formatTapeChange(value: number | null | undefined) {
   return `${prefix}${value.toFixed(2)}%`;
 }
 
+function isUsMarketOpen(now = new Date()) {
+  const easternParts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(now);
+  const part = (type: string) => easternParts.find((item) => item.type === type)?.value;
+  const weekday = part('weekday');
+  const hour = Number(part('hour'));
+  const minute = Number(part('minute'));
+  if (weekday === 'Sat' || weekday === 'Sun' || !Number.isFinite(hour) || !Number.isFinite(minute)) return false;
+  const minutes = hour * 60 + minute;
+  return minutes >= 9 * 60 + 30 && minutes < 16 * 60;
+}
+
 function formatTapeStatus(asOf: Date | null) {
   if (!asOf) return 'Updated: unknown';
   const formatted = new Intl.DateTimeFormat('en-GB', {
@@ -61,7 +79,8 @@ function formatTapeStatus(asOf: Date | null) {
 export async function getMarketTape(): Promise<MarketTapeData> {
   if (!hasEodhdApiKey()) {
     return {
-      status: 'EODHD market tape unavailable · API key missing',
+      status: 'Updated: unavailable',
+      isMarketOpen: false,
       items: MARKET_TAPE.map((item) => ({ label: item.label, value: '—', change: '—' })),
     };
   }
@@ -83,6 +102,7 @@ export async function getMarketTape(): Promise<MarketTapeData> {
     status: availableCount
       ? formatTapeStatus(latestAsOf)
       : 'Updated: unavailable',
+    isMarketOpen: isUsMarketOpen(),
     items: quotes.map(({ item, quote }) => {
       const close = asNumber(quote?.close) ?? asNumber(quote?.previousClose);
       return {

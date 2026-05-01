@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { MarketTape, MiniLineChart, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
+import { MarketTapeClient } from '@/components/pages/trading/MarketTapeClient';
+import { MiniLineChart, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import {
   earningsPreview,
   healthItems,
@@ -86,7 +87,7 @@ export default async function TradingOverviewPage() {
       description="BOILER ROOM home base for portfolio posture, watchlists, market context, and the next names that deserve attention."
       hideHeader
     >
-      <MarketTape items={marketTape.items} status={marketTape.status} />
+      <MarketTapeClient initialData={marketTape} />
 
       <section className="trading-overview-hero">
         <div className="trading-overview-hero-head">

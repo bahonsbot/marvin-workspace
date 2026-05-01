@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import { MarketTapeClient } from '@/components/pages/trading/MarketTapeClient';
 import { TickerPriceChart } from '@/components/pages/trading/TickerPriceChart';
 import { TickerQuoteRefresh } from '@/components/pages/trading/TickerQuoteRefresh';
-import { MarketTape, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
+import { TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { getMarketTape } from '@/lib/trading/market-tape';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
 import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerDisplayMetric, TickerFinancialHighlight, TickerFinancialOverview, TickerProfileFact, TickerSourceMeta, TickerSupplementalSection } from '@/lib/trading/contracts';
@@ -312,7 +313,6 @@ function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
   const minTarget = sortedTargets[0]?.numeric ?? 0;
   const maxTarget = sortedTargets.at(-1)?.numeric ?? 1;
   const meanTarget = targetMetrics.find((metric) => metric.label === 'Target mean');
-  const medianTarget = targetMetrics.find((metric) => metric.label === 'Target median');
   const recommendation = metrics.find((metric) => metric.label === 'Recommendation');
   const analystCount = metrics.find((metric) => metric.label === 'Analyst count');
   const trendMetric = metrics.find((metric) => metric.label === 'Recommendation trend');
@@ -344,15 +344,15 @@ function EstimatesPanel({ section }: { section?: TickerSupplementalSection }) {
             <span>Price target range</span>
           </div>
           <div className="trading-estimate-range-rail" aria-label="Analyst target range">
-            {sortedTargets.map((metric) => {
-              const left = maxTarget === minTarget ? 50 : ((metric.numeric - minTarget) / (maxTarget - minTarget)) * 100;
-              return <i key={metric.label} style={{ left: `${left}%` }} title={`${metric.label}: ${metric.value}`} />;
+            {[sortedTargets[0], meanTarget, sortedTargets.at(-1)].filter(Boolean).map((metric) => {
+              const left = maxTarget === minTarget ? 50 : ((metric!.numeric - minTarget) / (maxTarget - minTarget)) * 100;
+              return <i key={metric!.label} style={{ left: `${left}%` }} title={`${metric!.label}: ${metric!.value}`} />;
             })}
           </div>
           <dl className="trading-estimate-target-table ordered">
-            {[sortedTargets[0], medianTarget, sortedTargets.at(-1)].filter(Boolean).map((metric) => (
+            {[sortedTargets[0], meanTarget, sortedTargets.at(-1)].filter(Boolean).map((metric) => (
               <div key={metric!.label}>
-                <dt>{metric!.label.replace('Target ', '')}</dt>
+                <dt>{metric!.label.replace('Target ', '').replace(/^./, (letter) => letter.toUpperCase())}</dt>
                 <dd>{cleanEstimateValue(metric!.value)}</dd>
               </div>
             ))}
@@ -471,7 +471,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       description="Static BOILER ROOM ticker research object. Live provider wiring comes later through a server-side cached ticker profile adapter."
       hideHeader
     >
-      <MarketTape items={marketTape.items} status={marketTape.status} />
+      <MarketTapeClient initialData={marketTape} />
 
       <Link href="/trading" className="trading-ticker-back">
         ← Back to Overview

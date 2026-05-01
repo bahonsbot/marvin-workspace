@@ -115,11 +115,6 @@ export function TickerQuoteRefresh({ initialQuote, symbol: profileSymbol }: { in
       <strong>{quote.price}</strong>
       <em className={quote.tone}>{quote.change} ({quote.changePct})</em>
       <div className="trading-quote-refresh-stack">
-        <div className="trading-quote-refresh-lines" title={quote.priceTime}>
-          <span>{metaLines.updated}</span>
-          <span>{metaLines.refreshed}</span>
-          <span className="trading-quote-delay-line">{delayText}</span>
-        </div>
         <button
           type="button"
           className="trading-quote-refresh-button"
@@ -131,6 +126,11 @@ export function TickerQuoteRefresh({ initialQuote, symbol: profileSymbol }: { in
           <RefreshCw size={12} strokeWidth={2.2} />
           {statusText(state)}
         </button>
+        <div className="trading-quote-refresh-lines" title={quote.priceTime}>
+          <span>{metaLines.updated}</span>
+          <span>{metaLines.refreshed}</span>
+          <span className="trading-quote-delay-line">{delayText}</span>
+        </div>
       </div>
       {error ? <small className="trading-quote-refresh-error">{error}</small> : null}
     </div>

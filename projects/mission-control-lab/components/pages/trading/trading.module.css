@@ -939,8 +939,8 @@
   gap: 9px;
   margin-top: 7px;
   max-width: 250px;
-  justify-items: end;
-  justify-self: end;
+  justify-items: center;
+  justify-self: center;
 }
 
 :global(.trading-quote-refresh-lines) {
@@ -2359,12 +2359,12 @@
 :global(.trading-estimate-range-rail i) {
   position: absolute;
   top: 50%;
-  width: 7px;
-  height: 18px;
+  width: 2px;
+  height: 17px;
   transform: translate(-50%, -50%);
   border-radius: 999px;
-  background: #17241e;
-  box-shadow: 0 0 0 3px rgba(255, 253, 249, 0.85);
+  background: rgba(23, 36, 30, 0.86);
+  box-shadow: 0 0 0 2px rgba(255, 253, 249, 0.88);
 }
 
 :global(.trading-estimate-target-table) {

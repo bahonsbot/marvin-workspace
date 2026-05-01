@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
-import type { MarketTapeItem } from '@/lib/trading/market-tape';
 import styles from './trading.module.css';
 
 export function formatTradingTime(value: string | null | undefined) {
@@ -65,32 +64,6 @@ export function TradingPageFrame({
       )}
       {children}
     </section>
-  );
-}
-
-export function MarketTape({
-  items,
-  status = 'Static sample tape · live market tape not wired yet',
-}: {
-  items: MarketTapeItem[];
-  status?: string;
-}) {
-  return (
-    <div className="trading-market-tape-shell" aria-label="Market tape">
-      <div className="trading-market-tape">
-        {items.map((item) => {
-          const mutedMove = item.change.startsWith('-') ? 'negative' : 'positive';
-          return (
-            <div key={item.label} className="trading-market-tape-item">
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
-              <em className={mutedMove}>{item.change}</em>
-            </div>
-          );
-        })}
-        <div className="trading-market-tape-status">{status}</div>
-      </div>
-    </div>
   );
 }
 
