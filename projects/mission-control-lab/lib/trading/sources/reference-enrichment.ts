@@ -19,17 +19,44 @@ import {
 
 function yahooSymbolCandidates(symbol: string) {
   const normalized = symbol.toUpperCase();
-  const candidates = [normalized];
-  if (normalized.endsWith('.US')) candidates.push(normalized.replace(/\.US$/, ''));
+  const candidates = normalized.endsWith('.US')
+    ? [normalized.replace(/\.US$/, ''), normalized]
+    : [normalized];
   return Array.from(new Set(candidates));
+}
+
+function hasUsableYfinanceData(result: Awaited<ReturnType<typeof fetchYfinanceBridge>>) {
+  if (!result) return false;
+  return Boolean(
+    (result.headerStats?.length ?? 0) ||
+    (result.estimates?.length ?? 0) ||
+    (result.facts?.length ?? 0) ||
+    (result.keyRatios?.length ?? 0) ||
+    (result.ownership?.length ?? 0) ||
+    (result.dividends?.length ?? 0) ||
+    result.fundamentals?.highlights?.revenue?.value != null ||
+    result.fundamentals?.highlights?.eps?.value != null
+  );
 }
 
 async function fetchFirstYfinance(symbol: string) {
   for (const candidate of yahooSymbolCandidates(symbol)) {
     const result = await fetchYfinanceBridge(candidate);
-    if (result && ((result.headerStats?.length ?? 0) || (result.estimates?.length ?? 0) || (result.facts?.length ?? 0) || result.fundamentals)) return result;
+    if (hasUsableYfinanceData(result)) return result;
   }
   return null;
+}
+
+function mergeFinancialHighlights(primary: TickerProfile['financialHighlights'], supplemental: TickerProfile['financialHighlights']) {
+  if (!supplemental.length) return primary;
+  const byLabel = new Map(primary.map((item) => [item.label, item]));
+  for (const item of supplemental) {
+    const existing = byLabel.get(item.label);
+    if (!existing || existing.status === 'unavailable' || existing.value === 'Unavailable') {
+      byLabel.set(item.label, item);
+    }
+  }
+  return Array.from(byLabel.values());
 }
 
 export async function enrichTickerProfileWithReferenceData(profile: TickerProfile): Promise<TickerProfile> {
@@ -105,7 +132,7 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     }
   }
 
-  const shouldBackfillFinancials = profile.sourceMap.financials.freshness === 'missing' && Boolean(yfinanceMetaSource);
+  const shouldBackfillFinancials = Boolean(yfinanceMetaSource);
   const yfinanceHighlights = shouldBackfillFinancials ? yfinanceFinancialHighlights(yfinanceData, yfinanceMetaSource!) : [];
   const yfinanceCashDebt = shouldBackfillFinancials ? yfinanceCashDebtSnapshot(yfinanceData, yfinanceMetaSource!) : null;
   const yfinanceBalanceSheet = shouldBackfillFinancials ? yfinanceBalanceSheetSnapshot(yfinanceData, yfinanceMetaSource!) : null;
@@ -124,7 +151,7 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     keyRatios: yfinanceMetaSource
       ? mergeKeyRatiosFromFundamentals(mergeKeyRatios(profile.keyRatios, yfinanceData?.keyRatios, yfinanceMetaSource), yfinanceData, yfinanceMetaSource)
       : profile.keyRatios,
-    financialHighlights: yfinanceHighlights.length ? yfinanceHighlights : profile.financialHighlights,
+    financialHighlights: mergeFinancialHighlights(profile.financialHighlights, yfinanceHighlights),
     cashDebtSnapshot: yfinanceCashDebt ?? profile.cashDebtSnapshot,
     balanceSheetSnapshot: yfinanceBalanceSheet ?? profile.balanceSheetSnapshot,
     financialOverview: yfinanceOverview ?? profile.financialOverview,

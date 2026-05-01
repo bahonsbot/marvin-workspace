@@ -177,12 +177,17 @@ export function mergeHeaderStats(base: TickerDisplayMetric[], extras: YfinanceBr
   return Array.from(byLabel.values()).slice(0, 6);
 }
 
+function normalizeRatioLabel(label: string) {
+  return label.toLowerCase().replace(/\s*\/\s*/g, '/').replace(/enterprise value\s*\/\s*ebitda/g, 'ev/ebitda').replace(/ev\s*\/\s*ebitda/g, 'ev/ebitda');
+}
+
 export function mergeKeyRatios(base: TickerDisplayMetric[], extras: YfinanceBridgeMetric[] | undefined, source: TickerSourceMeta) {
-  const byLabel = new Map(base.map((metric) => [metric.label, metric]));
+  const byLabel = new Map(base.map((metric) => [normalizeRatioLabel(metric.label), metric]));
   for (const metric of bridgeMetricsToDisplay(extras, source)) {
-    const current = byLabel.get(metric.label);
+    const key = normalizeRatioLabel(metric.label);
+    const current = byLabel.get(key);
     if (!current || current.status === 'unavailable' || current.value === 'Unavailable' || current.value === 'Provider pending') {
-      byLabel.set(metric.label, metric);
+      byLabel.set(key, metric);
     }
   }
   return Array.from(byLabel.values());
@@ -301,12 +306,13 @@ export function yfinanceFinancialOverview(data: YfinanceBridgeResult | null): Ti
 }
 
 export function mergeKeyRatiosFromFundamentals(base: TickerDisplayMetric[], data: YfinanceBridgeResult | null, source: TickerSourceMeta) {
-  const byLabel = new Map(base.map((metric) => [metric.label, metric]));
+  const byLabel = new Map(base.map((metric) => [normalizeRatioLabel(metric.label), metric]));
   for (const ratioMetric of data?.fundamentals?.ratios ?? []) {
     const metric: TickerDisplayMetric = { label: ratioMetric.label, value: ratioMetric.value, status: 'available', source, note: 'yfinance fundamentals ratio.' };
-    const current = byLabel.get(metric.label);
+    const key = normalizeRatioLabel(metric.label);
+    const current = byLabel.get(key);
     if (!current || current.status === 'unavailable' || current.value === 'Unavailable' || current.value === 'Provider pending') {
-      byLabel.set(metric.label, metric);
+      byLabel.set(key, metric);
     }
   }
   return Array.from(byLabel.values());

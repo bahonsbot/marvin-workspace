@@ -16,6 +16,15 @@ function hasAmbiguousCompanyProfile(profile: TickerProfile) {
   return profile.companyProfile.summary.toLowerCase().includes(' may refer to:');
 }
 
+
+function hasMissingUsYfinanceEnrichment(profile: TickerProfile) {
+  if (!profile.symbol.toUpperCase().endsWith('.US')) return false;
+  const estimatesMissing = profile.supplemental?.estimates.status === 'unavailable' || !(profile.supplemental?.estimates.metrics.length);
+  const hasUnavailableHighlight = profile.financialHighlights.some((item) => item.status === 'unavailable' || item.value === 'Unavailable');
+  const hasUnavailableRatio = profile.keyRatios.some((item) => item.status === 'unavailable' || item.value === 'Unavailable');
+  return estimatesMissing || hasUnavailableHighlight || hasUnavailableRatio;
+}
+
 function shouldRefreshCachedReferenceData(profile: TickerProfile) {
   return hasRegisteredNonUsFilingsSymbol(profile.symbol) && profile.sourceMap.filings.source !== 'sec' && (
     profile.sourceMap.filings.freshness === 'missing' ||
@@ -28,7 +37,7 @@ export async function getTickerProfile(symbol: string): Promise<TickerProfile> {
   const normalizedSymbol = symbol.trim().toUpperCase();
   const cached = await getCachedTickerProfile(normalizedSymbol, TICKER_PROFILE_TTL_MS);
   if (cached) {
-    if (!shouldRefreshCachedReferenceData(cached) && !hasAmbiguousCompanyProfile(cached)) return cached;
+    if (!shouldRefreshCachedReferenceData(cached) && !hasAmbiguousCompanyProfile(cached) && !hasMissingUsYfinanceEnrichment(cached)) return cached;
     const enrichedCached = await enrichTickerProfileWithReferenceData(cached);
     await writeTickerProfileCache(enrichedCached, TICKER_PROFILE_TTL_MS);
     return enrichedCached;
