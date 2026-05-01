@@ -77,7 +77,6 @@ export function MarketTape({
 }) {
   return (
     <div className="trading-market-tape-shell" aria-label="Market tape">
-      <div className="trading-market-tape-status">{status}</div>
       <div className="trading-market-tape">
         {items.map((item) => {
           const mutedMove = item.change.startsWith('-') ? 'negative' : 'positive';
@@ -89,6 +88,7 @@ export function MarketTape({
             </div>
           );
         })}
+        <div className="trading-market-tape-status">{status}</div>
       </div>
     </div>
   );

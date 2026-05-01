@@ -46,9 +46,8 @@ function formatTapeChange(value: number | null | undefined) {
   return `${prefix}${value.toFixed(2)}%`;
 }
 
-function formatTapeStatus(asOf: Date | null, hasProxy: boolean) {
-  const scope = hasProxy ? 'EODHD market tape · delayed quotes · Oil uses ETF proxy' : 'EODHD market tape · delayed quotes';
-  if (!asOf) return `${scope} · quote time unavailable`;
+function formatTapeStatus(asOf: Date | null) {
+  if (!asOf) return 'Updated: unknown';
   const formatted = new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -56,7 +55,7 @@ function formatTapeStatus(asOf: Date | null, hasProxy: boolean) {
     minute: '2-digit',
     timeZone: 'Asia/Ho_Chi_Minh',
   }).format(asOf);
-  return `${scope} · updated ${formatted}`;
+  return `Updated: ${formatted}`;
 }
 
 export async function getMarketTape(): Promise<MarketTapeData> {
@@ -79,12 +78,11 @@ export async function getMarketTape(): Promise<MarketTapeData> {
     .filter((value): value is Date => value instanceof Date && !Number.isNaN(value.getTime()));
   const latestAsOf = timestamps.length ? new Date(Math.max(...timestamps.map((date) => date.getTime()))) : null;
   const availableCount = quotes.filter(({ quote }) => asNumber(quote?.close) ?? asNumber(quote?.previousClose)).length;
-  const hasProxy = MARKET_TAPE.some((item) => item.kind === 'proxy');
 
   return {
     status: availableCount
-      ? formatTapeStatus(latestAsOf, hasProxy)
-      : 'EODHD market tape unavailable · provider returned no quote data',
+      ? formatTapeStatus(latestAsOf)
+      : 'Updated: unavailable',
     items: quotes.map(({ item, quote }) => {
       const close = asNumber(quote?.close) ?? asNumber(quote?.previousClose);
       return {
