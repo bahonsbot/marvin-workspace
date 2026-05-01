@@ -60,9 +60,16 @@ function SectionJumpNav({ items }: { items: SectionNavItem[] }) {
 }
 
 
+function sourceLabel(source: TickerSourceMeta['source']) {
+  if (source === 'eodhd') return 'EODHD';
+  if (source === 'yahoo') return 'Yahoo / yfinance';
+  if (source === 'xbrl') return 'filings.xbrl.org';
+  return source.toUpperCase();
+}
+
 function formatCaptionSource(source: TickerSourceMeta | undefined, options: { includeUpdated?: boolean } = {}) {
   if (!source) return 'Source: Provider pending';
-  const label = source.source === 'eodhd' ? 'EODHD' : source.source === 'yahoo' ? 'Yahoo / yfinance' : source.source.toUpperCase();
+  const label = sourceLabel(source.source);
   if (!options.includeUpdated || !source.asOf) return `Source: ${label}`;
   const date = new Date(source.asOf);
   if (Number.isNaN(date.getTime())) return `Source: ${label}`;
@@ -109,9 +116,9 @@ function sourceList(metrics: Array<{ source?: TickerSourceMeta }> = [], fallback
   const labels = new Set<string>();
   for (const metric of metrics) {
     if (!metric.source?.source) continue;
-    labels.add(metric.source.source === 'eodhd' ? 'EODHD' : metric.source.source === 'yahoo' ? 'Yahoo / yfinance' : metric.source.source.toUpperCase());
+    labels.add(sourceLabel(metric.source.source));
   }
-  if (!labels.size && fallback?.source) labels.add(fallback.source === 'eodhd' ? 'EODHD' : fallback.source === 'yahoo' ? 'Yahoo / yfinance' : fallback.source.toUpperCase());
+  if (!labels.size && fallback?.source) labels.add(sourceLabel(fallback.source));
   return labels.size ? `Sources: ${Array.from(labels).join(', ')}` : 'Sources: Provider pending';
 }
 

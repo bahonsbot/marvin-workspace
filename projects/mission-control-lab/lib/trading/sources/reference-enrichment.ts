@@ -2,6 +2,7 @@ import 'server-only';
 
 import type { TickerProfile, TickerSupplementalData } from '../contracts';
 import { financeDatabaseFacts, financeDatabaseSource, findFinanceDatabaseProfile } from './finance-database';
+import { fetchNonUsFilingsResources } from './xbrl-filings';
 import {
   bridgeMetricsToDisplay,
   fetchYfinanceBridge,
@@ -32,9 +33,15 @@ async function fetchFirstYfinance(symbol: string) {
 }
 
 export async function enrichTickerProfileWithReferenceData(profile: TickerProfile): Promise<TickerProfile> {
-  const [financeDatabaseProfile, yfinanceData] = await Promise.all([
+  const shouldFetchNonUsFilings = profile.sourceMap.filings.source !== 'sec' && (
+    profile.sourceMap.filings.freshness === 'missing' ||
+    !profile.resources.some((group) => group.items.length)
+  );
+
+  const [financeDatabaseProfile, yfinanceData, nonUsFilings] = await Promise.all([
     Promise.resolve(findFinanceDatabaseProfile(profile.symbol)),
     fetchFirstYfinance(profile.symbol),
+    shouldFetchNonUsFilings ? fetchNonUsFilingsResources(profile.symbol) : Promise.resolve(null),
   ]);
 
   const yfinanceMetaSource = yfinanceData ? yfinanceSource(yfinanceData.asOf, yfinanceData.sourceNote) : null;
@@ -104,6 +111,12 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
   const yfinanceBalanceSheet = shouldBackfillFinancials ? yfinanceBalanceSheetSnapshot(yfinanceData, yfinanceMetaSource!) : null;
   const yfinanceOverview = shouldBackfillFinancials ? yfinanceFinancialOverview(yfinanceData) : null;
 
+  const sourceMap = nonUsFilings ? {
+    ...profile.sourceMap,
+    resources: nonUsFilings.source,
+    filings: nonUsFilings.source,
+  } : profile.sourceMap;
+
   return {
     ...profile,
     headerStats: mergeHeaderStats(profile.headerStats, yfinanceData?.headerStats, yfinanceMetaSource ?? profile.sourceMap.profile),
@@ -115,6 +128,8 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     cashDebtSnapshot: yfinanceCashDebt ?? profile.cashDebtSnapshot,
     balanceSheetSnapshot: yfinanceBalanceSheet ?? profile.balanceSheetSnapshot,
     financialOverview: yfinanceOverview ?? profile.financialOverview,
+    resources: nonUsFilings?.resources ?? profile.resources,
+    sourceMap,
     supplemental,
   };
 }
