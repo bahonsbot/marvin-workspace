@@ -180,12 +180,12 @@ export function mergeKeyRatios(base: TickerDisplayMetric[], extras: YfinanceBrid
   return Array.from(byLabel.values());
 }
 
-function formatBillions(raw: number | null | undefined) {
-  if (raw == null || !Number.isFinite(raw)) return '$—';
+function formatBillions(raw: number | null | undefined, currency = 'USD') {
+  if (raw == null || !Number.isFinite(raw)) return `${currency} —`;
   const value = raw / 1_000_000_000;
   const sign = value < 0 ? '-' : '';
   const abs = Math.abs(value);
-  return `${sign}$${abs >= 100 ? abs.toFixed(0) : abs.toFixed(1)}B`;
+  return `${sign}${currency} ${abs >= 100 ? abs.toFixed(0) : abs.toFixed(1)}B`;
 }
 
 function ratio(raw: number | null | undefined) {
@@ -207,9 +207,10 @@ export function yfinanceFinancialHighlights(data: YfinanceBridgeResult | null, s
     const year = item.node?.year;
     const value = item.node?.value;
     if (!year || value == null || !Number.isFinite(value)) return [];
+    const currency = data?.fundamentals?.currency || 'USD';
     return [{
       label: item.label,
-      value: formatBillions(value),
+      value: formatBillions(value, currency),
       delta: 'Derived from annual yfinance statements.',
       tone: 'neutral',
       trend: [],
@@ -233,12 +234,12 @@ export function yfinanceCashDebtSnapshot(data: YfinanceBridgeResult | null, sour
     currency: data?.fundamentals?.currency || 'USD',
     cashPercent: Math.round((cash / total) * 100),
     debtPercent: Math.round((debt / total) * 100),
-    totalCash: formatBillions(cash),
-    totalDebt: formatBillions(debt),
-    netCash: formatBillions(Math.abs(netCash)),
+    totalCash: formatBillions(cash, data?.fundamentals?.currency || 'USD'),
+    totalDebt: formatBillions(debt, data?.fundamentals?.currency || 'USD'),
+    netCash: formatBillions(Math.abs(netCash), data?.fundamentals?.currency || 'USD'),
     netCashLabel: netCash >= 0 ? 'Net Cash' : 'Net Debt',
-    freeCashFlow: formatBillions(node.freeCashFlow),
-    operatingCashFlow: formatBillions(node.operatingCashFlow),
+    freeCashFlow: formatBillions(node.freeCashFlow, data?.fundamentals?.currency || 'USD'),
+    operatingCashFlow: formatBillions(node.operatingCashFlow, data?.fundamentals?.currency || 'USD'),
     interpretation: netCash >= 0 ? 'Net cash position' : 'Debt exceeds cash; watch leverage and refinancing risk',
     source,
   };
@@ -261,11 +262,11 @@ export function yfinanceBalanceSheetSnapshot(data: YfinanceBridgeResult | null, 
     period: `${balance.latestYear} FY · yfinance annual statements`,
     currency: data?.fundamentals?.currency || 'USD',
     kpis: [
-      { label: 'Assets', value: formatBillions(balance.assets), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
-      { label: 'Liabilities', value: formatBillions(balance.liabilities), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
-      { label: 'Equity', value: formatBillions(balance.equity), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
-      { label: 'Cash', value: formatBillions(balance.cash), caption: 'Cash and equivalents', tone: 'positive' },
-      { label: 'Debt', value: formatBillions(balance.debt), caption: 'Current + long-term debt', tone: 'negative' },
+      { label: 'Assets', value: formatBillions(balance.assets, data?.fundamentals?.currency || 'USD'), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
+      { label: 'Liabilities', value: formatBillions(balance.liabilities, data?.fundamentals?.currency || 'USD'), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
+      { label: 'Equity', value: formatBillions(balance.equity, data?.fundamentals?.currency || 'USD'), caption: `FY ${balance.latestYear}`, tone: 'neutral' },
+      { label: 'Cash', value: formatBillions(balance.cash, data?.fundamentals?.currency || 'USD'), caption: 'Cash and equivalents', tone: 'positive' },
+      { label: 'Debt', value: formatBillions(balance.debt, data?.fundamentals?.currency || 'USD'), caption: 'Current + long-term debt', tone: 'negative' },
       { label: 'Current Ratio', value: ratio(currentRatioValue), caption: 'Assets / liabilities (proxy)', tone: 'neutral' },
       { label: 'Debt / Equity', value: ratio(debtToEquityValue), caption: 'Debt / equity', tone: 'neutral' },
     ],

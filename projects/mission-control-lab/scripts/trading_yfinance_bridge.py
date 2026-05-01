@@ -73,15 +73,21 @@ def df_metric(df: Any, period: str, column: str) -> Any:
         return None
 
 
+def normalize_label(value: Any) -> str:
+    return "".join(ch.lower() for ch in str(value) if ch.isalnum())
+
+
 def read_statement_row(df: Any, labels: list[str]) -> dict[str, float]:
     output: dict[str, float] = {}
     try:
         if df is None or getattr(df, "empty", True):
             return output
+        normalized_index = {normalize_label(index): index for index in df.index}
         for label in labels:
-            if label not in df.index:
+            actual_label = label if label in df.index else normalized_index.get(normalize_label(label))
+            if actual_label is None:
                 continue
-            row = df.loc[label]
+            row = df.loc[actual_label]
             for column, raw in row.items():
                 number = safe_float(raw)
                 if number is None:
@@ -96,8 +102,8 @@ def read_statement_row(df: Any, labels: list[str]) -> dict[str, float]:
 
 
 def latest_year(values: dict[str, float]) -> str | None:
-    years = sorted(values.keys())
-    return years[-1] if years else None
+    years = sorted(values.keys(), reverse=True)
+    return years[0] if years else None
 
 
 def main() -> int:
@@ -239,23 +245,27 @@ def main() -> int:
         if value:
             dividends.append({"label": label, "value": value, "status": "available", "note": "Dividend field from yfinance."})
 
-    revenue_by_year = read_statement_row(annual_income_stmt, ["Total Revenue", "Operating Revenue"])
-    net_income_by_year = read_statement_row(annual_income_stmt, ["Net Income", "Net Income Common Stockholders"])
+    revenue_by_year = read_statement_row(annual_income_stmt, ["Total Revenue", "Operating Revenue", "Insurance Revenue"])
+    net_income_by_year = read_statement_row(annual_income_stmt, ["Net Income", "Net Income Common Stockholders", "Net Income From Continuing Operation Net Minority Interest"])
     gross_profit_by_year = read_statement_row(annual_income_stmt, ["Gross Profit"])
-    operating_income_by_year = read_statement_row(annual_income_stmt, ["Operating Income"])
+    operating_income_by_year = read_statement_row(annual_income_stmt, ["Operating Income", "EBIT"])
     total_assets_by_year = read_statement_row(annual_balance_sheet, ["Total Assets"])
     total_liabilities_by_year = read_statement_row(annual_balance_sheet, ["Total Liabilities Net Minority Interest", "Total Liabilities"])
-    total_equity_by_year = read_statement_row(annual_balance_sheet, ["Stockholders Equity", "Total Equity Gross Minority Interest"])
-    cash_by_year = read_statement_row(annual_balance_sheet, ["Cash And Cash Equivalents", "Cash Cash Equivalents And Short Term Investments"])
+    total_equity_by_year = read_statement_row(annual_balance_sheet, ["Stockholders Equity", "Total Equity Gross Minority Interest", "Common Stock Equity"])
+    cash_by_year = read_statement_row(annual_balance_sheet, ["Cash And Cash Equivalents", "Cash Cash Equivalents And Short Term Investments", "Cash And Short Term Investments"])
+    debt_total_by_year = read_statement_row(annual_balance_sheet, ["Total Debt"])
+    net_debt_by_year = read_statement_row(annual_balance_sheet, ["Net Debt"])
     debt_current_by_year = read_statement_row(annual_balance_sheet, ["Current Debt", "Current Debt And Capital Lease Obligation"])
     debt_noncurrent_by_year = read_statement_row(annual_balance_sheet, ["Long Term Debt", "Long Term Debt And Capital Lease Obligation"])
     operating_cashflow_by_year = read_statement_row(annual_cashflow, ["Operating Cash Flow", "Cash Flow From Continuing Operating Activities"])
     capex_by_year = read_statement_row(annual_cashflow, ["Capital Expenditure", "Capital Expenditures"])
     free_cashflow_by_year = read_statement_row(annual_cashflow, ["Free Cash Flow"])
 
-    debt_by_year: dict[str, float] = {}
+    debt_by_year: dict[str, float] = dict(debt_total_by_year)
     for year in set(debt_current_by_year.keys()) | set(debt_noncurrent_by_year.keys()):
-        debt_by_year[year] = debt_current_by_year.get(year, 0.0) + debt_noncurrent_by_year.get(year, 0.0)
+        debt_by_year.setdefault(year, debt_current_by_year.get(year, 0.0) + debt_noncurrent_by_year.get(year, 0.0))
+    for year, value in net_debt_by_year.items():
+        debt_by_year.setdefault(year, value)
 
     ratio_values = {
         "P/E Ratio": fmt_number(info.get("trailingPE")),
