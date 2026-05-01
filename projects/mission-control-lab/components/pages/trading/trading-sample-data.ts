@@ -1,13 +1,3 @@
-export const marketTape = [
-  { label: 'S&P 500', value: '5,983.42', change: '+0.42%' },
-  { label: 'Nasdaq', value: '19,284.10', change: '+0.68%' },
-  { label: 'Dow', value: '42,118.55', change: '-0.12%' },
-  { label: 'VIX', value: '14.8', change: '-2.10%' },
-  { label: '10Y', value: '4.21%', change: '+0.03' },
-  { label: 'Gold', value: '2,386.20', change: '+0.31%' },
-  { label: 'Oil', value: '78.44', change: '-0.46%' },
-];
-
 export const portfolioSnapshot = {
   value: '€486,134.47',
   dayChange: '-€1,942.18',

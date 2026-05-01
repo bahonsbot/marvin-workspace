@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
+import type { MarketTapeItem } from '@/lib/trading/market-tape';
 import styles from './trading.module.css';
 
 export function formatTradingTime(value: string | null | undefined) {
@@ -71,7 +72,7 @@ export function MarketTape({
   items,
   status = 'Static sample tape · live market tape not wired yet',
 }: {
-  items: Array<{ label: string; value: string; change: string }>;
+  items: MarketTapeItem[];
   status?: string;
 }) {
   return (

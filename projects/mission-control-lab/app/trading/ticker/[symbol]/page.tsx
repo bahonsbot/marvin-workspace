@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { TickerPriceChart } from '@/components/pages/trading/TickerPriceChart';
 import { TickerQuoteRefresh } from '@/components/pages/trading/TickerQuoteRefresh';
 import { MarketTape, TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
-import { marketTape } from '@/components/pages/trading/trading-sample-data';
+import { getMarketTape } from '@/lib/trading/market-tape';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
 import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerDisplayMetric, TickerFinancialHighlight, TickerFinancialOverview, TickerProfileFact, TickerSourceMeta, TickerSupplementalSection } from '@/lib/trading/contracts';
 
@@ -441,7 +441,7 @@ function FinancialBarChart({ overview }: { overview: TickerFinancialOverview }) 
 export default async function TradingTickerPage({ params }: { params: Promise<{ symbol: string }> }) {
   const { symbol } = await params;
   const upperSymbol = symbol.toUpperCase();
-  const ticker = await getTickerProfile(upperSymbol);
+  const [ticker, marketTape] = await Promise.all([getTickerProfile(upperSymbol), getMarketTape()]);
   const rawProfileFacts = ticker.companyProfile.facts;
   const profileFacts = cleanProfileFacts(rawProfileFacts);
   const displayName = titleFromProfile(ticker.name, ticker.companyProfile.summary, rawProfileFacts);
@@ -471,7 +471,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       description="Static BOILER ROOM ticker research object. Live provider wiring comes later through a server-side cached ticker profile adapter."
       hideHeader
     >
-      <MarketTape items={marketTape} />
+      <MarketTape items={marketTape.items} status={marketTape.status} />
 
       <Link href="/trading" className="trading-ticker-back">
         ← Back to Overview

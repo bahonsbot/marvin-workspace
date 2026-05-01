@@ -3,7 +3,6 @@ import { MarketTape, MiniLineChart, TradingPageFrame, tradingCardStyle } from '@
 import {
   earningsPreview,
   healthItems,
-  marketTape,
   newsPreview,
   performanceAxisLabels,
   performanceRangeTabs,
@@ -12,6 +11,7 @@ import {
   portfolioSnapshot,
   topMoverRows,
 } from '@/components/pages/trading/trading-sample-data';
+import { getMarketTape } from '@/lib/trading/market-tape';
 
 function HealthIcon({ type }: { type: string }) {
   if (type === 'concentration') {
@@ -77,14 +77,16 @@ function TrendSparkline({ values }: { values: number[] }) {
   );
 }
 
-export default function TradingOverviewPage() {
+export default async function TradingOverviewPage() {
+  const marketTape = await getMarketTape();
+
   return (
     <TradingPageFrame
       title="Trading Overview"
       description="BOILER ROOM home base for portfolio posture, watchlists, market context, and the next names that deserve attention."
       hideHeader
     >
-      <MarketTape items={marketTape} />
+      <MarketTape items={marketTape.items} status={marketTape.status} />
 
       <section className="trading-overview-hero">
         <div className="trading-overview-hero-head">
