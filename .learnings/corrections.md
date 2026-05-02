@@ -898,3 +898,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** high
 **Status:** active
+
+## [CORR-20260502-1358]
+
+**Trigger:** Philippe noticed two ticker-page gremlins after the milestone work: Samsung `005930.KS` quote refresh failed with 502, and `WAWI.OL` showed the generic EODHD fallback summary again.
+**What was wrong:** The implementation had improved major provider/source paths but did not sufficiently validate adjacent fallback behavior and cache regeneration for random non-US tickers. The quote refresh endpoint was narrower than the page data path, and the Wikipedia identity guard was too strict for known-safe mappings when provider names are ticker-like.
+**Lesson:** For Trading ticker QA, do not stop at the main rendered sections. Also verify companion APIs, regenerated cache JSON, known-safe symbol mappings, and random edge tickers after each provider/source change. If a guard is added to block false positives, include explicit bypass or test coverage for curated high-confidence mappings.
+
+**Priority:** medium
+**Status:** active

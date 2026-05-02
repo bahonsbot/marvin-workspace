@@ -1451,3 +1451,14 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** medium
 **Status:** active
+
+## [ERR-20260502-1358]
+
+**What failed:** Lab Trading ticker enrichment regressions escaped through fallback and cache paths during the ticker-page milestone.
+**Error:** `005930.KS` quote refresh returned `Quote refresh failed (502)` because the refresh endpoint only used EODHD realtime data even when the ticker page had a cached Yahoo/yfinance quote; `WAWI.OL` regressed to the generic EODHD company-summary fallback because the stricter Wikipedia identity guard rejected the known-safe `WAWI.OL -> Wallenius Wilhelmsen` mapping.
+**Context:** After adding official non-US filings, Wikipedia hardening, unsupported-symbol handling, and first-class `yfinance` source metadata, random ticker QA found regressions in paths that were not the headline feature: quote refresh and known-title profile repair.
+**Suggested fix:** For ticker/provider work, smoke both rendered page output and companion endpoints/cache state. Test fallback paths explicitly: EODHD-missing quote with cached Yahoo/yfinance quote, known-safe Wikipedia title mappings whose provider name is ticker-like, unsupported aliases, and regenerated cache after source changes. Keep provider/source changes guarded by deterministic smoke tests plus live random-ticker checks.
+**Resolution:** Resolved in Lab commit `802a949 Fix Lab quote refresh and WAWI profile fallback`; later protected by `tests/trading-provider-smoke.test.py` coverage and live checks for `005930.KS` and `WAWI.OL`.
+
+**Priority:** medium
+**Status:** resolved
