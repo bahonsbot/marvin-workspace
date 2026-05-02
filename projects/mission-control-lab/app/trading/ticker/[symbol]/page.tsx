@@ -31,6 +31,49 @@ const unavailableHighlightSource = {
   note: 'No reliable provider-backed value is available yet. Keep the metric visible for future fundamentals coverage.',
 };
 
+const financeGlossaryItems = [
+  {
+    term: 'P/E',
+    meaning: 'Price divided by earnings per share. A quick valuation check, but weak when earnings are cyclical or temporarily depressed.',
+  },
+  {
+    term: 'Forward P/E',
+    meaning: 'Price divided by expected earnings. Useful for expectations, fragile when analyst forecasts move.',
+  },
+  {
+    term: 'EV / EBITDA',
+    meaning: 'Enterprise value versus operating earnings before depreciation and amortization. Helps compare companies with different debt loads.',
+  },
+  {
+    term: 'Gross margin',
+    meaning: 'Revenue left after direct production costs. Higher margins usually mean stronger pricing power or better cost control.',
+  },
+  {
+    term: 'Operating margin',
+    meaning: 'Profitability after operating costs, before interest and taxes. Good for judging core business efficiency.',
+  },
+  {
+    term: 'EPS',
+    meaning: 'Earnings per share. The profit assigned to each share, useful but easy to distort with buybacks or one-off items.',
+  },
+  {
+    term: 'Free cash flow',
+    meaning: 'Cash left after operations and capital spending. Often cleaner than accounting profit for debt, dividends, and reinvestment capacity.',
+  },
+  {
+    term: 'ROE / ROIC',
+    meaning: 'Returns on equity or invested capital. They show how efficiently management turns capital into profit.',
+  },
+  {
+    term: 'Debt / Equity',
+    meaning: 'Debt compared with shareholder equity. Higher values can amplify returns, but also increase refinancing and downturn risk.',
+  },
+  {
+    term: 'Current ratio',
+    meaning: 'Current assets divided by current liabilities. A rough liquidity check for near-term obligations.',
+  },
+];
+
 function makeSectionNav(): SectionNavItem[] {
   return [
     { label: 'Overview', href: '#overview' },
@@ -44,6 +87,7 @@ function makeSectionNav(): SectionNavItem[] {
     { label: 'Estimates', href: '#estimates', status: 'unavailable' },
     { label: 'Dividends', href: '#dividends', status: 'unavailable' },
     { label: 'Ownership', href: '#ownership', status: 'unavailable' },
+    { label: 'Glossary', href: '#finance-glossary' },
   ];
 }
 
@@ -786,6 +830,24 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <p className="trading-financial-caption">{sourceList(ticker.keyRatios.filter((ratio) => !visibleHighlightRatioLabels.has(keyRatioHighlightKey(ratio.label))), ticker.sourceMap.financials)}</p>
         </section>
       </div>
+
+      <section id="finance-glossary" className="trading-finance-glossary" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+        <div className="trading-section-head">
+          <div>
+            <div className="trading-section-label">Finance glossary</div>
+            <h2>Small notes for reading the numbers</h2>
+          </div>
+          <span className="trading-ticker-source-note">Educational context, not investment advice</span>
+        </div>
+        <dl className="trading-glossary-grid">
+          {financeGlossaryItems.map((item) => (
+            <div key={item.term}>
+              <dt>{item.term}</dt>
+              <dd>{item.meaning}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       <div className="trading-ticker-placeholder-grid trading-ticker-provider-grid">
         <section id="estimates" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>

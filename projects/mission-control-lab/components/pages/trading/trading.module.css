@@ -1213,6 +1213,39 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+:global(.trading-finance-glossary) {
+  margin-top: 18px;
+}
+
+:global(.trading-glossary-grid) {
+  margin: 18px 0 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid rgba(28, 37, 32, 0.12);
+}
+
+:global(.trading-glossary-grid div) {
+  min-width: 0;
+  padding: 14px 18px 16px 0;
+  border-bottom: 1px solid rgba(28, 37, 32, 0.1);
+}
+
+:global(.trading-glossary-grid dt) {
+  color: #17241e;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+:global(.trading-glossary-grid dd) {
+  margin: 6px 0 0;
+  color: rgba(34, 48, 41, 0.62);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 :global(.trading-supplemental-metric-grid) {
   margin: 14px 0 0;
   display: grid;
@@ -1718,6 +1751,10 @@
   :global(.trading-financial-highlight-grid) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  :global(.trading-glossary-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -1733,7 +1770,8 @@
   :global(.trading-ticker-stat-strip),
   :global(.trading-ticker-chart-stats),
   :global(.trading-financial-highlight-grid),
-  :global(.trading-key-ratio-grid) {
+  :global(.trading-key-ratio-grid),
+  :global(.trading-glossary-grid) {
     grid-template-columns: 1fr 1fr;
   }
 

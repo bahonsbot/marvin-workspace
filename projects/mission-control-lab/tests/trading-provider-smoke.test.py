@@ -18,6 +18,7 @@ SOURCE_FILES = {
     "yfinance_bridge": ROOT / "lib" / "trading" / "sources" / "yfinance-bridge.ts",
     "wikipedia": ROOT / "lib" / "trading" / "sources" / "wikipedia.ts",
     "xbrl_filings": ROOT / "lib" / "trading" / "sources" / "xbrl-filings.ts",
+    "trading_styles": ROOT / "components" / "pages" / "trading" / "trading.module.css",
 }
 
 
@@ -84,6 +85,17 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("enterprise value", source.lower())
         self.assertIn("ev/ebitda", source.lower())
         self.assertIn("mergeKeyRatiosFromFundamentals", source)
+
+    def test_ticker_page_has_compact_finance_glossary(self) -> None:
+        ticker_page = read_source("ticker_page")
+        styles = read_source("trading_styles")
+
+        self.assertIn("financeGlossaryItems", ticker_page)
+        self.assertIn("finance-glossary", ticker_page)
+        for term in ["P/E", "Forward P/E", "EV / EBITDA", "Gross margin", "Free cash flow", "ROE / ROIC", "Debt / Equity", "Current ratio"]:
+            self.assertIn(term, ticker_page)
+        self.assertIn("trading-glossary-grid", styles)
+        self.assertIn("Educational context, not investment advice", ticker_page)
 
     def test_quote_refresh_falls_back_to_cached_profile_quote_when_eodhd_live_quote_is_missing(self) -> None:
         route = read_source("quote_route")
