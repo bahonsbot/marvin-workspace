@@ -50,10 +50,14 @@ async function replaceMissingDisclosureResources(profile: TickerProfile) {
 
 function hasAmbiguousCompanyProfile(profile: TickerProfile) {
   const summary = profile.companyProfile.summary.toLowerCase();
-  return summary.includes(' may refer to:') ||
-    summary.includes(' is a stock market index ') ||
-    summary.includes(' is covered by eodhd market-data endpoints') ||
-    (summary.includes(' comprises ') && summary.includes(' companies traded on'));
+  if (summary.includes(' may refer to:')) return true;
+  if (summary.includes(' is a stock market index ')) return true;
+  if (summary.includes(' comprises ') && summary.includes(' companies traded on')) return true;
+  if (!summary.includes(' is covered by eodhd market-data endpoints')) return false;
+  const normalized = profile.symbol.toUpperCase();
+  return normalized in {
+    'WAWI.OL': true,
+  };
 }
 
 

@@ -8,6 +8,7 @@ import {
   formatEodhdQuoteTime,
   formatEodhdSigned,
 } from '@/lib/trading/sources/eodhd';
+import { getTickerProfile } from '@/lib/trading/ticker-profile';
 
 export async function GET(_request: Request, { params }: { params: Promise<{ symbol: string }> }) {
   const { symbol } = await params;
@@ -19,6 +20,30 @@ export async function GET(_request: Request, { params }: { params: Promise<{ sym
 
   const quote = await fetchEodhdRealtimeQuote(normalized);
   if (!quote || typeof quote.close !== 'number') {
+    const profile = await getTickerProfile(normalized).catch(() => null);
+    if (profile?.quote?.rawPrice != null || profile?.quote?.price) {
+      const now = new Date().toISOString();
+      return NextResponse.json({
+        symbol: normalized,
+        price: profile.quote.price,
+        change: profile.quote.change,
+        changePct: profile.quote.changePct,
+        tone: profile.quote.tone,
+        priceTime: profile.quote.priceTime,
+        updatedAt: profile.quote.updatedAt ?? profile.quote.source.asOf,
+        fetchedAt: now,
+        provider: profile.quote.source.source === 'yahoo' ? 'Yahoo Finance' : profile.quote.source.source.toUpperCase(),
+        providerDelay: profile.quote.providerDelay ?? 'Cached quote; live refresh unavailable from EODHD.',
+        stale: true,
+        raw: {
+          close: profile.quote.rawPrice ?? null,
+          previousClose: null,
+          change: profile.quote.rawChange ?? null,
+          changePct: profile.quote.rawChangePct ?? null,
+          timestamp: profile.quote.updatedAt ? Math.floor(Date.parse(profile.quote.updatedAt) / 1000) : null,
+        },
+      });
+    }
     return NextResponse.json({ error: 'Quote unavailable from EODHD.' }, { status: 502 });
   }
 

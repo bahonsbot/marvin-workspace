@@ -261,7 +261,12 @@ function normalizeIdentityText(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
-function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefined, companyName: string) {
+function hasKnownWikipediaTitle(symbol: string) {
+  const normalizedSymbol = symbol.toUpperCase();
+  return Boolean(knownWikipediaTitles[normalizedSymbol] ?? knownWikipediaTitles[normalizedSymbol.replace(/\.US$/, '')]);
+}
+
+function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefined, companyName: string, trustKnownTitle = false) {
   const title = pageTitle.trim().toLowerCase();
   const cleanedExtract = (extract ?? '').trim().toLowerCase();
   const cleanedCompany = companyName.trim().toLowerCase();
@@ -278,7 +283,7 @@ function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefi
   if (cleanedExtract.includes('tracks') && cleanedExtract.includes('stock market index')) return true;
   if (cleanedExtract.includes('hang seng index')) return true;
   if (title.length <= 4 && !cleanedCompany.startsWith(title)) return true;
-  if (companyLead && !identityTitle.includes(companyLead) && !normalizeIdentityText(cleanedExtract).includes(companyLead) && !hasMeaningfulIdentityOverlap) return true;
+  if (!trustKnownTitle && companyLead && !identityTitle.includes(companyLead) && !normalizeIdentityText(cleanedExtract).includes(companyLead) && !hasMeaningfulIdentityOverlap) return true;
   return false;
 }
 
@@ -293,7 +298,7 @@ export async function fetchWikipediaCompanyProfile(symbol: string, companyName: 
   if (!title) return null;
 
   const page = await fetchWikipediaPage(title);
-  if (isAmbiguousWikipediaProfile(page?.title ?? title, page?.extract, companyName)) return null;
+  if (isAmbiguousWikipediaProfile(page?.title ?? title, page?.extract, companyName, hasKnownWikipediaTitle(symbol))) return null;
   const wikidataId = page?.pageprops?.wikibase_item;
   if (!wikidataId) return null;
 

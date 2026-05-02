@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BRIDGE = ROOT / "scripts" / "trading_yfinance_bridge.py"
 SOURCE_FILES = {
     "ticker_page": ROOT / "app" / "trading" / "ticker" / "[symbol]" / "page.tsx",
+    "quote_route": ROOT / "app" / "api" / "trading" / "quote" / "[symbol]" / "route.ts",
     "ticker_profile": ROOT / "lib" / "trading" / "ticker-profile.ts",
     "contracts": ROOT / "lib" / "trading" / "contracts.ts",
     "reference_enrichment": ROOT / "lib" / "trading" / "sources" / "reference-enrichment.ts",
@@ -84,6 +85,14 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("ev/ebitda", source.lower())
         self.assertIn("mergeKeyRatiosFromFundamentals", source)
 
+    def test_quote_refresh_falls_back_to_cached_profile_quote_when_eodhd_live_quote_is_missing(self) -> None:
+        route = read_source("quote_route")
+
+        self.assertIn("getTickerProfile(normalized)", route)
+        self.assertIn("profile?.quote?.rawPrice", route)
+        self.assertIn("stale: true", route)
+        self.assertIn("Cached quote; live refresh unavailable from EODHD", route)
+
     def test_yfinance_has_first_class_source_metadata(self) -> None:
         contracts = read_source("contracts")
         source = read_source("yfinance_bridge")
@@ -111,6 +120,7 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("hang seng index", wikipedia)
         self.assertIn("hasMeaningfulIdentityOverlap", wikipedia)
         self.assertIn("is covered by eodhd market-data endpoints", ticker_profile)
+        self.assertIn("'WAWI.OL': true", ticker_profile)
         self.assertIn("fetchFreshTickerProfile(normalizedSymbol)", ticker_profile)
 
     def test_unsupported_symbols_do_not_use_synthetic_sample_company_profiles(self) -> None:
