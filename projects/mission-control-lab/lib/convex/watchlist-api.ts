@@ -44,6 +44,12 @@ export const watchlistApi = {
     { userKey?: string; name: string; description?: string; pinned?: boolean },
     string
   >('watchlist:createWatchlist'),
+  updateWatchlist: makeFunctionReference<
+    'mutation',
+    { id: string; name?: string; description?: string; pinned?: boolean },
+    void
+  >('watchlist:updateWatchlist'),
+  deleteWatchlist: makeFunctionReference<'mutation', { id: string; userKey?: string }, void>('watchlist:deleteWatchlist'),
   add: makeFunctionReference<
     'mutation',
     {

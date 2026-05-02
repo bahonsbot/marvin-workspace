@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import {
   watchlistApi,
@@ -212,10 +212,12 @@ function WatchlistRail({
   watchlists,
   activeId,
   onSelect,
+  children,
 }: {
   watchlists: WatchlistWithItems[];
   activeId?: string;
   onSelect: (id: string) => void;
+  children?: React.ReactNode;
 }) {
   return (
     <nav className="trading-watchlist-rail" aria-label="Watchlists">
@@ -225,7 +227,92 @@ function WatchlistRail({
           <em>{watchlist.items.length} names{watchlist.pinned ? ' · pinned' : ''}</em>
         </button>
       ))}
+      {children}
     </nav>
+  );
+}
+
+function StaticWatchlistManager() {
+  return (
+    <div className="trading-watchlist-manager" aria-label="Watchlist management unavailable">
+      <input value="Main Watchlist" disabled aria-label="Watchlist name" />
+      <button type="button" disabled>Rename</button>
+      <button type="button" disabled>New list</button>
+    </div>
+  );
+}
+
+function LiveWatchlistManager({ activeWatchlist, canDelete, onCreated }: {
+  activeWatchlist?: WatchlistWithItems;
+  canDelete: boolean;
+  onCreated: (id: string) => void;
+}) {
+  const createWatchlist = useMutation(watchlistApi.createWatchlist);
+  const updateWatchlist = useMutation(watchlistApi.updateWatchlist);
+  const deleteWatchlist = useMutation(watchlistApi.deleteWatchlist);
+  const [name, setName] = useState(activeWatchlist?.name ?? '');
+  const [status, setStatus] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    setName(activeWatchlist?.name ?? '');
+  }, [activeWatchlist?._id, activeWatchlist?.name]);
+
+  async function renameActive() {
+    if (!activeWatchlist) return;
+    const nextName = name.trim();
+    if (!nextName) {
+      setStatus('Name the watchlist first.');
+      return;
+    }
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      await updateWatchlist({ id: activeWatchlist._id, name: nextName });
+      setStatus('Watchlist renamed.');
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Could not rename watchlist.');
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function createNew() {
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      const id = await createWatchlist({ userKey: DEMO_USER_KEY, name: 'New Watchlist' });
+      onCreated(id);
+      setStatus('New watchlist created.');
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Could not create watchlist.');
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function deleteActive() {
+    if (!activeWatchlist || !canDelete) return;
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      await deleteWatchlist({ id: activeWatchlist._id, userKey: DEMO_USER_KEY });
+      setStatus('Watchlist deleted.');
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Could not delete watchlist.');
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  return (
+    <div className="trading-watchlist-manager" aria-label="Manage watchlists">
+      <input value={name} onChange={(event) => setName(event.target.value)} aria-label="Watchlist name" disabled={isSaving || !activeWatchlist} />
+      <button type="button" onClick={renameActive} disabled={isSaving || !activeWatchlist}>Rename</button>
+      <button type="button" onClick={createNew} disabled={isSaving}>New list</button>
+      <button type="button" onClick={deleteActive} disabled={isSaving || !canDelete || !activeWatchlist}>Delete</button>
+      {status ? <p>{status}</p> : null}
+    </div>
   );
 }
 
@@ -235,7 +322,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
     if (!watchlists.length) return undefined;
     return watchlists.find((watchlist) => watchlist._id === selectedWatchlistId) ?? watchlists[0];
   }, [selectedWatchlistId, watchlists]);
-  const items = activeWatchlist?.items ?? sampleWatchlistItems;
+  const items = activeWatchlist?.items ?? (isLive ? [] : sampleWatchlistItems);
 
   return (
     <>
@@ -256,19 +343,32 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
           <div className="trading-section-head">
             <div>
               <div className="trading-section-label">Tracked names</div>
-              <h2>{isLoading ? 'Loading Convex…' : activeWatchlist?.name ?? 'Local preview data'}</h2>
+              <h2>{isLoading ? 'Loading Convex…' : activeWatchlist?.name ?? (isLive ? 'No watchlist yet' : 'Local preview data')}</h2>
             </div>
             <span className={isLive ? 'trading-watchlist-live-badge live' : 'trading-watchlist-live-badge'}>{isLive ? 'Convex live' : 'Convex not connected'}</span>
           </div>
-          <WatchlistRail watchlists={watchlists} activeId={activeWatchlist?._id} onSelect={setSelectedWatchlistId} />
-          {isLive ? <LiveWatchlistTable items={items} /> : <WatchlistTable items={items} canMutate={false} />}
+          <WatchlistRail watchlists={watchlists} activeId={activeWatchlist?._id} onSelect={setSelectedWatchlistId}>
+            {isLive ? (
+              <LiveWatchlistManager activeWatchlist={activeWatchlist} canDelete={watchlists.length > 1} onCreated={setSelectedWatchlistId} />
+            ) : (
+              <StaticWatchlistManager />
+            )}
+          </WatchlistRail>
+          {items.length ? (
+            isLive ? <LiveWatchlistTable items={items} /> : <WatchlistTable items={items} canMutate={false} />
+          ) : (
+            <div className="trading-watchlist-empty-state">
+              <span>No tracked names yet</span>
+              <p>Add a symbol from the side panel to start building this watchlist.</p>
+            </div>
+          )}
         </article>
 
         <aside className="trading-watchlist-side-panel">
           <div>
             <div className="trading-section-label">Add symbol</div>
             <h2>Capture the thesis first.</h2>
-            <p>Writes target the selected watchlist once Convex is connected. Later, the ticker page can expose this same list picker.</p>
+            <p>Writes target the selected watchlist, or create the first list automatically. Later, the ticker page can expose this same picker.</p>
           </div>
           <WatchlistAddForm enabled={isLive} watchlistId={isLive ? activeWatchlist?._id : undefined} />
           <div className="trading-watchlist-next-card">
@@ -284,7 +384,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
 
 function LiveWatchlistContent() {
   const liveWatchlists = useQuery(watchlistApi.listWatchlists, { userKey: DEMO_USER_KEY });
-  const watchlists = liveWatchlists && liveWatchlists.length ? liveWatchlists : sampleWatchlists;
+  const watchlists = liveWatchlists ?? sampleWatchlists;
   return <WatchlistLayout watchlists={watchlists} isLive={Boolean(liveWatchlists)} isLoading={liveWatchlists === undefined} />;
 }
 

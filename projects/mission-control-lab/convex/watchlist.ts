@@ -130,6 +130,49 @@ export const createWatchlist = mutationGeneric({
   },
 });
 
+
+export const updateWatchlist = mutationGeneric({
+  args: {
+    id: v.id('watchlists'),
+    name: v.optional(v.string()),
+    description: v.optional(v.string()),
+    pinned: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const patch: { name?: string; description?: string; pinned?: boolean; updatedAt: number } = { updatedAt: Date.now() };
+    if (args.name !== undefined) {
+      const name = args.name.trim();
+      if (!name) throw new Error('Watchlist name is required');
+      patch.name = name;
+    }
+    if (args.description !== undefined) patch.description = args.description.trim() || undefined;
+    if (args.pinned !== undefined) patch.pinned = args.pinned;
+    await ctx.db.patch(args.id, patch);
+  },
+});
+
+export const deleteWatchlist = mutationGeneric({
+  args: { id: v.id('watchlists'), userKey: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    const userKey = args.userKey ?? DEMO_USER_KEY;
+    const watchlist = await ctx.db.get(args.id);
+    if (!watchlist || watchlist.userKey !== userKey) throw new Error('Watchlist not found');
+
+    const watchlists = await ctx.db
+      .query('watchlists')
+      .withIndex('by_user_sort', (q) => q.eq('userKey', userKey))
+      .collect();
+    if (watchlists.length <= 1) throw new Error('Keep at least one watchlist. Rename this one instead.');
+
+    const items = await ctx.db
+      .query('watchlistItems')
+      .withIndex('by_watchlist_sort', (q) => q.eq('watchlistId', args.id))
+      .collect();
+    for (const item of items) await ctx.db.delete(item._id);
+    await ctx.db.delete(args.id);
+  },
+});
+
 export const add = mutationGeneric({
   args: {
     userKey: v.optional(v.string()),
