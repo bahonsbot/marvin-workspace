@@ -14,9 +14,9 @@ import { sampleWatchlistItems, sampleWatchlists } from './sample-watchlist';
 
 const DEMO_USER_KEY = 'lab-single-user';
 const priorityLabels: Record<WatchlistPriority, string> = {
-  core: 'Core',
-  radar: 'Radar',
-  speculative: 'Speculative',
+  core: 'High',
+  radar: 'Medium',
+  speculative: 'Low',
 };
 const alertLabels: Record<WatchlistAlertLevel, string> = {
   none: 'No alert',
@@ -57,9 +57,9 @@ function DisabledWatchlistAddForm() {
       <label>
         <span>Priority</span>
         <select disabled defaultValue="radar">
-          <option value="core">Core</option>
-          <option value="radar">Radar</option>
-          <option value="speculative">Speculative</option>
+          <option value="core">High</option>
+          <option value="radar">Medium</option>
+          <option value="speculative">Low</option>
         </select>
       </label>
       <label className="wide">
@@ -67,7 +67,7 @@ function DisabledWatchlistAddForm() {
         <input placeholder="Why is this worth watching?" disabled />
       </label>
       <button type="button" disabled>Add symbol</button>
-      <p>Connect Convex to save watchlists.</p>
+      <p>Priority is attention level: High, Medium, or Low. Connect Convex to save watchlists.</p>
     </form>
   );
 }
@@ -97,7 +97,7 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
         thesis: thesis.trim() || undefined,
         priority,
         alertLevel: 'watch',
-        tags: priority === 'core' ? ['Core'] : ['Radar'],
+        tags: [],
       });
       setSymbol('');
       setThesis('');
@@ -119,9 +119,9 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
       <label>
         <span>Priority</span>
         <select value={priority} onChange={(event) => setPriority(event.target.value as WatchlistPriority)} disabled={isSaving}>
-          <option value="core">Core</option>
-          <option value="radar">Radar</option>
-          <option value="speculative">Speculative</option>
+          <option value="core">High</option>
+          <option value="radar">Medium</option>
+          <option value="speculative">Low</option>
         </select>
       </label>
       <label className="wide">
@@ -129,7 +129,7 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
         <input value={thesis} onChange={(event) => setThesis(event.target.value)} placeholder="Why is this worth watching?" disabled={isSaving} />
       </label>
       <button type="submit" disabled={isSaving}>{isSaving ? 'Saving…' : 'Add symbol'}</button>
-      {status ? <p>{status}</p> : null}
+      <p>{status ?? 'Priority is attention level: High, Medium, or Low.'}</p>
     </form>
   );
 }
@@ -194,7 +194,7 @@ function LiveWatchlistTable({ items }: { items: WatchlistItem[] }) {
 }
 
 function WatchlistStats({ items, watchlists, live, isLoading }: { items: WatchlistItem[]; watchlists: WatchlistWithItems[]; live: boolean; isLoading?: boolean }) {
-  const coreCount = items.filter((item) => item.priority === 'core').length;
+  const highPriorityCount = items.filter((item) => item.priority === 'core').length;
   const urgentCount = items.filter((item) => item.alertLevel === 'urgent' || item.alertLevel === 'watch').length;
   const markets = new Set(items.map((item) => item.exchange || item.currency || 'Unknown'));
   const metricValue = (value: number) => (isLoading ? '—' : value);
@@ -204,7 +204,7 @@ function WatchlistStats({ items, watchlists, live, isLoading }: { items: Watchli
       <article><span>Tracked names</span><strong>{metricValue(items.length)}</strong><p>{isLoading ? 'Loading Convex' : live ? 'Live Convex list' : 'Sample fallback'}</p></article>
       <article><span>Watchlists</span><strong>{metricValue(watchlists.length)}</strong><p>Multi-list schema ready</p></article>
       <article><span>Active alerts</span><strong>{metricValue(urgentCount)}</strong><p>Watch or urgent flags</p></article>
-      <article><span>Markets</span><strong>{metricValue(markets.size)}</strong><p>{isLoading ? 'Awaiting live state' : `${coreCount} core candidate${coreCount === 1 ? '' : 's'}`}</p></article>
+      <article><span>Markets</span><strong>{metricValue(markets.size)}</strong><p>{isLoading ? 'Awaiting live state' : `${highPriorityCount} high-priority name${highPriorityCount === 1 ? '' : 's'}`}</p></article>
     </div>
   );
 }
