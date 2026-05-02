@@ -56,6 +56,9 @@ const knownWikipediaTitles: Record<string, string> = {
   VRT: 'Vertiv',
   'VRT.US': 'Vertiv',
   'WAWI.OL': 'Wallenius Wilhelmsen',
+  '9988.HK': 'Alibaba Group',
+  '2454.TW': 'MediaTek',
+  '2646.TW': 'Starlux Airlines',
 };
 
 const knownLogoFiles: Record<string, string> = {
@@ -199,6 +202,7 @@ function protectAbbreviations(text: string) {
     .replace(/\bU\.A\.E\./g, 'U§A§E§')
     .replace(/\bE\.U\./g, 'E§U§')
     .replace(/\bNo\./g, 'No§')
+    .replace(/\bN\.\s*V\./gi, 'N§V§')
     .replace(/\bInc\./g, 'Inc§')
     .replace(/\bLtd\./g, 'Ltd§')
     .replace(/\bCo\./g, 'Co§')
@@ -213,6 +217,7 @@ function restoreAbbreviations(text: string) {
     .replace(/U§A§E§/g, 'U.A.E.')
     .replace(/E§U§/g, 'E.U.')
     .replace(/No§/g, 'No.')
+    .replace(/N§V§/g, 'N.V.')
     .replace(/Inc§/g, 'Inc.')
     .replace(/Ltd§/g, 'Ltd.')
     .replace(/Co§/g, 'Co.')
@@ -252,16 +257,28 @@ async function fetchWikipediaPage(title: string) {
 }
 
 
+function normalizeIdentityText(value: string) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
 function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefined, companyName: string) {
   const title = pageTitle.trim().toLowerCase();
   const cleanedExtract = (extract ?? '').trim().toLowerCase();
   const cleanedCompany = companyName.trim().toLowerCase();
+  const identityTitle = normalizeIdentityText(pageTitle);
+  const identityCompany = normalizeIdentityText(companyName);
+  const meaningfulParts = identityCompany.split(' ').filter((part) => !['corporation', 'corp', 'inc', 'limited', 'ltd', 'company', 'co', 'plc', 'holdings', 'holding', 'group'].includes(part));
+  const companyLead = meaningfulParts.slice(0, 2).join(' ');
+  const hasMeaningfulIdentityOverlap = meaningfulParts.some((part) => part.length >= 4 && (identityTitle.includes(part) || normalizeIdentityText(cleanedExtract).includes(part)));
   if (cleanedExtract.includes(' may refer to:')) return true;
   if (title.startsWith('list of ')) return true;
   if (title.includes('s&p 500') || title.includes('stock market index')) return true;
   if (cleanedExtract.includes(' is a stock market index ')) return true;
-  if (cleanedExtract.includes(' comprises ') && cleanedExtract.includes(' companies traded on')) return true;
+  if (cleanedExtract.includes('comprises') && cleanedExtract.includes('companies traded on')) return true;
+  if (cleanedExtract.includes('tracks') && cleanedExtract.includes('stock market index')) return true;
+  if (cleanedExtract.includes('hang seng index')) return true;
   if (title.length <= 4 && !cleanedCompany.startsWith(title)) return true;
+  if (companyLead && !identityTitle.includes(companyLead) && !normalizeIdentityText(cleanedExtract).includes(companyLead) && !hasMeaningfulIdentityOverlap) return true;
   return false;
 }
 
