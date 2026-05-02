@@ -95,7 +95,15 @@ class TradingProviderSmokeTests(unittest.TestCase):
         for term in ["P/E", "Forward P/E", "EV / EBITDA", "Gross margin", "Free cash flow", "ROE / ROIC", "Debt / Equity", "Current ratio"]:
             self.assertIn(term, ticker_page)
         self.assertIn("trading-glossary-grid", styles)
+        self.assertIn("font-weight: 650", styles)
         self.assertIn("Educational context, not investment advice", ticker_page)
+
+    def test_ticker_chart_accents_avoid_legacy_brown_palette(self) -> None:
+        styles = read_source("trading_styles")
+
+        self.assertIn("#4f6f7d", styles)
+        self.assertNotIn("#9a6b46", styles)
+        self.assertNotIn("rgba(154, 107, 70", styles)
 
     def test_quote_refresh_falls_back_to_cached_profile_quote_when_eodhd_live_quote_is_missing(self) -> None:
         route = read_source("quote_route")
