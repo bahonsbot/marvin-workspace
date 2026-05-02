@@ -64,6 +64,8 @@ function sourceLabel(source: TickerSourceMeta['source']) {
   if (source === 'eodhd') return 'EODHD';
   if (source === 'yahoo') return 'Yahoo / yfinance';
   if (source === 'xbrl') return 'filings.xbrl.org';
+  if (source === 'dart') return 'DART';
+  if (source === 'mops') return 'MOPS';
   return source.toUpperCase();
 }
 

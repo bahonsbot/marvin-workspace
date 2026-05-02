@@ -95,17 +95,31 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("is covered by eodhd market-data endpoints", ticker_profile)
         self.assertIn("fetchFreshTickerProfile(normalizedSymbol)", ticker_profile)
 
-    def test_esef_registry_and_missing_resource_cache_refresh_are_present(self) -> None:
+    def test_official_non_us_filings_adapters_and_cache_refresh_are_present(self) -> None:
         xbrl = read_source("xbrl_filings")
         ticker_profile = read_source("ticker_profile")
 
         for symbol in ["ASRNL.AS", "ASML.AS", "ADYEN.AS"]:
             self.assertIn(symbol, xbrl)
-        self.assertIn("hasRegisteredNonUsFilingsSymbol", xbrl)
+        self.assertIn("resolveEntityFromProfile", xbrl)
         self.assertIn("Official ESEF filings", xbrl)
         self.assertIn("Structured XBRL data", xbrl)
+
+        self.assertIn("isKoreanDisclosureSymbol", xbrl)
+        self.assertIn("Official Korean disclosures", xbrl)
+        self.assertIn("dart.fss.or.kr", xbrl)
+        self.assertIn("englishdart.fss.or.kr", xbrl)
+        self.assertIn("kind.krx.co.kr", xbrl)
+
+        self.assertIn("isTaiwanDisclosureSymbol", xbrl)
+        self.assertIn("Official Taiwan disclosures", xbrl)
+        self.assertIn("emops.twse.com.tw", xbrl)
+        self.assertIn("caption_id=000001", xbrl)
+
         self.assertIn("shouldRefreshCachedReferenceData", ticker_profile)
         self.assertIn("hasRegisteredNonUsFilingsSymbol(profile.symbol)", ticker_profile)
+        self.assertIn("profile.sourceMap.filings.source === 'dart'", ticker_profile)
+        self.assertIn("profile.sourceMap.filings.source === 'mops'", ticker_profile)
         self.assertIn("!profile.resources.some((group) => group.items.length)", ticker_profile)
 
 

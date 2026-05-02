@@ -62,13 +62,17 @@ function mergeFinancialHighlights(primary: TickerProfile['financialHighlights'],
 export async function enrichTickerProfileWithReferenceData(profile: TickerProfile): Promise<TickerProfile> {
   const shouldFetchNonUsFilings = profile.sourceMap.filings.source !== 'sec' && (
     profile.sourceMap.filings.freshness === 'missing' ||
+    profile.sourceMap.filings.freshness === 'sample' ||
+    profile.sourceMap.filings.source === 'xbrl' ||
+    profile.sourceMap.filings.source === 'dart' ||
+    profile.sourceMap.filings.source === 'mops' ||
     !profile.resources.some((group) => group.items.length)
   );
 
   const [financeDatabaseProfile, yfinanceData, nonUsFilings] = await Promise.all([
     Promise.resolve(findFinanceDatabaseProfile(profile.symbol)),
     fetchFirstYfinance(profile.symbol),
-    shouldFetchNonUsFilings ? fetchNonUsFilingsResources(profile.symbol) : Promise.resolve(null),
+    shouldFetchNonUsFilings ? fetchNonUsFilingsResources(profile) : Promise.resolve(null),
   ]);
 
   const yfinanceMetaSource = yfinanceData ? yfinanceSource(yfinanceData.asOf, yfinanceData.sourceNote) : null;
@@ -143,6 +147,11 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     resources: nonUsFilings.source,
     filings: nonUsFilings.source,
   } : profile.sourceMap;
+  const resources = nonUsFilings?.resources ?? (
+    profile.sourceMap.resources.freshness === 'sample' || profile.sourceMap.filings.freshness === 'sample'
+      ? []
+      : profile.resources
+  );
 
   return {
     ...profile,
@@ -155,7 +164,7 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     cashDebtSnapshot: yfinanceCashDebt ?? profile.cashDebtSnapshot,
     balanceSheetSnapshot: yfinanceBalanceSheet ?? profile.balanceSheetSnapshot,
     financialOverview: yfinanceOverview ?? profile.financialOverview,
-    resources: nonUsFilings?.resources ?? profile.resources,
+    resources,
     sourceMap,
     supplemental,
   };

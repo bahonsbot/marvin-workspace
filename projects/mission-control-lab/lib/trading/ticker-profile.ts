@@ -3,13 +3,29 @@ import 'server-only';
 import { getCachedTickerProfile, writeTickerProfileCache } from './cache';
 import type { TickerProfile } from './contracts';
 import { enrichTickerProfileWithReferenceData } from './sources/reference-enrichment';
-import { hasRegisteredNonUsFilingsSymbol } from './sources/xbrl-filings';
+import { fetchNonUsFilingsResources, hasRegisteredNonUsFilingsSymbol } from './sources/xbrl-filings';
 import { eodhdTickerProfileSource } from './sources/eodhd';
 import { sampleTickerProfileSource } from './sources/sample';
 import { yahooTickerProfileSource } from './sources/yahoo';
 
 const profileSources = [eodhdTickerProfileSource, yahooTickerProfileSource, sampleTickerProfileSource];
 const TICKER_PROFILE_TTL_MS = 15 * 60 * 1000;
+
+async function replaceSampleResourcesForDisclosureSymbol(profile: TickerProfile) {
+  if (!hasRegisteredNonUsFilingsSymbol(profile.symbol)) return profile;
+  if (profile.sourceMap.filings.source !== 'sample' && profile.sourceMap.resources.source !== 'sample') return profile;
+  const nonUsFilings = await fetchNonUsFilingsResources(profile);
+  if (!nonUsFilings) return profile;
+  return {
+    ...profile,
+    resources: nonUsFilings.resources,
+    sourceMap: {
+      ...profile.sourceMap,
+      resources: nonUsFilings.source,
+      filings: nonUsFilings.source,
+    },
+  };
+}
 
 
 function hasAmbiguousCompanyProfile(profile: TickerProfile) {
@@ -32,6 +48,9 @@ function hasMissingUsYfinanceEnrichment(profile: TickerProfile) {
 function shouldRefreshCachedReferenceData(profile: TickerProfile) {
   return hasRegisteredNonUsFilingsSymbol(profile.symbol) && profile.sourceMap.filings.source !== 'sec' && (
     profile.sourceMap.filings.freshness === 'missing' ||
+    profile.sourceMap.filings.freshness === 'sample' ||
+    profile.sourceMap.filings.source === 'dart' ||
+    profile.sourceMap.filings.source === 'mops' ||
     !profile.resources.some((group) => group.items.length)
   );
 }
@@ -42,7 +61,7 @@ async function fetchFreshTickerProfile(normalizedSymbol: string) {
     const result = await source.fetchProfile({ symbol: normalizedSymbol, now: new Date() });
     if (!result) continue;
 
-    const enriched = await enrichTickerProfileWithReferenceData(result.profile);
+    const enriched = await replaceSampleResourcesForDisclosureSymbol(await enrichTickerProfileWithReferenceData(result.profile));
     await writeTickerProfileCache(enriched, TICKER_PROFILE_TTL_MS);
     return enriched;
   }
