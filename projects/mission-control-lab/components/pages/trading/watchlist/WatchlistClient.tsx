@@ -239,13 +239,13 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
 
   return (
     <>
-      <section className="trading-watchlist-hero">
+      <section className="trading-watchlist-surface-note">
         <div>
-          <div className="trading-section-label">Watchlist command center</div>
-          <h1>Names worth a second look, before they become positions.</h1>
+          <div className="trading-section-label">Planned surface</div>
+          <h2>Static shell first</h2>
         </div>
         <p>
-          A Convex-backed watchlist system for ticker research, thesis notes, priority buckets, and future ticker-page add-to-list flows. Educational context, not investment advice.
+          Watchlists now use the same market ribbon entry point as Overview and ticker pages. Convex writes stay disabled until the Lab deployment URL is configured.
         </p>
       </section>
 

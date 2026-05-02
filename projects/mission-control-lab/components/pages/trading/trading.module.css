@@ -3119,3 +3119,28 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+:global(.trading-watchlist-surface-note) {
+  border-top: 1px solid rgba(28, 37, 32, 0.18);
+  padding-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(260px, 0.7fr);
+  gap: 18px;
+  align-items: start;
+}
+
+:global(.trading-watchlist-surface-note h2) {
+  margin: 4px 0 0;
+  font-family: var(--font-serif);
+  font-size: 26px;
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+:global(.trading-watchlist-surface-note p) {
+  margin: 0;
+  color: rgba(34, 48, 41, 0.64);
+  font-size: 12px;
+  line-height: 1.5;
+}
