@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import {
   watchlistApi,
@@ -11,6 +11,28 @@ import {
   type WatchlistWithItems,
 } from '@/lib/convex/watchlist-api';
 import { sampleWatchlistItems, sampleWatchlists } from './sample-watchlist';
+
+interface TickerSearchResult {
+  symbol: string;
+  code: string;
+  exchange: string;
+  name: string;
+  type: string;
+  country: string;
+  currency: string;
+  previousClose: number | null;
+  previousCloseDate: string | null;
+  isPrimary: boolean;
+}
+
+interface TickerSearchResponse {
+  query: string;
+  results: TickerSearchResult[];
+}
+
+function tickerResultMeta(result: TickerSearchResult) {
+  return [result.country, result.currency, result.type].filter(Boolean).join(' · ');
+}
 
 const DEMO_USER_KEY = 'lab-single-user';
 const priorityLabels: Record<WatchlistPriority, string> = {
@@ -52,7 +74,7 @@ function DisabledWatchlistAddForm() {
     <form className="trading-watchlist-add-form">
       <label>
         <span>Symbol</span>
-        <input placeholder="ASML.AS" disabled />
+        <input placeholder="Search ticker or company" disabled />
       </label>
       <label>
         <span>Priority</span>
@@ -75,10 +97,65 @@ function DisabledWatchlistAddForm() {
 function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
   const addItem = useMutation(watchlistApi.add);
   const [symbol, setSymbol] = useState('');
+  const [selectedTicker, setSelectedTicker] = useState<TickerSearchResult | null>(null);
+  const [searchResults, setSearchResults] = useState<TickerSearchResult[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [thesis, setThesis] = useState('');
   const [priority, setPriority] = useState<WatchlistPriority>('radar');
   const [status, setStatus] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const trimmedSymbol = symbol.trim();
+  const searchResultsId = useId();
+  const selectedResult = searchResults[Math.min(activeResultIndex, Math.max(searchResults.length - 1, 0))];
+  const showSearchPanel = searchOpen && Boolean(trimmedSymbol) && (searchLoading || searchError || searchResults.length > 0);
+
+  useEffect(() => {
+    if (!trimmedSymbol || selectedTicker?.symbol === normalizeSymbol(trimmedSymbol)) {
+      setSearchResults([]);
+      setSearchLoading(false);
+      setSearchError(null);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setSearchLoading(true);
+      setSearchError(null);
+      try {
+        const response = await fetch(`/api/trading/search?q=${encodeURIComponent(trimmedSymbol)}`, {
+          signal: controller.signal,
+          headers: { accept: 'application/json' },
+        });
+        if (!response.ok) throw new Error(`Search failed (${response.status})`);
+        const data = (await response.json()) as TickerSearchResponse;
+        setSearchResults(data.results ?? []);
+        setActiveResultIndex(0);
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        setSearchResults([]);
+        setSearchError(error instanceof Error ? error.message : 'Search failed');
+      } finally {
+        if (!controller.signal.aborted) setSearchLoading(false);
+      }
+    }, 180);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [selectedTicker?.symbol, trimmedSymbol]);
+
+  function selectTicker(result: TickerSearchResult) {
+    setSymbol(result.symbol);
+    setSelectedTicker(result);
+    setSearchOpen(false);
+    setSearchResults([]);
+    setSearchError(null);
+    setStatus(null);
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -87,6 +164,7 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
       setStatus('Add a symbol first.');
       return;
     }
+    const lockedTicker = selectedTicker?.symbol === nextSymbol ? selectedTicker : null;
     setIsSaving(true);
     setStatus(null);
     try {
@@ -94,12 +172,17 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
         userKey: DEMO_USER_KEY,
         watchlistId,
         symbol: nextSymbol,
+        name: lockedTicker?.name,
+        exchange: lockedTicker?.exchange,
+        currency: lockedTicker?.currency,
         thesis: thesis.trim() || undefined,
         priority,
         alertLevel: 'watch',
         tags: [],
       });
       setSymbol('');
+      setSelectedTicker(null);
+      setSearchResults([]);
       setThesis('');
       setPriority('radar');
       setStatus(`${nextSymbol} added to watchlist.`);
@@ -112,9 +195,67 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
 
   return (
     <form className="trading-watchlist-add-form" onSubmit={handleSubmit}>
-      <label>
+      <label className="trading-watchlist-symbol-field">
         <span>Symbol</span>
-        <input value={symbol} onChange={(event) => setSymbol(event.target.value)} placeholder="ASML.AS" disabled={isSaving} />
+        <div className="trading-watchlist-symbol-search">
+          <input
+            value={symbol}
+            onChange={(event) => {
+              setSymbol(event.target.value);
+              setSelectedTicker(null);
+              setSearchOpen(true);
+            }}
+            onFocus={() => setSearchOpen(true)}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') {
+                setSearchOpen(false);
+                return;
+              }
+              if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                setActiveResultIndex((index) => Math.min(index + 1, Math.max(searchResults.length - 1, 0)));
+                return;
+              }
+              if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                setActiveResultIndex((index) => Math.max(index - 1, 0));
+                return;
+              }
+              if (event.key === 'Enter' && searchOpen && selectedResult) {
+                event.preventDefault();
+                selectTicker(selectedResult);
+              }
+            }}
+            placeholder="Search ticker or company"
+            aria-label="Search ticker or company"
+            aria-autocomplete="list"
+            aria-controls={showSearchPanel ? searchResultsId : undefined}
+            disabled={isSaving}
+          />
+          {showSearchPanel ? (
+            <div id={searchResultsId} className="trading-watchlist-symbol-results" role="listbox" aria-label="Symbol search results">
+              {searchLoading ? <div className="trading-watchlist-symbol-state">Searching symbols…</div> : null}
+              {!searchLoading && searchError ? <div className="trading-watchlist-symbol-state">{searchError}</div> : null}
+              {!searchLoading && !searchError && searchResults.map((result, index) => (
+                <button
+                  key={result.symbol}
+                  type="button"
+                  role="option"
+                  aria-selected={index === activeResultIndex}
+                  data-active={index === activeResultIndex ? 'true' : undefined}
+                  onMouseDown={(event) => event.preventDefault()}
+                  onMouseEnter={() => setActiveResultIndex(index)}
+                  onClick={() => selectTicker(result)}
+                >
+                  <strong>{result.symbol}</strong>
+                  <span>{result.name}</span>
+                  <small>{tickerResultMeta(result)}</small>
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </div>
+        {selectedTicker ? <em className="trading-watchlist-symbol-selected">Selected {selectedTicker.symbol} · {selectedTicker.name}</em> : null}
       </label>
       <label>
         <span>Priority</span>
@@ -129,7 +270,7 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
         <input value={thesis} onChange={(event) => setThesis(event.target.value)} placeholder="Why is this worth watching?" disabled={isSaving} />
       </label>
       <button type="submit" disabled={isSaving}>{isSaving ? 'Saving…' : 'Add symbol'}</button>
-      <p>{status ?? 'Priority is attention level: High, Medium, or Low.'}</p>
+      <p>{status ?? 'Search by ticker or company, then choose a result to lock in the listing.'}</p>
     </form>
   );
 }

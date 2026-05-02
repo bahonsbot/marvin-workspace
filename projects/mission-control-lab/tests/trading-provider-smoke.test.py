@@ -19,6 +19,7 @@ SOURCE_FILES = {
     "wikipedia": ROOT / "lib" / "trading" / "sources" / "wikipedia.ts",
     "xbrl_filings": ROOT / "lib" / "trading" / "sources" / "xbrl-filings.ts",
     "trading_styles": ROOT / "components" / "pages" / "trading" / "trading.module.css",
+    "watchlist_client": ROOT / "components" / "pages" / "trading" / "watchlist" / "WatchlistClient.tsx",
 }
 
 
@@ -182,6 +183,19 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("profile.sourceMap.filings.source === 'dart'", ticker_profile)
         self.assertIn("profile.sourceMap.filings.source === 'mops'", ticker_profile)
         self.assertIn("!profile.resources.some((group) => group.items.length)", ticker_profile)
+
+    def test_watchlist_add_symbol_reuses_ticker_search_endpoint(self) -> None:
+        watchlist = read_source("watchlist_client")
+        styles = read_source("trading_styles")
+
+        self.assertIn("/api/trading/search?q=", watchlist)
+        self.assertIn("Search by ticker or company", watchlist)
+        self.assertIn("selectTicker(result)", watchlist)
+        self.assertIn("name: lockedTicker?.name", watchlist)
+        self.assertIn("exchange: lockedTicker?.exchange", watchlist)
+        self.assertIn("currency: lockedTicker?.currency", watchlist)
+        self.assertIn("trading-watchlist-symbol-results", styles)
+        self.assertIn("trading-watchlist-symbol-selected", styles)
 
 
 if __name__ == "__main__":
