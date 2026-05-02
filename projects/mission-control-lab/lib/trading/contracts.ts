@@ -1,6 +1,6 @@
 export type TickerFreshness = 'fresh' | 'stale' | 'sample' | 'missing';
 
-export type TickerSourceName = 'sample' | 'cache' | 'yahoo' | 'eodhd' | 'sec' | 'wikipedia' | 'xbrl' | 'dart' | 'mops' | 'defeatbeta';
+export type TickerSourceName = 'sample' | 'cache' | 'yahoo' | 'yfinance' | 'eodhd' | 'sec' | 'wikipedia' | 'xbrl' | 'dart' | 'mops' | 'defeatbeta';
 
 export interface TickerSourceMeta {
   source: TickerSourceName;

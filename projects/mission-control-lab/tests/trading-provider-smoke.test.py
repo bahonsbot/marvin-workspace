@@ -12,6 +12,7 @@ BRIDGE = ROOT / "scripts" / "trading_yfinance_bridge.py"
 SOURCE_FILES = {
     "ticker_page": ROOT / "app" / "trading" / "ticker" / "[symbol]" / "page.tsx",
     "ticker_profile": ROOT / "lib" / "trading" / "ticker-profile.ts",
+    "contracts": ROOT / "lib" / "trading" / "contracts.ts",
     "reference_enrichment": ROOT / "lib" / "trading" / "sources" / "reference-enrichment.ts",
     "yfinance_bridge": ROOT / "lib" / "trading" / "sources" / "yfinance-bridge.ts",
     "wikipedia": ROOT / "lib" / "trading" / "sources" / "wikipedia.ts",
@@ -82,6 +83,17 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("enterprise value", source.lower())
         self.assertIn("ev/ebitda", source.lower())
         self.assertIn("mergeKeyRatiosFromFundamentals", source)
+
+    def test_yfinance_has_first_class_source_metadata(self) -> None:
+        contracts = read_source("contracts")
+        source = read_source("yfinance_bridge")
+        ticker_page = read_source("ticker_page")
+
+        self.assertIn("'yfinance'", contracts)
+        self.assertIn("source: 'yfinance'", source)
+        self.assertIn("source === 'yfinance'", ticker_page)
+        self.assertIn("return 'Yahoo Finance'", ticker_page)
+        self.assertNotIn("Yahoo / yfinance", ticker_page)
 
     def test_wikipedia_profile_repair_guards_cover_recent_bad_profile_classes(self) -> None:
         wikipedia = read_source("wikipedia")

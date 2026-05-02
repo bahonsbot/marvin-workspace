@@ -91,7 +91,7 @@ const YFINANCE_BRIDGE_SCRIPT = path.join(process.cwd(), 'scripts', 'trading_yfin
 
 export function yfinanceSource(asOf: string, note = 'yfinance bridge over Yahoo Finance data.'): TickerSourceMeta {
   return {
-    source: 'yahoo',
+    source: 'yfinance',
     asOf,
     freshness: 'fresh',
     note,

@@ -62,7 +62,8 @@ function SectionJumpNav({ items }: { items: SectionNavItem[] }) {
 
 function sourceLabel(source: TickerSourceMeta['source']) {
   if (source === 'eodhd') return 'EODHD';
-  if (source === 'yahoo') return 'Yahoo / yfinance';
+  if (source === 'yahoo') return 'Yahoo Finance';
+  if (source === 'yfinance') return 'yfinance';
   if (source === 'xbrl') return 'filings.xbrl.org';
   if (source === 'dart') return 'DART';
   if (source === 'mops') return 'MOPS';
@@ -127,7 +128,7 @@ function sourceList(metrics: Array<{ source?: TickerSourceMeta }> = [], fallback
 
 function compactSourceList(metrics: Array<{ source?: TickerSourceMeta; status?: TickerDataStatus }> = [], fallback?: TickerSourceMeta) {
   const eligible = metrics.filter((metric) => metric.status !== 'unavailable' && metric.source?.source !== 'sample');
-  return sourceList(eligible, eligible.length ? undefined : fallback).replace('Yahoo / yfinance', 'yfinance').replace('Sources:', 'Source:');
+  return sourceList(eligible, eligible.length ? undefined : fallback).replace('Sources:', 'Source:');
 }
 
 function cleanYearLabel(value: string) {
