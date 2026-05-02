@@ -3195,13 +3195,22 @@
   line-height: 1.35;
 }
 
-:global(.trading-watchlist-empty-state) {
+:global(.trading-watchlist-empty-state),
+:global(.trading-watchlist-loading-state) {
   border-top: 1px solid rgba(28, 37, 32, 0.12);
   padding: 28px 4px 10px;
   color: rgba(34, 48, 41, 0.64);
 }
 
-:global(.trading-watchlist-empty-state span) {
+:global(.trading-watchlist-loading-state) {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.35fr) 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+:global(.trading-watchlist-empty-state span),
+:global(.trading-watchlist-loading-state span) {
   display: block;
   margin-bottom: 4px;
   font-family: var(--font-serif);
@@ -3209,10 +3218,41 @@
   color: #17241e;
 }
 
-:global(.trading-watchlist-empty-state p) {
+:global(.trading-watchlist-empty-state p),
+:global(.trading-watchlist-loading-state p) {
   margin: 0;
   font-size: 12px;
   line-height: 1.5;
+}
+
+:global(.trading-watchlist-loading-lines) {
+  display: grid;
+  gap: 8px;
+  padding-top: 2px;
+}
+
+:global(.trading-watchlist-loading-lines i) {
+  display: block;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(34, 48, 41, 0.08), rgba(34, 48, 41, 0.16), rgba(34, 48, 41, 0.08));
+  background-size: 220% 100%;
+  animation: trading-watchlist-loading 1.25s ease-in-out infinite;
+}
+
+:global(.trading-watchlist-loading-lines i:nth-child(2)) {
+  width: 74%;
+  animation-delay: 0.08s;
+}
+
+:global(.trading-watchlist-loading-lines i:nth-child(3)) {
+  width: 48%;
+  animation-delay: 0.16s;
+}
+
+@keyframes trading-watchlist-loading {
+  0% { background-position: 120% 0; }
+  100% { background-position: -120% 0; }
 }
 
 @media (max-width: 760px) {
@@ -3228,5 +3268,9 @@
 
   :global(.trading-watchlist-manager input) {
     grid-column: 1 / -1;
+  }
+
+  :global(.trading-watchlist-loading-state) {
+    grid-template-columns: 1fr;
   }
 }

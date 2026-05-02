@@ -193,17 +193,18 @@ function LiveWatchlistTable({ items }: { items: WatchlistItem[] }) {
   return <WatchlistTable items={items} canMutate onRemove={remove} removingId={removingId} />;
 }
 
-function WatchlistStats({ items, watchlists, live }: { items: WatchlistItem[]; watchlists: WatchlistWithItems[]; live: boolean }) {
+function WatchlistStats({ items, watchlists, live, isLoading }: { items: WatchlistItem[]; watchlists: WatchlistWithItems[]; live: boolean; isLoading?: boolean }) {
   const coreCount = items.filter((item) => item.priority === 'core').length;
   const urgentCount = items.filter((item) => item.alertLevel === 'urgent' || item.alertLevel === 'watch').length;
   const markets = new Set(items.map((item) => item.exchange || item.currency || 'Unknown'));
+  const metricValue = (value: number) => (isLoading ? '—' : value);
 
   return (
     <div className="trading-watchlist-stat-grid">
-      <article><span>Tracked names</span><strong>{items.length}</strong><p>{live ? 'Live Convex list' : 'Sample fallback'}</p></article>
-      <article><span>Watchlists</span><strong>{watchlists.length}</strong><p>Multi-list schema ready</p></article>
-      <article><span>Active alerts</span><strong>{urgentCount}</strong><p>Watch or urgent flags</p></article>
-      <article><span>Markets</span><strong>{markets.size}</strong><p>{coreCount} core candidate{coreCount === 1 ? '' : 's'}</p></article>
+      <article><span>Tracked names</span><strong>{metricValue(items.length)}</strong><p>{isLoading ? 'Loading Convex' : live ? 'Live Convex list' : 'Sample fallback'}</p></article>
+      <article><span>Watchlists</span><strong>{metricValue(watchlists.length)}</strong><p>Multi-list schema ready</p></article>
+      <article><span>Active alerts</span><strong>{metricValue(urgentCount)}</strong><p>Watch or urgent flags</p></article>
+      <article><span>Markets</span><strong>{metricValue(markets.size)}</strong><p>{isLoading ? 'Awaiting live state' : `${coreCount} core candidate${coreCount === 1 ? '' : 's'}`}</p></article>
     </div>
   );
 }
@@ -229,6 +230,22 @@ function WatchlistRail({
       ))}
       {children}
     </nav>
+  );
+}
+
+function WatchlistLoadingState() {
+  return (
+    <div className="trading-watchlist-loading-state" aria-live="polite">
+      <div>
+        <span>Loading live watchlists…</span>
+        <p>Checking Convex before showing any rows.</p>
+      </div>
+      <div className="trading-watchlist-loading-lines" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </div>
+    </div>
   );
 }
 
@@ -332,11 +349,11 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
           <h2>Static shell first</h2>
         </div>
         <p>
-          Watchlists now use the same market ribbon entry point as Overview and ticker pages. Convex writes stay disabled until the Lab deployment URL is configured.
+          Watchlists use the same market ribbon entry point as Overview and ticker pages. Convex owns the live lists; sample rows appear only when Convex is not configured.
         </p>
       </section>
 
-      <WatchlistStats items={items} watchlists={watchlists} live={isLive} />
+      <WatchlistStats items={items} watchlists={watchlists} live={isLive} isLoading={isLoading} />
 
       <section className="trading-watchlist-grid">
         <article className="trading-watchlist-main-panel">
@@ -347,20 +364,26 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
             </div>
             <span className={isLive ? 'trading-watchlist-live-badge live' : 'trading-watchlist-live-badge'}>{isLive ? 'Convex live' : 'Convex not connected'}</span>
           </div>
-          <WatchlistRail watchlists={watchlists} activeId={activeWatchlist?._id} onSelect={setSelectedWatchlistId}>
-            {isLive ? (
-              <LiveWatchlistManager activeWatchlist={activeWatchlist} canDelete={watchlists.length > 1} onCreated={setSelectedWatchlistId} />
-            ) : (
-              <StaticWatchlistManager />
-            )}
-          </WatchlistRail>
-          {items.length ? (
-            isLive ? <LiveWatchlistTable items={items} /> : <WatchlistTable items={items} canMutate={false} />
+          {isLoading ? (
+            <WatchlistLoadingState />
           ) : (
-            <div className="trading-watchlist-empty-state">
-              <span>No tracked names yet</span>
-              <p>Add a symbol from the side panel to start building this watchlist.</p>
-            </div>
+            <>
+              <WatchlistRail watchlists={watchlists} activeId={activeWatchlist?._id} onSelect={setSelectedWatchlistId}>
+                {isLive ? (
+                  <LiveWatchlistManager activeWatchlist={activeWatchlist} canDelete={watchlists.length > 1} onCreated={setSelectedWatchlistId} />
+                ) : (
+                  <StaticWatchlistManager />
+                )}
+              </WatchlistRail>
+              {items.length ? (
+                isLive ? <LiveWatchlistTable items={items} /> : <WatchlistTable items={items} canMutate={false} />
+              ) : (
+                <div className="trading-watchlist-empty-state">
+                  <span>No tracked names yet</span>
+                  <p>Add a symbol from the side panel to start building this watchlist.</p>
+                </div>
+              )}
+            </>
           )}
         </article>
 
@@ -384,8 +407,8 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
 
 function LiveWatchlistContent() {
   const liveWatchlists = useQuery(watchlistApi.listWatchlists, { userKey: DEMO_USER_KEY });
-  const watchlists = liveWatchlists ?? sampleWatchlists;
-  return <WatchlistLayout watchlists={watchlists} isLive={Boolean(liveWatchlists)} isLoading={liveWatchlists === undefined} />;
+  const isLoading = liveWatchlists === undefined;
+  return <WatchlistLayout watchlists={isLoading ? [] : liveWatchlists} isLive isLoading={isLoading} />;
 }
 
 export function WatchlistClient({ convexEnabled }: { convexEnabled: boolean }) {
