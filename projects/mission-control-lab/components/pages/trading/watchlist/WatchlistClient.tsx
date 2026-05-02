@@ -63,11 +63,11 @@ function DisabledWatchlistAddForm() {
         </select>
       </label>
       <label className="wide">
-        <span>Thesis note</span>
-        <input placeholder="What needs to be true?" disabled />
+        <span>Watch note</span>
+        <input placeholder="Why is this worth watching?" disabled />
       </label>
-      <button type="button" disabled>Add name</button>
-      <p>Connect Convex to enable writes.</p>
+      <button type="button" disabled>Add symbol</button>
+      <p>Connect Convex to save watchlists.</p>
     </form>
   );
 }
@@ -125,10 +125,10 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
         </select>
       </label>
       <label className="wide">
-        <span>Thesis note</span>
-        <input value={thesis} onChange={(event) => setThesis(event.target.value)} placeholder="What needs to be true?" disabled={isSaving} />
+        <span>Watch note</span>
+        <input value={thesis} onChange={(event) => setThesis(event.target.value)} placeholder="Why is this worth watching?" disabled={isSaving} />
       </label>
-      <button type="submit" disabled={isSaving}>{isSaving ? 'Saving…' : 'Add name'}</button>
+      <button type="submit" disabled={isSaving}>{isSaving ? 'Saving…' : 'Add symbol'}</button>
       {status ? <p>{status}</p> : null}
     </form>
   );
@@ -150,7 +150,7 @@ function WatchlistTable({ items, canMutate, onRemove, removingId }: {
             <th>Priority</th>
             <th>Alert</th>
             <th>Tags</th>
-            <th>Thesis</th>
+            <th>Note</th>
             <th aria-label="Actions" />
           </tr>
         </thead>
@@ -162,7 +162,7 @@ function WatchlistTable({ items, canMutate, onRemove, removingId }: {
               <td><em className={`trading-watchlist-priority ${item.priority}`}>{priorityLabels[item.priority]}</em></td>
               <td><em className={`trading-watchlist-alert ${item.alertLevel}`}>{alertLabels[item.alertLevel]}</em></td>
               <td><div className="trading-watchlist-tag-row">{item.tags.length ? item.tags.map((tag) => <span key={tag}>{tag}</span>) : <span>Untagged</span>}</div></td>
-              <td title={item.thesis || undefined}>{item.thesis || 'No thesis note yet.'}</td>
+              <td title={item.thesis || undefined}>{item.thesis || 'No watch note yet.'}</td>
               <td>
                 <button type="button" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id}>
                   {removingId === item._id ? '…' : 'Remove'}
@@ -345,11 +345,11 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
     <>
       <section className="trading-watchlist-surface-note">
         <div>
-          <div className="trading-section-label">Planned surface</div>
-          <h2>Static shell first</h2>
+          <div className="trading-section-label">Watchlist</div>
+          <h2>Track ideas before they become positions.</h2>
         </div>
         <p>
-          Watchlists use the same market ribbon entry point as Overview and ticker pages. Convex owns the live lists; sample rows appear only when Convex is not configured.
+          Create lists for companies you want to follow, then add tickers with a short note so every name has a clear reason to stay on the board.
         </p>
       </section>
 
@@ -390,15 +390,10 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
         <aside className="trading-watchlist-side-panel">
           <div>
             <div className="trading-section-label">Add symbol</div>
-            <h2>Capture the thesis first.</h2>
-            <p>Writes target the selected watchlist, or create the first list automatically. Later, the ticker page can expose this same picker.</p>
+            <h2>Add a company to this list.</h2>
+            <p>Enter a ticker, choose how closely you want to track it, and add a quick note about why it belongs here.</p>
           </div>
           <WatchlistAddForm enabled={isLive} watchlistId={isLive ? activeWatchlist?._id : undefined} />
-          <div className="trading-watchlist-next-card">
-            <span>Next layer</span>
-            <strong>Portfolio can reuse the same user-owned symbol foundation.</strong>
-            <p>The schema now supports multiple watchlists, while the first page stays focused enough to finish cleanly.</p>
-          </div>
         </aside>
       </section>
     </>
