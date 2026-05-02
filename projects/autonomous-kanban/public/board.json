@@ -20,6 +20,11 @@
         "id": "5e5fffd1",
         "text": "[Career] Analyze: Creative-tool workflow friction shortlist",
         "column": "todo"
+      },
+      {
+        "id": "438754ca",
+        "text": "[Trading] Implement: Global official filings adapters",
+        "column": "todo"
       }
     ],
     "inprogress": [],
@@ -208,5 +213,5 @@
       }
     ]
   },
-  "updatedAt": "2026-05-01T01:02:02.406Z"
+  "updatedAt": "2026-05-02T01:02:36.720Z"
 }
