@@ -11,9 +11,29 @@ import { yahooTickerProfileSource } from './sources/yahoo';
 const profileSources = [eodhdTickerProfileSource, yahooTickerProfileSource, sampleTickerProfileSource];
 const TICKER_PROFILE_TTL_MS = 15 * 60 * 1000;
 
-async function replaceSampleResourcesForDisclosureSymbol(profile: TickerProfile) {
+class UnsupportedTickerProfileError extends Error {
+  constructor(symbol: string) {
+    super(`Unsupported ticker symbol: ${symbol}`);
+    this.name = 'UnsupportedTickerProfileError';
+  }
+}
+
+function isSyntheticSampleFallback(profile: TickerProfile) {
+  if (profile.sourceMap.profile.source !== 'sample') return false;
+  const normalized = profile.symbol.toUpperCase();
+  const name = profile.name.toUpperCase();
+  return name === `${normalized} HOLDINGS` || profile.companyProfile.summary.includes('placeholder research data until a live provider adapter is enabled');
+}
+
+async function replaceMissingDisclosureResources(profile: TickerProfile) {
   if (!hasRegisteredNonUsFilingsSymbol(profile.symbol)) return profile;
-  if (profile.sourceMap.filings.source !== 'sample' && profile.sourceMap.resources.source !== 'sample') return profile;
+  if (profile.sourceMap.filings.source === 'sec') return profile;
+  const shouldAttemptOfficialResources =
+    profile.sourceMap.filings.freshness === 'missing' ||
+    profile.sourceMap.filings.freshness === 'sample' ||
+    profile.sourceMap.resources.freshness === 'sample' ||
+    !profile.resources.some((group) => group.items.length);
+  if (!shouldAttemptOfficialResources) return profile;
   const nonUsFilings = await fetchNonUsFilingsResources(profile);
   if (!nonUsFilings) return profile;
   return {
@@ -61,12 +81,14 @@ async function fetchFreshTickerProfile(normalizedSymbol: string) {
     const result = await source.fetchProfile({ symbol: normalizedSymbol, now: new Date() });
     if (!result) continue;
 
-    const enriched = await replaceSampleResourcesForDisclosureSymbol(await enrichTickerProfileWithReferenceData(result.profile));
+    if (source.id === 'sample' && isSyntheticSampleFallback(result.profile)) continue;
+
+    const enriched = await replaceMissingDisclosureResources(await enrichTickerProfileWithReferenceData(result.profile));
     await writeTickerProfileCache(enriched, TICKER_PROFILE_TTL_MS);
     return enriched;
   }
 
-  throw new Error(`No ticker profile source produced data for ${normalizedSymbol || 'unknown symbol'}`);
+  throw new UnsupportedTickerProfileError(normalizedSymbol || 'unknown symbol');
 }
 
 export async function getTickerProfile(symbol: string): Promise<TickerProfile> {
@@ -75,7 +97,7 @@ export async function getTickerProfile(symbol: string): Promise<TickerProfile> {
   if (cached) {
     if (hasAmbiguousCompanyProfile(cached)) return fetchFreshTickerProfile(normalizedSymbol);
     if (!shouldRefreshCachedReferenceData(cached) && !hasMissingUsYfinanceEnrichment(cached)) return cached;
-    const enrichedCached = await enrichTickerProfileWithReferenceData(cached);
+    const enrichedCached = await replaceMissingDisclosureResources(await enrichTickerProfileWithReferenceData(cached));
     await writeTickerProfileCache(enrichedCached, TICKER_PROFILE_TTL_MS);
     return enrichedCached;
   }

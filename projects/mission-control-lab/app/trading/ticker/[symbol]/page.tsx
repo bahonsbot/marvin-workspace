@@ -485,7 +485,41 @@ function FinancialBarChart({ overview }: { overview: TickerFinancialOverview }) 
 export default async function TradingTickerPage({ params }: { params: Promise<{ symbol: string }> }) {
   const { symbol } = await params;
   const upperSymbol = symbol.toUpperCase();
-  const [ticker, marketTape] = await Promise.all([getTickerProfile(upperSymbol), getMarketTape()]);
+  const [profileResult, marketTapeResult] = await Promise.allSettled([getTickerProfile(upperSymbol), getMarketTape()]);
+  const ticker = profileResult.status === 'fulfilled' ? profileResult.value : null;
+  const marketTape = marketTapeResult.status === 'fulfilled' ? marketTapeResult.value : null;
+
+  if (!ticker) {
+    return (
+      <TradingPageFrame
+        title="Ticker not supported yet"
+        description={`${upperSymbol} did not resolve through the active market-data providers. No placeholder company profile is shown.`}
+        hideHeader
+      >
+        {marketTape ? <MarketTapeClient initialData={marketTape} /> : null}
+
+        <Link href="/trading" className="trading-ticker-back">
+          ← Back to Overview
+        </Link>
+
+        <section id="overview" className="trading-ticker-quote-panel">
+          <div className="trading-ticker-identity">
+            <TickerMark symbol={upperSymbol} logoUrl={null} logoAlt={`${upperSymbol} logo`} />
+            <div>
+              <h1>Ticker not supported yet</h1>
+              <p>{upperSymbol} <span>·</span> Provider-backed data unavailable</p>
+            </div>
+          </div>
+        </section>
+
+        <section style={tradingCardStyle({ minHeight: 260, maxHeight: 'none' })}>
+          <div className="trading-section-label">Unsupported symbol</div>
+          <EmptySectionState note="This ticker did not resolve through EODHD, Yahoo/yfinance, SEC, or the official non-US filings adapters. Try the provider-backed symbol if this is an alias or alternate listing, for example INGA.AS instead of ING.AS." />
+        </section>
+      </TradingPageFrame>
+    );
+  }
+
   const rawProfileFacts = ticker.companyProfile.facts;
   const profileFacts = cleanProfileFacts(rawProfileFacts);
   const displayName = titleFromProfile(ticker.name, ticker.companyProfile.summary, rawProfileFacts);
@@ -518,7 +552,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       description="Static BOILER ROOM ticker research object. Live provider wiring comes later through a server-side cached ticker profile adapter."
       hideHeader
     >
-      <MarketTapeClient initialData={marketTape} />
+      {marketTape ? <MarketTapeClient initialData={marketTape} /> : null}
 
       <Link href="/trading" className="trading-ticker-back">
         ← Back to Overview

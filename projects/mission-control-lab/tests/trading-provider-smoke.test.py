@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BRIDGE = ROOT / "scripts" / "trading_yfinance_bridge.py"
 SOURCE_FILES = {
+    "ticker_page": ROOT / "app" / "trading" / "ticker" / "[symbol]" / "page.tsx",
     "ticker_profile": ROOT / "lib" / "trading" / "ticker-profile.ts",
     "reference_enrichment": ROOT / "lib" / "trading" / "sources" / "reference-enrichment.ts",
     "yfinance_bridge": ROOT / "lib" / "trading" / "sources" / "yfinance-bridge.ts",
@@ -100,6 +101,18 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("is covered by eodhd market-data endpoints", ticker_profile)
         self.assertIn("fetchFreshTickerProfile(normalizedSymbol)", ticker_profile)
 
+    def test_unsupported_symbols_do_not_use_synthetic_sample_company_profiles(self) -> None:
+        ticker_profile = read_source("ticker_profile")
+        ticker_page = read_source("ticker_page")
+
+        self.assertIn("isSyntheticSampleFallback", ticker_profile)
+        self.assertIn("UnsupportedTickerProfileError", ticker_profile)
+        self.assertIn("source.id === 'sample'", ticker_profile)
+        self.assertIn("continue", ticker_profile)
+        self.assertIn("Ticker not supported yet", ticker_page)
+        self.assertIn("No placeholder company profile is shown", ticker_page)
+        self.assertIn("INGA.AS instead of ING.AS", ticker_page)
+
     def test_official_non_us_filings_adapters_and_cache_refresh_are_present(self) -> None:
         xbrl = read_source("xbrl_filings")
         ticker_profile = read_source("ticker_profile")
@@ -122,6 +135,7 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("caption_id=000001", xbrl)
 
         self.assertIn("shouldRefreshCachedReferenceData", ticker_profile)
+        self.assertIn("replaceMissingDisclosureResources", ticker_profile)
         self.assertIn("hasRegisteredNonUsFilingsSymbol(profile.symbol)", ticker_profile)
         self.assertIn("profile.sourceMap.filings.source === 'dart'", ticker_profile)
         self.assertIn("profile.sourceMap.filings.source === 'mops'", ticker_profile)
