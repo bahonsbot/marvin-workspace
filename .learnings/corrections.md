@@ -907,3 +907,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** medium
 **Status:** active
+
+## [CORR-20260502-2315]
+
+**Trigger:** Philippe questioned Watchlist copy such as `Thesis note`, `Planned surface`, `Static shell first`, `Next layer`, and priority labels like `Core / Radar / Speculative`.
+**What was wrong:** The UI was leaking implementation/build-plan language and fuzzy trading slang into an operator-facing product surface. Some labels mixed attention, confidence, and risk profile, making the Add Symbol flow harder to understand.
+**Lesson:** For Mission Control Lab product surfaces, use plain utility copy that describes the user action and state. Avoid scaffold terms, roadmap commentary, and faux-industry labels unless they are genuinely standard. When a field is just attention/urgency, label it plainly (`High / Medium / Low`) and keep separate concepts like risk/speculation as separate fields later if needed.
+
+**Priority:** medium
+**Status:** active

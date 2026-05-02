@@ -219,3 +219,10 @@ Capabilities the user wanted but don't exist.
 **What triggered it:** Philippe had to leave for dinner after the Lab ticker mobile pass and wanted future continuation to preserve all details, bugs solved, decisions, next steps, and implementation context so he does not need to re-explain.
 **Outcome:** Implemented by appending to `memory/2026-04-28.md`, adding structured entries to `.learnings/corrections.md` and `.learnings/errors.md`, and creating `projects/mission-control-lab/docs/trading-section-lab-savepoint-addendum-2026-04-28.md`.
 **Status:** implemented
+
+## [REQ-20260502-2356]
+
+**Request:** Continue building the Lab Trading Watchlist page tomorrow from the completed Convex-backed Watchlist foundation.
+**What triggered it:** Philippe called the evening Watchlist session complete and asked to save the daily memory/learnings with clear next goals for the Watchlist page.
+**Next goals:** item-level editing for priority/alert/watch note; provider metadata enrichment/backfill for added symbols; ticker-page add-to-watchlist picker; then list-level polish such as pinned/default list behavior, descriptions, sorting, and better multi-list empty states. Portfolio should wait until Watchlist persistence patterns are stable.
+**Status:** pending / tomorrow
