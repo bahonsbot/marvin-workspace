@@ -410,7 +410,34 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
   onRemove?: (id: string) => void;
   removingId?: string | null;
 }) {
-  const [openRowId, setOpenRowId] = useState<string | null>(null);
+  const [openRowMenu, setOpenRowMenu] = useState<{ id: string; left: number; top: number } | null>(null);
+
+  function toggleRowMenu(id: string, event: React.MouseEvent<HTMLButtonElement>) {
+    if (openRowMenu?.id === id) {
+      setOpenRowMenu(null);
+      return;
+    }
+    const rect = event.currentTarget.getBoundingClientRect();
+    setOpenRowMenu({
+      id,
+      left: Math.min(window.innerWidth - 336, Math.max(16, rect.right - 320)),
+      top: Math.max(16, rect.top - 226),
+    });
+  }
+
+  useEffect(() => {
+    if (!openRowMenu) return;
+    function closeMenu() {
+      setOpenRowMenu(null);
+    }
+    window.addEventListener('resize', closeMenu);
+    window.addEventListener('scroll', closeMenu, true);
+    return () => {
+      window.removeEventListener('resize', closeMenu);
+      window.removeEventListener('scroll', closeMenu, true);
+    };
+  }, [openRowMenu]);
+
   return (
     <div className="trading-table-shell trading-watchlist-page-table-shell">
       <table className="trading-table trading-watchlist-page-table">
@@ -460,14 +487,14 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                 <td><em className={`trading-watchlist-priority ${item.priority}`}>{priorityLabels[item.priority]}</em></td>
                 <td><em className={`trading-watchlist-alert ${item.alertLevel}`}>{alertLabels[item.alertLevel]}</em></td>
                 <td className="trading-watchlist-row-actions">
-                  <button type="button" className="trading-watchlist-more-button" onClick={() => setOpenRowId((id) => (id === item._id ? null : item._id))} aria-expanded={openRowId === item._id} aria-label={`More details for ${item.displaySymbol || item.symbol}`}>
+                  <button type="button" className="trading-watchlist-more-button" onClick={(event) => toggleRowMenu(item._id, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`More details for ${item.displaySymbol || item.symbol}`}>
                     …
                   </button>
                   <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id} aria-label={`Remove ${item.displaySymbol || item.symbol}`}>
                     {removingId === item._id ? '…' : '−'}
                   </button>
-                  {openRowId === item._id ? (
-                    <div className="trading-watchlist-row-menu">
+                  {openRowMenu?.id === item._id ? (
+                    <div className="trading-watchlist-row-menu" style={{ left: openRowMenu.left, top: openRowMenu.top }}>
                       <strong>{item.name || item.symbol}</strong>
                       <dl>
                         <div><dt>Watch note</dt><dd>{item.thesis || 'No watch note yet.'}</dd></div>
@@ -658,24 +685,27 @@ function LiveWatchlistManager({ activeWatchlist, canDelete, onCreated, onClose }
   );
 }
 
-function WatchlistNews({ items, isLoading }: { items: WatchlistItem[]; isLoading?: boolean }) {
-  const symbols = items.slice(0, 6).map((item) => item.displaySymbol || item.symbol);
+function WatchlistNews({ items, metadata, isLoading }: { items: WatchlistItem[]; metadata: Map<string, WatchlistMetadataItem>; isLoading?: boolean }) {
+  const previewItems = items.slice(0, 6);
 
   return (
     <section className="trading-watchlist-news-panel">
-      <div className="trading-section-head">
-        <div>
-          <div className="trading-section-label">Watchlist news</div>
-          <h2>Headlines for this list</h2>
-        </div>
-        <span>{items.length} symbols</span>
+      <div className="trading-section-head trading-watchlist-news-head">
+        <div className="trading-section-label">Watchlist news</div>
       </div>
       {isLoading ? (
-        <p>Loading watchlist headlines…</p>
+        <p>Loading watchlist news…</p>
       ) : items.length ? (
         <div className="trading-watchlist-news-placeholder">
-          <span>{symbols.join(' · ')}</span>
-          <p>News will scope to the active watchlist here. The current slice reserves the section without showing fabricated headlines.</p>
+          <div className="trading-watchlist-news-symbols">
+            {previewItems.map((item) => (
+              <span key={item._id}>
+                <WatchlistLogo item={item} metadata={metadata.get(item.symbol)} />
+                {item.displaySymbol || item.symbol}
+              </span>
+            ))}
+          </div>
+          <p>No linked headlines yet. Relevant news for this list will appear here when available.</p>
         </div>
       ) : (
         <p>Add symbols to see related headlines for the selected watchlist.</p>
@@ -752,9 +782,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
     <>
       <section className="trading-watchlist-command-bar">
         <div>
-          <div className="trading-section-label">Watchlist</div>
-          <h1>{activeWatchlist?.name ?? (isLive ? 'No watchlist yet' : 'Local preview data')}</h1>
-          <p>{activeWatchlist?.description || 'Track ideas before they become positions.'}</p>
+          <h1>Watchlists</h1>
         </div>
         <div className="trading-watchlist-command-actions" ref={menuRef}>
           <label className="trading-watchlist-sort-control">
@@ -781,8 +809,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
         <article className="trading-watchlist-main-panel">
           <div className="trading-section-head">
             <div>
-              <div className="trading-section-label">Tracked names</div>
-              <h2>{isLoading ? 'Loading Convex…' : activeWatchlist?.name ?? (isLive ? 'No watchlist yet' : 'Local preview data')}</h2>
+              <div className="trading-section-label">{isLoading ? 'Loading Convex…' : activeWatchlist?.name ?? (isLive ? 'No watchlist yet' : 'Local preview data')}</div>
             </div>
             <PinIcon active={activeWatchlist?.pinned} />
           </div>
@@ -799,7 +826,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
         </article>
       </section>
 
-      <WatchlistNews items={items} isLoading={isLoading} />
+      <WatchlistNews items={items} metadata={metadata} isLoading={isLoading} />
     </>
   );
 }

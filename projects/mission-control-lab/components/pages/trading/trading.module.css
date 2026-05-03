@@ -2728,27 +2728,19 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 14px;
-  align-items: start;
+  align-items: center;
   border-top: 1px solid rgba(28, 37, 32, 0.16);
   padding-top: 12px;
 }
 
 :global(.trading-watchlist-command-bar h1) {
-  margin: 3px 0 4px;
+  margin: 0;
   font-family: var(--font-serif);
   font-size: clamp(25px, 3vw, 38px);
   line-height: 1.02;
   letter-spacing: -0.035em;
   color: #111915;
   font-weight: 400;
-}
-
-:global(.trading-watchlist-command-bar p) {
-  margin: 0;
-  max-width: 620px;
-  color: rgba(34, 48, 41, 0.64);
-  font-size: 12px;
-  line-height: 1.45;
 }
 
 :global(.trading-watchlist-command-actions) {
@@ -2766,7 +2758,7 @@
   background: #17241e;
   color: #fffdf9;
   padding: 10px 14px;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 12px;
   cursor: pointer;
   white-space: nowrap;
@@ -2793,7 +2785,7 @@
   background: transparent;
   color: #17241e;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
   outline: none;
@@ -2849,6 +2841,16 @@
   padding: 14px;
   background: rgba(255, 253, 249, 0.82);
   box-shadow: 0 10px 30px rgba(17, 32, 26, 0.05);
+}
+
+:global(.trading-watchlist-main-panel) {
+  position: relative;
+  z-index: 4;
+}
+
+:global(.trading-watchlist-news-panel) {
+  position: relative;
+  z-index: 1;
 }
 
 :global(.trading-watchlist-main-panel) {
@@ -2908,7 +2910,7 @@
 
 :global(.trading-watchlist-tabs strong) {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 400;
 }
 
 :global(.trading-watchlist-tabs span) {
@@ -2930,20 +2932,20 @@
 }
 
 :global(.trading-watchlist-page-table) {
-  min-width: 0;
+  min-width: 1180px;
   width: 100%;
   table-layout: fixed;
 }
 
 :global(.trading-watchlist-page-table th:nth-child(1)) { width: 150px; }
-:global(.trading-watchlist-page-table th:nth-child(2)) { width: 24%; }
-:global(.trading-watchlist-page-table th:nth-child(3)) { width: 92px; }
-:global(.trading-watchlist-page-table th:nth-child(4)) { width: 96px; }
-:global(.trading-watchlist-page-table th:nth-child(5)) { width: 70px; }
-:global(.trading-watchlist-page-table th:nth-child(6)) { width: 176px; }
-:global(.trading-watchlist-page-table th:nth-child(7)) { width: 86px; }
-:global(.trading-watchlist-page-table th:nth-child(8)) { width: 88px; }
-:global(.trading-watchlist-page-table th:nth-child(9)) { width: 72px; }
+:global(.trading-watchlist-page-table th:nth-child(2)) { width: 250px; }
+:global(.trading-watchlist-page-table th:nth-child(3)) { width: 105px; }
+:global(.trading-watchlist-page-table th:nth-child(4)) { width: 118px; }
+:global(.trading-watchlist-page-table th:nth-child(5)) { width: 86px; }
+:global(.trading-watchlist-page-table th:nth-child(6)) { width: 220px; }
+:global(.trading-watchlist-page-table th:nth-child(7)) { width: 104px; }
+:global(.trading-watchlist-page-table th:nth-child(8)) { width: 96px; }
+:global(.trading-watchlist-page-table th:nth-child(9)) { width: 76px; }
 
 :global(.trading-watchlist-page-table td) {
   vertical-align: middle;
@@ -3144,10 +3146,8 @@
 }
 
 :global(.trading-watchlist-row-menu) {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 8px);
-  z-index: 20;
+  position: fixed;
+  z-index: 1000;
   width: min(320px, 70vw);
   border: 1px solid rgba(28, 37, 32, 0.14);
   border-radius: 14px;
@@ -3461,23 +3461,46 @@
   background: rgba(255, 253, 249, 0.58);
 }
 
-:global(.trading-watchlist-news-panel .trading-section-head h2) {
-  font-size: 19px;
+:global(.trading-watchlist-news-head) {
+  display: block;
 }
 
 :global(.trading-watchlist-news-placeholder) {
   border-top: 1px solid rgba(28, 37, 32, 0.1);
   padding-top: 12px;
   display: grid;
-  gap: 4px;
+  gap: 8px;
 }
 
-:global(.trading-watchlist-news-placeholder span) {
-  color: rgba(34, 48, 41, 0.58);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 800;
+:global(.trading-watchlist-news-symbols) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+:global(.trading-watchlist-news-symbols > span) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(28, 37, 32, 0.1);
+  border-radius: 999px;
+  background: rgba(244, 240, 232, 0.44);
+  padding: 4px 9px 4px 5px;
+  color: rgba(34, 48, 41, 0.72);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+:global(.trading-watchlist-news-symbols .trading-watchlist-logo) {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  font-size: 9px;
+}
+
+:global(.trading-watchlist-news-symbols .trading-watchlist-logo.has-logo) {
+  padding: 3px;
 }
 
 :global(.trading-watchlist-news-placeholder p) {

@@ -206,7 +206,7 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("Manage watchlist", watchlist)
         self.assertIn("Pin to Overview", watchlist)
         self.assertIn("Watchlist news", watchlist)
-        self.assertIn("without showing fabricated headlines", watchlist)
+        self.assertIn("No linked headlines yet", watchlist)
         self.assertIn("<th>Price</th>", watchlist)
         self.assertIn("<th>1D</th>", watchlist)
         self.assertIn("<th>P/E</th>", watchlist)
