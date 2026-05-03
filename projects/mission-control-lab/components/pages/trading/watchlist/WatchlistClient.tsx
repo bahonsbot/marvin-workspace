@@ -35,9 +35,12 @@ interface WatchlistMetadataItem {
   logoUrl: string | null;
   logoAlt: string;
   pe: string;
-  week52: string;
+  week52Low: string;
+  week52High: string;
+  week52Position: number | null;
   price: string;
   changePct: string;
+  dayPoints: number[];
   tone: 'positive' | 'negative' | 'neutral';
   source: string;
 }
@@ -61,6 +64,17 @@ const alertLabels: Record<WatchlistAlertLevel, string> = {
   watch: 'Watch',
   urgent: 'Urgent',
 };
+type WatchlistSortKey = 'name' | 'price' | 'change' | 'priority' | 'alert' | 'updated';
+const sortLabels: Record<WatchlistSortKey, string> = {
+  name: 'Name',
+  price: 'Price',
+  change: 'Price change',
+  priority: 'Priority',
+  alert: 'Alert',
+  updated: 'Recently updated',
+};
+const priorityRank: Record<WatchlistPriority, number> = { core: 0, radar: 1, speculative: 2 };
+const alertRank: Record<WatchlistAlertLevel, number> = { urgent: 0, watch: 1, none: 2 };
 
 function formatUpdatedAt(value: number) {
   return new Intl.DateTimeFormat('en-GB', {
@@ -94,6 +108,66 @@ function WatchlistLogo({ item, metadata }: { item: WatchlistItem; metadata?: Wat
   return (
     <span className={`trading-watchlist-logo ${logoUrl ? 'has-logo' : 'initials-only'}`} aria-hidden={logoUrl ? undefined : true}>
       {logoUrl ? <img src={logoUrl} alt={metadata?.logoAlt ?? `${item.displaySymbol || item.symbol} logo`} loading="lazy" decoding="async" /> : <span>{initialsFor(item)}</span>}
+    </span>
+  );
+}
+
+function parseMetricNumber(value: string | undefined) {
+  if (!value) return null;
+  const parsed = Number(value.replace(/[^0-9.-]/g, ''));
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function sortWatchlistItems(items: WatchlistItem[], metadata: Map<string, WatchlistMetadataItem>, sortKey: WatchlistSortKey) {
+  return [...items].sort((a, b) => {
+    const metaA = metadata.get(a.symbol);
+    const metaB = metadata.get(b.symbol);
+    if (sortKey === 'name') return (a.name || a.symbol).localeCompare(b.name || b.symbol);
+    if (sortKey === 'price') return (parseMetricNumber(metaB?.price) ?? -Infinity) - (parseMetricNumber(metaA?.price) ?? -Infinity);
+    if (sortKey === 'change') return (parseMetricNumber(metaB?.changePct) ?? -Infinity) - (parseMetricNumber(metaA?.changePct) ?? -Infinity);
+    if (sortKey === 'priority') return priorityRank[a.priority] - priorityRank[b.priority];
+    if (sortKey === 'alert') return alertRank[a.alertLevel] - alertRank[b.alertLevel];
+    return b.updatedAt - a.updatedAt;
+  });
+}
+
+function DaySparkline({ values, tone }: { values?: number[]; tone: WatchlistMetadataItem['tone'] }) {
+  const cleanValues = (values ?? []).filter((value) => Number.isFinite(value));
+  if (cleanValues.length < 2) return <span className="trading-watchlist-spark-empty" aria-label="1D chart unavailable" />;
+  const width = 86;
+  const height = 28;
+  const min = Math.min(...cleanValues);
+  const max = Math.max(...cleanValues);
+  const points = cleanValues.map((value, index) => {
+    const x = (index / Math.max(cleanValues.length - 1, 1)) * (width - 4) + 2;
+    const y = height - ((value - min) / Math.max(max - min, 1)) * (height - 8) - 4;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+
+  return (
+    <svg className={`trading-watchlist-mini-spark ${tone}`} viewBox={`0 0 ${width} ${height}`} aria-label="1D price history sparkline" role="img">
+      <polyline points={points} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function Week52Range({ metadata }: { metadata?: WatchlistMetadataItem }) {
+  const position = metadata?.week52Position;
+  return (
+    <div className="trading-watchlist-52w" aria-label="52 week range">
+      <span>{metadata?.week52Low ?? '—'}</span>
+      <i><b style={{ left: `${position ?? 50}%` }} data-empty={position == null ? 'true' : undefined} /></i>
+      <span>{metadata?.week52High ?? '—'}</span>
+    </div>
+  );
+}
+
+function PinIcon({ active }: { active?: boolean }) {
+  return (
+    <span className={`trading-watchlist-pin-icon ${active ? 'active' : ''}`} title={active ? 'Pinned to Overview' : 'Not pinned'} aria-label={active ? 'Pinned to Overview' : 'Not pinned'}>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14.5 4.5 19.5 9.5 17.4 11.6 19.2 15.2 17.8 16.6 13.8 12.6 11.2 15.2 11.5 18.6 10.2 19.9 8.3 16.2 4.6 14.3 5.9 13 9.3 13.3 11.9 10.7 7.9 6.7 9.3 5.3 12.9 7.1 14.5 4.5Z" fill="currentColor" />
+      </svg>
     </span>
   );
 }
@@ -336,6 +410,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
   onRemove?: (id: string) => void;
   removingId?: string | null;
 }) {
+  const [openRowId, setOpenRowId] = useState<string | null>(null);
   return (
     <div className="trading-table-shell trading-watchlist-page-table-shell">
       <table className="trading-table trading-watchlist-page-table">
@@ -349,7 +424,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
             <th>52W</th>
             <th>Priority</th>
             <th>Alert</th>
-            <th>Watch note</th>
+            <th aria-label="More" />
           </tr>
         </thead>
         <tbody>
@@ -378,17 +453,30 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                   </span>
                 </td>
                 <td className="trading-watchlist-day-cell">
-                  <span className={`trading-watchlist-day-pill ${tone}`}>{itemMetadata?.changePct ?? '—'}</span>
+                  <DaySparkline values={itemMetadata?.dayPoints} tone={tone} />
                 </td>
                 <td>{itemMetadata?.pe ?? (metadataLoading ? 'Loading…' : '—')}</td>
-                <td>{itemMetadata?.week52 ?? (metadataLoading ? 'Loading…' : '—')}</td>
+                <td><Week52Range metadata={itemMetadata} /></td>
                 <td><em className={`trading-watchlist-priority ${item.priority}`}>{priorityLabels[item.priority]}</em></td>
                 <td><em className={`trading-watchlist-alert ${item.alertLevel}`}>{alertLabels[item.alertLevel]}</em></td>
-                <td title={item.thesis || undefined}>
-                  <span>{item.thesis || 'No watch note yet.'}</span>
-                  <button type="button" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id}>
-                    {removingId === item._id ? 'Removing…' : 'Remove'}
+                <td className="trading-watchlist-row-actions">
+                  <button type="button" className="trading-watchlist-more-button" onClick={() => setOpenRowId((id) => (id === item._id ? null : item._id))} aria-expanded={openRowId === item._id} aria-label={`More details for ${item.displaySymbol || item.symbol}`}>
+                    …
                   </button>
+                  <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id} aria-label={`Remove ${item.displaySymbol || item.symbol}`}>
+                    {removingId === item._id ? '…' : '−'}
+                  </button>
+                  {openRowId === item._id ? (
+                    <div className="trading-watchlist-row-menu">
+                      <strong>{item.name || item.symbol}</strong>
+                      <dl>
+                        <div><dt>Watch note</dt><dd>{item.thesis || 'No watch note yet.'}</dd></div>
+                        <div><dt>Market</dt><dd>{displayMarket(item)}</dd></div>
+                        <div><dt>Updated</dt><dd>{formatUpdatedAt(item.updatedAt)}</dd></div>
+                        <div><dt>Source</dt><dd>{itemMetadata?.source ?? 'Provider pending'}</dd></div>
+                      </dl>
+                    </div>
+                  ) : null}
                 </td>
               </tr>
             );
@@ -599,6 +687,7 @@ function WatchlistNews({ items, isLoading }: { items: WatchlistItem[]; isLoading
 function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: WatchlistWithItems[]; isLive: boolean; isLoading?: boolean }) {
   const [selectedWatchlistId, setSelectedWatchlistId] = useState<string | undefined>();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [sortKey, setSortKey] = useState<WatchlistSortKey>('updated');
   const [metadata, setMetadata] = useState<Map<string, WatchlistMetadataItem>>(new Map());
   const [metadataLoading, setMetadataLoading] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -607,6 +696,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
     return watchlists.find((watchlist) => watchlist._id === selectedWatchlistId) ?? watchlists[0];
   }, [selectedWatchlistId, watchlists]);
   const items = useMemo(() => activeWatchlist?.items ?? [], [activeWatchlist?.items]);
+  const sortedItems = useMemo(() => sortWatchlistItems(items, metadata, sortKey), [items, metadata, sortKey]);
   const symbolsKey = useMemo(() => items.map((item) => item.symbol).sort().join(','), [items]);
 
   useEffect(() => {
@@ -667,7 +757,12 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
           <p>{activeWatchlist?.description || 'Track ideas before they become positions.'}</p>
         </div>
         <div className="trading-watchlist-command-actions" ref={menuRef}>
-          <span className={isLive ? 'trading-watchlist-live-badge live' : 'trading-watchlist-live-badge'}>{isLive ? 'Convex live' : 'Convex not connected'}</span>
+          <label className="trading-watchlist-sort-control">
+            <span>Sort by</span>
+            <select value={sortKey} onChange={(event) => setSortKey(event.target.value as WatchlistSortKey)}>
+              {(Object.keys(sortLabels) as WatchlistSortKey[]).map((key) => <option key={key} value={key}>{sortLabels[key]}</option>)}
+            </select>
+          </label>
           <button type="button" className="trading-watchlist-manage-button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen}>
             Manage watchlist
           </button>
@@ -689,12 +784,12 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
               <div className="trading-section-label">Tracked names</div>
               <h2>{isLoading ? 'Loading Convex…' : activeWatchlist?.name ?? (isLive ? 'No watchlist yet' : 'Local preview data')}</h2>
             </div>
-            <span>{activeWatchlist?.pinned ? 'Pinned to Overview' : 'Not pinned'}</span>
+            <PinIcon active={activeWatchlist?.pinned} />
           </div>
           {isLoading ? (
             <WatchlistLoadingState />
           ) : items.length ? (
-            isLive ? <LiveWatchlistTable items={items} metadata={metadata} metadataLoading={metadataLoading} /> : <WatchlistTable items={items} canMutate={false} metadata={metadata} metadataLoading={metadataLoading} />
+            isLive ? <LiveWatchlistTable items={sortedItems} metadata={metadata} metadataLoading={metadataLoading} /> : <WatchlistTable items={sortedItems} canMutate={false} metadata={metadata} metadataLoading={metadataLoading} />
           ) : (
             <div className="trading-watchlist-empty-state">
               <span>No tracked names yet</span>

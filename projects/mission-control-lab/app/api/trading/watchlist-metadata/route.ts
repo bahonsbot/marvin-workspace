@@ -7,9 +7,12 @@ type WatchlistMetadata = {
   logoUrl: string | null;
   logoAlt: string;
   pe: string;
-  week52: string;
+  week52Low: string;
+  week52High: string;
+  week52Position: number | null;
   price: string;
   changePct: string;
+  dayPoints: number[];
   tone: 'positive' | 'negative' | 'neutral';
   source: string;
 };
@@ -26,30 +29,49 @@ function findMetric(metrics: TickerDisplayMetric[], labels: string[]) {
   return metrics.find((metric) => normalized.includes(metric.label.trim().toLowerCase()));
 }
 
-function rangeValue(stats: TickerDisplayMetric[], label: string) {
-  return cleanMetric(stats.find((metric) => metric.label.trim().toLowerCase() === label)?.value);
+function formatCompactNumber(value: number | undefined | null) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return '—';
+  return new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: value >= 1000 ? 0 : 2,
+    minimumFractionDigits: value >= 1000 ? 0 : 0,
+  }).format(value);
 }
 
-function format52Week(profile: TickerProfile) {
+function week52Metadata(profile: TickerProfile) {
   const range = profile.priceSeries.rangeSeries?.['1Y'];
-  if (!range) return '—';
-  const low = rangeValue(range.stats, 'range low');
-  const high = rangeValue(range.stats, 'range high');
-  if (low === '—' || high === '—') return '—';
-  return `${low} - ${high}`;
+  const values = range?.points.map((point) => point.value).filter((value) => Number.isFinite(value)) ?? [];
+  if (!values.length) return { low: '—', high: '—', position: null };
+  const low = Math.min(...values);
+  const high = Math.max(...values);
+  const current = profile.quote.rawPrice ?? values.at(-1) ?? null;
+  const position = current == null || high === low
+    ? null
+    : Math.max(0, Math.min(100, ((current - low) / (high - low)) * 100));
+  return { low: formatCompactNumber(low), high: formatCompactNumber(high), position };
+}
+
+function compactDayPoints(profile: TickerProfile) {
+  const points = profile.priceSeries.rangeSeries?.['1D']?.points.map((point) => point.value).filter((value) => Number.isFinite(value)) ?? [];
+  if (points.length <= 18) return points;
+  const step = (points.length - 1) / 17;
+  return Array.from({ length: 18 }, (_, index) => points[Math.round(index * step)]).filter((value): value is number => typeof value === 'number');
 }
 
 function metadataFromProfile(profile: TickerProfile): WatchlistMetadata {
   const peMetric = findMetric(profile.keyRatios, ['P/E Ratio', 'P/E (TTM)', 'Trailing P/E'])
     ?? findMetric(profile.headerStats, ['P/E Ratio', 'P/E (TTM)', 'P/E']);
+  const week52 = week52Metadata(profile);
   return {
     symbol: profile.symbol,
     logoUrl: profile.companyLogo.url,
     logoAlt: profile.companyLogo.alt,
     pe: cleanMetric(peMetric?.value),
-    week52: format52Week(profile),
+    week52Low: week52.low,
+    week52High: week52.high,
+    week52Position: week52.position,
     price: cleanMetric(profile.quote.price),
     changePct: cleanMetric(profile.quote.changePct),
+    dayPoints: compactDayPoints(profile),
     tone: profile.quote.tone,
     source: profile.sourceMap.profile.source,
   };
@@ -74,9 +96,12 @@ export async function GET(request: Request) {
       logoUrl: null,
       logoAlt: `${symbol} logo`,
       pe: '—',
-      week52: '—',
+      week52Low: '—',
+      week52High: '—',
+      week52Position: null,
       price: '—',
       changePct: '—',
+      dayPoints: [],
       tone: 'neutral' as const,
       source: 'unavailable',
     };

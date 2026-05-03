@@ -212,11 +212,18 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("<th>P/E</th>", watchlist)
         self.assertIn("<th>52W</th>", watchlist)
         self.assertIn("WatchlistLogo", watchlist)
+        self.assertIn("DaySparkline", watchlist)
+        self.assertIn("Week52Range", watchlist)
+        self.assertIn("Sort by", watchlist)
+        self.assertIn("PinIcon", watchlist)
         self.assertIn("/api/trading/watchlist-metadata", watchlist)
         self.assertNotIn("Market cap", watchlist)
+        self.assertNotIn("Convex live", watchlist)
         self.assertIn("trading-watchlist-page-table", styles)
         self.assertIn("trading-watchlist-news-placeholder", styles)
         self.assertIn("trading-watchlist-logo", styles)
+        self.assertIn("trading-watchlist-52w", styles)
+        self.assertIn("trading-watchlist-mini-spark", styles)
 
 
 if __name__ == "__main__":
