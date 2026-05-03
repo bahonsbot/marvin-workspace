@@ -916,3 +916,6 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 **Priority:** medium
 **Status:** active
+
+## 2026-05-03 — Safe fallback is not product completion
+- For ticker profile repairs, removing a wrong/offensive external match is only the safety fix. If the page falls back to generic provider-plan/missing-data copy, report it as safer but unfinished, and carry forward a proper data-source/logo/profile follow-up.

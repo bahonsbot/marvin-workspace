@@ -1462,3 +1462,7 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** medium
 **Status:** resolved
+
+## 2026-05-03 — Bad Wikipedia entity match persisted through cache
+- `IREN.US` matched an unrelated Wikipedia page because the search term collided with German text in a page title/extract. Adding a resolver guard was not enough because stale bad profile data remained in `data/trading/ticker-profiles/IREN_US.json`.
+- Prevention: when fixing reference/entity enrichment bugs, check both resolver logic and cached ticker-profile artifacts. Add cached-profile refresh guards for known-bad summary signatures before declaring the runtime fixed.

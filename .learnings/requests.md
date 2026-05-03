@@ -226,3 +226,7 @@ Capabilities the user wanted but don't exist.
 **What triggered it:** Philippe called the evening Watchlist session complete and asked to save the daily memory/learnings with clear next goals for the Watchlist page.
 **Next goals:** item-level editing for priority/alert/watch note; provider metadata enrichment/backfill for added symbols; ticker-page add-to-watchlist picker; then list-level polish such as pinned/default list behavior, descriptions, sorting, and better multi-list empty states. Portfolio should wait until Watchlist persistence patterns are stable.
 **Status:** pending / tomorrow
+
+## 2026-05-03 — Lab Trading follow-ups for tomorrow
+- Continue `IREN.US` cleanup beyond the emergency guard: find a proper company summary/logo/source path for IREN Limited / Iris Energy, avoiding fake data and avoiding irrelevant Wikipedia matches.
+- Revisit the Watchlist page News element and make it product-real: provider-backed if possible, otherwise honest empty state without fabricated headlines.
