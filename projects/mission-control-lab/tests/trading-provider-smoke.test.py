@@ -137,6 +137,8 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("'9988.HK': 'Alibaba Group'", wikipedia)
         self.assertIn("'2454.TW': 'MediaTek'", wikipedia)
         self.assertIn("'2646.TW': 'Starlux Airlines'", wikipedia)
+        self.assertIn("'IREN.US': 'Iris Energy'", wikipedia)
+        self.assertIn("antisemitic treatise", wikipedia)
         self.assertIn("may refer to:", wikipedia)
         self.assertIn("title.startsWith('list of ')", wikipedia)
         self.assertIn("stock market index", wikipedia)

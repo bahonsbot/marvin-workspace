@@ -59,6 +59,8 @@ const knownWikipediaTitles: Record<string, string> = {
   '9988.HK': 'Alibaba Group',
   '2454.TW': 'MediaTek',
   '2646.TW': 'Starlux Airlines',
+  IREN: 'Iris Energy',
+  'IREN.US': 'Iris Energy',
 };
 
 const knownLogoFiles: Record<string, string> = {
@@ -282,6 +284,8 @@ function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefi
   if (cleanedExtract.includes('comprises') && cleanedExtract.includes('companies traded on')) return true;
   if (cleanedExtract.includes('tracks') && cleanedExtract.includes('stock market index')) return true;
   if (cleanedExtract.includes('hang seng index')) return true;
+  if (cleanedExtract.includes('antisemitic treatise')) return true;
+  if (cleanedExtract.includes('martin luther') && cleanedExtract.includes('jews')) return true;
   if (title.length <= 4 && !cleanedCompany.startsWith(title)) return true;
   if (!trustKnownTitle && companyLead && !identityTitle.includes(companyLead) && !normalizeIdentityText(cleanedExtract).includes(companyLead) && !hasMeaningfulIdentityOverlap) return true;
   return false;
