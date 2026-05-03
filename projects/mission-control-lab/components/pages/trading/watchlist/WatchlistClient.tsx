@@ -30,6 +30,22 @@ interface TickerSearchResponse {
   results: TickerSearchResult[];
 }
 
+interface WatchlistMetadataItem {
+  symbol: string;
+  logoUrl: string | null;
+  logoAlt: string;
+  pe: string;
+  week52: string;
+  price: string;
+  changePct: string;
+  tone: 'positive' | 'negative' | 'neutral';
+  source: string;
+}
+
+interface WatchlistMetadataResponse {
+  items: WatchlistMetadataItem[];
+}
+
 function tickerResultMeta(result: TickerSearchResult) {
   return [result.country, result.currency, result.type].filter(Boolean).join(' · ');
 }
@@ -68,19 +84,18 @@ function displayMarket(item: WatchlistItem) {
   return [item.exchange, item.currency].filter(Boolean).join(' · ') || 'Market pending';
 }
 
-function quoteSeed(symbol: string) {
-  return symbol.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+function initialsFor(item: WatchlistItem) {
+  const source = item.displaySymbol || item.symbol;
+  return source.replace(/\W/g, '').slice(0, 2) || '•';
 }
 
-function estimateQuote(item: WatchlistItem) {
-  const seed = quoteSeed(item.symbol);
-  const price = 18 + (seed % 420) + ((seed % 91) / 100);
-  const change = ((seed % 900) - 420) / 100;
-  return { price, change };
-}
-
-function formatPrice(value: number) {
-  return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+function WatchlistLogo({ item, metadata }: { item: WatchlistItem; metadata?: WatchlistMetadataItem }) {
+  const logoUrl = metadata?.logoUrl;
+  return (
+    <span className={`trading-watchlist-logo ${logoUrl ? 'has-logo' : 'initials-only'}`} aria-hidden={logoUrl ? undefined : true}>
+      {logoUrl ? <img src={logoUrl} alt={metadata?.logoAlt ?? `${item.displaySymbol || item.symbol} logo`} loading="lazy" decoding="async" /> : <span>{initialsFor(item)}</span>}
+    </span>
+  );
 }
 
 function WatchlistAddForm({ enabled, watchlistId, onSaved }: { enabled: boolean; watchlistId?: string; onSaved?: () => void }) {
@@ -313,9 +328,11 @@ function LiveWatchlistAddForm({ watchlistId, onSaved }: { watchlistId?: string; 
   );
 }
 
-function WatchlistTable({ items, canMutate, onRemove, removingId }: {
+function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove, removingId }: {
   items: WatchlistItem[];
   canMutate: boolean;
+  metadata: Map<string, WatchlistMetadataItem>;
+  metadataLoading?: boolean;
   onRemove?: (id: string) => void;
   removingId?: string | null;
 }) {
@@ -328,41 +345,49 @@ function WatchlistTable({ items, canMutate, onRemove, removingId }: {
             <th>Company</th>
             <th>Price</th>
             <th>1D</th>
+            <th>P/E</th>
+            <th>52W</th>
             <th>Priority</th>
             <th>Alert</th>
             <th>Watch note</th>
-            <th aria-label="Actions" />
           </tr>
         </thead>
         <tbody>
           {items.map((item) => {
-            const quote = estimateQuote(item);
-            const isPositive = quote.change >= 0;
+            const itemMetadata = metadata.get(item.symbol);
+            const tone = itemMetadata?.tone ?? 'neutral';
             return (
               <tr key={item._id}>
                 <td>
-                  <Link href={symbolHref(item.symbol)}>{item.displaySymbol || item.symbol}</Link>
-                  <span>{item.symbol}</span>
+                  <div className="trading-watchlist-symbol-cell">
+                    <WatchlistLogo item={item} metadata={itemMetadata} />
+                    <div>
+                      <Link href={symbolHref(item.symbol)}>{item.displaySymbol || item.symbol}</Link>
+                      <span>{item.symbol}</span>
+                    </div>
+                  </div>
                 </td>
                 <td>
                   {item.name || 'Provider pending'}
                   <span>{displayMarket(item)} · updated {formatUpdatedAt(item.updatedAt)}</span>
                 </td>
                 <td>
-                  ${formatPrice(quote.price)}
-                  <span className={isPositive ? 'trading-watchlist-change positive' : 'trading-watchlist-change negative'}>
-                    {isPositive ? '+' : ''}{quote.change.toFixed(2)}%
+                  {itemMetadata?.price ?? (metadataLoading ? 'Loading…' : '—')}
+                  <span className={`trading-watchlist-change ${tone}`}>
+                    {itemMetadata?.changePct ?? (metadataLoading ? 'Provider' : '—')}
                   </span>
                 </td>
-                <td>
-                  <span className={isPositive ? 'trading-watchlist-spark positive' : 'trading-watchlist-spark negative'} aria-label="Indicative intraday movement" />
+                <td className="trading-watchlist-day-cell">
+                  <span className={`trading-watchlist-day-pill ${tone}`}>{itemMetadata?.changePct ?? '—'}</span>
                 </td>
+                <td>{itemMetadata?.pe ?? (metadataLoading ? 'Loading…' : '—')}</td>
+                <td>{itemMetadata?.week52 ?? (metadataLoading ? 'Loading…' : '—')}</td>
                 <td><em className={`trading-watchlist-priority ${item.priority}`}>{priorityLabels[item.priority]}</em></td>
                 <td><em className={`trading-watchlist-alert ${item.alertLevel}`}>{alertLabels[item.alertLevel]}</em></td>
-                <td title={item.thesis || undefined}>{item.thesis || 'No watch note yet.'}</td>
-                <td>
+                <td title={item.thesis || undefined}>
+                  <span>{item.thesis || 'No watch note yet.'}</span>
                   <button type="button" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id}>
-                    {removingId === item._id ? '…' : 'Remove'}
+                    {removingId === item._id ? 'Removing…' : 'Remove'}
                   </button>
                 </td>
               </tr>
@@ -374,7 +399,7 @@ function WatchlistTable({ items, canMutate, onRemove, removingId }: {
   );
 }
 
-function LiveWatchlistTable({ items }: { items: WatchlistItem[] }) {
+function LiveWatchlistTable({ items, metadata, metadataLoading }: { items: WatchlistItem[]; metadata: Map<string, WatchlistMetadataItem>; metadataLoading?: boolean }) {
   const removeItem = useMutation(watchlistApi.remove);
   const [removingId, setRemovingId] = useState<string | null>(null);
 
@@ -388,7 +413,7 @@ function LiveWatchlistTable({ items }: { items: WatchlistItem[] }) {
     }
   }
 
-  return <WatchlistTable items={items} canMutate onRemove={remove} removingId={removingId} />;
+  return <WatchlistTable items={items} canMutate metadata={metadata} metadataLoading={metadataLoading} onRemove={remove} removingId={removingId} />;
 }
 
 function WatchlistTabs({
@@ -574,12 +599,43 @@ function WatchlistNews({ items, isLoading }: { items: WatchlistItem[]; isLoading
 function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: WatchlistWithItems[]; isLive: boolean; isLoading?: boolean }) {
   const [selectedWatchlistId, setSelectedWatchlistId] = useState<string | undefined>();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [metadata, setMetadata] = useState<Map<string, WatchlistMetadataItem>>(new Map());
+  const [metadataLoading, setMetadataLoading] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const activeWatchlist = useMemo(() => {
     if (!watchlists.length) return undefined;
     return watchlists.find((watchlist) => watchlist._id === selectedWatchlistId) ?? watchlists[0];
   }, [selectedWatchlistId, watchlists]);
-  const items = activeWatchlist?.items ?? [];
+  const items = useMemo(() => activeWatchlist?.items ?? [], [activeWatchlist?.items]);
+  const symbolsKey = useMemo(() => items.map((item) => item.symbol).sort().join(','), [items]);
+
+  useEffect(() => {
+    if (!symbolsKey) {
+      setMetadata(new Map());
+      setMetadataLoading(false);
+      return;
+    }
+    const controller = new AbortController();
+    setMetadataLoading(true);
+    fetch(`/api/trading/watchlist-metadata?symbols=${encodeURIComponent(symbolsKey)}`, {
+      signal: controller.signal,
+      headers: { accept: 'application/json' },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Metadata failed (${response.status})`);
+        return response.json() as Promise<WatchlistMetadataResponse>;
+      })
+      .then((data) => {
+        setMetadata(new Map((data.items ?? []).map((item) => [item.symbol, item])));
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setMetadata(new Map());
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setMetadataLoading(false);
+      });
+    return () => controller.abort();
+  }, [symbolsKey]);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -638,7 +694,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
           {isLoading ? (
             <WatchlistLoadingState />
           ) : items.length ? (
-            isLive ? <LiveWatchlistTable items={items} /> : <WatchlistTable items={items} canMutate={false} />
+            isLive ? <LiveWatchlistTable items={items} metadata={metadata} metadataLoading={metadataLoading} /> : <WatchlistTable items={items} canMutate={false} metadata={metadata} metadataLoading={metadataLoading} />
           ) : (
             <div className="trading-watchlist-empty-state">
               <span>No tracked names yet</span>

@@ -209,9 +209,14 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("without showing fabricated headlines", watchlist)
         self.assertIn("<th>Price</th>", watchlist)
         self.assertIn("<th>1D</th>", watchlist)
+        self.assertIn("<th>P/E</th>", watchlist)
+        self.assertIn("<th>52W</th>", watchlist)
+        self.assertIn("WatchlistLogo", watchlist)
+        self.assertIn("/api/trading/watchlist-metadata", watchlist)
         self.assertNotIn("Market cap", watchlist)
         self.assertIn("trading-watchlist-page-table", styles)
         self.assertIn("trading-watchlist-news-placeholder", styles)
+        self.assertIn("trading-watchlist-logo", styles)
 
 
 if __name__ == "__main__":
