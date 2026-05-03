@@ -127,6 +127,14 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("return 'Yahoo Finance'", ticker_page)
         self.assertNotIn("Yahoo / yfinance", ticker_page)
 
+
+    def test_cached_bad_iren_profile_is_forced_to_refresh(self) -> None:
+        ticker_profile = read_source("ticker_profile")
+
+        self.assertIn("antisemitic treatise", ticker_profile)
+        self.assertIn("martin luther", ticker_profile)
+        self.assertIn("jews", ticker_profile)
+
     def test_wikipedia_profile_repair_guards_cover_recent_bad_profile_classes(self) -> None:
         wikipedia = read_source("wikipedia")
         ticker_profile = read_source("ticker_profile")

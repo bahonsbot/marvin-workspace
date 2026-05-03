@@ -51,6 +51,8 @@ async function replaceMissingDisclosureResources(profile: TickerProfile) {
 function hasAmbiguousCompanyProfile(profile: TickerProfile) {
   const summary = profile.companyProfile.summary.toLowerCase();
   if (summary.includes(' may refer to:')) return true;
+  if (summary.includes('antisemitic treatise')) return true;
+  if (summary.includes('martin luther') && summary.includes('jews')) return true;
   if (summary.includes(' is a stock market index ')) return true;
   if (summary.includes(' comprises ') && summary.includes(' companies traded on')) return true;
   if (!summary.includes(' is covered by eodhd market-data endpoints')) return false;
