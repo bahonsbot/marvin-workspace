@@ -2932,20 +2932,20 @@
 }
 
 :global(.trading-watchlist-page-table) {
-  min-width: 1180px;
+  min-width: 0;
   width: 100%;
   table-layout: fixed;
 }
 
-:global(.trading-watchlist-page-table th:nth-child(1)) { width: 150px; }
-:global(.trading-watchlist-page-table th:nth-child(2)) { width: 250px; }
-:global(.trading-watchlist-page-table th:nth-child(3)) { width: 105px; }
-:global(.trading-watchlist-page-table th:nth-child(4)) { width: 118px; }
-:global(.trading-watchlist-page-table th:nth-child(5)) { width: 86px; }
-:global(.trading-watchlist-page-table th:nth-child(6)) { width: 220px; }
-:global(.trading-watchlist-page-table th:nth-child(7)) { width: 104px; }
-:global(.trading-watchlist-page-table th:nth-child(8)) { width: 96px; }
-:global(.trading-watchlist-page-table th:nth-child(9)) { width: 76px; }
+:global(.trading-watchlist-page-table th:nth-child(1)) { width: 135px; }
+:global(.trading-watchlist-page-table th:nth-child(2)) { width: 27%; }
+:global(.trading-watchlist-page-table th:nth-child(3)) { width: 96px; }
+:global(.trading-watchlist-page-table th:nth-child(4)) { width: 106px; }
+:global(.trading-watchlist-page-table th:nth-child(5)) { width: 76px; }
+:global(.trading-watchlist-page-table th:nth-child(6)) { width: 238px; }
+:global(.trading-watchlist-page-table th:nth-child(7)) { width: 76px; }
+:global(.trading-watchlist-page-table th:nth-child(8)) { width: 72px; }
+:global(.trading-watchlist-page-table th:nth-child(9)) { width: 58px; }
 
 :global(.trading-watchlist-page-table td) {
   vertical-align: middle;
@@ -3070,8 +3070,8 @@
 
 :global(.trading-watchlist-52w) {
   display: grid;
-  grid-template-columns: 38px minmax(52px, 1fr) 38px;
-  gap: 7px;
+  grid-template-columns: 42px minmax(76px, 1fr) 42px;
+  gap: 8px;
   align-items: center;
   color: rgba(34, 48, 41, 0.72);
   font-size: 11px;
@@ -3110,7 +3110,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 7px;
+  gap: 4px;
 }
 
 :global(.trading-watchlist-more-button),
@@ -3120,8 +3120,8 @@
 }
 
 :global(.trading-watchlist-more-button) {
-  width: 27px;
-  height: 27px;
+  width: 24px;
+  height: 24px;
   border-radius: 999px;
   background: rgba(34, 48, 41, 0.09);
   color: rgba(34, 48, 41, 0.76);
@@ -3130,13 +3130,13 @@
 }
 
 :global(.trading-watchlist-remove-pill) {
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   border-radius: 999px;
   background: rgba(190, 18, 60, 0.14);
   color: #be123c;
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 400;
   line-height: 1;
 }
 
@@ -3148,7 +3148,7 @@
 :global(.trading-watchlist-row-menu) {
   position: fixed;
   z-index: 1000;
-  width: min(320px, 70vw);
+  width: min(284px, 70vw);
   border: 1px solid rgba(28, 37, 32, 0.14);
   border-radius: 14px;
   background: #fffdf9;
@@ -3195,7 +3195,7 @@
   align-items: center;
   border-radius: 999px;
   border: 1px solid rgba(28, 37, 32, 0.14);
-  padding: 4px 8px;
+  padding: 4px 7px;
   font-style: normal;
   font-size: 11px;
   white-space: nowrap;

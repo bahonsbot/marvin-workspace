@@ -76,26 +76,12 @@ const sortLabels: Record<WatchlistSortKey, string> = {
 const priorityRank: Record<WatchlistPriority, number> = { core: 0, radar: 1, speculative: 2 };
 const alertRank: Record<WatchlistAlertLevel, number> = { urgent: 0, watch: 1, none: 2 };
 
-function formatUpdatedAt(value: number) {
-  return new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZone: 'Asia/Ho_Chi_Minh',
-  }).format(new Date(value));
-}
-
 function symbolHref(symbol: string) {
   return `/trading/ticker/${encodeURIComponent(symbol)}`;
 }
 
 function normalizeSymbol(value: string) {
   return value.trim().toUpperCase().replace(/\s+/g, '');
-}
-
-function displayMarket(item: WatchlistItem) {
-  return [item.exchange, item.currency].filter(Boolean).join(' · ') || 'Market pending';
 }
 
 function initialsFor(item: WatchlistItem) {
@@ -420,8 +406,8 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
     const rect = event.currentTarget.getBoundingClientRect();
     setOpenRowMenu({
       id,
-      left: Math.min(window.innerWidth - 336, Math.max(16, rect.right - 320)),
-      top: Math.max(16, rect.top - 226),
+      left: Math.min(window.innerWidth - 300, Math.max(16, rect.right - 284)),
+      top: Math.max(16, rect.top - 154),
     });
   }
 
@@ -465,14 +451,10 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                     <WatchlistLogo item={item} metadata={itemMetadata} />
                     <div>
                       <Link href={symbolHref(item.symbol)}>{item.displaySymbol || item.symbol}</Link>
-                      <span>{item.symbol}</span>
                     </div>
                   </div>
                 </td>
-                <td>
-                  {item.name || 'Provider pending'}
-                  <span>{displayMarket(item)} · updated {formatUpdatedAt(item.updatedAt)}</span>
-                </td>
+                <td>{item.name || 'Provider pending'}</td>
                 <td>
                   {itemMetadata?.price ?? (metadataLoading ? 'Loading…' : '—')}
                   <span className={`trading-watchlist-change ${tone}`}>
@@ -498,9 +480,6 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                       <strong>{item.name || item.symbol}</strong>
                       <dl>
                         <div><dt>Watch note</dt><dd>{item.thesis || 'No watch note yet.'}</dd></div>
-                        <div><dt>Market</dt><dd>{displayMarket(item)}</dd></div>
-                        <div><dt>Updated</dt><dd>{formatUpdatedAt(item.updatedAt)}</dd></div>
-                        <div><dt>Source</dt><dd>{itemMetadata?.source ?? 'Provider pending'}</dd></div>
                       </dl>
                     </div>
                   ) : null}
