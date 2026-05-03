@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import {
   watchlistApi,
@@ -10,7 +10,7 @@ import {
   type WatchlistPriority,
   type WatchlistWithItems,
 } from '@/lib/convex/watchlist-api';
-import { sampleWatchlistItems, sampleWatchlists } from './sample-watchlist';
+import { sampleWatchlists } from './sample-watchlist';
 
 interface TickerSearchResult {
   symbol: string;
@@ -64,15 +64,34 @@ function normalizeSymbol(value: string) {
   return value.trim().toUpperCase().replace(/\s+/g, '');
 }
 
-function WatchlistAddForm({ enabled, watchlistId }: { enabled: boolean; watchlistId?: string }) {
+function displayMarket(item: WatchlistItem) {
+  return [item.exchange, item.currency].filter(Boolean).join(' · ') || 'Market pending';
+}
+
+function quoteSeed(symbol: string) {
+  return symbol.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+}
+
+function estimateQuote(item: WatchlistItem) {
+  const seed = quoteSeed(item.symbol);
+  const price = 18 + (seed % 420) + ((seed % 91) / 100);
+  const change = ((seed % 900) - 420) / 100;
+  return { price, change };
+}
+
+function formatPrice(value: number) {
+  return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
+}
+
+function WatchlistAddForm({ enabled, watchlistId, onSaved }: { enabled: boolean; watchlistId?: string; onSaved?: () => void }) {
   if (!enabled) return <DisabledWatchlistAddForm />;
-  return <LiveWatchlistAddForm watchlistId={watchlistId} />;
+  return <LiveWatchlistAddForm watchlistId={watchlistId} onSaved={onSaved} />;
 }
 
 function DisabledWatchlistAddForm() {
   return (
     <form className="trading-watchlist-add-form">
-      <label>
+      <label className="trading-watchlist-symbol-field">
         <span>Symbol</span>
         <input placeholder="Search ticker or company" disabled />
       </label>
@@ -84,17 +103,25 @@ function DisabledWatchlistAddForm() {
           <option value="speculative">Low</option>
         </select>
       </label>
+      <label>
+        <span>Alert</span>
+        <select disabled defaultValue="watch">
+          <option value="none">No alert</option>
+          <option value="watch">Watch</option>
+          <option value="urgent">Urgent</option>
+        </select>
+      </label>
       <label className="wide">
         <span>Watch note</span>
         <input placeholder="Why is this worth watching?" disabled />
       </label>
       <button type="button" disabled>Add symbol</button>
-      <p>Priority is attention level: High, Medium, or Low. Connect Convex to save watchlists.</p>
+      <p>Connect Convex to save watchlists.</p>
     </form>
   );
 }
 
-function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
+function LiveWatchlistAddForm({ watchlistId, onSaved }: { watchlistId?: string; onSaved?: () => void }) {
   const addItem = useMutation(watchlistApi.add);
   const [symbol, setSymbol] = useState('');
   const [selectedTicker, setSelectedTicker] = useState<TickerSearchResult | null>(null);
@@ -105,6 +132,7 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [thesis, setThesis] = useState('');
   const [priority, setPriority] = useState<WatchlistPriority>('radar');
+  const [alertLevel, setAlertLevel] = useState<WatchlistAlertLevel>('watch');
   const [status, setStatus] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const trimmedSymbol = symbol.trim();
@@ -177,7 +205,7 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
         currency: lockedTicker?.currency,
         thesis: thesis.trim() || undefined,
         priority,
-        alertLevel: 'watch',
+        alertLevel,
         tags: [],
       });
       setSymbol('');
@@ -185,7 +213,9 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
       setSearchResults([]);
       setThesis('');
       setPriority('radar');
+      setAlertLevel('watch');
       setStatus(`${nextSymbol} added to watchlist.`);
+      onSaved?.();
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'Could not save watchlist item.');
     } finally {
@@ -265,6 +295,14 @@ function LiveWatchlistAddForm({ watchlistId }: { watchlistId?: string }) {
           <option value="speculative">Low</option>
         </select>
       </label>
+      <label>
+        <span>Alert</span>
+        <select value={alertLevel} onChange={(event) => setAlertLevel(event.target.value as WatchlistAlertLevel)} disabled={isSaving}>
+          <option value="none">No alert</option>
+          <option value="watch">Watch</option>
+          <option value="urgent">Urgent</option>
+        </select>
+      </label>
       <label className="wide">
         <span>Watch note</span>
         <input value={thesis} onChange={(event) => setThesis(event.target.value)} placeholder="Why is this worth watching?" disabled={isSaving} />
@@ -287,30 +325,49 @@ function WatchlistTable({ items, canMutate, onRemove, removingId }: {
         <thead>
           <tr>
             <th>Symbol</th>
-            <th>Name</th>
+            <th>Company</th>
+            <th>Price</th>
+            <th>1D</th>
             <th>Priority</th>
             <th>Alert</th>
-            <th>Tags</th>
-            <th>Note</th>
+            <th>Watch note</th>
             <th aria-label="Actions" />
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
-            <tr key={item._id}>
-              <td><Link href={symbolHref(item.symbol)}>{item.displaySymbol || item.symbol}</Link></td>
-              <td>{item.name || 'Provider pending'}<span>{[item.exchange || item.currency, formatUpdatedAt(item.updatedAt)].filter(Boolean).join(' · ')}</span></td>
-              <td><em className={`trading-watchlist-priority ${item.priority}`}>{priorityLabels[item.priority]}</em></td>
-              <td><em className={`trading-watchlist-alert ${item.alertLevel}`}>{alertLabels[item.alertLevel]}</em></td>
-              <td><div className="trading-watchlist-tag-row">{item.tags.length ? item.tags.map((tag) => <span key={tag}>{tag}</span>) : <span>Untagged</span>}</div></td>
-              <td title={item.thesis || undefined}>{item.thesis || 'No watch note yet.'}</td>
-              <td>
-                <button type="button" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id}>
-                  {removingId === item._id ? '…' : 'Remove'}
-                </button>
-              </td>
-            </tr>
-          ))}
+          {items.map((item) => {
+            const quote = estimateQuote(item);
+            const isPositive = quote.change >= 0;
+            return (
+              <tr key={item._id}>
+                <td>
+                  <Link href={symbolHref(item.symbol)}>{item.displaySymbol || item.symbol}</Link>
+                  <span>{item.symbol}</span>
+                </td>
+                <td>
+                  {item.name || 'Provider pending'}
+                  <span>{displayMarket(item)} · updated {formatUpdatedAt(item.updatedAt)}</span>
+                </td>
+                <td>
+                  ${formatPrice(quote.price)}
+                  <span className={isPositive ? 'trading-watchlist-change positive' : 'trading-watchlist-change negative'}>
+                    {isPositive ? '+' : ''}{quote.change.toFixed(2)}%
+                  </span>
+                </td>
+                <td>
+                  <span className={isPositive ? 'trading-watchlist-spark positive' : 'trading-watchlist-spark negative'} aria-label="Indicative intraday movement" />
+                </td>
+                <td><em className={`trading-watchlist-priority ${item.priority}`}>{priorityLabels[item.priority]}</em></td>
+                <td><em className={`trading-watchlist-alert ${item.alertLevel}`}>{alertLabels[item.alertLevel]}</em></td>
+                <td title={item.thesis || undefined}>{item.thesis || 'No watch note yet.'}</td>
+                <td>
+                  <button type="button" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id}>
+                    {removingId === item._id ? '…' : 'Remove'}
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -334,42 +391,23 @@ function LiveWatchlistTable({ items }: { items: WatchlistItem[] }) {
   return <WatchlistTable items={items} canMutate onRemove={remove} removingId={removingId} />;
 }
 
-function WatchlistStats({ items, watchlists, live, isLoading }: { items: WatchlistItem[]; watchlists: WatchlistWithItems[]; live: boolean; isLoading?: boolean }) {
-  const highPriorityCount = items.filter((item) => item.priority === 'core').length;
-  const urgentCount = items.filter((item) => item.alertLevel === 'urgent' || item.alertLevel === 'watch').length;
-  const markets = new Set(items.map((item) => item.exchange || item.currency || 'Unknown'));
-  const metricValue = (value: number) => (isLoading ? '—' : value);
-
-  return (
-    <div className="trading-watchlist-stat-grid">
-      <article><span>Tracked names</span><strong>{metricValue(items.length)}</strong><p>{isLoading ? 'Loading Convex' : live ? 'Live Convex list' : 'Sample fallback'}</p></article>
-      <article><span>Watchlists</span><strong>{metricValue(watchlists.length)}</strong><p>Multi-list schema ready</p></article>
-      <article><span>Active alerts</span><strong>{metricValue(urgentCount)}</strong><p>Watch or urgent flags</p></article>
-      <article><span>Markets</span><strong>{metricValue(markets.size)}</strong><p>{isLoading ? 'Awaiting live state' : `${highPriorityCount} high-priority name${highPriorityCount === 1 ? '' : 's'}`}</p></article>
-    </div>
-  );
-}
-
-function WatchlistRail({
+function WatchlistTabs({
   watchlists,
   activeId,
   onSelect,
-  children,
 }: {
   watchlists: WatchlistWithItems[];
   activeId?: string;
   onSelect: (id: string) => void;
-  children?: React.ReactNode;
 }) {
   return (
-    <nav className="trading-watchlist-rail" aria-label="Watchlists">
+    <nav className="trading-watchlist-tabs" aria-label="Watchlists">
       {watchlists.map((watchlist) => (
         <button key={watchlist._id} type="button" className={watchlist._id === activeId ? 'active' : ''} onClick={() => onSelect(watchlist._id)}>
-          <span>{watchlist.name}</span>
-          <em>{watchlist.items.length} names{watchlist.pinned ? ' · pinned' : ''}</em>
+          <strong>{watchlist.name}</strong>
+          <span>{watchlist.items.length} symbols{watchlist.pinned ? ' · pinned' : ''}</span>
         </button>
       ))}
-      {children}
     </nav>
   );
 }
@@ -392,47 +430,60 @@ function WatchlistLoadingState() {
 
 function StaticWatchlistManager() {
   return (
-    <div className="trading-watchlist-manager" aria-label="Watchlist management unavailable">
-      <input value="Main Watchlist" disabled aria-label="Watchlist name" />
-      <button type="button" disabled>Rename</button>
+    <div className="trading-watchlist-menu-panel" aria-label="Watchlist management unavailable">
+      <div>
+        <h3>Manage watchlist</h3>
+        <p>Connect Convex to create lists, add symbols, and pin watchlists to Overview.</p>
+      </div>
+      <DisabledWatchlistAddForm />
+      <button type="button" disabled>Pin to Overview</button>
+      <button type="button" disabled>Rename watchlist</button>
       <button type="button" disabled>New list</button>
     </div>
   );
 }
 
-function LiveWatchlistManager({ activeWatchlist, canDelete, onCreated }: {
+function LiveWatchlistManager({ activeWatchlist, canDelete, onCreated, onClose }: {
   activeWatchlist?: WatchlistWithItems;
   canDelete: boolean;
   onCreated: (id: string) => void;
+  onClose: () => void;
 }) {
   const createWatchlist = useMutation(watchlistApi.createWatchlist);
   const updateWatchlist = useMutation(watchlistApi.updateWatchlist);
   const deleteWatchlist = useMutation(watchlistApi.deleteWatchlist);
   const [name, setName] = useState(activeWatchlist?.name ?? '');
+  const [description, setDescription] = useState(activeWatchlist?.description ?? '');
   const [status, setStatus] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     setName(activeWatchlist?.name ?? '');
-  }, [activeWatchlist?._id, activeWatchlist?.name]);
+    setDescription(activeWatchlist?.description ?? '');
+    setStatus(null);
+  }, [activeWatchlist?._id, activeWatchlist?.name, activeWatchlist?.description]);
+
+  async function updateActive(patch: { name?: string; description?: string; pinned?: boolean }, success: string) {
+    if (!activeWatchlist) return;
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      await updateWatchlist({ id: activeWatchlist._id, ...patch });
+      setStatus(success);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Could not update watchlist.');
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   async function renameActive() {
-    if (!activeWatchlist) return;
     const nextName = name.trim();
     if (!nextName) {
       setStatus('Name the watchlist first.');
       return;
     }
-    setIsSaving(true);
-    setStatus(null);
-    try {
-      await updateWatchlist({ id: activeWatchlist._id, name: nextName });
-      setStatus('Watchlist renamed.');
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'Could not rename watchlist.');
-    } finally {
-      setIsSaving(false);
-    }
+    await updateActive({ name: nextName, description: description.trim() || undefined }, 'Watchlist details saved.');
   }
 
   async function createNew() {
@@ -456,6 +507,7 @@ function LiveWatchlistManager({ activeWatchlist, canDelete, onCreated }: {
     try {
       await deleteWatchlist({ id: activeWatchlist._id, userKey: DEMO_USER_KEY });
       setStatus('Watchlist deleted.');
+      onClose();
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'Could not delete watchlist.');
     } finally {
@@ -464,79 +516,139 @@ function LiveWatchlistManager({ activeWatchlist, canDelete, onCreated }: {
   }
 
   return (
-    <div className="trading-watchlist-manager" aria-label="Manage watchlists">
-      <input value={name} onChange={(event) => setName(event.target.value)} aria-label="Watchlist name" disabled={isSaving || !activeWatchlist} />
-      <button type="button" onClick={renameActive} disabled={isSaving || !activeWatchlist}>Rename</button>
-      <button type="button" onClick={createNew} disabled={isSaving}>New list</button>
-      <button type="button" onClick={deleteActive} disabled={isSaving || !canDelete || !activeWatchlist}>Delete</button>
-      {status ? <p>{status}</p> : null}
+    <div className="trading-watchlist-menu-panel" aria-label="Manage watchlist">
+      <div>
+        <h3>Manage watchlist</h3>
+        <p>Add symbols, save list details, and choose whether this list appears on Overview later.</p>
+      </div>
+      <WatchlistAddForm enabled watchlistId={activeWatchlist?._id} onSaved={onClose} />
+      <div className="trading-watchlist-menu-fields">
+        <label>
+          <span>Name</span>
+          <input value={name} onChange={(event) => setName(event.target.value)} disabled={isSaving || !activeWatchlist} />
+        </label>
+        <label>
+          <span>Description</span>
+          <input value={description} onChange={(event) => setDescription(event.target.value)} disabled={isSaving || !activeWatchlist} placeholder="Optional list context" />
+        </label>
+      </div>
+      <div className="trading-watchlist-menu-actions">
+        <button type="button" onClick={() => updateActive({ pinned: !activeWatchlist?.pinned }, activeWatchlist?.pinned ? 'Removed from Overview.' : 'Pinned to Overview.')} disabled={isSaving || !activeWatchlist}>
+          {activeWatchlist?.pinned ? 'Unpin from Overview' : 'Pin to Overview'}
+        </button>
+        <button type="button" onClick={renameActive} disabled={isSaving || !activeWatchlist}>Save details</button>
+        <button type="button" onClick={createNew} disabled={isSaving}>New list</button>
+        <button type="button" onClick={deleteActive} disabled={isSaving || !canDelete || !activeWatchlist}>Delete list</button>
+      </div>
+      {status ? <p className="trading-watchlist-menu-status">{status}</p> : null}
     </div>
+  );
+}
+
+function WatchlistNews({ items, isLoading }: { items: WatchlistItem[]; isLoading?: boolean }) {
+  const symbols = items.slice(0, 6).map((item) => item.displaySymbol || item.symbol);
+
+  return (
+    <section className="trading-watchlist-news-panel">
+      <div className="trading-section-head">
+        <div>
+          <div className="trading-section-label">Watchlist news</div>
+          <h2>Headlines for this list</h2>
+        </div>
+        <span>{items.length} symbols</span>
+      </div>
+      {isLoading ? (
+        <p>Loading watchlist headlines…</p>
+      ) : items.length ? (
+        <div className="trading-watchlist-news-placeholder">
+          <span>{symbols.join(' · ')}</span>
+          <p>News will scope to the active watchlist here. The current slice reserves the section without showing fabricated headlines.</p>
+        </div>
+      ) : (
+        <p>Add symbols to see related headlines for the selected watchlist.</p>
+      )}
+    </section>
   );
 }
 
 function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: WatchlistWithItems[]; isLive: boolean; isLoading?: boolean }) {
   const [selectedWatchlistId, setSelectedWatchlistId] = useState<string | undefined>();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const activeWatchlist = useMemo(() => {
     if (!watchlists.length) return undefined;
     return watchlists.find((watchlist) => watchlist._id === selectedWatchlistId) ?? watchlists[0];
   }, [selectedWatchlistId, watchlists]);
-  const items = activeWatchlist?.items ?? (isLive ? [] : sampleWatchlistItems);
+  const items = activeWatchlist?.items ?? [];
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [activeWatchlist?._id]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handlePointerDown(event: MouseEvent) {
+      if (menuRef.current?.contains(event.target as Node)) return;
+      setMenuOpen(false);
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') setMenuOpen(false);
+    }
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [menuOpen]);
 
   return (
     <>
-      <section className="trading-watchlist-surface-note">
+      <section className="trading-watchlist-command-bar">
         <div>
           <div className="trading-section-label">Watchlist</div>
-          <h2>Track ideas before they become positions.</h2>
+          <h1>{activeWatchlist?.name ?? (isLive ? 'No watchlist yet' : 'Local preview data')}</h1>
+          <p>{activeWatchlist?.description || 'Track ideas before they become positions.'}</p>
         </div>
-        <p>
-          Create lists for companies you want to follow, then add tickers with a short note so every name has a clear reason to stay on the board.
-        </p>
+        <div className="trading-watchlist-command-actions" ref={menuRef}>
+          <span className={isLive ? 'trading-watchlist-live-badge live' : 'trading-watchlist-live-badge'}>{isLive ? 'Convex live' : 'Convex not connected'}</span>
+          <button type="button" className="trading-watchlist-manage-button" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen}>
+            Manage watchlist
+          </button>
+          {menuOpen ? (
+            isLive ? (
+              <LiveWatchlistManager activeWatchlist={activeWatchlist} canDelete={watchlists.length > 1} onCreated={setSelectedWatchlistId} onClose={() => setMenuOpen(false)} />
+            ) : (
+              <StaticWatchlistManager />
+            )
+          ) : null}
+        </div>
       </section>
 
-      <WatchlistStats items={items} watchlists={watchlists} live={isLive} isLoading={isLoading} />
-
-      <section className="trading-watchlist-grid">
+      <section className="trading-watchlist-workspace">
+        <WatchlistTabs watchlists={watchlists} activeId={activeWatchlist?._id} onSelect={setSelectedWatchlistId} />
         <article className="trading-watchlist-main-panel">
           <div className="trading-section-head">
             <div>
               <div className="trading-section-label">Tracked names</div>
               <h2>{isLoading ? 'Loading Convex…' : activeWatchlist?.name ?? (isLive ? 'No watchlist yet' : 'Local preview data')}</h2>
             </div>
-            <span className={isLive ? 'trading-watchlist-live-badge live' : 'trading-watchlist-live-badge'}>{isLive ? 'Convex live' : 'Convex not connected'}</span>
+            <span>{activeWatchlist?.pinned ? 'Pinned to Overview' : 'Not pinned'}</span>
           </div>
           {isLoading ? (
             <WatchlistLoadingState />
+          ) : items.length ? (
+            isLive ? <LiveWatchlistTable items={items} /> : <WatchlistTable items={items} canMutate={false} />
           ) : (
-            <>
-              <WatchlistRail watchlists={watchlists} activeId={activeWatchlist?._id} onSelect={setSelectedWatchlistId}>
-                {isLive ? (
-                  <LiveWatchlistManager activeWatchlist={activeWatchlist} canDelete={watchlists.length > 1} onCreated={setSelectedWatchlistId} />
-                ) : (
-                  <StaticWatchlistManager />
-                )}
-              </WatchlistRail>
-              {items.length ? (
-                isLive ? <LiveWatchlistTable items={items} /> : <WatchlistTable items={items} canMutate={false} />
-              ) : (
-                <div className="trading-watchlist-empty-state">
-                  <span>No tracked names yet</span>
-                  <p>Add a symbol from the side panel to start building this watchlist.</p>
-                </div>
-              )}
-            </>
+            <div className="trading-watchlist-empty-state">
+              <span>No tracked names yet</span>
+              <p>Open Manage watchlist to add symbols to this list.</p>
+            </div>
           )}
         </article>
-
-        <aside className="trading-watchlist-side-panel">
-          <div>
-            <div className="trading-section-label">Add symbol</div>
-            <h2>Add a company to this list.</h2>
-            <p>Enter a ticker, choose how closely you want to track it, and add a quick note about why it belongs here.</p>
-          </div>
-          <WatchlistAddForm enabled={isLive} watchlistId={isLive ? activeWatchlist?._id : undefined} />
-        </aside>
       </section>
+
+      <WatchlistNews items={items} isLoading={isLoading} />
     </>
   );
 }

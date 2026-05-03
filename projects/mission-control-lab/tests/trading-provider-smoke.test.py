@@ -197,6 +197,22 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("trading-watchlist-symbol-results", styles)
         self.assertIn("trading-watchlist-symbol-selected", styles)
 
+    def test_watchlist_redesign_keeps_table_first_management_and_news_placeholders(self) -> None:
+        watchlist = read_source("watchlist_client")
+        styles = read_source("trading_styles")
+
+        self.assertIn("trading-watchlist-command-bar", watchlist)
+        self.assertIn("trading-watchlist-tabs", watchlist)
+        self.assertIn("Manage watchlist", watchlist)
+        self.assertIn("Pin to Overview", watchlist)
+        self.assertIn("Watchlist news", watchlist)
+        self.assertIn("without showing fabricated headlines", watchlist)
+        self.assertIn("<th>Price</th>", watchlist)
+        self.assertIn("<th>1D</th>", watchlist)
+        self.assertNotIn("Market cap", watchlist)
+        self.assertIn("trading-watchlist-page-table", styles)
+        self.assertIn("trading-watchlist-news-placeholder", styles)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
