@@ -50,8 +50,8 @@ function week52Metadata(profile: TickerProfile) {
   return { low: formatCompactNumber(low), high: formatCompactNumber(high), position };
 }
 
-function compactDayPoints(profile: TickerProfile) {
-  const points = profile.priceSeries.rangeSeries?.['1D']?.points.map((point) => point.value).filter((value) => Number.isFinite(value)) ?? [];
+function compactFiveDayPoints(profile: TickerProfile) {
+  const points = profile.priceSeries.rangeSeries?.['5D']?.points.map((point) => point.value).filter((value) => Number.isFinite(value)) ?? [];
   if (points.length <= 18) return points;
   const step = (points.length - 1) / 17;
   return Array.from({ length: 18 }, (_, index) => points[Math.round(index * step)]).filter((value): value is number => typeof value === 'number');
@@ -71,7 +71,7 @@ function metadataFromProfile(profile: TickerProfile): WatchlistMetadata {
     week52Position: week52.position,
     price: cleanMetric(profile.quote.price),
     changePct: cleanMetric(profile.quote.changePct),
-    dayPoints: compactDayPoints(profile),
+    dayPoints: compactFiveDayPoints(profile),
     tone: profile.quote.tone,
     source: profile.sourceMap.profile.source,
   };

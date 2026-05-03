@@ -117,9 +117,9 @@ function sortWatchlistItems(items: WatchlistItem[], metadata: Map<string, Watchl
   });
 }
 
-function DaySparkline({ values, tone }: { values?: number[]; tone: WatchlistMetadataItem['tone'] }) {
+function FiveDaySparkline({ values, tone }: { values?: number[]; tone: WatchlistMetadataItem['tone'] }) {
   const cleanValues = (values ?? []).filter((value) => Number.isFinite(value));
-  if (cleanValues.length < 2) return <span className="trading-watchlist-spark-empty" aria-label="1D chart unavailable" />;
+  if (cleanValues.length < 2) return <span className="trading-watchlist-spark-empty" aria-label="5D chart unavailable" />;
   const width = 86;
   const height = 28;
   const min = Math.min(...cleanValues);
@@ -131,7 +131,7 @@ function DaySparkline({ values, tone }: { values?: number[]; tone: WatchlistMeta
   }).join(' ');
 
   return (
-    <svg className={`trading-watchlist-mini-spark ${tone}`} viewBox={`0 0 ${width} ${height}`} aria-label="1D price history sparkline" role="img">
+    <svg className={`trading-watchlist-mini-spark ${tone}`} viewBox={`0 0 ${width} ${height}`} aria-label="5D price history sparkline" role="img">
       <polyline points={points} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -432,7 +432,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
             <th>Symbol</th>
             <th>Company</th>
             <th>Price</th>
-            <th>1D</th>
+            <th>5D</th>
             <th>P/E</th>
             <th>52W</th>
             <th>Priority</th>
@@ -462,7 +462,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                   </span>
                 </td>
                 <td className="trading-watchlist-day-cell">
-                  <DaySparkline values={itemMetadata?.dayPoints} tone={tone} />
+                  <FiveDaySparkline values={itemMetadata?.dayPoints} tone={tone} />
                 </td>
                 <td>{itemMetadata?.pe ?? (metadataLoading ? 'Loading…' : '—')}</td>
                 <td><Week52Range metadata={itemMetadata} /></td>

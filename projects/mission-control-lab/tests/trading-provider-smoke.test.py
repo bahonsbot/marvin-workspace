@@ -20,6 +20,8 @@ SOURCE_FILES = {
     "xbrl_filings": ROOT / "lib" / "trading" / "sources" / "xbrl-filings.ts",
     "trading_styles": ROOT / "components" / "pages" / "trading" / "trading.module.css",
     "watchlist_client": ROOT / "components" / "pages" / "trading" / "watchlist" / "WatchlistClient.tsx",
+    "watchlist_metadata_route": ROOT / "app" / "api" / "trading" / "watchlist-metadata" / "route.ts",
+    "ticker_watchlist_button": ROOT / "components" / "pages" / "trading" / "ticker" / "TickerWatchlistButton.tsx",
 }
 
 
@@ -208,11 +210,15 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("Watchlist news", watchlist)
         self.assertIn("No linked headlines yet", watchlist)
         self.assertIn("<th>Price</th>", watchlist)
-        self.assertIn("<th>1D</th>", watchlist)
+        metadata_route = read_source("watchlist_metadata_route")
+        ticker_button = read_source("ticker_watchlist_button")
+        ticker_page = read_source("ticker_page")
+
+        self.assertIn("<th>5D</th>", watchlist)
         self.assertIn("<th>P/E</th>", watchlist)
         self.assertIn("<th>52W</th>", watchlist)
         self.assertIn("WatchlistLogo", watchlist)
-        self.assertIn("DaySparkline", watchlist)
+        self.assertIn("FiveDaySparkline", watchlist)
         self.assertIn("Week52Range", watchlist)
         self.assertIn("Sort by", watchlist)
         self.assertIn("PinIcon", watchlist)
@@ -224,6 +230,12 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("trading-watchlist-logo", styles)
         self.assertIn("trading-watchlist-52w", styles)
         self.assertIn("trading-watchlist-mini-spark", styles)
+        self.assertIn("rangeSeries?.['5D']", metadata_route)
+        self.assertIn("TickerWatchlistButton", ticker_page)
+        self.assertIn("watchlistApi.listWatchlists", ticker_button)
+        self.assertIn("watchlistApi.add", ticker_button)
+        self.assertIn("Choose where to save", ticker_button)
+        self.assertIn("trading-ticker-watchlist-menu", styles)
 
 
 if __name__ == "__main__":

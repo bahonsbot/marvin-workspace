@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { MarketTapeClient } from '@/components/pages/trading/MarketTapeClient';
 import { TickerPriceChart } from '@/components/pages/trading/TickerPriceChart';
 import { TickerQuoteRefresh } from '@/components/pages/trading/TickerQuoteRefresh';
+import { ConvexClientProvider } from '@/components/pages/trading/watchlist/ConvexClientProvider';
+import { TickerWatchlistButton } from '@/components/pages/trading/ticker/TickerWatchlistButton';
 import { TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { getMarketTape } from '@/lib/trading/market-tape';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
@@ -628,9 +630,15 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
 
       <div className="trading-ticker-tabs-row">
         <SectionJumpNav items={makeSectionNav()} />
-        <button type="button" className={`trading-watchlist-toggle ${ticker.inWatchlist ? 'in-watchlist' : 'not-watched'}`}>
-          {ticker.inWatchlist ? '− Watchlist' : '+ Watchlist'}
-        </button>
+        <ConvexClientProvider>
+          <TickerWatchlistButton
+            convexEnabled={Boolean(process.env.NEXT_PUBLIC_CONVEX_URL)}
+            symbol={ticker.symbol}
+            name={displayName}
+            exchange={ticker.exchange}
+            currency={ticker.currency}
+          />
+        </ConvexClientProvider>
       </div>
 
       <div className="trading-ticker-primary-grid">

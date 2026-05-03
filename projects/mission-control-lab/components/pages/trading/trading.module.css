@@ -1827,12 +1827,17 @@
   border-bottom: 0;
 }
 
+:global(.trading-ticker-watchlist-control) {
+  position: relative;
+  flex: 0 0 auto;
+  margin-bottom: 8px;
+}
+
 :global(.trading-watchlist-toggle) {
   flex: 0 0 auto;
   border: 1px solid rgba(28, 37, 32, 0.14);
   border-radius: 999px;
   padding: 7px 12px;
-  margin-bottom: 8px;
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
@@ -1855,6 +1860,85 @@
   border-color: rgba(23, 36, 30, 0.32);
   background: rgba(255, 253, 249, 0.94);
   color: #17241e;
+}
+
+:global(.trading-watchlist-toggle:disabled) {
+  opacity: 0.52;
+  cursor: not-allowed;
+}
+
+:global(.trading-ticker-watchlist-menu) {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  z-index: 80;
+  width: min(320px, calc(100vw - 32px));
+  border: 1px solid rgba(28, 37, 32, 0.14);
+  border-radius: 16px;
+  background: rgba(255, 253, 249, 0.98);
+  box-shadow: 0 22px 54px rgba(17, 32, 26, 0.18);
+  padding: 13px;
+  display: grid;
+  gap: 11px;
+}
+
+:global(.trading-ticker-watchlist-menu strong) {
+  display: block;
+  color: #17241e;
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+:global(.trading-ticker-watchlist-menu p) {
+  margin: 3px 0 0;
+  color: rgba(34, 48, 41, 0.62);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+:global(.trading-ticker-watchlist-menu label) {
+  display: grid;
+  gap: 5px;
+}
+
+:global(.trading-ticker-watchlist-menu label span) {
+  color: rgba(34, 48, 41, 0.58);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+:global(.trading-ticker-watchlist-menu select) {
+  width: 100%;
+  border: 1px solid rgba(28, 37, 32, 0.16);
+  border-radius: 12px;
+  background: rgba(255, 253, 249, 0.76);
+  color: #17241e;
+  padding: 10px 11px;
+  outline: none;
+}
+
+:global(.trading-ticker-watchlist-menu > button) {
+  border: 1px solid rgba(28, 37, 32, 0.16);
+  border-radius: 999px;
+  background: #17241e;
+  color: #fffdf9;
+  padding: 9px 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+:global(.trading-ticker-watchlist-menu > button:disabled) {
+  background: rgba(34, 48, 41, 0.26);
+  cursor: not-allowed;
+}
+
+:global(.trading-ticker-watchlist-status) {
+  border-top: 1px solid rgba(28, 37, 32, 0.1);
+  padding-top: 9px;
 }
 
 @media (max-width: 560px) {
