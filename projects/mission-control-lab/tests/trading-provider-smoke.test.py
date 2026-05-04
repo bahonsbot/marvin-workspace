@@ -190,6 +190,18 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("showSource={false}", ticker_page)
         self.assertIn("sourceList(sourceMetrics, sourceMetrics[0]?.source).replace('Sources:', 'Source:')", ticker_page)
 
+
+    def test_etf_ticker_page_omits_stock_only_glossary_and_estimates(self) -> None:
+        ticker_page = read_source("ticker_page")
+
+        self.assertIn("!isFundProfile ? (", ticker_page)
+        self.assertIn('<section id="finance-glossary"', ticker_page)
+        self.assertIn('<section id="estimates"', ticker_page)
+        self.assertIn("{ label: 'Glossary', href: '#finance-glossary' }", ticker_page)
+        fund_nav = ticker_page.split("if (isFundProfile)", 1)[1].split("return [", 1)[1].split("];", 1)[0]
+        self.assertNotIn("#finance-glossary", fund_nav)
+        self.assertNotIn("#estimates", fund_nav)
+
     def test_ticker_chart_accents_avoid_legacy_brown_palette(self) -> None:
         styles = read_source("trading_styles")
 

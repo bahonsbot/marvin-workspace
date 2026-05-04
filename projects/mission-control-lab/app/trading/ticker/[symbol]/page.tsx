@@ -87,7 +87,6 @@ function makeSectionNav(isFundProfile = false): SectionNavItem[] {
       { label: 'Holdings', href: '#fund-analytics', status: 'partial', note: 'Holdings and exposure when provider-backed fund facts are available' },
       { label: 'Dividends', href: '#dividends', status: 'unavailable' },
       { label: 'Technicals', href: '#technicals' },
-      { label: 'Glossary', href: '#finance-glossary' },
     ];
   }
   return [
@@ -1195,29 +1194,33 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </div>
       )}
 
-      <section id="finance-glossary" className="trading-finance-glossary" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
-        <div className="trading-section-head">
-          <div>
-            <div className="trading-section-label">Finance glossary</div>
-            <h2>Small notes for reading the numbers</h2>
-          </div>
-          <span className="trading-ticker-source-note">Educational context, not investment advice</span>
-        </div>
-        <dl className="trading-glossary-grid">
-          {financeGlossaryItems.map((item) => (
-            <div key={item.term}>
-              <dt>{item.term}</dt>
-              <dd>{item.meaning}</dd>
+      {!isFundProfile ? (
+        <section id="finance-glossary" className="trading-finance-glossary" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+          <div className="trading-section-head">
+            <div>
+              <div className="trading-section-label">Finance glossary</div>
+              <h2>Small notes for reading the numbers</h2>
             </div>
-          ))}
-        </dl>
-      </section>
+            <span className="trading-ticker-source-note">Educational context, not investment advice</span>
+          </div>
+          <dl className="trading-glossary-grid">
+            {financeGlossaryItems.map((item) => (
+              <div key={item.term}>
+                <dt>{item.term}</dt>
+                <dd>{item.meaning}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      ) : null}
 
       <div className="trading-ticker-placeholder-grid trading-ticker-provider-grid">
-        <section id="estimates" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
-          <div className="trading-section-label">Estimates</div>
-          <EstimatesPanel section={estimatesSection} />
-        </section>
+        {!isFundProfile ? (
+          <section id="estimates" style={tradingCardStyle({ minHeight: 190, maxHeight: 'none' })}>
+            <div className="trading-section-label">Estimates</div>
+            <EstimatesPanel section={estimatesSection} />
+          </section>
+        ) : null}
         {!isFundProfile ? (
           <section id="eps" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
             <div className="trading-section-label">EPS estimates</div>
