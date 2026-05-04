@@ -523,6 +523,7 @@ function buildEodhdNews(rows: EodhdNewsRow[], source: TickerSourceMeta): TickerN
     .map((item) => ({
       source: 'EODHD News',
       time: formatRelativeTime(item.date),
+      publishedAt: item.date ? new Date(item.date).toISOString() : undefined,
       title: item.title!,
       summary: summarizeNewsContent(item.content),
       url: item.link,

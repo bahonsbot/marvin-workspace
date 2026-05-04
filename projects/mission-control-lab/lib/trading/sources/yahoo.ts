@@ -299,6 +299,7 @@ function buildYahooNews(news: YahooNewsItem[], source: TickerSourceMeta): Ticker
     .map((item) => ({
       source: item.publisher ?? 'Yahoo Finance',
       time: formatNewsTime(item.providerPublishTime),
+      publishedAt: item.providerPublishTime ? new Date(item.providerPublishTime * 1000).toISOString() : undefined,
       title: item.title!,
       summary: item.relatedTickers?.length
         ? `Related tickers: ${item.relatedTickers.slice(0, 6).join(', ')}`

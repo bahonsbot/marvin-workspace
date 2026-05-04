@@ -68,6 +68,7 @@ export interface TickerFinancialHighlight {
 export interface TickerNewsItem {
   source: string;
   time: string;
+  publishedAt?: string;
   title: string;
   summary: string;
   url?: string;

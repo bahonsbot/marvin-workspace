@@ -7,6 +7,7 @@ type WatchlistNews = {
   name: string;
   source: string;
   time: string;
+  publishedAt?: string;
   title: string;
   summary: string;
   url?: string;
@@ -113,6 +114,7 @@ function newsFromProfile(profile: TickerProfile): WatchlistNews[] {
       name: profile.name,
       source: item.source,
       time: item.time,
+      publishedAt: item.publishedAt,
       title: item.title,
       summary: item.summary,
       url: item.url,
@@ -127,6 +129,18 @@ function payloadFromProfile(profile: TickerProfile): WatchlistProfilePayload {
   };
 }
 
+function newsSortValue(item: WatchlistNews) {
+  const timestamp = item.publishedAt ? Date.parse(item.publishedAt) : NaN;
+  if (Number.isFinite(timestamp)) return timestamp;
+  const relative = item.time.match(/^(\d+)\s*([mhd])\s+ago$/i);
+  if (!relative) return 0;
+  const value = Number(relative[1]);
+  const unit = relative[2].toLowerCase();
+  if (unit === 'm') return Date.now() - value * 60_000;
+  if (unit === 'h') return Date.now() - value * 60 * 60_000;
+  return Date.now() - value * 24 * 60 * 60_000;
+}
+
 function dedupeNews(items: WatchlistNews[]) {
   const seen = new Set<string>();
   const next: WatchlistNews[] = [];
@@ -135,9 +149,10 @@ function dedupeNews(items: WatchlistNews[]) {
     if (seen.has(key)) continue;
     seen.add(key);
     next.push(item);
-    if (next.length >= 18) break;
   }
-  return next;
+  return next
+    .sort((a, b) => newsSortValue(b) - newsSortValue(a) || a.symbol.localeCompare(b.symbol))
+    .slice(0, 16);
 }
 
 export async function GET(request: Request) {

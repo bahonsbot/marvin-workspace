@@ -51,6 +51,7 @@ interface WatchlistNewsItem {
   name: string;
   source: string;
   time: string;
+  publishedAt?: string;
   title: string;
   summary: string;
   url?: string;
@@ -883,28 +884,80 @@ function LiveWatchlistManager({ activeWatchlist, canDelete, onCreated, onClose }
   );
 }
 
+function newsSortValue(item: WatchlistNewsItem) {
+  const timestamp = item.publishedAt ? Date.parse(item.publishedAt) : NaN;
+  if (Number.isFinite(timestamp)) return timestamp;
+  const relative = item.time.match(/^(\d+)\s*([mhd])\s+ago$/i);
+  if (!relative) return 0;
+  const value = Number(relative[1]);
+  const unit = relative[2].toLowerCase();
+  if (unit === 'm') return Date.now() - value * 60_000;
+  if (unit === 'h') return Date.now() - value * 60 * 60_000;
+  return Date.now() - value * 24 * 60 * 60_000;
+}
+
+type WatchlistNewsSortKey = 'newest' | 'ticker';
+
 function WatchlistNews({ items, metadata, news, isLoading }: { items: WatchlistItem[]; metadata: Map<string, WatchlistMetadataItem>; news: WatchlistNewsItem[]; isLoading?: boolean }) {
+  const [symbolFilter, setSymbolFilter] = useState('all');
+  const [newsSort, setNewsSort] = useState<WatchlistNewsSortKey>('newest');
   const previewItems = items.slice(0, 6);
+  const newsSymbols = useMemo(() => Array.from(new Set(news.map((item) => item.symbol))).sort(), [news]);
+  const visibleNews = useMemo(() => {
+    const filtered = symbolFilter === 'all' ? news : news.filter((item) => item.symbol === symbolFilter);
+    const sorted = [...filtered].sort((a, b) => {
+      if (newsSort === 'ticker') return a.symbol.localeCompare(b.symbol) || newsSortValue(b) - newsSortValue(a);
+      return newsSortValue(b) - newsSortValue(a) || a.symbol.localeCompare(b.symbol);
+    });
+    return sorted.slice(0, 16);
+  }, [news, newsSort, symbolFilter]);
+
+  useEffect(() => {
+    if (symbolFilter !== 'all' && !newsSymbols.includes(symbolFilter)) setSymbolFilter('all');
+  }, [newsSymbols, symbolFilter]);
 
   return (
     <section className="trading-watchlist-news-panel">
       <div className="trading-section-head trading-watchlist-news-head">
-        <div className="trading-section-label">Watchlist news</div>
+        <div>
+          <div className="trading-section-label">Watchlist news</div>
+          {news.length ? <p>{visibleNews.length} of {news.length} linked headlines · newest first</p> : null}
+        </div>
+        {news.length ? (
+          <div className="trading-watchlist-news-controls">
+            <label>
+              <span>Filter</span>
+              <select value={symbolFilter} onChange={(event) => setSymbolFilter(event.target.value)}>
+                <option value="all">All tickers</option>
+                {newsSymbols.map((symbol) => <option key={symbol} value={symbol}>{symbol}</option>)}
+              </select>
+            </label>
+            <label>
+              <span>Sort</span>
+              <select value={newsSort} onChange={(event) => setNewsSort(event.target.value as WatchlistNewsSortKey)}>
+                <option value="newest">Newest</option>
+                <option value="ticker">Ticker</option>
+              </select>
+            </label>
+          </div>
+        ) : null}
       </div>
       {isLoading ? (
         <p>Loading watchlist news…</p>
-      ) : news.length ? (
+      ) : visibleNews.length ? (
         <div className="trading-watchlist-news-list">
-          {news.map((item) => (
+          {visibleNews.map((item) => (
             <article key={`${item.symbol}-${item.title}`}>
               <a href={item.url} target="_blank" rel="noreferrer" aria-label={`${item.title} source link`}>
-                <span>{item.symbol} · {item.source} · {item.time}{item.kind === 'video' ? ' · Video' : ''}</span>
+                <span><b>{item.symbol}</b> · {item.source} · {item.time}{item.kind === 'video' ? ' · Video' : ''}</span>
                 <strong>{item.title}</strong>
                 <p>{item.summary}</p>
               </a>
             </article>
           ))}
         </div>
+      ) : news.length ? (
+        <p>No headlines match the selected filter.</p>
       ) : items.length ? (
         <div className="trading-watchlist-news-placeholder">
           <div className="trading-watchlist-news-symbols">
