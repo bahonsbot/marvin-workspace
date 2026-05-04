@@ -7,7 +7,7 @@ import { TickerWatchlistButton } from '@/components/pages/trading/ticker/TickerW
 import { TradingPageFrame, tradingCardStyle } from '@/components/pages/trading/shared';
 import { getMarketTape } from '@/lib/trading/market-tape';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
-import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerDisplayMetric, TickerFinancialHighlight, TickerFinancialOverview, TickerProfileFact, TickerSourceMeta, TickerSupplementalSection } from '@/lib/trading/contracts';
+import type { TickerBalanceSheetSnapshot, TickerDataStatus, TickerDisplayMetric, TickerFinancialHighlight, TickerFinancialOverview, TickerProfileFact, TickerSourceMeta, TickerSourceName, TickerSupplementalSection } from '@/lib/trading/contracts';
 
 type SparklineTone = 'positive' | 'negative' | 'neutral';
 
@@ -83,6 +83,7 @@ function makeSectionNav(isFundProfile = false): SectionNavItem[] {
       { label: 'Price', href: '#price-history' },
       { label: 'Fund profile', href: '#company-profile', status: 'partial', note: 'Provider enrichment pending' },
       { label: 'Fund metrics', href: '#fund-metrics', status: 'partial', note: 'Issuer, ISIN, type, and provider-backed fund facts' },
+      { label: 'Holdings', href: '#fund-analytics', status: 'partial', note: 'Holdings and exposure when provider-backed fund facts are available' },
       { label: 'News', href: '#recent-news', status: 'partial', note: 'Provider decision pending' },
       { label: 'Reports', href: '#resources' },
       { label: 'Dividends', href: '#dividends', status: 'unavailable' },
@@ -313,6 +314,22 @@ function FundUnavailablePanel({ title, note }: { title: string; note: string }) 
   );
 }
 
+type FundMetricGroup = {
+  title: string;
+  eyebrow: string;
+  metrics: TickerDisplayMetric[];
+  emptyTitle: string;
+  emptyNote: string;
+};
+
+type SplitFundMetrics = {
+  summary: TickerDisplayMetric[];
+  holdings: TickerDisplayMetric[];
+  countries: TickerDisplayMetric[];
+  sectors: TickerDisplayMetric[];
+  cost: TickerDisplayMetric[];
+};
+
 function FundMetricListPanel({ metrics, emptyTitle, emptyNote }: { metrics: TickerDisplayMetric[]; emptyTitle: string; emptyNote: string }) {
   const availableMetrics = metrics.filter((metric) => cleanFactValue(metric.value));
   if (!availableMetrics.length) return <FundUnavailablePanel title={emptyTitle} note={emptyNote} />;
@@ -323,7 +340,7 @@ function FundMetricListPanel({ metrics, emptyTitle, emptyNote }: { metrics: Tick
           <div key={`${metric.label}-${metric.value}`}>
             <dt>{metric.label}</dt>
             <dd>{metric.value}</dd>
-            {metric.note ? <p>{metric.note}</p> : null}
+            {metric.note && !['Country exposure', 'Sector exposure'].includes(metric.note) ? <p>{metric.note}</p> : null}
           </div>
         ))}
       </dl>
@@ -332,15 +349,89 @@ function FundMetricListPanel({ metrics, emptyTitle, emptyNote }: { metrics: Tick
   );
 }
 
-function splitFundOwnershipMetrics(section?: TickerSupplementalSection) {
+function FundMetricGroupPanel({ group }: { group: FundMetricGroup }) {
+  return (
+    <section className="trading-fund-metric-group">
+      <div>
+        <span>{group.eyebrow}</span>
+        <h3>{group.title}</h3>
+      </div>
+      <FundMetricListPanel metrics={group.metrics} emptyTitle={group.emptyTitle} emptyNote={group.emptyNote} />
+    </section>
+  );
+}
+
+function FundAnalyticsPanel({ groups, sourceMetrics }: { groups: FundMetricGroup[]; sourceMetrics: TickerDisplayMetric[] }) {
+  return (
+    <>
+      <div className="trading-fund-analytics-panel">
+        {groups.map((group) => <FundMetricGroupPanel key={group.title} group={group} />)}
+      </div>
+      {sourceMetrics.length ? <p className="trading-financial-caption">{sourceList(sourceMetrics, sourceMetrics[0]?.source)}</p> : null}
+    </>
+  );
+}
+
+const countryNames = new Set([
+  'australia', 'belgium', 'brazil', 'canada', 'china', 'denmark', 'finland', 'france', 'germany', 'hong kong', 'india', 'ireland', 'israel', 'italy', 'japan', 'netherlands', 'norway', 'singapore', 'south africa', 'south korea', 'spain', 'sweden', 'switzerland', 'taiwan', 'united kingdom', 'united states', 'usa', 'other',
+]);
+
+const sectorNames = new Set([
+  'basic materials', 'communication services', 'consumer cyclical', 'consumer defensive', 'consumer discretionary', 'consumer goods', 'consumer staples', 'energy', 'financials', 'health care', 'healthcare', 'industrials', 'real estate', 'technology', 'telecommunications', 'utilities', 'other',
+]);
+
+function sourceName(metric: TickerDisplayMetric): TickerSourceName | undefined {
+  return metric.source?.source;
+}
+
+function splitFundOwnershipMetrics(section?: TickerSupplementalSection): SplitFundMetrics {
   const metrics = section?.metrics ?? [];
   const costLabels = new Set(['expense ratio', 'aum / fund size', 'replication', 'distribution policy']);
   const summaryLabels = new Set(['holdings', 'top 10 weight']);
   return {
     summary: metrics.filter((metric) => summaryLabels.has(metric.label.trim().toLowerCase())),
-    holdings: metrics.filter((metric) => !costLabels.has(metric.label.trim().toLowerCase()) && !summaryLabels.has(metric.label.trim().toLowerCase())),
+    holdings: metrics.filter((metric) => {
+      const label = metric.label.trim().toLowerCase();
+      if (costLabels.has(label) || summaryLabels.has(label) || countryNames.has(label) || sectorNames.has(label)) return false;
+      return true;
+    }),
+    countries: metrics.filter((metric) => metric.note === 'Country exposure' || (countryNames.has(metric.label.trim().toLowerCase()) && metric.note !== 'Sector exposure')),
+    sectors: metrics.filter((metric) => metric.note === 'Sector exposure' || (sectorNames.has(metric.label.trim().toLowerCase()) && metric.note !== 'Country exposure')),
     cost: metrics.filter((metric) => costLabels.has(metric.label.trim().toLowerCase())),
   };
+}
+
+function buildFundAnalyticsGroups(metrics: SplitFundMetrics): FundMetricGroup[] {
+  return [
+    {
+      title: 'Holdings summary',
+      eyebrow: 'Breadth',
+      metrics: metrics.summary,
+      emptyTitle: 'Holdings summary pending',
+      emptyNote: 'Holdings count and top-10 concentration will appear here when a fund-data provider exposes them.',
+    },
+    {
+      title: 'Top holdings',
+      eyebrow: 'Constituents',
+      metrics: metrics.holdings,
+      emptyTitle: 'Top holdings pending',
+      emptyNote: 'Top holdings need a fund-specific provider. This page will not infer constituents from the fund name.',
+    },
+    {
+      title: 'Country exposure',
+      eyebrow: 'Geography',
+      metrics: metrics.countries,
+      emptyTitle: 'Country exposure pending',
+      emptyNote: 'Country weights will appear when the provider exposes an allocation snapshot for this ISIN.',
+    },
+    {
+      title: 'Sector exposure',
+      eyebrow: 'Allocation',
+      metrics: metrics.sectors,
+      emptyTitle: 'Sector exposure pending',
+      emptyNote: 'Sector weights will appear when the provider exposes an allocation snapshot for this ISIN.',
+    },
+  ];
 }
 
 function titleFromProfile(tickerName: string, summary: string, facts: TickerProfileFact[]) {
@@ -712,7 +803,9 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const headerStats = normalizeHeaderStats(ticker.headerStats, rawProfileFacts);
   const isFundProfile = isFundLikeProfile(rawProfileFacts, headerStats);
   const fundMetricFacts = isFundProfile ? buildFundMetricFacts(ticker) : [];
-  const fundOwnershipMetrics = isFundProfile ? splitFundOwnershipMetrics(ticker.supplemental?.ownership) : { summary: [], holdings: [], cost: [] };
+  const fundOwnershipMetrics = isFundProfile ? splitFundOwnershipMetrics(ticker.supplemental?.ownership) : { summary: [], holdings: [], countries: [], sectors: [], cost: [] };
+  const fundAnalyticsGroups = isFundProfile ? buildFundAnalyticsGroups(fundOwnershipMetrics) : [];
+  const fundAnalyticsSourceMetrics = [...fundOwnershipMetrics.summary, ...fundOwnershipMetrics.holdings, ...fundOwnershipMetrics.countries, ...fundOwnershipMetrics.sectors].filter((metric) => sourceName(metric));
   const profileFactsByLabel = new Map(profileFacts.map((fact) => [fact.label.toLowerCase(), fact]));
   for (const stat of headerStats) {
     const key = stat.label.toLowerCase();
@@ -968,19 +1061,15 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       </div>
 
       {isFundProfile ? (
-        <div className="trading-ticker-lower-grid">
-          <section id="financial-overview" style={tradingCardStyle({ minHeight: 260, maxHeight: 'none' })}>
+        <div className="trading-ticker-lower-grid trading-ticker-fund-analytics-grid">
+          <section id="fund-analytics" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
             <div className="trading-section-head">
               <div>
                 <div className="trading-section-label">Fund analytics</div>
                 <h2>Holdings and exposure</h2>
               </div>
             </div>
-            <FundMetricListPanel
-              metrics={[...fundOwnershipMetrics.summary, ...fundOwnershipMetrics.holdings]}
-              emptyTitle="Holdings provider not connected"
-              emptyNote="The active market-data path identifies the fund and its listing, but does not expose holdings, sector weights, or benchmark composition yet."
-            />
+            <FundAnalyticsPanel groups={fundAnalyticsGroups} sourceMetrics={fundAnalyticsSourceMetrics} />
           </section>
 
           <section id="key-ratios" style={tradingCardStyle({ minHeight: 260, maxHeight: 'none' })}>
@@ -1056,12 +1145,12 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div className="trading-section-label">Dividends</div>
           <SupplementalDataPanel section={dividendsSection} />
         </section>
-        <section id="ownership" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
-          <div className="trading-section-label">{isFundProfile ? 'Holdings' : 'Ownership'}</div>
-          {isFundProfile
-            ? <FundMetricListPanel metrics={fundOwnershipMetrics.holdings} emptyTitle="Holdings feed pending" emptyNote="Top holdings and issuer allocation need a fund-specific provider. This page will not infer holdings from the fund name." />
-            : <SupplementalDataPanel section={ticker.supplemental?.ownership} />}
-        </section>
+        {!isFundProfile ? (
+          <section id="ownership" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
+            <div className="trading-section-label">Ownership</div>
+            <SupplementalDataPanel section={ticker.supplemental?.ownership} />
+          </section>
+        ) : null}
         <section id="technicals" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
           <div className="trading-section-label">Technicals</div>
           <SupplementalDataPanel section={technicalsSection} />

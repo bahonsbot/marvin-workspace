@@ -111,8 +111,9 @@ function parseExposureSegment(text: string, heading: 'Countries' | 'Sectors', so
     .filter((index) => index > start);
   const end = endCandidates.length ? Math.min(...endCandidates) : Math.min(text.length, start + 600);
   const segment = text.slice(start + heading.length, end);
+  const note = heading === 'Countries' ? 'Country exposure' : 'Sector exposure';
   return Array.from(segment.matchAll(/([A-Z][A-Za-z ()&.,'’\-]{2,50}?)\s+([0-9]+(?:\.[0-9]+)?%)/g))
-    .map((match) => metric(match[1], match[2], source))
+    .map((match) => metric(match[1], match[2], source, note))
     .filter((item): item is TickerDisplayMetric => Boolean(item))
     .slice(0, 8);
 }
