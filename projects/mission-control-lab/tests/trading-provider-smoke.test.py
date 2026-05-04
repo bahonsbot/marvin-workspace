@@ -162,6 +162,10 @@ class TradingProviderSmokeTests(unittest.TestCase):
 
         self.assertIn("resolvedWatchlistName", watchlist)
         self.assertIn("metadata?.name", watchlist)
+        self.assertIn("isProviderPlaceholderDisplayName", watchlist)
+        self.assertIn("covered by eodhd market-data endpoints", watchlist)
+        self.assertIn("resolvedWatchlistSymbol", watchlist)
+        self.assertIn("metadata?.symbol", watchlist)
         self.assertIn("name: profile.name", route)
 
     def test_wikipedia_profile_repair_guards_cover_recent_bad_profile_classes(self) -> None:

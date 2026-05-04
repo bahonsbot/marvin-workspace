@@ -105,6 +105,13 @@ function parseMetricNumber(value: string | undefined) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function isProviderPlaceholderDisplayName(value: string | undefined | null) {
+  const normalizedValue = (value ?? '').trim().toLowerCase();
+  return normalizedValue.includes('covered by eodhd market-data endpoints')
+    || normalizedValue.includes('verified company summary is not available yet')
+    || normalizedValue.includes('verified fund strategy summary is not available yet');
+}
+
 function isTickerLikeDisplayName(value: string | undefined | null, symbol: string) {
   const normalizedValue = (value ?? '').trim().toUpperCase();
   if (!normalizedValue) return true;
@@ -117,8 +124,12 @@ function isTickerLikeDisplayName(value: string | undefined | null, symbol: strin
 
 function resolvedWatchlistName(item: WatchlistItem, metadata?: WatchlistMetadataItem) {
   const metadataName = metadata?.name?.trim();
-  if (metadataName && (isTickerLikeDisplayName(item.name, item.symbol) || !item.name?.trim())) return metadataName;
+  if (metadataName && (isTickerLikeDisplayName(item.name, item.symbol) || isProviderPlaceholderDisplayName(item.name) || !item.name?.trim())) return metadataName;
   return item.name?.trim() || metadataName || 'Provider pending';
+}
+
+function resolvedWatchlistSymbol(item: WatchlistItem, metadata?: WatchlistMetadataItem) {
+  return metadata?.symbol || item.symbol || item.displaySymbol;
 }
 
 function sortWatchlistItems(items: WatchlistItem[], metadata: Map<string, WatchlistMetadataItem>, sortKey: WatchlistSortKey) {
@@ -468,7 +479,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                   <div className="trading-watchlist-symbol-cell">
                     <WatchlistLogo item={item} metadata={itemMetadata} />
                     <div>
-                      <Link href={symbolHref(item.symbol)}>{item.displaySymbol || item.symbol}</Link>
+                      <Link href={symbolHref(resolvedWatchlistSymbol(item, itemMetadata))}>{resolvedWatchlistSymbol(item, itemMetadata)}</Link>
                     </div>
                   </div>
                 </td>
@@ -487,10 +498,10 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                 <td><em className={`trading-watchlist-priority ${item.priority}`}>{priorityLabels[item.priority]}</em></td>
                 <td><em className={`trading-watchlist-alert ${item.alertLevel}`}>{alertLabels[item.alertLevel]}</em></td>
                 <td className="trading-watchlist-row-actions">
-                  <button type="button" className="trading-watchlist-more-button" onClick={(event) => toggleRowMenu(item._id, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`More details for ${item.displaySymbol || item.symbol}`}>
+                  <button type="button" className="trading-watchlist-more-button" onClick={(event) => toggleRowMenu(item._id, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`More details for ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
                     …
                   </button>
-                  <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id} aria-label={`Remove ${item.displaySymbol || item.symbol}`}>
+                  <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id} aria-label={`Remove ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
                     {removingId === item._id ? '…' : '−'}
                   </button>
                   {openRowMenu?.id === item._id ? (
@@ -698,7 +709,7 @@ function WatchlistNews({ items, metadata, isLoading }: { items: WatchlistItem[];
             {previewItems.map((item) => (
               <span key={item._id}>
                 <WatchlistLogo item={item} metadata={metadata.get(item.symbol)} />
-                {item.displaySymbol || item.symbol}
+                {resolvedWatchlistSymbol(item, metadata.get(item.symbol))}
               </span>
             ))}
           </div>
