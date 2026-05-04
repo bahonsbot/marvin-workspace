@@ -127,6 +127,10 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("buildFundAnalyticsGroups", ticker_page)
         self.assertIn("splitFundOwnershipMetrics", ticker_page)
         self.assertIn("profileSummaryParagraphs", ticker_page)
+        self.assertIn("fundProfileIdentityFacts", ticker_page)
+        self.assertIn("displayProfileFactsForPage", ticker_page)
+        self.assertIn("AUM / Fund Size", ticker_page)
+        self.assertIn("Fund Domicile", ticker_page)
         self.assertIn("fundOwnershipMetrics.countries", ticker_page)
         self.assertIn("fundOwnershipMetrics.sectors", ticker_page)
         self.assertIn("trading-ticker-fund-analytics-wide", styles)
@@ -162,6 +166,19 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("<div className=\"trading-section-label\">Ownership</div>", ticker_page)
         self.assertNotIn("Holdings feed pending", ticker_page)
 
+
+
+    def test_etf_profile_keeps_identity_facts_and_metrics_hold_fund_details(self) -> None:
+        ticker_page = read_source("ticker_page")
+        styles = read_source("trading_styles")
+
+        self.assertIn("const keep = new Set(['instrument type', 'exchange', 'country', 'isin'])", ticker_page)
+        self.assertIn("displayProfileFactsForPage", ticker_page)
+        self.assertIn("fundProfileIdentityFacts(displayProfileFacts)", ticker_page)
+        self.assertIn("AUM / Fund Size", ticker_page)
+        self.assertIn("Fund Domicile", ticker_page)
+        self.assertIn("font-weight: 500", styles)
+        self.assertIn("font-weight: 450", styles)
 
     def test_etf_ticker_page_removes_news_and_uses_full_width_analytics(self) -> None:
         ticker_page = read_source("ticker_page")

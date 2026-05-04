@@ -254,6 +254,11 @@ function cleanProfileFacts(facts: TickerProfileFact[]) {
   return Array.from(preferred.values());
 }
 
+function fundProfileIdentityFacts(facts: TickerProfileFact[]) {
+  const keep = new Set(['instrument type', 'exchange', 'country', 'isin']);
+  return facts.filter((fact) => keep.has(fact.label.trim().toLowerCase()));
+}
+
 function profileFactValue(fact: TickerProfileFact) {
   if (fact.label.toLowerCase() !== 'website' || !fact.value || fact.value === 'Provider pending') return fact.value;
   const href = /^https?:\/\//i.test(fact.value) ? fact.value : `https://${fact.value}`;
@@ -309,10 +314,10 @@ function buildFundMetricFacts(profile: {
   add('Category', factByLabel(facts, ['Category', 'Fund Category', 'Sector']));
   add('Benchmark', factByLabel(facts, ['Benchmark', 'Index', 'Underlying Index']));
   add('ISIN', factByLabel(facts, ['ISIN']));
-  add('Domicile / country', factByLabel(facts, ['Domicile', 'Country']) ?? metricByLabel(profile.headerStats, ['Country']));
+  add('Domicile / country', factByLabel(facts, ['Domicile', 'Country', 'Fund Domicile']) ?? metricByLabel(profile.headerStats, ['Country']));
   add('Exchange', profile.exchange);
   add('Currency', profile.currency);
-  add('AUM / net assets', factByLabel(facts, ['Total Assets', 'Net Assets', 'AUM']));
+  add('AUM / net assets', factByLabel(facts, ['Total Assets', 'Net Assets', 'AUM', 'AUM / Fund Size']));
   add('Expense ratio', factByLabel(facts, ['Expense Ratio', 'Annual Report Expense Ratio']));
   add('Holdings', factByLabel(facts, ['Holdings Count']));
   add('Top 10 weight', factByLabel(facts, ['Top 10 Weight']));
@@ -878,6 +883,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
     }
   }
   const displayProfileFacts = Array.from(profileFactsByLabel.values()).filter((fact) => !['sector', 'industry', 'currency'].includes(fact.label.trim().toLowerCase()));
+  const displayProfileFactsForPage = isFundProfile ? fundProfileIdentityFacts(displayProfileFacts) : displayProfileFacts;
   const financialHighlightSlots = buildFinancialHighlightSlots(ticker.financialHighlights);
   const visibleHighlightRatioLabels = highlightedRatioLabels(ticker.financialHighlights);
   const keyRatios = stripMetricSourceNotes(ticker.keyRatios).filter((ratio) => !visibleHighlightRatioLabels.has(keyRatioHighlightKey(ratio.label)));
@@ -959,7 +965,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
             </div>
           ) : null}
           <dl className="trading-profile-facts">
-            {displayProfileFacts.map((fact) => (
+            {displayProfileFactsForPage.map((fact) => (
               <div key={fact.label}>
                 <dt>{fact.label}</dt>
                 <dd>{profileFactValue(fact)}</dd>

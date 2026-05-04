@@ -1141,19 +1141,19 @@
 }
 
 :global(.trading-fund-list-panel dt) {
-  color: rgba(34, 48, 41, 0.6);
+  color: rgba(34, 48, 41, 0.56);
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 :global(.trading-fund-list-panel dd) {
   margin: 0;
-  color: #18211c;
+  color: rgba(24, 33, 28, 0.82);
   font-size: 13px;
-  font-weight: 650;
-  line-height: 1.25;
+  font-weight: 500;
+  line-height: 1.3;
 }
 
 :global(.trading-fund-list-panel p) {
@@ -1187,11 +1187,11 @@
 }
 
 :global(.trading-fund-metric-group span) {
-  color: rgba(34, 48, 41, 0.5);
+  color: rgba(34, 48, 41, 0.48);
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.11em;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 :global(.trading-fund-metric-group h3) {
@@ -1199,7 +1199,7 @@
   color: #18211c;
   font-size: 15px;
   line-height: 1.2;
-  font-weight: 650;
+  font-weight: 600;
 }
 
 :global(.trading-fund-metric-group .trading-fund-list-panel) {
@@ -1223,12 +1223,12 @@
 }
 
 :global(.trading-fund-exposure-bars span) {
-  color: rgba(34, 48, 41, 0.64);
+  color: rgba(34, 48, 41, 0.62);
   font-size: 11px;
   line-height: 1.2;
   text-transform: none;
   letter-spacing: 0;
-  font-weight: 650;
+  font-weight: 450;
 }
 
 :global(.trading-fund-exposure-bars i) {
@@ -1247,9 +1247,9 @@
 }
 
 :global(.trading-fund-exposure-bars strong) {
-  color: #18211c;
+  color: rgba(24, 33, 28, 0.74);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 550;
   text-align: right;
 }
 
