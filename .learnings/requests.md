@@ -230,3 +230,12 @@ Capabilities the user wanted but don't exist.
 ## 2026-05-03 — Lab Trading follow-ups for tomorrow
 - Continue `IREN.US` cleanup beyond the emergency guard: find a proper company summary/logo/source path for IREN Limited / Iris Energy, avoiding fake data and avoiding irrelevant Wikipedia matches.
 - Revisit the Watchlist page News element and make it product-real: provider-backed if possible, otherwise honest empty state without fabricated headlines.
+
+## [FEAT-20260505-0042]
+
+**Requested:** Add price alerts for Mission Control Lab watchlist items, define actions triggered by each Alert level, and begin the first phase of the Trading Portfolio page.
+**Why needed:** Philippe wants the Trading Lab watchlist to move from passive monitoring into actionable alert workflows, then start connecting holdings/portfolio context as the next major surface.
+**Complexity:** medium-high
+
+**Priority:** high
+**Status:** pending
