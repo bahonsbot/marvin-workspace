@@ -230,6 +230,13 @@ function normalizeHeaderStats(stats: TickerDisplayMetric[], facts: TickerProfile
   });
 }
 
+function isFundLikeProfile(facts: TickerProfileFact[], stats: TickerDisplayMetric[]) {
+  const quoteType = facts.find((fact) => ['quote type', 'instrument type'].includes(fact.label.toLowerCase()))?.value;
+  const typeStat = stats.find((stat) => stat.label.toLowerCase() === 'type')?.value;
+  const raw = `${quoteType ?? ''} ${typeStat ?? ''}`.toUpperCase();
+  return ['ETF', 'ETN', 'FUND', 'TRUST', 'MUTUAL FUND', 'UCITS'].some((token) => raw.includes(token));
+}
+
 function stripMetricSourceNotes(metrics: TickerDisplayMetric[]) {
   return metrics.map((metric) => ({ ...metric, note: undefined, source: undefined }));
 }
@@ -571,6 +578,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const profileFacts = cleanProfileFacts(rawProfileFacts);
   const displayName = titleFromProfile(ticker.name, ticker.companyProfile.summary, rawProfileFacts);
   const headerStats = normalizeHeaderStats(ticker.headerStats, rawProfileFacts);
+  const isFundProfile = isFundLikeProfile(rawProfileFacts, headerStats);
   const profileFactsByLabel = new Map(profileFacts.map((fact) => [fact.label.toLowerCase(), fact]));
   for (const stat of headerStats) {
     const key = stat.label.toLowerCase();
@@ -652,7 +660,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </section>
 
         <section id="company-profile" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
-          <div className="trading-section-label">Company profile</div>
+          <div className="trading-section-label">{isFundProfile ? 'Fund profile' : 'Company profile'}</div>
           {profileSummary ? <p className="trading-ticker-profile-copy">{profileSummary}</p> : null}
           <dl className="trading-profile-facts">
             {displayProfileFacts.map((fact) => (

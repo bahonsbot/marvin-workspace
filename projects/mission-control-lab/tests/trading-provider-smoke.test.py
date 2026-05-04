@@ -15,6 +15,7 @@ SOURCE_FILES = {
     "ticker_profile": ROOT / "lib" / "trading" / "ticker-profile.ts",
     "contracts": ROOT / "lib" / "trading" / "contracts.ts",
     "reference_enrichment": ROOT / "lib" / "trading" / "sources" / "reference-enrichment.ts",
+    "eodhd": ROOT / "lib" / "trading" / "sources" / "eodhd.ts",
     "yfinance_bridge": ROOT / "lib" / "trading" / "sources" / "yfinance-bridge.ts",
     "wikipedia": ROOT / "lib" / "trading" / "sources" / "wikipedia.ts",
     "xbrl_filings": ROOT / "lib" / "trading" / "sources" / "xbrl-filings.ts",
@@ -134,6 +135,34 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("antisemitic treatise", ticker_profile)
         self.assertIn("martin luther", ticker_profile)
         self.assertIn("jews", ticker_profile)
+        self.assertIn("sophia kianni", ticker_profile)
+        self.assertIn("phia ai", ticker_profile)
+
+    def test_eodhd_dotted_symbol_resolution_uses_search_metadata(self) -> None:
+        eodhd = read_source("eodhd")
+
+        self.assertIn("parseDottedSymbol", eodhd)
+        self.assertIn("fetchEodhdSearch(parsed.code)", eodhd)
+        self.assertIn("searchResult: exact", eodhd)
+        self.assertIn("preferredInstrumentName", eodhd)
+
+    def test_etf_fallback_profile_summary_is_honest_and_not_provider_debug_copy(self) -> None:
+        eodhd = read_source("eodhd")
+        reference = read_source("reference_enrichment")
+
+        self.assertIn("fallbackProfileSummary", eodhd)
+        self.assertIn("verified fund strategy summary is not available yet", eodhd)
+        self.assertNotIn("covered by EODHD market-data endpoints", eodhd)
+        self.assertIn("isFundLikeQuoteType", reference)
+        self.assertIn("fallbackSummary", reference)
+
+    def test_watchlist_table_prefers_provider_metadata_names_without_overwriting_saved_rows(self) -> None:
+        watchlist = read_source("watchlist_client")
+        route = read_source("watchlist_metadata_route")
+
+        self.assertIn("resolvedWatchlistName", watchlist)
+        self.assertIn("metadata?.name", watchlist)
+        self.assertIn("name: profile.name", route)
 
     def test_wikipedia_profile_repair_guards_cover_recent_bad_profile_classes(self) -> None:
         wikipedia = read_source("wikipedia")
@@ -146,11 +175,13 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("'2454.TW': 'MediaTek'", wikipedia)
         self.assertIn("'2646.TW': 'Starlux Airlines'", wikipedia)
         self.assertIn("'IREN.US': 'Iris Energy'", wikipedia)
+        self.assertIn("'PHIA.AS': 'Philips'", wikipedia)
         self.assertIn("antisemitic treatise", wikipedia)
         self.assertIn("may refer to:", wikipedia)
         self.assertIn("title.startsWith('list of ')", wikipedia)
         self.assertIn("stock market index", wikipedia)
         self.assertIn("hang seng index", wikipedia)
+        self.assertIn("identityTokens", wikipedia)
         self.assertIn("hasMeaningfulIdentityOverlap", wikipedia)
         self.assertIn("is covered by eodhd market-data endpoints", ticker_profile)
         self.assertIn("'WAWI.OL': true", ticker_profile)

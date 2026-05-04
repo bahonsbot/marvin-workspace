@@ -59,6 +59,44 @@ function mergeFinancialHighlights(primary: TickerProfile['financialHighlights'],
   return Array.from(byLabel.values());
 }
 
+function factValue(facts: TickerProfile['companyProfile']['facts'], label: string) {
+  return facts.find((fact) => fact.label.trim().toLowerCase() === label.trim().toLowerCase())?.value ?? null;
+}
+
+function normalizeIdentity(value: string | null | undefined) {
+  return (value ?? '').trim().replace(/\s+/g, ' ');
+}
+
+function isTickerLikeName(value: string | null | undefined, symbol: string) {
+  const normalizedValue = normalizeIdentity(value).toUpperCase();
+  if (!normalizedValue) return true;
+  const normalizedSymbol = symbol.trim().toUpperCase();
+  if (!normalizedSymbol) return true;
+  if (normalizedValue === normalizedSymbol) return true;
+  if (normalizedValue === normalizedSymbol.split('.')[0]) return true;
+  return false;
+}
+
+function isFundLikeQuoteType(value: string | null | undefined) {
+  const normalized = normalizeIdentity(value).toUpperCase();
+  return ['ETF', 'ETN', 'FUND', 'TRUST', 'MUTUAL FUND', 'UCITS'].some((token) => normalized.includes(token));
+}
+
+function isGenericProfileSummary(summary: string) {
+  const normalized = summary.toLowerCase();
+  return normalized.includes('is covered by eodhd market-data endpoints')
+    || normalized.includes('verified company summary is not available yet')
+    || normalized.includes('verified fund strategy summary is not available yet');
+}
+
+function fallbackSummary(name: string, quoteType: string | null | undefined, exchange: string) {
+  if (isFundLikeQuoteType(quoteType)) {
+    const kind = normalizeIdentity(quoteType)?.toLowerCase() || 'fund';
+    return `${name} is a listed ${kind} on ${exchange}. Price history and market metadata are available, but a verified fund strategy summary is not available yet.`;
+  }
+  return `${name} trades on ${exchange}. Price history and market metadata are available, but a verified company summary is not available yet.`;
+}
+
 export async function enrichTickerProfileWithReferenceData(profile: TickerProfile): Promise<TickerProfile> {
   const shouldFetchNonUsFilings = profile.sourceMap.filings.source !== 'sec' && (
     profile.sourceMap.filings.freshness === 'missing' ||
@@ -88,6 +126,16 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     if (companyProfile.source.freshness === 'missing' && yfinanceMetaSource) {
       companyProfile.source = yfinanceMetaSource;
     }
+  }
+
+  const companyNameFact = normalizeIdentity(factValue(companyProfile.facts, 'Company Name'));
+  const quoteTypeFact = factValue(companyProfile.facts, 'Quote Type') ?? factValue(companyProfile.facts, 'Instrument Type');
+  const promotedName = !isTickerLikeName(companyNameFact, profile.symbol)
+    ? companyNameFact
+    : normalizeIdentity(profile.name);
+  const displayName = !isTickerLikeName(promotedName, profile.symbol) ? promotedName : profile.symbol;
+  if (isGenericProfileSummary(companyProfile.summary)) {
+    companyProfile.summary = fallbackSummary(displayName, quoteTypeFact, profile.exchange);
   }
 
   let supplemental: TickerSupplementalData | undefined = profile.supplemental ? {
@@ -155,6 +203,7 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
 
   return {
     ...profile,
+    name: displayName,
     headerStats: mergeHeaderStats(profile.headerStats, yfinanceData?.headerStats, yfinanceMetaSource ?? profile.sourceMap.profile),
     companyProfile,
     keyRatios: yfinanceMetaSource

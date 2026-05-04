@@ -61,6 +61,7 @@ const knownWikipediaTitles: Record<string, string> = {
   '2646.TW': 'Starlux Airlines',
   IREN: 'Iris Energy',
   'IREN.US': 'Iris Energy',
+  'PHIA.AS': 'Philips',
 };
 
 const knownLogoFiles: Record<string, string> = {
@@ -102,10 +103,18 @@ async function resolveWikipediaTitle(symbol: string, companyName: string) {
   const known = knownWikipediaTitles[normalizedSymbol] ?? knownWikipediaTitles[normalizedSymbol.replace(/\.US$/, '')];
   if (known) return known;
 
-  const search = await fetchJson<WikipediaSearchResponse>(
-    `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(`${companyName} company`)}&srlimit=1&format=json&origin=*`,
-  );
-  return search?.query?.search?.[0]?.title ?? null;
+  for (const query of [
+    companyName,
+    `${companyName} company`,
+    `${companyName} fund`,
+  ]) {
+    const search = await fetchJson<WikipediaSearchResponse>(
+      `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=1&format=json&origin=*`,
+    );
+    const title = search?.query?.search?.[0]?.title ?? null;
+    if (title) return title;
+  }
+  return null;
 }
 
 async function resolveWikidataId(title: string) {
@@ -263,6 +272,35 @@ function normalizeIdentityText(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
+function identityTokens(value: string) {
+  return normalizeIdentityText(value)
+    .split(' ')
+    .filter((token) => token.length >= 3)
+    .filter((token) => ![
+      'corporation',
+      'corp',
+      'inc',
+      'limited',
+      'ltd',
+      'company',
+      'co',
+      'plc',
+      'holdings',
+      'holding',
+      'group',
+      'ordinary',
+      'shares',
+      'stock',
+      'fund',
+      'etf',
+      'trust',
+      'sa',
+      'nv',
+      'n',
+      'v',
+    ].includes(token));
+}
+
 function hasKnownWikipediaTitle(symbol: string) {
   const normalizedSymbol = symbol.toUpperCase();
   return Boolean(knownWikipediaTitles[normalizedSymbol] ?? knownWikipediaTitles[normalizedSymbol.replace(/\.US$/, '')]);
@@ -273,8 +311,7 @@ function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefi
   const cleanedExtract = (extract ?? '').trim().toLowerCase();
   const cleanedCompany = companyName.trim().toLowerCase();
   const identityTitle = normalizeIdentityText(pageTitle);
-  const identityCompany = normalizeIdentityText(companyName);
-  const meaningfulParts = identityCompany.split(' ').filter((part) => !['corporation', 'corp', 'inc', 'limited', 'ltd', 'company', 'co', 'plc', 'holdings', 'holding', 'group'].includes(part));
+  const meaningfulParts = identityTokens(companyName);
   const companyLead = meaningfulParts.slice(0, 2).join(' ');
   const hasMeaningfulIdentityOverlap = meaningfulParts.some((part) => part.length >= 4 && (identityTitle.includes(part) || normalizeIdentityText(cleanedExtract).includes(part)));
   if (cleanedExtract.includes(' may refer to:')) return true;
@@ -287,6 +324,7 @@ function isAmbiguousWikipediaProfile(pageTitle: string, extract: string | undefi
   if (cleanedExtract.includes('antisemitic treatise')) return true;
   if (cleanedExtract.includes('martin luther') && cleanedExtract.includes('jews')) return true;
   if (title.length <= 4 && !cleanedCompany.startsWith(title)) return true;
+  if (!trustKnownTitle && meaningfulParts.length >= 1 && !hasMeaningfulIdentityOverlap) return true;
   if (!trustKnownTitle && companyLead && !identityTitle.includes(companyLead) && !normalizeIdentityText(cleanedExtract).includes(companyLead) && !hasMeaningfulIdentityOverlap) return true;
   return false;
 }

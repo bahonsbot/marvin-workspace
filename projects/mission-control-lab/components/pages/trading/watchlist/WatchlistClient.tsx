@@ -32,6 +32,7 @@ interface TickerSearchResponse {
 
 interface WatchlistMetadataItem {
   symbol: string;
+  name: string;
   logoUrl: string | null;
   logoAlt: string;
   pe: string;
@@ -104,11 +105,27 @@ function parseMetricNumber(value: string | undefined) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function isTickerLikeDisplayName(value: string | undefined | null, symbol: string) {
+  const normalizedValue = (value ?? '').trim().toUpperCase();
+  if (!normalizedValue) return true;
+  const normalizedSymbol = symbol.trim().toUpperCase();
+  if (!normalizedSymbol) return true;
+  if (normalizedValue === normalizedSymbol) return true;
+  if (normalizedValue === normalizedSymbol.split('.')[0]) return true;
+  return false;
+}
+
+function resolvedWatchlistName(item: WatchlistItem, metadata?: WatchlistMetadataItem) {
+  const metadataName = metadata?.name?.trim();
+  if (metadataName && (isTickerLikeDisplayName(item.name, item.symbol) || !item.name?.trim())) return metadataName;
+  return item.name?.trim() || metadataName || 'Provider pending';
+}
+
 function sortWatchlistItems(items: WatchlistItem[], metadata: Map<string, WatchlistMetadataItem>, sortKey: WatchlistSortKey) {
   return [...items].sort((a, b) => {
     const metaA = metadata.get(a.symbol);
     const metaB = metadata.get(b.symbol);
-    if (sortKey === 'name') return (a.name || a.symbol).localeCompare(b.name || b.symbol);
+    if (sortKey === 'name') return resolvedWatchlistName(a, metaA).localeCompare(resolvedWatchlistName(b, metaB));
     if (sortKey === 'price') return (parseMetricNumber(metaB?.price) ?? -Infinity) - (parseMetricNumber(metaA?.price) ?? -Infinity);
     if (sortKey === 'change') return (parseMetricNumber(metaB?.changePct) ?? -Infinity) - (parseMetricNumber(metaA?.changePct) ?? -Infinity);
     if (sortKey === 'priority') return priorityRank[a.priority] - priorityRank[b.priority];
@@ -444,6 +461,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
           {items.map((item) => {
             const itemMetadata = metadata.get(item.symbol);
             const tone = itemMetadata?.tone ?? 'neutral';
+            const displayName = resolvedWatchlistName(item, itemMetadata);
             return (
               <tr key={item._id}>
                 <td>
@@ -454,7 +472,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                     </div>
                   </div>
                 </td>
-                <td>{item.name || 'Provider pending'}</td>
+                <td>{displayName}</td>
                 <td>
                   {itemMetadata?.price ?? (metadataLoading ? 'Loading…' : '—')}
                   <span className={`trading-watchlist-change ${tone}`}>
@@ -477,7 +495,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                   </button>
                   {openRowMenu?.id === item._id ? (
                     <div className="trading-watchlist-row-menu" style={{ left: openRowMenu.left, top: openRowMenu.top }}>
-                      <strong>{item.name || item.symbol}</strong>
+                      <strong>{displayName}</strong>
                       <dl>
                         <div><dt>Watch note</dt><dd>{item.thesis || 'No watch note yet.'}</dd></div>
                       </dl>

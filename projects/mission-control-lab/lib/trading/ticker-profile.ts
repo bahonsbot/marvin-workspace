@@ -53,10 +53,13 @@ function hasAmbiguousCompanyProfile(profile: TickerProfile) {
   if (summary.includes(' may refer to:')) return true;
   if (summary.includes('antisemitic treatise')) return true;
   if (summary.includes('martin luther') && summary.includes('jews')) return true;
+  if (summary.includes('sophia kianni')) return true;
+  if (summary.includes('phia ai')) return true;
   if (summary.includes(' is a stock market index ')) return true;
   if (summary.includes(' comprises ') && summary.includes(' companies traded on')) return true;
   if (!summary.includes(' is covered by eodhd market-data endpoints')) return false;
   const normalized = profile.symbol.toUpperCase();
+  if (profile.name.trim().toUpperCase() === normalized) return true;
   return normalized in {
     'WAWI.OL': true,
   };

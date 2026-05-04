@@ -4,6 +4,7 @@ import { getTickerProfile } from '@/lib/trading/ticker-profile';
 
 type WatchlistMetadata = {
   symbol: string;
+  name: string;
   logoUrl: string | null;
   logoAlt: string;
   pe: string;
@@ -63,8 +64,9 @@ function metadataFromProfile(profile: TickerProfile): WatchlistMetadata {
   const week52 = week52Metadata(profile);
   return {
     symbol: profile.symbol,
+    name: profile.name,
     logoUrl: profile.companyLogo.url,
-    logoAlt: profile.companyLogo.alt,
+    logoAlt: profile.companyLogo.alt || `${profile.name || profile.symbol} logo`,
     pe: cleanMetric(peMetric?.value),
     week52Low: week52.low,
     week52High: week52.high,
@@ -93,6 +95,7 @@ export async function GET(request: Request) {
     const symbol = symbols[index];
     return {
       symbol,
+      name: symbol,
       logoUrl: null,
       logoAlt: `${symbol} logo`,
       pe: '—',

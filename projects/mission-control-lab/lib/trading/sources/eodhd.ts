@@ -416,6 +416,64 @@ function safeSearchQuery(input: string) {
   return input.trim().replace(/[^A-Za-z0-9.\-\s]/g, '').replace(/\s+/g, ' ').trim();
 }
 
+function normalizeInstrumentType(raw: string | null | undefined) {
+  return (raw ?? '').trim().toUpperCase();
+}
+
+function isFundLikeInstrumentType(raw: string | null | undefined) {
+  const normalized = normalizeInstrumentType(raw);
+  return ['ETF', 'ETN', 'FUND', 'TRUST', 'MUTUAL FUND', 'UCITS'].some((token) => normalized.includes(token));
+}
+
+function normalizeDisplayName(value: string | null | undefined) {
+  return (value ?? '').trim().replace(/\s+/g, ' ');
+}
+
+function isTickerLikeName(value: string | null | undefined, symbol: string) {
+  const normalizedValue = normalizeDisplayName(value).toUpperCase();
+  if (!normalizedValue) return true;
+  const normalizedSymbol = symbol.trim().toUpperCase();
+  if (!normalizedSymbol) return true;
+  if (normalizedValue === normalizedSymbol) return true;
+  const symbolCode = normalizedSymbol.split('.')[0] ?? normalizedSymbol;
+  if (normalizedValue === symbolCode) return true;
+  return false;
+}
+
+function preferredInstrumentName(bundle: EodhdMarketDataBundle) {
+  const searchName = normalizeDisplayName(bundle.searchResult?.Name);
+  if (searchName && !isTickerLikeName(searchName, bundle.resolvedSymbol)) return searchName;
+  return bundle.resolvedSymbol;
+}
+
+function fallbackProfileSummary(name: string, instrumentType: string | undefined, exchangeLabel: string) {
+  const isFund = isFundLikeInstrumentType(instrumentType);
+  if (isFund) {
+    const typeLabel = normalizeDisplayName(instrumentType)?.toLowerCase() || 'fund';
+    return `${name} is a listed ${typeLabel} on ${exchangeLabel}. Price history and market metadata are available, but a verified fund strategy summary is not available yet.`;
+  }
+  return `${name} trades on ${exchangeLabel}. Price history and market metadata are available, but a verified company summary is not available yet.`;
+}
+
+function resolveSearchMatch(results: EodhdSearchResult[], code: string, exchange?: string | null) {
+  const upperCode = code.toUpperCase();
+  const upperExchange = exchange?.toUpperCase() ?? null;
+  return (upperExchange
+    ? results.find((item) => item.Code?.toUpperCase() === upperCode && item.Exchange?.toUpperCase() === upperExchange && item.isPrimary)
+      ?? results.find((item) => item.Code?.toUpperCase() === upperCode && item.Exchange?.toUpperCase() === upperExchange)
+    : null)
+    ?? results.find((item) => item.Code?.toUpperCase() === upperCode && item.isPrimary)
+    ?? results.find((item) => item.Code?.toUpperCase() === upperCode)
+    ?? results[0]
+    ?? null;
+}
+
+function parseDottedSymbol(symbol: string) {
+  const match = symbol.match(/^([A-Z0-9\-]+)\.([A-Z0-9\-]+)$/);
+  if (!match) return null;
+  return { code: match[1], exchange: match[2] };
+}
+
 export async function fetchEodhdSearch(query: string) {
   const normalized = safeSearchQuery(query);
   if (!normalized) return [];
@@ -436,14 +494,21 @@ export async function fetchEodhdRealtimeQuote(symbol: string) {
 export async function resolveEodhdSymbol(symbol: string) {
   const normalized = safeSymbol(symbol);
   if (!normalized) return null;
-  if (normalized.includes('.')) return { resolvedSymbol: normalized, searchResult: null };
+
+  if (normalized.includes('.')) {
+    const parsed = parseDottedSymbol(normalized);
+    if (!parsed) return { resolvedSymbol: normalized, searchResult: null };
+    const results = await fetchEodhdSearch(parsed.code);
+    const exact = resolveSearchMatch(results, parsed.code, parsed.exchange);
+    return {
+      resolvedSymbol: `${parsed.code}.${parsed.exchange}`,
+      searchResult: exact,
+    };
+  }
 
   const results = await fetchEodhdSearch(normalized);
   const exact = results.find((item) => item.Code?.toUpperCase() === normalized && item.Exchange?.toUpperCase() === 'US')
-    ?? results.find((item) => item.Code?.toUpperCase() === normalized && item.isPrimary)
-    ?? results.find((item) => item.Code?.toUpperCase() === normalized)
-    ?? results[0]
-    ?? null;
+    ?? resolveSearchMatch(results, normalized, null);
   if (!exact?.Code || !exact.Exchange) return null;
   return {
     resolvedSymbol: `${exact.Code.toUpperCase()}.${exact.Exchange.toUpperCase()}`,
@@ -707,10 +772,13 @@ export const eodhdTickerProfileSource: TickerProfileSource = {
 
     const asOf = bundle.quote.timestamp ? new Date(bundle.quote.timestamp * 1000).toISOString() : now.toISOString();
     const exchangeCode = bundle.resolvedSymbol.split('.').at(-1) ?? bundle.searchResult?.Exchange ?? '';
+    const name = preferredInstrumentName(bundle);
     const [exchangeDetails, companyLogoResult, companyProfileResult, secFundamentals] = await Promise.all([
       exchangeCode ? fetchEodhdExchangeDetails(exchangeCode) : Promise.resolve(null),
-      fetchWikipediaCompanyLogo(bundle.resolvedSymbol, bundle.searchResult?.Name ?? bundle.resolvedSymbol),
-      fetchWikipediaCompanyProfile(bundle.resolvedSymbol, bundle.searchResult?.Name ?? bundle.resolvedSymbol, [
+      fetchWikipediaCompanyLogo(bundle.resolvedSymbol, name),
+      fetchWikipediaCompanyProfile(bundle.resolvedSymbol, name, [
+        { label: 'Company Name', value: name },
+        { label: 'Instrument Type', value: bundle.searchResult?.Type ?? 'Provider pending' },
         { label: 'Exchange', value: exchangeCode || 'Provider pending' },
         { label: 'Country', value: bundle.searchResult?.Country ?? 'Provider pending' },
         { label: 'Currency', value: bundle.searchResult?.Currency ?? 'Provider pending' },
@@ -732,8 +800,8 @@ export const eodhdTickerProfileSource: TickerProfileSource = {
     const changePct = bundle.quote.change_p ?? (previousClose ? (change / previousClose) * 100 : 0);
     const tone = change < 0 ? 'negative' : change > 0 ? 'positive' : 'neutral';
     const currency = bundle.searchResult?.Currency ?? exchangeDetails?.Currency ?? 'USD';
-    const name = bundle.searchResult?.Name ?? bundle.resolvedSymbol;
     const exchange = [exchangeDetails?.Name, bundle.searchResult?.Country].filter(Boolean).join(' · ') || bundle.searchResult?.Exchange || exchangeCode || 'EODHD';
+    const instrumentType = bundle.searchResult?.Type;
 
     const profile: TickerProfile = {
       symbol: bundle.resolvedSymbol,
@@ -765,8 +833,10 @@ export const eodhdTickerProfileSource: TickerProfileSource = {
         source: unavailableSource(asOf, 'Logo provider returned no confident match; using ticker initials fallback.'),
       },
       companyProfile: companyProfileResult?.profile ?? {
-        summary: `${name} is covered by EODHD market-data endpoints. Fundamentals are unavailable under the current plan unless covered separately by SEC EDGAR or another provider.`,
+        summary: fallbackProfileSummary(name, instrumentType, exchangeCode || exchange),
         facts: [
+          { label: 'Company Name', value: name },
+          { label: 'Instrument Type', value: instrumentType ?? 'Provider pending' },
           { label: 'Exchange', value: exchangeCode || 'Provider pending' },
           { label: 'Country', value: bundle.searchResult?.Country ?? exchangeDetails?.Country ?? 'Provider pending' },
           { label: 'Currency', value: currency },
