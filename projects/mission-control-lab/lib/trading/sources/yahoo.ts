@@ -99,7 +99,7 @@ interface YahooNewsItem {
 
 const YAHOO_USER_AGENT = 'Mozilla/5.0 (compatible; MissionControlLab/1.0; +https://motiondisplay.cloud)';
 
-function yahooSource(asOf: string, note: string): TickerSourceMeta {
+export function yahooSource(asOf: string, note: string): TickerSourceMeta {
   return {
     source: 'yahoo',
     asOf,
@@ -220,7 +220,7 @@ async function fetchJson<T>(url: string, noStore = false): Promise<T | null> {
   }
 }
 
-const YAHOO_PRICE_RANGES = ['1D', '5D', '1M', '6M', 'YTD', '1Y', '5Y'] as const;
+export const YAHOO_PRICE_RANGES = ['1D', '5D', '1M', '6M', 'YTD', '1Y', '5Y'] as const;
 
 const yahooRangeParams: Record<(typeof YAHOO_PRICE_RANGES)[number], { range: string; interval: string }> = {
   '1D': { range: '1d', interval: '5m' },
@@ -232,7 +232,7 @@ const yahooRangeParams: Record<(typeof YAHOO_PRICE_RANGES)[number], { range: str
   '5Y': { range: '5y', interval: '1wk' },
 };
 
-async function fetchYahooChart(symbol: string, range: (typeof YAHOO_PRICE_RANGES)[number] = '1Y') {
+export async function fetchYahooChart(symbol: string, range: (typeof YAHOO_PRICE_RANGES)[number] = '1Y') {
   const params = yahooRangeParams[range];
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${params.range}&interval=${params.interval}`;
   const data = await fetchJson<YahooChartResponse>(url, range === '1D');
@@ -408,7 +408,7 @@ function buildRangeStats(meta: YahooChartMeta, quote: { close?: Array<number | n
   ];
 }
 
-function buildRangeSeries(range: string, chart: NonNullable<Awaited<ReturnType<typeof fetchYahooChart>>>, source: TickerSourceMeta): TickerPriceRangeSeries | null {
+export function buildYahooRangeSeries(range: string, chart: NonNullable<Awaited<ReturnType<typeof fetchYahooChart>>>, source: TickerSourceMeta): TickerPriceRangeSeries | null {
   const quote = chart.indicators?.quote?.[0];
   const meta = chart.meta ?? {};
   const timestamps = chart.timestamp ?? [];
@@ -439,7 +439,7 @@ async function fetchYahooRangeSeries(symbol: string, source: TickerSourceMeta) {
     YAHOO_PRICE_RANGES.map(async (range) => {
       const chart = await fetchYahooChart(symbol, range);
       if (!chart) return null;
-      const series = buildRangeSeries(range, chart, source);
+      const series = buildYahooRangeSeries(range, chart, source);
       return series ? [range, series] as const : null;
     }),
   );

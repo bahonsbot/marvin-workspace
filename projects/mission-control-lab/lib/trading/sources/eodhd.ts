@@ -18,6 +18,7 @@ import type {
 import type { TickerProfileSource } from '../sources';
 import { withProfileSource } from '../sources';
 import { fetchSecTickerFundamentals } from './sec';
+import { buildYahooRangeSeries, fetchYahooChart, yahooSource } from './yahoo';
 import { fetchWikipediaCompanyLogo, fetchWikipediaCompanyProfile } from './wikipedia';
 
 const EODHD_BASE_URL = 'https://eodhd.com/api';
@@ -353,6 +354,32 @@ function statsForPoints(points: EodhdPoint[], currency: string): TickerDisplayMe
   ];
 }
 
+
+function pointSeconds(point: { time: string | number } | undefined) {
+  if (!point) return null;
+  const seconds = typeof point.time === 'number' ? point.time : Date.parse(point.time) / 1000;
+  return Number.isFinite(seconds) ? seconds : null;
+}
+
+function isSeriesStale(series: TickerPriceRangeSeries | null | undefined, now: Date, maxAgeMs: number) {
+  const latestSeconds = pointSeconds(series?.points.at(-1));
+  return latestSeconds == null || now.getTime() - latestSeconds * 1000 > maxAgeMs;
+}
+
+async function fetchYahooOneDayFallback(symbol: string, now: Date, staleSeries: TickerPriceRangeSeries | null) {
+  const chart = await fetchYahooChart(symbol.replace(/\.US$/, ''), '1D');
+  if (!chart) return null;
+  const source = yahooSource(now.toISOString(), 'Yahoo Finance 1D intraday fallback used because EODHD 1D intraday was stale while realtime quote was updating.');
+  const series = buildYahooRangeSeries('1D', chart, source);
+  if (!series?.points.length) return null;
+  if (!isSeriesStale(staleSeries, now, 18 * 60 * 60 * 1000) && isSeriesStale(series, now, 18 * 60 * 60 * 1000)) return null;
+  return {
+    ...series,
+    note: 'Yahoo Finance intraday fallback; EODHD 1D range was stale for the current session.',
+    stats: series.stats.map((metric) => metric.label.startsWith('52 Week') ? metric : { ...metric, source }),
+  } satisfies TickerPriceRangeSeries;
+}
+
 function rangeFromEodRows(range: EodhdPriceRange, rows: EodhdEodRow[], source: TickerSourceMeta, currency: string): TickerPriceRangeSeries | null {
   const points = rows
     .map((row): EodhdPoint | null => {
@@ -416,7 +443,9 @@ async function fetchRange(symbol: string, range: EodhdPriceRange, now: Date, sou
       __noStore: 1,
     });
     const todaySeries = rangeFromIntradayRows(range, Array.isArray(todayRows) ? todayRows : [], source, currency);
-    return todaySeries?.points.length ? todaySeries : series;
+    const candidate = todaySeries?.points.length ? todaySeries : series;
+    const yahooFallback = await fetchYahooOneDayFallback(symbol, now, candidate);
+    return yahooFallback ?? candidate;
   }
 
   const rows = await fetchEodhdJson<EodhdEodRow[]>(`/eod/${encodeURIComponent(symbol)}`, {

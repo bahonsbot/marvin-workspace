@@ -3206,9 +3206,9 @@
 :global(.trading-watchlist-page-table th:nth-child(4)) { width: 106px; }
 :global(.trading-watchlist-page-table th:nth-child(5)) { width: 76px; }
 :global(.trading-watchlist-page-table th:nth-child(6)) { width: 238px; }
-:global(.trading-watchlist-page-table th:nth-child(7)) { width: 76px; }
-:global(.trading-watchlist-page-table th:nth-child(8)) { width: 72px; }
-:global(.trading-watchlist-page-table th:nth-child(9)) { width: 58px; }
+:global(.trading-watchlist-page-table th:nth-child(7)) { width: 74px; }
+:global(.trading-watchlist-page-table th:nth-child(8)) { width: 58px; }
+:global(.trading-watchlist-page-table th:nth-child(9)) { width: 72px; }
 
 :global(.trading-watchlist-page-table td) {
   vertical-align: middle;
@@ -3372,12 +3372,35 @@
   opacity: 0.2;
 }
 
+:global(.trading-watchlist-page-table td:nth-child(7)),
+:global(.trading-watchlist-page-table td:nth-child(8)),
+:global(.trading-watchlist-page-table td:nth-child(9)) {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  vertical-align: middle;
+}
+
+:global(.trading-watchlist-page-table td:nth-child(7)) {
+  padding-right: 8px;
+}
+
+:global(.trading-watchlist-page-table td:nth-child(8)) {
+  padding-left: 4px;
+  padding-right: 6px;
+}
+
+:global(.trading-watchlist-page-table td:nth-child(9)) {
+  padding-left: 4px;
+  padding-right: 0;
+}
+
 :global(.trading-watchlist-row-actions) {
   position: relative;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  min-height: 26px;
 }
 
 :global(.trading-watchlist-more-button),
@@ -3480,13 +3503,13 @@
   border-radius: 999px;
   border: 1px solid rgba(28, 37, 32, 0.14);
   justify-content: center;
-  min-width: 68px;
-  min-height: 24px;
-  padding: 5px 10px;
+  width: 64px;
+  height: 22px;
+  padding: 0 8px;
   font-style: normal;
   font-size: 11px;
   font-weight: 500;
-  line-height: 1.1;
+  line-height: 20px;
   white-space: nowrap;
   overflow: visible;
 }
@@ -3528,10 +3551,12 @@
 
 :global(.trading-watchlist-inline-select) {
   appearance: none;
-  max-width: 112px;
+  width: 64px;
+  max-width: 64px;
   cursor: pointer;
   font-family: inherit;
   text-align: center;
+  text-align-last: center;
 }
 
 :global(.trading-watchlist-inline-select:disabled) {
@@ -4040,10 +4065,12 @@
   
 :global(.trading-watchlist-inline-select) {
   appearance: none;
-  max-width: 112px;
+  width: 64px;
+  max-width: 64px;
   cursor: pointer;
   font-family: inherit;
   text-align: center;
+  text-align-last: center;
 }
 
 :global(.trading-watchlist-inline-select:disabled) {
