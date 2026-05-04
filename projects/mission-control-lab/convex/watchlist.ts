@@ -21,6 +21,24 @@ type WatchlistQuery = {
   order(direction: 'asc' | 'desc'): WatchlistQuery;
   first(): Promise<WatchlistDocument | null>;
 };
+type WatchlistItemDocument = {
+  _id: string;
+  userKey: string;
+  watchlistId: string;
+  symbol: string;
+  displaySymbol: string;
+  name?: string;
+  exchange?: string;
+  currency?: string;
+  tags: string[];
+  thesis?: string;
+  priority: 'core' | 'radar' | 'speculative';
+  alertLevel: 'none' | 'watch' | 'urgent';
+  sortOrder: number;
+  createdAt: number;
+  updatedAt: number;
+};
+
 type WatchlistDb = {
   query(tableName: 'watchlists'): WatchlistQuery;
   insert(tableName: 'watchlists', value: Omit<WatchlistDocument, '_id'>): Promise<string>;
@@ -237,6 +255,53 @@ export const add = mutationGeneric({
       createdAt: now,
       updatedAt: now,
     });
+  },
+});
+
+export const move = mutationGeneric({
+  args: {
+    id: v.id('watchlistItems'),
+    targetWatchlistId: v.id('watchlists'),
+    userKey: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const userKey = args.userKey ?? DEMO_USER_KEY;
+    const item = await ctx.db.get(args.id) as WatchlistItemDocument | null;
+    if (!item || item.userKey !== userKey) throw new Error('Watchlist item not found');
+    if (item.watchlistId === args.targetWatchlistId) return item._id;
+
+    const targetWatchlist = await ctx.db.get(args.targetWatchlistId) as WatchlistDocument | null;
+    if (!targetWatchlist || targetWatchlist.userKey !== userKey) throw new Error('Target watchlist not found');
+
+    const targetItems = await ctx.db
+      .query('watchlistItems')
+      .withIndex('by_watchlist_sort', (q) => q.eq('watchlistId', args.targetWatchlistId))
+      .collect() as WatchlistItemDocument[];
+    const duplicate = targetItems.find((candidate) => normalizeSymbol(candidate.symbol) === normalizeSymbol(item.symbol));
+    const now = Date.now();
+
+    if (duplicate) {
+      await ctx.db.patch(duplicate._id as typeof args.id, {
+        name: item.name ?? duplicate.name,
+        exchange: item.exchange ?? duplicate.exchange,
+        currency: item.currency ?? duplicate.currency,
+        tags: item.tags.length ? item.tags : duplicate.tags,
+        thesis: item.thesis ?? duplicate.thesis,
+        priority: item.priority,
+        alertLevel: item.alertLevel,
+        updatedAt: now,
+      });
+      await ctx.db.delete(item._id as typeof args.id);
+      return duplicate._id;
+    }
+
+    const latest = targetItems.reduce((max, candidate) => Math.max(max, candidate.sortOrder ?? 0), 0);
+    await ctx.db.patch(item._id as typeof args.id, {
+      watchlistId: args.targetWatchlistId,
+      sortOrder: latest ? latest + 1000 : 1000,
+      updatedAt: now,
+    });
+    return item._id;
   },
 });
 

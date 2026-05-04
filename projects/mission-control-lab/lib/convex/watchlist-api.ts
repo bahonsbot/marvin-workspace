@@ -66,6 +66,7 @@ export const watchlistApi = {
     },
     string
   >('watchlist:add'),
+  move: makeFunctionReference<'mutation', { id: string; targetWatchlistId: string; userKey?: string }, string>('watchlist:move'),
   update: makeFunctionReference<
     'mutation',
     {

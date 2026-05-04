@@ -62,10 +62,17 @@ const knownWikipediaTitles: Record<string, string> = {
   IREN: 'Iris Energy',
   'IREN.US': 'Iris Energy',
   'PHIA.AS': 'Philips',
+  CRWV: 'CoreWeave',
+  'CRWV.US': 'CoreWeave',
 };
 
 const knownLogoFiles: Record<string, string> = {
   AAPL: 'Apple logo black.svg',
+};
+
+const blockedLogoFiles: Record<string, string[]> = {
+  CRWV: ['google'],
+  'CRWV.US': ['google'],
 };
 
 function wikipediaSource(asOf: string, note: string): TickerSourceMeta {
@@ -126,13 +133,17 @@ async function resolveWikidataId(title: string) {
 }
 
 function pickCurrentLogoFile(entity: WikidataEntityResponse, wikidataId: string, symbol: string) {
-  const knownLogo = knownLogoFiles[symbol.toUpperCase()];
+  const normalizedSymbol = symbol.toUpperCase();
+  const knownLogo = knownLogoFiles[normalizedSymbol];
   if (knownLogo) return knownLogo;
   const logoClaims = entity.entities?.[wikidataId]?.claims?.P154 ?? [];
   const usable = logoClaims.filter((claim) => claim.rank !== 'deprecated' && typeof claim.mainsnak?.datavalue?.value === 'string');
   const preferred = usable.find((claim) => claim.rank === 'preferred') ?? usable.at(-1);
   const value = preferred?.mainsnak?.datavalue?.value;
-  return typeof value === 'string' ? value : null;
+  if (typeof value !== 'string') return null;
+  const blockedTerms = blockedLogoFiles[normalizedSymbol] ?? blockedLogoFiles[normalizedSymbol.replace(/\.US$/, '')] ?? [];
+  if (blockedTerms.some((term) => value.toLowerCase().includes(term))) return null;
+  return value;
 }
 
 async function resolveCommonsImageUrl(fileName: string) {

@@ -549,19 +549,23 @@ function LiveWatchlistAddForm({ watchlistId, onSaved }: { watchlistId?: string; 
   );
 }
 
-function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove, onUpdate, removingId, updatingId, updateError }: {
+function WatchlistTable({ items, watchlists, activeWatchlistId, canMutate, metadata, metadataLoading, onRemove, onUpdate, onMove, removingId, updatingId, movingId, updateError }: {
   items: WatchlistItem[];
+  watchlists: WatchlistWithItems[];
+  activeWatchlistId?: string;
   canMutate: boolean;
   metadata: Map<string, WatchlistMetadataItem>;
   metadataLoading?: boolean;
   onRemove?: (id: string) => void;
-  onUpdate?: (id: string, patch: { priority?: WatchlistPriority; alertLevel?: WatchlistAlertLevel; thesis?: string }) => Promise<boolean>;
+  onUpdate?: (id: string, patch: { priority?: WatchlistPriority; alertLevel?: WatchlistAlertLevel }) => Promise<boolean>;
+  onMove?: (id: string, targetWatchlistId: string) => Promise<boolean>;
   removingId?: string | null;
   updatingId?: string | null;
+  movingId?: string | null;
   updateError?: { id: string; message: string } | null;
 }) {
   const [openRowMenu, setOpenRowMenu] = useState<{ id: string; left: number; top: number } | null>(null);
-  const [noteDraft, setNoteDraft] = useState('');
+  const moveTargets = watchlists.filter((watchlist) => watchlist._id !== activeWatchlistId);
 
   function toggleRowMenu(item: WatchlistItem, event: React.MouseEvent<HTMLButtonElement>) {
     if (openRowMenu?.id === item._id) {
@@ -569,11 +573,10 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
       return;
     }
     const rect = event.currentTarget.getBoundingClientRect();
-    setNoteDraft(item.thesis ?? '');
     setOpenRowMenu({
       id: item._id,
       left: Math.min(window.innerWidth - 300, Math.max(16, rect.right - 284)),
-      top: Math.max(16, rect.top - 154),
+      top: Math.max(16, rect.top - 96),
     });
   }
 
@@ -656,33 +659,36 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                   </select>
                 </td>
                 <td className="trading-watchlist-row-actions">
-                  <button type="button" className={`trading-watchlist-more-button ${item.thesis ? 'has-note' : ''}`} onClick={(event) => toggleRowMenu(item, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`Watch note for ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
-                    …
+                  <button type="button" className="trading-watchlist-more-button" onClick={(event) => toggleRowMenu(item, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`Move ${resolvedWatchlistSymbol(item, itemMetadata)} to another watchlist`}>
+                    ↔
                   </button>
-                  <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id || updatingId === item._id} aria-label={`Remove ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
+                  <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id || updatingId === item._id || movingId === item._id} aria-label={`Remove ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
                     {removingId === item._id ? '…' : '−'}
                   </button>
                   {updateError?.id === item._id ? <span className="trading-watchlist-row-error">{updateError.message}</span> : null}
                   {openRowMenu?.id === item._id ? (
                     <div className="trading-watchlist-row-menu" style={{ left: openRowMenu.left, top: openRowMenu.top }}>
-                      <strong>{displayName}</strong>
-                      <label>
-                        <span>Watch note</span>
-                        <textarea value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} placeholder="Why is this on the list?" disabled={!canMutate || updatingId === item._id} />
-                      </label>
-                      <div className="trading-watchlist-row-menu-actions">
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            const ok = await onUpdate?.(item._id, { thesis: noteDraft.trim() || undefined });
-                            if (ok) setOpenRowMenu(null);
-                          }}
-                          disabled={!canMutate || updatingId === item._id}
-                        >
-                          {updatingId === item._id ? 'Saving…' : 'Save'}
-                        </button>
-                        <button type="button" onClick={() => setOpenRowMenu(null)}>Cancel</button>
-                      </div>
+                      <strong>Move {resolvedWatchlistSymbol(item, itemMetadata)}</strong>
+                      {moveTargets.length ? (
+                        <div className="trading-watchlist-move-list">
+                          {moveTargets.map((watchlist) => (
+                            <button
+                              key={watchlist._id}
+                              type="button"
+                              onClick={async () => {
+                                const ok = await onMove?.(item._id, watchlist._id);
+                                if (ok) setOpenRowMenu(null);
+                              }}
+                              disabled={!canMutate || movingId === item._id || updatingId === item._id}
+                            >
+                              <span>{watchlist.name}</span>
+                              <em>{watchlist.items.length} symbols</em>
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <p>Create another watchlist first, then move symbols between lists here.</p>
+                      )}
                     </div>
                   ) : null}
                 </td>
@@ -695,11 +701,13 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
   );
 }
 
-function LiveWatchlistTable({ items, metadata, metadataLoading }: { items: WatchlistItem[]; metadata: Map<string, WatchlistMetadataItem>; metadataLoading?: boolean }) {
+function LiveWatchlistTable({ items, watchlists, activeWatchlistId, metadata, metadataLoading }: { items: WatchlistItem[]; watchlists: WatchlistWithItems[]; activeWatchlistId?: string; metadata: Map<string, WatchlistMetadataItem>; metadataLoading?: boolean }) {
   const removeItem = useMutation(watchlistApi.remove);
   const updateItem = useMutation(watchlistApi.update);
+  const moveItem = useMutation(watchlistApi.move);
   const [removingId, setRemovingId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [movingId, setMovingId] = useState<string | null>(null);
   const [updateError, setUpdateError] = useState<{ id: string; message: string } | null>(null);
 
   async function remove(id: string) {
@@ -712,7 +720,7 @@ function LiveWatchlistTable({ items, metadata, metadataLoading }: { items: Watch
     }
   }
 
-  async function update(id: string, patch: { priority?: WatchlistPriority; alertLevel?: WatchlistAlertLevel; thesis?: string }) {
+  async function update(id: string, patch: { priority?: WatchlistPriority; alertLevel?: WatchlistAlertLevel }) {
     if (id.startsWith('sample-')) return false;
     setUpdatingId(id);
     setUpdateError(null);
@@ -727,7 +735,22 @@ function LiveWatchlistTable({ items, metadata, metadataLoading }: { items: Watch
     }
   }
 
-  return <WatchlistTable items={items} canMutate metadata={metadata} metadataLoading={metadataLoading} onRemove={remove} onUpdate={update} removingId={removingId} updatingId={updatingId} updateError={updateError} />;
+  async function move(id: string, targetWatchlistId: string) {
+    if (id.startsWith('sample-')) return false;
+    setMovingId(id);
+    setUpdateError(null);
+    try {
+      await moveItem({ id, targetWatchlistId, userKey: DEMO_USER_KEY });
+      return true;
+    } catch (error) {
+      setUpdateError({ id, message: error instanceof Error ? error.message : 'Could not move row.' });
+      return false;
+    } finally {
+      setMovingId(null);
+    }
+  }
+
+  return <WatchlistTable items={items} watchlists={watchlists} activeWatchlistId={activeWatchlistId} canMutate metadata={metadata} metadataLoading={metadataLoading} onRemove={remove} onUpdate={update} onMove={move} removingId={removingId} updatingId={updatingId} movingId={movingId} updateError={updateError} />;
 }
 
 function WatchlistTabs({
@@ -1093,7 +1116,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
           {isLoading ? (
             <WatchlistLoadingState />
           ) : items.length ? (
-            isLive ? <LiveWatchlistTable items={sortedItems} metadata={metadata} metadataLoading={metadataLoading} /> : <WatchlistTable items={sortedItems} canMutate={false} metadata={metadata} metadataLoading={metadataLoading} />
+            isLive ? <LiveWatchlistTable items={sortedItems} watchlists={watchlists} activeWatchlistId={activeWatchlist?._id} metadata={metadata} metadataLoading={metadataLoading} /> : <WatchlistTable items={sortedItems} watchlists={watchlists} activeWatchlistId={activeWatchlist?._id} canMutate={false} metadata={metadata} metadataLoading={metadataLoading} />
           ) : (
             <div className="trading-watchlist-empty-state">
               <span>No tracked names yet</span>
