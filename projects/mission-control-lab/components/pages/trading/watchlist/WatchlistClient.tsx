@@ -548,24 +548,29 @@ function LiveWatchlistAddForm({ watchlistId, onSaved }: { watchlistId?: string; 
   );
 }
 
-function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove, removingId }: {
+function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove, onUpdate, removingId, updatingId, updateError }: {
   items: WatchlistItem[];
   canMutate: boolean;
   metadata: Map<string, WatchlistMetadataItem>;
   metadataLoading?: boolean;
   onRemove?: (id: string) => void;
+  onUpdate?: (id: string, patch: { priority?: WatchlistPriority; alertLevel?: WatchlistAlertLevel; thesis?: string }) => Promise<boolean>;
   removingId?: string | null;
+  updatingId?: string | null;
+  updateError?: { id: string; message: string } | null;
 }) {
   const [openRowMenu, setOpenRowMenu] = useState<{ id: string; left: number; top: number } | null>(null);
+  const [noteDraft, setNoteDraft] = useState('');
 
-  function toggleRowMenu(id: string, event: React.MouseEvent<HTMLButtonElement>) {
-    if (openRowMenu?.id === id) {
+  function toggleRowMenu(item: WatchlistItem, event: React.MouseEvent<HTMLButtonElement>) {
+    if (openRowMenu?.id === item._id) {
       setOpenRowMenu(null);
       return;
     }
     const rect = event.currentTarget.getBoundingClientRect();
+    setNoteDraft(item.thesis ?? '');
     setOpenRowMenu({
-      id,
+      id: item._id,
       left: Math.min(window.innerWidth - 300, Math.max(16, rect.right - 284)),
       top: Math.max(16, rect.top - 154),
     });
@@ -627,21 +632,56 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
                 </td>
                 <td>{itemMetadata?.pe ?? (metadataLoading ? 'Loading…' : '—')}</td>
                 <td><Week52Range metadata={itemMetadata} /></td>
-                <td><em className={`trading-watchlist-priority ${item.priority}`}>{priorityLabels[item.priority]}</em></td>
-                <td><em className={`trading-watchlist-alert ${item.alertLevel}`}>{alertLabels[item.alertLevel]}</em></td>
+                <td>
+                  <select
+                    className={`trading-watchlist-inline-select trading-watchlist-priority ${item.priority}`}
+                    value={item.priority}
+                    onChange={(event) => onUpdate?.(item._id, { priority: event.target.value as WatchlistPriority })}
+                    disabled={!canMutate || updatingId === item._id}
+                    aria-label={`Priority for ${resolvedWatchlistSymbol(item, itemMetadata)}`}
+                  >
+                    {(Object.keys(priorityLabels) as WatchlistPriority[]).map((priority) => <option key={priority} value={priority}>{priorityLabels[priority]}</option>)}
+                  </select>
+                </td>
+                <td>
+                  <select
+                    className={`trading-watchlist-inline-select trading-watchlist-alert ${item.alertLevel}`}
+                    value={item.alertLevel}
+                    onChange={(event) => onUpdate?.(item._id, { alertLevel: event.target.value as WatchlistAlertLevel })}
+                    disabled={!canMutate || updatingId === item._id}
+                    aria-label={`Alert level for ${resolvedWatchlistSymbol(item, itemMetadata)}`}
+                  >
+                    {(Object.keys(alertLabels) as WatchlistAlertLevel[]).map((alertLevel) => <option key={alertLevel} value={alertLevel}>{alertLabels[alertLevel]}</option>)}
+                  </select>
+                </td>
                 <td className="trading-watchlist-row-actions">
-                  <button type="button" className="trading-watchlist-more-button" onClick={(event) => toggleRowMenu(item._id, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`More details for ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
+                  <button type="button" className={`trading-watchlist-more-button ${item.thesis ? 'has-note' : ''}`} onClick={(event) => toggleRowMenu(item, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`Watch note for ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
                     …
                   </button>
-                  <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id} aria-label={`Remove ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
+                  <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id || updatingId === item._id} aria-label={`Remove ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
                     {removingId === item._id ? '…' : '−'}
                   </button>
+                  {updateError?.id === item._id ? <span className="trading-watchlist-row-error">{updateError.message}</span> : null}
                   {openRowMenu?.id === item._id ? (
                     <div className="trading-watchlist-row-menu" style={{ left: openRowMenu.left, top: openRowMenu.top }}>
                       <strong>{displayName}</strong>
-                      <dl>
-                        <div><dt>Watch note</dt><dd>{item.thesis || 'No watch note yet.'}</dd></div>
-                      </dl>
+                      <label>
+                        <span>Watch note</span>
+                        <textarea value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} placeholder="Why is this on the list?" disabled={!canMutate || updatingId === item._id} />
+                      </label>
+                      <div className="trading-watchlist-row-menu-actions">
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            const ok = await onUpdate?.(item._id, { thesis: noteDraft.trim() || undefined });
+                            if (ok) setOpenRowMenu(null);
+                          }}
+                          disabled={!canMutate || updatingId === item._id}
+                        >
+                          {updatingId === item._id ? 'Saving…' : 'Save'}
+                        </button>
+                        <button type="button" onClick={() => setOpenRowMenu(null)}>Cancel</button>
+                      </div>
                     </div>
                   ) : null}
                 </td>
@@ -656,7 +696,10 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
 
 function LiveWatchlistTable({ items, metadata, metadataLoading }: { items: WatchlistItem[]; metadata: Map<string, WatchlistMetadataItem>; metadataLoading?: boolean }) {
   const removeItem = useMutation(watchlistApi.remove);
+  const updateItem = useMutation(watchlistApi.update);
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [updateError, setUpdateError] = useState<{ id: string; message: string } | null>(null);
 
   async function remove(id: string) {
     if (id.startsWith('sample-')) return;
@@ -668,7 +711,22 @@ function LiveWatchlistTable({ items, metadata, metadataLoading }: { items: Watch
     }
   }
 
-  return <WatchlistTable items={items} canMutate metadata={metadata} metadataLoading={metadataLoading} onRemove={remove} removingId={removingId} />;
+  async function update(id: string, patch: { priority?: WatchlistPriority; alertLevel?: WatchlistAlertLevel; thesis?: string }) {
+    if (id.startsWith('sample-')) return false;
+    setUpdatingId(id);
+    setUpdateError(null);
+    try {
+      await updateItem({ id, ...patch });
+      return true;
+    } catch (error) {
+      setUpdateError({ id, message: error instanceof Error ? error.message : 'Could not update row.' });
+      return false;
+    } finally {
+      setUpdatingId(null);
+    }
+  }
+
+  return <WatchlistTable items={items} canMutate metadata={metadata} metadataLoading={metadataLoading} onRemove={remove} onUpdate={update} removingId={removingId} updatingId={updatingId} updateError={updateError} />;
 }
 
 function WatchlistTabs({

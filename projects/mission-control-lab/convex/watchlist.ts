@@ -253,16 +253,26 @@ export const update = mutationGeneric({
     sortOrder: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const { id, ...patch } = args;
-    await ctx.db.patch(id, {
-      ...patch,
-      name: patch.name?.trim() || undefined,
-      exchange: patch.exchange?.trim() || undefined,
-      currency: patch.currency?.trim() || undefined,
-      thesis: patch.thesis?.trim() || undefined,
-      tags: patch.tags ? cleanTags(patch.tags) : undefined,
-      updatedAt: Date.now(),
-    });
+    const patch: {
+      name?: string;
+      exchange?: string;
+      currency?: string;
+      tags?: string[];
+      thesis?: string;
+      priority?: 'core' | 'radar' | 'speculative';
+      alertLevel?: 'none' | 'watch' | 'urgent';
+      sortOrder?: number;
+      updatedAt: number;
+    } = { updatedAt: Date.now() };
+    if (args.name !== undefined) patch.name = args.name.trim() || undefined;
+    if (args.exchange !== undefined) patch.exchange = args.exchange.trim() || undefined;
+    if (args.currency !== undefined) patch.currency = args.currency.trim() || undefined;
+    if (args.tags !== undefined) patch.tags = cleanTags(args.tags);
+    if (args.thesis !== undefined) patch.thesis = args.thesis.trim() || undefined;
+    if (args.priority !== undefined) patch.priority = args.priority;
+    if (args.alertLevel !== undefined) patch.alertLevel = args.alertLevel;
+    if (args.sortOrder !== undefined) patch.sortOrder = args.sortOrder;
+    await ctx.db.patch(args.id, patch);
   },
 });
 
