@@ -102,6 +102,21 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("font-weight: 650", styles)
         self.assertIn("Educational context, not investment advice", ticker_page)
 
+    def test_ticker_page_uses_fund_specific_sections_for_etfs(self) -> None:
+        ticker_page = read_source("ticker_page")
+        styles = read_source("trading_styles")
+
+        self.assertIn("buildFundMetricFacts", ticker_page)
+        self.assertIn("FundMetricsPanel", ticker_page)
+        self.assertIn("FundUnavailablePanel", ticker_page)
+        self.assertIn("Fund metrics", ticker_page)
+        self.assertIn("Holdings provider not connected", ticker_page)
+        self.assertIn("Expense and AUM coverage pending", ticker_page)
+        self.assertIn("This page will not infer holdings from the fund name", ticker_page)
+        self.assertIn("!isFundProfile", ticker_page)
+        self.assertIn("trading-fund-metric-facts", styles)
+        self.assertIn("trading-fund-unavailable-panel", styles)
+
     def test_ticker_chart_accents_avoid_legacy_brown_palette(self) -> None:
         styles = read_source("trading_styles")
 

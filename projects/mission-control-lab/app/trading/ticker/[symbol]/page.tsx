@@ -76,7 +76,20 @@ const financeGlossaryItems = [
   },
 ];
 
-function makeSectionNav(): SectionNavItem[] {
+function makeSectionNav(isFundProfile = false): SectionNavItem[] {
+  if (isFundProfile) {
+    return [
+      { label: 'Overview', href: '#overview' },
+      { label: 'Price', href: '#price-history' },
+      { label: 'Fund profile', href: '#company-profile', status: 'partial', note: 'Provider enrichment pending' },
+      { label: 'Fund metrics', href: '#fund-metrics', status: 'partial', note: 'Issuer, ISIN, type, and provider-backed fund facts' },
+      { label: 'News', href: '#recent-news', status: 'partial', note: 'Provider decision pending' },
+      { label: 'Reports', href: '#resources' },
+      { label: 'Dividends', href: '#dividends', status: 'unavailable' },
+      { label: 'Technicals', href: '#technicals' },
+      { label: 'Glossary', href: '#finance-glossary' },
+    ];
+  }
   return [
     { label: 'Overview', href: '#overview' },
     { label: 'Price', href: '#price-history' },
@@ -209,6 +222,91 @@ function profileFactValue(fact: TickerProfileFact) {
   if (fact.label.toLowerCase() !== 'website' || !fact.value || fact.value === 'Provider pending') return fact.value;
   const href = /^https?:\/\//i.test(fact.value) ? fact.value : `https://${fact.value}`;
   return <a href={href} target="_blank" rel="noreferrer">{fact.value.replace(/^https?:\/\//i, '')}</a>;
+}
+
+function cleanFactValue(value: string | undefined | null) {
+  const cleaned = (value ?? '').trim();
+  if (!cleaned || /^provider pending$/i.test(cleaned) || /^data unavailable$/i.test(cleaned) || /^unavailable$/i.test(cleaned)) return null;
+  return cleaned;
+}
+
+function factByLabel(facts: TickerProfileFact[], labels: string[]) {
+  const normalized = labels.map((label) => label.toLowerCase());
+  for (const fact of facts) {
+    if (!normalized.includes(fact.label.trim().toLowerCase())) continue;
+    const value = cleanFactValue(fact.value);
+    if (value) return value;
+  }
+  return null;
+}
+
+function metricByLabel(metrics: TickerDisplayMetric[], labels: string[]) {
+  const normalized = labels.map((label) => label.toLowerCase());
+  for (const metric of metrics) {
+    if (!normalized.includes(metric.label.trim().toLowerCase())) continue;
+    const value = cleanFactValue(metric.value);
+    if (value) return value;
+  }
+  return null;
+}
+
+function buildFundMetricFacts(profile: {
+  name: string;
+  exchange: string;
+  currency: string;
+  headerStats: TickerDisplayMetric[];
+  companyProfile: { facts: TickerProfileFact[] };
+  supplemental?: { dividends?: TickerSupplementalSection };
+}) {
+  const facts = profile.companyProfile.facts;
+  const rows: TickerProfileFact[] = [];
+  const add = (label: string, value?: string | null) => {
+    const cleaned = cleanFactValue(value);
+    if (!cleaned) return;
+    if (rows.some((row) => row.label === label)) return;
+    rows.push({ label, value: cleaned });
+  };
+
+  add('Fund name', factByLabel(facts, ['Company Name', 'Fund Name']) ?? profile.name);
+  add('Instrument type', factByLabel(facts, ['Instrument Type', 'Quote Type']) ?? metricByLabel(profile.headerStats, ['Type']));
+  add('Issuer / family', factByLabel(facts, ['Fund Family', 'Issuer', 'Fund Provider', 'Management Company']));
+  add('Category', factByLabel(facts, ['Category', 'Fund Category', 'Sector']));
+  add('Benchmark', factByLabel(facts, ['Benchmark', 'Index', 'Underlying Index']));
+  add('ISIN', factByLabel(facts, ['ISIN']));
+  add('Domicile / country', factByLabel(facts, ['Domicile', 'Country']) ?? metricByLabel(profile.headerStats, ['Country']));
+  add('Exchange', profile.exchange);
+  add('Currency', profile.currency);
+  add('AUM / net assets', factByLabel(facts, ['Total Assets', 'Net Assets', 'AUM']));
+  add('Expense ratio', factByLabel(facts, ['Expense Ratio', 'Annual Report Expense Ratio']));
+  add('Latest dividend', metricByLabel(profile.supplemental?.dividends?.metrics ?? [], ['Latest dividend']));
+  add('Trailing dividend', metricByLabel(profile.supplemental?.dividends?.metrics ?? [], ['Trailing 12M dividends']));
+
+  return rows;
+}
+
+function FundMetricsPanel({ facts }: { facts: TickerProfileFact[] }) {
+  return (
+    <>
+      <dl className="trading-profile-facts trading-fund-metric-facts">
+        {facts.map((fact) => (
+          <div key={fact.label}>
+            <dt>{fact.label}</dt>
+            <dd>{profileFactValue(fact)}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="trading-financial-caption">Holdings, exact expense ratios, and AUM only appear when the active provider exposes them. No fund facts are guessed.</p>
+    </>
+  );
+}
+
+function FundUnavailablePanel({ title, note }: { title: string; note: string }) {
+  return (
+    <div className="trading-fund-unavailable-panel">
+      <strong>{title}</strong>
+      <p>{note}</p>
+    </div>
+  );
 }
 
 function titleFromProfile(tickerName: string, summary: string, facts: TickerProfileFact[]) {
@@ -579,6 +677,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const displayName = titleFromProfile(ticker.name, ticker.companyProfile.summary, rawProfileFacts);
   const headerStats = normalizeHeaderStats(ticker.headerStats, rawProfileFacts);
   const isFundProfile = isFundLikeProfile(rawProfileFacts, headerStats);
+  const fundMetricFacts = isFundProfile ? buildFundMetricFacts(ticker) : [];
   const profileFactsByLabel = new Map(profileFacts.map((fact) => [fact.label.toLowerCase(), fact]));
   for (const stat of headerStats) {
     const key = stat.label.toLowerCase();
@@ -637,7 +736,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
       </section>
 
       <div className="trading-ticker-tabs-row">
-        <SectionJumpNav items={makeSectionNav()} />
+        <SectionJumpNav items={makeSectionNav(isFundProfile)} />
         <ConvexClientProvider>
           <TickerWatchlistButton
             convexEnabled={Boolean(process.env.NEXT_PUBLIC_CONVEX_URL)}
@@ -673,85 +772,100 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </section>
       </div>
 
-      <section id="financial-highlights" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
-        <div className="trading-section-head">
-          <div>
-            <div className="trading-section-label">Financial highlights</div>
-          </div>
-          <span className="trading-ticker-source-note">{compactSourceList(financialHighlightSlots, ticker.sourceMap.financials)}</span>
-        </div>
-        <div className="trading-financial-highlight-grid">
-          {financialHighlightSlots.map((metric) => (
-            <article key={metric.label} className={`trading-financial-highlight-card ${metric.status === 'unavailable' ? 'is-unavailable' : ''}`}>
-              <span>{metric.label}</span>
-              <strong>{metric.value}</strong>
-              {metric.status !== 'unavailable' && metric.delta ? <em className={metric.tone}>{metric.delta}</em> : null}
-              {metric.status !== 'unavailable' && metric.trend.length ? <SmallSparkline values={metric.trend} years={metric.trendYears} tone={metric.tone as SparklineTone} /> : null}
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <div className="trading-ticker-balance-grid">
-        <section id="cash-debt" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+      {isFundProfile ? (
+        <section id="fund-metrics" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
           <div className="trading-section-head">
             <div>
-              <div className="trading-section-label">Cash & Debt</div>
-              <h2>{ticker.cashDebtSnapshot.interpretation}</h2>
+              <div className="trading-section-label">Fund metrics</div>
+              <h2>Issuer, listing, and available fund facts</h2>
             </div>
-            <span className="trading-ticker-source-note">{ticker.cashDebtSnapshot.period}</span>
+            <span className="trading-ticker-source-note">{formatCaptionSource(ticker.sourceMap.profile)}</span>
           </div>
-          <StackedRatioBar cashPercent={ticker.cashDebtSnapshot.cashPercent} debtPercent={ticker.cashDebtSnapshot.debtPercent} />
-          <dl className="trading-cash-debt-list">
-            <div>
-              <dt>Total Cash</dt>
-              <dd>{ticker.cashDebtSnapshot.totalCash}</dd>
-            </div>
-            <div>
-              <dt>Total Debt</dt>
-              <dd>{ticker.cashDebtSnapshot.totalDebt}</dd>
-            </div>
-            <div>
-              <dt>{ticker.cashDebtSnapshot.netCashLabel}</dt>
-              <dd>{ticker.cashDebtSnapshot.netCash}</dd>
-            </div>
-            <div>
-              <dt>Free Cash Flow</dt>
-              <dd>{ticker.cashDebtSnapshot.freeCashFlow}</dd>
-            </div>
-            <div>
-              <dt>Operating Cash Flow</dt>
-              <dd>{ticker.cashDebtSnapshot.operatingCashFlow}</dd>
-            </div>
-          </dl>
-          <p className="trading-financial-caption">{formatCaptionSource(ticker.cashDebtSnapshot.source)}</p>
+          <FundMetricsPanel facts={fundMetricFacts} />
         </section>
+      ) : (
+        <>
+          <section id="financial-highlights" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+            <div className="trading-section-head">
+              <div>
+                <div className="trading-section-label">Financial highlights</div>
+              </div>
+              <span className="trading-ticker-source-note">{compactSourceList(financialHighlightSlots, ticker.sourceMap.financials)}</span>
+            </div>
+            <div className="trading-financial-highlight-grid">
+              {financialHighlightSlots.map((metric) => (
+                <article key={metric.label} className={`trading-financial-highlight-card ${metric.status === 'unavailable' ? 'is-unavailable' : ''}`}>
+                  <span>{metric.label}</span>
+                  <strong>{metric.value}</strong>
+                  {metric.status !== 'unavailable' && metric.delta ? <em className={metric.tone}>{metric.delta}</em> : null}
+                  {metric.status !== 'unavailable' && metric.trend.length ? <SmallSparkline values={metric.trend} years={metric.trendYears} tone={metric.tone as SparklineTone} /> : null}
+                </article>
+              ))}
+            </div>
+          </section>
 
-        <section id="balance-sheet" style={tradingCardStyle({ minHeight: 420, maxHeight: 'none' })}>
-          <div className="trading-section-head">
-            <div>
-              <div className="trading-section-label">Balance sheet</div>
-              <h2>Assets, liabilities, equity</h2>
-            </div>
-            <div className="trading-financial-legend trading-balance-legend" aria-hidden="true">
-              <span><i /> Assets</span>
-              <span><b /> Liabilities</span>
-              <span><em /> Equity</span>
-            </div>
+          <div className="trading-ticker-balance-grid">
+            <section id="cash-debt" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+              <div className="trading-section-head">
+                <div>
+                  <div className="trading-section-label">Cash & Debt</div>
+                  <h2>{ticker.cashDebtSnapshot.interpretation}</h2>
+                </div>
+                <span className="trading-ticker-source-note">{ticker.cashDebtSnapshot.period}</span>
+              </div>
+              <StackedRatioBar cashPercent={ticker.cashDebtSnapshot.cashPercent} debtPercent={ticker.cashDebtSnapshot.debtPercent} />
+              <dl className="trading-cash-debt-list">
+                <div>
+                  <dt>Total Cash</dt>
+                  <dd>{ticker.cashDebtSnapshot.totalCash}</dd>
+                </div>
+                <div>
+                  <dt>Total Debt</dt>
+                  <dd>{ticker.cashDebtSnapshot.totalDebt}</dd>
+                </div>
+                <div>
+                  <dt>{ticker.cashDebtSnapshot.netCashLabel}</dt>
+                  <dd>{ticker.cashDebtSnapshot.netCash}</dd>
+                </div>
+                <div>
+                  <dt>Free Cash Flow</dt>
+                  <dd>{ticker.cashDebtSnapshot.freeCashFlow}</dd>
+                </div>
+                <div>
+                  <dt>Operating Cash Flow</dt>
+                  <dd>{ticker.cashDebtSnapshot.operatingCashFlow}</dd>
+                </div>
+              </dl>
+              <p className="trading-financial-caption">{formatCaptionSource(ticker.cashDebtSnapshot.source)}</p>
+            </section>
+
+            <section id="balance-sheet" style={tradingCardStyle({ minHeight: 420, maxHeight: 'none' })}>
+              <div className="trading-section-head">
+                <div>
+                  <div className="trading-section-label">Balance sheet</div>
+                  <h2>Assets, liabilities, equity</h2>
+                </div>
+                <div className="trading-financial-legend trading-balance-legend" aria-hidden="true">
+                  <span><i /> Assets</span>
+                  <span><b /> Liabilities</span>
+                  <span><em /> Equity</span>
+                </div>
+              </div>
+              <div className="trading-balance-kpi-grid">
+                {ticker.balanceSheetSnapshot.kpis.map((kpi) => (
+                  <article key={kpi.label} className={kpi.tone}>
+                    <span>{kpi.label}</span>
+                    <strong>{kpi.value}</strong>
+                    <p>{kpi.caption}</p>
+                  </article>
+                ))}
+              </div>
+              <BalanceSheetBars snapshot={ticker.balanceSheetSnapshot} />
+              <p className="trading-financial-caption">{formatCaptionSource(ticker.balanceSheetSnapshot.source)}</p>
+            </section>
           </div>
-          <div className="trading-balance-kpi-grid">
-            {ticker.balanceSheetSnapshot.kpis.map((kpi) => (
-              <article key={kpi.label} className={kpi.tone}>
-                <span>{kpi.label}</span>
-                <strong>{kpi.value}</strong>
-                <p>{kpi.caption}</p>
-              </article>
-            ))}
-          </div>
-          <BalanceSheetBars snapshot={ticker.balanceSheetSnapshot} />
-          <p className="trading-financial-caption">{formatCaptionSource(ticker.balanceSheetSnapshot.source)}</p>
-        </section>
-      </div>
+        </>
+      )}
 
       <div className="trading-ticker-secondary-grid">
         <section id="recent-news" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
@@ -818,34 +932,53 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </section>
       </div>
 
-      <div className="trading-ticker-lower-grid">
-        <section id="financial-overview" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
-          <div className="trading-section-head">
-            <div>
-              <div className="trading-section-label">Financials overview</div>
-              <h2>Revenue vs net income</h2>
-            </div>
-            <div className="trading-financial-legend" aria-hidden="true">
-              <span><i /> Revenue</span>
-              <span><b /> Net income</span>
-            </div>
-          </div>
-          <FinancialBarChart overview={ticker.financialOverview} />
-        </section>
-
-        <section id="key-ratios" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
-          <div className="trading-section-label">Key ratios (TTM)</div>
-          <dl className="trading-key-ratio-grid">
-            {keyRatios.map((ratio) => (
-              <div key={ratio.label}>
-                <dt>{ratio.label}</dt>
-                <dd className={ratio.status === 'unavailable' ? 'unavailable' : undefined}>{ratio.value}</dd>
+      {isFundProfile ? (
+        <div className="trading-ticker-lower-grid">
+          <section id="financial-overview" style={tradingCardStyle({ minHeight: 260, maxHeight: 'none' })}>
+            <div className="trading-section-head">
+              <div>
+                <div className="trading-section-label">Fund analytics</div>
+                <h2>Holdings and exposure</h2>
               </div>
-            ))}
-          </dl>
-          <p className="trading-financial-caption">{sourceList(ticker.keyRatios.filter((ratio) => !visibleHighlightRatioLabels.has(keyRatioHighlightKey(ratio.label))), ticker.sourceMap.financials)}</p>
-        </section>
-      </div>
+            </div>
+            <FundUnavailablePanel title="Holdings provider not connected" note="The active market-data path identifies the fund and its listing, but does not expose holdings, sector weights, or benchmark composition yet." />
+          </section>
+
+          <section id="key-ratios" style={tradingCardStyle({ minHeight: 260, maxHeight: 'none' })}>
+            <div className="trading-section-label">Fund cost & structure</div>
+            <FundUnavailablePanel title="Expense and AUM coverage pending" note="Expense ratio, AUM, replication method, and distribution policy will appear here when a fund-data provider exposes them for this listing." />
+          </section>
+        </div>
+      ) : (
+        <div className="trading-ticker-lower-grid">
+          <section id="financial-overview" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
+            <div className="trading-section-head">
+              <div>
+                <div className="trading-section-label">Financials overview</div>
+                <h2>Revenue vs net income</h2>
+              </div>
+              <div className="trading-financial-legend" aria-hidden="true">
+                <span><i /> Revenue</span>
+                <span><b /> Net income</span>
+              </div>
+            </div>
+            <FinancialBarChart overview={ticker.financialOverview} />
+          </section>
+
+          <section id="key-ratios" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
+            <div className="trading-section-label">Key ratios (TTM)</div>
+            <dl className="trading-key-ratio-grid">
+              {keyRatios.map((ratio) => (
+                <div key={ratio.label}>
+                  <dt>{ratio.label}</dt>
+                  <dd className={ratio.status === 'unavailable' ? 'unavailable' : undefined}>{ratio.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="trading-financial-caption">{sourceList(ticker.keyRatios.filter((ratio) => !visibleHighlightRatioLabels.has(keyRatioHighlightKey(ratio.label))), ticker.sourceMap.financials)}</p>
+          </section>
+        </div>
+      )}
 
       <section id="finance-glossary" className="trading-finance-glossary" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
         <div className="trading-section-head">
@@ -870,17 +1003,21 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
           <div className="trading-section-label">Estimates</div>
           <EstimatesPanel section={estimatesSection} />
         </section>
-        <section id="eps" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
-          <div className="trading-section-label">EPS estimates</div>
-          <EpsPanel section={estimatesSection} />
-        </section>
+        {!isFundProfile ? (
+          <section id="eps" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
+            <div className="trading-section-label">EPS estimates</div>
+            <EpsPanel section={estimatesSection} />
+          </section>
+        ) : null}
         <section id="dividends" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
           <div className="trading-section-label">Dividends</div>
           <SupplementalDataPanel section={dividendsSection} />
         </section>
         <section id="ownership" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
-          <div className="trading-section-label">Ownership</div>
-          <SupplementalDataPanel section={ticker.supplemental?.ownership} />
+          <div className="trading-section-label">{isFundProfile ? 'Holdings' : 'Ownership'}</div>
+          {isFundProfile
+            ? <FundUnavailablePanel title="Holdings feed pending" note="Top holdings and issuer allocation need a fund-specific provider. This page will not infer holdings from the fund name." />
+            : <SupplementalDataPanel section={ticker.supplemental?.ownership} />}
         </section>
         <section id="technicals" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
           <div className="trading-section-label">Technicals</div>
