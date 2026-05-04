@@ -181,6 +181,12 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("covered by eodhd market-data endpoints", watchlist)
         self.assertIn("resolvedWatchlistSymbol", watchlist)
         self.assertIn("metadata?.symbol", watchlist)
+        self.assertIn("WATCHLIST_METADATA_CACHE_KEY", watchlist)
+        self.assertIn("readWatchlistMetadataCache", watchlist)
+        self.assertIn("writeWatchlistMetadataCache", watchlist)
+        self.assertIn("mission-control-lab:watchlist-metadata:v1", watchlist)
+        self.assertIn("watchlistMetadataForItem", watchlist)
+        self.assertIn("safeMetadataName", watchlist)
         self.assertIn("name: profile.name", route)
 
     def test_wikipedia_profile_repair_guards_cover_recent_bad_profile_classes(self) -> None:

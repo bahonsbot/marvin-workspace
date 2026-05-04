@@ -55,6 +55,8 @@ function tickerResultMeta(result: TickerSearchResult) {
 }
 
 const DEMO_USER_KEY = 'lab-single-user';
+const WATCHLIST_METADATA_CACHE_KEY = 'mission-control-lab:watchlist-metadata:v1';
+const WATCHLIST_METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const priorityLabels: Record<WatchlistPriority, string> = {
   core: 'High',
   radar: 'Medium',
@@ -76,6 +78,11 @@ const sortLabels: Record<WatchlistSortKey, string> = {
 };
 const priorityRank: Record<WatchlistPriority, number> = { core: 0, radar: 1, speculative: 2 };
 const alertRank: Record<WatchlistAlertLevel, number> = { urgent: 0, watch: 1, none: 2 };
+
+type CachedWatchlistMetadataEntry = {
+  cachedAt: number;
+  item: WatchlistMetadataItem;
+};
 
 function symbolHref(symbol: string) {
   return `/trading/ticker/${encodeURIComponent(symbol)}`;
@@ -124,18 +131,83 @@ function isTickerLikeDisplayName(value: string | undefined | null, symbol: strin
 
 function resolvedWatchlistName(item: WatchlistItem, metadata?: WatchlistMetadataItem) {
   const metadataName = metadata?.name?.trim();
-  if (metadataName && (isTickerLikeDisplayName(item.name, item.symbol) || isProviderPlaceholderDisplayName(item.name) || !item.name?.trim())) return metadataName;
-  return item.name?.trim() || metadataName || 'Provider pending';
+  const safeMetadataName = metadataName && !isProviderPlaceholderDisplayName(metadataName) ? metadataName : undefined;
+  const savedName = item.name?.trim();
+  const savedNameIsFallback = isTickerLikeDisplayName(savedName, item.symbol) || isProviderPlaceholderDisplayName(savedName) || !savedName;
+  if (safeMetadataName && savedNameIsFallback) return safeMetadataName;
+  if (savedName && !savedNameIsFallback) return savedName;
+  return safeMetadataName || metadata?.symbol || item.symbol || item.displaySymbol || 'Provider pending';
 }
 
 function resolvedWatchlistSymbol(item: WatchlistItem, metadata?: WatchlistMetadataItem) {
   return metadata?.symbol || item.symbol || item.displaySymbol;
 }
 
+function watchlistMetadataForItem(metadata: Map<string, WatchlistMetadataItem>, item: WatchlistItem) {
+  return metadata.get(normalizeSymbol(item.symbol))
+    ?? metadata.get(item.symbol)
+    ?? metadata.get(normalizeSymbol(item.displaySymbol))
+    ?? metadata.get(item.displaySymbol);
+}
+
+function metadataMapFromItems(items: WatchlistMetadataItem[], requestedSymbols: string[] = []) {
+  const next = new Map<string, WatchlistMetadataItem>();
+  items.forEach((item, index) => {
+    const requestedSymbol = requestedSymbols[index];
+    if (requestedSymbol) next.set(normalizeSymbol(requestedSymbol), item);
+    next.set(normalizeSymbol(item.symbol), item);
+  });
+  return next;
+}
+
+function readWatchlistMetadataCache(symbols: string[]) {
+  if (typeof window === 'undefined') return new Map<string, WatchlistMetadataItem>();
+  try {
+    const raw = window.localStorage.getItem(WATCHLIST_METADATA_CACHE_KEY);
+    if (!raw) return new Map<string, WatchlistMetadataItem>();
+    const parsed = JSON.parse(raw) as Record<string, CachedWatchlistMetadataEntry>;
+    const now = Date.now();
+    const next = new Map<string, WatchlistMetadataItem>();
+    for (const symbol of symbols) {
+      const normalizedSymbol = normalizeSymbol(symbol);
+      const cached = parsed[normalizedSymbol];
+      if (!cached?.item || now - cached.cachedAt > WATCHLIST_METADATA_CACHE_TTL_MS) continue;
+      next.set(normalizedSymbol, cached.item);
+      next.set(normalizeSymbol(cached.item.symbol), cached.item);
+    }
+    return next;
+  } catch {
+    return new Map<string, WatchlistMetadataItem>();
+  }
+}
+
+function writeWatchlistMetadataCache(items: WatchlistMetadataItem[], requestedSymbols: string[]) {
+  if (typeof window === 'undefined' || !items.length) return;
+  try {
+    const now = Date.now();
+    const raw = window.localStorage.getItem(WATCHLIST_METADATA_CACHE_KEY);
+    const parsed = raw ? JSON.parse(raw) as Record<string, CachedWatchlistMetadataEntry> : {};
+    const next: Record<string, CachedWatchlistMetadataEntry> = {};
+    for (const [key, entry] of Object.entries(parsed)) {
+      if (!entry?.item || now - entry.cachedAt > WATCHLIST_METADATA_CACHE_TTL_MS) continue;
+      next[key] = entry;
+    }
+    items.forEach((item, index) => {
+      const requestedSymbol = requestedSymbols[index];
+      const entry = { cachedAt: now, item };
+      next[normalizeSymbol(item.symbol)] = entry;
+      if (requestedSymbol) next[normalizeSymbol(requestedSymbol)] = entry;
+    });
+    window.localStorage.setItem(WATCHLIST_METADATA_CACHE_KEY, JSON.stringify(next));
+  } catch {
+    // Cache is best-effort only. Rendering should never depend on localStorage.
+  }
+}
+
 function sortWatchlistItems(items: WatchlistItem[], metadata: Map<string, WatchlistMetadataItem>, sortKey: WatchlistSortKey) {
   return [...items].sort((a, b) => {
-    const metaA = metadata.get(a.symbol);
-    const metaB = metadata.get(b.symbol);
+    const metaA = watchlistMetadataForItem(metadata, a);
+    const metaB = watchlistMetadataForItem(metadata, b);
     if (sortKey === 'name') return resolvedWatchlistName(a, metaA).localeCompare(resolvedWatchlistName(b, metaB));
     if (sortKey === 'price') return (parseMetricNumber(metaB?.price) ?? -Infinity) - (parseMetricNumber(metaA?.price) ?? -Infinity);
     if (sortKey === 'change') return (parseMetricNumber(metaB?.changePct) ?? -Infinity) - (parseMetricNumber(metaA?.changePct) ?? -Infinity);
@@ -470,7 +542,7 @@ function WatchlistTable({ items, canMutate, metadata, metadataLoading, onRemove,
         </thead>
         <tbody>
           {items.map((item) => {
-            const itemMetadata = metadata.get(item.symbol);
+            const itemMetadata = watchlistMetadataForItem(metadata, item);
             const tone = itemMetadata?.tone ?? 'neutral';
             const displayName = resolvedWatchlistName(item, itemMetadata);
             return (
@@ -708,8 +780,8 @@ function WatchlistNews({ items, metadata, isLoading }: { items: WatchlistItem[];
           <div className="trading-watchlist-news-symbols">
             {previewItems.map((item) => (
               <span key={item._id}>
-                <WatchlistLogo item={item} metadata={metadata.get(item.symbol)} />
-                {resolvedWatchlistSymbol(item, metadata.get(item.symbol))}
+                <WatchlistLogo item={item} metadata={watchlistMetadataForItem(metadata, item)} />
+                {resolvedWatchlistSymbol(item, watchlistMetadataForItem(metadata, item))}
               </span>
             ))}
           </div>
@@ -735,7 +807,8 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
   }, [selectedWatchlistId, watchlists]);
   const items = useMemo(() => activeWatchlist?.items ?? [], [activeWatchlist?.items]);
   const sortedItems = useMemo(() => sortWatchlistItems(items, metadata, sortKey), [items, metadata, sortKey]);
-  const symbolsKey = useMemo(() => items.map((item) => item.symbol).sort().join(','), [items]);
+  const symbols = useMemo(() => items.map((item) => normalizeSymbol(item.symbol)).filter(Boolean).sort(), [items]);
+  const symbolsKey = useMemo(() => symbols.join(','), [symbols]);
 
   useEffect(() => {
     if (!symbolsKey) {
@@ -743,6 +816,8 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
       setMetadataLoading(false);
       return;
     }
+    const requestedSymbols = symbolsKey.split(',').filter(Boolean);
+    setMetadata(readWatchlistMetadataCache(requestedSymbols));
     const controller = new AbortController();
     setMetadataLoading(true);
     fetch(`/api/trading/watchlist-metadata?symbols=${encodeURIComponent(symbolsKey)}`, {
@@ -754,10 +829,12 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
         return response.json() as Promise<WatchlistMetadataResponse>;
       })
       .then((data) => {
-        setMetadata(new Map((data.items ?? []).map((item) => [item.symbol, item])));
+        const items = data.items ?? [];
+        writeWatchlistMetadataCache(items, requestedSymbols);
+        setMetadata(metadataMapFromItems(items, requestedSymbols));
       })
       .catch(() => {
-        if (!controller.signal.aborted) setMetadata(new Map());
+        if (!controller.signal.aborted) setMetadata(readWatchlistMetadataCache(requestedSymbols));
       })
       .finally(() => {
         if (!controller.signal.aborted) setMetadataLoading(false);
