@@ -278,6 +278,10 @@ function buildFundMetricFacts(profile: {
   add('Currency', profile.currency);
   add('AUM / net assets', factByLabel(facts, ['Total Assets', 'Net Assets', 'AUM']));
   add('Expense ratio', factByLabel(facts, ['Expense Ratio', 'Annual Report Expense Ratio']));
+  add('Holdings', factByLabel(facts, ['Holdings Count']));
+  add('Top 10 weight', factByLabel(facts, ['Top 10 Weight']));
+  add('Replication', factByLabel(facts, ['Replication']));
+  add('Distribution policy', factByLabel(facts, ['Distribution Policy']));
   add('Latest dividend', metricByLabel(profile.supplemental?.dividends?.metrics ?? [], ['Latest dividend']));
   add('Trailing dividend', metricByLabel(profile.supplemental?.dividends?.metrics ?? [], ['Trailing 12M dividends']));
 
@@ -307,6 +311,36 @@ function FundUnavailablePanel({ title, note }: { title: string; note: string }) 
       <p>{note}</p>
     </div>
   );
+}
+
+function FundMetricListPanel({ metrics, emptyTitle, emptyNote }: { metrics: TickerDisplayMetric[]; emptyTitle: string; emptyNote: string }) {
+  const availableMetrics = metrics.filter((metric) => cleanFactValue(metric.value));
+  if (!availableMetrics.length) return <FundUnavailablePanel title={emptyTitle} note={emptyNote} />;
+  return (
+    <>
+      <dl className="trading-fund-list-panel">
+        {availableMetrics.map((metric) => (
+          <div key={`${metric.label}-${metric.value}`}>
+            <dt>{metric.label}</dt>
+            <dd>{metric.value}</dd>
+            {metric.note ? <p>{metric.note}</p> : null}
+          </div>
+        ))}
+      </dl>
+      <p className="trading-financial-caption">{sourceList(availableMetrics, availableMetrics[0]?.source)}</p>
+    </>
+  );
+}
+
+function splitFundOwnershipMetrics(section?: TickerSupplementalSection) {
+  const metrics = section?.metrics ?? [];
+  const costLabels = new Set(['expense ratio', 'aum / fund size', 'replication', 'distribution policy']);
+  const summaryLabels = new Set(['holdings', 'top 10 weight']);
+  return {
+    summary: metrics.filter((metric) => summaryLabels.has(metric.label.trim().toLowerCase())),
+    holdings: metrics.filter((metric) => !costLabels.has(metric.label.trim().toLowerCase()) && !summaryLabels.has(metric.label.trim().toLowerCase())),
+    cost: metrics.filter((metric) => costLabels.has(metric.label.trim().toLowerCase())),
+  };
 }
 
 function titleFromProfile(tickerName: string, summary: string, facts: TickerProfileFact[]) {
@@ -678,6 +712,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const headerStats = normalizeHeaderStats(ticker.headerStats, rawProfileFacts);
   const isFundProfile = isFundLikeProfile(rawProfileFacts, headerStats);
   const fundMetricFacts = isFundProfile ? buildFundMetricFacts(ticker) : [];
+  const fundOwnershipMetrics = isFundProfile ? splitFundOwnershipMetrics(ticker.supplemental?.ownership) : { summary: [], holdings: [], cost: [] };
   const profileFactsByLabel = new Map(profileFacts.map((fact) => [fact.label.toLowerCase(), fact]));
   for (const stat of headerStats) {
     const key = stat.label.toLowerCase();
@@ -941,12 +976,20 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
                 <h2>Holdings and exposure</h2>
               </div>
             </div>
-            <FundUnavailablePanel title="Holdings provider not connected" note="The active market-data path identifies the fund and its listing, but does not expose holdings, sector weights, or benchmark composition yet." />
+            <FundMetricListPanel
+              metrics={[...fundOwnershipMetrics.summary, ...fundOwnershipMetrics.holdings]}
+              emptyTitle="Holdings provider not connected"
+              emptyNote="The active market-data path identifies the fund and its listing, but does not expose holdings, sector weights, or benchmark composition yet."
+            />
           </section>
 
           <section id="key-ratios" style={tradingCardStyle({ minHeight: 260, maxHeight: 'none' })}>
             <div className="trading-section-label">Fund cost & structure</div>
-            <FundUnavailablePanel title="Expense and AUM coverage pending" note="Expense ratio, AUM, replication method, and distribution policy will appear here when a fund-data provider exposes them for this listing." />
+            <FundMetricListPanel
+              metrics={fundOwnershipMetrics.cost}
+              emptyTitle="Expense and AUM coverage pending"
+              emptyNote="Expense ratio, AUM, replication method, and distribution policy will appear here when a fund-data provider exposes them for this listing."
+            />
           </section>
         </div>
       ) : (
@@ -1016,7 +1059,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         <section id="ownership" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>
           <div className="trading-section-label">{isFundProfile ? 'Holdings' : 'Ownership'}</div>
           {isFundProfile
-            ? <FundUnavailablePanel title="Holdings feed pending" note="Top holdings and issuer allocation need a fund-specific provider. This page will not infer holdings from the fund name." />
+            ? <FundMetricListPanel metrics={fundOwnershipMetrics.holdings} emptyTitle="Holdings feed pending" emptyNote="Top holdings and issuer allocation need a fund-specific provider. This page will not infer holdings from the fund name." />
             : <SupplementalDataPanel section={ticker.supplemental?.ownership} />}
         </section>
         <section id="technicals" style={tradingCardStyle({ minHeight: 214, maxHeight: 'none' })}>

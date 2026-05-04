@@ -2,6 +2,7 @@ import 'server-only';
 
 import type { TickerProfile, TickerSupplementalData } from '../contracts';
 import { financeDatabaseFacts, financeDatabaseSource, findFinanceDatabaseProfile } from './finance-database';
+import { fetchJustEtfFundFacts, mergeJustEtfSupplementalData } from './justetf-fund-facts';
 import { fetchNonUsFilingsResources } from './xbrl-filings';
 import {
   bridgeMetricsToDisplay,
@@ -107,10 +108,11 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     !profile.resources.some((group) => group.items.length)
   );
 
-  const [financeDatabaseProfile, yfinanceData, nonUsFilings] = await Promise.all([
+  const [financeDatabaseProfile, yfinanceData, nonUsFilings, justEtfFacts] = await Promise.all([
     Promise.resolve(findFinanceDatabaseProfile(profile.symbol)),
     fetchFirstYfinance(profile.symbol),
     shouldFetchNonUsFilings ? fetchNonUsFilingsResources(profile) : Promise.resolve(null),
+    fetchJustEtfFundFacts(profile),
   ]);
 
   const yfinanceMetaSource = yfinanceData ? yfinanceSource(yfinanceData.asOf, yfinanceData.sourceNote) : null;
@@ -127,6 +129,12 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
       companyProfile.source = yfinanceMetaSource;
     }
   }
+  if (justEtfFacts?.facts.length) {
+    companyProfile.facts = mergeFacts(companyProfile.facts, justEtfFacts.facts);
+    if (companyProfile.source.freshness === 'missing' || isGenericProfileSummary(companyProfile.summary)) {
+      companyProfile.source = justEtfFacts.source;
+    }
+  }
 
   const companyNameFact = normalizeIdentity(factValue(companyProfile.facts, 'Company Name'));
   const quoteTypeFact = factValue(companyProfile.facts, 'Quote Type') ?? factValue(companyProfile.facts, 'Instrument Type');
@@ -134,7 +142,9 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     ? companyNameFact
     : normalizeIdentity(profile.name);
   const displayName = !isTickerLikeName(promotedName, profile.symbol) ? promotedName : profile.symbol;
-  if (isGenericProfileSummary(companyProfile.summary)) {
+  if (justEtfFacts?.summary && isFundLikeQuoteType(quoteTypeFact)) {
+    companyProfile.summary = justEtfFacts.summary;
+  } else if (isGenericProfileSummary(companyProfile.summary)) {
     companyProfile.summary = fallbackSummary(displayName, quoteTypeFact, profile.exchange);
   }
 
@@ -184,6 +194,10 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     }
   }
 
+  if (justEtfFacts) {
+    supplemental = mergeJustEtfSupplementalData({ ...profile, supplemental }, justEtfFacts);
+  }
+
   const shouldBackfillFinancials = Boolean(yfinanceMetaSource);
   const yfinanceHighlights = shouldBackfillFinancials ? yfinanceFinancialHighlights(yfinanceData, yfinanceMetaSource!) : [];
   const yfinanceCashDebt = shouldBackfillFinancials ? yfinanceCashDebtSnapshot(yfinanceData, yfinanceMetaSource!) : null;
@@ -200,6 +214,17 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
       ? []
       : profile.resources
   );
+  const enrichedResources = justEtfFacts ? [
+    ...resources,
+    {
+      label: 'Fund facts',
+      items: justEtfFacts.resources.map((resource) => ({
+        ...resource,
+        kind: 'resource' as const,
+        source: justEtfFacts.source,
+      })),
+    },
+  ] : resources;
 
   return {
     ...profile,
@@ -213,7 +238,7 @@ export async function enrichTickerProfileWithReferenceData(profile: TickerProfil
     cashDebtSnapshot: yfinanceCashDebt ?? profile.cashDebtSnapshot,
     balanceSheetSnapshot: yfinanceBalanceSheet ?? profile.balanceSheetSnapshot,
     financialOverview: yfinanceOverview ?? profile.financialOverview,
-    resources,
+    resources: enrichedResources,
     sourceMap,
     supplemental,
   };

@@ -1119,6 +1119,44 @@
   line-height: 1.55;
 }
 
+:global(.trading-fund-list-panel) {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 18px;
+  border-top: 1px solid rgba(28, 37, 32, 0.1);
+}
+
+:global(.trading-fund-list-panel div) {
+  display: grid;
+  gap: 4px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(28, 37, 32, 0.1);
+}
+
+:global(.trading-fund-list-panel dt) {
+  color: rgba(34, 48, 41, 0.6);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+
+:global(.trading-fund-list-panel dd) {
+  margin: 0;
+  color: #18211c;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+:global(.trading-fund-list-panel p) {
+  margin: 0;
+  color: rgba(34, 48, 41, 0.5);
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+
 :global(.trading-ticker-source-note) {
   color: rgba(34, 48, 41, 0.52);
   font-size: 11px;

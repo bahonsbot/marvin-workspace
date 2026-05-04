@@ -15,6 +15,7 @@ SOURCE_FILES = {
     "ticker_profile": ROOT / "lib" / "trading" / "ticker-profile.ts",
     "contracts": ROOT / "lib" / "trading" / "contracts.ts",
     "reference_enrichment": ROOT / "lib" / "trading" / "sources" / "reference-enrichment.ts",
+    "justetf_fund_facts": ROOT / "lib" / "trading" / "sources" / "justetf-fund-facts.ts",
     "eodhd": ROOT / "lib" / "trading" / "sources" / "eodhd.ts",
     "yfinance_bridge": ROOT / "lib" / "trading" / "sources" / "yfinance-bridge.ts",
     "wikipedia": ROOT / "lib" / "trading" / "sources" / "wikipedia.ts",
@@ -114,8 +115,26 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("Expense and AUM coverage pending", ticker_page)
         self.assertIn("This page will not infer holdings from the fund name", ticker_page)
         self.assertIn("!isFundProfile", ticker_page)
+        self.assertIn("FundMetricListPanel", ticker_page)
+        self.assertIn("splitFundOwnershipMetrics", ticker_page)
         self.assertIn("trading-fund-metric-facts", styles)
         self.assertIn("trading-fund-unavailable-panel", styles)
+        self.assertIn("trading-fund-list-panel", styles)
+
+    def test_justetf_fund_facts_enrichment_is_wired_by_isin(self) -> None:
+        contracts = read_source("contracts")
+        reference = read_source("reference_enrichment")
+        justetf = read_source("justetf_fund_facts")
+
+        self.assertIn("'justetf'", contracts)
+        self.assertIn("fetchJustEtfFundFacts(profile)", reference)
+        self.assertIn("mergeJustEtfSupplementalData", reference)
+        self.assertIn("justETF profile", justetf)
+        self.assertIn("JUSTETF_BASE_URL", justetf)
+        self.assertIn("parseTopHoldings", justetf)
+        self.assertIn("Expense Ratio", justetf)
+        self.assertIn("Top 10 Weight", justetf)
+        self.assertIn("Fund Provider", justetf)
 
     def test_ticker_chart_accents_avoid_legacy_brown_palette(self) -> None:
         styles = read_source("trading_styles")
