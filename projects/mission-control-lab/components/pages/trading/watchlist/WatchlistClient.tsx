@@ -660,10 +660,10 @@ function WatchlistTable({ items, watchlists, activeWatchlistId, canMutate, metad
                 </td>
                 <td className="trading-watchlist-row-actions">
                   <button type="button" className="trading-watchlist-more-button" onClick={(event) => toggleRowMenu(item, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`Move ${resolvedWatchlistSymbol(item, itemMetadata)} to another watchlist`}>
-                    ↔
+                    <span aria-hidden="true">↔</span>
                   </button>
                   <button type="button" className="trading-watchlist-remove-pill" onClick={() => onRemove?.(item._id)} disabled={!canMutate || item._id.startsWith('sample-') || removingId === item._id || updatingId === item._id || movingId === item._id} aria-label={`Remove ${resolvedWatchlistSymbol(item, itemMetadata)}`}>
-                    {removingId === item._id ? '…' : '−'}
+                    <span aria-hidden="true">{removingId === item._id ? '…' : '−'}</span>
                   </button>
                   {updateError?.id === item._id ? <span className="trading-watchlist-row-error">{updateError.message}</span> : null}
                   {openRowMenu?.id === item._id ? (

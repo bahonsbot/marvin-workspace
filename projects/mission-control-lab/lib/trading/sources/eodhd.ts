@@ -266,7 +266,7 @@ export async function fetchEodhdJson<T>(path: string, params: Record<string, str
         'user-agent': EODHD_USER_AGENT,
       },
       cache: params.__noStore === 1 ? 'no-store' : undefined,
-      next: params.__noStore === 1 ? undefined : { revalidate: 300 },
+      next: params.__noStore === 1 ? undefined : { revalidate: path.startsWith('/intraday/') ? 60 : 300 },
     });
     if (!response.ok) return null;
     return (await response.json()) as T;
@@ -400,8 +400,23 @@ async function fetchRange(symbol: string, range: EodhdPriceRange, now: Date, sou
       interval: range === '1D' ? '5m' : '1h',
       from: unixSeconds(daysAgo(now, days)),
       to: unixSeconds(now),
+      __noStore: range === '1D' ? 1 : undefined,
     });
-    return rangeFromIntradayRows(range, Array.isArray(rows) ? rows : [], source, currency);
+    const series = rangeFromIntradayRows(range, Array.isArray(rows) ? rows : [], source, currency);
+    if (range !== '1D' || !series?.points.length) return series;
+    const latestPoint = series.points.at(-1);
+    const nowSeconds = unixSeconds(now);
+    const latestSeconds = typeof latestPoint?.time === 'number' ? latestPoint.time : Date.parse(String(latestPoint?.time)) / 1000;
+    if (Number.isFinite(latestSeconds) && nowSeconds - latestSeconds <= 18 * 60 * 60) return series;
+
+    const todayRows = await fetchEodhdJson<EodhdIntradayRow[]>(`/intraday/${encodeURIComponent(symbol)}`, {
+      interval: '5m',
+      from: unixSeconds(startOfUtcDay(now)),
+      to: nowSeconds,
+      __noStore: 1,
+    });
+    const todaySeries = rangeFromIntradayRows(range, Array.isArray(todayRows) ? todayRows : [], source, currency);
+    return todaySeries?.points.length ? todaySeries : series;
   }
 
   const rows = await fetchEodhdJson<EodhdEodRow[]>(`/eod/${encodeURIComponent(symbol)}`, {

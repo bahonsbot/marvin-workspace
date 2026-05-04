@@ -203,14 +203,15 @@ function compactPriceSeries(closes: Array<number | null | undefined>) {
   return output;
 }
 
-async function fetchJson<T>(url: string): Promise<T | null> {
+async function fetchJson<T>(url: string, noStore = false): Promise<T | null> {
   try {
     const response = await fetch(url, {
       headers: {
         accept: 'application/json',
         'user-agent': YAHOO_USER_AGENT,
       },
-      next: { revalidate: 300 },
+      cache: noStore ? 'no-store' : undefined,
+      next: noStore ? undefined : { revalidate: 300 },
     });
     if (!response.ok) return null;
     return (await response.json()) as T;
@@ -234,7 +235,7 @@ const yahooRangeParams: Record<(typeof YAHOO_PRICE_RANGES)[number], { range: str
 async function fetchYahooChart(symbol: string, range: (typeof YAHOO_PRICE_RANGES)[number] = '1Y') {
   const params = yahooRangeParams[range];
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${params.range}&interval=${params.interval}`;
-  const data = await fetchJson<YahooChartResponse>(url);
+  const data = await fetchJson<YahooChartResponse>(url, range === '1D');
   return data?.chart?.result?.[0] ?? null;
 }
 
