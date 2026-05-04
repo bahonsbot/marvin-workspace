@@ -3392,6 +3392,7 @@
 :global(.trading-watchlist-page-table td:nth-child(9)) {
   padding-left: 4px;
   padding-right: 0;
+  border-bottom-color: transparent;
 }
 
 :global(.trading-watchlist-row-actions) {
@@ -3401,6 +3402,7 @@
   align-items: center;
   gap: 5px;
   min-height: 26px;
+  transform: translateY(5px);
 }
 
 :global(.trading-watchlist-more-button),
