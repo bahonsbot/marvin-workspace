@@ -68,7 +68,9 @@ function tickerResultMeta(result: TickerSearchResult) {
 
 const DEMO_USER_KEY = 'lab-single-user';
 const WATCHLIST_METADATA_CACHE_KEY = 'mission-control-lab:watchlist-metadata:v1';
+const WATCHLIST_NEWS_CACHE_KEY = 'mission-control-lab:watchlist-news:v1';
 const WATCHLIST_METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const WATCHLIST_NEWS_CACHE_TTL_MS = 30 * 60 * 1000;
 const priorityLabels: Record<WatchlistPriority, string> = {
   core: 'High',
   radar: 'Medium',
@@ -94,6 +96,11 @@ const alertRank: Record<WatchlistAlertLevel, number> = { urgent: 0, watch: 1, no
 type CachedWatchlistMetadataEntry = {
   cachedAt: number;
   item: WatchlistMetadataItem;
+};
+
+type CachedWatchlistNewsEntry = {
+  cachedAt: number;
+  news: WatchlistNewsItem[];
 };
 
 function symbolHref(symbol: string) {
@@ -211,6 +218,47 @@ function writeWatchlistMetadataCache(items: WatchlistMetadataItem[], requestedSy
       if (requestedSymbol) next[normalizeSymbol(requestedSymbol)] = entry;
     });
     window.localStorage.setItem(WATCHLIST_METADATA_CACHE_KEY, JSON.stringify(next));
+  } catch {
+    // Cache is best-effort only. Rendering should never depend on localStorage.
+  }
+}
+
+
+function watchlistNewsCacheKey(symbolsKey: string) {
+  return symbolsKey.split(',').map(normalizeSymbol).filter(Boolean).sort().join(',');
+}
+
+function readWatchlistNewsCache(symbolsKey: string) {
+  if (typeof window === 'undefined') return [] as WatchlistNewsItem[];
+  try {
+    const key = watchlistNewsCacheKey(symbolsKey);
+    if (!key) return [];
+    const raw = window.localStorage.getItem(WATCHLIST_NEWS_CACHE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as Record<string, CachedWatchlistNewsEntry>;
+    const cached = parsed[key];
+    if (!cached?.news?.length || Date.now() - cached.cachedAt > WATCHLIST_NEWS_CACHE_TTL_MS) return [];
+    return cached.news;
+  } catch {
+    return [];
+  }
+}
+
+function writeWatchlistNewsCache(symbolsKey: string, news: WatchlistNewsItem[]) {
+  if (typeof window === 'undefined' || !news.length) return;
+  try {
+    const key = watchlistNewsCacheKey(symbolsKey);
+    if (!key) return;
+    const now = Date.now();
+    const raw = window.localStorage.getItem(WATCHLIST_NEWS_CACHE_KEY);
+    const parsed = raw ? JSON.parse(raw) as Record<string, CachedWatchlistNewsEntry> : {};
+    const next: Record<string, CachedWatchlistNewsEntry> = {};
+    for (const [entryKey, entry] of Object.entries(parsed)) {
+      if (!entry?.news?.length || now - entry.cachedAt > WATCHLIST_NEWS_CACHE_TTL_MS) continue;
+      next[entryKey] = entry;
+    }
+    next[key] = { cachedAt: now, news };
+    window.localStorage.setItem(WATCHLIST_NEWS_CACHE_KEY, JSON.stringify(next));
   } catch {
     // Cache is best-effort only. Rendering should never depend on localStorage.
   }
@@ -844,6 +892,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
     }
     const requestedSymbols = symbolsKey.split(',').filter(Boolean);
     setMetadata(readWatchlistMetadataCache(requestedSymbols));
+    setWatchlistNews(readWatchlistNewsCache(symbolsKey));
     const controller = new AbortController();
     setMetadataLoading(true);
     fetch(`/api/trading/watchlist-metadata?symbols=${encodeURIComponent(symbolsKey)}`, {
@@ -857,13 +906,15 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
       .then((data) => {
         const items = data.items ?? [];
         writeWatchlistMetadataCache(items, requestedSymbols);
+        const news = data.news ?? [];
+        writeWatchlistNewsCache(symbolsKey, news);
         setMetadata(metadataMapFromItems(items, requestedSymbols));
-        setWatchlistNews(data.news ?? []);
+        setWatchlistNews(news.length ? news : readWatchlistNewsCache(symbolsKey));
       })
       .catch(() => {
         if (!controller.signal.aborted) {
           setMetadata(readWatchlistMetadataCache(requestedSymbols));
-          setWatchlistNews([]);
+          setWatchlistNews(readWatchlistNewsCache(symbolsKey));
         }
       })
       .finally(() => {
@@ -941,7 +992,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
         </article>
       </section>
 
-      <WatchlistNews items={items} metadata={metadata} news={watchlistNews} isLoading={isLoading || metadataLoading} />
+      <WatchlistNews items={items} metadata={metadata} news={watchlistNews} isLoading={isLoading || (metadataLoading && !watchlistNews.length)} />
     </>
   );
 }
