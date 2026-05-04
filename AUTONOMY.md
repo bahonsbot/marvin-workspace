@@ -7,6 +7,7 @@ This file governs proactive execution outside heartbeat.
 
 Autonomy is for Marvin's Workspace Lane only.
 Heartbeat must not be the normal trigger for proactive execution.
+System cron-owned reasoning jobs, such as nightly memory extraction, operate under separate cron governance and are not enumerated here as Workspace Lane autonomy modes.
 
 ## Live Modes
 Current autonomy is limited to two live modes:
