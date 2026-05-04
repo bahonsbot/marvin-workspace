@@ -1,6 +1,22 @@
 import { NextResponse } from 'next/server';
-import type { TickerDisplayMetric, TickerProfile } from '@/lib/trading/contracts';
+import type { TickerDisplayMetric, TickerNewsItem, TickerProfile } from '@/lib/trading/contracts';
 import { getTickerProfile } from '@/lib/trading/ticker-profile';
+
+type WatchlistNews = {
+  symbol: string;
+  name: string;
+  source: string;
+  time: string;
+  title: string;
+  summary: string;
+  url?: string;
+  kind?: TickerNewsItem['kind'];
+};
+
+type WatchlistProfilePayload = {
+  metadata: WatchlistMetadata;
+  news: WatchlistNews[];
+};
 
 type WatchlistMetadata = {
   symbol: string;
@@ -79,6 +95,51 @@ function metadataFromProfile(profile: TickerProfile): WatchlistMetadata {
   };
 }
 
+
+function isUsableNewsItem(item: TickerNewsItem) {
+  if (!item.title?.trim()) return false;
+  if (!item.url?.trim()) return false;
+  if (/headlines unavailable/i.test(item.title)) return false;
+  if (/provider pending/i.test(item.time)) return false;
+  return true;
+}
+
+function newsFromProfile(profile: TickerProfile): WatchlistNews[] {
+  return profile.recentNews
+    .filter(isUsableNewsItem)
+    .slice(0, 3)
+    .map((item) => ({
+      symbol: profile.symbol,
+      name: profile.name,
+      source: item.source,
+      time: item.time,
+      title: item.title,
+      summary: item.summary,
+      url: item.url,
+      kind: item.kind,
+    }));
+}
+
+function payloadFromProfile(profile: TickerProfile): WatchlistProfilePayload {
+  return {
+    metadata: metadataFromProfile(profile),
+    news: newsFromProfile(profile),
+  };
+}
+
+function dedupeNews(items: WatchlistNews[]) {
+  const seen = new Set<string>();
+  const next: WatchlistNews[] = [];
+  for (const item of items) {
+    const key = item.url?.trim().toLowerCase() || `${item.symbol}:${item.title}`.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    next.push(item);
+    if (next.length >= 18) break;
+  }
+  return next;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const symbols = (searchParams.get('symbols') ?? '')
@@ -89,9 +150,9 @@ export async function GET(request: Request) {
 
   if (!symbols.length) return NextResponse.json({ items: [] });
 
-  const settled = await Promise.allSettled(symbols.map(async (symbol) => metadataFromProfile(await getTickerProfile(symbol))));
+  const settled = await Promise.allSettled(symbols.map(async (symbol) => payloadFromProfile(await getTickerProfile(symbol))));
   const items = settled.map((result, index) => {
-    if (result.status === 'fulfilled') return result.value;
+    if (result.status === 'fulfilled') return result.value.metadata;
     const symbol = symbols[index];
     return {
       symbol,
@@ -110,5 +171,7 @@ export async function GET(request: Request) {
     };
   });
 
-  return NextResponse.json({ items });
+  const news = dedupeNews(settled.flatMap((result) => result.status === 'fulfilled' ? result.value.news : []));
+
+  return NextResponse.json({ items, news });
 }

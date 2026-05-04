@@ -46,8 +46,20 @@ interface WatchlistMetadataItem {
   source: string;
 }
 
+interface WatchlistNewsItem {
+  symbol: string;
+  name: string;
+  source: string;
+  time: string;
+  title: string;
+  summary: string;
+  url?: string;
+  kind?: 'story' | 'video' | 'press-release' | 'news';
+}
+
 interface WatchlistMetadataResponse {
   items: WatchlistMetadataItem[];
+  news?: WatchlistNewsItem[];
 }
 
 function tickerResultMeta(result: TickerSearchResult) {
@@ -765,7 +777,7 @@ function LiveWatchlistManager({ activeWatchlist, canDelete, onCreated, onClose }
   );
 }
 
-function WatchlistNews({ items, metadata, isLoading }: { items: WatchlistItem[]; metadata: Map<string, WatchlistMetadataItem>; isLoading?: boolean }) {
+function WatchlistNews({ items, metadata, news, isLoading }: { items: WatchlistItem[]; metadata: Map<string, WatchlistMetadataItem>; news: WatchlistNewsItem[]; isLoading?: boolean }) {
   const previewItems = items.slice(0, 6);
 
   return (
@@ -775,6 +787,18 @@ function WatchlistNews({ items, metadata, isLoading }: { items: WatchlistItem[];
       </div>
       {isLoading ? (
         <p>Loading watchlist news…</p>
+      ) : news.length ? (
+        <div className="trading-watchlist-news-list">
+          {news.map((item) => (
+            <article key={`${item.symbol}-${item.title}`}>
+              <a href={item.url} target="_blank" rel="noreferrer" aria-label={`${item.title} source link`}>
+                <span>{item.symbol} · {item.source} · {item.time}{item.kind === 'video' ? ' · Video' : ''}</span>
+                <strong>{item.title}</strong>
+                <p>{item.summary}</p>
+              </a>
+            </article>
+          ))}
+        </div>
       ) : items.length ? (
         <div className="trading-watchlist-news-placeholder">
           <div className="trading-watchlist-news-symbols">
@@ -785,7 +809,7 @@ function WatchlistNews({ items, metadata, isLoading }: { items: WatchlistItem[];
               </span>
             ))}
           </div>
-          <p>No linked headlines yet. Relevant news for this list will appear here when available.</p>
+          <p>No provider-linked headlines are available for this list right now.</p>
         </div>
       ) : (
         <p>Add symbols to see related headlines for the selected watchlist.</p>
@@ -799,6 +823,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
   const [menuOpen, setMenuOpen] = useState(false);
   const [sortKey, setSortKey] = useState<WatchlistSortKey>('updated');
   const [metadata, setMetadata] = useState<Map<string, WatchlistMetadataItem>>(new Map());
+  const [watchlistNews, setWatchlistNews] = useState<WatchlistNewsItem[]>([]);
   const [metadataLoading, setMetadataLoading] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const activeWatchlist = useMemo(() => {
@@ -813,6 +838,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
   useEffect(() => {
     if (!symbolsKey) {
       setMetadata(new Map());
+      setWatchlistNews([]);
       setMetadataLoading(false);
       return;
     }
@@ -832,9 +858,13 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
         const items = data.items ?? [];
         writeWatchlistMetadataCache(items, requestedSymbols);
         setMetadata(metadataMapFromItems(items, requestedSymbols));
+        setWatchlistNews(data.news ?? []);
       })
       .catch(() => {
-        if (!controller.signal.aborted) setMetadata(readWatchlistMetadataCache(requestedSymbols));
+        if (!controller.signal.aborted) {
+          setMetadata(readWatchlistMetadataCache(requestedSymbols));
+          setWatchlistNews([]);
+        }
       })
       .finally(() => {
         if (!controller.signal.aborted) setMetadataLoading(false);
@@ -911,7 +941,7 @@ function WatchlistLayout({ watchlists, isLive, isLoading }: { watchlists: Watchl
         </article>
       </section>
 
-      <WatchlistNews items={items} metadata={metadata} isLoading={isLoading} />
+      <WatchlistNews items={items} metadata={metadata} news={watchlistNews} isLoading={isLoading || metadataLoading} />
     </>
   );
 }
