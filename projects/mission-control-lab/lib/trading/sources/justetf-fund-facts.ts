@@ -99,7 +99,7 @@ function parseTopHoldings(text: string, source: TickerSourceMeta) {
     .map((match) => ({ name: cleanText(match[1]), weight: match[2] }))
     .filter((item) => item.name && !/^(Top 10 Holdings|Weight of top|out of|Show more)/i.test(item.name))
     .slice(0, 10)
-    .map((item) => metric(item.name, item.weight, source))
+    .map((item) => metric(item.name, item.weight, source, 'Fund holding'))
     .filter((item): item is TickerDisplayMetric => Boolean(item));
 }
 
@@ -222,6 +222,7 @@ export function mergeJustEtfSupplementalData(profile: TickerProfile, justEtf: Ju
   const ownershipMetrics = [
     ...justEtf.holdingsMetrics,
     ...justEtf.exposureMetrics,
+    ...justEtf.costMetrics,
   ];
   return {
     dividends: existing?.dividends ?? { status: 'unavailable', note: 'Dividend data unavailable.', source: fallbackSource, metrics: [] },

@@ -83,9 +83,8 @@ function makeSectionNav(isFundProfile = false): SectionNavItem[] {
       { label: 'Price', href: '#price-history' },
       { label: 'Fund profile', href: '#company-profile', status: 'partial', note: 'Provider enrichment pending' },
       { label: 'Fund metrics', href: '#fund-metrics', status: 'partial', note: 'Issuer, ISIN, type, and provider-backed fund facts' },
+      { label: 'Cost', href: '#key-ratios', status: 'partial', note: 'Expense ratio, AUM, replication, and distribution when available' },
       { label: 'Holdings', href: '#fund-analytics', status: 'partial', note: 'Holdings and exposure when provider-backed fund facts are available' },
-      { label: 'News', href: '#recent-news', status: 'partial', note: 'Provider decision pending' },
-      { label: 'Reports', href: '#resources' },
       { label: 'Dividends', href: '#dividends', status: 'unavailable' },
       { label: 'Technicals', href: '#technicals' },
       { label: 'Glossary', href: '#finance-glossary' },
@@ -155,6 +154,42 @@ function profileSummaryText(summary: string, displayName: string) {
   const normalizedName = normalizeCompanyName(displayName);
   if (!normalizedSummary || normalizedSummary === normalizedName) return null;
   return normalizedSummary;
+}
+
+function splitSummarySentences(summary: string) {
+  return summary
+    .split(/(?<=\.)\s+/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+}
+
+function profileSummaryParagraphs(summary: string | null, isFundProfile: boolean) {
+  if (!summary) return [];
+  if (!isFundProfile || summary.length <= 360) return [summary];
+  const sentences = splitSummarySentences(summary);
+  if (sentences.length <= 3) return [summary];
+
+  const used = new Set<number>();
+  const pick = (patterns: RegExp[]) => {
+    const index = sentences.findIndex((sentence, sentenceIndex) => !used.has(sentenceIndex) && patterns.some((pattern) => pattern.test(sentence)));
+    if (index < 0) return null;
+    used.add(index);
+    return sentences[index];
+  };
+
+  const strategy = [
+    pick([/seeks to track/i]) ?? sentences[0],
+    pick([/index tracks/i, /tracks companies/i]),
+  ].filter(Boolean).join(' ');
+
+  const structure = [
+    pick([/TER|expense ratio/i]),
+    pick([/replicat/i]),
+    pick([/dividends? in the ETF|accumulat|distribut/i]),
+    pick([/assets under management|fund size/i]),
+  ].filter(Boolean).join(' ');
+
+  return [strategy, structure].filter(Boolean);
 }
 
 function metricCurrency(metrics: TickerDisplayMetric[] = []) {
@@ -330,7 +365,7 @@ type SplitFundMetrics = {
   cost: TickerDisplayMetric[];
 };
 
-function FundMetricListPanel({ metrics, emptyTitle, emptyNote }: { metrics: TickerDisplayMetric[]; emptyTitle: string; emptyNote: string }) {
+function FundMetricListPanel({ metrics, emptyTitle, emptyNote, showSource = true }: { metrics: TickerDisplayMetric[]; emptyTitle: string; emptyNote: string; showSource?: boolean }) {
   const availableMetrics = metrics.filter((metric) => cleanFactValue(metric.value));
   if (!availableMetrics.length) return <FundUnavailablePanel title={emptyTitle} note={emptyNote} />;
   return (
@@ -340,23 +375,45 @@ function FundMetricListPanel({ metrics, emptyTitle, emptyNote }: { metrics: Tick
           <div key={`${metric.label}-${metric.value}`}>
             <dt>{metric.label}</dt>
             <dd>{metric.value}</dd>
-            {metric.note && !['Country exposure', 'Sector exposure'].includes(metric.note) ? <p>{metric.note}</p> : null}
+            {metric.note && !['Fund holding', 'Country exposure', 'Sector exposure'].includes(metric.note) ? <p>{metric.note}</p> : null}
           </div>
         ))}
       </dl>
-      <p className="trading-financial-caption">{sourceList(availableMetrics, availableMetrics[0]?.source)}</p>
+      {showSource ? <p className="trading-financial-caption">{sourceList(availableMetrics, availableMetrics[0]?.source)}</p> : null}
     </>
   );
 }
 
-function FundMetricGroupPanel({ group }: { group: FundMetricGroup }) {
+function ExposureBars({ metrics, title }: { metrics: TickerDisplayMetric[]; title: string }) {
+  const rows = metrics
+    .map((metric) => ({ ...metric, numeric: parseNumber(metric.value) ?? 0 }))
+    .filter((metric) => cleanFactValue(metric.value))
+    .slice(0, 6);
+  const max = Math.max(...rows.map((metric) => metric.numeric), 1);
+  if (!rows.length) return null;
   return (
-    <section className="trading-fund-metric-group">
+    <div className="trading-fund-exposure-bars" aria-label={`${title} weight chart`}>
+      {rows.map((metric) => (
+        <div key={`${title}-${metric.label}-${metric.value}`}>
+          <span>{metric.label}</span>
+          <i><b style={{ width: `${Math.min(100, (metric.numeric / max) * 100)}%` }} /></i>
+          <strong>{metric.value}</strong>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FundMetricGroupPanel({ group }: { group: FundMetricGroup }) {
+  const isExposureGroup = group.title === 'Country exposure' || group.title === 'Sector exposure';
+  return (
+    <section className={`trading-fund-metric-group ${isExposureGroup ? 'has-bars' : ''}`}>
       <div>
         <span>{group.eyebrow}</span>
         <h3>{group.title}</h3>
       </div>
-      <FundMetricListPanel metrics={group.metrics} emptyTitle={group.emptyTitle} emptyNote={group.emptyNote} />
+      {isExposureGroup ? <ExposureBars metrics={group.metrics} title={group.title} /> : null}
+      <FundMetricListPanel metrics={group.metrics} emptyTitle={group.emptyTitle} emptyNote={group.emptyNote} showSource={false} />
     </section>
   );
 }
@@ -367,7 +424,7 @@ function FundAnalyticsPanel({ groups, sourceMetrics }: { groups: FundMetricGroup
       <div className="trading-fund-analytics-panel">
         {groups.map((group) => <FundMetricGroupPanel key={group.title} group={group} />)}
       </div>
-      {sourceMetrics.length ? <p className="trading-financial-caption">{sourceList(sourceMetrics, sourceMetrics[0]?.source)}</p> : null}
+      {sourceMetrics.length ? <p className="trading-financial-caption">{sourceList(sourceMetrics, sourceMetrics[0]?.source).replace('Sources:', 'Source:')}</p> : null}
     </>
   );
 }
@@ -384,10 +441,17 @@ function sourceName(metric: TickerDisplayMetric): TickerSourceName | undefined {
   return metric.source?.source;
 }
 
-function splitFundOwnershipMetrics(section?: TickerSupplementalSection): SplitFundMetrics {
+function splitFundOwnershipMetrics(section: TickerSupplementalSection | undefined, fundMetricFacts: TickerProfileFact[] = []): SplitFundMetrics {
   const metrics = section?.metrics ?? [];
   const costLabels = new Set(['expense ratio', 'aum / fund size', 'replication', 'distribution policy']);
   const summaryLabels = new Set(['holdings', 'top 10 weight']);
+  const costMetricsFromFacts = fundMetricFacts
+    .filter((fact) => costLabels.has(fact.label.trim().toLowerCase()))
+    .map((fact) => ({ label: fact.label, value: fact.value, status: 'available' as const, source: section?.source }));
+  const costMetrics = [...metrics.filter((metric) => costLabels.has(metric.label.trim().toLowerCase()))];
+  for (const metric of costMetricsFromFacts) {
+    if (!costMetrics.some((existing) => existing.label.trim().toLowerCase() === metric.label.trim().toLowerCase())) costMetrics.push(metric);
+  }
   return {
     summary: metrics.filter((metric) => summaryLabels.has(metric.label.trim().toLowerCase())),
     holdings: metrics.filter((metric) => {
@@ -397,7 +461,7 @@ function splitFundOwnershipMetrics(section?: TickerSupplementalSection): SplitFu
     }),
     countries: metrics.filter((metric) => metric.note === 'Country exposure' || (countryNames.has(metric.label.trim().toLowerCase()) && metric.note !== 'Sector exposure')),
     sectors: metrics.filter((metric) => metric.note === 'Sector exposure' || (sectorNames.has(metric.label.trim().toLowerCase()) && metric.note !== 'Country exposure')),
-    cost: metrics.filter((metric) => costLabels.has(metric.label.trim().toLowerCase())),
+    cost: costMetrics,
   };
 }
 
@@ -803,7 +867,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const headerStats = normalizeHeaderStats(ticker.headerStats, rawProfileFacts);
   const isFundProfile = isFundLikeProfile(rawProfileFacts, headerStats);
   const fundMetricFacts = isFundProfile ? buildFundMetricFacts(ticker) : [];
-  const fundOwnershipMetrics = isFundProfile ? splitFundOwnershipMetrics(ticker.supplemental?.ownership) : { summary: [], holdings: [], countries: [], sectors: [], cost: [] };
+  const fundOwnershipMetrics = isFundProfile ? splitFundOwnershipMetrics(ticker.supplemental?.ownership, fundMetricFacts) : { summary: [], holdings: [], countries: [], sectors: [], cost: [] };
   const fundAnalyticsGroups = isFundProfile ? buildFundAnalyticsGroups(fundOwnershipMetrics) : [];
   const fundAnalyticsSourceMetrics = [...fundOwnershipMetrics.summary, ...fundOwnershipMetrics.holdings, ...fundOwnershipMetrics.countries, ...fundOwnershipMetrics.sectors].filter((metric) => sourceName(metric));
   const profileFactsByLabel = new Map(profileFacts.map((fact) => [fact.label.toLowerCase(), fact]));
@@ -819,6 +883,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
   const keyRatios = stripMetricSourceNotes(ticker.keyRatios).filter((ratio) => !visibleHighlightRatioLabels.has(keyRatioHighlightKey(ratio.label)));
   const hasResources = ticker.resources.some((group) => group.items.length);
   const profileSummary = profileSummaryText(ticker.companyProfile.summary, displayName);
+  const profileSummaryParagraphsList = profileSummaryParagraphs(profileSummary, isFundProfile);
   const displayCurrency = ticker.currency || metricCurrency(ticker.supplemental?.estimates.metrics) || metricCurrency(ticker.supplemental?.dividends.metrics) || undefined;
   const priceRangeSeries = ticker.priceSeries.rangeSeries
     ? Object.fromEntries(Object.entries(ticker.priceSeries.rangeSeries).map(([range, series]) => [range, { ...series, stats: normalizeMetricCurrencies(series.stats, displayCurrency) }]))
@@ -888,7 +953,11 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
 
         <section id="company-profile" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
           <div className="trading-section-label">{isFundProfile ? 'Fund profile' : 'Company profile'}</div>
-          {profileSummary ? <p className="trading-ticker-profile-copy">{profileSummary}</p> : null}
+          {profileSummaryParagraphsList.length ? (
+            <div className="trading-ticker-profile-copy">
+              {profileSummaryParagraphsList.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+          ) : null}
           <dl className="trading-profile-facts">
             {displayProfileFacts.map((fact) => (
               <div key={fact.label}>
@@ -995,74 +1064,91 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
         </>
       )}
 
-      <div className="trading-ticker-secondary-grid">
-        <section id="recent-news" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
-          <div className="trading-section-head">
-            <div>
-              <div className="trading-section-label">Recent news</div>
+      {!isFundProfile ? (
+        <div className="trading-ticker-secondary-grid">
+          <section id="recent-news" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+            <div className="trading-section-head">
+              <div>
+                <div className="trading-section-label">Recent news</div>
+              </div>
+              <Link href="/trading/news" className="trading-text-link">
+                View all →
+              </Link>
             </div>
-            <Link href="/trading/news" className="trading-text-link">
-              View all →
-            </Link>
-          </div>
-          <div className="trading-ticker-news-list">
-            {ticker.recentNews.map((item) => (
-              <article key={item.title}>
-                {item.url ? (
-                  <a href={item.url} target="_blank" rel="noreferrer" aria-label={`${item.title} source link`}>
-                    <span>{item.source} · {item.time}{item.kind === 'video' ? ' · Video' : ''}</span>
-                    <strong>{item.title}</strong>
-                    <p>{item.summary}</p>
-                  </a>
-                ) : (
-                  <>
-                    <span>{item.source} · {item.time}</span>
-                    <strong>{item.title}</strong>
-                    <p>{item.summary}</p>
-                  </>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="resources" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
-          <div className="trading-section-head">
-            <div>
-              <div className="trading-section-label">Filings & reports</div>
-            </div>
-            <span className="trading-ticker-source-note">{hasResources ? formatCaptionSource(ticker.sourceMap.filings) : 'Data not available'}</span>
-          </div>
-          {hasResources ? (
-            <div className="trading-resource-list">
-              {ticker.resources.map((group) => (
-                <div key={group.label}>
-                  {group.label !== 'SEC filings' ? <h3>{group.label}</h3> : null}
-                  {group.items.map((item) => (
-                    <a
-                      key={`${item.name}-${item.href}`}
-                      href={item.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${item.name} source link`}
-                      className={item.kind ? `filing-${item.kind}` : undefined}
-                    >
-                      <i>{item.form ?? item.kind ?? 'LINK'}</i>
-                      <span>{item.name}</span>
-                      <em>{item.meta}</em>
-                      <b>↗</b>
+            <div className="trading-ticker-news-list">
+              {ticker.recentNews.map((item) => (
+                <article key={item.title}>
+                  {item.url ? (
+                    <a href={item.url} target="_blank" rel="noreferrer" aria-label={`${item.title} source link`}>
+                      <span>{item.source} · {item.time}{item.kind === 'video' ? ' · Video' : ''}</span>
+                      <strong>{item.title}</strong>
+                      <p>{item.summary}</p>
                     </a>
-                  ))}
-                </div>
+                  ) : (
+                    <>
+                      <span>{item.source} · {item.time}</span>
+                      <strong>{item.title}</strong>
+                      <p>{item.summary}</p>
+                    </>
+                  )}
+                </article>
               ))}
             </div>
-          ) : <EmptySectionState />}
-        </section>
-      </div>
+          </section>
+
+          <section id="resources" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+            <div className="trading-section-head">
+              <div>
+                <div className="trading-section-label">Filings & reports</div>
+              </div>
+              <span className="trading-ticker-source-note">{hasResources ? formatCaptionSource(ticker.sourceMap.filings) : 'Data not available'}</span>
+            </div>
+            {hasResources ? (
+              <div className="trading-resource-list">
+                {ticker.resources.map((group) => (
+                  <div key={group.label}>
+                    {group.label !== 'SEC filings' ? <h3>{group.label}</h3> : null}
+                    {group.items.map((item) => (
+                      <a
+                        key={`${item.name}-${item.href}`}
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${item.name} source link`}
+                        className={item.kind ? `filing-${item.kind}` : undefined}
+                      >
+                        <i>{item.form ?? item.kind ?? 'LINK'}</i>
+                        <span>{item.name}</span>
+                        <em>{item.meta}</em>
+                        <b>↗</b>
+                      </a>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ) : <EmptySectionState />}
+          </section>
+        </div>
+      ) : null}
 
       {isFundProfile ? (
-        <div className="trading-ticker-lower-grid trading-ticker-fund-analytics-grid">
-          <section id="fund-analytics" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
+        <>
+          <section id="key-ratios" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+            <div className="trading-section-head">
+              <div>
+                <div className="trading-section-label">Fund cost & structure</div>
+                <h2>Cost, scale, and distribution</h2>
+              </div>
+            </div>
+            <FundMetricListPanel
+              metrics={fundOwnershipMetrics.cost}
+              emptyTitle="Fund cost coverage pending"
+              emptyNote="Expense ratio, AUM, replication method, and distribution policy will appear here when a fund-data provider exposes them for this listing."
+              showSource={false}
+            />
+          </section>
+
+          <section id="fund-analytics" className="trading-ticker-fund-analytics-wide" style={tradingCardStyle({ minHeight: 360, maxHeight: 'none' })}>
             <div className="trading-section-head">
               <div>
                 <div className="trading-section-label">Fund analytics</div>
@@ -1071,16 +1157,7 @@ export default async function TradingTickerPage({ params }: { params: Promise<{ 
             </div>
             <FundAnalyticsPanel groups={fundAnalyticsGroups} sourceMetrics={fundAnalyticsSourceMetrics} />
           </section>
-
-          <section id="key-ratios" style={tradingCardStyle({ minHeight: 260, maxHeight: 'none' })}>
-            <div className="trading-section-label">Fund cost & structure</div>
-            <FundMetricListPanel
-              metrics={fundOwnershipMetrics.cost}
-              emptyTitle="Expense and AUM coverage pending"
-              emptyNote="Expense ratio, AUM, replication method, and distribution policy will appear here when a fund-data provider exposes them for this listing."
-            />
-          </section>
-        </div>
+        </>
       ) : (
         <div className="trading-ticker-lower-grid">
           <section id="financial-overview" style={tradingCardStyle({ minHeight: 330, maxHeight: 'none' })}>
