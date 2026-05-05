@@ -50,6 +50,9 @@ type PortfolioMetadataItem = {
   name: string;
   logoUrl: string | null;
   logoAlt: string;
+  week52Low?: string;
+  week52High?: string;
+  week52Position?: number | null;
   price: string;
   rawPrice: number | null;
   priceTime: string;
@@ -701,6 +704,70 @@ function PortfolioPerformanceChart({
         stroke="rgba(28,37,32,0.14)"
       />
     </svg>
+  );
+}
+
+function FiveDayGlimmer({
+  values,
+  tone,
+}: {
+  values?: number[];
+  tone: PortfolioMetadataItem["tone"] | undefined;
+}) {
+  const cleanValues = (values ?? []).filter((value) => Number.isFinite(value));
+  if (cleanValues.length < 2) {
+    return (
+      <span
+        className="trading-portfolio-glimmer-empty"
+        aria-label="5D chart unavailable"
+      />
+    );
+  }
+  const width = 86;
+  const height = 28;
+  const min = Math.min(...cleanValues);
+  const max = Math.max(...cleanValues);
+  const points = cleanValues
+    .map((value, index) => {
+      const x = (index / Math.max(cleanValues.length - 1, 1)) * (width - 4) + 2;
+      const y =
+        height - ((value - min) / Math.max(max - min, 1)) * (height - 8) - 4;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+
+  return (
+    <svg
+      className={`trading-portfolio-glimmer ${tone ?? "neutral"}`}
+      viewBox={`0 0 ${width} ${height}`}
+      aria-label="5D price history glimmer line"
+      role="img"
+    >
+      <polyline
+        points={points}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function Week52Range({ metadata }: { metadata?: PortfolioMetadataItem }) {
+  const position = metadata?.week52Position;
+  return (
+    <div className="trading-portfolio-52w" aria-label="52 week range">
+      <span>{metadata?.week52Low ?? "—"}</span>
+      <i>
+        <b
+          style={{ left: `${position ?? 50}%` }}
+          data-empty={position == null ? "true" : undefined}
+        />
+      </i>
+      <span>{metadata?.week52High ?? "—"}</span>
+    </div>
   );
 }
 
@@ -1614,10 +1681,11 @@ function HoldingsTable({
             <th>Shares</th>
             <th>Avg cost</th>
             <th>Price</th>
+            <th>5D</th>
+            <th>52W</th>
             <th>Value</th>
             <th>P/L</th>
             <th>%</th>
-            <th>Weight</th>
             <th>Alert</th>
             <th aria-label="Actions" />
           </tr>
@@ -1669,6 +1737,20 @@ function HoldingsTable({
                         holding.currentPrice,
                         holding.displayCurrency,
                       )}
+                  <small
+                    className={`trading-portfolio-price-change ${holding.metadata?.tone ?? "neutral"}`}
+                  >
+                    {formatPercent(holding.dayChangePct)}
+                  </small>
+                </td>
+                <td className="trading-portfolio-glimmer-cell">
+                  <FiveDayGlimmer
+                    values={holding.metadata?.dayPoints}
+                    tone={holding.metadata?.tone}
+                  />
+                </td>
+                <td>
+                  <Week52Range metadata={holding.metadata} />
                 </td>
                 <td>
                   {formatMoney(holding.marketValueBase, BASE_CURRENCY)}
@@ -1690,12 +1772,6 @@ function HoldingsTable({
                   ) : null}
                 </td>
                 <td className={tone}>{formatPercent(holding.totalPlPct)}</td>
-                <td>
-                  <div className="trading-portfolio-weight">
-                    <i style={{ width: `${Math.min(100, holding.weight)}%` }} />
-                    <span>{holding.weight.toFixed(2)}%</span>
-                  </div>
-                </td>
                 <td>
                   <span className="trading-portfolio-alert-cell">
                     <b>
@@ -1758,38 +1834,6 @@ function HoldingsTable({
             );
           })}
         </tbody>
-        <tfoot>
-          <tr>
-            <td>Total ({holdings.length})</td>
-            <td colSpan={3} />
-            <td>
-              {formatMoney(
-                holdings.reduce(
-                  (sum, holding) => sum + holding.marketValueBase,
-                  0,
-                ),
-                BASE_CURRENCY,
-              )}
-            </td>
-            <td
-              className={
-                holdings.reduce(
-                  (sum, holding) => sum + holding.totalPlBase,
-                  0,
-                ) >= 0
-                  ? "positive"
-                  : "negative"
-              }
-            >
-              {formatMoney(
-                holdings.reduce((sum, holding) => sum + holding.totalPlBase, 0),
-                BASE_CURRENCY,
-              )}
-            </td>
-            <td colSpan={2}>100.00%</td>
-            <td colSpan={2} />
-          </tr>
-        </tfoot>
       </table>
     </div>
   );

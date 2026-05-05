@@ -383,6 +383,21 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("trading-portfolio-cash-form", styles)
         self.assertIn("trading-portfolio-cash-row", styles)
 
+    def test_portfolio_holdings_imports_watchlist_market_visuals(self) -> None:
+        portfolio = read_source("portfolio_client")
+        styles = read_source("trading_styles")
+
+        self.assertIn("FiveDayGlimmer", portfolio)
+        self.assertIn("Week52Range", portfolio)
+        self.assertIn("<th>5D</th>", portfolio)
+        self.assertIn("<th>52W</th>", portfolio)
+        self.assertIn("trading-portfolio-price-change", portfolio)
+        self.assertIn("trading-portfolio-glimmer", styles)
+        self.assertIn("trading-portfolio-52w", styles)
+        self.assertNotIn("<th>Weight</th>", portfolio)
+        self.assertNotIn("trading-portfolio-weight", portfolio)
+        self.assertNotIn("<tfoot>", portfolio)
+
     def test_portfolio_holding_rows_show_logos_and_buy_more_flow(self) -> None:
         portfolio = read_source("portfolio_client")
         styles = read_source("trading_styles")
