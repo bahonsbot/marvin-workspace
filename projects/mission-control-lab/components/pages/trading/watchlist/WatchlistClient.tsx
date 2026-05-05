@@ -5,9 +5,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import {
   watchlistApi,
-  type WatchlistAlertLevel,
   type WatchlistItem,
-  type WatchlistPriority,
   type WatchlistWithItems,
 } from '@/lib/convex/watchlist-api';
 import { sampleWatchlists } from './sample-watchlist';
@@ -40,10 +38,15 @@ interface WatchlistMetadataItem {
   week52High: string;
   week52Position: number | null;
   price: string;
+  rawPrice: number | null;
+  priceTime: string;
+  currency: string;
   changePct: string;
   dayPoints: number[];
   tone: 'positive' | 'negative' | 'neutral';
   source: string;
+  quoteFreshness: string;
+  providerDelay?: string;
 }
 
 interface WatchlistNewsItem {
@@ -72,27 +75,39 @@ const WATCHLIST_METADATA_CACHE_KEY = 'mission-control-lab:watchlist-metadata:v1'
 const WATCHLIST_NEWS_CACHE_KEY = 'mission-control-lab:watchlist-news:v1';
 const WATCHLIST_METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const WATCHLIST_NEWS_CACHE_TTL_MS = 30 * 60 * 1000;
-const priorityLabels: Record<WatchlistPriority, string> = {
-  core: 'High',
-  radar: 'Medium',
-  speculative: 'Low',
-};
-const alertLabels: Record<WatchlistAlertLevel, string> = {
-  none: 'No alert',
-  watch: 'Watch',
-  urgent: 'Urgent',
-};
-type WatchlistSortKey = 'name' | 'price' | 'change' | 'priority' | 'alert' | 'updated';
+type PriceAlertStatus = 'no-rule' | 'waiting' | 'near-low' | 'near-high' | 'below-min' | 'above-max' | 'unavailable';
+type WatchlistSortKey = 'name' | 'price' | 'change' | 'priceAlert' | 'alert' | 'updated';
 const sortLabels: Record<WatchlistSortKey, string> = {
   name: 'Name',
   price: 'Price',
   change: 'Price change',
-  priority: 'Priority',
+  priceAlert: 'Price alert',
   alert: 'Alert',
   updated: 'Recently updated',
 };
-const priorityRank: Record<WatchlistPriority, number> = { core: 0, radar: 1, speculative: 2 };
-const alertRank: Record<WatchlistAlertLevel, number> = { urgent: 0, watch: 1, none: 2 };
+const priceAlertStatusLabels: Record<PriceAlertStatus, string> = {
+  'no-rule': 'No rule',
+  waiting: 'Inside range',
+  'near-low': 'Near low',
+  'near-high': 'Near high',
+  'below-min': 'Below min',
+  'above-max': 'Above max',
+  unavailable: 'No quote',
+};
+const priceAlertStatusRank: Record<PriceAlertStatus, number> = {
+  'below-min': 0,
+  'above-max': 1,
+  'near-low': 2,
+  'near-high': 3,
+  waiting: 4,
+  unavailable: 5,
+  'no-rule': 6,
+};
+type WatchlistItemPatch = {
+  alertEnabled?: boolean;
+  alertMinPrice?: number | null;
+  alertMaxPrice?: number | null;
+};
 
 type CachedWatchlistMetadataEntry = {
   cachedAt: number;
@@ -131,6 +146,39 @@ function parseMetricNumber(value: string | undefined) {
   const parsed = Number(value.replace(/[^0-9.-]/g, ''));
   return Number.isFinite(parsed) ? parsed : null;
 }
+
+function cleanAlertInput(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const parsed = Number(trimmed.replace(/,/g, ''));
+  if (!Number.isFinite(parsed) || parsed <= 0) return null;
+  return Math.round(parsed * 10000) / 10000;
+}
+
+function formatAlertPrice(value: number | undefined, currency?: string) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 'Set';
+  const formatted = new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: value >= 100 ? 2 : 4,
+    minimumFractionDigits: value >= 100 ? 2 : 0,
+  }).format(value);
+  return currency ? `${formatted}` : formatted;
+}
+
+function evaluatePriceAlert(item: WatchlistItem, metadata?: WatchlistMetadataItem): PriceAlertStatus {
+  const hasMin = typeof item.alertMinPrice === 'number' && Number.isFinite(item.alertMinPrice) && item.alertMinPrice > 0;
+  const hasMax = typeof item.alertMaxPrice === 'number' && Number.isFinite(item.alertMaxPrice) && item.alertMaxPrice > 0;
+  const enabled = item.alertEnabled ?? (hasMin || hasMax);
+  if (!enabled || (!hasMin && !hasMax)) return 'no-rule';
+  const price = metadata?.rawPrice;
+  if (typeof price !== 'number' || !Number.isFinite(price)) return 'unavailable';
+  if (hasMin && price <= item.alertMinPrice!) return 'below-min';
+  if (hasMax && price >= item.alertMaxPrice!) return 'above-max';
+  const nearDistance = 0.02;
+  if (hasMin && price <= item.alertMinPrice! * (1 + nearDistance)) return 'near-low';
+  if (hasMax && price >= item.alertMaxPrice! * (1 - nearDistance)) return 'near-high';
+  return 'waiting';
+}
+
 
 function isProviderPlaceholderDisplayName(value: string | undefined | null) {
   const normalizedValue = (value ?? '').trim().toLowerCase();
@@ -272,8 +320,12 @@ function sortWatchlistItems(items: WatchlistItem[], metadata: Map<string, Watchl
     if (sortKey === 'name') return resolvedWatchlistName(a, metaA).localeCompare(resolvedWatchlistName(b, metaB));
     if (sortKey === 'price') return (parseMetricNumber(metaB?.price) ?? -Infinity) - (parseMetricNumber(metaA?.price) ?? -Infinity);
     if (sortKey === 'change') return (parseMetricNumber(metaB?.changePct) ?? -Infinity) - (parseMetricNumber(metaA?.changePct) ?? -Infinity);
-    if (sortKey === 'priority') return priorityRank[a.priority] - priorityRank[b.priority];
-    if (sortKey === 'alert') return alertRank[a.alertLevel] - alertRank[b.alertLevel];
+    if (sortKey === 'priceAlert') {
+      const statusA = evaluatePriceAlert(a, metaA);
+      const statusB = evaluatePriceAlert(b, metaB);
+      return priceAlertStatusRank[statusA] - priceAlertStatusRank[statusB];
+    }
+    if (sortKey === 'alert') return priceAlertStatusRank[evaluatePriceAlert(a, metaA)] - priceAlertStatusRank[evaluatePriceAlert(b, metaB)];
     return b.updatedAt - a.updatedAt;
   });
 }
@@ -309,6 +361,88 @@ function Week52Range({ metadata }: { metadata?: WatchlistMetadataItem }) {
   );
 }
 
+function PriceAlertCell({ item, metadata, canMutate, isSaving, onUpdate }: {
+  item: WatchlistItem;
+  metadata?: WatchlistMetadataItem;
+  canMutate: boolean;
+  isSaving?: boolean;
+  onUpdate?: (id: string, patch: WatchlistItemPatch) => Promise<boolean>;
+}) {
+  const [editing, setEditing] = useState<'min' | 'max' | null>(null);
+  const [draft, setDraft] = useState('');
+  const currency = metadata?.currency;
+
+  function startEdit(side: 'min' | 'max') {
+    if (!canMutate || isSaving) return;
+    const value = side === 'min' ? item.alertMinPrice : item.alertMaxPrice;
+    setEditing(side);
+    setDraft(typeof value === 'number' ? String(value) : '');
+  }
+
+  async function save() {
+    if (!editing) return;
+    const value = cleanAlertInput(draft);
+    const nextMin = editing === 'min' ? value : item.alertMinPrice;
+    const nextMax = editing === 'max' ? value : item.alertMaxPrice;
+    const ok = await onUpdate?.(item._id, {
+      alertEnabled: Boolean(nextMin || nextMax),
+      [editing === 'min' ? 'alertMinPrice' : 'alertMaxPrice']: value,
+    });
+    if (ok !== false) setEditing(null);
+  }
+
+  function cancel() {
+    setEditing(null);
+    setDraft('');
+  }
+
+  function renderButton(side: 'min' | 'max') {
+    const label = side === 'min' ? 'Min' : 'Max';
+    const value = side === 'min' ? item.alertMinPrice : item.alertMaxPrice;
+    if (editing === side) {
+      return (
+        <span className="trading-watchlist-alert-edit">
+          <input
+            value={draft}
+            onChange={(event) => setDraft(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') void save();
+              if (event.key === 'Escape') cancel();
+            }}
+            onBlur={() => void save()}
+            inputMode="decimal"
+            autoFocus
+            aria-label={`${label} price alert for ${resolvedWatchlistSymbol(item, metadata)}`}
+          />
+        </span>
+      );
+    }
+    return (
+      <button
+        type="button"
+        className={`trading-watchlist-alert-bound ${typeof value === 'number' ? 'set' : 'empty'}`}
+        onClick={() => startEdit(side)}
+        disabled={!canMutate || isSaving}
+        title={`Click to ${typeof value === 'number' ? 'change or remove' : 'set'} ${label.toLowerCase()} alert`}
+      >
+        <span>{label}</span>
+        <strong>{formatAlertPrice(value, currency)}</strong>
+      </button>
+    );
+  }
+
+  return (
+    <div className="trading-watchlist-price-alert-cell">
+      {renderButton('min')}
+      {renderButton('max')}
+    </div>
+  );
+}
+
+function PriceAlertStatusPill({ status }: { status: PriceAlertStatus }) {
+  return <span className={`trading-watchlist-alert-status ${status}`}>{priceAlertStatusLabels[status]}</span>;
+}
+
 function PinIcon({ active }: { active?: boolean }) {
   return (
     <span className={`trading-watchlist-pin-icon ${active ? 'active' : ''}`} title={active ? 'Pinned to Overview' : 'Not pinned'} aria-label={active ? 'Pinned to Overview' : 'Not pinned'}>
@@ -330,14 +464,6 @@ function DisabledWatchlistAddForm() {
       <label className="trading-watchlist-symbol-field">
         <span>Symbol</span>
         <input placeholder="Search ticker or company" disabled />
-      </label>
-      <label>
-        <span>Priority</span>
-        <select disabled defaultValue="radar">
-          <option value="core">High</option>
-          <option value="radar">Medium</option>
-          <option value="speculative">Low</option>
-        </select>
       </label>
       <label>
         <span>Alert</span>
@@ -367,8 +493,8 @@ function LiveWatchlistAddForm({ watchlistId, onSaved }: { watchlistId?: string; 
   const [searchOpen, setSearchOpen] = useState(false);
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [thesis, setThesis] = useState('');
-  const [priority, setPriority] = useState<WatchlistPriority>('radar');
-  const [alertLevel, setAlertLevel] = useState<WatchlistAlertLevel>('watch');
+  const [alertMinPrice, setAlertMinPrice] = useState('');
+  const [alertMaxPrice, setAlertMaxPrice] = useState('');
   const [status, setStatus] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const trimmedSymbol = symbol.trim();
@@ -440,16 +566,17 @@ function LiveWatchlistAddForm({ watchlistId, onSaved }: { watchlistId?: string; 
         exchange: lockedTicker?.exchange,
         currency: lockedTicker?.currency,
         thesis: thesis.trim() || undefined,
-        priority,
-        alertLevel,
+        alertEnabled: Boolean(cleanAlertInput(alertMinPrice) || cleanAlertInput(alertMaxPrice)),
+        alertMinPrice: cleanAlertInput(alertMinPrice) ?? undefined,
+        alertMaxPrice: cleanAlertInput(alertMaxPrice) ?? undefined,
         tags: [],
       });
       setSymbol('');
       setSelectedTicker(null);
       setSearchResults([]);
       setThesis('');
-      setPriority('radar');
-      setAlertLevel('watch');
+      setAlertMinPrice('');
+      setAlertMaxPrice('');
       setStatus(`${nextSymbol} added to watchlist.`);
       onSaved?.();
     } catch (error) {
@@ -524,20 +651,12 @@ function LiveWatchlistAddForm({ watchlistId, onSaved }: { watchlistId?: string; 
         {selectedTicker ? <em className="trading-watchlist-symbol-selected">Selected {selectedTicker.symbol} · {selectedTicker.name}</em> : null}
       </label>
       <label>
-        <span>Priority</span>
-        <select value={priority} onChange={(event) => setPriority(event.target.value as WatchlistPriority)} disabled={isSaving}>
-          <option value="core">High</option>
-          <option value="radar">Medium</option>
-          <option value="speculative">Low</option>
-        </select>
+        <span>Min alert</span>
+        <input value={alertMinPrice} onChange={(event) => setAlertMinPrice(event.target.value)} inputMode="decimal" placeholder="Below" disabled={isSaving} />
       </label>
       <label>
-        <span>Alert</span>
-        <select value={alertLevel} onChange={(event) => setAlertLevel(event.target.value as WatchlistAlertLevel)} disabled={isSaving}>
-          <option value="none">No alert</option>
-          <option value="watch">Watch</option>
-          <option value="urgent">Urgent</option>
-        </select>
+        <span>Max alert</span>
+        <input value={alertMaxPrice} onChange={(event) => setAlertMaxPrice(event.target.value)} inputMode="decimal" placeholder="Above" disabled={isSaving} />
       </label>
       <label className="wide">
         <span>Watch note</span>
@@ -557,7 +676,7 @@ function WatchlistTable({ items, watchlists, activeWatchlistId, canMutate, metad
   metadata: Map<string, WatchlistMetadataItem>;
   metadataLoading?: boolean;
   onRemove?: (id: string) => void;
-  onUpdate?: (id: string, patch: { priority?: WatchlistPriority; alertLevel?: WatchlistAlertLevel }) => Promise<boolean>;
+  onUpdate?: (id: string, patch: WatchlistItemPatch) => Promise<boolean>;
   onMove?: (id: string, targetWatchlistId: string) => Promise<boolean>;
   removingId?: string | null;
   updatingId?: string | null;
@@ -604,8 +723,8 @@ function WatchlistTable({ items, watchlists, activeWatchlistId, canMutate, metad
             <th>5D</th>
             <th>P/E</th>
             <th>52W</th>
-            <th>Priority</th>
-            <th>Alert</th>
+            <th>Price Alert</th>
+            <th>Status</th>
             <th aria-label="More" />
           </tr>
         </thead>
@@ -614,6 +733,7 @@ function WatchlistTable({ items, watchlists, activeWatchlistId, canMutate, metad
             const itemMetadata = watchlistMetadataForItem(metadata, item);
             const tone = itemMetadata?.tone ?? 'neutral';
             const displayName = resolvedWatchlistName(item, itemMetadata);
+            const alertStatus = evaluatePriceAlert(item, itemMetadata);
             return (
               <tr key={item._id}>
                 <td>
@@ -637,26 +757,10 @@ function WatchlistTable({ items, watchlists, activeWatchlistId, canMutate, metad
                 <td>{itemMetadata?.pe ?? (metadataLoading ? 'Loading…' : '—')}</td>
                 <td><Week52Range metadata={itemMetadata} /></td>
                 <td>
-                  <select
-                    className={`trading-watchlist-inline-select trading-watchlist-priority ${item.priority}`}
-                    value={item.priority}
-                    onChange={(event) => onUpdate?.(item._id, { priority: event.target.value as WatchlistPriority })}
-                    disabled={!canMutate || updatingId === item._id}
-                    aria-label={`Priority for ${resolvedWatchlistSymbol(item, itemMetadata)}`}
-                  >
-                    {(Object.keys(priorityLabels) as WatchlistPriority[]).map((priority) => <option key={priority} value={priority}>{priorityLabels[priority]}</option>)}
-                  </select>
+                  <PriceAlertCell item={item} metadata={itemMetadata} canMutate={canMutate} isSaving={updatingId === item._id} onUpdate={onUpdate} />
                 </td>
                 <td>
-                  <select
-                    className={`trading-watchlist-inline-select trading-watchlist-alert ${item.alertLevel}`}
-                    value={item.alertLevel}
-                    onChange={(event) => onUpdate?.(item._id, { alertLevel: event.target.value as WatchlistAlertLevel })}
-                    disabled={!canMutate || updatingId === item._id}
-                    aria-label={`Alert level for ${resolvedWatchlistSymbol(item, itemMetadata)}`}
-                  >
-                    {(Object.keys(alertLabels) as WatchlistAlertLevel[]).map((alertLevel) => <option key={alertLevel} value={alertLevel}>{alertLabels[alertLevel]}</option>)}
-                  </select>
+                  <PriceAlertStatusPill status={alertStatus} />
                 </td>
                 <td className="trading-watchlist-row-actions">
                   <button type="button" className="trading-watchlist-more-button" onClick={(event) => toggleRowMenu(item, event)} aria-expanded={openRowMenu?.id === item._id} aria-label={`Move ${resolvedWatchlistSymbol(item, itemMetadata)} to another watchlist`}>
@@ -720,7 +824,7 @@ function LiveWatchlistTable({ items, watchlists, activeWatchlistId, metadata, me
     }
   }
 
-  async function update(id: string, patch: { priority?: WatchlistPriority; alertLevel?: WatchlistAlertLevel }) {
+  async function update(id: string, patch: WatchlistItemPatch) {
     if (id.startsWith('sample-')) return false;
     setUpdatingId(id);
     setUpdateError(null);

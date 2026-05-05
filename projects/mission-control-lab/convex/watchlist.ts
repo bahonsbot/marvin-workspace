@@ -34,6 +34,9 @@ type WatchlistItemDocument = {
   thesis?: string;
   priority: 'core' | 'radar' | 'speculative';
   alertLevel: 'none' | 'watch' | 'urgent';
+  alertEnabled?: boolean;
+  alertMinPrice?: number;
+  alertMaxPrice?: number;
   sortOrder: number;
   createdAt: number;
   updatedAt: number;
@@ -55,6 +58,11 @@ function displaySymbol(symbol: string) {
 
 function cleanTags(tags: string[] = []) {
   return tags.map((tag) => tag.trim()).filter(Boolean).slice(0, 8);
+}
+
+function cleanAlertPrice(value: number | null | undefined) {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) return undefined;
+  return Math.round(value * 10000) / 10000;
 }
 
 async function getDefaultWatchlist(ctx: WatchlistCtx, userKey: string): Promise<WatchlistDocument | null> {
@@ -203,6 +211,9 @@ export const add = mutationGeneric({
     thesis: v.optional(v.string()),
     priority: v.optional(v.union(v.literal('core'), v.literal('radar'), v.literal('speculative'))),
     alertLevel: v.optional(v.union(v.literal('none'), v.literal('watch'), v.literal('urgent'))),
+    alertEnabled: v.optional(v.boolean()),
+    alertMinPrice: v.optional(v.number()),
+    alertMaxPrice: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const userKey = args.userKey ?? DEMO_USER_KEY;
@@ -218,6 +229,9 @@ export const add = mutationGeneric({
 
     const now = Date.now();
     const tags = cleanTags(args.tags);
+    const alertMinPrice = cleanAlertPrice(args.alertMinPrice);
+    const alertMaxPrice = cleanAlertPrice(args.alertMaxPrice);
+    const hasAlertRule = alertMinPrice !== undefined || alertMaxPrice !== undefined;
 
     if (existing) {
       await ctx.db.patch(existing._id, {
@@ -228,6 +242,9 @@ export const add = mutationGeneric({
         thesis: args.thesis?.trim() || existing.thesis,
         priority: args.priority ?? existing.priority,
         alertLevel: args.alertLevel ?? existing.alertLevel,
+        alertEnabled: args.alertEnabled ?? existing.alertEnabled ?? (hasAlertRule || undefined),
+        alertMinPrice: alertMinPrice ?? existing.alertMinPrice,
+        alertMaxPrice: alertMaxPrice ?? existing.alertMaxPrice,
         updatedAt: now,
       });
       return existing._id;
@@ -251,6 +268,9 @@ export const add = mutationGeneric({
       thesis: args.thesis?.trim() || undefined,
       priority: args.priority ?? 'radar',
       alertLevel: args.alertLevel ?? 'none',
+      alertEnabled: args.alertEnabled ?? (hasAlertRule || undefined),
+      alertMinPrice,
+      alertMaxPrice,
       sortOrder: latest ? latest.sortOrder + 1000 : 1000,
       createdAt: now,
       updatedAt: now,
@@ -289,6 +309,9 @@ export const move = mutationGeneric({
         thesis: item.thesis ?? duplicate.thesis,
         priority: item.priority,
         alertLevel: item.alertLevel,
+        alertEnabled: item.alertEnabled ?? duplicate.alertEnabled,
+        alertMinPrice: item.alertMinPrice ?? duplicate.alertMinPrice,
+        alertMaxPrice: item.alertMaxPrice ?? duplicate.alertMaxPrice,
         updatedAt: now,
       });
       await ctx.db.delete(item._id as typeof args.id);
@@ -315,6 +338,9 @@ export const update = mutationGeneric({
     thesis: v.optional(v.string()),
     priority: v.optional(v.union(v.literal('core'), v.literal('radar'), v.literal('speculative'))),
     alertLevel: v.optional(v.union(v.literal('none'), v.literal('watch'), v.literal('urgent'))),
+    alertEnabled: v.optional(v.boolean()),
+    alertMinPrice: v.optional(v.union(v.number(), v.null())),
+    alertMaxPrice: v.optional(v.union(v.number(), v.null())),
     sortOrder: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
@@ -326,6 +352,9 @@ export const update = mutationGeneric({
       thesis?: string;
       priority?: 'core' | 'radar' | 'speculative';
       alertLevel?: 'none' | 'watch' | 'urgent';
+      alertEnabled?: boolean;
+      alertMinPrice?: number;
+      alertMaxPrice?: number;
       sortOrder?: number;
       updatedAt: number;
     } = { updatedAt: Date.now() };
@@ -336,6 +365,17 @@ export const update = mutationGeneric({
     if (args.thesis !== undefined) patch.thesis = args.thesis.trim() || undefined;
     if (args.priority !== undefined) patch.priority = args.priority;
     if (args.alertLevel !== undefined) patch.alertLevel = args.alertLevel;
+    if (args.alertEnabled !== undefined) patch.alertEnabled = args.alertEnabled;
+    if (args.alertMinPrice !== undefined) {
+      const alertMinPrice = cleanAlertPrice(args.alertMinPrice);
+      if (alertMinPrice === undefined) patch.alertMinPrice = undefined;
+      else patch.alertMinPrice = alertMinPrice;
+    }
+    if (args.alertMaxPrice !== undefined) {
+      const alertMaxPrice = cleanAlertPrice(args.alertMaxPrice);
+      if (alertMaxPrice === undefined) patch.alertMaxPrice = undefined;
+      else patch.alertMaxPrice = alertMaxPrice;
+    }
     if (args.sortOrder !== undefined) patch.sortOrder = args.sortOrder;
     await ctx.db.patch(args.id, patch);
   },

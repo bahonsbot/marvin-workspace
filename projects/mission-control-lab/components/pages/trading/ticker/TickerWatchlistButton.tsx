@@ -82,7 +82,7 @@ function LiveTickerWatchlistButton({ symbol, name, exchange, currency }: Omit<Ti
         exchange,
         currency,
         priority: 'radar',
-        alertLevel: 'watch',
+        alertLevel: 'none',
         tags: [],
       });
       setStatus(selectedWatchlist ? `Saved to ${selectedWatchlist.name}.` : 'Saved to watchlist.');

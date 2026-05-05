@@ -3201,13 +3201,13 @@
 }
 
 :global(.trading-watchlist-page-table th:nth-child(1)) { width: 135px; }
-:global(.trading-watchlist-page-table th:nth-child(2)) { width: 27%; }
+:global(.trading-watchlist-page-table th:nth-child(2)) { width: 24%; }
 :global(.trading-watchlist-page-table th:nth-child(3)) { width: 96px; }
 :global(.trading-watchlist-page-table th:nth-child(4)) { width: 106px; }
 :global(.trading-watchlist-page-table th:nth-child(5)) { width: 76px; }
-:global(.trading-watchlist-page-table th:nth-child(6)) { width: 238px; }
-:global(.trading-watchlist-page-table th:nth-child(7)) { width: 74px; }
-:global(.trading-watchlist-page-table th:nth-child(8)) { width: 58px; }
+:global(.trading-watchlist-page-table th:nth-child(6)) { width: 210px; }
+:global(.trading-watchlist-page-table th:nth-child(7)) { width: 118px; }
+:global(.trading-watchlist-page-table th:nth-child(8)) { width: 78px; }
 :global(.trading-watchlist-page-table th:nth-child(9)) { width: 72px; }
 
 :global(.trading-watchlist-page-table td) {
@@ -3496,6 +3496,118 @@
   color: rgba(34, 48, 41, 0.78);
   font-size: 12px;
   line-height: 1.4;
+}
+
+
+:global(.trading-watchlist-price-alert-cell) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  align-items: center;
+  min-width: 0;
+}
+
+:global(.trading-watchlist-alert-bound) {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  border: 1px solid rgba(28, 37, 32, 0.13);
+  border-radius: 9px;
+  background: rgba(255, 253, 249, 0.78);
+  color: rgba(23, 36, 30, 0.78);
+  padding: 4px 6px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  line-height: 1.05;
+}
+
+:global(.trading-watchlist-alert-bound span) {
+  color: rgba(34, 48, 41, 0.46);
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:global(.trading-watchlist-alert-bound strong) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #17241e;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+:global(.trading-watchlist-alert-bound.empty strong) {
+  color: rgba(34, 48, 41, 0.42);
+  font-weight: 600;
+}
+
+:global(.trading-watchlist-alert-bound:hover:not(:disabled)) {
+  border-color: rgba(49, 82, 63, 0.26);
+  background: rgba(49, 82, 63, 0.07);
+}
+
+:global(.trading-watchlist-alert-bound:disabled) {
+  opacity: 0.54;
+  cursor: wait;
+}
+
+:global(.trading-watchlist-alert-edit input) {
+  width: 100%;
+  min-width: 0;
+  height: 31px;
+  border: 1px solid rgba(49, 82, 63, 0.28);
+  border-radius: 9px;
+  background: #fffdf9;
+  color: #17241e;
+  padding: 4px 6px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  outline: none;
+}
+
+:global(.trading-watchlist-alert-status) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  min-height: 22px;
+  border: 1px solid rgba(28, 37, 32, 0.14);
+  border-radius: 999px;
+  padding: 0 7px;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+:global(.trading-watchlist-alert-status.no-rule),
+:global(.trading-watchlist-alert-status.unavailable) {
+  color: rgba(34, 48, 41, 0.5);
+  background: rgba(244, 240, 232, 0.54);
+}
+
+:global(.trading-watchlist-alert-status.waiting) {
+  border-color: rgba(22, 163, 74, 0.2);
+  background: rgba(22, 163, 74, 0.08);
+  color: #15803d;
+}
+
+:global(.trading-watchlist-alert-status.near-low),
+:global(.trading-watchlist-alert-status.near-high) {
+  border-color: rgba(196, 130, 58, 0.26);
+  background: rgba(196, 130, 58, 0.1);
+  color: #9a5d1f;
+}
+
+:global(.trading-watchlist-alert-status.below-min),
+:global(.trading-watchlist-alert-status.above-max) {
+  border-color: rgba(225, 29, 72, 0.25);
+  background: rgba(225, 29, 72, 0.09);
+  color: #be123c;
 }
 
 :global(.trading-watchlist-priority),

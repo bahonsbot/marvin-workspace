@@ -29,10 +29,15 @@ type WatchlistMetadata = {
   week52High: string;
   week52Position: number | null;
   price: string;
+  rawPrice: number | null;
+  priceTime: string;
+  currency: string;
   changePct: string;
   dayPoints: number[];
   tone: 'positive' | 'negative' | 'neutral';
   source: string;
+  quoteFreshness: string;
+  providerDelay?: string;
 };
 
 function cleanMetric(value: string | undefined | null) {
@@ -89,10 +94,15 @@ function metadataFromProfile(profile: TickerProfile): WatchlistMetadata {
     week52High: week52.high,
     week52Position: week52.position,
     price: cleanMetric(profile.quote.price),
+    rawPrice: profile.quote.rawPrice ?? null,
+    priceTime: profile.quote.priceTime,
+    currency: profile.quote.currency,
     changePct: cleanMetric(profile.quote.changePct),
     dayPoints: compactFiveDayPoints(profile),
     tone: profile.quote.tone,
     source: profile.sourceMap.profile.source,
+    quoteFreshness: profile.quote.source.freshness,
+    providerDelay: profile.quote.providerDelay,
   };
 }
 
@@ -179,10 +189,14 @@ export async function GET(request: Request) {
       week52High: '—',
       week52Position: null,
       price: '—',
+      rawPrice: null,
+      priceTime: 'Provider pending',
+      currency: '',
       changePct: '—',
       dayPoints: [],
       tone: 'neutral' as const,
       source: 'unavailable',
+      quoteFreshness: 'missing',
     };
   });
 

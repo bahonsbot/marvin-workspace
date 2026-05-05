@@ -17,6 +17,9 @@ export type WatchlistItem = {
   thesis?: string;
   priority: WatchlistPriority;
   alertLevel: WatchlistAlertLevel;
+  alertEnabled?: boolean;
+  alertMinPrice?: number;
+  alertMaxPrice?: number;
   sortOrder: number;
   createdAt: number;
   updatedAt: number;
@@ -63,6 +66,9 @@ export const watchlistApi = {
       thesis?: string;
       priority?: WatchlistPriority;
       alertLevel?: WatchlistAlertLevel;
+      alertEnabled?: boolean;
+      alertMinPrice?: number;
+      alertMaxPrice?: number;
     },
     string
   >('watchlist:add'),
@@ -78,6 +84,9 @@ export const watchlistApi = {
       thesis?: string;
       priority?: WatchlistPriority;
       alertLevel?: WatchlistAlertLevel;
+      alertEnabled?: boolean;
+      alertMinPrice?: number | null;
+      alertMaxPrice?: number | null;
       sortOrder?: number;
     },
     void
