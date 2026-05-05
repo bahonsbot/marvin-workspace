@@ -95,6 +95,12 @@ type HoldingInput = {
 type PortfolioFormMode = "add" | "edit";
 type CashFormMode = "add" | "edit";
 
+type BuyMoreInput = {
+  quantity: string;
+  purchasePrice: string;
+  transactionFee: string;
+};
+
 type CashInput = {
   currency: string;
   amount: string;
@@ -296,6 +302,11 @@ function cleanAlertInput(value: string) {
 function symbolHref(symbol: string) {
   if (symbol.startsWith("CASH")) return "/trading/portfolio";
   return `/trading/ticker/${encodeURIComponent(symbol)}`;
+}
+
+function initialsForHolding(holding: EnrichedHolding) {
+  const source = holding.displaySymbol || holding.symbol;
+  return source.replace(/\W/g, "").slice(0, 2) || "•";
 }
 
 function readMetadataCache(symbols: string[]) {
@@ -725,6 +736,10 @@ function initialHoldingInput(holding?: EnrichedHolding): HoldingInput {
     alertMaxPrice:
       holding.alertMaxPrice != null ? String(holding.alertMaxPrice) : "",
   };
+}
+
+function initialBuyMoreInput(): BuyMoreInput {
+  return { quantity: "", purchasePrice: "", transactionFee: "" };
 }
 
 function initialCashInput(holding?: EnrichedHolding | null): CashInput {
@@ -1157,6 +1172,135 @@ function LivePortfolioHoldingForm({
   );
 }
 
+function BuyMoreForm({
+  holding,
+  onSaved,
+  onCancel,
+}: {
+  holding: EnrichedHolding;
+  onSaved?: () => void;
+  onCancel?: () => void;
+}) {
+  const updateHolding = useMutation(portfolioApi.update);
+  const [input, setInput] = useState<BuyMoreInput>(() => initialBuyMoreInput());
+  const [status, setStatus] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const addedQuantity = parseNumber(input.quantity);
+    const purchasePrice = parseNumber(input.purchasePrice);
+    const transactionFee = parseNumber(input.transactionFee) ?? 0;
+    if (
+      !addedQuantity ||
+      addedQuantity <= 0 ||
+      !purchasePrice ||
+      purchasePrice <= 0 ||
+      transactionFee < 0
+    ) {
+      setStatus(
+        "Amount and purchase price must be greater than zero. Fee cannot be negative.",
+      );
+      return;
+    }
+
+    const nextQuantity = holding.quantity + addedQuantity;
+    const nextTransactionFee = (holding.transactionFee ?? 0) + transactionFee;
+    const nextCostBasis =
+      holding.costBasis + addedQuantity * purchasePrice + transactionFee;
+    const nextAverageCost = (nextCostBasis - nextTransactionFee) / nextQuantity;
+
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      await updateHolding({
+        id: holding._id,
+        quantity: nextQuantity,
+        averageCost: Math.round(nextAverageCost * 10000) / 10000,
+        transactionFee: Math.round(nextTransactionFee * 100) / 100,
+      });
+      setStatus(`${holding.displaySymbol} purchase added.`);
+      setInput(initialBuyMoreInput());
+      onSaved?.();
+    } catch (error) {
+      setStatus(
+        error instanceof Error ? error.message : "Could not add purchase.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  return (
+    <form className="trading-portfolio-buy-more-form" onSubmit={handleSubmit}>
+      <div className="trading-portfolio-form-title">
+        <strong>Add purchase · {holding.displaySymbol}</strong>
+        {onCancel ? (
+          <button
+            type="button"
+            className="trading-portfolio-form-close"
+            onClick={onCancel}
+            aria-label="Close add purchase form"
+          >
+            <X size={14} />
+          </button>
+        ) : null}
+      </div>
+      <label>
+        <span>Amount</span>
+        <input
+          value={input.quantity}
+          onChange={(event) =>
+            setInput((current) => ({
+              ...current,
+              quantity: event.target.value,
+            }))
+          }
+          inputMode="decimal"
+          placeholder="10"
+          disabled={isSaving}
+        />
+      </label>
+      <label>
+        <span>Purchase price</span>
+        <input
+          value={input.purchasePrice}
+          onChange={(event) =>
+            setInput((current) => ({
+              ...current,
+              purchasePrice: event.target.value,
+            }))
+          }
+          inputMode="decimal"
+          placeholder={
+            holding.currentPrice != null ? String(holding.currentPrice) : "0.00"
+          }
+          disabled={isSaving}
+        />
+      </label>
+      <label>
+        <span>Transaction costs</span>
+        <input
+          value={input.transactionFee}
+          onChange={(event) =>
+            setInput((current) => ({
+              ...current,
+              transactionFee: event.target.value,
+            }))
+          }
+          inputMode="decimal"
+          placeholder="0.00"
+          disabled={isSaving}
+        />
+      </label>
+      <button type="submit" disabled={isSaving}>
+        {isSaving ? "Saving…" : "Add purchase"}
+      </button>
+      {status ? <p>{status}</p> : null}
+    </form>
+  );
+}
+
 function CashManagementForm({
   enabled,
   mode,
@@ -1450,12 +1594,14 @@ function HoldingsTable({
   holdings,
   canMutate,
   onEdit,
+  onBuyMore,
   onRemove,
   removingId,
 }: {
   holdings: EnrichedHolding[];
   canMutate: boolean;
   onEdit?: (holding: EnrichedHolding) => void;
+  onBuyMore?: (holding: EnrichedHolding) => void;
   onRemove?: (id: string) => void;
   removingId?: string | null;
 }) {
@@ -1482,10 +1628,35 @@ function HoldingsTable({
             return (
               <tr key={holding._id}>
                 <td>
-                  <Link href={symbolHref(holding.symbol)}>
-                    {holding.displaySymbol}
-                  </Link>
-                  <span>{holding.displayName}</span>
+                  <div className="trading-portfolio-holding-cell">
+                    <span
+                      className={`trading-portfolio-logo ${holding.metadata?.logoUrl ? "has-logo" : "initials-only"}`}
+                      aria-hidden={holding.metadata?.logoUrl ? undefined : true}
+                    >
+                      {holding.metadata?.logoUrl ? (
+                        <>
+                          <img
+                            src={holding.metadata.logoUrl}
+                            alt={
+                              holding.metadata.logoAlt ??
+                              `${holding.displaySymbol} logo`
+                            }
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <span>{initialsForHolding(holding)}</span>
+                        </>
+                      ) : (
+                        <span>{initialsForHolding(holding)}</span>
+                      )}
+                    </span>
+                    <div>
+                      <Link href={symbolHref(holding.symbol)}>
+                        {holding.displaySymbol}
+                      </Link>
+                      <span>{holding.displayName}</span>
+                    </div>
+                  </div>
                 </td>
                 <td>{formatNumber(holding.quantity)}</td>
                 <td>
@@ -1561,6 +1732,15 @@ function HoldingsTable({
                     </button>
                     <button
                       type="button"
+                      className="trading-portfolio-buy-more"
+                      onClick={() => onBuyMore?.(holding)}
+                      disabled={!canMutate || holding._id.startsWith("sample-")}
+                      aria-label={`Add purchase for ${holding.displaySymbol}`}
+                    >
+                      <Plus size={14} />
+                    </button>
+                    <button
+                      type="button"
                       className="trading-portfolio-remove"
                       onClick={() => onRemove?.(holding._id)}
                       disabled={
@@ -1619,10 +1799,12 @@ function LivePortfolioTable({
   holdings,
   metadata,
   onEdit,
+  onBuyMore,
 }: {
   holdings: EnrichedHolding[];
   metadata: Map<string, PortfolioMetadataItem>;
   onEdit: (holding: EnrichedHolding) => void;
+  onBuyMore: (holding: EnrichedHolding) => void;
 }) {
   void metadata;
   const removeHolding = useMutation(portfolioApi.remove);
@@ -1640,6 +1822,7 @@ function LivePortfolioTable({
       holdings={holdings}
       canMutate
       onEdit={onEdit}
+      onBuyMore={onBuyMore}
       onRemove={remove}
       removingId={removingId}
     />
@@ -1669,6 +1852,9 @@ function PortfolioLayout({
   const [addOpen, setAddOpen] = useState(false);
   const [cashFormOpen, setCashFormOpen] = useState(false);
   const [editHolding, setEditHolding] = useState<EnrichedHolding | null>(null);
+  const [buyMoreHolding, setBuyMoreHolding] = useState<EnrichedHolding | null>(
+    null,
+  );
   const [editCashHolding, setEditCashHolding] =
     useState<EnrichedHolding | null>(null);
   const [visibleBenchmarks, setVisibleBenchmarks] = useState<
@@ -1837,6 +2023,7 @@ function PortfolioLayout({
             className="trading-portfolio-add-icon-button"
             onClick={() => {
               setEditHolding(null);
+              setBuyMoreHolding(null);
               setEditCashHolding(null);
               setCashFormOpen(false);
               setAddOpen((open) => !open);
@@ -1864,6 +2051,13 @@ function PortfolioLayout({
           holding={editHolding}
           onSaved={() => setEditHolding(null)}
           onCancel={() => setEditHolding(null)}
+        />
+      ) : null}
+      {buyMoreHolding ? (
+        <BuyMoreForm
+          holding={buyMoreHolding}
+          onSaved={() => setBuyMoreHolding(null)}
+          onCancel={() => setBuyMoreHolding(null)}
         />
       ) : null}
       {cashFormOpen ? (
@@ -2036,8 +2230,16 @@ function PortfolioLayout({
               onEdit={(holding) => {
                 setAddOpen(false);
                 setCashFormOpen(false);
+                setBuyMoreHolding(null);
                 setEditCashHolding(null);
                 setEditHolding(holding);
+              }}
+              onBuyMore={(holding) => {
+                setAddOpen(false);
+                setCashFormOpen(false);
+                setEditHolding(null);
+                setEditCashHolding(null);
+                setBuyMoreHolding(holding);
               }}
             />
           ) : (
@@ -2062,6 +2264,7 @@ function PortfolioLayout({
           onAdd={() => {
             setAddOpen(false);
             setEditHolding(null);
+            setBuyMoreHolding(null);
             setEditCashHolding(null);
             setCashFormOpen(true);
           }}
@@ -2069,6 +2272,7 @@ function PortfolioLayout({
             setAddOpen(false);
             setCashFormOpen(false);
             setEditHolding(null);
+            setBuyMoreHolding(null);
             setEditCashHolding(holding);
           }}
         />

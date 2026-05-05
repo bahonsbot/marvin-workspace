@@ -363,6 +363,8 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("getFxRates", fx_route)
         self.assertIn("trading-portfolio-fx-kpi", styles)
         self.assertIn("trading-portfolio-fx-tooltip", styles)
+        self.assertIn("overflow: visible", styles)
+        self.assertIn("bottom: calc(100% + 8px)", styles)
         self.assertNotIn("trading-portfolio-fx-note", portfolio)
 
     def test_portfolio_cash_management_is_separate_from_ticker_holdings(self) -> None:
@@ -380,6 +382,23 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("trading-portfolio-cash-panel", styles)
         self.assertIn("trading-portfolio-cash-form", styles)
         self.assertIn("trading-portfolio-cash-row", styles)
+
+    def test_portfolio_holding_rows_show_logos_and_buy_more_flow(self) -> None:
+        portfolio = read_source("portfolio_client")
+        styles = read_source("trading_styles")
+
+        self.assertIn("trading-portfolio-logo", portfolio)
+        self.assertIn("holding.metadata?.logoUrl", portfolio)
+        self.assertIn("initialsForHolding", portfolio)
+        self.assertIn("BuyMoreForm", portfolio)
+        self.assertIn("Add purchase", portfolio)
+        self.assertIn("Purchase price", portfolio)
+        self.assertIn("Transaction costs", portfolio)
+        self.assertIn("nextAverageCost", portfolio)
+        self.assertIn("holding.costBasis + addedQuantity * purchasePrice + transactionFee", portfolio)
+        self.assertIn("trading-portfolio-buy-more", styles)
+        self.assertIn("trading-portfolio-buy-more-form", styles)
+        self.assertIn("trading-portfolio-holding-cell", styles)
 
     def test_portfolio_polish_keeps_search_edit_fee_flow(self) -> None:
         portfolio = read_source("portfolio_client")
