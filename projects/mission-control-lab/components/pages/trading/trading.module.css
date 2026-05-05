@@ -4952,49 +4952,91 @@
 }
 
 :global(.trading-portfolio-table) {
-  min-width: 1180px;
+  min-width: 1190px;
   table-layout: fixed;
+  font-variant-numeric: tabular-nums;
 }
 
 :global(.trading-portfolio-table th:nth-child(1)) {
-  width: 168px;
+  width: 166px;
 }
 :global(.trading-portfolio-table th:nth-child(2)) {
-  width: 76px;
+  width: 72px;
 }
 :global(.trading-portfolio-table th:nth-child(3)) {
-  width: 88px;
+  width: 84px;
 }
 :global(.trading-portfolio-table th:nth-child(4)) {
   width: 92px;
 }
 :global(.trading-portfolio-table th:nth-child(5)) {
-  width: 92px;
+  width: 98px;
 }
 :global(.trading-portfolio-table th:nth-child(6)) {
-  width: 172px;
+  width: 190px;
 }
 :global(.trading-portfolio-table th:nth-child(7)) {
-  width: 112px;
+  width: 118px;
 }
 :global(.trading-portfolio-table th:nth-child(8)) {
-  width: 112px;
+  width: 100px;
 }
 :global(.trading-portfolio-table th:nth-child(9)) {
-  width: 72px;
+  width: 64px;
 }
 :global(.trading-portfolio-table th:nth-child(10)) {
-  width: 124px;
+  width: 118px;
 }
 :global(.trading-portfolio-table th:nth-child(11)) {
-  width: 112px;
+  width: 88px;
 }
 
 :global(.trading-portfolio-table td),
 :global(.trading-portfolio-table th) {
-  padding-left: 9px;
-  padding-right: 9px;
+  padding-left: 8px;
+  padding-right: 8px;
   vertical-align: middle;
+}
+
+:global(.trading-portfolio-table td:nth-child(4)),
+:global(.trading-portfolio-table th:nth-child(4)),
+:global(.trading-portfolio-table td:nth-child(7)),
+:global(.trading-portfolio-table th:nth-child(7)),
+:global(.trading-portfolio-table td:nth-child(8)),
+:global(.trading-portfolio-table th:nth-child(8)),
+:global(.trading-portfolio-table td:nth-child(9)),
+:global(.trading-portfolio-table th:nth-child(9)) {
+  text-align: right;
+}
+
+:global(.trading-portfolio-table td:nth-child(5)),
+:global(.trading-portfolio-table th:nth-child(5)) {
+  padding-left: 12px;
+  padding-right: 14px;
+}
+
+:global(.trading-portfolio-table td:nth-child(6)),
+:global(.trading-portfolio-table th:nth-child(6)) {
+  padding-left: 16px;
+  padding-right: 18px;
+}
+
+:global(.trading-portfolio-table td:nth-child(7)),
+:global(.trading-portfolio-table th:nth-child(7)) {
+  padding-left: 18px;
+  padding-right: 12px;
+}
+
+:global(.trading-portfolio-table td:nth-child(8)),
+:global(.trading-portfolio-table th:nth-child(8)) {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+:global(.trading-portfolio-table td:nth-child(9)),
+:global(.trading-portfolio-table th:nth-child(9)) {
+  padding-left: 6px;
+  padding-right: 14px;
 }
 
 :global(.trading-portfolio-table td small) {
@@ -5114,8 +5156,8 @@
 
 :global(.trading-portfolio-52w) {
   display: grid;
-  grid-template-columns: 42px minmax(70px, 1fr) 42px;
-  gap: 8px;
+  grid-template-columns: 46px minmax(82px, 1fr) 46px;
+  gap: 9px;
   align-items: center;
   color: rgba(34, 48, 41, 0.72);
   font-size: 11px;
