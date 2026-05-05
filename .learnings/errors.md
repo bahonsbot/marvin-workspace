@@ -1488,3 +1488,13 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** medium
 **Status:** resolved
+
+## [ERR-20260505-2322]
+
+**What failed:** Portfolio P/L and Performance can look precise while being reconstructed from current holdings only.
+**Error:** A current-holdings-only performance line ignores purchase/sell dates, transaction-date FX, cash-flow timing, historical lots, realized sells, and dividends, so it is useful as a quick approximation but not a true portfolio return record.
+**Context:** After making the Lab Portfolio Performance chart functional with lightweight-chart overlays, Philippe correctly noted that actual purchase/sell dates must be saved somewhere or P/L/performance are based on assumptions.
+**Suggested fix:** Before treating Portfolio accounting as final, implement a transaction/lot ledger and make performance/P&L calculations source from dated transactions, fees, currency, transaction-date FX, dividends, and cash movements. Keep current reconstructed charts clearly caveated until then.
+
+**Priority:** high
+**Status:** pending

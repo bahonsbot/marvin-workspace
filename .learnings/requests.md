@@ -239,3 +239,12 @@ Capabilities the user wanted but don't exist.
 
 **Priority:** high
 **Status:** pending
+
+## [FEAT-20260505-2322]
+
+**Requested:** Add a proper Portfolio transaction/lot ledger with actual purchase and sell dates, quantities, prices, fees, currencies, and transaction-date FX, then use it for accurate P/L, dividends/total return, cash-flow-aware performance, and realized vs unrealized reporting.
+**Why needed:** Philippe noticed that the current Portfolio P/L and Performance chart are still assumption-based if they only use current holdings. Without dated buys/sells, the chart cannot know when capital was actually deployed or removed, and cost basis/returns cannot be historically accurate.
+**Complexity:** complex
+
+**Priority:** high
+**Status:** pending / next Portfolio accounting phase
