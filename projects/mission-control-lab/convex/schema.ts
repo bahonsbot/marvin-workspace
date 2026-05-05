@@ -1,5 +1,5 @@
-import { defineSchema, defineTable } from 'convex/server';
-import { v } from 'convex/values';
+import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
 
 export default defineSchema({
   watchlists: defineTable({
@@ -11,12 +11,12 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
   })
-    .index('by_user_sort', ['userKey', 'sortOrder'])
-    .index('by_user_pinned', ['userKey', 'pinned', 'sortOrder']),
+    .index("by_user_sort", ["userKey", "sortOrder"])
+    .index("by_user_pinned", ["userKey", "pinned", "sortOrder"]),
 
   watchlistItems: defineTable({
     userKey: v.string(),
-    watchlistId: v.id('watchlists'),
+    watchlistId: v.id("watchlists"),
     symbol: v.string(),
     displaySymbol: v.string(),
     name: v.optional(v.string()),
@@ -24,8 +24,16 @@ export default defineSchema({
     currency: v.optional(v.string()),
     tags: v.array(v.string()),
     thesis: v.optional(v.string()),
-    priority: v.union(v.literal('core'), v.literal('radar'), v.literal('speculative')),
-    alertLevel: v.union(v.literal('none'), v.literal('watch'), v.literal('urgent')),
+    priority: v.union(
+      v.literal("core"),
+      v.literal("radar"),
+      v.literal("speculative"),
+    ),
+    alertLevel: v.union(
+      v.literal("none"),
+      v.literal("watch"),
+      v.literal("urgent"),
+    ),
     alertEnabled: v.optional(v.boolean()),
     alertMinPrice: v.optional(v.number()),
     alertMaxPrice: v.optional(v.number()),
@@ -33,16 +41,21 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
   })
-    .index('by_watchlist_sort', ['watchlistId', 'sortOrder'])
-    .index('by_watchlist_symbol', ['watchlistId', 'symbol'])
-    .index('by_user_symbol', ['userKey', 'symbol']),
+    .index("by_watchlist_sort", ["watchlistId", "sortOrder"])
+    .index("by_watchlist_symbol", ["watchlistId", "symbol"])
+    .index("by_user_symbol", ["userKey", "symbol"]),
 
   portfolioHoldings: defineTable({
     userKey: v.string(),
     symbol: v.string(),
     displaySymbol: v.string(),
     name: v.optional(v.string()),
-    assetType: v.union(v.literal('stock'), v.literal('etf'), v.literal('cash'), v.literal('other')),
+    assetType: v.union(
+      v.literal("stock"),
+      v.literal("etf"),
+      v.literal("cash"),
+      v.literal("other"),
+    ),
     strategy: v.optional(v.string()),
     sector: v.optional(v.string()),
     industry: v.optional(v.string()),
@@ -52,6 +65,7 @@ export default defineSchema({
     quantity: v.number(),
     averageCost: v.number(),
     costBasis: v.number(),
+    transactionFee: v.optional(v.number()),
     alertEnabled: v.optional(v.boolean()),
     alertMinPrice: v.optional(v.number()),
     alertMaxPrice: v.optional(v.number()),
@@ -60,6 +74,6 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
   })
-    .index('by_user_sort', ['userKey', 'sortOrder'])
-    .index('by_user_symbol', ['userKey', 'symbol']),
+    .index("by_user_sort", ["userKey", "sortOrder"])
+    .index("by_user_symbol", ["userKey", "symbol"]),
 });

@@ -1,6 +1,6 @@
-import { makeFunctionReference } from 'convex/server';
+import { makeFunctionReference } from "convex/server";
 
-export type PortfolioAssetType = 'stock' | 'etf' | 'cash' | 'other';
+export type PortfolioAssetType = "stock" | "etf" | "cash" | "other";
 
 export type PortfolioHolding = {
   _id: string;
@@ -19,6 +19,7 @@ export type PortfolioHolding = {
   quantity: number;
   averageCost: number;
   costBasis: number;
+  transactionFee?: number;
   alertEnabled?: boolean;
   alertMinPrice?: number;
   alertMaxPrice?: number;
@@ -29,9 +30,13 @@ export type PortfolioHolding = {
 };
 
 export const portfolioApi = {
-  list: makeFunctionReference<'query', { userKey?: string }, PortfolioHolding[]>('portfolio:list'),
+  list: makeFunctionReference<
+    "query",
+    { userKey?: string },
+    PortfolioHolding[]
+  >("portfolio:list"),
   add: makeFunctionReference<
-    'mutation',
+    "mutation",
     {
       userKey?: string;
       symbol: string;
@@ -45,15 +50,16 @@ export const portfolioApi = {
       broker?: string;
       quantity: number;
       averageCost: number;
+      transactionFee?: number;
       alertEnabled?: boolean;
       alertMinPrice?: number;
       alertMaxPrice?: number;
       notes?: string;
     },
     string
-  >('portfolio:add'),
+  >("portfolio:add"),
   update: makeFunctionReference<
-    'mutation',
+    "mutation",
     {
       id: string;
       name?: string;
@@ -66,6 +72,7 @@ export const portfolioApi = {
       broker?: string;
       quantity?: number;
       averageCost?: number;
+      transactionFee?: number;
       alertEnabled?: boolean;
       alertMinPrice?: number | null;
       alertMaxPrice?: number | null;
@@ -73,6 +80,8 @@ export const portfolioApi = {
       sortOrder?: number;
     },
     void
-  >('portfolio:update'),
-  remove: makeFunctionReference<'mutation', { id: string }, void>('portfolio:remove'),
+  >("portfolio:update"),
+  remove: makeFunctionReference<"mutation", { id: string }, void>(
+    "portfolio:remove",
+  ),
 } as const;

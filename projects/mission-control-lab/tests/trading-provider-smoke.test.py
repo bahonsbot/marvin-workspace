@@ -24,6 +24,8 @@ SOURCE_FILES = {
     "watchlist_client": ROOT / "components" / "pages" / "trading" / "watchlist" / "WatchlistClient.tsx",
     "watchlist_metadata_route": ROOT / "app" / "api" / "trading" / "watchlist-metadata" / "route.ts",
     "ticker_watchlist_button": ROOT / "components" / "pages" / "trading" / "ticker" / "TickerWatchlistButton.tsx",
+    "portfolio_client": ROOT / "components" / "pages" / "trading" / "portfolio" / "PortfolioClient.tsx",
+    "portfolio_convex": ROOT / "convex" / "portfolio.ts",
 }
 
 
@@ -336,6 +338,29 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("profile.sourceMap.filings.source === 'dart'", ticker_profile)
         self.assertIn("profile.sourceMap.filings.source === 'mops'", ticker_profile)
         self.assertIn("!profile.resources.some((group) => group.items.length)", ticker_profile)
+
+
+    def test_portfolio_polish_keeps_search_edit_fee_flow(self) -> None:
+        portfolio = read_source("portfolio_client")
+        convex_portfolio = read_source("portfolio_convex")
+        styles = read_source("trading_styles")
+
+        self.assertIn("trading-portfolio-add-icon-button", portfolio)
+        self.assertIn("<Plus size={16}", portfolio)
+        self.assertIn("trading-portfolio-holdings-sort", portfolio)
+        self.assertIn('className="trading-portfolio-edit"', portfolio)
+        self.assertIn('mode="edit"', portfolio)
+        self.assertIn("/api/trading/search?q=", portfolio)
+        self.assertIn("applySearchResult", portfolio)
+        self.assertIn("assetTypeFromSearchType", portfolio)
+        self.assertIn("Transaction fee", portfolio)
+        self.assertNotIn("<span>Sector</span>", portfolio)
+        self.assertNotIn("<span>Country</span>", portfolio)
+        self.assertIn("transactionFee: v.optional(v.number())", convex_portfolio)
+        self.assertIn("quantity * averageCost + (transactionFee ?? 0)", convex_portfolio)
+        self.assertIn("trading-portfolio-search-results", styles)
+        self.assertIn("trading-portfolio-edit", styles)
+        self.assertIn("#20b86f", portfolio)
 
     def test_watchlist_add_symbol_reuses_ticker_search_endpoint(self) -> None:
         watchlist = read_source("watchlist_client")
