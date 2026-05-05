@@ -674,7 +674,7 @@ function LivePortfolioHoldingForm({
   }, [holding]);
 
   useEffect(() => {
-    if (mode !== "add" || searchTerm.length < 1) {
+    if (mode !== "add" || !searchOpen || searchTerm.length < 1) {
       setSearchResults([]);
       setSearchLoading(false);
       setSearchError(null);
@@ -711,7 +711,7 @@ function LivePortfolioHoldingForm({
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [mode, searchTerm]);
+  }, [mode, searchOpen, searchTerm]);
 
   function patch<K extends keyof HoldingInput>(key: K, value: HoldingInput[K]) {
     setInput((current) => ({ ...current, [key]: value }));
