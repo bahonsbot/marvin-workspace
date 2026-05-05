@@ -5446,3 +5446,59 @@
 :global(.trading-portfolio-buy-more-form .trading-portfolio-form-title) {
   grid-column: 1 / -1;
 }
+
+:global(.trading-portfolio-performance-toolbar) {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+:global(.trading-portfolio-range-tabs) {
+  justify-content: flex-start;
+  margin: 0;
+}
+
+:global(.trading-portfolio-benchmark-tabs) {
+  margin: 0;
+}
+
+:global(.trading-portfolio-benchmark-tabs button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+:global(.trading-portfolio-benchmark-tabs button::before) {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--benchmark-color, #31523f);
+  opacity: 0.85;
+}
+
+:global(.trading-portfolio-benchmark-tabs button span) {
+  color: rgba(34, 48, 41, 0.54);
+  font-variant-numeric: tabular-nums;
+}
+
+:global(.trading-portfolio-performance-chart-shell) {
+  position: relative;
+  min-height: 236px;
+}
+
+:global(.trading-portfolio-performance-chart) {
+  display: block;
+  width: 100%;
+  min-height: 236px;
+}
+
+:global(.trading-portfolio-performance-empty) {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(34, 48, 41, 0.48);
+  font-size: 12px;
+}

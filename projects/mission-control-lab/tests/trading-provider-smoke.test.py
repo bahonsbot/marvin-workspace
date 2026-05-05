@@ -28,6 +28,7 @@ SOURCE_FILES = {
     "portfolio_convex": ROOT / "convex" / "portfolio.ts",
     "portfolio_fx": ROOT / "lib" / "trading" / "fx.ts",
     "portfolio_fx_route": ROOT / "app" / "api" / "trading" / "fx" / "route.ts",
+    "portfolio_performance_route": ROOT / "app" / "api" / "trading" / "portfolio-performance" / "route.ts",
 }
 
 
@@ -534,6 +535,23 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("object-position: center", styles)
         self.assertIn("trading-ticker-watchlist-menu", styles)
 
+
+    def test_portfolio_performance_chart_uses_live_range_overlays(self) -> None:
+        client = read_source("portfolio_client")
+        route = read_source("portfolio_performance_route")
+        self.assertIn('lightweight-charts', client)
+        self.assertIn('const performanceRanges: PerformanceRange[] = [', client)
+        for range_label in ['"1D"', '"5D"', '"1M"', '"6M"', '"YTD"', '"1Y"', '"5Y"']:
+            self.assertIn(range_label, client)
+        self.assertIn('/api/trading/portfolio-performance', client)
+        self.assertNotIn('Benchmark overlays are Phase 1 scaffolding', client)
+        self.assertIn('Reconstructed from current holdings, current FX, and historical market prices', client)
+        self.assertIn("BENCHMARKS", route)
+        self.assertIn("SPY.US", route)
+        self.assertIn("VT.US", route)
+        self.assertIn("QQQ.US", route)
+        self.assertIn('getTickerProfile', route)
+        self.assertIn('Portfolio line is reconstructed from current holdings, current FX rates, and historical prices', route)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { Pencil, Plus, Wallet, X } from "lucide-react";
 import { useMutation, useQuery } from "convex/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  createChart,
+  LineSeries,
+  type IChartApi,
+  type ISeriesApi,
+  type LineData,
+  type Time,
+} from "lightweight-charts";
 import {
   portfolioApi,
   type PortfolioAssetType,
@@ -44,6 +52,7 @@ type TickerSearchResult = {
 
 type TickerSearchResponse = { query: string; results: TickerSearchResult[] };
 type BenchmarkKey = "portfolio" | "sp500" | "allworld" | "nasdaq";
+type PerformanceRange = "1D" | "5D" | "1M" | "6M" | "YTD" | "1Y" | "5Y";
 
 type PortfolioMetadataItem = {
   symbol: string;
@@ -80,6 +89,23 @@ type FxRate = {
 };
 
 type FxRatesResponse = { baseCurrency: string; rates?: FxRate[] };
+
+type PerformancePoint = { time: string | number; value: number };
+type PerformanceSeries = {
+  key: BenchmarkKey;
+  label: string;
+  range: PerformanceRange;
+  points: PerformancePoint[];
+  source: string;
+  note?: string;
+};
+type PortfolioPerformanceResponse = {
+  baseCurrency: string;
+  range: PerformanceRange;
+  ranges: PerformanceRange[];
+  series: PerformanceSeries[];
+  generatedAt: string;
+};
 
 type HoldingInput = {
   symbol: string;
@@ -236,23 +262,21 @@ const benchmarkLabels: Record<BenchmarkKey, string> = {
   nasdaq: "Nasdaq 100",
 };
 
-const benchmarkSeries: Record<BenchmarkKey, number[]> = {
-  portfolio: [
-    100, 101.4, 100.8, 103.2, 104.6, 103.8, 106.5, 108.1, 107.4, 110.2, 112.7,
-    111.9, 114.3, 116.1, 115.4, 118.8, 121.2, 120.6, 123.7, 126.4,
-  ],
-  sp500: [
-    100, 100.6, 101.1, 102, 101.7, 103.1, 104.4, 105.2, 104.9, 106.3, 107.7,
-    108.4, 109.1, 110.2, 111, 112.6, 113.4, 114.2, 115.1, 116.2,
-  ],
-  allworld: [
-    100, 100.4, 100.9, 101.6, 101.4, 102.2, 103.1, 103.8, 104.1, 105, 105.8,
-    106.2, 106.9, 107.7, 108.3, 109, 109.8, 110.2, 110.9, 111.7,
-  ],
-  nasdaq: [
-    100, 101.1, 101.8, 103.4, 102.8, 104.9, 106.3, 107.5, 106.8, 109.1, 111.4,
-    112, 113.8, 115.3, 116.2, 118.4, 119.7, 120.5, 122.9, 124.6,
-  ],
+const performanceRanges: PerformanceRange[] = [
+  "1D",
+  "5D",
+  "1M",
+  "6M",
+  "YTD",
+  "1Y",
+  "5Y",
+];
+
+const benchmarkColors: Record<BenchmarkKey, string> = {
+  portfolio: "#31523f",
+  sp500: "#37a6ff",
+  allworld: "#20b86f",
+  nasdaq: "#7c5cff",
 };
 
 const colors = [
@@ -630,80 +654,132 @@ function DonutChart({ rows }: { rows: ReturnType<typeof allocationRows> }) {
   );
 }
 
+function performancePointTime(point: PerformancePoint) {
+  return typeof point.time === "number"
+    ? point.time
+    : Date.parse(point.time) / 1000;
+}
+
+function performanceLineData(
+  series: PerformanceSeries | undefined,
+): LineData<Time>[] {
+  return [...(series?.points ?? [])]
+    .map((point) => ({
+      time: point.time as Time,
+      value: point.value,
+      sortTime: performancePointTime(point),
+    }))
+    .filter(
+      (point) =>
+        Number.isFinite(point.sortTime) && Number.isFinite(point.value),
+    )
+    .sort((a, b) => a.sortTime - b.sortTime)
+    .map(({ time, value }) => ({ time, value }));
+}
+
 function PortfolioPerformanceChart({
   visible,
+  series,
 }: {
   visible: Record<BenchmarkKey, boolean>;
+  series: PerformanceSeries[];
 }) {
-  const width = 720;
-  const height = 220;
-  const plotTop = 18;
-  const plotBottom = 34;
-  const plotHeight = height - plotTop - plotBottom;
-  const activeSeries = (Object.keys(benchmarkSeries) as BenchmarkKey[]).filter(
-    (key) => visible[key],
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const chartRef = useRef<IChartApi | null>(null);
+  const seriesRef = useRef<Map<BenchmarkKey, ISeriesApi<"Line">>>(new Map());
+  const activeSeries = useMemo(
+    () => series.filter((entry) => visible[entry.key] && entry.points.length),
+    [series, visible],
   );
-  const values = activeSeries.flatMap((key) => benchmarkSeries[key]);
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const seriesColors: Record<BenchmarkKey, string> = {
-    portfolio: "#31523f",
-    sp500: "#4f6f7d",
-    allworld: "#9a7f4d",
-    nasdaq: "#b77d55",
-  };
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const chart = createChart(containerRef.current, {
+      height: 236,
+      autoSize: true,
+      layout: {
+        attributionLogo: false,
+        background: { color: "transparent" },
+        textColor: "rgba(34, 48, 41, 0.58)",
+        fontFamily: "inherit",
+      },
+      grid: {
+        vertLines: { color: "rgba(28, 37, 32, 0.04)" },
+        horzLines: { color: "rgba(28, 37, 32, 0.08)" },
+      },
+      rightPriceScale: {
+        borderColor: "rgba(28, 37, 32, 0.12)",
+        textColor: "rgba(34, 48, 41, 0.55)",
+      },
+      timeScale: {
+        borderColor: "rgba(28, 37, 32, 0.12)",
+        timeVisible: true,
+        secondsVisible: false,
+        rightOffset: 4,
+      },
+      crosshair: {
+        vertLine: {
+          color: "rgba(23, 36, 30, 0.24)",
+          labelBackgroundColor: "#17241e",
+        },
+        horzLine: {
+          color: "rgba(23, 36, 30, 0.18)",
+          labelBackgroundColor: "#17241e",
+        },
+      },
+    });
+    chartRef.current = chart;
+    const lineSeries = seriesRef.current;
+    const observer = new ResizeObserver(() => chart.timeScale().fitContent());
+    observer.observe(containerRef.current);
+    return () => {
+      observer.disconnect();
+      chart.remove();
+      chartRef.current = null;
+      lineSeries.clear();
+    };
+  }, []);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart) return;
+    const wanted = new Set(activeSeries.map((entry) => entry.key));
+    for (const [key, line] of seriesRef.current.entries()) {
+      if (!wanted.has(key)) {
+        chart.removeSeries(line);
+        seriesRef.current.delete(key);
+      }
+    }
+    activeSeries.forEach((entry) => {
+      let line = seriesRef.current.get(entry.key);
+      if (!line) {
+        line = chart.addSeries(LineSeries, {
+          color: benchmarkColors[entry.key],
+          lineWidth: entry.key === "portfolio" ? 3 : 2,
+          lastValueVisible: true,
+          priceLineVisible: false,
+          title: benchmarkLabels[entry.key],
+        });
+        seriesRef.current.set(entry.key, line);
+      }
+      line.setData(performanceLineData(entry));
+    });
+    chart.timeScale().fitContent();
+  }, [activeSeries]);
+
   return (
-    <svg
-      className="trading-portfolio-performance-chart"
-      viewBox={`0 0 ${width} ${height}`}
-      role="img"
-      aria-label="Portfolio performance with benchmark overlays"
-    >
-      {[0, 1, 2, 3].map((line) => {
-        const y = plotTop + (line / 3) * plotHeight;
-        return (
-          <line
-            key={line}
-            x1="12"
-            y1={y}
-            x2={width - 22}
-            y2={y}
-            stroke="rgba(28,37,32,0.08)"
-            strokeWidth="1"
-          />
-        );
-      })}
-      {activeSeries.map((key) => {
-        const points = benchmarkSeries[key]
-          .map((value, index) => {
-            const x =
-              12 + (index / (benchmarkSeries[key].length - 1)) * (width - 44);
-            const y =
-              plotTop +
-              (1 - (value - min) / Math.max(max - min, 1)) * plotHeight;
-            return `${x.toFixed(1)},${y.toFixed(1)}`;
-          })
-          .join(" ");
-        return (
-          <polyline
-            key={key}
-            points={points}
-            fill="none"
-            stroke={seriesColors[key]}
-            strokeWidth={key === "portfolio" ? 2.8 : 1.8}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        );
-      })}
-      <line
-        x1="12"
-        y1={height - plotBottom}
-        x2={width - 22}
-        y2={height - plotBottom}
-        stroke="rgba(28,37,32,0.14)"
+    <div className="trading-portfolio-performance-chart-shell">
+      <div
+        ref={containerRef}
+        className="trading-portfolio-performance-chart"
+        aria-label="Portfolio performance chart"
       />
-    </svg>
+      {!activeSeries.length ? (
+        <div className="trading-portfolio-performance-empty">
+          Performance data is still loading.
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -844,6 +920,31 @@ function fxTooltipRows(rates: FxRate[]) {
           : rate.freshness;
     return `${formatFxRate(rate)} · ${source} · ${date}`;
   });
+}
+
+function performanceRequestPayload(holdings: EnrichedHolding[]) {
+  return holdings
+    .filter((holding) => holding.assetType !== "cash")
+    .map((holding) => ({
+      symbol: holding.symbol,
+      quantity: holding.quantity,
+      currency: holding.displayCurrency,
+      assetType: holding.assetType,
+      fxRate: holding.fxRate.rate,
+    }));
+}
+
+function seriesChange(series: PerformanceSeries | undefined) {
+  const last = series?.points.at(-1)?.value;
+  return typeof last === "number" && Number.isFinite(last) ? last : null;
+}
+
+function sourceLabel(series: PerformanceSeries[]) {
+  const sources = Array.from(
+    new Set(series.map((entry) => entry.source).filter(Boolean)),
+  );
+  if (!sources.length) return "provider data";
+  return sources.slice(0, 3).join(" + ");
 }
 
 function PortfolioHoldingForm({
@@ -1904,6 +2005,12 @@ function PortfolioLayout({
   const [visibleBenchmarks, setVisibleBenchmarks] = useState<
     Record<BenchmarkKey, boolean>
   >({ portfolio: true, sp500: true, allworld: true, nasdaq: false });
+  const [performanceRange, setPerformanceRange] =
+    useState<PerformanceRange>("1Y");
+  const [performanceData, setPerformanceData] =
+    useState<PortfolioPerformanceResponse | null>(null);
+  const [performanceLoading, setPerformanceLoading] = useState(false);
+  const [performanceError, setPerformanceError] = useState<string | null>(null);
 
   const symbols = useMemo(
     () =>
@@ -2035,11 +2142,13 @@ function PortfolioLayout({
   );
   const totalPl = totalValue - totalCost;
   const totalPlPct = totalCost > 0 ? (totalPl / totalCost) * 100 : null;
-  const cashHoldings = enriched.filter(
-    (holding) => holding.assetType === "cash",
+  const cashHoldings = useMemo(
+    () => enriched.filter((holding) => holding.assetType === "cash"),
+    [enriched],
   );
-  const investmentHoldings = enriched.filter(
-    (holding) => holding.assetType !== "cash",
+  const investmentHoldings = useMemo(
+    () => enriched.filter((holding) => holding.assetType !== "cash"),
+    [enriched],
   );
   const cashValue = cashHoldings.reduce(
     (sum, holding) => sum + holding.marketValueBase,
@@ -2049,6 +2158,79 @@ function PortfolioLayout({
   const largest = [...investmentHoldings].sort(
     (a, b) => b.weight - a.weight,
   )[0];
+  const performanceHoldings = useMemo(
+    () => performanceRequestPayload(investmentHoldings),
+    [investmentHoldings],
+  );
+  const performanceHoldingsKey = useMemo(
+    () =>
+      performanceHoldings
+        .map(
+          (holding) =>
+            `${holding.symbol}:${holding.quantity}:${holding.assetType}:${holding.fxRate}`,
+        )
+        .sort()
+        .join("|"),
+    [performanceHoldings],
+  );
+  const performanceRequestBody = useMemo(
+    () =>
+      JSON.stringify({
+        range: performanceRange,
+        holdings: performanceHoldings,
+      }),
+    [performanceHoldings, performanceRange],
+  );
+
+  useEffect(() => {
+    if (!performanceHoldings.length) {
+      setPerformanceData(null);
+      setPerformanceLoading(false);
+      setPerformanceError(null);
+      return;
+    }
+    const controller = new AbortController();
+    setPerformanceLoading(true);
+    setPerformanceError(null);
+    fetch("/api/trading/portfolio-performance", {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json",
+      },
+      body: performanceRequestBody,
+    })
+      .then((response) => {
+        if (!response.ok)
+          throw new Error(`Performance failed (${response.status})`);
+        return response.json() as Promise<PortfolioPerformanceResponse>;
+      })
+      .then((data) => setPerformanceData(data))
+      .catch((error) => {
+        if (controller.signal.aborted) return;
+        setPerformanceError(
+          error instanceof Error ? error.message : "Performance unavailable",
+        );
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setPerformanceLoading(false);
+      });
+    return () => controller.abort();
+  }, [
+    performanceHoldings.length,
+    performanceHoldingsKey,
+    performanceRequestBody,
+  ]);
+
+  const performanceSeries = performanceData?.series ?? [];
+  const portfolioPerformance = performanceSeries.find(
+    (entry) => entry.key === "portfolio",
+  );
+  const portfolioRangeChange = seriesChange(portfolioPerformance);
+  const performanceCaption =
+    portfolioPerformance?.note ??
+    "Reconstructed from current holdings, current FX, and historical market prices.";
 
   return (
     <>
@@ -2171,29 +2353,65 @@ function PortfolioLayout({
             <div>
               <div className="trading-section-label">Performance</div>
               <p>
-                Benchmark overlays are Phase 1 scaffolding until portfolio
-                history is collected.
+                {performanceLoading
+                  ? "Loading market history…"
+                  : performanceError
+                    ? performanceError
+                    : performanceCaption}
               </p>
             </div>
           </div>
-          <div className="trading-portfolio-benchmark-tabs">
-            {(Object.keys(benchmarkLabels) as BenchmarkKey[]).map((key) => (
-              <button
-                key={key}
-                type="button"
-                className={visibleBenchmarks[key] ? "active" : ""}
-                onClick={() =>
-                  setVisibleBenchmarks((current) => ({
-                    ...current,
-                    [key]: !current[key],
-                  }))
-                }
-              >
-                {benchmarkLabels[key]}
-              </button>
-            ))}
+          <div className="trading-portfolio-performance-toolbar">
+            <div
+              className="trading-range-tabs trading-portfolio-range-tabs"
+              role="tablist"
+              aria-label="Portfolio performance range"
+            >
+              {performanceRanges.map((range) => (
+                <button
+                  key={range}
+                  type="button"
+                  className={performanceRange === range ? "active" : ""}
+                  role="tab"
+                  aria-selected={performanceRange === range}
+                  onClick={() => setPerformanceRange(range)}
+                >
+                  {range}
+                </button>
+              ))}
+            </div>
+            <div className="trading-portfolio-benchmark-tabs">
+              {(Object.keys(benchmarkLabels) as BenchmarkKey[]).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={visibleBenchmarks[key] ? "active" : ""}
+                  style={{
+                    ["--benchmark-color" as string]: benchmarkColors[key],
+                  }}
+                  onClick={() =>
+                    setVisibleBenchmarks((current) => ({
+                      ...current,
+                      [key]: !current[key],
+                    }))
+                  }
+                >
+                  {benchmarkLabels[key]}
+                  {key === "portfolio" ? (
+                    <span>{formatPercent(portfolioRangeChange)}</span>
+                  ) : null}
+                </button>
+              ))}
+            </div>
           </div>
-          <PortfolioPerformanceChart visible={visibleBenchmarks} />
+          <PortfolioPerformanceChart
+            visible={visibleBenchmarks}
+            series={performanceSeries}
+          />
+          <p className="trading-financial-caption">
+            Source: {sourceLabel(performanceSeries)} · {performanceRange} %
+            change, excluding dividends and transaction-date cash-flow timing.
+          </p>
         </article>
 
         <article className="trading-portfolio-panel trading-portfolio-allocation-panel">
