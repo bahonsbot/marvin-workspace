@@ -84,12 +84,20 @@ Use the live cron registry as runtime truth instead of trusting a fixed snapshot
 - Inspect current jobs: `/data/.openclaw/cron/jobs.json`
 - Prefer live checks when needed: `openclaw gateway call status --json`, `openclaw cron list`
 - Do not rely on stale job counts or legacy wrapper entries in docs
+- Nightly memory extraction verification quick check:
+  1. confirm job `7201afb2-6ff2-4ce7-8c24-e12d4413b9f9` / `nightly-memory-extraction` shows `lastRunStatus: ok` in live cron state or run history
+  2. confirm today's `memory/YYYY-MM-DD.md` was updated meaningfully or that the run explicitly concluded no append was needed because the file was already comprehensive
+  3. confirm any expected entity/file updates landed where relevant, especially `life/*/items.json` or project fact stores when the run summary claims durable updates
+  4. ignore delivery-preview noise for this job when `delivery.mode` is `none`; `not-requested` is healthy for this silent job
 
 ### Deterministic scheduler
 Script-only jobs belong on the host deterministic scheduler.
 - Service: `marvin-deterministic-scheduler.service`
 - Runner: `scripts/deterministic_scheduler.py`
-- Main entry: `python3 scripts/cron_runner.py --list-tasks`
+- Task registry: `scripts/cron_runner_tasks.py`
+- Main entry / verification: `python3 scripts/cron_runner.py --list-tasks`
+- Workflow: after editing `scripts/cron_runner_tasks.py`, run `python3 scripts/cron_runner.py --list-tasks` to confirm the task is registered before wiring its schedule
+- Host-service install/verify/rollback: `docs/runbooks/deterministic-scheduler-host-service.md`
 - Logs: `memory/cron-run-log.jsonl`, `memory/cron-run-details/`
 - Do not treat disabled legacy wrapper jobs as runtime truth
 
@@ -121,9 +129,9 @@ Script-only jobs belong on the host deterministic scheduler.
   - mirror/sync surface: `AUTONOMOUS.md`
 - Memory/files editor foundation: `projects/mission-control/components/editor/CodeMirrorEditor.tsx`
 - Chat helpers:
-  - `components/chat/chat-rich-text.tsx`
-  - `components/chat/chat-ui-helpers.ts`
-  - `components/chat/chat-tool-groups.tsx`
+  - `projects/mission-control/components/chat/chat-rich-text.tsx`
+  - `projects/mission-control/components/chat/chat-ui-helpers.ts`
+  - `projects/mission-control/components/chat/chat-tool-groups.tsx`
 
 ## Specialist Workspaces
 - Canonical specialist data lives under: `/data/.openclaw/workspace/agent-workspaces/<seat>/...`
@@ -157,19 +165,25 @@ Script-only jobs belong on the host deterministic scheduler.
 ## Key Scripts and Runbooks
 ### Scripts
 - `scripts/deterministic_scheduler.py`: host-side script-only scheduler
-- `scripts/cron_runner.py`: deterministic cron task entry point
+- `scripts/cron_runner_tasks.py`: declarative deterministic cron task registry used by `scripts/cron_runner.py`
+- `scripts/cron_runner.py`: deterministic cron task entry point and `--list-tasks` verifier
 - `scripts/autonomy_gate.py`: cron/autonomy preflight gate
 - `scripts/queue_state.py`: queue inspection/manual healing
 - `scripts/queue_triage.py`: queue diagnosis
 - `scripts/daily-task-generator.py`: daily backlog generation
 - `scripts/cron_tasks/session_log_cleanup.py`: old session-log cleanup
+- `scripts/check_runbook_index.py`: validates `docs/runbooks/README.md` against current runbook files
 - `scripts/check_token_age.py`: token age check
+- Operator diagnostics:
+  - `scripts/autonomy_health_check.py`: checks AUTONOMOUS.md vs executor queue drift and stale/autonomy-lane issues
+  - `scripts/autonomy_operator_dashboard.py`: operator view across AUTONOMOUS.md, Mission Control task board, and executor queue
+  - `scripts/operator_snapshot.py`: quick OpenClaw troubleshooting snapshot for gateway, queue, and autonomous task context
+  - `scripts/cron_run_summary.py`: compact summary of deterministic cron run history from `memory/cron-run-log.jsonl`
 
 ### Runbooks
 - `docs/runbooks/deterministic-scheduler-host-service.md`
 - `docs/runbooks/webhook-receiver-host-service.md`
 - `docs/runbooks/mission-control-runtime-preview-runbook.md`
-- `docs/runbooks/openai-codex-runtime-account-switch.md`
 - `docs/runbooks/morning-meeting-decision-template.md`
 
 ## Safety Constraints
