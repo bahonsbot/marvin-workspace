@@ -5046,13 +5046,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-:global(.trading-portfolio-fx-note) {
-  margin-top: 4px;
-  color: rgba(34, 48, 41, 0.44);
-  font-size: 9.5px;
-  white-space: nowrap;
-}
-
 :global(.trading-portfolio-alert-cell) {
   display: grid;
   gap: 3px;
@@ -5145,4 +5138,134 @@
   :global(.trading-portfolio-donut) {
     margin: 0 auto;
   }
+}
+
+:global(.trading-portfolio-fx-kpi) {
+  position: relative;
+  outline: none;
+}
+
+:global(.trading-portfolio-fx-tooltip) {
+  position: absolute;
+  right: 10px;
+  top: calc(100% - 6px);
+  z-index: 30;
+  display: grid;
+  gap: 5px;
+  min-width: 230px;
+  max-width: 320px;
+  padding: 10px 11px;
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 13px;
+  background: rgba(255, 253, 249, 0.96);
+  box-shadow: 0 16px 40px rgba(17, 32, 26, 0.13);
+  color: rgba(34, 48, 41, 0.68);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+:global(.trading-portfolio-fx-tooltip b) {
+  color: rgba(23, 36, 30, 0.82);
+  font-size: 10.5px;
+  font-weight: 400;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+:global(.trading-portfolio-fx-kpi:hover .trading-portfolio-fx-tooltip),
+:global(.trading-portfolio-fx-kpi:focus-within .trading-portfolio-fx-tooltip),
+:global(.trading-portfolio-fx-kpi:focus .trading-portfolio-fx-tooltip) {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+:global(.trading-portfolio-cash-form) {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.8fr) minmax(140px, 1fr) minmax(
+      160px,
+      1.2fr
+    ) auto;
+  gap: 10px;
+  align-items: end;
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 253, 249, 0.82);
+  padding: 14px;
+}
+
+:global(.trading-portfolio-cash-form .trading-portfolio-form-title) {
+  grid-column: 1 / -1;
+}
+
+:global(.trading-portfolio-cash-panel) {
+  padding: 16px;
+}
+
+:global(.trading-portfolio-cash-head) {
+  align-items: center;
+}
+
+:global(.trading-portfolio-cash-add) {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid rgba(49, 82, 63, 0.16);
+  border-radius: 999px;
+  background: rgba(49, 82, 63, 0.08);
+  color: #17241e;
+  padding: 8px 11px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+:global(.trading-portfolio-cash-add:disabled) {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+:global(.trading-portfolio-cash-list) {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  margin-top: 12px;
+  border: 1px solid rgba(28, 37, 32, 0.1);
+  border-radius: 15px;
+  background: rgba(28, 37, 32, 0.08);
+}
+
+:global(.trading-portfolio-cash-row) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, auto) auto;
+  gap: 14px;
+  align-items: center;
+  background: rgba(255, 253, 249, 0.74);
+  padding: 11px 12px;
+}
+
+:global(.trading-portfolio-cash-row strong),
+:global(.trading-portfolio-cash-row b) {
+  display: block;
+  color: #17241e;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+:global(.trading-portfolio-cash-row span),
+:global(.trading-portfolio-cash-row em) {
+  display: block;
+  margin-top: 3px;
+  color: rgba(34, 48, 41, 0.5);
+  font-size: 11px;
+  font-style: normal;
+}
+
+:global(.trading-portfolio-cash-row > div:nth-child(2)) {
+  text-align: right;
 }

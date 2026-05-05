@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Pencil, Plus, X } from "lucide-react";
+import { Pencil, Plus, Wallet, X } from "lucide-react";
 import { useMutation, useQuery } from "convex/react";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -93,6 +93,13 @@ type HoldingInput = {
 };
 
 type PortfolioFormMode = "add" | "edit";
+type CashFormMode = "add" | "edit";
+
+type CashInput = {
+  currency: string;
+  amount: string;
+  broker: string;
+};
 
 type EnrichedHolding = PortfolioHolding & {
   metadata?: PortfolioMetadataItem;
@@ -720,6 +727,43 @@ function initialHoldingInput(holding?: EnrichedHolding): HoldingInput {
   };
 }
 
+function initialCashInput(holding?: EnrichedHolding | null): CashInput {
+  if (!holding) return { currency: BASE_CURRENCY, amount: "", broker: "" };
+  return {
+    currency: holding.currency || BASE_CURRENCY,
+    amount: String(holding.quantity),
+    broker: holding.broker ?? "",
+  };
+}
+
+function cashSymbol(currency: string) {
+  return `CASH.${currency.trim().toUpperCase() || BASE_CURRENCY}`;
+}
+
+function fxTooltipRows(rates: FxRate[]) {
+  const relevant = rates
+    .filter((rate) => rate.from !== rate.to)
+    .sort((a, b) => a.from.localeCompare(b.from));
+  if (!relevant.length)
+    return ["All holdings already match the base currency."];
+  return relevant.map((rate) => {
+    const date = Number.isFinite(Date.parse(rate.asOf))
+      ? new Intl.DateTimeFormat("en-US", {
+          month: "short",
+          day: "numeric",
+          timeZone: "UTC",
+        }).format(new Date(rate.asOf))
+      : "latest";
+    const source =
+      rate.freshness === "fresh"
+        ? "Frankfurter"
+        : rate.freshness === "fallback"
+          ? "fallback"
+          : rate.freshness;
+    return `${formatFxRate(rate)} · ${source} · ${date}`;
+  });
+}
+
 function PortfolioHoldingForm({
   enabled,
   mode,
@@ -1113,6 +1157,295 @@ function LivePortfolioHoldingForm({
   );
 }
 
+function CashManagementForm({
+  enabled,
+  mode,
+  holding,
+  onSaved,
+  onCancel,
+}: {
+  enabled: boolean;
+  mode: CashFormMode;
+  holding?: EnrichedHolding | null;
+  onSaved?: () => void;
+  onCancel?: () => void;
+}) {
+  if (!enabled) {
+    return (
+      <div className="trading-portfolio-add-disabled">
+        Connect Convex to manage cash balances.
+      </div>
+    );
+  }
+  return (
+    <LiveCashManagementForm
+      mode={mode}
+      holding={holding ?? null}
+      onSaved={onSaved}
+      onCancel={onCancel}
+    />
+  );
+}
+
+function LiveCashManagementForm({
+  mode,
+  holding,
+  onSaved,
+  onCancel,
+}: {
+  mode: CashFormMode;
+  holding: EnrichedHolding | null;
+  onSaved?: () => void;
+  onCancel?: () => void;
+}) {
+  const addHolding = useMutation(portfolioApi.add);
+  const updateHolding = useMutation(portfolioApi.update);
+  const [input, setInput] = useState<CashInput>(() =>
+    initialCashInput(holding),
+  );
+  const [status, setStatus] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    setInput(initialCashInput(holding));
+  }, [holding]);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const currency = input.currency.trim().toUpperCase() || BASE_CURRENCY;
+    const amount = parseNumber(input.amount);
+    if (!amount || amount <= 0) {
+      setStatus("Cash amount must be greater than zero.");
+      return;
+    }
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      const payload = {
+        name: `Cash ${currency}`,
+        assetType: "cash" as PortfolioAssetType,
+        quantity: amount,
+        averageCost: 1,
+        transactionFee: 0,
+        currency,
+        strategy: "Reserve",
+        broker: input.broker.trim() || undefined,
+      };
+      if (mode === "edit" && holding) {
+        await updateHolding({ id: holding._id, ...payload });
+        setStatus(`${currency} cash updated.`);
+      } else {
+        await addHolding({
+          userKey: DEMO_USER_KEY,
+          symbol: cashSymbol(currency),
+          ...payload,
+        });
+        setInput(initialCashInput());
+        setStatus(`${currency} cash added.`);
+      }
+      onSaved?.();
+    } catch (error) {
+      setStatus(
+        error instanceof Error ? error.message : "Could not save cash.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  return (
+    <form className="trading-portfolio-cash-form" onSubmit={handleSubmit}>
+      <div className="trading-portfolio-form-title">
+        <strong>
+          {mode === "edit"
+            ? `Edit ${holding?.displaySymbol ?? "cash"}`
+            : "Add cash"}
+        </strong>
+        {onCancel ? (
+          <button
+            type="button"
+            className="trading-portfolio-form-close"
+            onClick={onCancel}
+            aria-label="Close cash form"
+          >
+            <X size={14} />
+          </button>
+        ) : null}
+      </div>
+      <label>
+        <span>Currency</span>
+        <input
+          value={input.currency}
+          onChange={(event) =>
+            setInput((current) => ({
+              ...current,
+              currency: event.target.value,
+            }))
+          }
+          placeholder="EUR"
+          disabled={isSaving || mode === "edit"}
+        />
+      </label>
+      <label>
+        <span>Amount</span>
+        <input
+          value={input.amount}
+          onChange={(event) =>
+            setInput((current) => ({ ...current, amount: event.target.value }))
+          }
+          inputMode="decimal"
+          placeholder="1000"
+          disabled={isSaving}
+        />
+      </label>
+      <label>
+        <span>Broker / account</span>
+        <input
+          value={input.broker}
+          onChange={(event) =>
+            setInput((current) => ({ ...current, broker: event.target.value }))
+          }
+          placeholder="Cash account"
+          disabled={isSaving}
+        />
+      </label>
+      <button type="submit" disabled={isSaving}>
+        {isSaving ? "Saving…" : mode === "edit" ? "Save cash" : "Add cash"}
+      </button>
+      {status ? <p>{status}</p> : null}
+    </form>
+  );
+}
+
+function CashManagementPanel({
+  cashHoldings,
+  totalValue,
+  canMutate,
+  onEdit,
+  onAdd,
+  onRemove,
+  removingId,
+}: {
+  cashHoldings: EnrichedHolding[];
+  totalValue: number;
+  canMutate: boolean;
+  onEdit?: (holding: EnrichedHolding) => void;
+  onAdd?: () => void;
+  onRemove?: (id: string) => void;
+  removingId?: string | null;
+}) {
+  return (
+    <section className="trading-portfolio-panel trading-portfolio-cash-panel">
+      <div className="trading-section-head trading-portfolio-cash-head">
+        <div>
+          <div className="trading-section-label">Cash management</div>
+          <p>
+            Cash balances are separate from ticker search and included in the
+            EUR base view.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="trading-portfolio-cash-add"
+          onClick={onAdd}
+          disabled={!canMutate}
+        >
+          <Wallet size={14} />
+          Add cash
+        </button>
+      </div>
+      {cashHoldings.length ? (
+        <div className="trading-portfolio-cash-list">
+          {cashHoldings.map((cash) => (
+            <div key={cash._id} className="trading-portfolio-cash-row">
+              <div>
+                <strong>{cash.displaySymbol}</strong>
+                <span>{cash.broker || "Cash balance"}</span>
+              </div>
+              <div>
+                <b>{formatMoney(cash.marketValueBase, BASE_CURRENCY)}</b>
+                {cash.displayCurrency !== BASE_CURRENCY ? (
+                  <span>
+                    {formatMoney(cash.marketValue, cash.displayCurrency)}
+                  </span>
+                ) : null}
+                <em>
+                  {totalValue > 0
+                    ? `${cash.weight.toFixed(1)}% of portfolio`
+                    : "—"}
+                </em>
+              </div>
+              <div className="trading-portfolio-row-actions">
+                <button
+                  type="button"
+                  className="trading-portfolio-edit"
+                  onClick={() => onEdit?.(cash)}
+                  disabled={!canMutate || cash._id.startsWith("sample-")}
+                >
+                  <Pencil size={13} />
+                  <span>Edit</span>
+                </button>
+                <button
+                  type="button"
+                  className="trading-portfolio-remove"
+                  onClick={() => onRemove?.(cash._id)}
+                  disabled={
+                    !canMutate ||
+                    cash._id.startsWith("sample-") ||
+                    removingId === cash._id
+                  }
+                  aria-label={`Remove ${cash.displaySymbol}`}
+                >
+                  {removingId === cash._id ? "…" : "−"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="trading-portfolio-empty">
+          No cash balance yet. Add cash to include reserves in allocation and
+          total value.
+        </div>
+      )}
+    </section>
+  );
+}
+
+function LiveCashManagementPanel({
+  cashHoldings,
+  totalValue,
+  onEdit,
+  onAdd,
+}: {
+  cashHoldings: EnrichedHolding[];
+  totalValue: number;
+  onEdit: (holding: EnrichedHolding) => void;
+  onAdd: () => void;
+}) {
+  const removeHolding = useMutation(portfolioApi.remove);
+  const [removingId, setRemovingId] = useState<string | null>(null);
+  async function remove(id: string) {
+    setRemovingId(id);
+    try {
+      await removeHolding({ id });
+    } finally {
+      setRemovingId(null);
+    }
+  }
+  return (
+    <CashManagementPanel
+      cashHoldings={cashHoldings}
+      totalValue={totalValue}
+      canMutate
+      onEdit={onEdit}
+      onAdd={onAdd}
+      onRemove={remove}
+      removingId={removingId}
+    />
+  );
+}
+
 function HoldingsTable({
   holdings,
   canMutate,
@@ -1155,7 +1488,9 @@ function HoldingsTable({
                   <span>{holding.displayName}</span>
                 </td>
                 <td>{formatNumber(holding.quantity)}</td>
-                <td>{formatMoney(holding.averageCost, holding.displayCurrency)}</td>
+                <td>
+                  {formatMoney(holding.averageCost, holding.displayCurrency)}
+                </td>
                 <td>
                   {holding.currentPrice == null
                     ? "—"
@@ -1189,22 +1524,25 @@ function HoldingsTable({
                     <i style={{ width: `${Math.min(100, holding.weight)}%` }} />
                     <span>{holding.weight.toFixed(2)}%</span>
                   </div>
-                  <small className="trading-portfolio-fx-note">
-                    {formatFxRate(holding.fxRate)}
-                  </small>
                 </td>
                 <td>
                   <span className="trading-portfolio-alert-cell">
                     <b>
                       Min{" "}
                       {holding.alertMinPrice
-                        ? formatMoney(holding.alertMinPrice, holding.displayCurrency)
+                        ? formatMoney(
+                            holding.alertMinPrice,
+                            holding.displayCurrency,
+                          )
                         : "—"}
                     </b>
                     <b>
                       Max{" "}
                       {holding.alertMaxPrice
-                        ? formatMoney(holding.alertMaxPrice, holding.displayCurrency)
+                        ? formatMoney(
+                            holding.alertMaxPrice,
+                            holding.displayCurrency,
+                          )
                         : "—"}
                     </b>
                   </span>
@@ -1329,7 +1667,10 @@ function PortfolioLayout({
     useState<AllocationDimension>("sector");
   const [sortKey, setSortKey] = useState<SortKey>("weight");
   const [addOpen, setAddOpen] = useState(false);
+  const [cashFormOpen, setCashFormOpen] = useState(false);
   const [editHolding, setEditHolding] = useState<EnrichedHolding | null>(null);
+  const [editCashHolding, setEditCashHolding] =
+    useState<EnrichedHolding | null>(null);
   const [visibleBenchmarks, setVisibleBenchmarks] = useState<
     Record<BenchmarkKey, boolean>
   >({ portfolio: true, sp500: true, allworld: true, nasdaq: false });
@@ -1464,10 +1805,20 @@ function PortfolioLayout({
   );
   const totalPl = totalValue - totalCost;
   const totalPlPct = totalCost > 0 ? (totalPl / totalCost) * 100 : null;
-  const cashValue = enriched
-    .filter((holding) => holding.assetType === "cash")
-    .reduce((sum, holding) => sum + holding.marketValueBase, 0);
-  const largest = [...enriched].sort((a, b) => b.weight - a.weight)[0];
+  const cashHoldings = enriched.filter(
+    (holding) => holding.assetType === "cash",
+  );
+  const investmentHoldings = enriched.filter(
+    (holding) => holding.assetType !== "cash",
+  );
+  const cashValue = cashHoldings.reduce(
+    (sum, holding) => sum + holding.marketValueBase,
+    0,
+  );
+  const fxTooltip = fxTooltipRows(Array.from(fxRates.values()));
+  const largest = [...investmentHoldings].sort(
+    (a, b) => b.weight - a.weight,
+  )[0];
 
   return (
     <>
@@ -1486,6 +1837,8 @@ function PortfolioLayout({
             className="trading-portfolio-add-icon-button"
             onClick={() => {
               setEditHolding(null);
+              setEditCashHolding(null);
+              setCashFormOpen(false);
               setAddOpen((open) => !open);
             }}
             aria-expanded={addOpen}
@@ -1513,12 +1866,29 @@ function PortfolioLayout({
           onCancel={() => setEditHolding(null)}
         />
       ) : null}
+      {cashFormOpen ? (
+        <CashManagementForm
+          enabled={isLive}
+          mode="add"
+          onSaved={() => setCashFormOpen(false)}
+          onCancel={() => setCashFormOpen(false)}
+        />
+      ) : null}
+      {editCashHolding ? (
+        <CashManagementForm
+          enabled={isLive}
+          mode="edit"
+          holding={editCashHolding}
+          onSaved={() => setEditCashHolding(null)}
+          onCancel={() => setEditCashHolding(null)}
+        />
+      ) : null}
 
       <section className="trading-portfolio-kpis">
         <article>
           <span>Total value</span>
           <strong>{formatMoney(totalValue, BASE_CURRENCY)}</strong>
-          <em>{holdings.length} holdings</em>
+          <em>{investmentHoldings.length} holdings</em>
         </article>
         <article>
           <span>Total P/L</span>
@@ -1543,12 +1913,17 @@ function PortfolioLayout({
           <strong>{largest?.displaySymbol ?? "—"}</strong>
           <em>{largest ? `${largest.weight.toFixed(1)}%` : "—"}</em>
         </article>
-        <article>
+        <article className="trading-portfolio-fx-kpi" tabIndex={0}>
           <span>Base currency</span>
           <strong>{BASE_CURRENCY}</strong>
           <em>
             {fxLoading ? "Updating FX…" : `${currencies.length} currencies`}
           </em>
+          <div className="trading-portfolio-fx-tooltip" role="tooltip">
+            {fxTooltip.map((row) => (
+              <b key={row}>{row}</b>
+            ))}
+          </div>
         </article>
       </section>
 
@@ -1651,18 +2026,27 @@ function PortfolioLayout({
         </div>
         {isLoading ? (
           <div className="trading-portfolio-empty">Loading holdings…</div>
-        ) : sortedHoldings.length ? (
+        ) : investmentHoldings.length ? (
           isLive ? (
             <LivePortfolioTable
-              holdings={sortedHoldings}
+              holdings={sortedHoldings.filter(
+                (holding) => holding.assetType !== "cash",
+              )}
               metadata={metadata}
               onEdit={(holding) => {
                 setAddOpen(false);
+                setCashFormOpen(false);
+                setEditCashHolding(null);
                 setEditHolding(holding);
               }}
             />
           ) : (
-            <HoldingsTable holdings={sortedHoldings} canMutate={false} />
+            <HoldingsTable
+              holdings={sortedHoldings.filter(
+                (holding) => holding.assetType !== "cash",
+              )}
+              canMutate={false}
+            />
           )
         ) : (
           <div className="trading-portfolio-empty">
@@ -1670,6 +2054,31 @@ function PortfolioLayout({
           </div>
         )}
       </section>
+
+      {isLive ? (
+        <LiveCashManagementPanel
+          cashHoldings={cashHoldings}
+          totalValue={totalValue}
+          onAdd={() => {
+            setAddOpen(false);
+            setEditHolding(null);
+            setEditCashHolding(null);
+            setCashFormOpen(true);
+          }}
+          onEdit={(holding) => {
+            setAddOpen(false);
+            setCashFormOpen(false);
+            setEditHolding(null);
+            setEditCashHolding(holding);
+          }}
+        />
+      ) : (
+        <CashManagementPanel
+          cashHoldings={cashHoldings}
+          totalValue={totalValue}
+          canMutate={false}
+        />
+      )}
 
       <section className="trading-portfolio-bottom-grid">
         <article className="trading-portfolio-panel">

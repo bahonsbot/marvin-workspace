@@ -355,11 +355,31 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("totalPlBase", portfolio)
         self.assertIn("costBasisBase", portfolio)
         self.assertIn("formatFxRate", portfolio)
+        self.assertIn("fxTooltipRows", portfolio)
+        self.assertIn("trading-portfolio-fx-tooltip", portfolio)
         self.assertIn("Manual rows with live quote overlay and base-currency conversion", portfolio)
         self.assertIn("frankfurter.app", fx)
         self.assertIn("STATIC_TO_EUR", fx)
         self.assertIn("getFxRates", fx_route)
-        self.assertIn("trading-portfolio-fx-note", styles)
+        self.assertIn("trading-portfolio-fx-kpi", styles)
+        self.assertIn("trading-portfolio-fx-tooltip", styles)
+        self.assertNotIn("trading-portfolio-fx-note", portfolio)
+
+    def test_portfolio_cash_management_is_separate_from_ticker_holdings(self) -> None:
+        portfolio = read_source("portfolio_client")
+        styles = read_source("trading_styles")
+
+        self.assertIn("CashManagementPanel", portfolio)
+        self.assertIn("LiveCashManagementForm", portfolio)
+        self.assertIn("cashSymbol(currency)", portfolio)
+        self.assertIn("assetType: \"cash\"", portfolio)
+        self.assertIn("investmentHoldings", portfolio)
+        self.assertIn("holdings={sortedHoldings.filter", portfolio)
+        self.assertIn("Cash management", portfolio)
+        self.assertIn("Add cash", portfolio)
+        self.assertIn("trading-portfolio-cash-panel", styles)
+        self.assertIn("trading-portfolio-cash-form", styles)
+        self.assertIn("trading-portfolio-cash-row", styles)
 
     def test_portfolio_polish_keeps_search_edit_fee_flow(self) -> None:
         portfolio = read_source("portfolio_client")
