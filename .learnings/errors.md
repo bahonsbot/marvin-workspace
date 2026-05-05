@@ -177,6 +177,17 @@ Command/tool failures and exceptions.
 **Priority:** medium
 **Status:** resolved
 
+## [ERR-20260505-1232]
+
+**What failed:** installed OpenClaw runtime updates surfaced deferred context-engine maintenance as user-visible background-task chat noise
+**Error:** the running gateway auto-delivered `context_engine_turn_maintenance` state changes / terminal updates into chat, producing lines like `Background task update: Context engine turn maintenance...` and heartbeat-looking popups that were unrelated to the real 180-minute heartbeat cadence.
+**Context:** Philippe reported the repeated popups were disruptive and polluting chat channels. Investigation showed the issue lived in installed OpenClaw dist runtime code, not `HEARTBEAT.md` scheduling.
+**Suggested fix:** if the symptom returns after an update/reinstall, reapply the local guard in `/data/.npm-global/lib/node_modules/openclaw/dist/task-registry-DfxdgLn1.js` so `shouldAutoDeliverTaskTerminalUpdate(task)` and `shouldAutoDeliverTaskStateChange(task)` both early-return `false` for `taskKind === "context_engine_turn_maintenance"`, then activate it with a minimal gateway-only `SIGUSR1` restart and verify the reload completed.
+**Resolution:** Hotfixed on 2026-05-05 and documented in `docs/runbooks/openclaw-context-maintenance-chat-spam-hotfix.md`. This remains a local installed-dist patch that can be overwritten by future OpenClaw updates.
+
+**Priority:** high
+**Status:** pending
+
 ## [ERR-20260421-1115]
 
 **What failed:** main-session system-event cron jobs looked enabled but were skipped as `disabled`
@@ -1466,3 +1477,14 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 ## 2026-05-03 — Bad Wikipedia entity match persisted through cache
 - `IREN.US` matched an unrelated Wikipedia page because the search term collided with German text in a page title/extract. Adding a resolver guard was not enough because stale bad profile data remained in `data/trading/ticker-profiles/IREN_US.json`.
 - Prevention: when fixing reference/entity enrichment bugs, check both resolver logic and cached ticker-profile artifacts. Add cached-profile refresh guards for known-bad summary signatures before declaring the runtime fixed.
+
+## [ERR-20260504-1910]
+
+**What failed:** A rendered ETF-page verification initially read stale Lab preview output after a successful build.
+**Error:** The local Host-routed `NUKL.XETRA` page still showed old Finance Glossary / Estimates sections until the scoped Lab preview was restarted.
+**Context:** After removing stock-only sections from ETF ticker pages, source tests and build passed, but the running Lab preview was still serving the previous compiled bundle.
+**Suggested fix:** For Mission Control Lab visual/UI validation, especially after page-structure changes, restart the Lab preview with scoped Lab scripts before treating rendered HTML as current truth. Do not infer failure from stale preview output if source/build gates are green; refresh the lane and re-check.
+**Resolution:** Restarted Lab preview with `scripts/lab-env.sh`, `scripts/preview-stop.sh`, and `scripts/preview-start.sh`, then verified `NUKL.XETRA` no longer rendered Finance Glossary, `id="finance-glossary"`, Estimates, `id="estimates"`, or EPS estimates.
+
+**Priority:** medium
+**Status:** resolved
