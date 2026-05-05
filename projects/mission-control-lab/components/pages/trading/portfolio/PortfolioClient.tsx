@@ -1,0 +1,774 @@
+'use client';
+
+import Link from 'next/link';
+import { useMutation, useQuery } from 'convex/react';
+import { useEffect, useMemo, useState } from 'react';
+import { portfolioApi, type PortfolioAssetType, type PortfolioHolding } from '@/lib/convex/portfolio-api';
+
+const DEMO_USER_KEY = 'lab-single-user';
+const PORTFOLIO_METADATA_CACHE_KEY = 'mission-control-lab:portfolio-metadata:v1';
+const PORTFOLIO_METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const BASE_CURRENCY = 'EUR';
+
+type AllocationDimension = 'ticker' | 'sector' | 'industry' | 'country' | 'assetType' | 'strategy' | 'currency' | 'broker';
+type SortKey = 'weight' | 'value' | 'pl' | 'symbol';
+type BenchmarkKey = 'portfolio' | 'sp500' | 'allworld' | 'nasdaq';
+
+type PortfolioMetadataItem = {
+  symbol: string;
+  name: string;
+  logoUrl: string | null;
+  logoAlt: string;
+  price: string;
+  rawPrice: number | null;
+  priceTime: string;
+  currency: string;
+  changePct: string;
+  dayPoints: number[];
+  tone: 'positive' | 'negative' | 'neutral';
+  source: string;
+  quoteFreshness: string;
+};
+
+type PortfolioMetadataResponse = { items?: PortfolioMetadataItem[] };
+type CachedPortfolioMetadataEntry = { cachedAt: number; item: PortfolioMetadataItem };
+
+type HoldingInput = {
+  symbol: string;
+  name: string;
+  assetType: PortfolioAssetType;
+  quantity: string;
+  averageCost: string;
+  currency: string;
+  strategy: string;
+  sector: string;
+  industry: string;
+  country: string;
+  broker: string;
+  alertMinPrice: string;
+  alertMaxPrice: string;
+};
+
+type EnrichedHolding = PortfolioHolding & {
+  metadata?: PortfolioMetadataItem;
+  displayName: string;
+  currentPrice: number | null;
+  marketValue: number;
+  costBasisValue: number;
+  totalPl: number;
+  totalPlPct: number | null;
+  weight: number;
+  dayChangePct: number | null;
+  allocation: Record<AllocationDimension, string>;
+};
+
+const sampleHoldings: PortfolioHolding[] = [
+  {
+    _id: 'sample-wise',
+    userKey: DEMO_USER_KEY,
+    symbol: 'WISE.LSE',
+    displaySymbol: 'WISE',
+    name: 'Wise',
+    assetType: 'stock',
+    strategy: 'Compounders',
+    sector: 'Information Technology',
+    industry: 'Payments',
+    country: 'United Kingdom',
+    currency: 'EUR',
+    broker: 'Demo broker',
+    quantity: 6120,
+    averageCost: 9.82,
+    costBasis: 60098.4,
+    alertEnabled: true,
+    alertMinPrice: 8.8,
+    alertMaxPrice: 13.5,
+    sortOrder: 1000,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  },
+  {
+    _id: 'sample-amzn',
+    userKey: DEMO_USER_KEY,
+    symbol: 'AMZN.US',
+    displaySymbol: 'AMZN',
+    name: 'Amazon',
+    assetType: 'stock',
+    strategy: 'Compounders',
+    sector: 'Consumer Discretionary',
+    industry: 'Internet Retail',
+    country: 'United States',
+    currency: 'USD',
+    broker: 'Demo broker',
+    quantity: 298,
+    averageCost: 113.1,
+    costBasis: 33703.8,
+    alertEnabled: true,
+    alertMinPrice: 175,
+    alertMaxPrice: 230,
+    sortOrder: 2000,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  },
+  {
+    _id: 'sample-googl',
+    userKey: DEMO_USER_KEY,
+    symbol: 'GOOGL.US',
+    displaySymbol: 'GOOGL',
+    name: 'Alphabet',
+    assetType: 'stock',
+    strategy: 'Compounders',
+    sector: 'Communication Services',
+    industry: 'Interactive Media',
+    country: 'United States',
+    currency: 'USD',
+    broker: 'Demo broker',
+    quantity: 295,
+    averageCost: 57.64,
+    costBasis: 17003.8,
+    alertEnabled: true,
+    alertMinPrice: 160,
+    sortOrder: 3000,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  },
+  {
+    _id: 'sample-cash',
+    userKey: DEMO_USER_KEY,
+    symbol: 'CASH.EUR',
+    displaySymbol: 'Cash',
+    name: 'Cash EUR',
+    assetType: 'cash',
+    strategy: 'Reserve',
+    sector: 'Cash',
+    country: 'Eurozone',
+    currency: 'EUR',
+    broker: 'Demo broker',
+    quantity: 49039.05,
+    averageCost: 1,
+    costBasis: 49039.05,
+    sortOrder: 4000,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  },
+];
+
+const allocationLabels: Record<AllocationDimension, string> = {
+  ticker: 'Ticker weight',
+  sector: 'Sector',
+  industry: 'Industry',
+  country: 'Country',
+  assetType: 'Asset type',
+  strategy: 'Strategy',
+  currency: 'Currency',
+  broker: 'Broker',
+};
+
+const benchmarkLabels: Record<BenchmarkKey, string> = {
+  portfolio: 'Portfolio',
+  sp500: 'S&P 500',
+  allworld: 'All-World',
+  nasdaq: 'Nasdaq 100',
+};
+
+const benchmarkSeries: Record<BenchmarkKey, number[]> = {
+  portfolio: [100, 101.4, 100.8, 103.2, 104.6, 103.8, 106.5, 108.1, 107.4, 110.2, 112.7, 111.9, 114.3, 116.1, 115.4, 118.8, 121.2, 120.6, 123.7, 126.4],
+  sp500: [100, 100.6, 101.1, 102, 101.7, 103.1, 104.4, 105.2, 104.9, 106.3, 107.7, 108.4, 109.1, 110.2, 111, 112.6, 113.4, 114.2, 115.1, 116.2],
+  allworld: [100, 100.4, 100.9, 101.6, 101.4, 102.2, 103.1, 103.8, 104.1, 105, 105.8, 106.2, 106.9, 107.7, 108.3, 109, 109.8, 110.2, 110.9, 111.7],
+  nasdaq: [100, 101.1, 101.8, 103.4, 102.8, 104.9, 106.3, 107.5, 106.8, 109.1, 111.4, 112, 113.8, 115.3, 116.2, 118.4, 119.7, 120.5, 122.9, 124.6],
+};
+
+const colors = ['#31523f', '#4f6f7d', '#8f6d3f', '#7f9b73', '#b77d55', '#657a9a', '#9a7f4d', '#5d8274'];
+
+function normalizeSymbol(value: string) {
+  return value.trim().toUpperCase().replace(/\s+/g, '');
+}
+
+function parseNumber(value: string | number | undefined | null) {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  if (!value) return null;
+  const parsed = Number(value.replace(/[^0-9.-]/g, ''));
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function formatMoney(value: number, currency = BASE_CURRENCY) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency,
+    maximumFractionDigits: Math.abs(value) >= 1000 ? 0 : 2,
+  }).format(value);
+}
+
+function formatNumber(value: number) {
+  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(value);
+}
+
+function formatPercent(value: number | null) {
+  if (value == null || !Number.isFinite(value)) return '—';
+  return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
+}
+
+function cleanAlertInput(value: string) {
+  const parsed = parseNumber(value);
+  if (parsed == null || parsed <= 0) return undefined;
+  return Math.round(parsed * 10000) / 10000;
+}
+
+function symbolHref(symbol: string) {
+  if (symbol.startsWith('CASH')) return '/trading/portfolio';
+  return `/trading/ticker/${encodeURIComponent(symbol)}`;
+}
+
+function readMetadataCache(symbols: string[]) {
+  if (typeof window === 'undefined') return new Map<string, PortfolioMetadataItem>();
+  try {
+    const raw = window.localStorage.getItem(PORTFOLIO_METADATA_CACHE_KEY);
+    if (!raw) return new Map<string, PortfolioMetadataItem>();
+    const parsed = JSON.parse(raw) as Record<string, CachedPortfolioMetadataEntry>;
+    const now = Date.now();
+    const next = new Map<string, PortfolioMetadataItem>();
+    for (const symbol of symbols) {
+      const entry = parsed[normalizeSymbol(symbol)];
+      if (!entry?.item || now - entry.cachedAt > PORTFOLIO_METADATA_CACHE_TTL_MS) continue;
+      next.set(normalizeSymbol(symbol), entry.item);
+      next.set(normalizeSymbol(entry.item.symbol), entry.item);
+    }
+    return next;
+  } catch {
+    return new Map<string, PortfolioMetadataItem>();
+  }
+}
+
+function writeMetadataCache(items: PortfolioMetadataItem[], requestedSymbols: string[]) {
+  if (typeof window === 'undefined' || !items.length) return;
+  try {
+    const now = Date.now();
+    const raw = window.localStorage.getItem(PORTFOLIO_METADATA_CACHE_KEY);
+    const parsed = raw ? JSON.parse(raw) as Record<string, CachedPortfolioMetadataEntry> : {};
+    const next: Record<string, CachedPortfolioMetadataEntry> = {};
+    for (const [key, entry] of Object.entries(parsed)) {
+      if (!entry?.item || now - entry.cachedAt > PORTFOLIO_METADATA_CACHE_TTL_MS) continue;
+      next[key] = entry;
+    }
+    items.forEach((item, index) => {
+      const entry = { cachedAt: now, item };
+      next[normalizeSymbol(item.symbol)] = entry;
+      if (requestedSymbols[index]) next[normalizeSymbol(requestedSymbols[index])] = entry;
+    });
+    window.localStorage.setItem(PORTFOLIO_METADATA_CACHE_KEY, JSON.stringify(next));
+  } catch {
+    // best effort only
+  }
+}
+
+function metadataForHolding(metadata: Map<string, PortfolioMetadataItem>, holding: PortfolioHolding) {
+  return metadata.get(normalizeSymbol(holding.symbol)) ?? metadata.get(normalizeSymbol(holding.displaySymbol));
+}
+
+function assetTypeLabel(value: PortfolioAssetType) {
+  if (value === 'etf') return 'ETF';
+  if (value === 'cash') return 'Cash';
+  if (value === 'other') return 'Other';
+  return 'Stock';
+}
+
+function enrichHoldings(holdings: PortfolioHolding[], metadata: Map<string, PortfolioMetadataItem>) {
+  const interim = holdings.map((holding) => {
+    const meta = metadataForHolding(metadata, holding);
+    const isCash = holding.assetType === 'cash' || holding.symbol.startsWith('CASH');
+    const currentPrice = isCash ? 1 : meta?.rawPrice ?? null;
+    const marketValue = currentPrice != null ? holding.quantity * currentPrice : holding.costBasis;
+    const totalPl = marketValue - holding.costBasis;
+    const totalPlPct = holding.costBasis > 0 ? (totalPl / holding.costBasis) * 100 : null;
+    const displayName = holding.name?.trim() || meta?.name || holding.displaySymbol || holding.symbol;
+    return {
+      ...holding,
+      metadata: meta,
+      displayName,
+      currentPrice,
+      marketValue,
+      costBasisValue: holding.costBasis,
+      totalPl,
+      totalPlPct,
+      weight: 0,
+      dayChangePct: parseNumber(meta?.changePct),
+      allocation: {
+        ticker: holding.displaySymbol || holding.symbol,
+        sector: holding.sector || (isCash ? 'Cash' : 'Unclassified'),
+        industry: holding.industry || (isCash ? 'Cash' : 'Unclassified'),
+        country: holding.country || 'Unclassified',
+        assetType: assetTypeLabel(holding.assetType),
+        strategy: holding.strategy || 'Unassigned',
+        currency: holding.currency || meta?.currency || BASE_CURRENCY,
+        broker: holding.broker || 'Unassigned',
+      },
+    } satisfies EnrichedHolding;
+  });
+  const total = interim.reduce((sum, holding) => sum + holding.marketValue, 0);
+  return interim.map((holding) => ({ ...holding, weight: total > 0 ? (holding.marketValue / total) * 100 : 0 }));
+}
+
+function allocationRows(holdings: EnrichedHolding[], dimension: AllocationDimension) {
+  const totals = new Map<string, number>();
+  holdings.forEach((holding) => {
+    const key = holding.allocation[dimension] || 'Unclassified';
+    totals.set(key, (totals.get(key) ?? 0) + holding.marketValue);
+  });
+  const total = Array.from(totals.values()).reduce((sum, value) => sum + value, 0);
+  return Array.from(totals.entries())
+    .map(([label, value], index) => ({ label, value, pct: total > 0 ? (value / total) * 100 : 0, color: colors[index % colors.length] }))
+    .sort((a, b) => b.value - a.value);
+}
+
+function DonutChart({ rows }: { rows: ReturnType<typeof allocationRows> }) {
+  const total = rows.reduce((sum, row) => sum + row.value, 0);
+  const radius = 35;
+  const circumference = 2 * Math.PI * radius;
+  const segments = rows.map((row, index) => {
+    const dash = total > 0 ? (row.value / total) * circumference : 0;
+    const previous = rows.slice(0, index).reduce((sum, previousRow) => sum + (total > 0 ? (previousRow.value / total) * circumference : 0), 0);
+    return { ...row, dash, offset: 25 - previous };
+  });
+  return (
+    <svg className="trading-portfolio-donut" viewBox="0 0 100 100" role="img" aria-label="Portfolio allocation donut">
+      <circle cx="50" cy="50" r={radius} fill="none" stroke="rgba(28,37,32,0.08)" strokeWidth="14" />
+      {segments.map((row) => (
+        <circle
+          key={row.label}
+          cx="50"
+          cy="50"
+          r={radius}
+          fill="none"
+          stroke={row.color}
+          strokeWidth="14"
+          strokeDasharray={`${row.dash} ${circumference - row.dash}`}
+          strokeDashoffset={row.offset}
+          strokeLinecap="butt"
+          transform="rotate(-90 50 50)"
+        />
+      ))}
+      <text x="50" y="47" textAnchor="middle">{rows.length}</text>
+      <text x="50" y="58" textAnchor="middle">groups</text>
+    </svg>
+  );
+}
+
+function PortfolioPerformanceChart({ visible }: { visible: Record<BenchmarkKey, boolean> }) {
+  const width = 720;
+  const height = 220;
+  const plotTop = 18;
+  const plotBottom = 34;
+  const plotHeight = height - plotTop - plotBottom;
+  const activeSeries = (Object.keys(benchmarkSeries) as BenchmarkKey[]).filter((key) => visible[key]);
+  const values = activeSeries.flatMap((key) => benchmarkSeries[key]);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const seriesColors: Record<BenchmarkKey, string> = { portfolio: '#31523f', sp500: '#4f6f7d', allworld: '#9a7f4d', nasdaq: '#b77d55' };
+  return (
+    <svg className="trading-portfolio-performance-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Portfolio performance with benchmark overlays">
+      {[0, 1, 2, 3].map((line) => {
+        const y = plotTop + (line / 3) * plotHeight;
+        return <line key={line} x1="12" y1={y} x2={width - 22} y2={y} stroke="rgba(28,37,32,0.08)" strokeWidth="1" />;
+      })}
+      {activeSeries.map((key) => {
+        const points = benchmarkSeries[key].map((value, index) => {
+          const x = 12 + (index / (benchmarkSeries[key].length - 1)) * (width - 44);
+          const y = plotTop + (1 - (value - min) / Math.max(max - min, 1)) * plotHeight;
+          return `${x.toFixed(1)},${y.toFixed(1)}`;
+        }).join(' ');
+        return <polyline key={key} points={points} fill="none" stroke={seriesColors[key]} strokeWidth={key === 'portfolio' ? 2.8 : 1.8} strokeLinecap="round" strokeLinejoin="round" />;
+      })}
+      <line x1="12" y1={height - plotBottom} x2={width - 22} y2={height - plotBottom} stroke="rgba(28,37,32,0.14)" />
+    </svg>
+  );
+}
+
+function PortfolioAddForm({ enabled, onSaved }: { enabled: boolean; onSaved?: () => void }) {
+  if (!enabled) {
+    return <div className="trading-portfolio-add-disabled">Connect Convex to add manual portfolio holdings.</div>;
+  }
+  return <LivePortfolioAddForm onSaved={onSaved} />;
+}
+
+function LivePortfolioAddForm({ onSaved }: { onSaved?: () => void }) {
+  const addHolding = useMutation(portfolioApi.add);
+  const [input, setInput] = useState<HoldingInput>({
+    symbol: '',
+    name: '',
+    assetType: 'stock',
+    quantity: '',
+    averageCost: '',
+    currency: BASE_CURRENCY,
+    strategy: '',
+    sector: '',
+    industry: '',
+    country: '',
+    broker: '',
+    alertMinPrice: '',
+    alertMaxPrice: '',
+  });
+  const [status, setStatus] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  function patch<K extends keyof HoldingInput>(key: K, value: HoldingInput[K]) {
+    setInput((current) => ({ ...current, [key]: value }));
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const symbol = normalizeSymbol(input.symbol);
+    const quantity = parseNumber(input.quantity);
+    const averageCost = parseNumber(input.averageCost);
+    if (!symbol) {
+      setStatus('Symbol is required.');
+      return;
+    }
+    if (!quantity || quantity <= 0 || !averageCost || averageCost <= 0) {
+      setStatus('Quantity and average cost must be greater than zero.');
+      return;
+    }
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      const alertMinPrice = cleanAlertInput(input.alertMinPrice);
+      const alertMaxPrice = cleanAlertInput(input.alertMaxPrice);
+      await addHolding({
+        userKey: DEMO_USER_KEY,
+        symbol,
+        name: input.name.trim() || undefined,
+        assetType: input.assetType,
+        quantity,
+        averageCost,
+        currency: input.currency.trim().toUpperCase() || BASE_CURRENCY,
+        strategy: input.strategy.trim() || undefined,
+        sector: input.sector.trim() || undefined,
+        industry: input.industry.trim() || undefined,
+        country: input.country.trim() || undefined,
+        broker: input.broker.trim() || undefined,
+        alertEnabled: Boolean(alertMinPrice || alertMaxPrice),
+        alertMinPrice,
+        alertMaxPrice,
+      });
+      setInput((current) => ({ ...current, symbol: '', name: '', quantity: '', averageCost: '', alertMinPrice: '', alertMaxPrice: '' }));
+      setStatus(`${symbol} added.`);
+      onSaved?.();
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Could not add holding.');
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  return (
+    <form className="trading-portfolio-add-form" onSubmit={handleSubmit}>
+      <label>
+        <span>Symbol</span>
+        <input value={input.symbol} onChange={(event) => patch('symbol', event.target.value)} placeholder="NVDA.US" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Name</span>
+        <input value={input.name} onChange={(event) => patch('name', event.target.value)} placeholder="Optional" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Type</span>
+        <select value={input.assetType} onChange={(event) => patch('assetType', event.target.value as PortfolioAssetType)} disabled={isSaving}>
+          <option value="stock">Stock</option>
+          <option value="etf">ETF</option>
+          <option value="cash">Cash</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label>
+        <span>Shares</span>
+        <input value={input.quantity} onChange={(event) => patch('quantity', event.target.value)} inputMode="decimal" placeholder="10" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Avg cost</span>
+        <input value={input.averageCost} onChange={(event) => patch('averageCost', event.target.value)} inputMode="decimal" placeholder="125.50" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Currency</span>
+        <input value={input.currency} onChange={(event) => patch('currency', event.target.value)} placeholder="EUR" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Strategy</span>
+        <input value={input.strategy} onChange={(event) => patch('strategy', event.target.value)} placeholder="Compounders" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Sector</span>
+        <input value={input.sector} onChange={(event) => patch('sector', event.target.value)} placeholder="Technology" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Country</span>
+        <input value={input.country} onChange={(event) => patch('country', event.target.value)} placeholder="United States" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Min alert</span>
+        <input value={input.alertMinPrice} onChange={(event) => patch('alertMinPrice', event.target.value)} inputMode="decimal" placeholder="Below" disabled={isSaving} />
+      </label>
+      <label>
+        <span>Max alert</span>
+        <input value={input.alertMaxPrice} onChange={(event) => patch('alertMaxPrice', event.target.value)} inputMode="decimal" placeholder="Above" disabled={isSaving} />
+      </label>
+      <button type="submit" disabled={isSaving}>{isSaving ? 'Saving…' : 'Add holding'}</button>
+      {status ? <p>{status}</p> : null}
+    </form>
+  );
+}
+
+function HoldingsTable({ holdings, canMutate, onRemove, removingId }: { holdings: EnrichedHolding[]; canMutate: boolean; onRemove?: (id: string) => void; removingId?: string | null }) {
+  return (
+    <div className="trading-table-shell trading-portfolio-table-shell">
+      <table className="trading-table trading-portfolio-table">
+        <thead>
+          <tr>
+            <th>Holding</th>
+            <th>Shares</th>
+            <th>Avg cost</th>
+            <th>Price</th>
+            <th>Value</th>
+            <th>P/L</th>
+            <th>%</th>
+            <th>Weight</th>
+            <th>Alert</th>
+            <th aria-label="Actions" />
+          </tr>
+        </thead>
+        <tbody>
+          {holdings.map((holding) => {
+            const tone = holding.totalPl >= 0 ? 'positive' : 'negative';
+            return (
+              <tr key={holding._id}>
+                <td>
+                  <Link href={symbolHref(holding.symbol)}>{holding.displaySymbol}</Link>
+                  <span>{holding.displayName}</span>
+                </td>
+                <td>{formatNumber(holding.quantity)}</td>
+                <td>{formatMoney(holding.averageCost, holding.currency)}</td>
+                <td>{holding.currentPrice == null ? '—' : formatMoney(holding.currentPrice, holding.metadata?.currency || holding.currency)}</td>
+                <td>{formatMoney(holding.marketValue, holding.metadata?.currency || holding.currency)}</td>
+                <td className={tone}>{formatMoney(holding.totalPl, holding.metadata?.currency || holding.currency)}</td>
+                <td className={tone}>{formatPercent(holding.totalPlPct)}</td>
+                <td>
+                  <div className="trading-portfolio-weight"><i style={{ width: `${Math.min(100, holding.weight)}%` }} /><span>{holding.weight.toFixed(2)}%</span></div>
+                </td>
+                <td>
+                  <span className="trading-portfolio-alert-cell">
+                    <b>Min {holding.alertMinPrice ? formatMoney(holding.alertMinPrice, holding.currency) : '—'}</b>
+                    <b>Max {holding.alertMaxPrice ? formatMoney(holding.alertMaxPrice, holding.currency) : '—'}</b>
+                  </span>
+                </td>
+                <td>
+                  <button type="button" className="trading-portfolio-remove" onClick={() => onRemove?.(holding._id)} disabled={!canMutate || holding._id.startsWith('sample-') || removingId === holding._id} aria-label={`Remove ${holding.displaySymbol}`}>
+                    {removingId === holding._id ? '…' : '−'}
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total ({holdings.length})</td>
+            <td colSpan={3} />
+            <td>{formatMoney(holdings.reduce((sum, holding) => sum + holding.marketValue, 0), BASE_CURRENCY)}</td>
+            <td className={holdings.reduce((sum, holding) => sum + holding.totalPl, 0) >= 0 ? 'positive' : 'negative'}>{formatMoney(holdings.reduce((sum, holding) => sum + holding.totalPl, 0), BASE_CURRENCY)}</td>
+            <td colSpan={2}>100.00%</td>
+            <td colSpan={2} />
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  );
+}
+
+function LivePortfolioTable({ holdings, metadata }: { holdings: EnrichedHolding[]; metadata: Map<string, PortfolioMetadataItem> }) {
+  void metadata;
+  const removeHolding = useMutation(portfolioApi.remove);
+  const [removingId, setRemovingId] = useState<string | null>(null);
+  async function remove(id: string) {
+    setRemovingId(id);
+    try {
+      await removeHolding({ id });
+    } finally {
+      setRemovingId(null);
+    }
+  }
+  return <HoldingsTable holdings={holdings} canMutate onRemove={remove} removingId={removingId} />;
+}
+
+function PortfolioLayout({ holdings, isLive, isLoading }: { holdings: PortfolioHolding[]; isLive: boolean; isLoading?: boolean }) {
+  const [metadata, setMetadata] = useState<Map<string, PortfolioMetadataItem>>(new Map());
+  const [metadataLoading, setMetadataLoading] = useState(false);
+  const [allocationDimension, setAllocationDimension] = useState<AllocationDimension>('sector');
+  const [sortKey, setSortKey] = useState<SortKey>('weight');
+  const [addOpen, setAddOpen] = useState(false);
+  const [visibleBenchmarks, setVisibleBenchmarks] = useState<Record<BenchmarkKey, boolean>>({ portfolio: true, sp500: true, allworld: true, nasdaq: false });
+
+  const symbols = useMemo(() => holdings.filter((holding) => holding.assetType !== 'cash').map((holding) => normalizeSymbol(holding.symbol)).filter(Boolean).sort(), [holdings]);
+  const symbolsKey = symbols.join(',');
+
+  useEffect(() => {
+    if (!symbolsKey) {
+      setMetadata(new Map());
+      setMetadataLoading(false);
+      return;
+    }
+    const requestedSymbols = symbolsKey.split(',').filter(Boolean);
+    setMetadata(readMetadataCache(requestedSymbols));
+    const controller = new AbortController();
+    setMetadataLoading(true);
+    fetch(`/api/trading/watchlist-metadata?symbols=${encodeURIComponent(symbolsKey)}`, { signal: controller.signal, headers: { accept: 'application/json' } })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Metadata failed (${response.status})`);
+        return response.json() as Promise<PortfolioMetadataResponse>;
+      })
+      .then((data) => {
+        const items = data.items ?? [];
+        writeMetadataCache(items, requestedSymbols);
+        const next = new Map<string, PortfolioMetadataItem>();
+        items.forEach((item, index) => {
+          next.set(normalizeSymbol(item.symbol), item);
+          if (requestedSymbols[index]) next.set(normalizeSymbol(requestedSymbols[index]), item);
+        });
+        setMetadata(next);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setMetadata(readMetadataCache(requestedSymbols));
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setMetadataLoading(false);
+      });
+    return () => controller.abort();
+  }, [symbolsKey]);
+
+  const enriched = useMemo(() => enrichHoldings(holdings, metadata), [holdings, metadata]);
+  const sortedHoldings = useMemo(() => [...enriched].sort((a, b) => {
+    if (sortKey === 'value') return b.marketValue - a.marketValue;
+    if (sortKey === 'pl') return b.totalPl - a.totalPl;
+    if (sortKey === 'symbol') return a.displaySymbol.localeCompare(b.displaySymbol);
+    return b.weight - a.weight;
+  }), [enriched, sortKey]);
+  const allocation = useMemo(() => allocationRows(enriched, allocationDimension), [enriched, allocationDimension]);
+  const totalValue = enriched.reduce((sum, holding) => sum + holding.marketValue, 0);
+  const totalCost = enriched.reduce((sum, holding) => sum + holding.costBasisValue, 0);
+  const totalPl = totalValue - totalCost;
+  const totalPlPct = totalCost > 0 ? (totalPl / totalCost) * 100 : null;
+  const cashValue = enriched.filter((holding) => holding.assetType === 'cash').reduce((sum, holding) => sum + holding.marketValue, 0);
+  const largest = [...enriched].sort((a, b) => b.weight - a.weight)[0];
+
+  return (
+    <>
+      <section className="trading-portfolio-command-bar">
+        <div>
+          <h1>Portfolio</h1>
+          <p>{metadataLoading ? 'Refreshing prices…' : `Manual holdings · ${BASE_CURRENCY} base view`}</p>
+        </div>
+        <div className="trading-portfolio-actions">
+          <label>
+            <span>Sort</span>
+            <select value={sortKey} onChange={(event) => setSortKey(event.target.value as SortKey)}>
+              <option value="weight">Weight</option>
+              <option value="value">Value</option>
+              <option value="pl">P/L</option>
+              <option value="symbol">Symbol</option>
+            </select>
+          </label>
+          <button type="button" onClick={() => setAddOpen((open) => !open)} aria-expanded={addOpen}>{addOpen ? 'Close add' : 'Add holding'}</button>
+        </div>
+      </section>
+
+      {addOpen ? <PortfolioAddForm enabled={isLive} onSaved={() => setAddOpen(false)} /> : null}
+
+      <section className="trading-portfolio-kpis">
+        <article><span>Total value</span><strong>{formatMoney(totalValue, BASE_CURRENCY)}</strong><em>{holdings.length} holdings</em></article>
+        <article><span>Total P/L</span><strong className={totalPl >= 0 ? 'positive' : 'negative'}>{formatMoney(totalPl, BASE_CURRENCY)}</strong><em className={totalPl >= 0 ? 'positive' : 'negative'}>{formatPercent(totalPlPct)}</em></article>
+        <article><span>Cash</span><strong>{formatMoney(cashValue, BASE_CURRENCY)}</strong><em>{totalValue > 0 ? `${((cashValue / totalValue) * 100).toFixed(1)}%` : '—'}</em></article>
+        <article><span>Largest position</span><strong>{largest?.displaySymbol ?? '—'}</strong><em>{largest ? `${largest.weight.toFixed(1)}%` : '—'}</em></article>
+        <article><span>Base currency</span><strong>{BASE_CURRENCY}</strong><em>FX conversion later</em></article>
+      </section>
+
+      <section className="trading-portfolio-dashboard-grid">
+        <article className="trading-portfolio-panel trading-portfolio-performance-panel">
+          <div className="trading-section-head">
+            <div>
+              <div className="trading-section-label">Performance</div>
+              <p>Benchmark overlays are Phase 1 scaffolding until portfolio history is collected.</p>
+            </div>
+          </div>
+          <div className="trading-portfolio-benchmark-tabs">
+            {(Object.keys(benchmarkLabels) as BenchmarkKey[]).map((key) => (
+              <button key={key} type="button" className={visibleBenchmarks[key] ? 'active' : ''} onClick={() => setVisibleBenchmarks((current) => ({ ...current, [key]: !current[key] }))}>{benchmarkLabels[key]}</button>
+            ))}
+          </div>
+          <PortfolioPerformanceChart visible={visibleBenchmarks} />
+        </article>
+
+        <article className="trading-portfolio-panel trading-portfolio-allocation-panel">
+          <div className="trading-section-head">
+            <div>
+              <div className="trading-section-label">Allocation</div>
+              <p>{allocationLabels[allocationDimension]}</p>
+            </div>
+          </div>
+          <div className="trading-portfolio-allocation-tabs">
+            {(Object.keys(allocationLabels) as AllocationDimension[]).map((key) => (
+              <button key={key} type="button" className={key === allocationDimension ? 'active' : ''} onClick={() => setAllocationDimension(key)}>{allocationLabels[key]}</button>
+            ))}
+          </div>
+          <div className="trading-portfolio-allocation-body">
+            <DonutChart rows={allocation} />
+            <div className="trading-portfolio-allocation-list">
+              {allocation.map((row) => (
+                <div key={row.label}>
+                  <span><i style={{ background: row.color }} />{row.label}</span>
+                  <strong>{row.pct.toFixed(2)}%</strong>
+                  <b><em style={{ width: `${row.pct}%`, background: row.color }} /></b>
+                </div>
+              ))}
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section className="trading-portfolio-panel trading-portfolio-holdings-panel">
+        <div className="trading-section-head">
+          <div>
+            <div className="trading-section-label">Holdings</div>
+            <p>{isLoading ? 'Loading Convex holdings…' : 'Manual portfolio rows with live quote overlay where available.'}</p>
+          </div>
+        </div>
+        {isLoading ? <div className="trading-portfolio-empty">Loading holdings…</div> : sortedHoldings.length ? (isLive ? <LivePortfolioTable holdings={sortedHoldings} metadata={metadata} /> : <HoldingsTable holdings={sortedHoldings} canMutate={false} />) : <div className="trading-portfolio-empty">No holdings yet. Add your first manual position.</div>}
+      </section>
+
+      <section className="trading-portfolio-bottom-grid">
+        <article className="trading-portfolio-panel">
+          <div className="trading-section-label">Upcoming earnings</div>
+          <div className="trading-portfolio-earnings-list">
+            {enriched.filter((holding) => holding.assetType !== 'cash').slice(0, 5).map((holding, index) => (
+              <div key={holding._id}>
+                <strong>{holding.displaySymbol}</strong>
+                <span>{index === 0 ? 'Provider date pending' : `${index + 2} weeks · estimated`}</span>
+                <em>{holding.weight.toFixed(1)}% weight</em>
+              </div>
+            ))}
+          </div>
+        </article>
+        <article className="trading-portfolio-panel">
+          <div className="trading-section-label">Closed positions</div>
+          <div className="trading-portfolio-closed-placeholder">Closed positions archive comes after manual holdings are stable.</div>
+        </article>
+      </section>
+    </>
+  );
+}
+
+function LivePortfolioContent() {
+  const liveHoldings = useQuery(portfolioApi.list, { userKey: DEMO_USER_KEY });
+  const isLoading = liveHoldings === undefined;
+  return <PortfolioLayout holdings={isLoading ? [] : liveHoldings} isLive isLoading={isLoading} />;
+}
+
+export function PortfolioClient({ convexEnabled }: { convexEnabled: boolean }) {
+  if (!convexEnabled) return <PortfolioLayout holdings={sampleHoldings} isLive={false} />;
+  return <LivePortfolioContent />;
+}

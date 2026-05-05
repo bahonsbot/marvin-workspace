@@ -4408,3 +4408,454 @@
 :global(.trading-watchlist-symbol-selected) {
   font-style: normal;
 }
+
+:global(.trading-portfolio-command-bar) {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid rgba(28, 37, 32, 0.18);
+  padding: 4px 0 14px;
+}
+
+:global(.trading-portfolio-command-bar h1) {
+  margin: 0;
+  color: #111915;
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.6vw, 48px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+:global(.trading-portfolio-command-bar p) {
+  margin: 5px 0 0;
+  color: rgba(34, 48, 41, 0.58);
+  font-size: 12px;
+}
+
+:global(.trading-portfolio-actions) {
+  display: flex;
+  align-items: end;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+:global(.trading-portfolio-actions label) {
+  display: grid;
+  gap: 4px;
+}
+
+:global(.trading-portfolio-actions span),
+:global(.trading-portfolio-add-form label span) {
+  color: rgba(38, 58, 49, 0.56);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+:global(.trading-portfolio-actions select),
+:global(.trading-portfolio-actions button),
+:global(.trading-portfolio-add-form input),
+:global(.trading-portfolio-add-form select),
+:global(.trading-portfolio-add-form button) {
+  min-height: 34px;
+  border: 1px solid rgba(28, 37, 32, 0.13);
+  border-radius: 10px;
+  background: rgba(255, 253, 249, 0.82);
+  color: #17241e;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 12px;
+}
+
+:global(.trading-portfolio-actions button),
+:global(.trading-portfolio-add-form button) {
+  cursor: pointer;
+  font-weight: 750;
+}
+
+:global(.trading-portfolio-add-form) {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(110px, 1fr));
+  gap: 10px;
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 253, 249, 0.76);
+  padding: 14px;
+}
+
+:global(.trading-portfolio-add-form label) {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+:global(.trading-portfolio-add-form p) {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: rgba(34, 48, 41, 0.62);
+  font-size: 12px;
+}
+
+:global(.trading-portfolio-add-disabled),
+:global(.trading-portfolio-empty),
+:global(.trading-portfolio-closed-placeholder) {
+  border: 1px dashed rgba(28, 37, 32, 0.16);
+  border-radius: 16px;
+  padding: 18px;
+  color: rgba(34, 48, 41, 0.58);
+  background: rgba(255, 253, 249, 0.48);
+}
+
+:global(.trading-portfolio-kpis) {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(28, 37, 32, 0.1);
+}
+
+:global(.trading-portfolio-kpis article) {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  background: rgba(255, 253, 249, 0.78);
+  padding: 14px;
+}
+
+:global(.trading-portfolio-kpis span) {
+  color: rgba(38, 58, 49, 0.54);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+:global(.trading-portfolio-kpis strong) {
+  overflow: hidden;
+  color: #111915;
+  font-size: clamp(17px, 2vw, 25px);
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:global(.trading-portfolio-kpis em) {
+  color: rgba(34, 48, 41, 0.52);
+  font-size: 11px;
+  font-style: normal;
+}
+
+:global(.trading-portfolio-dashboard-grid) {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(360px, 0.75fr);
+  gap: 16px;
+}
+
+:global(.trading-portfolio-panel) {
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 20px;
+  background: rgba(255, 253, 249, 0.78);
+  box-shadow: 0 10px 30px rgba(17, 32, 26, 0.045);
+  padding: 16px;
+  min-width: 0;
+}
+
+:global(.trading-portfolio-panel .trading-section-head p) {
+  margin: 4px 0 0;
+  color: rgba(34, 48, 41, 0.56);
+  font-size: 12px;
+}
+
+:global(.trading-portfolio-benchmark-tabs),
+:global(.trading-portfolio-allocation-tabs) {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+:global(.trading-portfolio-benchmark-tabs button),
+:global(.trading-portfolio-allocation-tabs button) {
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 253, 249, 0.72);
+  color: rgba(34, 48, 41, 0.62);
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+:global(.trading-portfolio-benchmark-tabs button.active),
+:global(.trading-portfolio-allocation-tabs button.active) {
+  border-color: rgba(49, 82, 63, 0.28);
+  background: rgba(49, 82, 63, 0.1);
+  color: #17241e;
+}
+
+:global(.trading-portfolio-performance-chart) {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 220px;
+}
+
+:global(.trading-portfolio-allocation-body) {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+:global(.trading-portfolio-donut) {
+  display: block;
+  width: 160px;
+  height: 160px;
+}
+
+:global(.trading-portfolio-donut text:first-of-type) {
+  fill: #17241e;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+:global(.trading-portfolio-donut text:last-of-type) {
+  fill: rgba(34, 48, 41, 0.52);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+:global(.trading-portfolio-allocation-list) {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+:global(.trading-portfolio-allocation-list div) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px 10px;
+  align-items: center;
+}
+
+:global(.trading-portfolio-allocation-list span) {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  overflow: hidden;
+  color: rgba(23, 36, 30, 0.82);
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:global(.trading-portfolio-allocation-list span i) {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+}
+
+:global(.trading-portfolio-allocation-list strong) {
+  color: rgba(34, 48, 41, 0.58);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+:global(.trading-portfolio-allocation-list b) {
+  grid-column: 1 / -1;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(28, 37, 32, 0.08);
+}
+
+:global(.trading-portfolio-allocation-list b em) {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+:global(.trading-portfolio-holdings-panel) {
+  padding: 0;
+  overflow: hidden;
+}
+
+:global(.trading-portfolio-holdings-panel > .trading-section-head) {
+  padding: 16px 16px 0;
+}
+
+:global(.trading-portfolio-table-shell) {
+  max-height: 620px;
+  overflow: auto;
+  margin-top: 12px;
+}
+
+:global(.trading-portfolio-table) {
+  min-width: 1120px;
+  table-layout: fixed;
+}
+
+:global(.trading-portfolio-table th:nth-child(1)) { width: 180px; }
+:global(.trading-portfolio-table th:nth-child(2)) { width: 92px; }
+:global(.trading-portfolio-table th:nth-child(3)) { width: 96px; }
+:global(.trading-portfolio-table th:nth-child(4)) { width: 96px; }
+:global(.trading-portfolio-table th:nth-child(5)) { width: 110px; }
+:global(.trading-portfolio-table th:nth-child(6)) { width: 105px; }
+:global(.trading-portfolio-table th:nth-child(7)) { width: 74px; }
+:global(.trading-portfolio-table th:nth-child(8)) { width: 150px; }
+:global(.trading-portfolio-table th:nth-child(9)) { width: 135px; }
+:global(.trading-portfolio-table th:nth-child(10)) { width: 52px; }
+
+:global(.trading-portfolio-table td),
+:global(.trading-portfolio-table th) {
+  vertical-align: middle;
+}
+
+:global(.trading-portfolio-table td:first-child span) {
+  display: block;
+  overflow: hidden;
+  margin-top: 3px;
+  color: rgba(34, 48, 41, 0.48);
+  font-size: 10.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:global(.trading-portfolio-weight) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  gap: 8px;
+  align-items: center;
+}
+
+:global(.trading-portfolio-weight i) {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: #31523f;
+}
+
+:global(.trading-portfolio-weight)::before {
+  content: '';
+  grid-column: 1;
+  grid-row: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(28, 37, 32, 0.08);
+}
+
+:global(.trading-portfolio-weight i) {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+:global(.trading-portfolio-weight span) {
+  grid-column: 2;
+  color: rgba(34, 48, 41, 0.58);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+:global(.trading-portfolio-alert-cell) {
+  display: grid;
+  gap: 3px;
+}
+
+:global(.trading-portfolio-alert-cell b) {
+  color: rgba(34, 48, 41, 0.64);
+  font-size: 10.5px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+:global(.trading-portfolio-remove) {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(190, 18, 60, 0.16);
+  border-radius: 999px;
+  background: rgba(225, 29, 72, 0.06);
+  color: #be123c;
+  cursor: pointer;
+}
+
+:global(.trading-portfolio-table tfoot td) {
+  border-top: 1px solid rgba(28, 37, 32, 0.16);
+  background: rgba(49, 82, 63, 0.06);
+  font-weight: 800;
+}
+
+:global(.trading-portfolio-bottom-grid) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.7fr);
+  gap: 16px;
+}
+
+:global(.trading-portfolio-earnings-list) {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+:global(.trading-portfolio-earnings-list div) {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border-top: 1px solid rgba(28, 37, 32, 0.1);
+  padding-top: 8px;
+}
+
+:global(.trading-portfolio-earnings-list strong) {
+  color: #17241e;
+}
+
+:global(.trading-portfolio-earnings-list span),
+:global(.trading-portfolio-earnings-list em) {
+  color: rgba(34, 48, 41, 0.58);
+  font-size: 12px;
+  font-style: normal;
+}
+
+@media (max-width: 1100px) {
+  :global(.trading-portfolio-dashboard-grid),
+  :global(.trading-portfolio-bottom-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  :global(.trading-portfolio-kpis) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  :global(.trading-portfolio-add-form) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  :global(.trading-portfolio-command-bar) {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  :global(.trading-portfolio-kpis),
+  :global(.trading-portfolio-add-form),
+  :global(.trading-portfolio-allocation-body) {
+    grid-template-columns: 1fr;
+  }
+
+  :global(.trading-portfolio-donut) {
+    margin: 0 auto;
+  }
+}

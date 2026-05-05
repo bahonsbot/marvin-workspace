@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as portfolio from "../portfolio.js";
 import type * as watchlist from "../watchlist.js";
 
 import type {
@@ -17,6 +18,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  portfolio: typeof portfolio;
   watchlist: typeof watchlist;
 }>;
 

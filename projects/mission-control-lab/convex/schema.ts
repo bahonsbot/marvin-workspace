@@ -36,4 +36,30 @@ export default defineSchema({
     .index('by_watchlist_sort', ['watchlistId', 'sortOrder'])
     .index('by_watchlist_symbol', ['watchlistId', 'symbol'])
     .index('by_user_symbol', ['userKey', 'symbol']),
+
+  portfolioHoldings: defineTable({
+    userKey: v.string(),
+    symbol: v.string(),
+    displaySymbol: v.string(),
+    name: v.optional(v.string()),
+    assetType: v.union(v.literal('stock'), v.literal('etf'), v.literal('cash'), v.literal('other')),
+    strategy: v.optional(v.string()),
+    sector: v.optional(v.string()),
+    industry: v.optional(v.string()),
+    country: v.optional(v.string()),
+    currency: v.string(),
+    broker: v.optional(v.string()),
+    quantity: v.number(),
+    averageCost: v.number(),
+    costBasis: v.number(),
+    alertEnabled: v.optional(v.boolean()),
+    alertMinPrice: v.optional(v.number()),
+    alertMaxPrice: v.optional(v.number()),
+    notes: v.optional(v.string()),
+    sortOrder: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_user_sort', ['userKey', 'sortOrder'])
+    .index('by_user_symbol', ['userKey', 'symbol']),
 });
