@@ -109,6 +109,16 @@ type WatchlistItemPatch = {
   alertMaxPrice?: number | null;
 };
 
+type OptimisticAlertRulePatch = {
+  alertEnabled?: boolean;
+  alertMinPrice?: number;
+  alertMaxPrice?: number;
+};
+
+function hasOwn<T extends object>(value: T, key: PropertyKey) {
+  return Object.prototype.hasOwnProperty.call(value, key);
+}
+
 type CachedWatchlistMetadataEntry = {
   cachedAt: number;
   item: WatchlistMetadataItem;
@@ -372,15 +382,8 @@ function PriceAlertCell({ item, metadata, canMutate, isSaving, onUpdate }: {
   const [draft, setDraft] = useState('');
   const currency = metadata?.currency;
 
-  function startEdit(side: 'min' | 'max') {
-    if (!canMutate || isSaving) return;
-    const value = side === 'min' ? item.alertMinPrice : item.alertMaxPrice;
-    setEditing(side);
-    setDraft(typeof value === 'number' ? String(value) : '');
-  }
-
   async function save() {
-    if (!editing) return;
+    if (!editing) return true;
     const value = cleanAlertInput(draft);
     const nextMin = editing === 'min' ? value : item.alertMinPrice;
     const nextMax = editing === 'max' ? value : item.alertMaxPrice;
@@ -388,7 +391,21 @@ function PriceAlertCell({ item, metadata, canMutate, isSaving, onUpdate }: {
       alertEnabled: Boolean(nextMin || nextMax),
       [editing === 'min' ? 'alertMinPrice' : 'alertMaxPrice']: value,
     });
-    if (ok !== false) setEditing(null);
+    if (ok === false) return false;
+    setEditing(null);
+    setDraft('');
+    return true;
+  }
+
+  async function startEdit(side: 'min' | 'max') {
+    if (!canMutate || isSaving) return;
+    if (editing && editing !== side) {
+      const saved = await save();
+      if (!saved) return;
+    }
+    const value = side === 'min' ? item.alertMinPrice : item.alertMaxPrice;
+    setEditing(side);
+    setDraft(typeof value === 'number' ? String(value) : '');
   }
 
   function cancel() {
@@ -406,14 +423,24 @@ function PriceAlertCell({ item, metadata, canMutate, isSaving, onUpdate }: {
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === 'Enter') void save();
-              if (event.key === 'Escape') cancel();
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                void save();
+              }
+              if (event.key === 'Escape') {
+                event.preventDefault();
+                cancel();
+              }
             }}
-            onBlur={() => void save()}
             inputMode="decimal"
+            enterKeyHint="done"
             autoFocus
             aria-label={`${label} price alert for ${resolvedWatchlistSymbol(item, metadata)}`}
           />
+          <span className="trading-watchlist-alert-edit-actions">
+            <button type="button" onClick={() => void save()} disabled={isSaving}>Save</button>
+            <button type="button" onClick={cancel} disabled={isSaving}>Cancel</button>
+          </span>
         </span>
       );
     }
@@ -421,7 +448,7 @@ function PriceAlertCell({ item, metadata, canMutate, isSaving, onUpdate }: {
       <button
         type="button"
         className={`trading-watchlist-alert-bound ${typeof value === 'number' ? 'set' : 'empty'}`}
-        onClick={() => startEdit(side)}
+        onClick={() => void startEdit(side)}
         disabled={!canMutate || isSaving}
         title={`Click to ${typeof value === 'number' ? 'change or remove' : 'set'} ${label.toLowerCase()} alert`}
       >
@@ -432,9 +459,13 @@ function PriceAlertCell({ item, metadata, canMutate, isSaving, onUpdate }: {
   }
 
   return (
-    <div className="trading-watchlist-price-alert-cell">
-      {renderButton('min')}
-      {renderButton('max')}
+    <div className={`trading-watchlist-price-alert-cell ${editing ? 'editing' : ''}`}>
+      {editing ? renderButton(editing) : (
+        <>
+          {renderButton('min')}
+          {renderButton('max')}
+        </>
+      )}
     </div>
   );
 }
@@ -813,6 +844,36 @@ function LiveWatchlistTable({ items, watchlists, activeWatchlistId, metadata, me
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [movingId, setMovingId] = useState<string | null>(null);
   const [updateError, setUpdateError] = useState<{ id: string; message: string } | null>(null);
+  const [optimisticAlertRules, setOptimisticAlertRules] = useState<Record<string, OptimisticAlertRulePatch>>({});
+
+  const renderedItems = useMemo(() => items.map((item) => {
+    const optimisticRule = optimisticAlertRules[item._id];
+    return optimisticRule ? { ...item, ...optimisticRule } : item;
+  }), [items, optimisticAlertRules]);
+
+  useEffect(() => {
+    setOptimisticAlertRules((current) => {
+      let changed = false;
+      const next = { ...current };
+      const itemMap = new Map(items.map((item) => [item._id, item]));
+      for (const [id, rule] of Object.entries(current)) {
+        const item = itemMap.get(id);
+        if (!item) {
+          delete next[id];
+          changed = true;
+          continue;
+        }
+        const matchesEnabled = !hasOwn(rule, 'alertEnabled') || item.alertEnabled === rule.alertEnabled;
+        const matchesMin = !hasOwn(rule, 'alertMinPrice') || item.alertMinPrice === rule.alertMinPrice;
+        const matchesMax = !hasOwn(rule, 'alertMaxPrice') || item.alertMaxPrice === rule.alertMaxPrice;
+        if (matchesEnabled && matchesMin && matchesMax) {
+          delete next[id];
+          changed = true;
+        }
+      }
+      return changed ? next : current;
+    });
+  }, [items]);
 
   async function remove(id: string) {
     if (id.startsWith('sample-')) return;
@@ -826,12 +887,34 @@ function LiveWatchlistTable({ items, watchlists, activeWatchlistId, metadata, me
 
   async function update(id: string, patch: WatchlistItemPatch) {
     if (id.startsWith('sample-')) return false;
+    let previousRule: OptimisticAlertRulePatch | undefined;
+    const optimisticPatch: OptimisticAlertRulePatch = {};
+    if (hasOwn(patch, 'alertEnabled')) optimisticPatch.alertEnabled = patch.alertEnabled;
+    if (hasOwn(patch, 'alertMinPrice')) optimisticPatch.alertMinPrice = patch.alertMinPrice ?? undefined;
+    if (hasOwn(patch, 'alertMaxPrice')) optimisticPatch.alertMaxPrice = patch.alertMaxPrice ?? undefined;
+    const hasOptimisticPatch = Object.keys(optimisticPatch).length > 0;
+
+    if (hasOptimisticPatch) {
+      setOptimisticAlertRules((current) => {
+        previousRule = current[id];
+        return { ...current, [id]: { ...current[id], ...optimisticPatch } };
+      });
+    }
+
     setUpdatingId(id);
     setUpdateError(null);
     try {
       await updateItem({ id, ...patch });
       return true;
     } catch (error) {
+      if (hasOptimisticPatch) {
+        setOptimisticAlertRules((current) => {
+          if (previousRule) return { ...current, [id]: previousRule };
+          const next = { ...current };
+          delete next[id];
+          return next;
+        });
+      }
       setUpdateError({ id, message: error instanceof Error ? error.message : 'Could not update row.' });
       return false;
     } finally {
@@ -854,7 +937,7 @@ function LiveWatchlistTable({ items, watchlists, activeWatchlistId, metadata, me
     }
   }
 
-  return <WatchlistTable items={items} watchlists={watchlists} activeWatchlistId={activeWatchlistId} canMutate metadata={metadata} metadataLoading={metadataLoading} onRemove={remove} onUpdate={update} onMove={move} removingId={removingId} updatingId={updatingId} movingId={movingId} updateError={updateError} />;
+  return <WatchlistTable items={renderedItems} watchlists={watchlists} activeWatchlistId={activeWatchlistId} canMutate metadata={metadata} metadataLoading={metadataLoading} onRemove={remove} onUpdate={update} onMove={move} removingId={removingId} updatingId={updatingId} movingId={movingId} updateError={updateError} />;
 }
 
 function WatchlistTabs({

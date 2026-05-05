@@ -3201,12 +3201,12 @@
 }
 
 :global(.trading-watchlist-page-table th:nth-child(1)) { width: 135px; }
-:global(.trading-watchlist-page-table th:nth-child(2)) { width: 24%; }
+:global(.trading-watchlist-page-table th:nth-child(2)) { width: 22%; }
 :global(.trading-watchlist-page-table th:nth-child(3)) { width: 96px; }
 :global(.trading-watchlist-page-table th:nth-child(4)) { width: 106px; }
 :global(.trading-watchlist-page-table th:nth-child(5)) { width: 76px; }
-:global(.trading-watchlist-page-table th:nth-child(6)) { width: 210px; }
-:global(.trading-watchlist-page-table th:nth-child(7)) { width: 118px; }
+:global(.trading-watchlist-page-table th:nth-child(6)) { width: 196px; }
+:global(.trading-watchlist-page-table th:nth-child(7)) { width: 150px; }
 :global(.trading-watchlist-page-table th:nth-child(8)) { width: 78px; }
 :global(.trading-watchlist-page-table th:nth-child(9)) { width: 72px; }
 
@@ -3507,6 +3507,10 @@
   min-width: 0;
 }
 
+:global(.trading-watchlist-price-alert-cell.editing) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 :global(.trading-watchlist-alert-bound) {
   display: grid;
   gap: 1px;
@@ -3554,10 +3558,16 @@
   cursor: wait;
 }
 
+:global(.trading-watchlist-alert-edit) {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
 :global(.trading-watchlist-alert-edit input) {
   width: 100%;
   min-width: 0;
-  height: 31px;
+  height: 29px;
   border: 1px solid rgba(49, 82, 63, 0.28);
   border-radius: 9px;
   background: #fffdf9;
@@ -3567,6 +3577,39 @@
   font-size: 11px;
   font-weight: 700;
   outline: none;
+}
+
+
+
+:global(.trading-watchlist-alert-edit-actions) {
+  display: flex;
+  gap: 3px;
+  min-width: 0;
+}
+
+:global(.trading-watchlist-alert-edit-actions button) {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 21px;
+  border: 1px solid rgba(28, 37, 32, 0.13);
+  border-radius: 7px;
+  background: rgba(255, 253, 249, 0.9);
+  color: rgba(23, 36, 30, 0.76);
+  padding: 0 4px;
+  font: inherit;
+  font-size: 9.5px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+:global(.trading-watchlist-alert-edit-actions button:hover:not(:disabled)) {
+  border-color: rgba(49, 82, 63, 0.25);
+  background: rgba(49, 82, 63, 0.08);
+}
+
+:global(.trading-watchlist-alert-edit-actions button:disabled) {
+  opacity: 0.55;
+  cursor: wait;
 }
 
 :global(.trading-watchlist-alert-status) {
