@@ -665,16 +665,27 @@ function LivePortfolioHoldingForm({
   const [searchError, setSearchError] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
-  const searchTerm = [input.symbol.trim(), input.name.trim()]
-    .filter(Boolean)
-    .join(" ");
+  const [selectedSearchSymbol, setSelectedSearchSymbol] = useState<
+    string | null
+  >(null);
+  const selectedSymbolStillCurrent =
+    selectedSearchSymbol !== null &&
+    normalizeSymbol(input.symbol) === selectedSearchSymbol;
+  const searchTerm = selectedSymbolStillCurrent
+    ? ""
+    : [input.symbol.trim(), input.name.trim()].filter(Boolean).join(" ");
 
   useEffect(() => {
     setInput(initialHoldingInput(holding));
   }, [holding]);
 
   useEffect(() => {
-    if (mode !== "add" || !searchOpen || searchTerm.length < 1) {
+    if (
+      mode !== "add" ||
+      !searchOpen ||
+      selectedSymbolStillCurrent ||
+      searchTerm.length < 1
+    ) {
       setSearchResults([]);
       setSearchLoading(false);
       setSearchError(null);
@@ -696,7 +707,6 @@ function LivePortfolioHoldingForm({
         const data = (await response.json()) as TickerSearchResponse;
         setSearchResults(data.results ?? []);
         setActiveIndex(0);
-        setSearchOpen(true);
       } catch (error) {
         if (controller.signal.aborted) return;
         setSearchResults([]);
@@ -711,13 +721,14 @@ function LivePortfolioHoldingForm({
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [mode, searchOpen, searchTerm]);
+  }, [mode, searchOpen, searchTerm, selectedSymbolStillCurrent]);
 
   function patch<K extends keyof HoldingInput>(key: K, value: HoldingInput[K]) {
     setInput((current) => ({ ...current, [key]: value }));
   }
 
   function applySearchResult(result: TickerSearchResult) {
+    setSelectedSearchSymbol(normalizeSymbol(result.symbol));
     setInput((current) => ({
       ...current,
       symbol: result.symbol,
@@ -730,6 +741,8 @@ function LivePortfolioHoldingForm({
     }));
     setSearchOpen(false);
     setSearchResults([]);
+    setSearchError(null);
+    setActiveIndex(0);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -817,10 +830,13 @@ function LivePortfolioHoldingForm({
         <input
           value={input.symbol}
           onChange={(event) => {
+            setSelectedSearchSymbol(null);
             patch("symbol", event.target.value);
             if (mode === "add") setSearchOpen(true);
           }}
-          onFocus={() => setSearchOpen(mode === "add")}
+          onFocus={() =>
+            setSearchOpen(mode === "add" && !selectedSymbolStillCurrent)
+          }
           onKeyDown={(event) => {
             if (mode !== "add") return;
             if (event.key === "ArrowDown") {
@@ -841,7 +857,7 @@ function LivePortfolioHoldingForm({
           placeholder="Type ticker or company"
           disabled={isSaving || mode === "edit"}
         />
-        {mode === "add" && searchOpen ? (
+        {mode === "add" && searchOpen && !selectedSymbolStillCurrent ? (
           <div
             className="trading-portfolio-search-results"
             role="listbox"
