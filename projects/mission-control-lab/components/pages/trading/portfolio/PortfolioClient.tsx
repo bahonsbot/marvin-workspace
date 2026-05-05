@@ -14,6 +14,8 @@ const DEMO_USER_KEY = "lab-single-user";
 const PORTFOLIO_METADATA_CACHE_KEY =
   "mission-control-lab:portfolio-metadata:v1";
 const PORTFOLIO_METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const PORTFOLIO_FX_CACHE_KEY = "mission-control-lab:portfolio-fx:v1";
+const PORTFOLIO_FX_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const BASE_CURRENCY = "EUR";
 
 type AllocationDimension =
@@ -65,6 +67,17 @@ type CachedPortfolioMetadataEntry = {
   item: PortfolioMetadataItem;
 };
 
+type FxRate = {
+  from: string;
+  to: string;
+  rate: number;
+  asOf: string;
+  source: "frankfurter" | "static" | "identity";
+  freshness: "fresh" | "fallback" | "identity" | "missing";
+};
+
+type FxRatesResponse = { baseCurrency: string; rates?: FxRate[] };
+
 type HoldingInput = {
   symbol: string;
   name: string;
@@ -86,10 +99,15 @@ type EnrichedHolding = PortfolioHolding & {
   displayName: string;
   currentPrice: number | null;
   marketValue: number;
+  marketValueBase: number;
   costBasisValue: number;
+  costBasisBase: number;
   totalPl: number;
+  totalPlBase: number;
   totalPlPct: number | null;
   weight: number;
+  displayCurrency: string;
+  fxRate: FxRate;
   dayChangePct: number | null;
   allocation: Record<AllocationDimension, string>;
 };
@@ -372,22 +390,104 @@ function assetTypeLabel(value: PortfolioAssetType) {
   return "Stock";
 }
 
+function identityFxRate(currency = BASE_CURRENCY): FxRate {
+  const normalized = currency.trim().toUpperCase() || BASE_CURRENCY;
+  return {
+    from: normalized,
+    to: BASE_CURRENCY,
+    rate: normalized === BASE_CURRENCY ? 1 : 1,
+    asOf: new Date().toISOString(),
+    source: normalized === BASE_CURRENCY ? "identity" : "static",
+    freshness: normalized === BASE_CURRENCY ? "identity" : "missing",
+  };
+}
+
+function readFxCache(currencies: string[]) {
+  const next = new Map<string, FxRate>();
+  currencies.forEach((currency) => {
+    const normalized = currency.trim().toUpperCase();
+    if (normalized === BASE_CURRENCY)
+      next.set(normalized, identityFxRate(normalized));
+  });
+  if (typeof window === "undefined") return next;
+  try {
+    const raw = window.localStorage.getItem(PORTFOLIO_FX_CACHE_KEY);
+    if (!raw) return next;
+    const parsed = JSON.parse(raw) as Record<
+      string,
+      { cachedAt: number; rate: FxRate }
+    >;
+    const now = Date.now();
+    currencies.forEach((currency) => {
+      const normalized = currency.trim().toUpperCase();
+      const entry = parsed[normalized];
+      if (!entry?.rate || now - entry.cachedAt > PORTFOLIO_FX_CACHE_TTL_MS)
+        return;
+      next.set(normalized, entry.rate);
+    });
+  } catch {
+    // best effort only
+  }
+  return next;
+}
+
+function writeFxCache(rates: FxRate[]) {
+  if (typeof window === "undefined" || !rates.length) return;
+  try {
+    const now = Date.now();
+    const raw = window.localStorage.getItem(PORTFOLIO_FX_CACHE_KEY);
+    const parsed = raw
+      ? (JSON.parse(raw) as Record<string, { cachedAt: number; rate: FxRate }>)
+      : {};
+    const next: Record<string, { cachedAt: number; rate: FxRate }> = {};
+    for (const [key, entry] of Object.entries(parsed)) {
+      if (!entry?.rate || now - entry.cachedAt > PORTFOLIO_FX_CACHE_TTL_MS)
+        continue;
+      next[key] = entry;
+    }
+    rates.forEach((rate) => {
+      next[rate.from] = { cachedAt: now, rate };
+    });
+    window.localStorage.setItem(PORTFOLIO_FX_CACHE_KEY, JSON.stringify(next));
+  } catch {
+    // best effort only
+  }
+}
+
+function fxRateForCurrency(fxRates: Map<string, FxRate>, currency: string) {
+  const normalized = currency.trim().toUpperCase() || BASE_CURRENCY;
+  return fxRates.get(normalized) ?? identityFxRate(normalized);
+}
+
+function formatFxRate(rate: FxRate | undefined) {
+  if (!rate) return "FX pending";
+  if (rate.from === rate.to) return "1:1";
+  const approx = rate.freshness === "fresh" ? "" : "≈ ";
+  return `${approx}1 ${rate.from} = ${rate.rate.toFixed(4)} ${rate.to}`;
+}
+
 function enrichHoldings(
   holdings: PortfolioHolding[],
   metadata: Map<string, PortfolioMetadataItem>,
+  fxRates: Map<string, FxRate>,
 ) {
   const interim = holdings.map((holding) => {
     const meta = metadataForHolding(metadata, holding);
     const isCash =
       holding.assetType === "cash" || holding.symbol.startsWith("CASH");
+    const displayCurrency = holding.currency || meta?.currency || BASE_CURRENCY;
+    const fxRate = fxRateForCurrency(fxRates, displayCurrency);
     const currentPrice = isCash ? 1 : (meta?.rawPrice ?? null);
     const marketValue =
       currentPrice != null
         ? holding.quantity * currentPrice
         : holding.costBasis;
+    const marketValueBase = marketValue * fxRate.rate;
+    const costBasisBase = holding.costBasis * fxRate.rate;
     const totalPl = marketValue - holding.costBasis;
+    const totalPlBase = marketValueBase - costBasisBase;
     const totalPlPct =
-      holding.costBasis > 0 ? (totalPl / holding.costBasis) * 100 : null;
+      costBasisBase > 0 ? (totalPlBase / costBasisBase) * 100 : null;
     const displayName =
       holding.name?.trim() ||
       meta?.name ||
@@ -399,10 +499,15 @@ function enrichHoldings(
       displayName,
       currentPrice,
       marketValue,
+      marketValueBase,
       costBasisValue: holding.costBasis,
+      costBasisBase,
       totalPl,
+      totalPlBase,
       totalPlPct,
       weight: 0,
+      displayCurrency,
+      fxRate,
       dayChangePct: parseNumber(meta?.changePct),
       allocation: {
         ticker: holding.displaySymbol || holding.symbol,
@@ -411,15 +516,18 @@ function enrichHoldings(
         country: holding.country || "Unclassified",
         assetType: assetTypeLabel(holding.assetType),
         strategy: holding.strategy || "Unassigned",
-        currency: holding.currency || meta?.currency || BASE_CURRENCY,
+        currency: displayCurrency,
         broker: holding.broker || "Unassigned",
       },
     } satisfies EnrichedHolding;
   });
-  const total = interim.reduce((sum, holding) => sum + holding.marketValue, 0);
+  const total = interim.reduce(
+    (sum, holding) => sum + holding.marketValueBase,
+    0,
+  );
   return interim.map((holding) => ({
     ...holding,
-    weight: total > 0 ? (holding.marketValue / total) * 100 : 0,
+    weight: total > 0 ? (holding.marketValueBase / total) * 100 : 0,
   }));
 }
 
@@ -430,7 +538,7 @@ function allocationRows(
   const totals = new Map<string, number>();
   holdings.forEach((holding) => {
     const key = holding.allocation[dimension] || "Unclassified";
-    totals.set(key, (totals.get(key) ?? 0) + holding.marketValue);
+    totals.set(key, (totals.get(key) ?? 0) + holding.marketValueBase);
   });
   const total = Array.from(totals.values()).reduce(
     (sum, value) => sum + value,
@@ -1037,7 +1145,7 @@ function HoldingsTable({
         </thead>
         <tbody>
           {holdings.map((holding) => {
-            const tone = holding.totalPl >= 0 ? "positive" : "negative";
+            const tone = holding.totalPlBase >= 0 ? "positive" : "negative";
             return (
               <tr key={holding._id}>
                 <td>
@@ -1047,26 +1155,33 @@ function HoldingsTable({
                   <span>{holding.displayName}</span>
                 </td>
                 <td>{formatNumber(holding.quantity)}</td>
-                <td>{formatMoney(holding.averageCost, holding.currency)}</td>
+                <td>{formatMoney(holding.averageCost, holding.displayCurrency)}</td>
                 <td>
                   {holding.currentPrice == null
                     ? "—"
                     : formatMoney(
                         holding.currentPrice,
-                        holding.metadata?.currency || holding.currency,
+                        holding.displayCurrency,
                       )}
                 </td>
                 <td>
-                  {formatMoney(
-                    holding.marketValue,
-                    holding.metadata?.currency || holding.currency,
-                  )}
+                  {formatMoney(holding.marketValueBase, BASE_CURRENCY)}
+                  {holding.displayCurrency !== BASE_CURRENCY ? (
+                    <small>
+                      {formatMoney(
+                        holding.marketValue,
+                        holding.displayCurrency,
+                      )}
+                    </small>
+                  ) : null}
                 </td>
                 <td className={tone}>
-                  {formatMoney(
-                    holding.totalPl,
-                    holding.metadata?.currency || holding.currency,
-                  )}
+                  {formatMoney(holding.totalPlBase, BASE_CURRENCY)}
+                  {holding.displayCurrency !== BASE_CURRENCY ? (
+                    <small>
+                      {formatMoney(holding.totalPl, holding.displayCurrency)}
+                    </small>
+                  ) : null}
                 </td>
                 <td className={tone}>{formatPercent(holding.totalPlPct)}</td>
                 <td>
@@ -1074,19 +1189,22 @@ function HoldingsTable({
                     <i style={{ width: `${Math.min(100, holding.weight)}%` }} />
                     <span>{holding.weight.toFixed(2)}%</span>
                   </div>
+                  <small className="trading-portfolio-fx-note">
+                    {formatFxRate(holding.fxRate)}
+                  </small>
                 </td>
                 <td>
                   <span className="trading-portfolio-alert-cell">
                     <b>
                       Min{" "}
                       {holding.alertMinPrice
-                        ? formatMoney(holding.alertMinPrice, holding.currency)
+                        ? formatMoney(holding.alertMinPrice, holding.displayCurrency)
                         : "—"}
                     </b>
                     <b>
                       Max{" "}
                       {holding.alertMaxPrice
-                        ? formatMoney(holding.alertMaxPrice, holding.currency)
+                        ? formatMoney(holding.alertMaxPrice, holding.displayCurrency)
                         : "—"}
                     </b>
                   </span>
@@ -1128,19 +1246,25 @@ function HoldingsTable({
             <td colSpan={3} />
             <td>
               {formatMoney(
-                holdings.reduce((sum, holding) => sum + holding.marketValue, 0),
+                holdings.reduce(
+                  (sum, holding) => sum + holding.marketValueBase,
+                  0,
+                ),
                 BASE_CURRENCY,
               )}
             </td>
             <td
               className={
-                holdings.reduce((sum, holding) => sum + holding.totalPl, 0) >= 0
+                holdings.reduce(
+                  (sum, holding) => sum + holding.totalPlBase,
+                  0,
+                ) >= 0
                   ? "positive"
                   : "negative"
               }
             >
               {formatMoney(
-                holdings.reduce((sum, holding) => sum + holding.totalPl, 0),
+                holdings.reduce((sum, holding) => sum + holding.totalPlBase, 0),
                 BASE_CURRENCY,
               )}
             </td>
@@ -1197,6 +1321,10 @@ function PortfolioLayout({
     new Map(),
   );
   const [metadataLoading, setMetadataLoading] = useState(false);
+  const [fxRates, setFxRates] = useState<Map<string, FxRate>>(() =>
+    readFxCache([BASE_CURRENCY]),
+  );
+  const [fxLoading, setFxLoading] = useState(false);
   const [allocationDimension, setAllocationDimension] =
     useState<AllocationDimension>("sector");
   const [sortKey, setSortKey] = useState<SortKey>("weight");
@@ -1216,6 +1344,21 @@ function PortfolioLayout({
     [holdings],
   );
   const symbolsKey = symbols.join(",");
+  const currencies = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          holdings
+            .map(
+              (holding) =>
+                holding.currency.trim().toUpperCase() || BASE_CURRENCY,
+            )
+            .filter(Boolean),
+        ),
+      ).sort(),
+    [holdings],
+  );
+  const currenciesKey = currencies.join(",");
 
   useEffect(() => {
     if (!symbolsKey) {
@@ -1257,15 +1400,50 @@ function PortfolioLayout({
     return () => controller.abort();
   }, [symbolsKey]);
 
+  useEffect(() => {
+    if (!currenciesKey) {
+      setFxRates(readFxCache([BASE_CURRENCY]));
+      setFxLoading(false);
+      return;
+    }
+    const requestedCurrencies = currenciesKey.split(",").filter(Boolean);
+    setFxRates(readFxCache(requestedCurrencies));
+    const controller = new AbortController();
+    setFxLoading(true);
+    fetch(
+      `/api/trading/fx?base=${encodeURIComponent(BASE_CURRENCY)}&currencies=${encodeURIComponent(currenciesKey)}`,
+      { signal: controller.signal, headers: { accept: "application/json" } },
+    )
+      .then((response) => {
+        if (!response.ok) throw new Error(`FX failed (${response.status})`);
+        return response.json() as Promise<FxRatesResponse>;
+      })
+      .then((data) => {
+        const rates = data.rates ?? [];
+        writeFxCache(rates);
+        const next = readFxCache(requestedCurrencies);
+        rates.forEach((rate) => next.set(rate.from, rate));
+        setFxRates(next);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setFxRates(readFxCache(requestedCurrencies));
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setFxLoading(false);
+      });
+    return () => controller.abort();
+  }, [currenciesKey]);
+
   const enriched = useMemo(
-    () => enrichHoldings(holdings, metadata),
-    [holdings, metadata],
+    () => enrichHoldings(holdings, metadata, fxRates),
+    [holdings, metadata, fxRates],
   );
   const sortedHoldings = useMemo(
     () =>
       [...enriched].sort((a, b) => {
-        if (sortKey === "value") return b.marketValue - a.marketValue;
-        if (sortKey === "pl") return b.totalPl - a.totalPl;
+        if (sortKey === "value") return b.marketValueBase - a.marketValueBase;
+        if (sortKey === "pl") return b.totalPlBase - a.totalPlBase;
         if (sortKey === "symbol")
           return a.displaySymbol.localeCompare(b.displaySymbol);
         return b.weight - a.weight;
@@ -1277,18 +1455,18 @@ function PortfolioLayout({
     [enriched, allocationDimension],
   );
   const totalValue = enriched.reduce(
-    (sum, holding) => sum + holding.marketValue,
+    (sum, holding) => sum + holding.marketValueBase,
     0,
   );
   const totalCost = enriched.reduce(
-    (sum, holding) => sum + holding.costBasisValue,
+    (sum, holding) => sum + holding.costBasisBase,
     0,
   );
   const totalPl = totalValue - totalCost;
   const totalPlPct = totalCost > 0 ? (totalPl / totalCost) * 100 : null;
   const cashValue = enriched
     .filter((holding) => holding.assetType === "cash")
-    .reduce((sum, holding) => sum + holding.marketValue, 0);
+    .reduce((sum, holding) => sum + holding.marketValueBase, 0);
   const largest = [...enriched].sort((a, b) => b.weight - a.weight)[0];
 
   return (
@@ -1297,9 +1475,9 @@ function PortfolioLayout({
         <div>
           <h1>Portfolio</h1>
           <p>
-            {metadataLoading
-              ? "Refreshing prices…"
-              : `Manual holdings · ${BASE_CURRENCY} base view`}
+            {metadataLoading || fxLoading
+              ? "Refreshing prices and FX…"
+              : `Manual holdings · converted to ${BASE_CURRENCY}`}
           </p>
         </div>
         <div className="trading-portfolio-actions">
@@ -1368,7 +1546,9 @@ function PortfolioLayout({
         <article>
           <span>Base currency</span>
           <strong>{BASE_CURRENCY}</strong>
-          <em>FX conversion later</em>
+          <em>
+            {fxLoading ? "Updating FX…" : `${currencies.length} currencies`}
+          </em>
         </article>
       </section>
 
@@ -1453,7 +1633,7 @@ function PortfolioLayout({
             <p>
               {isLoading
                 ? "Loading Convex holdings…"
-                : "Manual portfolio rows with live quote overlay where available."}
+                : "Manual rows with live quote overlay and base-currency conversion."}
             </p>
           </div>
           <label className="trading-portfolio-holdings-sort">

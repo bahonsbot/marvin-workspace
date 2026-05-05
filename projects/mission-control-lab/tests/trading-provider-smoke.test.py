@@ -26,6 +26,8 @@ SOURCE_FILES = {
     "ticker_watchlist_button": ROOT / "components" / "pages" / "trading" / "ticker" / "TickerWatchlistButton.tsx",
     "portfolio_client": ROOT / "components" / "pages" / "trading" / "portfolio" / "PortfolioClient.tsx",
     "portfolio_convex": ROOT / "convex" / "portfolio.ts",
+    "portfolio_fx": ROOT / "lib" / "trading" / "fx.ts",
+    "portfolio_fx_route": ROOT / "app" / "api" / "trading" / "fx" / "route.ts",
 }
 
 
@@ -339,6 +341,25 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("profile.sourceMap.filings.source === 'mops'", ticker_profile)
         self.assertIn("!profile.resources.some((group) => group.items.length)", ticker_profile)
 
+
+
+    def test_portfolio_uses_base_currency_fx_conversion(self) -> None:
+        portfolio = read_source("portfolio_client")
+        fx = read_source("portfolio_fx")
+        fx_route = read_source("portfolio_fx_route")
+        styles = read_source("trading_styles")
+
+        self.assertIn("PORTFOLIO_FX_CACHE_KEY", portfolio)
+        self.assertIn("/api/trading/fx?base=", portfolio)
+        self.assertIn("marketValueBase", portfolio)
+        self.assertIn("totalPlBase", portfolio)
+        self.assertIn("costBasisBase", portfolio)
+        self.assertIn("formatFxRate", portfolio)
+        self.assertIn("Manual rows with live quote overlay and base-currency conversion", portfolio)
+        self.assertIn("frankfurter.app", fx)
+        self.assertIn("STATIC_TO_EUR", fx)
+        self.assertIn("getFxRates", fx_route)
+        self.assertIn("trading-portfolio-fx-note", styles)
 
     def test_portfolio_polish_keeps_search_edit_fee_flow(self) -> None:
         portfolio = read_source("portfolio_client")
