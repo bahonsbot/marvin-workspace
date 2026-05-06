@@ -410,11 +410,19 @@ function roundMoney(value: number) {
 }
 
 function formatMoney(value: number, currency = BASE_CURRENCY) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: Math.abs(value) >= 1000 ? 0 : 2,
-  }).format(value);
+  const safeValue = Number.isFinite(value) ? value : 0;
+  const normalizedCurrency = (currency || BASE_CURRENCY).trim().toUpperCase();
+  try {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: normalizedCurrency,
+      maximumFractionDigits: Math.abs(safeValue) >= 1000 ? 0 : 2,
+    }).format(safeValue);
+  } catch {
+    return `${normalizedCurrency} ${new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: Math.abs(safeValue) >= 1000 ? 0 : 2,
+    }).format(safeValue)}`;
+  }
 }
 
 function formatNumber(value: number) {
