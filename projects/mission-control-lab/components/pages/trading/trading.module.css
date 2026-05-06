@@ -5577,7 +5577,11 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  align-items: start;
+  align-items: flex-start;
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 253, 249, 0.78);
 }
 
 :global(.trading-portfolio-collapsible > summary::-webkit-details-marker) {
@@ -5588,15 +5592,18 @@
   margin: 4px 0 0;
   color: rgba(34, 48, 41, 0.62);
   font-size: 12px;
+  line-height: 1.35;
 }
 
 :global(.trading-portfolio-collapsible > summary b) {
   border: 1px solid rgba(28, 37, 32, 0.12);
-  border-radius: 999px;
-  padding: 3px 10px;
+  border-radius: 10px;
+  padding: 4px 8px;
   font-size: 11px;
   line-height: 1.4;
   font-weight: 700;
+  min-width: 34px;
+  text-align: center;
 }
 
 :global(.trading-portfolio-fixed-table) {
@@ -5633,4 +5640,17 @@
   gap: 8px;
   color: rgba(34, 48, 41, 0.72);
   font-size: 11px;
+}
+
+:global(.trading-portfolio-import-summary label) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+:global(.trading-portfolio-import-summary select) {
+  border: 1px solid rgba(28, 37, 32, 0.16);
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: #fffdf9;
 }

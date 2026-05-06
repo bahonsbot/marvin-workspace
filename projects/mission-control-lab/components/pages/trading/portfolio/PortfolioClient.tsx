@@ -164,6 +164,7 @@ type ImportAction =
 
 type DegiroImportCandidate = {
   id: string;
+  rowHash: string;
   dedupKey: string;
   date: string;
   executedAt: number;
@@ -179,6 +180,29 @@ type DegiroImportCandidate = {
   strategy: string;
   status: ImportStatus;
   reason?: string;
+  duplicate?: boolean;
+  groupedFeeAmount?: number;
+  groupedTaxAmount?: number;
+  sourceRows: number;
+  previewOnly?: boolean;
+};
+
+type ImportDraftTransaction = {
+  id: string;
+  dedupKey: string;
+  rowHash: string;
+  symbol: string;
+  transactionType: PortfolioTransactionType;
+  executedAt: number;
+  quantity?: number;
+  price?: number;
+  grossAmount?: number;
+  netAmount?: number;
+  fee?: number;
+  currency: string;
+  broker?: string;
+  strategy?: string;
+  previewOnly: true;
 };
 
 type ClosedPositionRow = {
@@ -425,6 +449,14 @@ function parseDegiroDate(value: string) {
   return { iso, stamp };
 }
 
+function simpleRowHash(value: string) {
+  let hash = 5381;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash * 33) ^ value.charCodeAt(i);
+  }
+  return `h${(hash >>> 0).toString(16)}`;
+}
+
 function splitCsvLine(line: string, delimiter: string) {
   const out: string[] = [];
   let current = "";
@@ -451,13 +483,38 @@ function splitCsvLine(line: string, delimiter: string) {
   return out;
 }
 
+function isDegiroSecurityAction(action: ImportAction) {
+  return action === "buy" || action === "sell" || action === "dividend" || action === "fee" || action === "tax/withholding";
+}
+
+function looksLikeIsin(value: string) {
+  return /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(value.trim().toUpperCase());
+}
+
+function resolveImportStatus(row: DegiroImportCandidate): Pick<DegiroImportCandidate, "status" | "reason"> {
+  if (row.duplicate) return { status: "duplicate", reason: "Appears to match an existing transaction/import row." };
+  const mappedSymbol = row.candidateSymbol.trim().toUpperCase();
+  if (isDegiroSecurityAction(row.action) && (!mappedSymbol || mappedSymbol === row.isin || looksLikeIsin(mappedSymbol))) {
+    return { status: "needs mapping", reason: "Map ISIN/product to a portfolio ticker before import." };
+  }
+  if ((row.action === "buy" || row.action === "sell") && (!row.quantity || !row.price)) {
+    return { status: "warning", reason: "Could not parse quantity/price from description." };
+  }
+  if (row.reason) return { status: "ready", reason: row.reason };
+  return { status: "ready", reason: undefined };
+}
+
+function withResolvedImportStatus(row: DegiroImportCandidate) {
+  return { ...row, ...resolveImportStatus(row) };
+}
+
 function parseDegiroCsvToCandidates(text: string, existing: PortfolioTransaction[]) {
   const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
   if (!lines.length) return [] as DegiroImportCandidate[];
   const delimiter = lines[0].includes(";") ? ";" : ",";
   const header = splitCsvLine(lines[0], delimiter).map((h) => h.toLowerCase());
   const idx = {
-    date: header.findIndex((v) => v.includes("date")),
+    date: header.findIndex((v) => v.includes("date") || v.includes("datum")),
     product: header.findIndex((v) => v.includes("product")),
     isin: header.findIndex((v) => v.includes("isin")),
     description: header.findIndex((v) => v.includes("omschrijving")),
@@ -472,15 +529,15 @@ function parseDegiroCsvToCandidates(text: string, existing: PortfolioTransaction
       const amount = Math.abs(tx.netAmount ?? tx.grossAmount ?? 0).toFixed(2);
       const action = tx.transactionType;
       const symbol = normalizeSymbol(tx.symbol);
-      const holdingId = tx.holdingId ?? "";
+      const importNote = tx.notes?.match(/dedup=([^\s]+)/)?.[1] ?? "";
       return [
         [date, symbol, action, amount].join("|"),
-        holdingId ? [date, holdingId, action, amount].join("|") : "",
+        importNote,
       ].filter(Boolean);
     }),
   );
 
-  return lines.slice(1).map((line, rowIndex) => {
+  const candidates = lines.slice(1).map((line, rowIndex) => {
     const cols = splitCsvLine(line, delimiter);
     const dateRaw = cols[idx.date] ?? "";
     const parsedDate = parseDegiroDate(dateRaw);
@@ -499,28 +556,21 @@ function parseDegiroCsvToCandidates(text: string, existing: PortfolioTransaction
     else if (descLower.includes("verkoop")) action = "sell";
     else if (descLower.includes("dividendbelasting")) action = "tax/withholding";
     else if (descLower.includes("dividend")) action = "dividend";
-    else if (descLower.includes("transactiekosten") || descLower.includes("kosten")) action = "fee";
-    else if (descLower.includes("deposit") || descLower.includes("terugstorting")) action = "deposit";
+    else if (descLower.includes("transactiekosten") || descLower.includes("kosten") || descLower.includes("stamp duty")) action = "fee";
+    else if (descLower.includes("deposit") || descLower.includes("terugstorting")) action = amount >= 0 ? "deposit" : "withdrawal";
     else if (descLower.includes("withdraw") || descLower.includes("opname")) action = "withdrawal";
 
-    const candidateSymbol = isin || normalizeSymbol(product).replace(/[^A-Z0-9]/g, "").slice(0, 12);
+    const suggestedSymbol = isin || normalizeSymbol(product).replace(/[^A-Z0-9]/g, "").slice(0, 12);
     const normalizedAction = action === "tax/withholding" ? "adjustment" : action;
     const absoluteAmountKey = Math.abs(amount).toFixed(2);
-    const dedupKey = [parsedDate?.iso ?? dateRaw, isin || product, action, absoluteAmountKey].join("|");
-    const existingKey = [parsedDate?.iso ?? "", normalizeSymbol(candidateSymbol), normalizedAction, absoluteAmountKey].join("|");
-    const isDuplicate = existingKeys.has(existingKey);
-    const needsMapping = !isin && (action === "buy" || action === "sell");
-    const warning = (action === "buy" || action === "sell") && (!quantity || !price);
-    const status: ImportStatus = isDuplicate
-      ? "duplicate"
-      : needsMapping
-        ? "needs mapping"
-        : warning
-          ? "warning"
-          : "ready";
+    const dedupKey = [parsedDate?.iso ?? dateRaw, isin || product, action, absoluteAmountKey, simpleRowHash(line)].join("|");
+    const rowHash = simpleRowHash(line);
+    const existingKey = [parsedDate?.iso ?? "", normalizeSymbol(suggestedSymbol), normalizedAction, absoluteAmountKey].join("|");
+    const duplicate = existingKeys.has(existingKey) || existingKeys.has(dedupKey);
 
-    return {
+    return withResolvedImportStatus({
       id: `degiro-${rowIndex + 1}`,
+      rowHash,
       dedupKey,
       date: parsedDate?.iso ?? dateRaw,
       executedAt: parsedDate?.stamp ?? Date.now(),
@@ -532,12 +582,92 @@ function parseDegiroCsvToCandidates(text: string, existing: PortfolioTransaction
       action,
       quantity,
       price,
-      candidateSymbol,
+      candidateSymbol: suggestedSymbol,
       strategy: "Other",
-      status,
-      reason: status === "ready" ? undefined : needsMapping ? "Missing ISIN for trade row" : warning ? "Could not parse quantity/price from description" : "Appears to match existing transaction",
-    };
+      status: "ready",
+      duplicate,
+      sourceRows: 1,
+    });
   });
+
+  const tradeGroups = new Map<string, DegiroImportCandidate[]>();
+  candidates.forEach((candidate) => {
+    if ((candidate.action === "buy" || candidate.action === "sell") && candidate.isin) {
+      const key = `${candidate.date}|${candidate.isin}`;
+      tradeGroups.set(key, [...(tradeGroups.get(key) ?? []), candidate]);
+    }
+  });
+
+  const passthrough: DegiroImportCandidate[] = [];
+  candidates.forEach((candidate) => {
+    if ((candidate.action === "fee" || candidate.action === "tax/withholding") && candidate.isin) {
+      const matches = tradeGroups.get(`${candidate.date}|${candidate.isin}`) ?? [];
+      if (matches.length === 1) {
+        const target = matches[0];
+        if (candidate.action === "fee") {
+          target.groupedFeeAmount = roundMoney((target.groupedFeeAmount ?? 0) + Math.abs(candidate.amount));
+        } else {
+          target.groupedTaxAmount = roundMoney((target.groupedTaxAmount ?? 0) + Math.abs(candidate.amount));
+        }
+        target.sourceRows += 1;
+        target.reason = `Grouped ${target.sourceRows - 1} related fee/tax row(s).`;
+        Object.assign(target, resolveImportStatus(target));
+        return;
+      }
+      if (matches.length > 1) {
+        candidate.status = "warning";
+        candidate.reason = "Multiple same-day trades for this ISIN; fee/tax was not auto-grouped.";
+      }
+    }
+    passthrough.push(candidate);
+  });
+
+  return passthrough;
+}
+
+function importActionToTransactionType(action: ImportAction): PortfolioTransactionType {
+  if (action === "buy") return "buy";
+  if (action === "sell") return "sell";
+  if (action === "dividend") return "dividend";
+  if (action === "deposit") return "deposit";
+  if (action === "withdrawal") return "withdrawal";
+  if (action === "fee") return "fee";
+  return "adjustment";
+}
+
+function buildImportDraftTransactions(rows: DegiroImportCandidate[]) {
+  return rows
+    .filter((row) => row.status !== "duplicate")
+    .map((row): ImportDraftTransaction => {
+      const transactionType = importActionToTransactionType(row.action);
+      const fee = row.groupedFeeAmount ?? (row.action === "fee" ? Math.abs(row.amount) : undefined);
+      const tax = row.groupedTaxAmount ?? 0;
+      const grossAmount = (row.action === "buy" || row.action === "sell" || row.action === "dividend" || row.action === "deposit" || row.action === "withdrawal")
+        ? Math.abs(row.amount)
+        : undefined;
+      const netAmount = row.action === "buy"
+        ? roundMoney(Math.abs(row.amount) + (fee ?? 0) + Math.abs(tax))
+        : row.action === "sell"
+          ? roundMoney(Math.abs(row.amount) - (fee ?? 0) - Math.abs(tax))
+          : row.amount;
+      return {
+        id: row.id,
+        dedupKey: row.dedupKey,
+        rowHash: row.rowHash,
+        symbol: row.candidateSymbol,
+        transactionType,
+        executedAt: row.executedAt,
+        quantity: row.quantity,
+        price: row.price,
+        grossAmount,
+        netAmount,
+        fee,
+        currency: row.currency,
+        broker: "DeGiro",
+        strategy: row.strategy || "Other",
+        previewOnly: true,
+      };
+    });
 }
 
 function cleanAlertInput(value: string) {
@@ -2141,7 +2271,9 @@ function LivePortfolioTable({
   );
 }
 
-function deriveClosedPositions(transactions: PortfolioTransaction[]) {
+type ClosedPositionsInputTx = Pick<PortfolioTransaction, "symbol" | "displaySymbol" | "currency" | "transactionType" | "quantity" | "price" | "netAmount" | "grossAmount" | "fee">;
+
+function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
   const rows = new Map<string, ClosedPositionRow>();
   transactions.forEach((tx) => {
     const key = normalizeSymbol(tx.symbol);
@@ -2196,15 +2328,39 @@ function deriveClosedPositions(transactions: PortfolioTransaction[]) {
     .sort((a, b) => b.realizedPl - a.realizedPl);
 }
 
-function ClosedPositionsSection({ transactions }: { transactions: PortfolioTransaction[] }) {
-  const rows = useMemo(() => deriveClosedPositions(transactions), [transactions]);
+function ClosedPositionsSection({
+  transactions,
+  previewDrafts,
+}: {
+  transactions: PortfolioTransaction[];
+  previewDrafts?: ImportDraftTransaction[];
+}) {
+  const previewRows = useMemo<ClosedPositionsInputTx[]>(
+    () =>
+      (previewDrafts ?? []).map((row) => ({
+        symbol: row.symbol,
+        displaySymbol: row.symbol,
+        currency: row.currency,
+        transactionType: row.transactionType,
+        quantity: row.quantity,
+        price: row.price,
+        netAmount: row.netAmount,
+        grossAmount: row.grossAmount,
+        fee: row.fee,
+      })),
+    [previewDrafts],
+  );
+  const rows = useMemo(
+    () => deriveClosedPositions([...transactions, ...previewRows]),
+    [transactions, previewRows],
+  );
   return (
     <section className="trading-portfolio-panel">
       <details className="trading-portfolio-collapsible" open={false}>
         <summary>
           <div>
             <div className="trading-section-label">Closed positions</div>
-            <p>Sold-out positions stay in realized P/L totals.</p>
+            <p>Sold-out positions stay in realized P/L totals. Includes preview-only import rows when present.</p>
           </div>
           <b>{rows.length}</b>
         </summary>
@@ -2233,9 +2389,21 @@ function ClosedPositionsSection({ transactions }: { transactions: PortfolioTrans
   );
 }
 
-function DegiroImportSection({ transactions }: { transactions: PortfolioTransaction[] }) {
+function DegiroImportSection({
+  transactions,
+  enabled,
+  onPreviewDraftsChange,
+}: {
+  transactions: PortfolioTransaction[];
+  enabled: boolean;
+  onPreviewDraftsChange?: (rows: ImportDraftTransaction[]) => void;
+}) {
+  const addTransaction = useMutation(portfolioApi.addTransaction);
   const [csvText, setCsvText] = useState("");
   const [rows, setRows] = useState<DegiroImportCandidate[]>([]);
+  const [bulkStrategy, setBulkStrategy] = useState("Other");
+  const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
   const summary = useMemo(() => {
     const totals: Record<ImportStatus, number> = { ready: 0, "needs mapping": 0, duplicate: 0, warning: 0 };
     rows.forEach((row) => {
@@ -2244,8 +2412,15 @@ function DegiroImportSection({ transactions }: { transactions: PortfolioTransact
     return totals;
   }, [rows]);
 
+  const draftRows = useMemo(() => buildImportDraftTransactions(rows), [rows]);
+
+  useEffect(() => {
+    onPreviewDraftsChange?.(draftRows);
+  }, [draftRows, onPreviewDraftsChange]);
+
   function parsePreview() {
     setRows(parseDegiroCsvToCandidates(csvText, transactions));
+    setImportStatus(null);
   }
 
   function onUpload(event: React.ChangeEvent<HTMLInputElement>) {
@@ -2254,13 +2429,62 @@ function DegiroImportSection({ transactions }: { transactions: PortfolioTransact
     file.text().then((text) => setCsvText(text));
   }
 
+  function setRowStrategy(id: string, strategy: string) {
+    setRows((current) => current.map((row) => (row.id === id ? { ...row, strategy } : row)));
+  }
+
+  function setRowCandidateSymbol(id: string, candidateSymbol: string) {
+    setRows((current) => current.map((row) => (row.id === id ? withResolvedImportStatus({ ...row, candidateSymbol: normalizeSymbol(candidateSymbol) }) : row)));
+  }
+
+  function applyBulkStrategy() {
+    setRows((current) => current.map((row) => ({ ...row, strategy: bulkStrategy })));
+  }
+
+  async function applyImport() {
+    if (!enabled || !draftRows.length || isImporting) return;
+    const eligible = rows.filter((row) => row.status === "ready");
+    if (!eligible.length) {
+      setImportStatus("No ready rows to import. Resolve ticker mappings, warnings, and duplicates first.");
+      return;
+    }
+    setIsImporting(true);
+    setImportStatus(null);
+    try {
+      for (const row of eligible) {
+        const tx = buildImportDraftTransactions([row])[0];
+        await addTransaction({
+          userKey: DEMO_USER_KEY,
+          symbol: tx.symbol,
+          assetType: "stock",
+          transactionType: tx.transactionType,
+          executedAt: tx.executedAt,
+          quantity: tx.quantity,
+          price: tx.price,
+          grossAmount: tx.grossAmount,
+          netAmount: tx.netAmount,
+          fee: tx.fee,
+          currency: tx.currency,
+          broker: "DeGiro",
+          strategy: tx.strategy,
+          notes: `DeGiro import staged (${tx.rowHash}) dedup=${tx.dedupKey}`,
+        });
+      }
+      setImportStatus(`Imported ${eligible.length} transaction(s). Existing portfolio holdings were not auto-mutated.`);
+    } catch (error) {
+      setImportStatus(error instanceof Error ? error.message : "Import failed.");
+    } finally {
+      setIsImporting(false);
+    }
+  }
+
   return (
     <section className="trading-portfolio-panel">
       <details className="trading-portfolio-collapsible" open={false}>
         <summary>
           <div>
-            <div className="trading-section-label">DeGiro import (preview)</div>
-            <p>Parse, classify, and review only. No live mutation yet.</p>
+            <div className="trading-section-label">DeGiro import (staged review)</div>
+            <p>Upload → review statuses/dedup → optional explicit import. Never auto-imports on upload.</p>
           </div>
           <b>{rows.length}</b>
         </summary>
@@ -2269,29 +2493,41 @@ function DegiroImportSection({ transactions }: { transactions: PortfolioTransact
           <textarea value={csvText} onChange={(event) => setCsvText(event.target.value)} placeholder="Paste DeGiro CSV here" rows={6} />
           <button type="button" onClick={parsePreview}>Parse preview</button>
           <div className="trading-portfolio-import-summary">
+            <label>
+              <span>Bulk strategy</span>
+              <select value={bulkStrategy} onChange={(event) => setBulkStrategy(event.target.value)}>
+                {STRATEGY_OPTIONS.map((strategy) => (<option key={strategy} value={strategy}>{strategy}</option>))}
+              </select>
+            </label>
+            <button type="button" onClick={applyBulkStrategy}>Apply bulk strategy</button>
+            <button type="button" onClick={applyImport} disabled={!enabled || isImporting || !rows.length}> {isImporting ? "Importing…" : "Import ready rows"}</button>
+          </div>
+          <div className="trading-portfolio-import-summary">
             <span>ready: {summary.ready}</span><span>needs mapping: {summary["needs mapping"]}</span><span>duplicate: {summary.duplicate}</span><span>warning: {summary.warning}</span>
           </div>
+          {importStatus ? <p>{importStatus}</p> : null}
         </div>
         <div className="trading-table-shell trading-portfolio-table-shell trading-portfolio-fixed-table">
           <table className="trading-table trading-portfolio-table">
-            <thead><tr><th>Date</th><th>Product</th><th>ISIN</th><th>Candidate symbol</th><th>Action</th><th>Qty</th><th>Price</th><th>Amount</th><th>Currency</th><th>Strategy</th><th>Status</th></tr></thead>
+            <thead><tr><th>Date</th><th>Product</th><th>ISIN</th><th>Candidate symbol</th><th>Action</th><th>Qty</th><th>Price</th><th>Amount</th><th>Currency</th><th>Strategy</th><th>Status</th><th>Dedup/hash</th></tr></thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.id}>
                   <td>{row.date}</td>
                   <td>{row.product || row.description}</td>
                   <td>{row.isin || "—"}</td>
-                  <td>{row.candidateSymbol || "—"}</td>
+                  <td><input value={row.candidateSymbol} onChange={(event) => setRowCandidateSymbol(row.id, event.target.value)} placeholder={row.isin ? "Map ticker" : "Symbol"} /></td>
                   <td>{row.action}</td>
                   <td>{row.quantity != null ? formatNumber(row.quantity) : "—"}</td>
                   <td>{row.price != null ? formatMoney(row.price, row.currency) : "—"}</td>
-                  <td>{formatMoney(row.amount, row.currency)}</td>
+                  <td>{formatMoney(row.amount, row.currency)}{row.groupedFeeAmount ? <small> fee {formatMoney(row.groupedFeeAmount, row.currency)}</small> : null}{row.groupedTaxAmount ? <small> tax {formatMoney(row.groupedTaxAmount, row.currency)}</small> : null}</td>
                   <td>{row.currency}</td>
-                  <td>{row.strategy}</td>
-                  <td>{row.status}</td>
+                  <td><select value={row.strategy} onChange={(event) => setRowStrategy(row.id, event.target.value)}>{STRATEGY_OPTIONS.map((strategy) => (<option key={strategy} value={strategy}>{strategy}</option>))}</select></td>
+                  <td>{row.status}{row.reason ? <small> · {row.reason}</small> : null}</td>
+                  <td><small>{row.dedupKey}<br />{row.rowHash}</small></td>
                 </tr>
               ))}
-              {!rows.length ? <tr><td colSpan={11}><div className="trading-portfolio-empty">Upload or paste CSV, then parse preview.</div></td></tr> : null}
+              {!rows.length ? <tr><td colSpan={12}><div className="trading-portfolio-empty">Upload or paste CSV, then parse preview.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
@@ -2337,6 +2573,8 @@ function PortfolioLayout({
     useState<PortfolioPerformanceResponse | null>(null);
   const [performanceLoading, setPerformanceLoading] = useState(false);
   const [performanceError, setPerformanceError] = useState<string | null>(null);
+  const [importPreviewDrafts, setImportPreviewDrafts] =
+    useState<ImportDraftTransaction[]>([]);
 
   const symbols = useMemo(
     () =>
@@ -2862,8 +3100,8 @@ function PortfolioLayout({
         </article>
       </section>
 
-      <ClosedPositionsSection transactions={transactions} />
-      <DegiroImportSection transactions={transactions} />
+      <ClosedPositionsSection transactions={transactions} previewDrafts={importPreviewDrafts} />
+      <DegiroImportSection transactions={transactions} enabled={isLive} onPreviewDraftsChange={setImportPreviewDrafts} />
     </>
   );
 }
@@ -2872,7 +3110,7 @@ function LivePortfolioContent() {
   const liveHoldings = useQuery(portfolioApi.list, { userKey: DEMO_USER_KEY });
   const liveTransactions = useQuery(portfolioApi.listTransactions, {
     userKey: DEMO_USER_KEY,
-    limit: 200,
+    limit: 2000,
   });
   const isLoading = liveHoldings === undefined;
   return (
