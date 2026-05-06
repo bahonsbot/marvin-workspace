@@ -514,6 +514,71 @@ function looksLikeIsin(value: string) {
   return /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(value.trim().toUpperCase());
 }
 
+const DEGIRO_DEFAULT_SYMBOL_MAPPINGS: Record<string, string> = {
+  "GB00B1YW4409": "III.LSE",
+  "NL0011540547": "ABN.AS",
+  "US6701002056": "NVO.US",
+  "US71654V4086": "PBR.US",
+  "NL0012969182": "ADYEN.AS",
+  "US0231351067": "AMZN.US",
+  "NL0006237562": "ARCAD.AS",
+  "NL0010273215": "ASML.AS",
+  "NL0011872643": "ASRNL.AS",
+  "NL0015002IE0": "AVTX.AS",
+  "NL0012047823": "AVTX.AS",
+  "NL0012866412": "BESI.AS",
+  "CNE100000296": "1211.HK",
+  "US21873S1087": "CRWV.US",
+  "US22052L1044": "CTVA.US",
+  "BE0974413453": "DEME.BR",
+  "US29355A1079": "ENPH.US",
+  "NO0010096985": "EQNR.OL",
+  "NL00150003E1": "FUR.AS",
+  "IE000OJ5TQP4": "ASWC.XETRA",
+  "US4270965084": "HTGC.US",
+  "NL0010801007": "IMCD.AS",
+  "IE000X59ZHE2": "AIFS.XETRA",
+  "IE00B1XNHC34": "INRG.LSE",
+  "IE00BJ5JPG56": "ICHN.AS",
+  "DE000KGX8881": "KGX.XETRA",
+  "NL0011794037": "AD.AS",
+  "NL0009269109": "HEIJM.AS",
+  "NL0000009082": "KPN.AS",
+  "US5949181045": "MSFT.US",
+  "US60770K1079": "MRNA.US",
+  "NL0009805522": "NBIS.US",
+  "KYG6683N1034": "NU.US",
+  "US67066G1040": "NVDA.US",
+  "NO0010714785": "NYKD.OL",
+  "NL0010558797": "OCI.AS",
+  "US7561091049": "O.US",
+  "GB00BP6MXD84": "SHEL.LSE",
+  "US83406F1021": "SOFI.US",
+  "MHY8162K2046": "SBLK.US",
+  "US91324P1021": "UNH.US",
+  "IE00BL0BMZ89": "GOAT.LSE",
+  "NL0010408704": "TGET.AS",
+  "IE00B3RBWM25": "VWRL.AS",
+  "IE00B3VVMM84": "VDEM.LSE",
+  "IE00B95PGT31": "VDJP.LSE",
+  "IE00B3XXRP09": "VUSD.LSE",
+  "IE00B8GKDB10": "VHYD.LSE",
+  "NO0010571680": "WAWI.OL",
+  "NL0000395903": "WKL.AS",
+  "XFC000A402FE": "XRP",
+};
+
+function defaultDegiroSymbolFor(isin: string, product: string) {
+  const byIsin = DEGIRO_DEFAULT_SYMBOL_MAPPINGS[isin.trim().toUpperCase()];
+  if (byIsin) return byIsin;
+  if (!isin && product.trim()) return normalizeSymbol(product).replace(/[^A-Z0-9.]/g, "").slice(0, 24);
+  return "";
+}
+
+function cashImportSymbol(currency: string) {
+  return cashSymbol(currency || BASE_CURRENCY);
+}
+
 function resolveImportStatus(row: DegiroImportCandidate): Pick<DegiroImportCandidate, "status" | "reason"> {
   if (row.duplicate) return { status: "duplicate", reason: "Appears to match an existing transaction/import row." };
   const mappedSymbol = row.candidateSymbol.trim().toUpperCase();
@@ -583,12 +648,14 @@ function parseDegiroCsvToCandidates(text: string, existing: PortfolioTransaction
     else if (descLower.includes("deposit") || descLower.includes("terugstorting")) action = amount >= 0 ? "deposit" : "withdrawal";
     else if (descLower.includes("withdraw") || descLower.includes("opname")) action = "withdrawal";
 
-    const suggestedSymbol = isin || normalizeSymbol(product).replace(/[^A-Z0-9]/g, "").slice(0, 12);
+    const suggestedSymbol = isDegiroSecurityAction(action)
+      ? defaultDegiroSymbolFor(isin, product)
+      : cashImportSymbol(currency);
     const normalizedAction = action === "tax/withholding" ? "adjustment" : action;
     const absoluteAmountKey = Math.abs(amount).toFixed(2);
     const dedupKey = [parsedDate?.iso ?? dateRaw, isin || product, action, absoluteAmountKey, simpleRowHash(line)].join("|");
     const rowHash = simpleRowHash(line);
-    const existingKey = [parsedDate?.iso ?? "", normalizeSymbol(suggestedSymbol), normalizedAction, absoluteAmountKey].join("|");
+    const existingKey = [parsedDate?.iso ?? "", normalizeSymbol(suggestedSymbol || cashImportSymbol(currency)), normalizedAction, absoluteAmountKey].join("|");
     const duplicate = existingKeys.has(existingKey) || existingKeys.has(dedupKey);
 
     return withResolvedImportStatus({
@@ -677,7 +744,7 @@ function buildImportDraftTransactions(rows: DegiroImportCandidate[]) {
         id: row.id,
         dedupKey: row.dedupKey,
         rowHash: row.rowHash,
-        symbol: row.candidateSymbol,
+        symbol: row.candidateSymbol || cashImportSymbol(row.currency),
         transactionType,
         executedAt: row.executedAt,
         quantity: row.quantity,
@@ -2508,7 +2575,7 @@ function DegiroImportSection({
 
   async function applyImport() {
     if (!enabled || !draftRows.length || isImporting) return;
-    const eligible = rows.filter((row) => row.status === "ready");
+    const eligible = rows.filter((row) => row.status === "ready" && (row.candidateSymbol || !isDegiroSecurityAction(row.action)));
     if (!eligible.length) {
       setImportStatus("No ready rows to import. Resolve ticker mappings, warnings, and duplicates first.");
       return;
@@ -2521,7 +2588,7 @@ function DegiroImportSection({
         await addTransaction({
           userKey: DEMO_USER_KEY,
           symbol: tx.symbol,
-          assetType: "stock",
+          assetType: tx.symbol.startsWith("CASH.") ? "cash" : "stock",
           transactionType: tx.transactionType,
           executedAt: tx.executedAt,
           quantity: tx.quantity,
@@ -2535,7 +2602,7 @@ function DegiroImportSection({
           notes: `DeGiro import staged (${tx.rowHash}) dedup=${tx.dedupKey}`,
         });
       }
-      setImportStatus(`Imported ${eligible.length} transaction(s). Existing portfolio holdings were not auto-mutated.`);
+      setImportStatus(`Imported ${eligible.length} transaction(s).`);
     } catch (error) {
       setImportStatus(error instanceof Error ? error.message : "Import failed.");
     } finally {
