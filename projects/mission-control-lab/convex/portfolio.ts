@@ -107,6 +107,12 @@ function cleanOptionalText(value: string | undefined) {
   return value?.trim() || undefined;
 }
 
+function cleanCurrency(value: string | undefined, fallback = "USD") {
+  const normalized = cleanOptionalText(value)?.toUpperCase();
+  if (normalized === "NO") return "NOK";
+  return normalized ?? fallback;
+}
+
 function cleanNonNegativeNumber(value: number | null | undefined) {
   if (typeof value !== "number" || !Number.isFinite(value) || value < 0)
     return undefined;
@@ -223,7 +229,7 @@ export const add = mutationGeneric({
       sector: cleanOptionalText(args.sector),
       industry: cleanOptionalText(args.industry),
       country: cleanOptionalText(args.country),
-      currency: cleanOptionalText(args.currency)?.toUpperCase() ?? "USD",
+      currency: cleanCurrency(args.currency),
       broker: cleanOptionalText(args.broker),
       quantity,
       averageCost,
@@ -321,7 +327,7 @@ export const update = mutationGeneric({
       patch.country = cleanOptionalText(args.country);
     if (args.currency !== undefined)
       patch.currency =
-        cleanOptionalText(args.currency)?.toUpperCase() ?? existing.currency;
+        cleanCurrency(args.currency, existing.currency);
     if (args.broker !== undefined)
       patch.broker = cleanOptionalText(args.broker);
     if (args.quantity !== undefined) patch.quantity = quantity;
@@ -467,7 +473,7 @@ export const addTransaction = mutationGeneric({
       fee: fee != null ? Math.round(fee * 100) / 100 : undefined,
       grossAmount: grossAmount != null ? Math.round(grossAmount * 100) / 100 : undefined,
       netAmount: resolvedNetAmount,
-      currency: cleanOptionalText(args.currency)?.toUpperCase() ?? "USD",
+      currency: cleanCurrency(args.currency),
       baseCurrency: cleanOptionalText(args.baseCurrency)?.toUpperCase() ?? "EUR",
       fxRateToBase,
       baseAmount,
@@ -588,7 +594,7 @@ export const updateTransaction = mutationGeneric({
       netAmount: resolvedNetAmount,
       currency:
         args.currency !== undefined
-          ? (cleanOptionalText(args.currency)?.toUpperCase() ?? existing.currency)
+          ? cleanCurrency(args.currency, existing.currency)
           : existing.currency,
       baseCurrency:
         args.baseCurrency !== undefined

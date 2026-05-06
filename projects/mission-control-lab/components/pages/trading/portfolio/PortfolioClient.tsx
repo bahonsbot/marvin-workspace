@@ -236,6 +236,7 @@ type LedgerSummary = {
   taxes: number;
   fees: number;
   closedCount: number;
+  missingCurrencies: string[];
 };
 
 type TransactionPrefill = {
@@ -415,6 +416,23 @@ function normalizeSymbol(value: string) {
   return value.trim().toUpperCase().replace(/\s+/g, "");
 }
 
+function normalizeCurrencyCode(value: string | undefined | null) {
+  const normalized = (value ?? "").trim().toUpperCase();
+  if (normalized === "NO") return "NOK";
+  return normalized || BASE_CURRENCY;
+}
+
+function currencyFxRate(fxRates: Map<string, FxRate>, currency: string | undefined | null) {
+  return fxRates.get(normalizeCurrencyCode(currency));
+}
+
+function currencyToBase(value: number, currency: string | undefined | null, fxRates: Map<string, FxRate>) {
+  const normalized = normalizeCurrencyCode(currency);
+  if (normalized === BASE_CURRENCY) return value;
+  const rate = currencyFxRate(fxRates, normalized);
+  return rate ? value * rate.rate : null;
+}
+
 function parseNumber(value: string | number | undefined | null) {
   if (typeof value === "number") return Number.isFinite(value) ? value : null;
   if (!value) return null;
@@ -428,7 +446,7 @@ function roundMoney(value: number) {
 
 function formatMoney(value: number, currency = BASE_CURRENCY) {
   const safeValue = Number.isFinite(value) ? value : 0;
-  const normalizedCurrency = (currency || BASE_CURRENCY).trim().toUpperCase();
+  const normalizedCurrency = normalizeCurrencyCode(currency);
   try {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -640,7 +658,7 @@ function parseDegiroCsvToCandidates(text: string, existing: PortfolioTransaction
     const product = cols[idx.product] ?? "";
     const isin = (cols[idx.isin] ?? "").trim().toUpperCase();
     const description = (cols[idx.description] ?? "").trim();
-    const currency = ((cols[idx.currency] ?? "EUR").trim().toUpperCase() || "EUR");
+    const currency = normalizeCurrencyCode(cols[idx.currency] ?? "EUR");
     const amount = parseEuropeanNumber(cols[idx.amount] ?? "") ?? 0;
     const descLower = description.toLowerCase();
     const qtyPriceMatch = description.match(/(Koop|Verkoop)\s+([0-9.,]+)\s+@\s+([0-9.,]+)/i);
@@ -912,7 +930,7 @@ function assetTypeLabel(value: PortfolioAssetType) {
 }
 
 function identityFxRate(currency = BASE_CURRENCY): FxRate {
-  const normalized = currency.trim().toUpperCase() || BASE_CURRENCY;
+  const normalized = normalizeCurrencyCode(currency);
   return {
     from: normalized,
     to: BASE_CURRENCY,
@@ -940,7 +958,7 @@ function readFxCache(currencies: string[]) {
     >;
     const now = Date.now();
     currencies.forEach((currency) => {
-      const normalized = currency.trim().toUpperCase();
+      const normalized = normalizeCurrencyCode(currency);
       const entry = parsed[normalized];
       if (!entry?.rate || now - entry.cachedAt > PORTFOLIO_FX_CACHE_TTL_MS)
         return;
@@ -976,7 +994,7 @@ function writeFxCache(rates: FxRate[]) {
 }
 
 function fxRateForCurrency(fxRates: Map<string, FxRate>, currency: string) {
-  const normalized = currency.trim().toUpperCase() || BASE_CURRENCY;
+  const normalized = normalizeCurrencyCode(currency);
   return fxRates.get(normalized) ?? identityFxRate(normalized);
 }
 
@@ -2397,22 +2415,25 @@ function LivePortfolioTable({
   );
 }
 
-type ClosedPositionsInputTx = Pick<PortfolioTransaction, "symbol" | "displaySymbol" | "currency" | "transactionType" | "quantity" | "price" | "netAmount" | "grossAmount" | "baseAmount" | "fee">;
+type ClosedPositionsInputTx = Pick<PortfolioTransaction, "symbol" | "displaySymbol" | "currency" | "transactionType" | "quantity" | "price" | "netAmount" | "grossAmount" | "fee">;
 
-function transactionCashValue(tx: ClosedPositionsInputTx) {
-  return tx.baseAmount ?? tx.netAmount ?? tx.grossAmount ?? 0;
+function transactionNativeValue(tx: ClosedPositionsInputTx) {
+  return tx.netAmount ?? tx.grossAmount ?? 0;
 }
+
 
 function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
   const rows = new Map<string, ClosedPositionRow>();
   transactions.forEach((tx) => {
     const key = normalizeSymbol(tx.symbol);
     if (!key || key.startsWith("CASH")) return;
-    const current = rows.get(key) ?? {
-      key,
+    const currency = normalizeCurrencyCode(tx.currency);
+    const rowKey = `${key}:${currency}`;
+    const current = rows.get(rowKey) ?? {
+      key: rowKey,
       symbol: tx.symbol,
       displayName: tx.displaySymbol || tx.symbol,
-      currency: BASE_CURRENCY,
+      currency,
       quantityBought: 0,
       quantitySold: 0,
       avgBuy: 0,
@@ -2424,25 +2445,25 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
       netContribution: 0,
     };
     if (tx.transactionType === "buy" && tx.quantity && tx.price) {
-      const value = Math.abs(transactionCashValue(tx) || tx.quantity * tx.price);
+      const value = Math.abs(transactionNativeValue(tx) || tx.quantity * tx.price);
       current.quantityBought += tx.quantity;
       current.avgBuy += value;
       current.netContribution -= value;
     } else if (tx.transactionType === "sell" && tx.quantity && tx.price) {
-      const value = Math.abs(transactionCashValue(tx) || tx.quantity * tx.price);
+      const value = Math.abs(transactionNativeValue(tx) || tx.quantity * tx.price);
       current.quantitySold += tx.quantity;
       current.avgSell += value;
       current.netContribution += value;
     } else if (tx.transactionType === "dividend") {
-      const value = transactionCashValue(tx);
+      const value = transactionNativeValue(tx);
       current.dividends += value;
       current.netContribution += value;
     } else if (tx.transactionType === "fee") {
-      const value = Math.abs(transactionCashValue(tx) || tx.fee || 0);
+      const value = Math.abs(transactionNativeValue(tx) || tx.fee || 0);
       current.fees += value;
       current.netContribution -= value;
     } else if (tx.transactionType === "adjustment") {
-      const rawValue = transactionCashValue(tx);
+      const rawValue = transactionNativeValue(tx);
       const isDividendTax = tx.grossAmount != null && tx.netAmount != null && Math.abs(tx.grossAmount) === Math.abs(tx.netAmount);
       const value = isDividendTax ? -Math.abs(rawValue) : rawValue;
       if (value < 0) {
@@ -2452,7 +2473,7 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
         current.netContribution += value;
       }
     }
-    rows.set(key, current);
+    rows.set(rowKey, current);
   });
   return Array.from(rows.values())
     .filter((row) => row.quantityBought > 0 && row.quantityBought <= row.quantitySold + 0.0001)
@@ -2464,24 +2485,44 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
     .sort((a, b) => b.realizedPl - a.realizedPl);
 }
 
-function deriveLedgerSummary(transactions: ClosedPositionsInputTx[]): LedgerSummary {
+function deriveLedgerSummary(transactions: ClosedPositionsInputTx[], fxRates: Map<string, FxRate>): LedgerSummary {
   const closedRows = deriveClosedPositions(transactions);
+  const missingCurrencies = new Set<string>();
+  function toBase(value: number, currency: string) {
+    const converted = currencyToBase(value, currency, fxRates);
+    if (converted == null) {
+      missingCurrencies.add(normalizeCurrencyCode(currency));
+      return null;
+    }
+    return converted;
+  }
   const totals = transactions.reduce(
     (summary, tx) => {
       if (tx.symbol.startsWith("CASH")) return summary;
-      if (tx.transactionType === "dividend") summary.dividends += transactionCashValue(tx);
-      else if (tx.transactionType === "fee") summary.fees += Math.abs(transactionCashValue(tx) || tx.fee || 0);
-      else if (tx.transactionType === "adjustment") {
-        const rawValue = transactionCashValue(tx);
+      if (tx.transactionType === "dividend") {
+        const value = toBase(transactionNativeValue(tx), tx.currency);
+        if (value != null) summary.dividends += value;
+      } else if (tx.transactionType === "fee") {
+        const value = toBase(Math.abs(transactionNativeValue(tx) || tx.fee || 0), tx.currency);
+        if (value != null) summary.fees += value;
+      } else if (tx.transactionType === "adjustment") {
+        const rawValue = transactionNativeValue(tx);
         const isDividendTax = tx.grossAmount != null && tx.netAmount != null && Math.abs(tx.grossAmount) === Math.abs(tx.netAmount);
         const value = isDividendTax ? -Math.abs(rawValue) : rawValue;
-        if (value < 0) summary.taxes += Math.abs(value);
+        if (value < 0) {
+          const baseValue = toBase(Math.abs(value), tx.currency);
+          if (baseValue != null) summary.taxes += baseValue;
+        }
       }
       return summary;
     },
-    { realizedPl: 0, dividends: 0, taxes: 0, fees: 0, closedCount: closedRows.length },
+    { realizedPl: 0, dividends: 0, taxes: 0, fees: 0, closedCount: closedRows.length, missingCurrencies: [] as string[] },
   );
-  totals.realizedPl = closedRows.reduce((sum, row) => sum + row.realizedPl, 0);
+  totals.realizedPl = closedRows.reduce((sum, row) => {
+    const converted = toBase(row.realizedPl, row.currency);
+    return converted == null ? sum : sum + converted;
+  }, 0);
+  totals.missingCurrencies = Array.from(missingCurrencies).sort();
   return totals;
 }
 
@@ -2503,7 +2544,6 @@ function ClosedPositionsSection({
         price: row.price,
         netAmount: row.netAmount,
         grossAmount: row.grossAmount,
-        baseAmount: row.netAmount,
         fee: row.fee,
       })),
     [previewDrafts],
@@ -2808,15 +2848,12 @@ function PortfolioLayout({
     () =>
       Array.from(
         new Set(
-          holdings
-            .map(
-              (holding) =>
-                holding.currency.trim().toUpperCase() || BASE_CURRENCY,
-            )
+          [...holdings.map((holding) => holding.currency), ...transactions.map((transaction) => transaction.currency)]
+            .map(normalizeCurrencyCode)
             .filter(Boolean),
         ),
       ).sort(),
-    [holdings],
+    [holdings, transactions],
   );
   const currenciesKey = currencies.join(",");
 
@@ -2935,7 +2972,7 @@ function PortfolioLayout({
     (sum, holding) => sum + holding.marketValueBase,
     0,
   );
-  const ledgerSummary = useMemo(() => deriveLedgerSummary(transactions), [transactions]);
+  const ledgerSummary = useMemo(() => deriveLedgerSummary(transactions, fxRates), [transactions, fxRates]);
   const totalPlWithLedger = totalPl + ledgerSummary.realizedPl;
   const totalPlWithLedgerPct = totalCost > 0 ? (totalPlWithLedger / totalCost) * 100 : null;
   const fxTooltip = fxTooltipRows(Array.from(fxRates.values()));
@@ -3073,7 +3110,7 @@ function PortfolioLayout({
           <strong className={ledgerSummary.realizedPl >= 0 ? "positive" : "negative"}>
             {formatMoney(ledgerSummary.realizedPl, BASE_CURRENCY)}
           </strong>
-          <em>{ledgerSummary.closedCount} closed · tax {formatMoney(ledgerSummary.taxes, BASE_CURRENCY)}</em>
+          <em>{ledgerSummary.closedCount} closed · tax {formatMoney(ledgerSummary.taxes, BASE_CURRENCY)}{ledgerSummary.missingCurrencies.length ? ` · FX missing: ${ledgerSummary.missingCurrencies.join(", ")}` : ""}</em>
         </article>
         <article className="trading-portfolio-fx-kpi" tabIndex={0}>
           <span>Base currency</span>

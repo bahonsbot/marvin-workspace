@@ -18,6 +18,7 @@ const STATIC_TO_EUR: Record<string, number> = {
   EUR: 1,
   USD: 0.92,
   GBP: 1.17,
+  NOK: 0.085,
   CHF: 1.07,
   CAD: 0.67,
   AUD: 0.61,
@@ -28,7 +29,9 @@ const STATIC_TO_EUR: Record<string, number> = {
 };
 
 function normalizeCurrency(value: string | null | undefined) {
-  return (value ?? "").trim().toUpperCase();
+  const normalized = (value ?? "").trim().toUpperCase();
+  if (normalized === "NO") return "NOK";
+  return normalized;
 }
 
 function fallbackRate(
