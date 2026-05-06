@@ -5566,3 +5566,71 @@
   color: rgba(34, 48, 41, 0.48);
   font-size: 12px;
 }
+:global(.trading-portfolio-collapsible) {
+  display: grid;
+  gap: 12px;
+}
+
+:global(.trading-portfolio-collapsible > summary) {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+:global(.trading-portfolio-collapsible > summary::-webkit-details-marker) {
+  display: none;
+}
+
+:global(.trading-portfolio-collapsible > summary p) {
+  margin: 4px 0 0;
+  color: rgba(34, 48, 41, 0.62);
+  font-size: 12px;
+}
+
+:global(.trading-portfolio-collapsible > summary b) {
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+:global(.trading-portfolio-fixed-table) {
+  max-height: 380px;
+  overflow: auto;
+}
+
+:global(.trading-portfolio-import-controls) {
+  display: grid;
+  gap: 8px;
+}
+
+:global(.trading-portfolio-import-controls textarea) {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid rgba(28, 37, 32, 0.16);
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(255, 253, 249, 0.76);
+}
+
+:global(.trading-portfolio-import-controls button) {
+  width: fit-content;
+  border: 1px solid rgba(28, 37, 32, 0.16);
+  border-radius: 999px;
+  background: #17241e;
+  color: #fffdf9;
+  padding: 8px 12px;
+}
+
+:global(.trading-portfolio-import-summary) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: rgba(34, 48, 41, 0.72);
+  font-size: 11px;
+}

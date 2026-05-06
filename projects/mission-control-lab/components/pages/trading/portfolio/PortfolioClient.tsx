@@ -150,6 +150,53 @@ type TransactionInput = {
 
 type TransactionFormMode = "transaction-add" | "transaction-edit" | "holding-update";
 
+type ImportStatus = "ready" | "needs mapping" | "duplicate" | "warning";
+
+type ImportAction =
+  | "buy"
+  | "sell"
+  | "dividend"
+  | "fee"
+  | "tax/withholding"
+  | "deposit"
+  | "withdrawal"
+  | "adjustment";
+
+type DegiroImportCandidate = {
+  id: string;
+  dedupKey: string;
+  date: string;
+  executedAt: number;
+  product: string;
+  isin: string;
+  description: string;
+  currency: string;
+  amount: number;
+  action: ImportAction;
+  quantity?: number;
+  price?: number;
+  candidateSymbol: string;
+  strategy: string;
+  status: ImportStatus;
+  reason?: string;
+};
+
+type ClosedPositionRow = {
+  key: string;
+  symbol: string;
+  displayName: string;
+  currency: string;
+  quantityBought: number;
+  quantitySold: number;
+  avgBuy: number;
+  avgSell: number;
+  realizedPl: number;
+  dividends: number;
+  fees: number;
+  taxes: number;
+  netContribution: number;
+};
+
 type TransactionPrefill = {
   mode?: TransactionFormMode;
   holdingId?: string;
@@ -355,6 +402,142 @@ function formatNumber(value: number) {
 function formatPercent(value: number | null) {
   if (value == null || !Number.isFinite(value)) return "—";
   return `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
+}
+
+function parseEuropeanNumber(value: string) {
+  const cleaned = value
+    .trim()
+    .replace(/\s/g, "")
+    .replace(/\./g, "")
+    .replace(/,/g, ".")
+    .replace(/[^0-9.-]/g, "");
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseDegiroDate(value: string) {
+  const match = value.trim().match(/^(\d{2})-(\d{2})-(\d{4})$/);
+  if (!match) return null;
+  const [, dd, mm, yyyy] = match;
+  const iso = `${yyyy}-${mm}-${dd}`;
+  const stamp = Date.parse(`${iso}T12:00:00.000Z`);
+  if (!Number.isFinite(stamp)) return null;
+  return { iso, stamp };
+}
+
+function splitCsvLine(line: string, delimiter: string) {
+  const out: string[] = [];
+  let current = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i += 1) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        current += '"';
+        i += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+    if (ch === delimiter && !inQuotes) {
+      out.push(current.trim());
+      current = "";
+      continue;
+    }
+    current += ch;
+  }
+  out.push(current.trim());
+  return out;
+}
+
+function parseDegiroCsvToCandidates(text: string, existing: PortfolioTransaction[]) {
+  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  if (!lines.length) return [] as DegiroImportCandidate[];
+  const delimiter = lines[0].includes(";") ? ";" : ",";
+  const header = splitCsvLine(lines[0], delimiter).map((h) => h.toLowerCase());
+  const idx = {
+    date: header.findIndex((v) => v.includes("date")),
+    product: header.findIndex((v) => v.includes("product")),
+    isin: header.findIndex((v) => v.includes("isin")),
+    description: header.findIndex((v) => v.includes("omschrijving")),
+    currency: header.findIndex((v) => v.includes("currency")),
+    amount: header.findIndex((v) => v.includes("amount")),
+  };
+  if (Object.values(idx).some((value) => value < 0)) return [] as DegiroImportCandidate[];
+
+  const existingKeys = new Set(
+    existing.flatMap((tx) => {
+      const date = new Date(tx.executedAt).toISOString().slice(0, 10);
+      const amount = Math.abs(tx.netAmount ?? tx.grossAmount ?? 0).toFixed(2);
+      const action = tx.transactionType;
+      const symbol = normalizeSymbol(tx.symbol);
+      const holdingId = tx.holdingId ?? "";
+      return [
+        [date, symbol, action, amount].join("|"),
+        holdingId ? [date, holdingId, action, amount].join("|") : "",
+      ].filter(Boolean);
+    }),
+  );
+
+  return lines.slice(1).map((line, rowIndex) => {
+    const cols = splitCsvLine(line, delimiter);
+    const dateRaw = cols[idx.date] ?? "";
+    const parsedDate = parseDegiroDate(dateRaw);
+    const product = cols[idx.product] ?? "";
+    const isin = (cols[idx.isin] ?? "").trim().toUpperCase();
+    const description = (cols[idx.description] ?? "").trim();
+    const currency = ((cols[idx.currency] ?? "EUR").trim().toUpperCase() || "EUR");
+    const amount = parseEuropeanNumber(cols[idx.amount] ?? "") ?? 0;
+    const descLower = description.toLowerCase();
+    const qtyPriceMatch = description.match(/(Koop|Verkoop)\s+([0-9.,]+)\s+@\s+([0-9.,]+)/i);
+    const quantity = qtyPriceMatch ? parseEuropeanNumber(qtyPriceMatch[2]) ?? undefined : undefined;
+    const price = qtyPriceMatch ? parseEuropeanNumber(qtyPriceMatch[3]) ?? undefined : undefined;
+
+    let action: ImportAction = "adjustment";
+    if (descLower.includes("koop")) action = "buy";
+    else if (descLower.includes("verkoop")) action = "sell";
+    else if (descLower.includes("dividendbelasting")) action = "tax/withholding";
+    else if (descLower.includes("dividend")) action = "dividend";
+    else if (descLower.includes("transactiekosten") || descLower.includes("kosten")) action = "fee";
+    else if (descLower.includes("deposit") || descLower.includes("terugstorting")) action = "deposit";
+    else if (descLower.includes("withdraw") || descLower.includes("opname")) action = "withdrawal";
+
+    const candidateSymbol = isin || normalizeSymbol(product).replace(/[^A-Z0-9]/g, "").slice(0, 12);
+    const normalizedAction = action === "tax/withholding" ? "adjustment" : action;
+    const absoluteAmountKey = Math.abs(amount).toFixed(2);
+    const dedupKey = [parsedDate?.iso ?? dateRaw, isin || product, action, absoluteAmountKey].join("|");
+    const existingKey = [parsedDate?.iso ?? "", normalizeSymbol(candidateSymbol), normalizedAction, absoluteAmountKey].join("|");
+    const isDuplicate = existingKeys.has(existingKey);
+    const needsMapping = !isin && (action === "buy" || action === "sell");
+    const warning = (action === "buy" || action === "sell") && (!quantity || !price);
+    const status: ImportStatus = isDuplicate
+      ? "duplicate"
+      : needsMapping
+        ? "needs mapping"
+        : warning
+          ? "warning"
+          : "ready";
+
+    return {
+      id: `degiro-${rowIndex + 1}`,
+      dedupKey,
+      date: parsedDate?.iso ?? dateRaw,
+      executedAt: parsedDate?.stamp ?? Date.now(),
+      product,
+      isin,
+      description,
+      currency,
+      amount,
+      action,
+      quantity,
+      price,
+      candidateSymbol,
+      strategy: "Other",
+      status,
+      reason: status === "ready" ? undefined : needsMapping ? "Missing ISIN for trade row" : warning ? "Could not parse quantity/price from description" : "Appears to match existing transaction",
+    };
+  });
 }
 
 function cleanAlertInput(value: string) {
@@ -1627,12 +1810,14 @@ function PortfolioTransactionsSection({
 
   return (
     <section className="trading-portfolio-panel trading-portfolio-holdings-panel">
-      <div className="trading-section-head trading-portfolio-holdings-head">
+      <details className="trading-portfolio-collapsible" open={false}>
+      <summary>
         <div>
           <div className="trading-section-label">Transactions</div>
           <p>Ledger-first history for buys, sells, dividends, and cash flows.</p>
         </div>
-      </div>
+        <b>{transactions.length}</b>
+      </summary>
       <form ref={formRef} className="trading-portfolio-add-form" onSubmit={handleSubmit}>
         <label><span>Action</span><select value={input.transactionType} onChange={(event) => setInput((current) => ({ ...current, transactionType: event.target.value as PortfolioTransactionType }))} disabled={isSaving || !enabled}><option value="buy">Buy</option><option value="sell">Sell</option><option value="dividend">Dividend</option><option value="deposit">Deposit</option><option value="withdrawal">Withdrawal</option></select></label>
         <label className="trading-portfolio-symbol-search"><span>Symbol or name</span><input value={input.symbol} onChange={(event) => { setSelectedSearchSymbol(null); setInput((current) => ({ ...current, symbol: event.target.value })); setSearchOpen(true); }} onFocus={() => setSearchOpen(!selectedSymbolStillCurrent)} onKeyDown={(event) => { if (event.key === "ArrowDown") { event.preventDefault(); setActiveIndex((index) => Math.min(index + 1, Math.max(searchResults.length - 1, 0))); } else if (event.key === "ArrowUp") { event.preventDefault(); setActiveIndex((index) => Math.max(index - 1, 0)); } else if (event.key === "Enter" && selected && searchOpen) { event.preventDefault(); applySearchResult(selected); } else if (event.key === "Escape") { setSearchOpen(false); } }} placeholder="Type ticker or company" disabled={isSaving || !enabled} />{searchOpen && !selectedSymbolStillCurrent ? (<div className="trading-portfolio-search-results" role="listbox" aria-label="Portfolio ticker suggestions">{searchLoading ? <div>Searching…</div> : null}{!searchLoading && searchError ? <div>{searchError}</div> : null}{!searchLoading && !searchError && searchTerm && !searchResults.length ? <div>No matches yet.</div> : null}{searchResults.map((result, index) => (<button key={result.symbol} type="button" role="option" aria-selected={index === activeIndex} data-active={index === activeIndex ? "true" : undefined} onMouseEnter={() => setActiveIndex(index)} onClick={() => applySearchResult(result)}><span><b>{result.symbol}</b>{result.isPrimary ? <em>Primary</em> : null}</span><strong>{result.name}</strong><small>{searchResultMeta(result)}</small></button>))}</div>) : null}</label>
@@ -1649,13 +1834,13 @@ function PortfolioTransactionsSection({
         {formMode !== "transaction-add" ? <button type="button" className="trading-portfolio-form-secondary" onClick={() => resetTransactionForm()} disabled={isSaving}>Cancel edit</button> : null}
         {status ? <p>{status}</p> : null}
       </form>
-      <div className="trading-table-shell trading-portfolio-table-shell">
+      <div className="trading-table-shell trading-portfolio-table-shell trading-portfolio-fixed-table">
         <table className="trading-table trading-portfolio-table">
           <thead>
             <tr><th>Date</th><th>Action</th><th>Symbol</th><th>Qty</th><th>Trade price</th><th>Fee</th><th>Total amount</th><th>Currency</th><th>Broker</th><th>Strategy</th><th aria-label="Transaction actions" /></tr>
           </thead>
           <tbody>
-            {transactions.slice(0, 25).map((tx) => (
+            {transactions.map((tx) => (
               <tr key={tx._id}>
                 <td>{new Date(tx.executedAt).toISOString().slice(0, 10)}</td>
                 <td>{tx.transactionType}</td>
@@ -1686,6 +1871,7 @@ function PortfolioTransactionsSection({
           </tbody>
         </table>
       </div>
+      </details>
     </section>
   );
 }
@@ -1952,6 +2138,165 @@ function LivePortfolioTable({
       onRemove={remove}
       removingId={removingId}
     />
+  );
+}
+
+function deriveClosedPositions(transactions: PortfolioTransaction[]) {
+  const rows = new Map<string, ClosedPositionRow>();
+  transactions.forEach((tx) => {
+    const key = normalizeSymbol(tx.symbol);
+    if (!key || key.startsWith("CASH")) return;
+    const current = rows.get(key) ?? {
+      key,
+      symbol: tx.symbol,
+      displayName: tx.displaySymbol || tx.symbol,
+      currency: tx.currency || BASE_CURRENCY,
+      quantityBought: 0,
+      quantitySold: 0,
+      avgBuy: 0,
+      avgSell: 0,
+      realizedPl: 0,
+      dividends: 0,
+      fees: 0,
+      taxes: 0,
+      netContribution: 0,
+    };
+    if (tx.transactionType === "buy" && tx.quantity && tx.price) {
+      current.quantityBought += tx.quantity;
+      current.avgBuy += tx.quantity * tx.price;
+      current.netContribution -= Math.abs(tx.netAmount ?? tx.grossAmount ?? tx.quantity * tx.price);
+    } else if (tx.transactionType === "sell" && tx.quantity && tx.price) {
+      current.quantitySold += tx.quantity;
+      current.avgSell += tx.quantity * tx.price;
+      current.netContribution += Math.abs(tx.netAmount ?? tx.grossAmount ?? tx.quantity * tx.price);
+    } else if (tx.transactionType === "dividend") {
+      const value = tx.netAmount ?? tx.grossAmount ?? 0;
+      current.dividends += value;
+      current.netContribution += value;
+    } else if (tx.transactionType === "fee") {
+      const value = tx.netAmount ?? tx.grossAmount ?? tx.fee ?? 0;
+      current.fees += value;
+      current.netContribution -= value;
+    } else if (tx.transactionType === "adjustment") {
+      const value = tx.netAmount ?? tx.grossAmount ?? 0;
+      if (value < 0) {
+        current.taxes += Math.abs(value);
+        current.netContribution += value;
+      }
+    }
+    rows.set(key, current);
+  });
+  return Array.from(rows.values())
+    .filter((row) => row.quantityBought > 0 && row.quantityBought <= row.quantitySold + 0.0001)
+    .map((row) => {
+      const avgBuy = row.quantityBought > 0 ? row.avgBuy / row.quantityBought : 0;
+      const avgSell = row.quantitySold > 0 ? row.avgSell / row.quantitySold : 0;
+      return { ...row, avgBuy, avgSell, realizedPl: row.netContribution };
+    })
+    .sort((a, b) => b.realizedPl - a.realizedPl);
+}
+
+function ClosedPositionsSection({ transactions }: { transactions: PortfolioTransaction[] }) {
+  const rows = useMemo(() => deriveClosedPositions(transactions), [transactions]);
+  return (
+    <section className="trading-portfolio-panel">
+      <details className="trading-portfolio-collapsible" open={false}>
+        <summary>
+          <div>
+            <div className="trading-section-label">Closed positions</div>
+            <p>Sold-out positions stay in realized P/L totals.</p>
+          </div>
+          <b>{rows.length}</b>
+        </summary>
+        <div className="trading-table-shell trading-portfolio-table-shell trading-portfolio-fixed-table">
+          <table className="trading-table trading-portfolio-table">
+            <thead><tr><th>Symbol</th><th>Qty</th><th>Avg buy</th><th>Avg sell</th><th>Dividends</th><th>Fees</th><th>Taxes</th><th>Realized P/L</th></tr></thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.key}>
+                  <td>{row.displayName}</td>
+                  <td>{formatNumber(row.quantitySold)}</td>
+                  <td>{formatMoney(row.avgBuy, row.currency)}</td>
+                  <td>{formatMoney(row.avgSell, row.currency)}</td>
+                  <td>{formatMoney(row.dividends, row.currency)}</td>
+                  <td>{formatMoney(row.fees, row.currency)}</td>
+                  <td>{formatMoney(row.taxes, row.currency)}</td>
+                  <td className={row.realizedPl >= 0 ? "positive" : "negative"}>{formatMoney(row.realizedPl, row.currency)}</td>
+                </tr>
+              ))}
+              {!rows.length ? <tr><td colSpan={8}><div className="trading-portfolio-empty">No closed positions yet. Import DeGiro history to build this view.</div></td></tr> : null}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+  );
+}
+
+function DegiroImportSection({ transactions }: { transactions: PortfolioTransaction[] }) {
+  const [csvText, setCsvText] = useState("");
+  const [rows, setRows] = useState<DegiroImportCandidate[]>([]);
+  const summary = useMemo(() => {
+    const totals: Record<ImportStatus, number> = { ready: 0, "needs mapping": 0, duplicate: 0, warning: 0 };
+    rows.forEach((row) => {
+      totals[row.status] += 1;
+    });
+    return totals;
+  }, [rows]);
+
+  function parsePreview() {
+    setRows(parseDegiroCsvToCandidates(csvText, transactions));
+  }
+
+  function onUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    file.text().then((text) => setCsvText(text));
+  }
+
+  return (
+    <section className="trading-portfolio-panel">
+      <details className="trading-portfolio-collapsible" open={false}>
+        <summary>
+          <div>
+            <div className="trading-section-label">DeGiro import (preview)</div>
+            <p>Parse, classify, and review only. No live mutation yet.</p>
+          </div>
+          <b>{rows.length}</b>
+        </summary>
+        <div className="trading-portfolio-import-controls">
+          <input type="file" accept=".csv,text/csv" onChange={onUpload} />
+          <textarea value={csvText} onChange={(event) => setCsvText(event.target.value)} placeholder="Paste DeGiro CSV here" rows={6} />
+          <button type="button" onClick={parsePreview}>Parse preview</button>
+          <div className="trading-portfolio-import-summary">
+            <span>ready: {summary.ready}</span><span>needs mapping: {summary["needs mapping"]}</span><span>duplicate: {summary.duplicate}</span><span>warning: {summary.warning}</span>
+          </div>
+        </div>
+        <div className="trading-table-shell trading-portfolio-table-shell trading-portfolio-fixed-table">
+          <table className="trading-table trading-portfolio-table">
+            <thead><tr><th>Date</th><th>Product</th><th>ISIN</th><th>Candidate symbol</th><th>Action</th><th>Qty</th><th>Price</th><th>Amount</th><th>Currency</th><th>Strategy</th><th>Status</th></tr></thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row.id}>
+                  <td>{row.date}</td>
+                  <td>{row.product || row.description}</td>
+                  <td>{row.isin || "—"}</td>
+                  <td>{row.candidateSymbol || "—"}</td>
+                  <td>{row.action}</td>
+                  <td>{row.quantity != null ? formatNumber(row.quantity) : "—"}</td>
+                  <td>{row.price != null ? formatMoney(row.price, row.currency) : "—"}</td>
+                  <td>{formatMoney(row.amount, row.currency)}</td>
+                  <td>{row.currency}</td>
+                  <td>{row.strategy}</td>
+                  <td>{row.status}</td>
+                </tr>
+              ))}
+              {!rows.length ? <tr><td colSpan={11}><div className="trading-portfolio-empty">Upload or paste CSV, then parse preview.</div></td></tr> : null}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </section>
   );
 }
 
@@ -2515,13 +2860,10 @@ function PortfolioLayout({
               ))}
           </div>
         </article>
-        <article className="trading-portfolio-panel">
-          <div className="trading-section-label">Closed positions</div>
-          <div className="trading-portfolio-closed-placeholder">
-            Closed positions archive comes after manual holdings are stable.
-          </div>
-        </article>
       </section>
+
+      <ClosedPositionsSection transactions={transactions} />
+      <DegiroImportSection transactions={transactions} />
     </>
   );
 }
