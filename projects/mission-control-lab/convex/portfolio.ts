@@ -57,6 +57,7 @@ type PortfolioTransactionDocument = {
   fxRateToBase?: number;
   baseAmount?: number;
   broker?: string;
+  strategy?: string;
   account?: string;
   notes?: string;
   createdAt: number;
@@ -477,5 +478,148 @@ export const addTransaction = mutationGeneric({
       createdAt: now,
       updatedAt: now,
     });
+  },
+});
+
+export const updateTransaction = mutationGeneric({
+  args: {
+    id: v.id("portfolioTransactions"),
+    holdingId: v.optional(v.id("portfolioHoldings")),
+    symbol: v.optional(v.string()),
+    assetType: v.optional(
+      v.union(
+        v.literal("stock"),
+        v.literal("etf"),
+        v.literal("cash"),
+        v.literal("other"),
+      ),
+    ),
+    transactionType: v.optional(
+      v.union(
+        v.literal("buy"),
+        v.literal("sell"),
+        v.literal("dividend"),
+        v.literal("deposit"),
+        v.literal("withdrawal"),
+        v.literal("fee"),
+        v.literal("adjustment"),
+      ),
+    ),
+    executedAt: v.optional(v.number()),
+    quantity: v.optional(v.number()),
+    price: v.optional(v.number()),
+    fee: v.optional(v.number()),
+    grossAmount: v.optional(v.number()),
+    netAmount: v.optional(v.number()),
+    currency: v.optional(v.string()),
+    baseCurrency: v.optional(v.string()),
+    fxRateToBase: v.optional(v.number()),
+    broker: v.optional(v.string()),
+    strategy: v.optional(v.string()),
+    account: v.optional(v.string()),
+    notes: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const existing = (await ctx.db.get(
+      args.id,
+    )) as PortfolioTransactionDocument | null;
+    if (!existing) throw new Error("Portfolio transaction not found");
+    const transactionType = args.transactionType ?? existing.transactionType;
+    const symbol =
+      args.symbol !== undefined ? normalizeSymbol(args.symbol) : existing.symbol;
+    if (!symbol) throw new Error("Transaction symbol is required");
+    const quantity =
+      args.quantity !== undefined
+        ? cleanPositiveNumber(args.quantity)
+        : existing.quantity;
+    const price =
+      args.price !== undefined ? cleanPositiveNumber(args.price) : existing.price;
+    const fee =
+      args.fee !== undefined ? cleanNonNegativeNumber(args.fee) : existing.fee;
+    const grossAmount =
+      args.grossAmount !== undefined
+        ? cleanPositiveNumber(args.grossAmount)
+        : existing.grossAmount;
+    const netAmount =
+      args.netAmount !== undefined
+        ? cleanNonNegativeNumber(args.netAmount)
+        : existing.netAmount;
+    if ((transactionType === "buy" || transactionType === "sell") && !quantity)
+      throw new Error("Quantity is required for buy/sell transactions");
+    if ((transactionType === "buy" || transactionType === "sell") && !price)
+      throw new Error("Price is required for buy/sell transactions");
+
+    const fxRateToBase =
+      args.fxRateToBase !== undefined
+        ? (cleanPositiveNumber(args.fxRateToBase) ?? 1)
+        : (existing.fxRateToBase ?? 1);
+    const resolvedNetAmount =
+      netAmount ??
+      (grossAmount !== undefined
+        ? Math.round(
+            ((transactionType === "buy" || transactionType === "withdrawal" || transactionType === "fee"
+              ? grossAmount + (fee ?? 0)
+              : grossAmount - (fee ?? 0)) + Number.EPSILON) * 100,
+          ) / 100
+        : undefined);
+    const baseAmount =
+      resolvedNetAmount !== undefined
+        ? Math.round(resolvedNetAmount * fxRateToBase * 100) / 100
+        : undefined;
+
+    await ctx.db.patch(args.id, {
+      holdingId: args.holdingId ?? existing.holdingId,
+      symbol,
+      displaySymbol: displaySymbol(symbol),
+      assetType:
+        args.assetType !== undefined
+          ? cleanAssetType(args.assetType)
+          : existing.assetType,
+      transactionType,
+      executedAt:
+        args.executedAt !== undefined
+          ? cleanTimestamp(args.executedAt)
+          : existing.executedAt,
+      quantity,
+      price,
+      fee: fee != null ? Math.round(fee * 100) / 100 : undefined,
+      grossAmount:
+        grossAmount != null ? Math.round(grossAmount * 100) / 100 : undefined,
+      netAmount: resolvedNetAmount,
+      currency:
+        args.currency !== undefined
+          ? (cleanOptionalText(args.currency)?.toUpperCase() ?? existing.currency)
+          : existing.currency,
+      baseCurrency:
+        args.baseCurrency !== undefined
+          ? (cleanOptionalText(args.baseCurrency)?.toUpperCase() ?? existing.baseCurrency)
+          : existing.baseCurrency,
+      fxRateToBase,
+      baseAmount,
+      broker:
+        args.broker !== undefined
+          ? cleanOptionalText(args.broker)
+          : existing.broker,
+      strategy:
+        args.strategy !== undefined
+          ? cleanOptionalText(args.strategy)
+          : existing.strategy,
+      account:
+        args.account !== undefined
+          ? cleanOptionalText(args.account)
+          : existing.account,
+      notes:
+        args.notes !== undefined
+          ? cleanOptionalText(args.notes)
+          : existing.notes,
+      updatedAt: Date.now(),
+    });
+  },
+});
+
+export const removeTransaction = mutationGeneric({
+  args: { id: v.id("portfolioTransactions") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
   },
 });

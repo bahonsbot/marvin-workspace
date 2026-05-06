@@ -149,4 +149,31 @@ export const portfolioApi = {
     },
     string
   >("portfolio:addTransaction"),
+  updateTransaction: makeFunctionReference<
+    "mutation",
+    {
+      id: string;
+      holdingId?: string;
+      symbol?: string;
+      assetType?: PortfolioAssetType;
+      transactionType?: PortfolioTransactionType;
+      executedAt?: number;
+      quantity?: number;
+      price?: number;
+      fee?: number;
+      grossAmount?: number;
+      netAmount?: number;
+      currency?: string;
+      baseCurrency?: string;
+      fxRateToBase?: number;
+      broker?: string;
+      strategy?: string;
+      account?: string;
+      notes?: string;
+    },
+    void
+  >("portfolio:updateTransaction"),
+  removeTransaction: makeFunctionReference<"mutation", { id: string }, void>(
+    "portfolio:removeTransaction",
+  ),
 } as const;

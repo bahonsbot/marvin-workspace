@@ -5267,6 +5267,22 @@
   opacity: 0.45;
 }
 
+:global(.trading-portfolio-form-secondary) {
+  height: 38px;
+  border: 1px solid rgba(49, 82, 63, 0.16);
+  border-radius: 999px;
+  background: rgba(49, 82, 63, 0.055);
+  color: #31523f;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+:global(.trading-portfolio-form-secondary:disabled) {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 :global(.trading-portfolio-remove) {
   width: 28px;
   height: 28px;

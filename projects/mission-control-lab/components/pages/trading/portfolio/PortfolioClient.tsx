@@ -148,7 +148,12 @@ type TransactionInput = {
   executedAt: string;
 };
 
+type TransactionFormMode = "transaction-add" | "transaction-edit" | "holding-update";
+
 type TransactionPrefill = {
+  mode?: TransactionFormMode;
+  holdingId?: string;
+  transactionId?: string;
   symbol: string;
   assetType: PortfolioAssetType;
   currency: string;
@@ -158,6 +163,8 @@ type TransactionPrefill = {
   quantity?: string;
   price?: string;
   fee?: string;
+  amount?: string;
+  executedAt?: string;
 };
 
 type EnrichedHolding = PortfolioHolding & {
@@ -1267,11 +1274,17 @@ function PortfolioTransactionsSection({
   focusToken?: number;
 }) {
   const addTransaction = useMutation(portfolioApi.addTransaction);
+  const updateTransaction = useMutation(portfolioApi.updateTransaction);
+  const removeTransaction = useMutation(portfolioApi.removeTransaction);
   const addHolding = useMutation(portfolioApi.add);
   const updateHolding = useMutation(portfolioApi.update);
   const [input, setInput] = useState<TransactionInput>(() =>
     initialTransactionInput(),
   );
+  const [formMode, setFormMode] = useState<TransactionFormMode>("transaction-add");
+  const [activeHoldingId, setActiveHoldingId] = useState<string | null>(null);
+  const [activeTransactionId, setActiveTransactionId] = useState<string | null>(null);
+  const [removingTransactionId, setRemovingTransactionId] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<TickerSearchResult[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -1300,8 +1313,13 @@ function PortfolioTransactionsSection({
       quantity: prefill.quantity ?? current.quantity,
       price: prefill.price ?? current.price,
       fee: prefill.fee ?? current.fee,
+      amount: prefill.amount ?? current.amount,
+      executedAt: prefill.executedAt ?? current.executedAt,
     }));
-    amountManuallyEditedRef.current = false;
+    setFormMode(prefill.mode ?? "transaction-add");
+    setActiveHoldingId(prefill.holdingId ?? null);
+    setActiveTransactionId(prefill.transactionId ?? null);
+    amountManuallyEditedRef.current = prefill.amount !== undefined;
     setSelectedSearchSymbol(normalizeSymbol(prefill.symbol));
     setSearchOpen(false);
     setSearchResults([]);
@@ -1379,6 +1397,70 @@ function PortfolioTransactionsSection({
     setActiveIndex(0);
   }
 
+  function resetTransactionForm(message?: string) {
+    setInput(initialTransactionInput());
+    setFormMode("transaction-add");
+    setActiveHoldingId(null);
+    setActiveTransactionId(null);
+    amountManuallyEditedRef.current = false;
+    setSelectedSearchSymbol(null);
+    setSearchOpen(false);
+    setSearchResults([]);
+    setSearchError(null);
+    setActiveIndex(0);
+    if (message !== undefined) setStatus(message);
+  }
+
+  function prefillFromTransaction(tx: PortfolioTransaction) {
+    setInput({
+      transactionType: tx.transactionType,
+      symbol: tx.symbol,
+      assetType: tx.assetType,
+      quantity: tx.quantity != null ? String(tx.quantity) : "",
+      price: tx.price != null ? String(tx.price) : "",
+      amount:
+        tx.netAmount != null
+          ? String(tx.netAmount)
+          : tx.grossAmount != null
+            ? String(tx.grossAmount)
+            : "",
+      fee: tx.fee != null ? String(tx.fee) : "",
+      currency: tx.currency || BASE_CURRENCY,
+      broker: tx.broker ?? "",
+      strategy: tx.strategy ?? "Other",
+      executedAt: new Date(tx.executedAt).toISOString().slice(0, 10),
+    });
+    setFormMode("transaction-edit");
+    setActiveHoldingId(tx.holdingId ?? null);
+    setActiveTransactionId(tx._id);
+    amountManuallyEditedRef.current = tx.netAmount !== undefined || tx.grossAmount !== undefined;
+    setSelectedSearchSymbol(normalizeSymbol(tx.symbol));
+    setSearchOpen(false);
+    setSearchResults([]);
+    setStatus("Editing recent transaction. Save changes will only update the transaction row.");
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  async function updateMatchedHolding(params: {
+    id: string;
+    quantity: number;
+    price: number;
+    fee: number;
+    currency: string;
+    broker?: string;
+    strategy?: string;
+  }) {
+    await updateHolding({
+      id: params.id,
+      quantity: params.quantity,
+      averageCost: Math.round(params.price * 10000) / 10000,
+      transactionFee: Math.round(params.fee * 100) / 100,
+      currency: params.currency,
+      broker: params.broker,
+      strategy: params.strategy,
+    });
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!enabled) return;
@@ -1404,6 +1486,63 @@ function PortfolioTransactionsSection({
       const matchedHolding = holdings.find(
         (holding) => normalizeSymbol(holding.symbol) === symbol,
       );
+      const holdingIdForUpdate = activeHoldingId ?? matchedHolding?._id ?? null;
+      const currency = input.currency.trim().toUpperCase() || BASE_CURRENCY;
+      const broker = input.broker.trim() || undefined;
+      const strategy = input.strategy.trim() || undefined;
+
+      if (formMode === "holding-update") {
+        if (!holdingIdForUpdate) return setStatus("No holding selected to update.");
+        if (!quantity || !price) return setStatus("Holding update requires quantity and trade price.");
+        await updateMatchedHolding({
+          id: holdingIdForUpdate,
+          quantity,
+          price,
+          fee,
+          currency,
+          broker,
+          strategy,
+        });
+        resetTransactionForm("Holding updated without creating a new Buy transaction.");
+        return;
+      }
+
+      if (formMode === "transaction-edit") {
+        if (!activeTransactionId) return setStatus("No transaction selected to update.");
+        await updateTransaction({
+          id: activeTransactionId,
+          holdingId: holdingIdForUpdate ?? undefined,
+          transactionType: input.transactionType,
+          symbol,
+          assetType: input.assetType,
+          quantity: quantity ?? undefined,
+          price: price ?? undefined,
+          grossAmount:
+            amount ??
+            (quantity != null && price != null
+              ? Math.round(quantity * price * 100) / 100
+              : undefined),
+          fee,
+          currency,
+          broker,
+          strategy,
+          executedAt,
+        });
+        if (holdingIdForUpdate && input.transactionType === "buy" && quantity != null && price != null) {
+          await updateMatchedHolding({
+            id: holdingIdForUpdate,
+            quantity,
+            price,
+            fee,
+            currency,
+            broker,
+            strategy,
+          });
+        }
+        resetTransactionForm("Transaction updated.");
+        return;
+      }
+
       await addTransaction({
         userKey: DEMO_USER_KEY,
         holdingId: matchedHolding?._id,
@@ -1416,9 +1555,9 @@ function PortfolioTransactionsSection({
           amount ??
           (quantity != null && price != null ? Math.round(quantity * price * 100) / 100 : undefined),
         fee,
-        currency: input.currency.trim().toUpperCase() || BASE_CURRENCY,
-        broker: input.broker.trim() || undefined,
-        strategy: input.strategy.trim() || undefined,
+        currency,
+        broker,
+        strategy,
         executedAt,
       });
 
@@ -1438,9 +1577,9 @@ function PortfolioTransactionsSection({
             quantity: nextQuantity,
             averageCost: Math.round(nextAverageCost * 10000) / 10000,
             transactionFee: Math.round(nextTransactionFee * 100) / 100,
-            currency: input.currency.trim().toUpperCase() || BASE_CURRENCY,
-            broker: input.broker.trim() || undefined,
-            strategy: input.strategy.trim() || undefined,
+            currency,
+            broker,
+            strategy,
           });
         } else {
           await addHolding({
@@ -1450,21 +1589,37 @@ function PortfolioTransactionsSection({
             quantity,
             averageCost: price,
             transactionFee: fee,
-            currency: input.currency.trim().toUpperCase() || BASE_CURRENCY,
-            broker: input.broker.trim() || undefined,
-            strategy: input.strategy.trim() || undefined,
+            currency,
+            broker,
+            strategy,
           });
         }
       }
 
-      setInput(initialTransactionInput());
-      amountManuallyEditedRef.current = false;
-      setSelectedSearchSymbol(null);
-      setStatus("Transaction saved.");
+      resetTransactionForm("Transaction saved.");
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Could not save transaction.");
     } finally {
       setIsSaving(false);
+    }
+  }
+
+  async function handleRemoveTransaction(tx: PortfolioTransaction) {
+    if (!enabled || removingTransactionId) return;
+    const ok = window.confirm(
+      `Remove ${tx.displaySymbol} ${tx.transactionType} transaction from ${new Date(tx.executedAt).toISOString().slice(0, 10)}?`,
+    );
+    if (!ok) return;
+    setRemovingTransactionId(tx._id);
+    setStatus(null);
+    try {
+      await removeTransaction({ id: tx._id });
+      setStatus("Transaction removed. Check the holding quantity if this transaction had already been reflected there.");
+      if (activeTransactionId === tx._id) resetTransactionForm("Transaction removed.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Could not remove transaction.");
+    } finally {
+      setRemovingTransactionId(null);
     }
   }
 
@@ -1488,13 +1643,14 @@ function PortfolioTransactionsSection({
         <label><span>Currency</span><input value={input.currency} onChange={(event) => setInput((current) => ({ ...current, currency: event.target.value }))} placeholder="EUR" disabled={isSaving || !enabled} /></label>
         <label><span>Broker</span><select value={input.broker} onChange={(event) => setInput((current) => ({ ...current, broker: event.target.value }))} disabled={isSaving || !enabled}><option value="">Select broker</option>{BROKER_OPTIONS.map((broker) => (<option key={broker} value={broker}>{broker}</option>))}</select></label>
         <label><span>Strategy</span><select value={input.strategy} onChange={(event) => setInput((current) => ({ ...current, strategy: event.target.value }))} disabled={isSaving || !enabled}>{STRATEGY_OPTIONS.map((strategy) => (<option key={strategy} value={strategy}>{strategy}</option>))}</select></label>
-        <button type="submit" disabled={isSaving || !enabled}>{isSaving ? "Saving…" : "Add transaction"}</button>
+        <button type="submit" disabled={isSaving || !enabled}>{isSaving ? "Saving…" : formMode === "holding-update" ? "Update holding" : formMode === "transaction-edit" ? "Save transaction" : "Add transaction"}</button>
+        {formMode !== "transaction-add" ? <button type="button" className="trading-portfolio-form-secondary" onClick={() => resetTransactionForm()} disabled={isSaving}>Cancel edit</button> : null}
         {status ? <p>{status}</p> : null}
       </form>
       <div className="trading-table-shell trading-portfolio-table-shell">
         <table className="trading-table trading-portfolio-table">
           <thead>
-            <tr><th>Date</th><th>Action</th><th>Symbol</th><th>Qty</th><th>Trade price</th><th>Fee</th><th>Total amount</th><th>Currency</th><th>Broker</th><th>Strategy</th></tr>
+            <tr><th>Date</th><th>Action</th><th>Symbol</th><th>Qty</th><th>Trade price</th><th>Fee</th><th>Total amount</th><th>Currency</th><th>Broker</th><th>Strategy</th><th aria-label="Transaction actions" /></tr>
           </thead>
           <tbody>
             {transactions.slice(0, 25).map((tx) => (
@@ -1509,10 +1665,21 @@ function PortfolioTransactionsSection({
                 <td>{tx.currency}</td>
                 <td>{tx.broker ?? "—"}</td>
                 <td>{tx.strategy ?? "—"}</td>
+                <td>
+                  <div className="trading-portfolio-row-actions">
+                    <button type="button" className="trading-portfolio-edit" onClick={() => prefillFromTransaction(tx)} disabled={!enabled || isSaving}>
+                      <Pencil size={13} />
+                      <span>Edit</span>
+                    </button>
+                    <button type="button" className="trading-portfolio-remove" onClick={() => handleRemoveTransaction(tx)} disabled={!enabled || removingTransactionId === tx._id} aria-label={`Remove ${tx.displaySymbol} transaction`}>
+                      {removingTransactionId === tx._id ? "…" : "−"}
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
             {!transactions.length ? (
-              <tr><td colSpan={10}><div className="trading-portfolio-empty">No transactions yet.</div></td></tr>
+              <tr><td colSpan={11}><div className="trading-portfolio-empty">No transactions yet.</div></td></tr>
             ) : null}
           </tbody>
         </table>
@@ -2269,6 +2436,8 @@ function PortfolioLayout({
                   currency: holding.currency || BASE_CURRENCY,
                   broker: holding.broker ?? "",
                   strategy: holding.strategy ?? "Other",
+                  mode: "holding-update",
+                  holdingId: holding._id,
                   transactionType: "buy",
                   quantity: String(holding.quantity),
                   price: String(holding.averageCost),
