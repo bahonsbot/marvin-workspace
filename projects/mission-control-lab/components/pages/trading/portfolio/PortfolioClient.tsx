@@ -2520,7 +2520,7 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
     rows.set(rowKey, current);
   });
   return Array.from(rows.values())
-    .filter((row) => row.quantitySold > 0)
+    .filter((row) => row.quantityBought > 0 && row.quantityBought <= row.quantitySold + 0.0001)
     .map((row) => {
       const avgBuy = row.quantityBought > 0 ? row.avgBuy / row.quantityBought : 0;
       const avgSell = row.quantitySold > 0 ? row.avgSell / row.quantitySold : 0;
@@ -2603,7 +2603,7 @@ function ClosedPositionsSection({
         <summary>
             <div>
             <div className="trading-section-label">Closed positions</div>
-            <p>FIFO realized P/L, plus dividends/fees/taxes. Includes preview-only import rows when present.</p>
+            <p>Fully closed FIFO positions, plus dividends/fees/taxes. Includes preview-only import rows when present.</p>
           </div>
           <b>{rows.length}</b>
         </summary>
@@ -2623,7 +2623,7 @@ function ClosedPositionsSection({
                   <td className={row.realizedPl >= 0 ? "positive" : "negative"}>{formatMoney(row.realizedPl, row.currency)}</td>
                 </tr>
               ))}
-              {!rows.length ? <tr><td colSpan={8}><div className="trading-portfolio-empty">No closed positions yet. Import DeGiro history to build this view.</div></td></tr> : null}
+              {!rows.length ? <tr><td colSpan={8}><div className="trading-portfolio-empty">No fully closed positions yet. Import DeGiro history to build this view.</div></td></tr> : null}
             </tbody>
           </table>
         </div>
