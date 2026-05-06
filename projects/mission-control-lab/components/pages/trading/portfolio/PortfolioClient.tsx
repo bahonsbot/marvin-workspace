@@ -205,6 +205,15 @@ type ImportDraftTransaction = {
   previewOnly: true;
 };
 
+type ImportInstrumentMapping = {
+  key: string;
+  product: string;
+  isin: string;
+  rowCount: number;
+  candidateSymbol: string;
+  needsMapping: boolean;
+};
+
 type ClosedPositionRow = {
   key: string;
   symbol: string;
@@ -495,6 +504,12 @@ function isDegiroSecurityAction(action: ImportAction) {
   return action === "buy" || action === "sell" || action === "dividend" || action === "fee" || action === "tax/withholding";
 }
 
+function instrumentKeyForRow(row: Pick<DegiroImportCandidate, "isin" | "product">) {
+  const isin = row.isin.trim().toUpperCase();
+  if (isin) return `isin:${isin}`;
+  return `product:${normalizeSymbol(row.product)}`;
+}
+
 function looksLikeIsin(value: string) {
   return /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(value.trim().toUpperCase());
 }
@@ -676,6 +691,32 @@ function buildImportDraftTransactions(rows: DegiroImportCandidate[]) {
         previewOnly: true,
       };
     });
+}
+
+function deriveInstrumentMappings(rows: DegiroImportCandidate[]) {
+  const grouped = new Map<string, ImportInstrumentMapping>();
+  rows.forEach((row) => {
+    if (!isDegiroSecurityAction(row.action)) return;
+    const key = instrumentKeyForRow(row);
+    const current = grouped.get(key);
+    const mapped = row.candidateSymbol.trim().toUpperCase();
+    const isMapped = Boolean(mapped && mapped !== row.isin && !looksLikeIsin(mapped));
+    if (!current) {
+      grouped.set(key, {
+        key,
+        product: row.product || row.description,
+        isin: row.isin,
+        rowCount: 1,
+        candidateSymbol: isMapped ? mapped : "",
+        needsMapping: !isMapped,
+      });
+      return;
+    }
+    current.rowCount += 1;
+    if (!current.candidateSymbol && isMapped) current.candidateSymbol = mapped;
+    current.needsMapping = !current.candidateSymbol;
+  });
+  return Array.from(grouped.values()).sort((a, b) => a.product.localeCompare(b.product));
 }
 
 function cleanAlertInput(value: string) {
@@ -2412,6 +2453,11 @@ function DegiroImportSection({
   const [bulkStrategy, setBulkStrategy] = useState("Other");
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [isImporting, setIsImporting] = useState(false);
+  const instruments = useMemo(() => deriveInstrumentMappings(rows), [rows]);
+  const instrumentsNeedingMapping = useMemo(
+    () => instruments.filter((instrument) => instrument.needsMapping).length,
+    [instruments],
+  );
   const summary = useMemo(() => {
     const totals: Record<ImportStatus, number> = { ready: 0, "needs mapping": 0, duplicate: 0, warning: 0 };
     rows.forEach((row) => {
@@ -2443,6 +2489,17 @@ function DegiroImportSection({
 
   function setRowCandidateSymbol(id: string, candidateSymbol: string) {
     setRows((current) => current.map((row) => (row.id === id ? withResolvedImportStatus({ ...row, candidateSymbol: normalizeSymbol(candidateSymbol) }) : row)));
+  }
+
+  function setInstrumentCandidateSymbol(instrumentKey: string, candidateSymbol: string) {
+    const normalized = normalizeSymbol(candidateSymbol);
+    setRows((current) =>
+      current.map((row) => {
+        if (!isDegiroSecurityAction(row.action)) return row;
+        if (instrumentKeyForRow(row) !== instrumentKey) return row;
+        return withResolvedImportStatus({ ...row, candidateSymbol: normalized || row.isin || "" });
+      }),
+    );
   }
 
   function applyBulkStrategy() {
@@ -2511,28 +2568,72 @@ function DegiroImportSection({
             <button type="button" onClick={applyImport} disabled={!enabled || isImporting || !rows.length}> {isImporting ? "Importing…" : "Import ready rows"}</button>
           </div>
           <div className="trading-portfolio-import-summary">
-            <span>ready: {summary.ready}</span><span>needs mapping: {summary["needs mapping"]}</span><span>duplicate: {summary.duplicate}</span><span>warning: {summary.warning}</span>
+            <span>rows: {rows.length}</span>
+            <span>instruments to map: {instrumentsNeedingMapping}</span>
+            <span>ready: {summary.ready}</span>
+            <span>warning/duplicate: {summary.warning + summary.duplicate}</span>
           </div>
+          {instruments.length ? (
+            <div className="trading-portfolio-instrument-map">
+              <div className="trading-portfolio-import-guidance">Map instruments first, then import ready rows.</div>
+              <div className="trading-table-shell trading-portfolio-table-shell">
+                <table className="trading-table trading-portfolio-table trading-portfolio-instrument-table">
+                  <thead>
+                    <tr><th>Product</th><th>ISIN</th><th>Rows</th><th>Ticker</th><th>Status</th></tr>
+                  </thead>
+                  <tbody>
+                    {instruments.map((instrument) => (
+                      <tr key={instrument.key}>
+                        <td>{instrument.product}</td>
+                        <td>{instrument.isin || "—"}</td>
+                        <td>{instrument.rowCount}</td>
+                        <td>
+                          <input
+                            value={instrument.candidateSymbol}
+                            onChange={(event) => setInstrumentCandidateSymbol(instrument.key, event.target.value)}
+                            placeholder="Ticker"
+                          />
+                        </td>
+                        <td>
+                          <span className={`trading-portfolio-import-status ${instrument.needsMapping ? "needs-mapping" : "ready"}`}>
+                            {instrument.needsMapping ? "needs map" : "ready"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : null}
           {importStatus ? <p>{importStatus}</p> : null}
         </div>
         <div className="trading-table-shell trading-portfolio-table-shell trading-portfolio-fixed-table">
           <table className="trading-table trading-portfolio-table">
-            <thead><tr><th>Date</th><th>Product</th><th>ISIN</th><th>Candidate symbol</th><th>Action</th><th>Qty</th><th>Price</th><th>Amount</th><th>Currency</th><th>Strategy</th><th>Status</th><th>Dedup/hash</th></tr></thead>
+            <thead><tr><th>Date</th><th>Product</th><th>ISIN</th><th>Row override</th><th>Action</th><th>Qty</th><th>Price</th><th>Amount</th><th>Currency</th><th>Strategy</th><th>Status</th><th>Details</th></tr></thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.id}>
                   <td>{row.date}</td>
                   <td>{row.product || row.description}</td>
                   <td>{row.isin || "—"}</td>
-                  <td><input value={row.candidateSymbol} onChange={(event) => setRowCandidateSymbol(row.id, event.target.value)} placeholder={row.isin ? "Map ticker" : "Symbol"} /></td>
+                  <td><input value={row.candidateSymbol} onChange={(event) => setRowCandidateSymbol(row.id, event.target.value)} placeholder="Optional" /></td>
                   <td>{row.action}</td>
                   <td>{row.quantity != null ? formatNumber(row.quantity) : "—"}</td>
                   <td>{row.price != null ? formatMoney(row.price, row.currency) : "—"}</td>
                   <td>{formatMoney(row.amount, row.currency)}{row.groupedFeeAmount ? <small> fee {formatMoney(row.groupedFeeAmount, row.currency)}</small> : null}{row.groupedTaxAmount ? <small> tax {formatMoney(row.groupedTaxAmount, row.currency)}</small> : null}</td>
                   <td>{row.currency}</td>
                   <td><select value={row.strategy} onChange={(event) => setRowStrategy(row.id, event.target.value)}>{STRATEGY_OPTIONS.map((strategy) => (<option key={strategy} value={strategy}>{strategy}</option>))}</select></td>
-                  <td>{row.status}{row.reason ? <small> · {row.reason}</small> : null}</td>
-                  <td><small>{row.dedupKey}<br />{row.rowHash}</small></td>
+                  <td>
+                    <span className={`trading-portfolio-import-status ${row.status.replace(" ", "-")}`}>{row.status === "needs mapping" ? "needs map" : row.status}</span>
+                    {row.reason ? <small> {row.reason}</small> : null}
+                  </td>
+                  <td>
+                    <details className="trading-portfolio-import-row-details">
+                      <summary>meta</summary>
+                      <small>{row.dedupKey}<br />{row.rowHash}</small>
+                    </details>
+                  </td>
                 </tr>
               ))}
               {!rows.length ? <tr><td colSpan={12}><div className="trading-portfolio-empty">Upload or paste CSV, then parse preview.</div></td></tr> : null}

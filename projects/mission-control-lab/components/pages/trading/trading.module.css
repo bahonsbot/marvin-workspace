@@ -5654,3 +5654,57 @@
   padding: 4px 8px;
   background: #fffdf9;
 }
+
+:global(.trading-portfolio-import-guidance) {
+  color: rgba(34, 48, 41, 0.68);
+  font-size: 11px;
+}
+
+:global(.trading-portfolio-instrument-map) {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(28, 37, 32, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 253, 249, 0.62);
+}
+
+:global(.trading-portfolio-instrument-table) {
+  min-width: 680px;
+}
+
+:global(.trading-portfolio-import-status) {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(28, 37, 32, 0.14);
+  padding: 2px 7px;
+  font-size: 10px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+:global(.trading-portfolio-import-status.ready) {
+  border-color: rgba(22, 163, 74, 0.25);
+  color: #15803d;
+  background: rgba(22, 163, 74, 0.08);
+}
+
+:global(.trading-portfolio-import-status.needs-mapping) {
+  border-color: rgba(196, 130, 58, 0.26);
+  color: #9a5d1f;
+  background: rgba(196, 130, 58, 0.1);
+}
+
+:global(.trading-portfolio-import-status.warning),
+:global(.trading-portfolio-import-status.duplicate) {
+  border-color: rgba(190, 18, 60, 0.24);
+  color: #be123c;
+  background: rgba(190, 18, 60, 0.08);
+}
+
+:global(.trading-portfolio-import-row-details summary) {
+  cursor: pointer;
+  color: rgba(34, 48, 41, 0.58);
+  font-size: 11px;
+}
