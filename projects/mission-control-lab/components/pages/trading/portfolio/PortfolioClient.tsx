@@ -155,6 +155,9 @@ type TransactionPrefill = {
   broker: string;
   strategy: string;
   transactionType: PortfolioTransactionType;
+  quantity?: string;
+  price?: string;
+  fee?: string;
 };
 
 type EnrichedHolding = PortfolioHolding & {
@@ -1294,7 +1297,11 @@ function PortfolioTransactionsSection({
       broker: prefill.broker || current.broker,
       strategy: prefill.strategy || current.strategy || "Other",
       transactionType: prefill.transactionType,
+      quantity: prefill.quantity ?? current.quantity,
+      price: prefill.price ?? current.price,
+      fee: prefill.fee ?? current.fee,
     }));
+    amountManuallyEditedRef.current = false;
     setSelectedSearchSymbol(normalizeSymbol(prefill.symbol));
     setSearchOpen(false);
     setSearchResults([]);
@@ -1475,9 +1482,9 @@ function PortfolioTransactionsSection({
         <label><span>Type</span><input value={assetTypeLabel(input.assetType)} readOnly disabled /></label>
         <label><span>Date</span><input type="date" value={input.executedAt} onChange={(event) => setInput((current) => ({ ...current, executedAt: event.target.value }))} disabled={isSaving || !enabled} /></label>
         <label><span>Quantity</span><input value={input.quantity} onChange={(event) => setInput((current) => ({ ...current, quantity: event.target.value }))} inputMode="decimal" placeholder="10" disabled={isSaving || !enabled} /></label>
-        <label><span>Price</span><input value={input.price} onChange={(event) => setInput((current) => ({ ...current, price: event.target.value }))} inputMode="decimal" placeholder="125.50" disabled={isSaving || !enabled} /></label>
-        <label><span>Amount</span><input value={input.amount} onChange={(event) => { amountManuallyEditedRef.current = true; setInput((current) => ({ ...current, amount: event.target.value })); }} inputMode="decimal" placeholder="Auto: qty × price + fee" disabled={isSaving || !enabled} /></label>
+        <label><span>Trade price</span><input value={input.price} onChange={(event) => setInput((current) => ({ ...current, price: event.target.value }))} inputMode="decimal" placeholder="125.50" disabled={isSaving || !enabled} /></label>
         <label><span>Fee</span><input value={input.fee} onChange={(event) => setInput((current) => ({ ...current, fee: event.target.value }))} inputMode="decimal" placeholder="0.00" disabled={isSaving || !enabled} /></label>
+        <label><span>Total amount</span><input value={input.amount} onChange={(event) => { amountManuallyEditedRef.current = true; setInput((current) => ({ ...current, amount: event.target.value })); }} inputMode="decimal" placeholder="Auto: qty × trade price + fee" disabled={isSaving || !enabled} /></label>
         <label><span>Currency</span><input value={input.currency} onChange={(event) => setInput((current) => ({ ...current, currency: event.target.value }))} placeholder="EUR" disabled={isSaving || !enabled} /></label>
         <label><span>Broker</span><select value={input.broker} onChange={(event) => setInput((current) => ({ ...current, broker: event.target.value }))} disabled={isSaving || !enabled}><option value="">Select broker</option>{BROKER_OPTIONS.map((broker) => (<option key={broker} value={broker}>{broker}</option>))}</select></label>
         <label><span>Strategy</span><select value={input.strategy} onChange={(event) => setInput((current) => ({ ...current, strategy: event.target.value }))} disabled={isSaving || !enabled}>{STRATEGY_OPTIONS.map((strategy) => (<option key={strategy} value={strategy}>{strategy}</option>))}</select></label>
@@ -1487,7 +1494,7 @@ function PortfolioTransactionsSection({
       <div className="trading-table-shell trading-portfolio-table-shell">
         <table className="trading-table trading-portfolio-table">
           <thead>
-            <tr><th>Date</th><th>Action</th><th>Symbol</th><th>Qty</th><th>Price</th><th>Amount</th><th>Fee</th><th>Currency</th><th>Broker</th><th>Strategy</th></tr>
+            <tr><th>Date</th><th>Action</th><th>Symbol</th><th>Qty</th><th>Trade price</th><th>Fee</th><th>Total amount</th><th>Currency</th><th>Broker</th><th>Strategy</th></tr>
           </thead>
           <tbody>
             {transactions.slice(0, 25).map((tx) => (
@@ -1497,8 +1504,8 @@ function PortfolioTransactionsSection({
                 <td>{tx.displaySymbol}</td>
                 <td>{tx.quantity != null ? formatNumber(tx.quantity) : "—"}</td>
                 <td>{tx.price != null ? formatMoney(tx.price, tx.currency) : "—"}</td>
-                <td>{tx.netAmount != null ? formatMoney(tx.netAmount, tx.currency) : tx.grossAmount != null ? formatMoney(tx.grossAmount, tx.currency) : "—"}</td>
                 <td>{tx.fee != null ? formatMoney(tx.fee, tx.currency) : "—"}</td>
+                <td>{tx.netAmount != null ? formatMoney(tx.netAmount, tx.currency) : tx.grossAmount != null ? formatMoney(tx.grossAmount, tx.currency) : "—"}</td>
                 <td>{tx.currency}</td>
                 <td>{tx.broker ?? "—"}</td>
                 <td>{tx.strategy ?? "—"}</td>
@@ -1545,9 +1552,9 @@ function HoldingsTable({
         <thead>
           <tr>
             <th>Holding</th>
-            <th>Shares</th>
+            <th>Quantity</th>
             <th>Avg cost</th>
-            <th>Price</th>
+            <th>Market price</th>
             <th>5D</th>
             <th>52W</th>
             <th>Value</th>
@@ -2263,6 +2270,12 @@ function PortfolioLayout({
                   broker: holding.broker ?? "",
                   strategy: holding.strategy ?? "Other",
                   transactionType: "buy",
+                  quantity: String(holding.quantity),
+                  price: String(holding.averageCost),
+                  fee:
+                    holding.transactionFee != null
+                      ? String(holding.transactionFee)
+                      : "",
                 });
                 setTransactionFocusToken((current) => current + 1);
               }}
