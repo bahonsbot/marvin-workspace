@@ -2,8 +2,8 @@
 # Nightly Memory Extraction
 # Runs at 23:00 ICT to extract durable facts from the day's conversations
 
-WORKSPACE="/data/.openclaw/workspace"
-DATE=$(date +%Y-%m-%d)
+WORKSPACE="${OPENCLAW_WORKSPACE:-/data/.openclaw/workspace}"
+DATE="${OPENCLAW_MEMORY_DATE:-$(date +%Y-%m-%d)}"
 
 echo "=== Nightly Memory Extraction: $DATE ==="
 
@@ -28,9 +28,12 @@ fi
 # Ensure secure permissions on memory directory
 chmod 700 "$WORKSPACE/memory" 2>/dev/null || true
 
-# Use atomic write: write to temp file first, then move
+# Use atomic write: preserve existing note content, append the extraction line, then move into place
 TEMP_FILE=$(mktemp "$WORKSPACE/memory/.XXXXXX.md")
-echo "- 23:00 — Nightly memory extraction ran" >> "$TEMP_FILE"
+if [[ -f "$MEMORY_FILE" ]]; then
+    cat "$MEMORY_FILE" > "$TEMP_FILE"
+fi
+printf '%s\n' "- 23:00 — Nightly memory extraction ran" >> "$TEMP_FILE"
 
 # Verify write succeeded before atomic move
 if [[ -s "$TEMP_FILE" ]]; then

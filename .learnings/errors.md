@@ -1498,3 +1498,13 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** high
 **Status:** pending
+
+## [ERR-20260506-1028]
+
+**What failed:** Mission Control Lab Convex schema/function changes were made locally but the live Convex dev deployment still served old validators.
+**Error:** Philippe saw `ArgumentValidationError: Object contains extra field alertEnabled` when saving Watchlist price alerts because `convex/watchlist.ts` had new `alertEnabled` / `alertMinPrice` / `alertMaxPrice` validators locally, but the deployed `watchlist:update` function had not been pushed.
+**Context:** May 5 Lab Watchlist alert work. Local lint/build/codegen were not enough to update the active Convex deployment. Running `npx convex dev --once` pushed the updated functions and immediately fixed the live validator mismatch.
+**Suggested fix:** After any Mission Control Lab Convex schema/function change, run the appropriate Convex push step, usually `npx convex dev --once` from `projects/mission-control-lab`, then verify live function specs or perform a small runtime mutation smoke before declaring the UI fixed.
+
+**Priority:** medium
+**Status:** active reminder
