@@ -1508,3 +1508,13 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** medium
 **Status:** active reminder
+
+## [ERR-20260506-1055]
+
+**What failed:** `nightly-memory-extraction` cron could complete its real memory/entity work but still end with `lastRunStatus=error` because an intermediate `edit` tool call failed on a large JSON file.
+**Error:** The cron registry reported `⚠️ 📝 Edit: in ~/.openclaw/workspace/life/areas/people/philippe/items.json failed`, which looked like a forbidden-path problem. Session evidence showed the actual tool call used `/data/.openclaw/workspace/...`; the displayed `~/.openclaw/...` path was renderer shorthand. The real failure was fragile exact-text matching in the `edit` tool. The agent later recovered with full-file `write`, but the earlier failed tool call poisoned cron status.
+**Context:** May 6 Morning Meeting follow-up into recurring `nightly-memory-extraction` errors. Latest extraction had successfully written mission-control facts mcs-068 through mcs-073, Philippe facts philippe-025/026, and the May 5 nightly summary, despite cron status showing error.
+**Suggested fix:** For model-backed extraction jobs, avoid `edit` on large JSON/entity files. Prefer read → construct full JSON → write, and skip uncertain updates rather than causing tool errors. When diagnosing cron failures, inspect session transcript/tool calls before trusting rendered `~/.openclaw/...` path text.
+
+**Priority:** medium
+**Status:** active reminder
