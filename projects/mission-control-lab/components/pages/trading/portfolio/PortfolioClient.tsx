@@ -221,12 +221,14 @@ type ClosedPositionRow = {
   currency: string;
   quantityBought: number;
   quantitySold: number;
+  unmatchedSoldQuantity: number;
   avgBuy: number;
   avgSell: number;
   realizedPl: number;
   dividends: number;
   fees: number;
   taxes: number;
+  adjustments: number;
   netContribution: number;
 };
 
@@ -2415,16 +2417,33 @@ function LivePortfolioTable({
   );
 }
 
-type ClosedPositionsInputTx = Pick<PortfolioTransaction, "symbol" | "displaySymbol" | "currency" | "transactionType" | "quantity" | "price" | "netAmount" | "grossAmount" | "fee">;
+type ClosedPositionsInputTx = Pick<PortfolioTransaction, "symbol" | "displaySymbol" | "currency" | "transactionType" | "quantity" | "price" | "netAmount" | "grossAmount" | "fee" | "executedAt"> & { _creationTime?: number };
 
 function transactionNativeValue(tx: ClosedPositionsInputTx) {
   return tx.netAmount ?? tx.grossAmount ?? 0;
 }
 
+type FifoLot = {
+  remainingQty: number;
+  costPerShare: number;
+};
 
 function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
   const rows = new Map<string, ClosedPositionRow>();
-  transactions.forEach((tx) => {
+  const groupedLots = new Map<string, FifoLot[]>();
+  const sorted = [...transactions]
+    .map((tx, index) => ({ tx, index }))
+    .sort((a, b) => {
+      const aTime = a.tx.executedAt ?? a.tx._creationTime ?? 0;
+      const bTime = b.tx.executedAt ?? b.tx._creationTime ?? 0;
+      if (aTime !== bTime) return aTime - bTime;
+      const aCreated = a.tx._creationTime ?? a.index;
+      const bCreated = b.tx._creationTime ?? b.index;
+      if (aCreated !== bCreated) return aCreated - bCreated;
+      return a.index - b.index;
+    });
+
+  sorted.forEach(({ tx }) => {
     const key = normalizeSymbol(tx.symbol);
     if (!key || key.startsWith("CASH")) return;
     const currency = normalizeCurrencyCode(tx.currency);
@@ -2436,51 +2455,76 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
       currency,
       quantityBought: 0,
       quantitySold: 0,
+      unmatchedSoldQuantity: 0,
       avgBuy: 0,
       avgSell: 0,
       realizedPl: 0,
       dividends: 0,
       fees: 0,
       taxes: 0,
+      adjustments: 0,
       netContribution: 0,
     };
+    const lots = groupedLots.get(rowKey) ?? [];
     if (tx.transactionType === "buy" && tx.quantity && tx.price) {
       const value = Math.abs(transactionNativeValue(tx) || tx.quantity * tx.price);
       current.quantityBought += tx.quantity;
       current.avgBuy += value;
-      current.netContribution -= value;
+      const costPerShare = tx.quantity > 0 ? value / tx.quantity : 0;
+      lots.push({ remainingQty: tx.quantity, costPerShare });
     } else if (tx.transactionType === "sell" && tx.quantity && tx.price) {
       const value = Math.abs(transactionNativeValue(tx) || tx.quantity * tx.price);
       current.quantitySold += tx.quantity;
       current.avgSell += value;
-      current.netContribution += value;
+      const sellQty = tx.quantity;
+      const sellUnitProceeds = sellQty > 0 ? value / sellQty : 0;
+      let remainingToMatch = sellQty;
+      let realizedFromLots = 0;
+      for (const lot of lots) {
+        if (remainingToMatch <= 0) break;
+        if (lot.remainingQty <= 0) continue;
+        const consumed = Math.min(lot.remainingQty, remainingToMatch);
+        lot.remainingQty -= consumed;
+        remainingToMatch -= consumed;
+        const allocatedProceeds = consumed * sellUnitProceeds;
+        const allocatedCost = consumed * lot.costPerShare;
+        realizedFromLots += allocatedProceeds - allocatedCost;
+      }
+      if (remainingToMatch > 0) {
+        current.unmatchedSoldQuantity += remainingToMatch;
+        realizedFromLots += remainingToMatch * sellUnitProceeds;
+      }
+      current.realizedPl += realizedFromLots;
     } else if (tx.transactionType === "dividend") {
       const value = transactionNativeValue(tx);
       current.dividends += value;
-      current.netContribution += value;
+      current.realizedPl += value;
     } else if (tx.transactionType === "fee") {
       const value = Math.abs(transactionNativeValue(tx) || tx.fee || 0);
       current.fees += value;
-      current.netContribution -= value;
+      current.realizedPl -= value;
     } else if (tx.transactionType === "adjustment") {
       const rawValue = transactionNativeValue(tx);
       const isDividendTax = tx.grossAmount != null && tx.netAmount != null && Math.abs(tx.grossAmount) === Math.abs(tx.netAmount);
       const value = isDividendTax ? -Math.abs(rawValue) : rawValue;
       if (value < 0) {
         current.taxes += Math.abs(value);
-        current.netContribution += value;
+        current.realizedPl += value;
       } else {
-        current.netContribution += value;
+        current.adjustments += value;
+        current.realizedPl += value;
       }
     }
+    current.netContribution = current.realizedPl;
+    groupedLots.set(rowKey, lots);
     rows.set(rowKey, current);
   });
   return Array.from(rows.values())
-    .filter((row) => row.quantityBought > 0 && row.quantityBought <= row.quantitySold + 0.0001)
+    .filter((row) => row.quantitySold > 0)
     .map((row) => {
       const avgBuy = row.quantityBought > 0 ? row.avgBuy / row.quantityBought : 0;
       const avgSell = row.quantitySold > 0 ? row.avgSell / row.quantitySold : 0;
-      return { ...row, avgBuy, avgSell, realizedPl: row.netContribution };
+      return { ...row, avgBuy, avgSell, realizedPl: roundMoney(row.realizedPl), netContribution: roundMoney(row.realizedPl) };
     })
     .sort((a, b) => b.realizedPl - a.realizedPl);
 }
@@ -2545,6 +2589,7 @@ function ClosedPositionsSection({
         netAmount: row.netAmount,
         grossAmount: row.grossAmount,
         fee: row.fee,
+        executedAt: row.executedAt,
       })),
     [previewDrafts],
   );
@@ -2556,9 +2601,9 @@ function ClosedPositionsSection({
     <section className="trading-portfolio-panel">
       <details className="trading-portfolio-collapsible" open={false}>
         <summary>
-          <div>
+            <div>
             <div className="trading-section-label">Closed positions</div>
-            <p>Sold-out positions stay in realized P/L totals. Includes preview-only import rows when present.</p>
+            <p>FIFO realized P/L, plus dividends/fees/taxes. Includes preview-only import rows when present.</p>
           </div>
           <b>{rows.length}</b>
         </summary>
@@ -2569,7 +2614,7 @@ function ClosedPositionsSection({
               {rows.map((row) => (
                 <tr key={row.key}>
                   <td>{row.displayName}</td>
-                  <td>{formatNumber(row.quantitySold)}</td>
+                  <td>{formatNumber(row.quantitySold)}{row.unmatchedSoldQuantity > 0 ? <small> ({formatNumber(row.unmatchedSoldQuantity)} unmatched)</small> : null}</td>
                   <td>{formatMoney(row.avgBuy, row.currency)}</td>
                   <td>{formatMoney(row.avgSell, row.currency)}</td>
                   <td>{formatMoney(row.dividends, row.currency)}</td>
