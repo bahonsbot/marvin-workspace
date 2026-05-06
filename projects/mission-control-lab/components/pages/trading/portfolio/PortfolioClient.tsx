@@ -230,6 +230,14 @@ type ClosedPositionRow = {
   netContribution: number;
 };
 
+type LedgerSummary = {
+  realizedPl: number;
+  dividends: number;
+  taxes: number;
+  fees: number;
+  closedCount: number;
+};
+
 type TransactionPrefill = {
   mode?: TransactionFormMode;
   holdingId?: string;
@@ -640,8 +648,8 @@ function parseDegiroCsvToCandidates(text: string, existing: PortfolioTransaction
     const price = qtyPriceMatch ? parseEuropeanNumber(qtyPriceMatch[3]) ?? undefined : undefined;
 
     let action: ImportAction = "adjustment";
-    if (descLower.includes("koop")) action = "buy";
-    else if (descLower.includes("verkoop")) action = "sell";
+    if (descLower.includes("verkoop")) action = "sell";
+    else if (descLower.includes("koop")) action = "buy";
     else if (descLower.includes("dividendbelasting")) action = "tax/withholding";
     else if (descLower.includes("dividend")) action = "dividend";
     else if (descLower.includes("transactiekosten") || descLower.includes("kosten") || descLower.includes("stamp duty")) action = "fee";
@@ -732,14 +740,16 @@ function buildImportDraftTransactions(rows: DegiroImportCandidate[]) {
       const transactionType = importActionToTransactionType(row.action);
       const fee = row.groupedFeeAmount ?? (row.action === "fee" ? Math.abs(row.amount) : undefined);
       const tax = row.groupedTaxAmount ?? 0;
-      const grossAmount = (row.action === "buy" || row.action === "sell" || row.action === "dividend" || row.action === "deposit" || row.action === "withdrawal")
+      const grossAmount = row.action === "buy" || row.action === "sell" || row.action === "dividend" || row.action === "deposit" || row.action === "withdrawal" || row.action === "tax/withholding"
         ? Math.abs(row.amount)
         : undefined;
       const netAmount = row.action === "buy"
         ? roundMoney(Math.abs(row.amount) + (fee ?? 0) + Math.abs(tax))
         : row.action === "sell"
           ? roundMoney(Math.abs(row.amount) - (fee ?? 0) - Math.abs(tax))
-          : row.amount;
+          : row.action === "tax/withholding"
+            ? -Math.abs(row.amount)
+            : row.amount;
       return {
         id: row.id,
         dedupKey: row.dedupKey,
@@ -2387,7 +2397,11 @@ function LivePortfolioTable({
   );
 }
 
-type ClosedPositionsInputTx = Pick<PortfolioTransaction, "symbol" | "displaySymbol" | "currency" | "transactionType" | "quantity" | "price" | "netAmount" | "grossAmount" | "fee">;
+type ClosedPositionsInputTx = Pick<PortfolioTransaction, "symbol" | "displaySymbol" | "currency" | "transactionType" | "quantity" | "price" | "netAmount" | "grossAmount" | "baseAmount" | "fee">;
+
+function transactionCashValue(tx: ClosedPositionsInputTx) {
+  return tx.baseAmount ?? tx.netAmount ?? tx.grossAmount ?? 0;
+}
 
 function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
   const rows = new Map<string, ClosedPositionRow>();
@@ -2398,7 +2412,7 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
       key,
       symbol: tx.symbol,
       displayName: tx.displaySymbol || tx.symbol,
-      currency: tx.currency || BASE_CURRENCY,
+      currency: BASE_CURRENCY,
       quantityBought: 0,
       quantitySold: 0,
       avgBuy: 0,
@@ -2410,25 +2424,31 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
       netContribution: 0,
     };
     if (tx.transactionType === "buy" && tx.quantity && tx.price) {
+      const value = Math.abs(transactionCashValue(tx) || tx.quantity * tx.price);
       current.quantityBought += tx.quantity;
-      current.avgBuy += tx.quantity * tx.price;
-      current.netContribution -= Math.abs(tx.netAmount ?? tx.grossAmount ?? tx.quantity * tx.price);
+      current.avgBuy += value;
+      current.netContribution -= value;
     } else if (tx.transactionType === "sell" && tx.quantity && tx.price) {
+      const value = Math.abs(transactionCashValue(tx) || tx.quantity * tx.price);
       current.quantitySold += tx.quantity;
-      current.avgSell += tx.quantity * tx.price;
-      current.netContribution += Math.abs(tx.netAmount ?? tx.grossAmount ?? tx.quantity * tx.price);
+      current.avgSell += value;
+      current.netContribution += value;
     } else if (tx.transactionType === "dividend") {
-      const value = tx.netAmount ?? tx.grossAmount ?? 0;
+      const value = transactionCashValue(tx);
       current.dividends += value;
       current.netContribution += value;
     } else if (tx.transactionType === "fee") {
-      const value = tx.netAmount ?? tx.grossAmount ?? tx.fee ?? 0;
+      const value = Math.abs(transactionCashValue(tx) || tx.fee || 0);
       current.fees += value;
       current.netContribution -= value;
     } else if (tx.transactionType === "adjustment") {
-      const value = tx.netAmount ?? tx.grossAmount ?? 0;
+      const rawValue = transactionCashValue(tx);
+      const isDividendTax = tx.grossAmount != null && tx.netAmount != null && Math.abs(tx.grossAmount) === Math.abs(tx.netAmount);
+      const value = isDividendTax ? -Math.abs(rawValue) : rawValue;
       if (value < 0) {
         current.taxes += Math.abs(value);
+        current.netContribution += value;
+      } else {
         current.netContribution += value;
       }
     }
@@ -2442,6 +2462,27 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
       return { ...row, avgBuy, avgSell, realizedPl: row.netContribution };
     })
     .sort((a, b) => b.realizedPl - a.realizedPl);
+}
+
+function deriveLedgerSummary(transactions: ClosedPositionsInputTx[]): LedgerSummary {
+  const closedRows = deriveClosedPositions(transactions);
+  const totals = transactions.reduce(
+    (summary, tx) => {
+      if (tx.symbol.startsWith("CASH")) return summary;
+      if (tx.transactionType === "dividend") summary.dividends += transactionCashValue(tx);
+      else if (tx.transactionType === "fee") summary.fees += Math.abs(transactionCashValue(tx) || tx.fee || 0);
+      else if (tx.transactionType === "adjustment") {
+        const rawValue = transactionCashValue(tx);
+        const isDividendTax = tx.grossAmount != null && tx.netAmount != null && Math.abs(tx.grossAmount) === Math.abs(tx.netAmount);
+        const value = isDividendTax ? -Math.abs(rawValue) : rawValue;
+        if (value < 0) summary.taxes += Math.abs(value);
+      }
+      return summary;
+    },
+    { realizedPl: 0, dividends: 0, taxes: 0, fees: 0, closedCount: closedRows.length },
+  );
+  totals.realizedPl = closedRows.reduce((sum, row) => sum + row.realizedPl, 0);
+  return totals;
 }
 
 function ClosedPositionsSection({
@@ -2462,6 +2503,7 @@ function ClosedPositionsSection({
         price: row.price,
         netAmount: row.netAmount,
         grossAmount: row.grossAmount,
+        baseAmount: row.netAmount,
         fee: row.fee,
       })),
     [previewDrafts],
@@ -2881,7 +2923,6 @@ function PortfolioLayout({
     0,
   );
   const totalPl = totalValue - totalCost;
-  const totalPlPct = totalCost > 0 ? (totalPl / totalCost) * 100 : null;
   const cashHoldings = useMemo(
     () => enriched.filter((holding) => holding.assetType === "cash"),
     [enriched],
@@ -2894,10 +2935,10 @@ function PortfolioLayout({
     (sum, holding) => sum + holding.marketValueBase,
     0,
   );
+  const ledgerSummary = useMemo(() => deriveLedgerSummary(transactions), [transactions]);
+  const totalPlWithLedger = totalPl + ledgerSummary.realizedPl;
+  const totalPlWithLedgerPct = totalCost > 0 ? (totalPlWithLedger / totalCost) * 100 : null;
   const fxTooltip = fxTooltipRows(Array.from(fxRates.values()));
-  const largest = [...investmentHoldings].sort(
-    (a, b) => b.weight - a.weight,
-  )[0];
   const performanceHoldings = useMemo(
     () => performanceRequestPayload(investmentHoldings),
     [investmentHoldings],
@@ -3011,11 +3052,11 @@ function PortfolioLayout({
         </article>
         <article>
           <span>Total P/L</span>
-          <strong className={totalPl >= 0 ? "positive" : "negative"}>
-            {formatMoney(totalPl, BASE_CURRENCY)}
+          <strong className={totalPlWithLedger >= 0 ? "positive" : "negative"}>
+            {formatMoney(totalPlWithLedger, BASE_CURRENCY)}
           </strong>
-          <em className={totalPl >= 0 ? "positive" : "negative"}>
-            {formatPercent(totalPlPct)}
+          <em className={totalPlWithLedger >= 0 ? "positive" : "negative"}>
+            {formatPercent(totalPlWithLedgerPct)} · incl. closed ledger
           </em>
         </article>
         <article>
@@ -3028,9 +3069,11 @@ function PortfolioLayout({
           </em>
         </article>
         <article>
-          <span>Largest position</span>
-          <strong>{largest?.displaySymbol ?? "—"}</strong>
-          <em>{largest ? `${largest.weight.toFixed(1)}%` : "—"}</em>
+          <span>Realized ledger</span>
+          <strong className={ledgerSummary.realizedPl >= 0 ? "positive" : "negative"}>
+            {formatMoney(ledgerSummary.realizedPl, BASE_CURRENCY)}
+          </strong>
+          <em>{ledgerSummary.closedCount} closed · tax {formatMoney(ledgerSummary.taxes, BASE_CURRENCY)}</em>
         </article>
         <article className="trading-portfolio-fx-kpi" tabIndex={0}>
           <span>Base currency</span>
@@ -3109,7 +3152,7 @@ function PortfolioLayout({
           />
           <p className="trading-financial-caption">
             Source: {sourceLabel(performanceSeries)} · {performanceRange} %
-            change, excluding dividends and transaction-date cash-flow timing.
+            change, excluding dividends and transaction-date cash-flow timing. Closed-position P/L is summarized from imported ledger rows above.
           </p>
         </article>
 
