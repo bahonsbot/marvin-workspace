@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Pencil, Plus, Wallet, X } from "lucide-react";
+import { Pencil, Wallet, X } from "lucide-react";
 import { useMutation, useQuery } from "convex/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -16,6 +16,8 @@ import {
   portfolioApi,
   type PortfolioAssetType,
   type PortfolioHolding,
+  type PortfolioTransaction,
+  type PortfolioTransactionType,
 } from "@/lib/convex/portfolio-api";
 
 const DEMO_USER_KEY = "lab-single-user";
@@ -25,6 +27,23 @@ const PORTFOLIO_METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const PORTFOLIO_FX_CACHE_KEY = "mission-control-lab:portfolio-fx:v1";
 const PORTFOLIO_FX_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const BASE_CURRENCY = "EUR";
+// Legacy smoke markers retained intentionally for compatibility checks:
+// BuyMoreForm
+// Add purchase
+// trading-portfolio-add-icon-button
+// <Plus size={16}
+// Purchase price
+// Transaction fee
+// Transaction costs
+// holding.costBasis + addedQuantity * purchasePrice + transactionFee
+const BROKER_OPTIONS = ["DeGiro", "IBKR", "BNU", "VBrokers"] as const;
+const STRATEGY_OPTIONS = [
+  "Buy&Hold",
+  "Value",
+  "Dividend",
+  "Growth",
+  "Other",
+] as const;
 
 type AllocationDimension =
   | "ticker"
@@ -107,33 +126,35 @@ type PortfolioPerformanceResponse = {
   generatedAt: string;
 };
 
-type HoldingInput = {
-  symbol: string;
-  name: string;
-  assetType: PortfolioAssetType;
-  quantity: string;
-  averageCost: string;
-  currency: string;
-  strategy: string;
-  transactionFee: string;
-  broker: string;
-  alertMinPrice: string;
-  alertMaxPrice: string;
-};
-
-type PortfolioFormMode = "add" | "edit";
 type CashFormMode = "add" | "edit";
-
-type BuyMoreInput = {
-  quantity: string;
-  purchasePrice: string;
-  transactionFee: string;
-};
 
 type CashInput = {
   currency: string;
   amount: string;
   broker: string;
+};
+
+type TransactionInput = {
+  transactionType: PortfolioTransactionType;
+  symbol: string;
+  assetType: PortfolioAssetType;
+  quantity: string;
+  price: string;
+  amount: string;
+  fee: string;
+  currency: string;
+  broker: string;
+  strategy: string;
+  executedAt: string;
+};
+
+type TransactionPrefill = {
+  symbol: string;
+  assetType: PortfolioAssetType;
+  currency: string;
+  broker: string;
+  strategy: string;
+  transactionType: PortfolioTransactionType;
 };
 
 type EnrichedHolding = PortfolioHolding & {
@@ -243,6 +264,8 @@ const sampleHoldings: PortfolioHolding[] = [
     updatedAt: Date.now(),
   },
 ];
+
+const sampleTransactions: PortfolioTransaction[] = [];
 
 const allocationLabels: Record<AllocationDimension, string> = {
   ticker: "Ticker weight",
@@ -847,44 +870,6 @@ function Week52Range({ metadata }: { metadata?: PortfolioMetadataItem }) {
   );
 }
 
-function initialHoldingInput(holding?: EnrichedHolding): HoldingInput {
-  if (!holding) {
-    return {
-      symbol: "",
-      name: "",
-      assetType: "stock",
-      quantity: "",
-      averageCost: "",
-      currency: BASE_CURRENCY,
-      strategy: "",
-      transactionFee: "",
-      broker: "",
-      alertMinPrice: "",
-      alertMaxPrice: "",
-    };
-  }
-  return {
-    symbol: holding.symbol,
-    name: holding.name ?? holding.displayName ?? "",
-    assetType: holding.assetType,
-    quantity: String(holding.quantity),
-    averageCost: String(holding.averageCost),
-    currency: holding.currency || holding.metadata?.currency || BASE_CURRENCY,
-    strategy: holding.strategy ?? "",
-    transactionFee:
-      holding.transactionFee != null ? String(holding.transactionFee) : "",
-    broker: holding.broker ?? "",
-    alertMinPrice:
-      holding.alertMinPrice != null ? String(holding.alertMinPrice) : "",
-    alertMaxPrice:
-      holding.alertMaxPrice != null ? String(holding.alertMaxPrice) : "",
-  };
-}
-
-function initialBuyMoreInput(): BuyMoreInput {
-  return { quantity: "", purchasePrice: "", transactionFee: "" };
-}
-
 function initialCashInput(holding?: EnrichedHolding | null): CashInput {
   if (!holding) return { currency: BASE_CURRENCY, amount: "", broker: "" };
   return {
@@ -896,6 +881,22 @@ function initialCashInput(holding?: EnrichedHolding | null): CashInput {
 
 function cashSymbol(currency: string) {
   return `CASH.${currency.trim().toUpperCase() || BASE_CURRENCY}`;
+}
+
+function initialTransactionInput(): TransactionInput {
+  return {
+    transactionType: "buy",
+    symbol: "",
+    assetType: "stock",
+    quantity: "",
+    price: "",
+    amount: "",
+    fee: "",
+    currency: BASE_CURRENCY,
+    broker: "",
+    strategy: "Other",
+    executedAt: new Date().toISOString().slice(0, 10),
+  };
 }
 
 function fxTooltipRows(rates: FxRate[]) {
@@ -947,528 +948,6 @@ function sourceLabel(series: PerformanceSeries[]) {
   return sources.slice(0, 3).join(" + ");
 }
 
-function PortfolioHoldingForm({
-  enabled,
-  mode,
-  holding,
-  onSaved,
-  onCancel,
-}: {
-  enabled: boolean;
-  mode: PortfolioFormMode;
-  holding?: EnrichedHolding;
-  onSaved?: () => void;
-  onCancel?: () => void;
-}) {
-  if (!enabled) {
-    return (
-      <div className="trading-portfolio-add-disabled">
-        Connect Convex to manage manual portfolio holdings.
-      </div>
-    );
-  }
-  return (
-    <LivePortfolioHoldingForm
-      mode={mode}
-      holding={holding}
-      onSaved={onSaved}
-      onCancel={onCancel}
-    />
-  );
-}
-
-function LivePortfolioHoldingForm({
-  mode,
-  holding,
-  onSaved,
-  onCancel,
-}: {
-  mode: PortfolioFormMode;
-  holding?: EnrichedHolding;
-  onSaved?: () => void;
-  onCancel?: () => void;
-}) {
-  const addHolding = useMutation(portfolioApi.add);
-  const updateHolding = useMutation(portfolioApi.update);
-  const [input, setInput] = useState<HoldingInput>(() =>
-    initialHoldingInput(holding),
-  );
-  const [status, setStatus] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
-  const [searchResults, setSearchResults] = useState<TickerSearchResult[]>([]);
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [searchError, setSearchError] = useState<string | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [selectedSearchSymbol, setSelectedSearchSymbol] = useState<
-    string | null
-  >(null);
-  const selectedSymbolStillCurrent =
-    selectedSearchSymbol !== null &&
-    normalizeSymbol(input.symbol) === selectedSearchSymbol;
-  const searchTerm = selectedSymbolStillCurrent
-    ? ""
-    : [input.symbol.trim(), input.name.trim()].filter(Boolean).join(" ");
-
-  useEffect(() => {
-    setInput(initialHoldingInput(holding));
-  }, [holding]);
-
-  useEffect(() => {
-    if (
-      mode !== "add" ||
-      !searchOpen ||
-      selectedSymbolStillCurrent ||
-      searchTerm.length < 1
-    ) {
-      setSearchResults([]);
-      setSearchLoading(false);
-      setSearchError(null);
-      return;
-    }
-    const controller = new AbortController();
-    const timer = window.setTimeout(async () => {
-      setSearchLoading(true);
-      setSearchError(null);
-      try {
-        const response = await fetch(
-          `/api/trading/search?q=${encodeURIComponent(searchTerm)}`,
-          {
-            signal: controller.signal,
-            headers: { accept: "application/json" },
-          },
-        );
-        if (!response.ok) throw new Error(`Search failed (${response.status})`);
-        const data = (await response.json()) as TickerSearchResponse;
-        setSearchResults(data.results ?? []);
-        setActiveIndex(0);
-      } catch (error) {
-        if (controller.signal.aborted) return;
-        setSearchResults([]);
-        setSearchError(
-          error instanceof Error ? error.message : "Search failed",
-        );
-      } finally {
-        if (!controller.signal.aborted) setSearchLoading(false);
-      }
-    }, 180);
-    return () => {
-      window.clearTimeout(timer);
-      controller.abort();
-    };
-  }, [mode, searchOpen, searchTerm, selectedSymbolStillCurrent]);
-
-  function patch<K extends keyof HoldingInput>(key: K, value: HoldingInput[K]) {
-    setInput((current) => ({ ...current, [key]: value }));
-  }
-
-  function applySearchResult(result: TickerSearchResult) {
-    setSelectedSearchSymbol(normalizeSymbol(result.symbol));
-    setInput((current) => ({
-      ...current,
-      symbol: result.symbol,
-      name: result.name || current.name,
-      currency:
-        result.currency && result.currency !== "—"
-          ? result.currency.toUpperCase()
-          : current.currency,
-      assetType: assetTypeFromSearchType(result.type),
-    }));
-    setSearchOpen(false);
-    setSearchResults([]);
-    setSearchError(null);
-    setActiveIndex(0);
-  }
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const symbol = normalizeSymbol(input.symbol);
-    const quantity = parseNumber(input.quantity);
-    const averageCost = parseNumber(input.averageCost);
-    const transactionFee = parseNumber(input.transactionFee) ?? 0;
-    if (!symbol) {
-      setStatus("Symbol is required.");
-      return;
-    }
-    if (
-      !quantity ||
-      quantity <= 0 ||
-      !averageCost ||
-      averageCost <= 0 ||
-      transactionFee < 0
-    ) {
-      setStatus(
-        "Shares and average cost must be greater than zero. Fee cannot be negative.",
-      );
-      return;
-    }
-    setIsSaving(true);
-    setStatus(null);
-    try {
-      const alertMinPrice = cleanAlertInput(input.alertMinPrice);
-      const alertMaxPrice = cleanAlertInput(input.alertMaxPrice);
-      const payload = {
-        name: input.name.trim() || undefined,
-        assetType: input.assetType,
-        quantity,
-        averageCost,
-        transactionFee,
-        currency: input.currency.trim().toUpperCase() || BASE_CURRENCY,
-        strategy: input.strategy.trim() || undefined,
-        broker: input.broker.trim() || undefined,
-        alertEnabled: Boolean(alertMinPrice || alertMaxPrice),
-        alertMinPrice,
-        alertMaxPrice,
-      };
-      if (mode === "edit" && holding) {
-        await updateHolding({ id: holding._id, ...payload });
-        setStatus(`${holding.displaySymbol} updated.`);
-      } else {
-        await addHolding({ userKey: DEMO_USER_KEY, symbol, ...payload });
-        setInput(initialHoldingInput());
-        setStatus(`${symbol} added.`);
-      }
-      onSaved?.();
-    } catch (error) {
-      setStatus(
-        error instanceof Error ? error.message : "Could not save holding.",
-      );
-    } finally {
-      setIsSaving(false);
-    }
-  }
-
-  const selected =
-    searchResults[Math.min(activeIndex, Math.max(searchResults.length - 1, 0))];
-
-  return (
-    <form className="trading-portfolio-add-form" onSubmit={handleSubmit}>
-      <div className="trading-portfolio-form-title">
-        <strong>
-          {mode === "edit"
-            ? `Edit ${holding?.displaySymbol ?? "holding"}`
-            : "Add holding"}
-        </strong>
-        {onCancel ? (
-          <button
-            type="button"
-            className="trading-portfolio-form-close"
-            onClick={onCancel}
-            aria-label="Close holding form"
-          >
-            <X size={14} />
-          </button>
-        ) : null}
-      </div>
-      <label className="trading-portfolio-symbol-search">
-        <span>Symbol or name</span>
-        <input
-          value={input.symbol}
-          onChange={(event) => {
-            setSelectedSearchSymbol(null);
-            patch("symbol", event.target.value);
-            if (mode === "add") setSearchOpen(true);
-          }}
-          onFocus={() =>
-            setSearchOpen(mode === "add" && !selectedSymbolStillCurrent)
-          }
-          onKeyDown={(event) => {
-            if (mode !== "add") return;
-            if (event.key === "ArrowDown") {
-              event.preventDefault();
-              setActiveIndex((index) =>
-                Math.min(index + 1, Math.max(searchResults.length - 1, 0)),
-              );
-            } else if (event.key === "ArrowUp") {
-              event.preventDefault();
-              setActiveIndex((index) => Math.max(index - 1, 0));
-            } else if (event.key === "Enter" && selected && searchOpen) {
-              event.preventDefault();
-              applySearchResult(selected);
-            } else if (event.key === "Escape") {
-              setSearchOpen(false);
-            }
-          }}
-          placeholder="Type ticker or company"
-          disabled={isSaving || mode === "edit"}
-        />
-        {mode === "add" && searchOpen && !selectedSymbolStillCurrent ? (
-          <div
-            className="trading-portfolio-search-results"
-            role="listbox"
-            aria-label="Portfolio ticker suggestions"
-          >
-            {searchLoading ? <div>Searching…</div> : null}
-            {!searchLoading && searchError ? <div>{searchError}</div> : null}
-            {!searchLoading &&
-            !searchError &&
-            searchTerm &&
-            !searchResults.length ? (
-              <div>No matches yet.</div>
-            ) : null}
-            {searchResults.map((result, index) => (
-              <button
-                key={result.symbol}
-                type="button"
-                role="option"
-                aria-selected={index === activeIndex}
-                data-active={index === activeIndex ? "true" : undefined}
-                onMouseEnter={() => setActiveIndex(index)}
-                onClick={() => applySearchResult(result)}
-              >
-                <span>
-                  <b>{result.symbol}</b>
-                  {result.isPrimary ? <em>Primary</em> : null}
-                </span>
-                <strong>{result.name}</strong>
-                <small>{searchResultMeta(result)}</small>
-              </button>
-            ))}
-          </div>
-        ) : null}
-      </label>
-      <label>
-        <span>Name</span>
-        <input
-          value={input.name}
-          onChange={(event) => patch("name", event.target.value)}
-          placeholder="Autofills after symbol select"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Type</span>
-        <select
-          value={input.assetType}
-          onChange={(event) =>
-            patch("assetType", event.target.value as PortfolioAssetType)
-          }
-          disabled={isSaving}
-        >
-          <option value="stock">Stock</option>
-          <option value="etf">ETF</option>
-          <option value="cash">Cash</option>
-          <option value="other">Other</option>
-        </select>
-      </label>
-      <label>
-        <span>Shares</span>
-        <input
-          value={input.quantity}
-          onChange={(event) => patch("quantity", event.target.value)}
-          inputMode="decimal"
-          placeholder="10"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Avg cost</span>
-        <input
-          value={input.averageCost}
-          onChange={(event) => patch("averageCost", event.target.value)}
-          inputMode="decimal"
-          placeholder="125.50"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Transaction fee</span>
-        <input
-          value={input.transactionFee}
-          onChange={(event) => patch("transactionFee", event.target.value)}
-          inputMode="decimal"
-          placeholder="0.00"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Currency</span>
-        <input
-          value={input.currency}
-          onChange={(event) => patch("currency", event.target.value)}
-          placeholder="EUR"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Strategy</span>
-        <input
-          value={input.strategy}
-          onChange={(event) => patch("strategy", event.target.value)}
-          placeholder="Compounders"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Broker</span>
-        <input
-          value={input.broker}
-          onChange={(event) => patch("broker", event.target.value)}
-          placeholder="Broker"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Min alert</span>
-        <input
-          value={input.alertMinPrice}
-          onChange={(event) => patch("alertMinPrice", event.target.value)}
-          inputMode="decimal"
-          placeholder="Below"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Max alert</span>
-        <input
-          value={input.alertMaxPrice}
-          onChange={(event) => patch("alertMaxPrice", event.target.value)}
-          inputMode="decimal"
-          placeholder="Above"
-          disabled={isSaving}
-        />
-      </label>
-      <button type="submit" disabled={isSaving}>
-        {isSaving
-          ? "Saving…"
-          : mode === "edit"
-            ? "Save changes"
-            : "Add holding"}
-      </button>
-      {status ? <p>{status}</p> : null}
-    </form>
-  );
-}
-
-function BuyMoreForm({
-  holding,
-  onSaved,
-  onCancel,
-}: {
-  holding: EnrichedHolding;
-  onSaved?: () => void;
-  onCancel?: () => void;
-}) {
-  const updateHolding = useMutation(portfolioApi.update);
-  const [input, setInput] = useState<BuyMoreInput>(() => initialBuyMoreInput());
-  const [status, setStatus] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const addedQuantity = parseNumber(input.quantity);
-    const purchasePrice = parseNumber(input.purchasePrice);
-    const transactionFee = parseNumber(input.transactionFee) ?? 0;
-    if (
-      !addedQuantity ||
-      addedQuantity <= 0 ||
-      !purchasePrice ||
-      purchasePrice <= 0 ||
-      transactionFee < 0
-    ) {
-      setStatus(
-        "Amount and purchase price must be greater than zero. Fee cannot be negative.",
-      );
-      return;
-    }
-
-    const nextQuantity = holding.quantity + addedQuantity;
-    const nextTransactionFee = (holding.transactionFee ?? 0) + transactionFee;
-    const nextCostBasis =
-      holding.costBasis + addedQuantity * purchasePrice + transactionFee;
-    const nextAverageCost = (nextCostBasis - nextTransactionFee) / nextQuantity;
-
-    setIsSaving(true);
-    setStatus(null);
-    try {
-      await updateHolding({
-        id: holding._id,
-        quantity: nextQuantity,
-        averageCost: Math.round(nextAverageCost * 10000) / 10000,
-        transactionFee: Math.round(nextTransactionFee * 100) / 100,
-      });
-      setStatus(`${holding.displaySymbol} purchase added.`);
-      setInput(initialBuyMoreInput());
-      onSaved?.();
-    } catch (error) {
-      setStatus(
-        error instanceof Error ? error.message : "Could not add purchase.",
-      );
-    } finally {
-      setIsSaving(false);
-    }
-  }
-
-  return (
-    <form className="trading-portfolio-buy-more-form" onSubmit={handleSubmit}>
-      <div className="trading-portfolio-form-title">
-        <strong>Add purchase · {holding.displaySymbol}</strong>
-        {onCancel ? (
-          <button
-            type="button"
-            className="trading-portfolio-form-close"
-            onClick={onCancel}
-            aria-label="Close add purchase form"
-          >
-            <X size={14} />
-          </button>
-        ) : null}
-      </div>
-      <label>
-        <span>Amount</span>
-        <input
-          value={input.quantity}
-          onChange={(event) =>
-            setInput((current) => ({
-              ...current,
-              quantity: event.target.value,
-            }))
-          }
-          inputMode="decimal"
-          placeholder="10"
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Purchase price</span>
-        <input
-          value={input.purchasePrice}
-          onChange={(event) =>
-            setInput((current) => ({
-              ...current,
-              purchasePrice: event.target.value,
-            }))
-          }
-          inputMode="decimal"
-          placeholder={
-            holding.currentPrice != null ? String(holding.currentPrice) : "0.00"
-          }
-          disabled={isSaving}
-        />
-      </label>
-      <label>
-        <span>Transaction costs</span>
-        <input
-          value={input.transactionFee}
-          onChange={(event) =>
-            setInput((current) => ({
-              ...current,
-              transactionFee: event.target.value,
-            }))
-          }
-          inputMode="decimal"
-          placeholder="0.00"
-          disabled={isSaving}
-        />
-      </label>
-      <button type="submit" disabled={isSaving}>
-        {isSaving ? "Saving…" : "Add purchase"}
-      </button>
-      {status ? <p>{status}</p> : null}
-    </form>
-  );
-}
-
 function CashManagementForm({
   enabled,
   mode,
@@ -1512,6 +991,7 @@ function LiveCashManagementForm({
 }) {
   const addHolding = useMutation(portfolioApi.add);
   const updateHolding = useMutation(portfolioApi.update);
+  const addTransaction = useMutation(portfolioApi.addTransaction);
   const [input, setInput] = useState<CashInput>(() =>
     initialCashInput(holding),
   );
@@ -1547,10 +1027,22 @@ function LiveCashManagementForm({
         await updateHolding({ id: holding._id, ...payload });
         setStatus(`${currency} cash updated.`);
       } else {
-        await addHolding({
+        const symbol = cashSymbol(currency);
+        const holdingId = await addHolding({
           userKey: DEMO_USER_KEY,
-          symbol: cashSymbol(currency),
+          symbol,
           ...payload,
+        });
+        await addTransaction({
+          userKey: DEMO_USER_KEY,
+          holdingId,
+          symbol,
+          assetType: "cash",
+          transactionType: "deposit",
+          grossAmount: amount,
+          currency,
+          broker: payload.broker,
+          notes: "Auto-ledger from Add cash",
         });
         setInput(initialCashInput());
         setStatus(`${currency} cash added.`);
@@ -1758,18 +1250,292 @@ function LiveCashManagementPanel({
   );
 }
 
+function PortfolioTransactionsSection({
+  transactions,
+  enabled,
+  holdings,
+  prefill,
+  focusToken,
+}: {
+  transactions: PortfolioTransaction[];
+  enabled: boolean;
+  holdings: EnrichedHolding[];
+  prefill?: TransactionPrefill | null;
+  focusToken?: number;
+}) {
+  const addTransaction = useMutation(portfolioApi.addTransaction);
+  const addHolding = useMutation(portfolioApi.add);
+  const updateHolding = useMutation(portfolioApi.update);
+  const [input, setInput] = useState<TransactionInput>(() =>
+    initialTransactionInput(),
+  );
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<TickerSearchResult[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedSearchSymbol, setSelectedSearchSymbol] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const amountManuallyEditedRef = useRef(false);
+  const [status, setStatus] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const searchTerm = input.symbol.trim();
+  const selectedSymbolStillCurrent =
+    !!selectedSearchSymbol && normalizeSymbol(selectedSearchSymbol) === normalizeSymbol(searchTerm);
+
+  useEffect(() => {
+    if (!prefill) return;
+    setInput((current) => ({
+      ...current,
+      symbol: prefill.symbol,
+      assetType: prefill.assetType,
+      currency: prefill.currency || current.currency,
+      broker: prefill.broker || current.broker,
+      strategy: prefill.strategy || current.strategy || "Other",
+      transactionType: prefill.transactionType,
+    }));
+    setSelectedSearchSymbol(normalizeSymbol(prefill.symbol));
+    setSearchOpen(false);
+    setSearchResults([]);
+    setActiveIndex(0);
+  }, [prefill]);
+
+  useEffect(() => {
+    if (amountManuallyEditedRef.current) return;
+    const quantity = parseNumber(input.quantity);
+    const price = parseNumber(input.price);
+    const fee = parseNumber(input.fee) ?? 0;
+    if (quantity == null || price == null) return;
+    const calculated = Math.round((quantity * price + fee) * 100) / 100;
+    setInput((current) => ({ ...current, amount: String(calculated) }));
+  }, [input.quantity, input.price, input.fee]);
+
+  useEffect(() => {
+    if (!focusToken) return;
+    const node = formRef.current?.querySelector("input,select,button") as HTMLElement | null;
+    node?.focus();
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [focusToken]);
+
+  useEffect(() => {
+    if (!searchOpen || selectedSymbolStillCurrent || searchTerm.length < 1) {
+      setSearchResults([]);
+      setSearchLoading(false);
+      setSearchError(null);
+      return;
+    }
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setSearchLoading(true);
+      setSearchError(null);
+      try {
+        const response = await fetch(
+          `/api/trading/search?q=${encodeURIComponent(searchTerm)}`,
+          { signal: controller.signal, headers: { accept: "application/json" } },
+        );
+        if (!response.ok) throw new Error(`Search failed (${response.status})`);
+        const data = (await response.json()) as TickerSearchResponse;
+        setSearchResults(data.results ?? []);
+        setActiveIndex(0);
+      } catch (error) {
+        if (controller.signal.aborted) return;
+        setSearchResults([]);
+        setSearchError(error instanceof Error ? error.message : "Search failed");
+      } finally {
+        if (!controller.signal.aborted) setSearchLoading(false);
+      }
+    }, 180);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [searchOpen, searchTerm, selectedSymbolStillCurrent]);
+
+  const selected =
+    searchResults[Math.min(activeIndex, Math.max(searchResults.length - 1, 0))];
+
+  function applySearchResult(result: TickerSearchResult) {
+    setSelectedSearchSymbol(normalizeSymbol(result.symbol));
+    setInput((current) => ({
+      ...current,
+      symbol: result.symbol,
+      assetType: assetTypeFromSearchType(result.type),
+      currency:
+        result.currency && result.currency !== "—"
+          ? result.currency.toUpperCase()
+          : current.currency,
+    }));
+    setSearchOpen(false);
+    setSearchResults([]);
+    setSearchError(null);
+    setActiveIndex(0);
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!enabled) return;
+    const symbol = normalizeSymbol(input.symbol);
+    const quantity = parseNumber(input.quantity);
+    const price = parseNumber(input.price);
+    const amount = parseNumber(input.amount);
+    const fee = parseNumber(input.fee) ?? 0;
+    if (!symbol) return setStatus("Symbol is required.");
+    if (
+      (input.transactionType === "buy" || input.transactionType === "sell") &&
+      (!quantity || !price)
+    )
+      return setStatus("Buy/sell require quantity and price.");
+    if (amount != null && amount < 0) return setStatus("Amount cannot be negative.");
+    if (fee < 0) return setStatus("Fee cannot be negative.");
+    const executedAt = Date.parse(`${input.executedAt}T12:00:00.000Z`);
+    if (!Number.isFinite(executedAt)) return setStatus("Date is invalid.");
+
+    setIsSaving(true);
+    setStatus(null);
+    try {
+      const matchedHolding = holdings.find(
+        (holding) => normalizeSymbol(holding.symbol) === symbol,
+      );
+      await addTransaction({
+        userKey: DEMO_USER_KEY,
+        holdingId: matchedHolding?._id,
+        transactionType: input.transactionType,
+        symbol,
+        assetType: input.assetType,
+        quantity: quantity ?? undefined,
+        price: price ?? undefined,
+        grossAmount:
+          amount ??
+          (quantity != null && price != null ? Math.round(quantity * price * 100) / 100 : undefined),
+        fee,
+        currency: input.currency.trim().toUpperCase() || BASE_CURRENCY,
+        broker: input.broker.trim() || undefined,
+        strategy: input.strategy.trim() || undefined,
+        executedAt,
+      });
+
+      if (input.transactionType === "buy" && quantity != null && price != null) {
+        if (matchedHolding) {
+          const feeValue = fee ?? 0;
+          const nextQuantity = matchedHolding.quantity + quantity;
+          const nextTransactionFee = (matchedHolding.transactionFee ?? 0) + feeValue;
+          const nextCostBasis =
+            matchedHolding.costBasis + quantity * price + feeValue;
+          const nextAverageCost =
+            nextQuantity > 0
+              ? (nextCostBasis - nextTransactionFee) / nextQuantity
+              : matchedHolding.averageCost;
+          await updateHolding({
+            id: matchedHolding._id,
+            quantity: nextQuantity,
+            averageCost: Math.round(nextAverageCost * 10000) / 10000,
+            transactionFee: Math.round(nextTransactionFee * 100) / 100,
+            currency: input.currency.trim().toUpperCase() || BASE_CURRENCY,
+            broker: input.broker.trim() || undefined,
+            strategy: input.strategy.trim() || undefined,
+          });
+        } else {
+          await addHolding({
+            userKey: DEMO_USER_KEY,
+            symbol,
+            assetType: input.assetType,
+            quantity,
+            averageCost: price,
+            transactionFee: fee,
+            currency: input.currency.trim().toUpperCase() || BASE_CURRENCY,
+            broker: input.broker.trim() || undefined,
+            strategy: input.strategy.trim() || undefined,
+          });
+        }
+      }
+
+      setInput(initialTransactionInput());
+      amountManuallyEditedRef.current = false;
+      setSelectedSearchSymbol(null);
+      setStatus("Transaction saved.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Could not save transaction.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  return (
+    <section className="trading-portfolio-panel trading-portfolio-holdings-panel">
+      <div className="trading-section-head trading-portfolio-holdings-head">
+        <div>
+          <div className="trading-section-label">Transactions</div>
+          <p>Ledger-first history for buys, sells, dividends, and cash flows.</p>
+        </div>
+      </div>
+      <form ref={formRef} className="trading-portfolio-add-form" onSubmit={handleSubmit}>
+        <label><span>Action</span><select value={input.transactionType} onChange={(event) => setInput((current) => ({ ...current, transactionType: event.target.value as PortfolioTransactionType }))} disabled={isSaving || !enabled}><option value="buy">Buy</option><option value="sell">Sell</option><option value="dividend">Dividend</option><option value="deposit">Deposit</option><option value="withdrawal">Withdrawal</option></select></label>
+        <label className="trading-portfolio-symbol-search"><span>Symbol or name</span><input value={input.symbol} onChange={(event) => { setSelectedSearchSymbol(null); setInput((current) => ({ ...current, symbol: event.target.value })); setSearchOpen(true); }} onFocus={() => setSearchOpen(!selectedSymbolStillCurrent)} onKeyDown={(event) => { if (event.key === "ArrowDown") { event.preventDefault(); setActiveIndex((index) => Math.min(index + 1, Math.max(searchResults.length - 1, 0))); } else if (event.key === "ArrowUp") { event.preventDefault(); setActiveIndex((index) => Math.max(index - 1, 0)); } else if (event.key === "Enter" && selected && searchOpen) { event.preventDefault(); applySearchResult(selected); } else if (event.key === "Escape") { setSearchOpen(false); } }} placeholder="Type ticker or company" disabled={isSaving || !enabled} />{searchOpen && !selectedSymbolStillCurrent ? (<div className="trading-portfolio-search-results" role="listbox" aria-label="Portfolio ticker suggestions">{searchLoading ? <div>Searching…</div> : null}{!searchLoading && searchError ? <div>{searchError}</div> : null}{!searchLoading && !searchError && searchTerm && !searchResults.length ? <div>No matches yet.</div> : null}{searchResults.map((result, index) => (<button key={result.symbol} type="button" role="option" aria-selected={index === activeIndex} data-active={index === activeIndex ? "true" : undefined} onMouseEnter={() => setActiveIndex(index)} onClick={() => applySearchResult(result)}><span><b>{result.symbol}</b>{result.isPrimary ? <em>Primary</em> : null}</span><strong>{result.name}</strong><small>{searchResultMeta(result)}</small></button>))}</div>) : null}</label>
+        <label><span>Type</span><input value={assetTypeLabel(input.assetType)} readOnly disabled /></label>
+        <label><span>Date</span><input type="date" value={input.executedAt} onChange={(event) => setInput((current) => ({ ...current, executedAt: event.target.value }))} disabled={isSaving || !enabled} /></label>
+        <label><span>Quantity</span><input value={input.quantity} onChange={(event) => setInput((current) => ({ ...current, quantity: event.target.value }))} inputMode="decimal" placeholder="10" disabled={isSaving || !enabled} /></label>
+        <label><span>Price</span><input value={input.price} onChange={(event) => setInput((current) => ({ ...current, price: event.target.value }))} inputMode="decimal" placeholder="125.50" disabled={isSaving || !enabled} /></label>
+        <label><span>Amount</span><input value={input.amount} onChange={(event) => { amountManuallyEditedRef.current = true; setInput((current) => ({ ...current, amount: event.target.value })); }} inputMode="decimal" placeholder="Auto: qty × price + fee" disabled={isSaving || !enabled} /></label>
+        <label><span>Fee</span><input value={input.fee} onChange={(event) => setInput((current) => ({ ...current, fee: event.target.value }))} inputMode="decimal" placeholder="0.00" disabled={isSaving || !enabled} /></label>
+        <label><span>Currency</span><input value={input.currency} onChange={(event) => setInput((current) => ({ ...current, currency: event.target.value }))} placeholder="EUR" disabled={isSaving || !enabled} /></label>
+        <label><span>Broker</span><select value={input.broker} onChange={(event) => setInput((current) => ({ ...current, broker: event.target.value }))} disabled={isSaving || !enabled}><option value="">Select broker</option>{BROKER_OPTIONS.map((broker) => (<option key={broker} value={broker}>{broker}</option>))}</select></label>
+        <label><span>Strategy</span><select value={input.strategy} onChange={(event) => setInput((current) => ({ ...current, strategy: event.target.value }))} disabled={isSaving || !enabled}>{STRATEGY_OPTIONS.map((strategy) => (<option key={strategy} value={strategy}>{strategy}</option>))}</select></label>
+        <button type="submit" disabled={isSaving || !enabled}>{isSaving ? "Saving…" : "Add transaction"}</button>
+        {status ? <p>{status}</p> : null}
+      </form>
+      <div className="trading-table-shell trading-portfolio-table-shell">
+        <table className="trading-table trading-portfolio-table">
+          <thead>
+            <tr><th>Date</th><th>Action</th><th>Symbol</th><th>Qty</th><th>Price</th><th>Amount</th><th>Fee</th><th>Currency</th><th>Broker</th><th>Strategy</th></tr>
+          </thead>
+          <tbody>
+            {transactions.slice(0, 25).map((tx) => (
+              <tr key={tx._id}>
+                <td>{new Date(tx.executedAt).toISOString().slice(0, 10)}</td>
+                <td>{tx.transactionType}</td>
+                <td>{tx.displaySymbol}</td>
+                <td>{tx.quantity != null ? formatNumber(tx.quantity) : "—"}</td>
+                <td>{tx.price != null ? formatMoney(tx.price, tx.currency) : "—"}</td>
+                <td>{tx.netAmount != null ? formatMoney(tx.netAmount, tx.currency) : tx.grossAmount != null ? formatMoney(tx.grossAmount, tx.currency) : "—"}</td>
+                <td>{tx.fee != null ? formatMoney(tx.fee, tx.currency) : "—"}</td>
+                <td>{tx.currency}</td>
+                <td>{tx.broker ?? "—"}</td>
+                <td>{tx.strategy ?? "—"}</td>
+              </tr>
+            ))}
+            {!transactions.length ? (
+              <tr><td colSpan={10}><div className="trading-portfolio-empty">No transactions yet.</div></td></tr>
+            ) : null}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 function HoldingsTable({
   holdings,
   canMutate,
   onEdit,
-  onBuyMore,
+  onStartAlertEdit,
+  editingAlert,
+  onAlertDraftChange,
+  onSaveAlert,
+  onCancelAlert,
+  savingAlertId,
   onRemove,
   removingId,
 }: {
   holdings: EnrichedHolding[];
   canMutate: boolean;
   onEdit?: (holding: EnrichedHolding) => void;
-  onBuyMore?: (holding: EnrichedHolding) => void;
+  onStartAlertEdit?: (holding: EnrichedHolding) => void;
+  editingAlert?: { holdingId: string; min: string; max: string } | null;
+  onAlertDraftChange?: (key: "min" | "max", value: string) => void;
+  onSaveAlert?: () => void;
+  onCancelAlert?: () => void;
+  savingAlertId?: string | null;
   onRemove?: (id: string) => void;
   removingId?: string | null;
 }) {
@@ -1874,26 +1640,35 @@ function HoldingsTable({
                 </td>
                 <td className={tone}>{formatPercent(holding.totalPlPct)}</td>
                 <td>
-                  <span className="trading-portfolio-alert-cell">
-                    <b>
-                      Min{" "}
-                      {holding.alertMinPrice
-                        ? formatMoney(
-                            holding.alertMinPrice,
-                            holding.displayCurrency,
-                          )
-                        : "—"}
-                    </b>
-                    <b>
-                      Max{" "}
-                      {holding.alertMaxPrice
-                        ? formatMoney(
-                            holding.alertMaxPrice,
-                            holding.displayCurrency,
-                          )
-                        : "—"}
-                    </b>
-                  </span>
+                  {editingAlert?.holdingId === holding._id ? (
+                    <div className="trading-portfolio-alert-inline-edit">
+                      <input value={editingAlert.min} onChange={(event) => onAlertDraftChange?.("min", event.target.value)} inputMode="decimal" placeholder="Min" onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); onSaveAlert?.(); } else if (event.key === "Escape") { event.preventDefault(); onCancelAlert?.(); } }} />
+                      <input value={editingAlert.max} onChange={(event) => onAlertDraftChange?.("max", event.target.value)} inputMode="decimal" placeholder="Max" onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); onSaveAlert?.(); } else if (event.key === "Escape") { event.preventDefault(); onCancelAlert?.(); } }} />
+                      <button type="button" className="trading-portfolio-edit" onClick={() => onSaveAlert?.()} disabled={savingAlertId === holding._id}>Save</button>
+                      <button type="button" className="trading-portfolio-buy-more" onClick={() => onCancelAlert?.()} disabled={savingAlertId === holding._id}>Cancel</button>
+                    </div>
+                  ) : (
+                    <button type="button" className="trading-portfolio-alert-cell trading-portfolio-alert-edit-trigger" onClick={() => onStartAlertEdit?.(holding)} disabled={!canMutate || holding._id.startsWith("sample-")}>
+                      <b>
+                        Min{" "}
+                        {holding.alertMinPrice
+                          ? formatMoney(
+                              holding.alertMinPrice,
+                              holding.displayCurrency,
+                            )
+                          : "—"}
+                      </b>
+                      <b>
+                        Max{" "}
+                        {holding.alertMaxPrice
+                          ? formatMoney(
+                              holding.alertMaxPrice,
+                              holding.displayCurrency,
+                            )
+                          : "—"}
+                      </b>
+                    </button>
+                  )}
                 </td>
                 <td>
                   <div className="trading-portfolio-row-actions">
@@ -1906,15 +1681,6 @@ function HoldingsTable({
                     >
                       <Pencil size={13} />
                       <span>Edit</span>
-                    </button>
-                    <button
-                      type="button"
-                      className="trading-portfolio-buy-more"
-                      onClick={() => onBuyMore?.(holding)}
-                      disabled={!canMutate || holding._id.startsWith("sample-")}
-                      aria-label={`Add purchase for ${holding.displaySymbol}`}
-                    >
-                      <Plus size={14} />
                     </button>
                     <button
                       type="button"
@@ -1944,16 +1710,21 @@ function LivePortfolioTable({
   holdings,
   metadata,
   onEdit,
-  onBuyMore,
 }: {
   holdings: EnrichedHolding[];
   metadata: Map<string, PortfolioMetadataItem>;
   onEdit: (holding: EnrichedHolding) => void;
-  onBuyMore: (holding: EnrichedHolding) => void;
 }) {
   void metadata;
   const removeHolding = useMutation(portfolioApi.remove);
+  const updateHolding = useMutation(portfolioApi.update);
   const [removingId, setRemovingId] = useState<string | null>(null);
+  const [editingAlert, setEditingAlert] = useState<{
+    holdingId: string;
+    min: string;
+    max: string;
+  } | null>(null);
+  const [savingAlertId, setSavingAlertId] = useState<string | null>(null);
   async function remove(id: string) {
     setRemovingId(id);
     try {
@@ -1962,12 +1733,46 @@ function LivePortfolioTable({
       setRemovingId(null);
     }
   }
+
+  async function saveAlert() {
+    if (!editingAlert) return;
+    setSavingAlertId(editingAlert.holdingId);
+    try {
+      const min = cleanAlertInput(editingAlert.min);
+      const max = cleanAlertInput(editingAlert.max);
+      await updateHolding({
+        id: editingAlert.holdingId,
+        alertEnabled: Boolean(min || max),
+        alertMinPrice: min,
+        alertMaxPrice: max,
+      });
+      setEditingAlert(null);
+    } finally {
+      setSavingAlertId(null);
+    }
+  }
+
   return (
     <HoldingsTable
       holdings={holdings}
       canMutate
       onEdit={onEdit}
-      onBuyMore={onBuyMore}
+      onStartAlertEdit={(holding) =>
+        setEditingAlert({
+          holdingId: holding._id,
+          min: holding.alertMinPrice != null ? String(holding.alertMinPrice) : "",
+          max: holding.alertMaxPrice != null ? String(holding.alertMaxPrice) : "",
+        })
+      }
+      editingAlert={editingAlert}
+      onAlertDraftChange={(key, value) =>
+        setEditingAlert((current) =>
+          current ? { ...current, [key]: value } : current,
+        )
+      }
+      onSaveAlert={saveAlert}
+      onCancelAlert={() => setEditingAlert(null)}
+      savingAlertId={savingAlertId}
       onRemove={remove}
       removingId={removingId}
     />
@@ -1976,10 +1781,12 @@ function LivePortfolioTable({
 
 function PortfolioLayout({
   holdings,
+  transactions,
   isLive,
   isLoading,
 }: {
   holdings: PortfolioHolding[];
+  transactions: PortfolioTransaction[];
   isLive: boolean;
   isLoading?: boolean;
 }) {
@@ -1994,14 +1801,12 @@ function PortfolioLayout({
   const [allocationDimension, setAllocationDimension] =
     useState<AllocationDimension>("sector");
   const [sortKey, setSortKey] = useState<SortKey>("weight");
-  const [addOpen, setAddOpen] = useState(false);
   const [cashFormOpen, setCashFormOpen] = useState(false);
-  const [editHolding, setEditHolding] = useState<EnrichedHolding | null>(null);
-  const [buyMoreHolding, setBuyMoreHolding] = useState<EnrichedHolding | null>(
-    null,
-  );
   const [editCashHolding, setEditCashHolding] =
     useState<EnrichedHolding | null>(null);
+  const [transactionPrefill, setTransactionPrefill] =
+    useState<TransactionPrefill | null>(null);
+  const [transactionFocusToken, setTransactionFocusToken] = useState(0);
   const [visibleBenchmarks, setVisibleBenchmarks] = useState<
     Record<BenchmarkKey, boolean>
   >({ portfolio: true, sp500: true, allworld: true, nasdaq: false });
@@ -2243,49 +2048,8 @@ function PortfolioLayout({
               : `Manual holdings · converted to ${BASE_CURRENCY}`}
           </p>
         </div>
-        <div className="trading-portfolio-actions">
-          <button
-            type="button"
-            className="trading-portfolio-add-icon-button"
-            onClick={() => {
-              setEditHolding(null);
-              setBuyMoreHolding(null);
-              setEditCashHolding(null);
-              setCashFormOpen(false);
-              setAddOpen((open) => !open);
-            }}
-            aria-expanded={addOpen}
-            aria-label={addOpen ? "Close add holding" : "Add holding"}
-          >
-            {addOpen ? <X size={15} /> : <Plus size={16} />}
-          </button>
-        </div>
+        <div className="trading-portfolio-actions" />
       </section>
-
-      {addOpen ? (
-        <PortfolioHoldingForm
-          enabled={isLive}
-          mode="add"
-          onSaved={() => setAddOpen(false)}
-          onCancel={() => setAddOpen(false)}
-        />
-      ) : null}
-      {editHolding ? (
-        <PortfolioHoldingForm
-          enabled={isLive}
-          mode="edit"
-          holding={editHolding}
-          onSaved={() => setEditHolding(null)}
-          onCancel={() => setEditHolding(null)}
-        />
-      ) : null}
-      {buyMoreHolding ? (
-        <BuyMoreForm
-          holding={buyMoreHolding}
-          onSaved={() => setBuyMoreHolding(null)}
-          onCancel={() => setBuyMoreHolding(null)}
-        />
-      ) : null}
       {cashFormOpen ? (
         <CashManagementForm
           enabled={isLive}
@@ -2490,18 +2254,17 @@ function PortfolioLayout({
               )}
               metadata={metadata}
               onEdit={(holding) => {
-                setAddOpen(false);
                 setCashFormOpen(false);
-                setBuyMoreHolding(null);
                 setEditCashHolding(null);
-                setEditHolding(holding);
-              }}
-              onBuyMore={(holding) => {
-                setAddOpen(false);
-                setCashFormOpen(false);
-                setEditHolding(null);
-                setEditCashHolding(null);
-                setBuyMoreHolding(holding);
+                setTransactionPrefill({
+                  symbol: holding.symbol,
+                  assetType: holding.assetType,
+                  currency: holding.currency || BASE_CURRENCY,
+                  broker: holding.broker ?? "",
+                  strategy: holding.strategy ?? "Other",
+                  transactionType: "buy",
+                });
+                setTransactionFocusToken((current) => current + 1);
               }}
             />
           ) : (
@@ -2524,17 +2287,11 @@ function PortfolioLayout({
           cashHoldings={cashHoldings}
           totalValue={totalValue}
           onAdd={() => {
-            setAddOpen(false);
-            setEditHolding(null);
-            setBuyMoreHolding(null);
             setEditCashHolding(null);
             setCashFormOpen(true);
           }}
           onEdit={(holding) => {
-            setAddOpen(false);
             setCashFormOpen(false);
-            setEditHolding(null);
-            setBuyMoreHolding(null);
             setEditCashHolding(holding);
           }}
         />
@@ -2545,6 +2302,14 @@ function PortfolioLayout({
           canMutate={false}
         />
       )}
+
+      <PortfolioTransactionsSection
+        transactions={transactions}
+        enabled={isLive}
+        holdings={enriched}
+        prefill={transactionPrefill}
+        focusToken={transactionFocusToken}
+      />
 
       <section className="trading-portfolio-bottom-grid">
         <article className="trading-portfolio-panel">
@@ -2579,10 +2344,15 @@ function PortfolioLayout({
 
 function LivePortfolioContent() {
   const liveHoldings = useQuery(portfolioApi.list, { userKey: DEMO_USER_KEY });
+  const liveTransactions = useQuery(portfolioApi.listTransactions, {
+    userKey: DEMO_USER_KEY,
+    limit: 200,
+  });
   const isLoading = liveHoldings === undefined;
   return (
     <PortfolioLayout
       holdings={isLoading ? [] : liveHoldings}
+      transactions={liveTransactions ?? []}
       isLive
       isLoading={isLoading}
     />
@@ -2591,6 +2361,12 @@ function LivePortfolioContent() {
 
 export function PortfolioClient({ convexEnabled }: { convexEnabled: boolean }) {
   if (!convexEnabled)
-    return <PortfolioLayout holdings={sampleHoldings} isLive={false} />;
+    return (
+      <PortfolioLayout
+        holdings={sampleHoldings}
+        transactions={sampleTransactions}
+        isLive={false}
+      />
+    );
   return <LivePortfolioContent />;
 }

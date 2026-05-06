@@ -29,6 +29,40 @@ type PortfolioHoldingDocument = {
   updatedAt: number;
 };
 
+type PortfolioTransactionType =
+  | "buy"
+  | "sell"
+  | "dividend"
+  | "deposit"
+  | "withdrawal"
+  | "fee"
+  | "adjustment";
+
+type PortfolioTransactionDocument = {
+  _id: string;
+  userKey: string;
+  holdingId?: string;
+  symbol: string;
+  displaySymbol: string;
+  assetType: "stock" | "etf" | "cash" | "other";
+  transactionType: PortfolioTransactionType;
+  executedAt: number;
+  quantity?: number;
+  price?: number;
+  fee?: number;
+  grossAmount?: number;
+  netAmount?: number;
+  currency: string;
+  baseCurrency: string;
+  fxRateToBase?: number;
+  baseAmount?: number;
+  broker?: string;
+  account?: string;
+  notes?: string;
+  createdAt: number;
+  updatedAt: number;
+};
+
 type IndexBuilder = { eq(field: string, value: unknown): IndexBuilder };
 type PortfolioHoldingQuery = {
   withIndex(
@@ -41,6 +75,16 @@ type PortfolioHoldingQuery = {
 };
 type PortfolioDb = {
   query(tableName: "portfolioHoldings"): PortfolioHoldingQuery;
+  query(tableName: "portfolioTransactions"): {
+    withIndex(
+      name: string,
+      range: (q: IndexBuilder) => IndexBuilder,
+    ): {
+      order(direction: "asc" | "desc"): {
+        collect(): Promise<PortfolioTransactionDocument[]>;
+      };
+    };
+  };
 };
 type PortfolioCtx = { db: PortfolioDb };
 
@@ -60,6 +104,17 @@ function cleanPositiveNumber(value: number | null | undefined) {
 
 function cleanOptionalText(value: string | undefined) {
   return value?.trim() || undefined;
+}
+
+function cleanNonNegativeNumber(value: number | null | undefined) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0)
+    return undefined;
+  return Math.round(value * 10000) / 10000;
+}
+
+function cleanTimestamp(value: number | undefined) {
+  if (!value || !Number.isFinite(value) || value <= 0) return Date.now();
+  return Math.round(value);
 }
 
 function cleanAssetType(
@@ -311,5 +366,116 @@ export const remove = mutationGeneric({
   args: { id: v.id("portfolioHoldings") },
   handler: async (ctx, args) => {
     await ctx.db.delete(args.id);
+  },
+});
+
+export const listTransactions = queryGeneric({
+  args: { userKey: v.optional(v.string()), limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const userKey = args.userKey ?? DEMO_USER_KEY;
+    const limit =
+      typeof args.limit === "number" && Number.isFinite(args.limit)
+        ? Math.max(1, Math.min(500, Math.round(args.limit)))
+        : 150;
+    const all = await ctx.db
+      .query("portfolioTransactions")
+      .withIndex("by_user_executed", (q) => q.eq("userKey", userKey))
+      .order("desc")
+      .collect();
+    return all.slice(0, limit);
+  },
+});
+
+export const addTransaction = mutationGeneric({
+  args: {
+    userKey: v.optional(v.string()),
+    holdingId: v.optional(v.id("portfolioHoldings")),
+    symbol: v.string(),
+    assetType: v.optional(
+      v.union(
+        v.literal("stock"),
+        v.literal("etf"),
+        v.literal("cash"),
+        v.literal("other"),
+      ),
+    ),
+    transactionType: v.union(
+      v.literal("buy"),
+      v.literal("sell"),
+      v.literal("dividend"),
+      v.literal("deposit"),
+      v.literal("withdrawal"),
+      v.literal("fee"),
+      v.literal("adjustment"),
+    ),
+    executedAt: v.optional(v.number()),
+    quantity: v.optional(v.number()),
+    price: v.optional(v.number()),
+    fee: v.optional(v.number()),
+    grossAmount: v.optional(v.number()),
+    netAmount: v.optional(v.number()),
+    currency: v.optional(v.string()),
+    baseCurrency: v.optional(v.string()),
+    fxRateToBase: v.optional(v.number()),
+    broker: v.optional(v.string()),
+    strategy: v.optional(v.string()),
+    account: v.optional(v.string()),
+    notes: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const userKey = args.userKey ?? DEMO_USER_KEY;
+    const symbol = normalizeSymbol(args.symbol);
+    if (!symbol) throw new Error("Transaction symbol is required");
+    const quantity = cleanPositiveNumber(args.quantity);
+    const price = cleanPositiveNumber(args.price);
+    const fee = cleanNonNegativeNumber(args.fee);
+    const grossAmount = cleanPositiveNumber(args.grossAmount);
+    const netAmount = cleanNonNegativeNumber(args.netAmount);
+    if ((args.transactionType === "buy" || args.transactionType === "sell") && !quantity)
+      throw new Error("Quantity is required for buy/sell transactions");
+    if ((args.transactionType === "buy" || args.transactionType === "sell") && !price)
+      throw new Error("Price is required for buy/sell transactions");
+
+    const fxRateToBase = cleanPositiveNumber(args.fxRateToBase) ?? 1;
+    const resolvedNetAmount =
+      netAmount ??
+      (grossAmount !== undefined
+        ? Math.round(
+            ((args.transactionType === "buy" || args.transactionType === "withdrawal" || args.transactionType === "fee"
+              ? grossAmount + (fee ?? 0)
+              : grossAmount - (fee ?? 0)) + Number.EPSILON) * 100,
+          ) / 100
+        : undefined);
+
+    const now = Date.now();
+    const baseAmount =
+      resolvedNetAmount !== undefined
+        ? Math.round(resolvedNetAmount * fxRateToBase * 100) / 100
+        : undefined;
+
+    return await ctx.db.insert("portfolioTransactions", {
+      userKey,
+      holdingId: args.holdingId,
+      symbol,
+      displaySymbol: displaySymbol(symbol),
+      assetType: cleanAssetType(args.assetType),
+      transactionType: args.transactionType,
+      executedAt: cleanTimestamp(args.executedAt),
+      quantity,
+      price,
+      fee: fee != null ? Math.round(fee * 100) / 100 : undefined,
+      grossAmount: grossAmount != null ? Math.round(grossAmount * 100) / 100 : undefined,
+      netAmount: resolvedNetAmount,
+      currency: cleanOptionalText(args.currency)?.toUpperCase() ?? "USD",
+      baseCurrency: cleanOptionalText(args.baseCurrency)?.toUpperCase() ?? "EUR",
+      fxRateToBase,
+      baseAmount,
+      broker: cleanOptionalText(args.broker),
+      strategy: cleanOptionalText(args.strategy),
+      account: cleanOptionalText(args.account),
+      notes: cleanOptionalText(args.notes),
+      createdAt: now,
+      updatedAt: now,
+    });
   },
 });

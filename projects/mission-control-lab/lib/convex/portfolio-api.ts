@@ -29,6 +29,42 @@ export type PortfolioHolding = {
   updatedAt: number;
 };
 
+export type PortfolioTransactionType =
+  | "buy"
+  | "sell"
+  | "dividend"
+  | "deposit"
+  | "withdrawal"
+  | "fee"
+  | "adjustment";
+
+export type PortfolioTransaction = {
+  _id: string;
+  _creationTime?: number;
+  userKey: string;
+  holdingId?: string;
+  symbol: string;
+  displaySymbol: string;
+  assetType: PortfolioAssetType;
+  transactionType: PortfolioTransactionType;
+  executedAt: number;
+  quantity?: number;
+  price?: number;
+  fee?: number;
+  grossAmount?: number;
+  netAmount?: number;
+  currency: string;
+  baseCurrency: string;
+  fxRateToBase?: number;
+  baseAmount?: number;
+  broker?: string;
+  strategy?: string;
+  account?: string;
+  notes?: string;
+  createdAt: number;
+  updatedAt: number;
+};
+
 export const portfolioApi = {
   list: makeFunctionReference<
     "query",
@@ -84,4 +120,33 @@ export const portfolioApi = {
   remove: makeFunctionReference<"mutation", { id: string }, void>(
     "portfolio:remove",
   ),
+  listTransactions: makeFunctionReference<
+    "query",
+    { userKey?: string; limit?: number },
+    PortfolioTransaction[]
+  >("portfolio:listTransactions"),
+  addTransaction: makeFunctionReference<
+    "mutation",
+    {
+      userKey?: string;
+      holdingId?: string;
+      symbol: string;
+      assetType?: PortfolioAssetType;
+      transactionType: PortfolioTransactionType;
+      executedAt?: number;
+      quantity?: number;
+      price?: number;
+      fee?: number;
+      grossAmount?: number;
+      netAmount?: number;
+      currency?: string;
+      baseCurrency?: string;
+      fxRateToBase?: number;
+      broker?: string;
+      strategy?: string;
+      account?: string;
+      notes?: string;
+    },
+    string
+  >("portfolio:addTransaction"),
 } as const;

@@ -76,4 +76,44 @@ export default defineSchema({
   })
     .index("by_user_sort", ["userKey", "sortOrder"])
     .index("by_user_symbol", ["userKey", "symbol"]),
+
+  portfolioTransactions: defineTable({
+    userKey: v.string(),
+    holdingId: v.optional(v.id("portfolioHoldings")),
+    symbol: v.string(),
+    displaySymbol: v.string(),
+    assetType: v.union(
+      v.literal("stock"),
+      v.literal("etf"),
+      v.literal("cash"),
+      v.literal("other"),
+    ),
+    transactionType: v.union(
+      v.literal("buy"),
+      v.literal("sell"),
+      v.literal("dividend"),
+      v.literal("deposit"),
+      v.literal("withdrawal"),
+      v.literal("fee"),
+      v.literal("adjustment"),
+    ),
+    executedAt: v.number(),
+    quantity: v.optional(v.number()),
+    price: v.optional(v.number()),
+    fee: v.optional(v.number()),
+    grossAmount: v.optional(v.number()),
+    netAmount: v.optional(v.number()),
+    currency: v.string(),
+    baseCurrency: v.string(),
+    fxRateToBase: v.optional(v.number()),
+    baseAmount: v.optional(v.number()),
+    broker: v.optional(v.string()),
+    strategy: v.optional(v.string()),
+    account: v.optional(v.string()),
+    notes: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_user_executed", ["userKey", "executedAt"])
+    .index("by_user_symbol_executed", ["userKey", "symbol", "executedAt"]),
 });
