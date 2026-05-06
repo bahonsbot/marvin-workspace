@@ -334,6 +334,10 @@ function parseNumber(value: string | number | undefined | null) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function roundMoney(value: number) {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
 function formatMoney(value: number, currency = BASE_CURRENCY) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -1469,6 +1473,8 @@ function PortfolioTransactionsSection({
     const price = parseNumber(input.price);
     const amount = parseNumber(input.amount);
     const fee = parseNumber(input.fee) ?? 0;
+    const tradeAmount =
+      quantity != null && price != null ? roundMoney(quantity * price) : undefined;
     if (!symbol) return setStatus("Symbol is required.");
     if (
       (input.transactionType === "buy" || input.transactionType === "sell") &&
@@ -1517,11 +1523,8 @@ function PortfolioTransactionsSection({
           assetType: input.assetType,
           quantity: quantity ?? undefined,
           price: price ?? undefined,
-          grossAmount:
-            amount ??
-            (quantity != null && price != null
-              ? Math.round(quantity * price * 100) / 100
-              : undefined),
+          grossAmount: tradeAmount,
+          netAmount: amount ?? (tradeAmount != null ? roundMoney(tradeAmount + fee) : undefined),
           fee,
           currency,
           broker,
@@ -1551,9 +1554,8 @@ function PortfolioTransactionsSection({
         assetType: input.assetType,
         quantity: quantity ?? undefined,
         price: price ?? undefined,
-        grossAmount:
-          amount ??
-          (quantity != null && price != null ? Math.round(quantity * price * 100) / 100 : undefined),
+        grossAmount: tradeAmount,
+        netAmount: amount ?? (tradeAmount != null ? roundMoney(tradeAmount + fee) : undefined),
         fee,
         currency,
         broker,
