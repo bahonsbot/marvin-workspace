@@ -6100,3 +6100,22 @@
   color: rgba(34, 48, 41, 0.56);
   font-size: 12px;
 }
+
+:global(.trading-analytics-command) {
+  position: relative;
+  z-index: 12;
+  overflow: visible;
+}
+
+:global(.trading-analytics-command:focus-within) {
+  z-index: 80;
+}
+
+:global(.trading-analytics-symbol-field),
+:global(.trading-analytics-symbol-search) {
+  z-index: 85;
+}
+
+:global(.trading-analytics-symbol-results) {
+  z-index: 120;
+}

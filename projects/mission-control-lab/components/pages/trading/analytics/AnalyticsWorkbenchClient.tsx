@@ -318,7 +318,7 @@ export function AnalyticsWorkbenchClient() {
 
   return (
     <div className="trading-analytics-workbench">
-      <section className="trading-analytics-command" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+      <section className="trading-analytics-command" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none', overflow: 'visible' })}>
         <div>
           <div className="trading-section-label">Analyze a ticker</div>
           <h2>From symbol to fair-value range.</h2>
