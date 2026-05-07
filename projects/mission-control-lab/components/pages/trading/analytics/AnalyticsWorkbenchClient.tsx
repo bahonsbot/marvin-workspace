@@ -137,7 +137,7 @@ export function AnalyticsWorkbenchClient() {
   const currency = selected?.currency && selected.currency !== '—' ? selected.currency : 'USD';
   const selectedResult = searchResults[Math.min(activeResultIndex, Math.max(searchResults.length - 1, 0))];
   const showSearchPanel = searchOpen && Boolean(trimmedQuery) && (searchLoading || searchError || searchResults.length > 0);
-  const valuationReady = valuation.status === 'ready' || valuation.status === 'unavailable';
+  const valuationReady = valuation.status === 'ready';
 
   const verdictLabel = useMemo(() => {
     if (valuation.status === 'generating') return 'Generating…';
@@ -229,7 +229,7 @@ export function AnalyticsWorkbenchClient() {
     const match = selected?.symbol === query.trim().toUpperCase() ? selected : await validateTicker();
     if (!match) return;
     setError(null);
-    setValuation((current) => ({ ...current, status: 'generating', selected: match, message: `Generating Quick Valuation for ${match.symbol}…` }));
+    setValuation({ ...initialValuation, status: 'generating', selected: match, currentPrice: match.previousClose, message: `Generating Quick Valuation for ${match.symbol}…` });
     try {
       const response = await fetch('/api/trading/valuation/quick', {
         method: 'POST',
@@ -267,7 +267,7 @@ export function AnalyticsWorkbenchClient() {
                 onChange={(event) => {
                   setQuery(event.target.value.toUpperCase());
                   setSearchOpen(true);
-                  setValuation((current) => ({ ...current, selected: null }));
+                  setValuation({ ...initialValuation, message: 'Choose a ticker result, then generate Quick Valuation.', selected: null });
                 }}
                 onFocus={() => setSearchOpen(true)}
                 onKeyDown={(event) => {

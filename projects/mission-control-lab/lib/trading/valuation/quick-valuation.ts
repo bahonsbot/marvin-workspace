@@ -153,6 +153,29 @@ function chartSeriesFromRange(low: number | null, base: number | null, high: num
   return [spot * 0.92, spot * 0.97, low, (low + base) / 2, base, (base + high) / 2, high].map((value) => Math.max(value, 1));
 }
 
+function flatSeries(anchor: number | null) {
+  const value = anchor && Number.isFinite(anchor) ? anchor : 100;
+  return Array.from({ length: 7 }, () => value);
+}
+
+function pendingSubmodels(reason: string): ValuationSubmodel[] {
+  return [
+    { key: 'dcfProxy', label: 'DCF proxy', weight: SUBMODEL_WEIGHTS.dcfProxy, value: null, low: null, high: null, confidence: 'Low', assumptions: {}, notes: [reason] },
+    { key: 'multiples', label: 'Multiples check', weight: SUBMODEL_WEIGHTS.multiples, value: null, low: null, high: null, confidence: 'Low', assumptions: {}, notes: [reason] },
+    { key: 'reverseDcf', label: 'Reverse DCF', weight: SUBMODEL_WEIGHTS.reverseDcf, value: null, low: null, high: null, confidence: 'Low', assumptions: {}, notes: [reason] },
+    { key: 'qualityRisk', label: 'Quality/risk overlay', weight: SUBMODEL_WEIGHTS.qualityRisk, value: null, low: null, high: null, confidence: 'Low', assumptions: {}, notes: [reason] },
+  ];
+}
+
+function pendingMethods(reason: string): ValuationModel[] {
+  return [
+    { name: 'DCF proxy', key: 'dcfProxy', range: 'Pending', weight: '40%', note: reason },
+    { name: 'Multiples check', key: 'multiples', range: 'Pending', weight: '25%', note: reason },
+    { name: 'Reverse DCF', key: 'reverseDcf', range: 'Pending', weight: '20%', note: reason },
+    { name: 'Quality/risk overlay', key: 'qualityRisk', range: 'Pending', weight: '15%', note: reason },
+  ];
+}
+
 function weightedBlend(submodels: ValuationSubmodel[]) {
   const usable = submodels.filter((model) => model.value != null && Number.isFinite(model.value));
   const totalWeight = usable.reduce((sum, model) => sum + model.weight, 0);
@@ -327,6 +350,54 @@ export function buildQuickValuation(input: {
   const roic = latestValue(summary.quality.roic);
   const revenueCagr = trendCagr(statementMetric(summary, 'Total Revenue'));
   const netIncomeCagr = trendCagr(statementMetric(summary, 'Net Income Common Stockholders'));
+
+  if (!ok) {
+    const unavailableReason = reason || summary.notes[0] || 'DefeatBeta coverage unavailable.';
+    return {
+      status: 'unavailable',
+      message: unavailableReason,
+      selected,
+      summary,
+      fairLow: null,
+      fairHigh: null,
+      baseValue: null,
+      currentPrice,
+      impliedUpside: null,
+      confidence: 'Low',
+      decisionZone: 'Needs analytics data',
+      methods: pendingMethods(unavailableReason),
+      evidence: [
+        ['Provider status', unavailableReason],
+        ['Coverage', 'Unavailable'],
+        ['Current price', currentPrice != null ? formatCurrency(currentPrice, currency) : 'No quote anchor supplied'],
+        ['Model state', 'No fair-value range calculated without analytics coverage'],
+      ],
+      valuationSeries: flatSeries(currentPrice),
+      benchmarkSeries: fallbackBenchmarkSeries,
+      riskSeries: fallbackRiskSeries,
+      submodels: pendingSubmodels(unavailableReason),
+      assumptions: {
+        modelVersion: 'quick-valuation-submodels-v1',
+        modelType: 'submodel-proxy',
+        currency,
+        revenueCagr,
+        netIncomeCagr,
+        latestPe: pe,
+        latestPs: ps,
+        latestPb: pb,
+        latestWacc: wacc,
+        latestRoe: roe,
+        latestRoic: roic,
+        dcfValue: null,
+        multiplesValue: null,
+        reverseDcfValue: null,
+        qualityRiskValue: null,
+        qualityAdjustment: 0,
+        riskPenalty: 0,
+        confidenceSpread: 0,
+      },
+    };
+  }
 
   const dcfModel = buildDcfProxy({ currentPrice, revenueCagr, netIncomeCagr, wacc, coverage: summary.coverage.statements });
   const multiplesModel = buildMultiplesModel({ currentPrice, pe, ps, pb, revenueCagr, coverage: summary.coverage.ratios });
