@@ -1,0 +1,6 @@
+.venv/
+.python-packages/
+.cache/
+.duckdb/
+reports/*.json
+reports/*.log
