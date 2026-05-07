@@ -416,6 +416,15 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("trading-portfolio-buy-more-form", styles)
         self.assertIn("trading-portfolio-holding-cell", styles)
 
+    def test_portfolio_closed_positions_include_trade_fee_values(self) -> None:
+        portfolio = read_source("portfolio_client")
+
+        self.assertIn("function transactionFeeValue", portfolio)
+        self.assertIn("function tradeNativeValue", portfolio)
+        self.assertIn("current.fees += fee", portfolio)
+        self.assertIn("side === \"buy\" ? gross + fee : Math.max(0, gross - fee)", portfolio)
+        self.assertIn("<th>Fees</th>", portfolio)
+
     def test_portfolio_polish_keeps_search_edit_fee_flow(self) -> None:
         portfolio = read_source("portfolio_client")
         convex_portfolio = read_source("portfolio_convex")

@@ -2423,6 +2423,17 @@ function transactionNativeValue(tx: ClosedPositionsInputTx) {
   return tx.netAmount ?? tx.grossAmount ?? 0;
 }
 
+function transactionFeeValue(tx: ClosedPositionsInputTx) {
+  return Math.abs(tx.fee ?? 0);
+}
+
+function tradeNativeValue(tx: ClosedPositionsInputTx, side: "buy" | "sell") {
+  if (tx.netAmount != null) return Math.abs(tx.netAmount);
+  const gross = Math.abs(tx.grossAmount ?? (tx.quantity && tx.price ? tx.quantity * tx.price : 0));
+  const fee = transactionFeeValue(tx);
+  return side === "buy" ? gross + fee : Math.max(0, gross - fee);
+}
+
 type FifoLot = {
   remainingQty: number;
   costPerShare: number;
@@ -2467,15 +2478,19 @@ function deriveClosedPositions(transactions: ClosedPositionsInputTx[]) {
     };
     const lots = groupedLots.get(rowKey) ?? [];
     if (tx.transactionType === "buy" && tx.quantity && tx.price) {
-      const value = Math.abs(transactionNativeValue(tx) || tx.quantity * tx.price);
+      const value = tradeNativeValue(tx, "buy");
+      const fee = transactionFeeValue(tx);
       current.quantityBought += tx.quantity;
       current.avgBuy += value;
+      current.fees += fee;
       const costPerShare = tx.quantity > 0 ? value / tx.quantity : 0;
       lots.push({ remainingQty: tx.quantity, costPerShare });
     } else if (tx.transactionType === "sell" && tx.quantity && tx.price) {
-      const value = Math.abs(transactionNativeValue(tx) || tx.quantity * tx.price);
+      const value = tradeNativeValue(tx, "sell");
+      const fee = transactionFeeValue(tx);
       current.quantitySold += tx.quantity;
       current.avgSell += value;
+      current.fees += fee;
       const sellQty = tx.quantity;
       const sellUnitProceeds = sellQty > 0 ? value / sellQty : 0;
       let remainingToMatch = sellQty;
