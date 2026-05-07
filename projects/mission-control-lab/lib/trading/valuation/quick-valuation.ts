@@ -176,6 +176,62 @@ function trendCagr(points?: Array<{ value: number }>) {
   return (Math.pow(latest / earliest, 1 / Math.max(usable.length - 1, 1)) - 1) * 100;
 }
 
+function compactDate(value: string | null | undefined) {
+  if (!value) return null;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(parsed);
+}
+
+function pointCount(points?: Array<{ value: number }>) {
+  return (points ?? []).filter((point) => Number.isFinite(point.value)).length;
+}
+
+function latestPointDate(points?: Array<{ date?: string | null }>) {
+  return compactDate(points?.find((point) => point.date)?.date ?? null);
+}
+
+function statementMetricCount(items: DefeatBetaAnalyticsSummary['statements']['annualIncome']) {
+  return items.filter((item) => item.points.length > 0).length;
+}
+
+function statementPointCount(items: DefeatBetaAnalyticsSummary['statements']['annualIncome']) {
+  return items.reduce((sum, item) => sum + item.points.filter((point) => Number.isFinite(point.value)).length, 0);
+}
+
+function latestStatementPeriod(items: DefeatBetaAnalyticsSummary['statements']['annualIncome']) {
+  return items.flatMap((item) => item.points.map((point) => point.period)).filter(Boolean)[0] ?? null;
+}
+
+function coverageList(summary: DefeatBetaAnalyticsSummary) {
+  return Object.entries(summary.coverage).filter(([, value]) => value).map(([key]) => key).join(', ') || 'Unavailable';
+}
+
+function buildEvidence(summary: DefeatBetaAnalyticsSummary): Array<[string, string]> {
+  const ratioParts = [
+    `PE ${pointCount(summary.ratios.pe)}`,
+    `PS ${pointCount(summary.ratios.ps)}`,
+    `PB ${pointCount(summary.ratios.pb)}`,
+    `WACC ${pointCount(summary.ratios.wacc)}`,
+  ];
+  const latestRatioDate = latestPointDate(summary.ratios.pe) ?? latestPointDate(summary.ratios.ps) ?? latestPointDate(summary.ratios.pb) ?? latestPointDate(summary.ratios.wacc);
+  const statementMetrics = statementMetricCount(summary.statements.annualIncome) + statementMetricCount(summary.statements.quarterlyIncome) + statementMetricCount(summary.statements.quarterlyCashFlow);
+  const statementPoints = statementPointCount(summary.statements.annualIncome) + statementPointCount(summary.statements.quarterlyIncome) + statementPointCount(summary.statements.quarterlyCashFlow);
+  const latestPeriod = latestStatementPeriod(summary.statements.annualIncome) ?? latestStatementPeriod(summary.statements.quarterlyIncome) ?? latestStatementPeriod(summary.statements.quarterlyCashFlow);
+  const qualityParts = [
+    `ROE ${pointCount(summary.quality.roe)}`,
+    `ROIC ${pointCount(summary.quality.roic)}`,
+    `dividends ${pointCount(summary.events.dividends)}`,
+    `splits ${summary.events.splits.length}`,
+  ];
+  return [
+    ['Coverage', `${coverageList(summary)} · ${summary.status}`],
+    ['Ratios', `${ratioParts.join(' · ')}${latestRatioDate ? ` · latest ${latestRatioDate}` : ''}`],
+    ['Statements', statementPoints ? `${statementMetrics} metrics · ${statementPoints} points${latestPeriod ? ` · latest ${latestPeriod}` : ''}` : 'No statement history available'],
+    ['Quality & events', qualityParts.join(' · ')],
+  ];
+}
+
 function statementMetric(summary: DefeatBetaAnalyticsSummary, metric: string) {
   return summary.statements.annualIncome.find((item) => item.metric === metric)?.points ?? [];
 }
@@ -443,9 +499,9 @@ export function buildQuickValuation(input: {
       decisionZone: 'Needs analytics data',
       methods: pendingMethods(unavailableReason),
       evidence: [
-        ['Provider status', unavailableReason],
         ['Coverage', 'Unavailable'],
         ['Current price', currentPrice != null ? formatCurrency(currentPrice, currency) : 'No quote anchor supplied'],
+        ['Provider status', unavailableReason],
         ['Model state', 'No fair-value range calculated without analytics coverage'],
       ],
       valuationSeries: flatSeries(currentPrice),
@@ -511,12 +567,7 @@ export function buildQuickValuation(input: {
       { name: reverseDcfModel.label, key: reverseDcfModel.key, value: reverseDcfModel.value, range: reverseDcfModel.value != null ? formatCurrency(reverseDcfModel.value, currency) : 'Needs quote', weight: '20%', note: `Implied growth ${formatPercent(Number(reverseDcfModel.assumptions.impliedGrowth ?? 0))}` },
       { name: qualityRiskModel.label, key: qualityRiskModel.key, value: qualityRiskModel.value, range: `${formatPercent(qualityAdjustment * 100, { signed: true })}`, weight: '15%', note: `ROE ${roe != null ? formatPercent(roe * 100) : '—'} · ROIC ${roic != null ? formatPercent(roic * 100) : '—'}` },
     ],
-    evidence: [
-      ['Revenue trend', revenueCagr != null ? `${formatPercent(revenueCagr, { signed: true })} annualized across available annual points` : 'Annual revenue trend unavailable'],
-      ['Net income trend', netIncomeCagr != null ? `${formatPercent(netIncomeCagr, { signed: true })} annualized across available annual points` : 'Net income trend unavailable'],
-      ['Capital quality', `ROE ${roe != null ? formatPercent(roe * 100) : '—'} · ROIC ${roic != null ? formatPercent(roic * 100) : '—'} · WACC ${wacc != null ? formatPercent(wacc * 100) : '—'}`],
-      ['Coverage', Object.entries(summary.coverage).filter(([, value]) => value).map(([key]) => key).join(', ') || 'Unavailable'],
-    ],
+    evidence: buildEvidence(summary),
     valuationSeries: chartSeriesFromRange(fairLow, baseValue, fairHigh, currentPrice),
     benchmarkSeries: summary.ratios.pe.map((point) => point.value).slice(0, 12).reverse().map((value) => Math.max(value, 1)).concat(fallbackBenchmarkSeries).slice(0, 12),
     riskSeries: summary.ratios.wacc.map((point) => point.value * 1000).slice(0, 12).reverse().map((value) => Math.max(value, 1)).concat(fallbackRiskSeries).slice(0, 12),
