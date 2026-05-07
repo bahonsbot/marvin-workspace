@@ -6010,3 +6010,22 @@
     grid-template-columns: 1fr;
   }
 }
+
+:global(.trading-analytics-search button:disabled) {
+  cursor: wait;
+  opacity: 0.68;
+}
+
+:global(.trading-analytics-validation small) {
+  margin-top: 4px;
+  color: #a85d42;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+:global(.trading-analytics-status-copy) {
+  border-top: 1px solid rgba(28, 37, 32, 0.1);
+  padding-top: 12px;
+  font-size: 12px !important;
+  color: rgba(34, 48, 41, 0.58) !important;
+}
