@@ -484,11 +484,16 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("fetch(`/api/trading/defeatbeta", workbench)
         self.assertIn("bestValidatedMatch", workbench)
         self.assertIn("result.symbol.toUpperCase() === normalized", workbench)
+        self.assertIn("selectTicker", workbench)
+        self.assertIn("trading-analytics-symbol-results", workbench)
+        self.assertIn('aria-autocomplete="list"', workbench)
         self.assertIn("DefeatBeta + providers", workbench)
         self.assertNotIn("Portfolio Lens", workbench)
         self.assertNotIn("Portfolio Impact", workbench)
         self.assertIn("trading-analytics-workbench", styles)
         self.assertIn("trading-analytics-milou", styles)
+        self.assertIn("trading-analytics-symbol-results", styles)
+        self.assertIn("trading-analytics-symbol-search", styles)
 
     def test_watchlist_add_symbol_reuses_ticker_search_endpoint(self) -> None:
         watchlist = read_source("watchlist_client")

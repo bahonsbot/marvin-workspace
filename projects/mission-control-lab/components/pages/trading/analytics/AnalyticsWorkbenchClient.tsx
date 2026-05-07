@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import { MiniLineChart, TabScaffold, tradingCardStyle } from '@/components/pages/trading/shared';
 import type { DefeatBetaAnalyticsSummary } from '@/lib/trading/sources/defeatbeta';
 
@@ -197,11 +197,19 @@ export function AnalyticsWorkbenchClient() {
   const [query, setQuery] = useState('ASML.AS');
   const [mode, setMode] = useState<'quick' | 'full'>('quick');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [valuation, setValuation] = useState<QuickValuation>(initialValuation);
   const [error, setError] = useState<string | null>(null);
 
-  const selected = valuation.selected ?? searchResults[0] ?? null;
+  const searchResultsId = useId();
+  const trimmedQuery = query.trim();
+  const selected = valuation.selected ?? null;
   const currency = selected?.currency && selected.currency !== '—' ? selected.currency : 'USD';
+  const selectedResult = searchResults[Math.min(activeResultIndex, Math.max(searchResults.length - 1, 0))];
+  const showSearchPanel = searchOpen && Boolean(trimmedQuery) && (searchLoading || searchError || searchResults.length > 0);
   const valuationReady = valuation.status === 'ready' || valuation.status === 'unavailable';
 
   const verdictLabel = useMemo(() => {
@@ -210,6 +218,54 @@ export function AnalyticsWorkbenchClient() {
     if (valuation.status === 'ready') return `${formatCurrency(valuation.fairLow, currency)}-${formatCurrency(valuation.fairHigh, currency)}`;
     return '$142-$178';
   }, [currency, valuation.fairHigh, valuation.fairLow, valuation.status]);
+
+
+  useEffect(() => {
+    if (!trimmedQuery || valuation.selected?.symbol === trimmedQuery.toUpperCase()) {
+      setSearchResults([]);
+      setSearchLoading(false);
+      setSearchError(null);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      setSearchLoading(true);
+      setSearchError(null);
+      try {
+        const response = await fetch(`/api/trading/search?q=${encodeURIComponent(trimmedQuery)}`, {
+          signal: controller.signal,
+          headers: { accept: 'application/json' },
+          cache: 'no-store',
+        });
+        if (!response.ok) throw new Error(`Search failed (${response.status})`);
+        const data = (await response.json()) as SearchResponse;
+        setSearchResults(data.results ?? []);
+        setActiveResultIndex(0);
+      } catch (caught) {
+        if (controller.signal.aborted) return;
+        setSearchResults([]);
+        setSearchError(caught instanceof Error ? caught.message : 'Search failed');
+      } finally {
+        if (!controller.signal.aborted) setSearchLoading(false);
+      }
+    }, 180);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [trimmedQuery, valuation.selected?.symbol]);
+
+  function selectTicker(result: SearchResult) {
+    setQuery(result.symbol);
+    setSearchOpen(false);
+    setSearchResults([]);
+    setSearchError(null);
+    setActiveResultIndex(0);
+    setError(null);
+    setValuation((current) => ({ ...current, status: 'validated', selected: result, message: `Validated ${result.name} on ${result.exchange}.` }));
+  }
 
   async function validateTicker() {
     const normalized = query.trim();
@@ -224,12 +280,14 @@ export function AnalyticsWorkbenchClient() {
       if (!response.ok) throw new Error(`Search returned HTTP ${response.status}`);
       const payload = (await response.json()) as SearchResponse;
       setSearchResults(payload.results);
-      const best = bestValidatedMatch(normalized, payload.results);
+      const lockedSelection = valuation.selected?.symbol === normalized.toUpperCase() ? valuation.selected : null;
+      const best = lockedSelection ?? bestValidatedMatch(normalized, payload.results);
       if (!best) {
         setValuation((current) => ({ ...current, status: 'error', selected: null, message: `No validated match found for ${normalized}.` }));
         return null;
       }
       setQuery(best.symbol);
+      setSearchOpen(false);
       setValuation((current) => ({ ...current, status: 'validated', selected: best, message: `Validated ${best.name} on ${best.exchange}.` }));
       return best;
     } catch (caught) {
@@ -241,7 +299,7 @@ export function AnalyticsWorkbenchClient() {
   }
 
   async function generateQuickValuation() {
-    const match = selected ?? await validateTicker();
+    const match = selected?.symbol === query.trim().toUpperCase() ? selected : await validateTicker();
     if (!match) return;
     setError(null);
     setValuation((current) => ({ ...current, status: 'generating', selected: match, message: `Generating Quick Valuation for ${match.symbol}…` }));
@@ -269,9 +327,64 @@ export function AnalyticsWorkbenchClient() {
           </p>
         </div>
         <form className="trading-analytics-search" aria-label="Ticker analysis setup" onSubmit={(event) => { event.preventDefault(); void generateQuickValuation(); }}>
-          <label>
+          <label className="trading-analytics-symbol-field">
             <span>Ticker</span>
-            <input placeholder="ASML.AS, AAPL, TSM…" value={query} onChange={(event) => setQuery(event.target.value.toUpperCase())} />
+            <div className="trading-analytics-symbol-search">
+              <input
+                placeholder="Search ticker or company"
+                value={query}
+                onChange={(event) => {
+                  setQuery(event.target.value.toUpperCase());
+                  setSearchOpen(true);
+                  setValuation((current) => ({ ...current, selected: null }));
+                }}
+                onFocus={() => setSearchOpen(true)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') {
+                    setSearchOpen(false);
+                    return;
+                  }
+                  if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    setActiveResultIndex((index) => Math.min(index + 1, Math.max(searchResults.length - 1, 0)));
+                    return;
+                  }
+                  if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    setActiveResultIndex((index) => Math.max(index - 1, 0));
+                    return;
+                  }
+                  if (event.key === 'Enter' && searchOpen && selectedResult) {
+                    event.preventDefault();
+                    selectTicker(selectedResult);
+                  }
+                }}
+                aria-autocomplete="list"
+                aria-controls={showSearchPanel ? searchResultsId : undefined}
+              />
+              {showSearchPanel ? (
+                <div id={searchResultsId} className="trading-analytics-symbol-results" role="listbox" aria-label="Ticker search results">
+                  {searchLoading ? <div className="trading-analytics-symbol-state">Searching symbols…</div> : null}
+                  {!searchLoading && searchError ? <div className="trading-analytics-symbol-state">{searchError}</div> : null}
+                  {!searchLoading && !searchError && searchResults.map((result, index) => (
+                    <button
+                      key={`${result.symbol}-${index}`}
+                      type="button"
+                      role="option"
+                      aria-selected={index === activeResultIndex}
+                      data-active={index === activeResultIndex ? 'true' : undefined}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onMouseEnter={() => setActiveResultIndex(index)}
+                      onClick={() => selectTicker(result)}
+                    >
+                      <strong>{result.symbol}</strong>
+                      <span>{result.name}</span>
+                      <small>{[result.country, result.currency, result.type].filter(Boolean).join(' · ')}</small>
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </label>
           <label>
             <span>Mode</span>
