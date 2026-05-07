@@ -133,6 +133,7 @@ const explainers: Record<string, string> = {
   reverseDcf: 'Reverse DCF asks what growth the current market price already implies. Useful for spotting when optimism is already priced in.',
   qualityRisk: 'Quality/risk overlay adjusts for capital efficiency, ROIC versus WACC, and missing coverage. Useful because better businesses deserve different valuation tolerance.',
   fairValue: 'The corridor shows bear, base, and bull valuation outputs across the model blend. It is uncertainty, not a price target.',
+  decisionZone: 'Decision zone is a model interpretation, not advice. Watch / Buy weakness means the model sees fair value or mild upside, but prefers waiting for a better entry unless fundamentals improve.',
   sensitivity: 'Sensitivity shows which assumption moves fair value most. Wider bands mean the output is more fragile.',
 };
 
@@ -143,6 +144,10 @@ function Explainer({ id }: { id: keyof typeof explainers }) {
 function formatCurrency(value: number | null | undefined, currency = 'USD') {
   if (value == null || !Number.isFinite(value)) return '—';
   return new Intl.NumberFormat('en-US', { style: 'currency', currency, maximumFractionDigits: value >= 100 ? 0 : 2 }).format(value);
+}
+
+function formatCurrencyRange(low: number | null | undefined, high: number | null | undefined, currency = 'USD') {
+  return `${formatCurrency(low, currency)}–${formatCurrency(high, currency)}`;
 }
 
 function formatPercent(value: number | null | undefined, options: { signed?: boolean; decimals?: number } = {}) {
@@ -311,7 +316,7 @@ export function AnalyticsWorkbenchClient() {
   const verdictLabel = useMemo(() => {
     if (valuation.status === 'generating') return 'Generating…';
     if (valuation.status === 'unavailable') return 'Unavailable';
-    if (valuation.status === 'ready') return `${formatCurrency(valuation.fairLow, currency)}-${formatCurrency(valuation.fairHigh, currency)}`;
+    if (valuation.status === 'ready') return formatCurrencyRange(valuation.fairLow, valuation.fairHigh, currency);
     return '$142-$178';
   }, [currency, valuation.fairHigh, valuation.fairLow, valuation.status]);
 
@@ -532,14 +537,17 @@ export function AnalyticsWorkbenchClient() {
       <section className="trading-analytics-hero" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
         <div className="trading-analytics-verdict">
           <div className="trading-section-label">Valuation verdict</div>
-          <h2>{verdictLabel}</h2>
-          <p>Base case: <strong>{formatCurrency(valuation.baseValue, currency)}</strong> · 12-24 month horizon · confidence {valuation.confidence.toLowerCase()} · range reflects model uncertainty, not a price target.</p>
+          <div className="trading-analytics-base-case">
+            <span>Base case</span>
+            <strong>{formatCurrency(valuation.baseValue, currency)}</strong>
+          </div>
+          <p className="trading-analytics-range-copy">Fair value range: <strong>{verdictLabel}</strong></p>
           <div className="trading-analytics-verdict-row">
             <span>Current price</span><strong>{formatCurrency(valuation.currentPrice, currency)}</strong>
             <span>Implied upside</span><strong className={(valuation.impliedUpside ?? 0) >= 0 ? 'positive' : 'negative'}>{formatPercent(valuation.impliedUpside, { signed: true })}</strong>
-            <span>Decision zone</span><strong>{valuation.decisionZone}</strong>
+            <span>Decision zone</span><strong className="trading-analytics-decision-chip">{valuation.decisionZone}<Explainer id="decisionZone" /></strong>
           </div>
-          <p className="trading-analytics-status-copy">{valuation.message}</p>
+          <p className="trading-analytics-verdict-meta">12–24 month horizon · {valuation.confidence} confidence · range reflects model uncertainty, not a price target.</p>
         </div>
         <div className="trading-analytics-chart-panel">
           <div className="trading-ticker-chart-head trading-analytics-corridor-head">

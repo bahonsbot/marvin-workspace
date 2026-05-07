@@ -6508,3 +6508,67 @@
   gap: 7px;
   margin-top: 0;
 }
+
+:global(.trading-analytics-base-case) {
+  display: grid;
+  gap: 4px;
+}
+
+:global(.trading-analytics-base-case span) {
+  color: rgba(34, 48, 41, 0.52);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+:global(.trading-analytics-base-case strong) {
+  color: #111915;
+  font-family: var(--font-serif);
+  font-size: clamp(58px, 6.6vw, 88px);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  font-weight: 400;
+}
+
+:global(.trading-analytics-range-copy) {
+  margin: -2px 0 2px !important;
+  color: rgba(34, 48, 41, 0.6) !important;
+  font-size: 13px !important;
+}
+
+:global(.trading-analytics-range-copy strong) {
+  color: rgba(17, 25, 21, 0.82);
+  font-family: var(--font-serif);
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+}
+
+:global(.trading-analytics-verdict-meta) {
+  border-top: 1px solid rgba(28, 37, 32, 0.1);
+  padding-top: 12px;
+  margin-top: 2px !important;
+  color: rgba(34, 48, 41, 0.56) !important;
+  font-size: 12px !important;
+  line-height: 1.45;
+}
+
+:global(.trading-analytics-decision-chip) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 999px;
+  padding: 4px 8px 4px 10px;
+  background: rgba(244, 240, 232, 0.64);
+}
+
+:global(.trading-analytics-decision-chip .trading-analytics-explainer) {
+  margin-left: 2px;
+  width: 15px;
+  height: 15px;
+  font-size: 9px;
+}
