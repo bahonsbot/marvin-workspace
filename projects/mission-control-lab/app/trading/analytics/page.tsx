@@ -35,6 +35,7 @@ export default async function TradingAnalyticsPage() {
     <TradingPageFrame
       title="Analytics"
       description="Generate a valuation thesis from ticker data, DefeatBeta fundamentals, market context, and Milou’s reasoning layer. Portfolio lens is intentionally left out for now."
+      hideHeader
     >
       <MarketTapeClient initialData={marketTape} />
       <div className="trading-analytics-workbench">

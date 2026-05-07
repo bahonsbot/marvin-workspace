@@ -473,6 +473,7 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("From symbol to fair-value range", analytics)
         self.assertIn("Valuation verdict", analytics)
         self.assertIn("Milou analysis panel", analytics)
+        self.assertIn("hideHeader", analytics)
         self.assertIn("Quick valuation", analytics)
         self.assertIn("Full thesis", analytics)
         self.assertIn("DCF base case", analytics)
