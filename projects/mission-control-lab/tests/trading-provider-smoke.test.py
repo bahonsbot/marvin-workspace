@@ -16,6 +16,8 @@ SOURCE_FILES = {
     "contracts": ROOT / "lib" / "trading" / "contracts.ts",
     "reference_enrichment": ROOT / "lib" / "trading" / "sources" / "reference-enrichment.ts",
     "justetf_fund_facts": ROOT / "lib" / "trading" / "sources" / "justetf-fund-facts.ts",
+    "defeatbeta_source": ROOT / "lib" / "trading" / "sources" / "defeatbeta.ts",
+    "defeatbeta_route": ROOT / "app" / "api" / "trading" / "defeatbeta" / "[symbol]" / "route.ts",
     "eodhd": ROOT / "lib" / "trading" / "sources" / "eodhd.ts",
     "yfinance_bridge": ROOT / "lib" / "trading" / "sources" / "yfinance-bridge.ts",
     "wikipedia": ROOT / "lib" / "trading" / "sources" / "wikipedia.ts",
@@ -163,6 +165,22 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("Fund holding", justetf)
         self.assertIn("Country exposure", justetf)
         self.assertIn("Sector exposure", justetf)
+
+    def test_defeatbeta_adapter_is_server_side_and_fails_soft(self) -> None:
+        source = read_source("defeatbeta_source")
+        route = read_source("defeatbeta_route")
+        contracts = read_source("contracts")
+
+        self.assertIn("import 'server-only'", source)
+        self.assertIn("DEFEATBETA_SIDECAR_URL", source)
+        self.assertIn("DEFAULT_BASE_URL = 'http://127.0.0.1:8791'", source)
+        self.assertIn("DefeatBetaAdapterResult", source)
+        self.assertIn("DefeatBeta sidecar is not reachable", source)
+        self.assertIn("DefeatBeta sidecar request timed out", source)
+        self.assertIn("coverage: { prices: false, statements: false, ratios: false, quality: false, events: false }", source)
+        self.assertIn("getDefeatBetaAnalyticsSummary", route)
+        self.assertIn("NextResponse.json(result", route)
+        self.assertIn("'defeatbeta'", contracts)
 
     def test_etf_ticker_page_does_not_repeat_bottom_holdings_card(self) -> None:
         ticker_page = read_source("ticker_page")
