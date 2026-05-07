@@ -107,7 +107,7 @@ export function MiniLineChart({ values }: { values: number[] }) {
   );
 }
 
-export function TabScaffold({ tabs }: { tabs: string[] }) {
+export function TabScaffold({ tabs, trailing }: { tabs: string[]; trailing?: ReactNode }) {
   return (
     <div className="trading-tab-row" role="tablist" aria-label="Planned tabs">
       {tabs.map((tab, index) => (
@@ -115,6 +115,7 @@ export function TabScaffold({ tabs }: { tabs: string[] }) {
           {tab}
         </button>
       ))}
+      {trailing ? <div className="trading-tab-row-trailing">{trailing}</div> : null}
     </div>
   );
 }
