@@ -38,6 +38,18 @@ export type ValuationSubmodel = {
   notes: string[];
 };
 
+export type ValuationRunStatus = {
+  id: string;
+  state: 'ready' | 'unavailable' | 'error';
+  mode: 'quick';
+  generatedAt: string;
+  elapsedMs: number | null;
+  source: string;
+  requestedSymbol: string;
+  resolvedSymbol: string;
+  modelVersion: string;
+};
+
 export type QuickValuationResult = {
   status: 'ready' | 'unavailable' | 'error';
   message: string;
@@ -56,6 +68,7 @@ export type QuickValuationResult = {
   benchmarkSeries: number[];
   riskSeries: number[];
   submodels: ValuationSubmodel[];
+  run: ValuationRunStatus;
   assumptions: {
     modelVersion: string;
     modelType: 'submodel-proxy';
@@ -102,6 +115,27 @@ const SUBMODEL_WEIGHTS: Record<ValuationModelName, number> = {
   reverseDcf: 0.2,
   qualityRisk: 0.15,
 };
+
+const MODEL_VERSION = 'quick-valuation-submodels-v1';
+
+function runIdFor(symbol: string, generatedAt: string) {
+  return `qv_${symbol.replace(/[^A-Z0-9]+/gi, '_').toLowerCase()}_${generatedAt.replace(/[^0-9]/g, '').slice(0, 14)}`;
+}
+
+function runStatus(input: { state: ValuationRunStatus['state']; selected: AnalyticsTickerSelection; summary: DefeatBetaAnalyticsSummary }): ValuationRunStatus {
+  const generatedAt = new Date().toISOString();
+  return {
+    id: runIdFor(input.selected.symbol, generatedAt),
+    state: input.state,
+    mode: 'quick',
+    generatedAt,
+    elapsedMs: input.summary.elapsedMs ?? null,
+    source: input.summary.source.label,
+    requestedSymbol: input.summary.requestedSymbol || input.selected.symbol,
+    resolvedSymbol: input.summary.resolvedSymbol || input.selected.symbol,
+    modelVersion: MODEL_VERSION,
+  };
+}
 
 export function formatCurrency(value: number | null | undefined, currency = 'USD') {
   if (value == null || !Number.isFinite(value)) return '—';
@@ -376,8 +410,9 @@ export function buildQuickValuation(input: {
       benchmarkSeries: fallbackBenchmarkSeries,
       riskSeries: fallbackRiskSeries,
       submodels: pendingSubmodels(unavailableReason),
+      run: runStatus({ state: 'unavailable', selected, summary }),
       assumptions: {
-        modelVersion: 'quick-valuation-submodels-v1',
+        modelVersion: MODEL_VERSION,
         modelType: 'submodel-proxy',
         currency,
         revenueCagr,
@@ -443,8 +478,9 @@ export function buildQuickValuation(input: {
     benchmarkSeries: summary.ratios.pe.map((point) => point.value).slice(0, 12).reverse().map((value) => Math.max(value, 1)).concat(fallbackBenchmarkSeries).slice(0, 12),
     riskSeries: summary.ratios.wacc.map((point) => point.value * 1000).slice(0, 12).reverse().map((value) => Math.max(value, 1)).concat(fallbackRiskSeries).slice(0, 12),
     submodels,
+    run: runStatus({ state: 'ready', selected, summary }),
     assumptions: {
-      modelVersion: 'quick-valuation-submodels-v1',
+      modelVersion: MODEL_VERSION,
       modelType: 'submodel-proxy',
       currency,
       revenueCagr,

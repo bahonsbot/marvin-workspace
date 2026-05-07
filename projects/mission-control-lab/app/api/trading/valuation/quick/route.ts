@@ -26,6 +26,7 @@ function validSelection(value: unknown): value is AnalyticsTickerSelection {
 }
 
 export async function POST(request: Request) {
+  const started = Date.now();
   let payload: QuickValuationRequest;
   try {
     payload = (await request.json()) as QuickValuationRequest;
@@ -45,6 +46,8 @@ export async function POST(request: Request) {
     ok: enrichment.ok,
     reason: enrichment.ok ? undefined : enrichment.reason,
   });
+
+  valuation.run.elapsedMs = Date.now() - started;
 
   return NextResponse.json({ ok: enrichment.ok, valuation });
 }

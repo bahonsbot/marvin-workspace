@@ -20,6 +20,18 @@ type SearchResult = {
 type SearchResponse = { query: string; results: SearchResult[] };
 type QuickValuationRouteResult = { ok: boolean; valuation: QuickValuation };
 
+type ValuationRunStatus = {
+  id: string;
+  state: 'ready' | 'unavailable' | 'error';
+  mode: 'quick';
+  generatedAt: string;
+  elapsedMs: number | null;
+  source: string;
+  requestedSymbol: string;
+  resolvedSymbol: string;
+  modelVersion: string;
+};
+
 type ValuationModel = {
   name: string;
   range: string;
@@ -46,6 +58,21 @@ type QuickValuation = {
   valuationSeries: number[];
   benchmarkSeries: number[];
   riskSeries: number[];
+  run?: ValuationRunStatus;
+  assumptions?: {
+    modelVersion: string;
+    modelType: string;
+    currency: string;
+    revenueCagr: number | null;
+    netIncomeCagr: number | null;
+    latestPe: number | null;
+    latestPs: number | null;
+    latestPb: number | null;
+    latestWacc: number | null;
+    latestRoe: number | null;
+    latestRoic: number | null;
+    confidenceSpread: number;
+  };
 };
 
 const tabs = ['Valuation', 'Performance', 'Fundamentals', 'Income & Events', 'Technical', 'Milou'];
@@ -84,6 +111,36 @@ function formatPercent(value: number | null | undefined, options: { signed?: boo
   const decimals = options.decimals ?? 1;
   const prefix = options.signed && value > 0 ? '+' : '';
   return `${prefix}${value.toFixed(decimals)}%`;
+}
+
+function formatDateTime(value: string | null | undefined) {
+  if (!value) return '—';
+  try {
+    return new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date(value));
+  } catch {
+    return value;
+  }
+}
+
+function formatElapsed(value: number | null | undefined) {
+  if (value == null || !Number.isFinite(value)) return '—';
+  if (value < 1000) return `${Math.round(value)}ms`;
+  return `${(value / 1000).toFixed(1)}s`;
+}
+
+function coverageEntries(summary: DefeatBetaAnalyticsSummary | null) {
+  const coverage = summary?.coverage ?? { prices: false, statements: false, ratios: false, quality: false, events: false };
+  return Object.entries(coverage) as Array<[keyof typeof coverage, boolean]>;
+}
+
+function runStateLabel(status: QuickValuation['status']) {
+  if (status === 'ready') return 'Complete';
+  if (status === 'generating') return 'Running';
+  if (status === 'unavailable') return 'Unavailable';
+  if (status === 'error') return 'Failed';
+  if (status === 'validated') return 'Validated';
+  if (status === 'validating') return 'Validating';
+  return 'Idle';
 }
 
 function exchangeSymbolForDefeatBeta(symbol: string) {
@@ -334,13 +391,37 @@ export function AnalyticsWorkbenchClient() {
         </div>
       </section>
 
+      <section className="trading-analytics-run-status" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+        <div className="trading-analytics-run-head">
+          <div>
+            <div className="trading-section-label">Valuation run status</div>
+            <h2>{runStateLabel(valuation.status)} · Quick model</h2>
+          </div>
+          <em>{valuation.run?.id ?? 'No run yet'}</em>
+        </div>
+        <dl className="trading-analytics-run-grid">
+          <div><dt>Generated</dt><dd>{valuation.run ? formatDateTime(valuation.run.generatedAt) : '—'}</dd></div>
+          <div><dt>Elapsed</dt><dd>{valuation.status === 'generating' ? 'Fetching…' : formatElapsed(valuation.run?.elapsedMs)}</dd></div>
+          <div><dt>Source</dt><dd>{valuation.run?.source ?? 'DefeatBeta pending'}</dd></div>
+          <div><dt>Symbol mapping</dt><dd>{valuation.run ? `${valuation.run.requestedSymbol} → ${valuation.run.resolvedSymbol}` : selected ? `${selected.symbol} → ${exchangeSymbolForDefeatBeta(selected.symbol)}` : '—'}</dd></div>
+          <div><dt>Model</dt><dd>{valuation.run?.modelVersion ?? valuation.assumptions?.modelVersion ?? 'quick-valuation-submodels-v1'}</dd></div>
+          <div><dt>Mode</dt><dd>Quick valuation · historical data only</dd></div>
+        </dl>
+        <div className="trading-analytics-coverage-row" aria-label="Data coverage">
+          {coverageEntries(valuation.summary).map(([key, value]) => (
+            <span key={key} data-state={value ? 'ok' : 'missing'}>{key}</span>
+          ))}
+        </div>
+        <p className="trading-analytics-disclaimer">Model interpretation only, not investment advice. Quick valuation uses a simplified DCF proxy and available historical data; full thesis still requires assumption review.</p>
+      </section>
+
       <TabScaffold tabs={tabs} />
 
       <section className="trading-analytics-hero" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
         <div className="trading-analytics-verdict">
           <div className="trading-section-label">Valuation verdict</div>
           <h2>{verdictLabel}</h2>
-          <p>Base case: <strong>{formatCurrency(valuation.baseValue, currency)}</strong> · 12-24 month horizon · confidence {valuation.confidence.toLowerCase()}</p>
+          <p>Base case: <strong>{formatCurrency(valuation.baseValue, currency)}</strong> · 12-24 month horizon · confidence {valuation.confidence.toLowerCase()} · range reflects model uncertainty, not a price target.</p>
           <div className="trading-analytics-verdict-row">
             <span>Current price</span><strong>{formatCurrency(valuation.currentPrice, currency)}</strong>
             <span>Implied upside</span><strong className={(valuation.impliedUpside ?? 0) >= 0 ? 'positive' : 'negative'}>{formatPercent(valuation.impliedUpside, { signed: true })}</strong>
@@ -352,7 +433,7 @@ export function AnalyticsWorkbenchClient() {
           <div className="trading-ticker-chart-head">
             <div>
               <div className="trading-section-label">Fair value corridor</div>
-              <h3>{valuationReady ? 'Quick model generated. Next hardening pass improves DCF assumptions.' : 'Base case sits above spot, but the margin is assumption-sensitive.'}</h3>
+              <h3>{valuationReady ? 'Quick valuation complete. Uses simplified DCF proxy and available historical data.' : 'Generate a provider-backed run before treating the range as meaningful.'}</h3>
             </div>
             <div className="trading-ticker-range-tabs" role="tablist" aria-label="Analysis ranges">
               {['Bear', 'Base', 'Bull'].map((range, index) => (
@@ -396,7 +477,7 @@ export function AnalyticsWorkbenchClient() {
           <dl className="trading-ticker-chart-stats">
             <div><dt>Vs QQQ</dt><dd className="positive">Pending</dd></div>
             <div><dt>Vs SPY</dt><dd className="positive">Pending</dd></div>
-            <div><dt>Momentum</dt><dd>{valuation.summary?.coverage.prices ? 'Provider-backed' : 'Pending'}</dd></div>
+            <div><dt>Momentum</dt><dd>{valuation.summary?.coverage.prices ? 'DefeatBeta-backed' : 'Pending'}</dd></div>
             <div><dt>Trend risk</dt><dd>{valuation.confidence === 'Low' ? 'High' : 'Medium'}</dd></div>
           </dl>
         </section>
