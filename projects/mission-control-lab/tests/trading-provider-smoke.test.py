@@ -465,6 +465,24 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("trading-portfolio-edit", styles)
         self.assertIn("#20b86f", portfolio)
 
+
+    def test_analytics_page_is_valuation_workbench_without_portfolio_lens(self) -> None:
+        analytics = (ROOT / "app" / "trading" / "analytics" / "page.tsx").read_text(encoding="utf-8")
+        styles = read_source("trading_styles")
+
+        self.assertIn("From symbol to fair-value range", analytics)
+        self.assertIn("Valuation verdict", analytics)
+        self.assertIn("Milou analysis panel", analytics)
+        self.assertIn("Quick valuation", analytics)
+        self.assertIn("Full thesis", analytics)
+        self.assertIn("DCF base case", analytics)
+        self.assertIn("Reverse DCF", analytics)
+        self.assertIn("DefeatBeta + providers", analytics)
+        self.assertNotIn("Portfolio Lens", analytics)
+        self.assertNotIn("Portfolio Impact", analytics)
+        self.assertIn("trading-analytics-workbench", styles)
+        self.assertIn("trading-analytics-milou", styles)
+
     def test_watchlist_add_symbol_reuses_ticker_search_endpoint(self) -> None:
         watchlist = read_source("watchlist_client")
         styles = read_source("trading_styles")
