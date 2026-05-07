@@ -103,22 +103,19 @@ type QuickValuation = {
 };
 
 const tabs = ['Valuation', 'Performance', 'Fundamentals', 'Income & Events', 'Technical', 'Milou'];
-const fallbackValuationSeries = [108, 112, 118, 115, 123, 132, 138, 146, 151, 158, 164, 161, 168, 176];
-const fallbackBenchmarkSeries = [100, 104, 102, 109, 112, 118, 121, 127, 126, 132, 136, 139, 141, 145];
-const fallbackRiskSeries = [64, 58, 61, 54, 49, 46, 51, 44, 41, 38, 36, 34];
 
-const fallbackMethods: ValuationModel[] = [
-  { name: 'DCF base case', range: '$148-$184', weight: '40%', note: 'FCF path, WACC, terminal growth' },
-  { name: 'Multiples check', range: '$136-$171', weight: '25%', note: 'PE, EV/EBITDA, PS vs history and peers' },
-  { name: 'Reverse DCF', range: '$128-$166', weight: '20%', note: 'Growth implied by current market price' },
-  { name: 'Quality adjustment', range: '+6%', weight: '15%', note: 'ROIC-WACC spread, balance sheet, cyclicality' },
+const emptyMethods: ValuationModel[] = [
+  { name: 'DCF base case', range: '—', weight: '—', note: 'Select a ticker to load assumptions' },
+  { name: 'Multiples check', range: '—', weight: '—', note: 'Select a ticker to load ratios' },
+  { name: 'Reverse DCF', range: '—', weight: '—', note: 'Select a ticker to compare price and fundamentals' },
+  { name: 'Quality adjustment', range: '—', weight: '—', note: 'Select a ticker to load ROE/ROIC context' },
 ];
 
-const fallbackEvidence: Array<[string, string]> = [
-  ['Revenue trend', '5Y CAGR, quarterly slope, consensus stress'],
-  ['Cash conversion', 'Operating cash flow, capex intensity, FCF margin'],
-  ['Capital quality', 'ROE, ROIC, WACC, reinvestment runway'],
-  ['Market context', 'Relative strength, sector momentum, rate sensitivity'],
+const emptyEvidence: Array<[string, string]> = [
+  ['Coverage', 'Select a ticker to load source coverage'],
+  ['Ratios', '—'],
+  ['Statements', '—'],
+  ['Quality & events', '—'],
 ];
 
 const milouPrompts = [
@@ -134,7 +131,7 @@ const explainers: Record<string, string> = {
   reverseDcf: 'Reverse DCF asks what growth the current market price already implies. Useful for spotting when optimism is already priced in.',
   qualityRisk: 'Quality/risk overlay adjusts for capital efficiency, ROIC versus WACC, and missing coverage. Useful because better businesses deserve different valuation tolerance.',
   fairValue: 'The corridor shows bear, base, and bull valuation outputs across the model blend. It is uncertainty, not a price target.',
-  decisionZone: 'Decision zone is a model interpretation, not advice. Watch / Buy weakness means the model sees fair value or mild upside, but prefers waiting for a better entry unless fundamentals improve.',
+  decisionZone: 'Decision zone is a model interpretation, not advice. It summarizes whether the valuation model sees upside, downside, or needs more analytics data before making a useful read.',
   sensitivity: 'Sensitivity shows which assumption moves fair value most. Wider bands mean the output is more fragile.',
 };
 
@@ -210,6 +207,7 @@ function CompanyLogo({ selection, metadata }: { selection: SearchResult | null; 
 }
 
 function valuePoints(valuation: QuickValuation) {
+  if (valuation.status === 'idle' || valuation.status === 'validated') return [];
   const submodels = valuation.submodels?.filter((model) => model.value != null) ?? [];
   if (!submodels.length) {
     return [
@@ -238,6 +236,15 @@ function CorridorChart({ valuation, currency }: { valuation: QuickValuation; cur
   const lowPct = low == null ? 0 : ((low - scale.min) / scale.span) * 100;
   const highPct = high == null ? 0 : ((high - scale.min) / scale.span) * 100;
   const basePct = base == null ? 0 : ((base - scale.min) / scale.span) * 100;
+  const isEmpty = valuation.status === 'idle' || valuation.status === 'validated' || low == null || base == null || high == null;
+  if (isEmpty) {
+    return (
+      <div className="trading-analytics-corridor is-empty" aria-label="Fair value corridor placeholder">
+        <div className="trading-analytics-corridor-track" />
+        <div className="trading-analytics-corridor-empty">Select a ticker to generate the fair-value corridor.</div>
+      </div>
+    );
+  }
   return (
     <div className="trading-analytics-corridor" aria-label="Fair value corridor">
       <div className="trading-analytics-corridor-track">
@@ -282,27 +289,27 @@ function SensitivityBands({ rows, currency }: { rows: ValuationSensitivity[] | u
 
 const initialValuation: QuickValuation = {
   status: 'idle',
-  message: 'Validate a ticker, then generate the first Quick Valuation.',
+  message: 'Choose a ticker result, then generate Quick Analysis.',
   selected: null,
   summary: null,
-  fairLow: 142,
-  fairHigh: 178,
-  baseValue: 161,
-  currentPrice: 149,
-  impliedUpside: 8.1,
-  confidence: 'Medium',
-  decisionZone: 'Watch / Buy weakness',
-  methods: fallbackMethods,
+  fairLow: null,
+  fairHigh: null,
+  baseValue: null,
+  currentPrice: null,
+  impliedUpside: null,
+  confidence: 'Low',
+  decisionZone: '—',
+  methods: emptyMethods,
   submodels: [],
   sensitivity: [],
-  evidence: fallbackEvidence,
-  valuationSeries: fallbackValuationSeries,
-  benchmarkSeries: fallbackBenchmarkSeries,
-  riskSeries: fallbackRiskSeries,
+  evidence: emptyEvidence,
+  valuationSeries: [],
+  benchmarkSeries: [],
+  riskSeries: [],
 };
 
 export function AnalyticsWorkbenchClient() {
-  const [query, setQuery] = useState('ASML.AS');
+  const [query, setQuery] = useState('');
   const [activeAnalysisTab, setActiveAnalysisTab] = useState<'quick' | 'full'>('quick');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -320,6 +327,7 @@ export function AnalyticsWorkbenchClient() {
   const selectedResult = searchResults[Math.min(activeResultIndex, Math.max(searchResults.length - 1, 0))];
   const showSearchPanel = searchOpen && Boolean(trimmedQuery) && (searchLoading || searchError || searchResults.length > 0);
   const valuationReady = valuation.status === 'ready';
+  const hasAnalysis = valuation.status === 'ready' || valuation.status === 'unavailable' || valuation.status === 'error';
 
   useEffect(() => {
     if (!trimmedQuery || valuation.selected?.symbol === trimmedQuery.toUpperCase()) {
@@ -563,7 +571,7 @@ export function AnalyticsWorkbenchClient() {
             <span>Implied upside</span><strong className={(valuation.impliedUpside ?? 0) >= 0 ? 'positive' : 'negative'}>{formatPercent(valuation.impliedUpside, { signed: true })}</strong>
             <span>Decision zone</span><strong className="trading-analytics-decision-chip">{valuation.decisionZone}<Explainer id="decisionZone" /></strong>
           </div>
-          <p className="trading-analytics-verdict-meta">12 – 24 month horizon · {valuation.confidence} confidence</p>
+          <p className="trading-analytics-verdict-meta">{hasAnalysis ? `12 – 24 month horizon · ${valuation.confidence} confidence` : 'Select a ticker to generate valuation context'}</p>
         </div>
         <div className="trading-analytics-chart-panel">
           <div className="trading-ticker-chart-head trading-analytics-corridor-head">
@@ -600,12 +608,12 @@ export function AnalyticsWorkbenchClient() {
             </div>
             <em>SPY · QQQ · sector ETF</em>
           </div>
-          <MiniLineChart values={valuation.benchmarkSeries} />
+          {valuation.benchmarkSeries.length ? <MiniLineChart values={valuation.benchmarkSeries} /> : <div className="trading-analytics-empty-chart">Select a ticker to compare market performance.</div>}
           <dl className="trading-ticker-chart-stats">
-            <div><dt>Vs QQQ</dt><dd className="positive">Pending</dd></div>
-            <div><dt>Vs SPY</dt><dd className="positive">Pending</dd></div>
-            <div><dt>Momentum</dt><dd>{valuation.summary?.coverage.prices ? 'DefeatBeta-backed' : 'Pending'}</dd></div>
-            <div><dt>Trend risk</dt><dd>{valuation.confidence === 'Low' ? 'High' : 'Medium'}</dd></div>
+            <div><dt>Vs QQQ</dt><dd>{hasAnalysis ? 'Pending' : '—'}</dd></div>
+            <div><dt>Vs SPY</dt><dd>{hasAnalysis ? 'Pending' : '—'}</dd></div>
+            <div><dt>Momentum</dt><dd>{valuation.summary?.coverage.prices ? 'DefeatBeta-backed' : '—'}</dd></div>
+            <div><dt>Trend risk</dt><dd>{hasAnalysis ? (valuation.confidence === 'Low' ? 'High' : 'Medium') : '—'}</dd></div>
           </dl>
         </section>
 
