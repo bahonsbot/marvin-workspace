@@ -919,3 +919,18 @@ User corrections and feedback. Log when user explicitly corrects you.
 
 ## 2026-05-03 — Safe fallback is not product completion
 - For ticker profile repairs, removing a wrong/offensive external match is only the safety fix. If the page falls back to generic provider-plan/missing-data copy, report it as safer but unfinished, and carry forward a proper data-source/logo/profile follow-up.
+
+## [CORR-20260504-1910]
+
+**Trigger:** Philippe reviewed the refined ETF ticker page screenshots and asked to lighten the Fund cost/analytics typography, reduce duplicated Fund Profile/Fund Metrics facts, and remove stock-only Finance Glossary / Estimates sections from ETF pages.
+**What was wrong:** The ETF page had become data-rich but still inherited too much stock-page structure and heavy table typography. Fund Profile duplicated fund metrics, Fund cost/analytics text was visually heavier than the surrounding Mission Control style, and ETF pages still carried stock-oriented glossary/estimate sections that did not fit funds.
+**Lesson:** For Mission Control ETF/fund pages, treat funds as a distinct information architecture from equities. Keep Fund Profile identity-only (Instrument Type, Exchange, Country, ISIN), put provider/benchmark/AUM/TER/replication/distribution/holdings into Fund Metrics or dedicated fund sections, and omit stock-only Finance Glossary / Estimates / EPS sections. Match Mission Control's lighter typography in dense fund lists; headers can stay strong, but row labels/values should stay calm.
+
+**Priority:** high
+**Status:** active
+
+## CORR-20260507-1408 — Keep TOOLS.md lean; do not document absent unused files
+
+- Context: During the May 7 Morning Meeting, a self-improvement review suggested documenting absent `projects/autonomous-trading-bot/.env.local` in `TOOLS.md`. Verification found no code/script/docs references to `.env.local`; only `.env` exists and is correctly mode 600.
+- Correction: Do not add TOOLS.md notes for absent unused files or non-existent workflows. Document only live runtime setup facts. Reopen only when code/scripts reference the file or a real local override workflow is introduced.
+- Related placement rule: removed-provider drift rules, such as Nexos staying absent, belong in `MEMORY.md`, not `TOOLS.md`.
