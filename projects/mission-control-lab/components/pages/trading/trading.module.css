@@ -6482,3 +6482,29 @@
     text-align: left;
   }
 }
+
+:global(.trading-analytics-chart-panel .trading-analytics-corridor-head) {
+  margin-bottom: -2px;
+}
+
+:global(.trading-analytics-chart-panel .trading-analytics-corridor) {
+  gap: 8px;
+  padding: 4px 0 2px;
+}
+
+:global(.trading-analytics-chart-panel .trading-analytics-corridor-track) {
+  height: 16px;
+}
+
+:global(.trading-analytics-chart-panel .trading-analytics-corridor-labels) {
+  min-height: 34px;
+}
+
+:global(.trading-analytics-chart-panel .trading-analytics-corridor-labels b) {
+  font-size: 18px;
+}
+
+:global(.trading-analytics-chart-panel .trading-analytics-contribution-bars) {
+  gap: 7px;
+  margin-top: 0;
+}

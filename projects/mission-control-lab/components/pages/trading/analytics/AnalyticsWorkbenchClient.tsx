@@ -544,7 +544,6 @@ export function AnalyticsWorkbenchClient() {
         <div className="trading-analytics-chart-panel">
           <div className="trading-ticker-chart-head trading-analytics-corridor-head">
             <div className="trading-section-label">Fair value corridor <Explainer id="fairValue" /></div>
-            <p>Bear/base/bull range from the blended model. The vertical marker is the base estimate.</p>
           </div>
           <CorridorChart valuation={valuation} currency={currency} />
         </div>
