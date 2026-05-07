@@ -469,6 +469,7 @@ export function AnalyticsWorkbenchClient() {
           <span>{selected ? 'Validated match' : 'Validation'}</span>
           <strong>{selected?.name ?? 'No company selected'}</strong>
           <em>{selected ? `${selected.exchange} · ${selected.currency} · DefeatBeta: ${exchangeSymbolForDefeatBeta(selected.symbol)}` : valuation.message}</em>
+          {valuation.status === 'unavailable' ? <small>Analytics data unavailable for this ticker.</small> : null}
           {error ? <small>{error}</small> : null}
         </div>
       </section>

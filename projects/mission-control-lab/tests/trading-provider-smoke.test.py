@@ -483,6 +483,7 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("fetch('/api/trading/valuation/quick'", workbench)
         self.assertIn("setValuation(payload.valuation)", workbench)
         self.assertIn("Choose a ticker result, then generate Quick Valuation.", workbench)
+        self.assertIn("Analytics data unavailable for this ticker.", workbench)
         self.assertIn("status: 'generating'", workbench)
         self.assertNotIn("Valuation run status", workbench)
         self.assertIn("CorridorChart", workbench)
