@@ -588,7 +588,7 @@ export function AnalyticsWorkbenchClient() {
               <span>Valuation stack</span>
               <h2>Four models, one blended range</h2>
             </div>
-            <em>{valuation.summary?.source.label ?? 'Editable weights later'}</em>
+            <em>{valuation.summary?.source.label ?? 'Models unlock after analysis'}</em>
           </div>
           <dl className="trading-analytics-methods">
             {valuation.methods.map((method) => (
@@ -606,7 +606,7 @@ export function AnalyticsWorkbenchClient() {
               <span>Market comparison</span>
               <h2>Relative performance</h2>
             </div>
-            <em>SPY · QQQ · sector ETF</em>
+            <em>{hasAnalysis ? 'Benchmarks pending' : 'Select ticker first'}</em>
           </div>
           {valuation.benchmarkSeries.length ? <MiniLineChart values={valuation.benchmarkSeries} /> : <div className="trading-analytics-empty-chart">Select a ticker to compare market performance.</div>}
           <dl className="trading-ticker-chart-stats">
@@ -623,7 +623,7 @@ export function AnalyticsWorkbenchClient() {
               <span>Evidence map</span>
               <h2>What the model reads</h2>
             </div>
-            <em>{valuation.summary ? `${valuation.summary.resolvedSymbol} · ${valuation.summary.status}` : 'DefeatBeta + providers'}</em>
+            <em>{valuation.summary ? `${valuation.summary.resolvedSymbol} · ${valuation.summary.status}` : 'Evidence loads after analysis'}</em>
           </div>
           <dl className="trading-profile-facts trading-analytics-evidence">
             {valuation.evidence.map(([label, value]) => (
@@ -638,7 +638,7 @@ export function AnalyticsWorkbenchClient() {
               <span>Risk sensitivity</span>
               <h2>Assumptions that matter <Explainer id="sensitivity" /></h2>
             </div>
-            <em>Bear/base/bull</em>
+            <em>{hasAnalysis ? 'Sensitivity range' : 'Assumptions pending'}</em>
           </div>
           <SensitivityBands rows={valuation.sensitivity} currency={currency} />
           <p className="trading-analytics-note">The final range should always show which variable changed the answer most: WACC, margin/cash conversion, revenue growth, or multiple compression. <Explainer id="sensitivity" /></p>
