@@ -1,0 +1,7 @@
+.venv/
+.python-packages/
+.cache/
+.duckdb/
+__pycache__/
+*.pyc
+*.log
