@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   }
 
   const defeatBetaSymbol = exchangeSymbolForDefeatBeta(payload.symbol || payload.selected.symbol);
-  const enrichment = await getDefeatBetaAnalyticsSummary(defeatBetaSymbol);
+  const enrichment = await getDefeatBetaAnalyticsSummary(defeatBetaSymbol, { timeoutMs: 30_000 });
   const valuation = buildQuickValuation({
     selected: payload.selected,
     summary: enrichment.summary,
