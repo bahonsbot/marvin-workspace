@@ -19,6 +19,7 @@ type SearchResult = {
 
 type SearchResponse = { query: string; results: SearchResult[] };
 type QuickValuationRouteResult = { ok: boolean; valuation: QuickValuation };
+type TickerMetadata = { symbol: string; name: string; logoUrl: string | null; logoAlt: string };
 
 type ValuationRunStatus = {
   id: string;
@@ -194,6 +195,20 @@ function bestValidatedMatch(query: string, results: SearchResult[]) {
   return results[0] ?? null;
 }
 
+function initialsForSelection(selection: SearchResult | null) {
+  return (selection?.code || selection?.symbol || '•').replace(/\W/g, '').slice(0, 2) || '•';
+}
+
+function CompanyLogo({ selection, metadata }: { selection: SearchResult | null; metadata: TickerMetadata | null }) {
+  const logoUrl = metadata?.logoUrl ?? null;
+  const alt = metadata?.logoAlt ?? `${selection?.name ?? selection?.symbol ?? 'Company'} logo`;
+  return (
+    <span className={`trading-analytics-company-logo ${logoUrl ? 'has-logo' : 'initials-only'}`} aria-hidden={logoUrl ? undefined : true}>
+      {logoUrl ? <img src={logoUrl} alt={alt} loading="lazy" decoding="async" /> : <span>{initialsForSelection(selection)}</span>}
+    </span>
+  );
+}
+
 function valuePoints(valuation: QuickValuation) {
   const submodels = valuation.submodels?.filter((model) => model.value != null) ?? [];
   if (!submodels.length) {
@@ -295,6 +310,7 @@ export function AnalyticsWorkbenchClient() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [valuation, setValuation] = useState<QuickValuation>(initialValuation);
+  const [selectedMetadata, setSelectedMetadata] = useState<TickerMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const searchResultsId = useId();
@@ -342,6 +358,27 @@ export function AnalyticsWorkbenchClient() {
     };
   }, [trimmedQuery, valuation.selected?.symbol]);
 
+  useEffect(() => {
+    if (!selected?.symbol) {
+      setSelectedMetadata(null);
+      return;
+    }
+    const controller = new AbortController();
+    fetch(`/api/trading/watchlist-metadata?symbols=${encodeURIComponent(selected.symbol)}`, {
+      signal: controller.signal,
+      headers: { accept: 'application/json' },
+      cache: 'no-store',
+    })
+      .then((response) => response.ok ? response.json() : null)
+      .then((payload: { items?: TickerMetadata[] } | null) => {
+        if (!controller.signal.aborted) setSelectedMetadata(payload?.items?.[0] ?? null);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setSelectedMetadata(null);
+      });
+    return () => controller.abort();
+  }, [selected?.symbol]);
+
   function selectTicker(result: SearchResult) {
     setQuery(result.symbol);
     setSearchOpen(false);
@@ -349,6 +386,7 @@ export function AnalyticsWorkbenchClient() {
     setSearchError(null);
     setActiveResultIndex(0);
     setError(null);
+    setSelectedMetadata(null);
     setValuation((current) => ({ ...current, status: 'validated', selected: result, message: `Validated ${result.name} on ${result.exchange}.` }));
   }
 
@@ -414,10 +452,10 @@ export function AnalyticsWorkbenchClient() {
     <div className="trading-analytics-workbench">
       <section className="trading-analytics-command" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none', overflow: 'visible' })}>
         <div>
-          <div className="trading-section-label">Analyze a ticker</div>
+          <div className="trading-section-label">Analytics</div>
           <h2>From symbol to fair-value range.</h2>
           <p>
-            Validate the company, choose the depth, then generate a valuation pack. DefeatBeta supplies analytical depth; Milou turns the evidence into a clear thesis.
+            Generate a quick analysis or full thesis to get proper valuations and insights. Chat with stock expert Milou to get the answers to all your questions.
           </p>
         </div>
         <form className="trading-analytics-search" aria-label="Ticker analysis setup" onSubmit={(event) => { event.preventDefault(); void generateQuickValuation(); }}>
@@ -430,6 +468,7 @@ export function AnalyticsWorkbenchClient() {
                 onChange={(event) => {
                   setQuery(event.target.value.toUpperCase());
                   setSearchOpen(true);
+                  setSelectedMetadata(null);
                   setValuation({ ...initialValuation, message: 'Choose a ticker result, then generate Quick Valuation.', selected: null });
                 }}
                 onFocus={() => setSearchOpen(true)}
@@ -486,9 +525,9 @@ export function AnalyticsWorkbenchClient() {
           </div>
         </form>
         <div className="trading-analytics-validation" data-state={valuation.status}>
-          <span>{selected ? 'Validated match' : 'Validation'}</span>
+          <CompanyLogo selection={selected} metadata={selectedMetadata} />
           <strong>{selected?.name ?? 'No company selected'}</strong>
-          <em>{selected ? `${selected.exchange} · ${selected.currency} · DefeatBeta: ${exchangeSymbolForDefeatBeta(selected.symbol)}` : valuation.message}</em>
+          {!selected ? <em>{valuation.message}</em> : null}
           {valuation.status === 'unavailable' ? <small>Analytics data unavailable for this ticker.</small> : null}
           {error ? <small>{error}</small> : null}
         </div>

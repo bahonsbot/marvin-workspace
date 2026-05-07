@@ -5716,9 +5716,9 @@
 
 :global(.trading-analytics-command) {
   display: grid;
-  grid-template-columns: minmax(280px, 0.86fr) minmax(360px, 1.15fr) minmax(230px, 0.65fr);
+  grid-template-columns: minmax(300px, 0.9fr) minmax(360px, 0.92fr) minmax(220px, 0.58fr);
   gap: 18px;
-  align-items: end;
+  align-items: center;
 }
 
 :global(.trading-analytics-command h2),
@@ -5744,9 +5744,10 @@
 
 :global(.trading-analytics-search) {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(150px, 0.62fr) auto;
-  gap: 10px;
-  align-items: end;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  align-self: start;
+  align-items: stretch;
 }
 
 :global(.trading-analytics-search label) {
@@ -5754,8 +5755,7 @@
   gap: 6px;
 }
 
-:global(.trading-analytics-search span),
-:global(.trading-analytics-validation span) {
+:global(.trading-analytics-search label > span) {
   font-size: 10px;
   line-height: 1.2;
   letter-spacing: 0.13em;
@@ -5795,7 +5795,9 @@
   border-left: 1px solid rgba(28, 37, 32, 0.12);
   padding-left: 18px;
   display: grid;
-  gap: 4px;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 10px;
+  align-items: center;
 }
 
 :global(.trading-analytics-validation strong) {
@@ -5804,12 +5806,50 @@
   line-height: 1;
   letter-spacing: -0.035em;
   font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-:global(.trading-analytics-validation em) {
+:global(.trading-analytics-validation em),
+:global(.trading-analytics-validation small) {
+  grid-column: 2;
   color: rgba(34, 48, 41, 0.54);
   font-size: 11px;
   font-style: normal;
+}
+
+
+:global(.trading-analytics-company-logo) {
+  grid-row: span 2;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(28, 37, 32, 0.14);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(79, 111, 125, 0.14), rgba(255, 253, 249, 0.92));
+  color: #17241e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: -0.04em;
+  overflow: hidden;
+}
+
+:global(.trading-analytics-company-logo.has-logo) {
+  background: rgba(255, 253, 249, 0.92);
+  padding: 5px;
+}
+
+:global(.trading-analytics-company-logo img) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 
 :global(.trading-analytics-hero) {
@@ -6075,7 +6115,9 @@
 }
 
 :global(.trading-analytics-symbol-results strong) {
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -6085,6 +6127,9 @@
   white-space: nowrap;
   font-size: 12px;
   color: rgba(34, 48, 41, 0.74);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 :global(.trading-analytics-symbol-results small) {
