@@ -57,6 +57,27 @@ def normalize_symbol(symbol: str) -> str:
     return SYMBOL_ALIASES.get(cleaned, cleaned)
 
 
+def symbol_candidates(symbol: str) -> list[str]:
+    cleaned = symbol.strip().upper().replace("/", ".")
+    candidates: list[str] = []
+
+    def add(candidate: str) -> None:
+        normalized = SYMBOL_ALIASES.get(candidate, candidate)
+        if normalized and normalized not in candidates:
+            candidates.append(normalized)
+
+    add(cleaned)
+    if "." in cleaned:
+        base = cleaned.split(".", 1)[0]
+        add(base)
+    return candidates
+
+
+def summary_has_core(summary: dict[str, Any]) -> bool:
+    coverage = summary.get("coverage") or {}
+    return bool(coverage.get("ratios") and coverage.get("statements"))
+
+
 def finite_number(value: Any) -> float | None:
     if value is None:
         return None
@@ -157,12 +178,12 @@ def non_empty_frame(df) -> bool:
     return df is not None and not df.empty and len(df.index) > 0
 
 
-def build_summary(symbol: str) -> dict[str, Any]:
+def build_candidate_summary(symbol: str, requested_symbol: str | None = None) -> dict[str, Any]:
     from defeatbeta_api.data.ticker import Ticker  # type: ignore
     import defeatbeta_api  # type: ignore
 
-    requested = symbol.strip().upper()
-    resolved = normalize_symbol(requested)
+    requested = (requested_symbol or symbol).strip().upper()
+    resolved = normalize_symbol(symbol)
     started = time.perf_counter()
     ticker = Ticker(resolved)
     diagnostics: list[dict[str, Any]] = []
@@ -242,6 +263,33 @@ def build_summary(symbol: str) -> dict[str, Any]:
             "Empty core datasets are treated as unavailable, not as zero-valued analytics.",
         ],
     }
+
+
+def build_summary(symbol: str) -> dict[str, Any]:
+    requested = symbol.strip().upper().replace("/", ".")
+    candidates = symbol_candidates(requested)
+    attempts: list[dict[str, Any]] = []
+    fallback: dict[str, Any] | None = None
+    for candidate in candidates:
+        summary = build_candidate_summary(candidate, requested_symbol=requested)
+        attempts.append({
+            "candidate": candidate,
+            "resolvedSymbol": summary.get("resolvedSymbol"),
+            "status": summary.get("status"),
+            "coverage": summary.get("coverage"),
+            "elapsedMs": summary.get("elapsedMs"),
+        })
+        if fallback is None:
+            fallback = summary
+        if summary.get("status") in {"available", "partial"} and summary_has_core(summary):
+            summary["resolution"] = {"strategy": "candidate-chain", "candidates": candidates, "attempts": attempts}
+            summary["notes"].append(f"Resolved {requested} via DefeatBeta candidate {summary.get('resolvedSymbol')}.")
+            return summary
+    result = fallback or build_candidate_summary(requested, requested_symbol=requested)
+    result["resolution"] = {"strategy": "candidate-chain", "candidates": candidates, "attempts": attempts}
+    result["notes"].append("No DefeatBeta candidate returned core analytics coverage.")
+    return result
+
 
 
 @app.get("/health")
