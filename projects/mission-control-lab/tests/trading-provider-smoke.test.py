@@ -492,7 +492,8 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("SensitivityBands", workbench)
         self.assertIn("Explainer", workbench)
         self.assertIn("trading-analytics-base-case", workbench)
-        self.assertIn("trading-analytics-range-copy", workbench)
+        self.assertIn("12 – 24 month horizon", workbench)
+        self.assertNotIn("trading-analytics-range-copy", workbench)
         self.assertIn("trading-analytics-decision-chip", workbench)
         self.assertIn("decisionZone", workbench)
         self.assertNotIn("trading-analytics-status-copy", workbench)
@@ -544,7 +545,7 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("data-model='dcfProxy'", styles)
         self.assertIn("trading-analytics-corridor-head", styles)
         self.assertIn("trading-analytics-base-case", styles)
-        self.assertIn("trading-analytics-range-copy", styles)
+        self.assertIn("trading-analytics-base-case strong", styles)
         self.assertIn("trading-analytics-decision-chip", styles)
         self.assertIn("trading-analytics-verdict-meta", styles)
 

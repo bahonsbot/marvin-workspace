@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { MiniLineChart, TabScaffold, tradingCardStyle } from '@/components/pages/trading/shared';
 import type { DefeatBetaAnalyticsSummary } from '@/lib/trading/sources/defeatbeta';
 
@@ -144,10 +144,6 @@ function Explainer({ id }: { id: keyof typeof explainers }) {
 function formatCurrency(value: number | null | undefined, currency = 'USD') {
   if (value == null || !Number.isFinite(value)) return '—';
   return new Intl.NumberFormat('en-US', { style: 'currency', currency, maximumFractionDigits: value >= 100 ? 0 : 2 }).format(value);
-}
-
-function formatCurrencyRange(low: number | null | undefined, high: number | null | undefined, currency = 'USD') {
-  return `${formatCurrency(low, currency)}–${formatCurrency(high, currency)}`;
 }
 
 function formatPercent(value: number | null | undefined, options: { signed?: boolean; decimals?: number } = {}) {
@@ -312,14 +308,6 @@ export function AnalyticsWorkbenchClient() {
   const selectedResult = searchResults[Math.min(activeResultIndex, Math.max(searchResults.length - 1, 0))];
   const showSearchPanel = searchOpen && Boolean(trimmedQuery) && (searchLoading || searchError || searchResults.length > 0);
   const valuationReady = valuation.status === 'ready';
-
-  const verdictLabel = useMemo(() => {
-    if (valuation.status === 'generating') return 'Generating…';
-    if (valuation.status === 'unavailable') return 'Unavailable';
-    if (valuation.status === 'ready') return formatCurrencyRange(valuation.fairLow, valuation.fairHigh, currency);
-    return '$142-$178';
-  }, [currency, valuation.fairHigh, valuation.fairLow, valuation.status]);
-
 
   useEffect(() => {
     if (!trimmedQuery || valuation.selected?.symbol === trimmedQuery.toUpperCase()) {
@@ -541,13 +529,12 @@ export function AnalyticsWorkbenchClient() {
             <span>Base case</span>
             <strong>{formatCurrency(valuation.baseValue, currency)}</strong>
           </div>
-          <p className="trading-analytics-range-copy">Fair value range: <strong>{verdictLabel}</strong></p>
           <div className="trading-analytics-verdict-row">
             <span>Current price</span><strong>{formatCurrency(valuation.currentPrice, currency)}</strong>
             <span>Implied upside</span><strong className={(valuation.impliedUpside ?? 0) >= 0 ? 'positive' : 'negative'}>{formatPercent(valuation.impliedUpside, { signed: true })}</strong>
             <span>Decision zone</span><strong className="trading-analytics-decision-chip">{valuation.decisionZone}<Explainer id="decisionZone" /></strong>
           </div>
-          <p className="trading-analytics-verdict-meta">12–24 month horizon · {valuation.confidence} confidence · range reflects model uncertainty, not a price target.</p>
+          <p className="trading-analytics-verdict-meta">12 – 24 month horizon · {valuation.confidence} confidence</p>
         </div>
         <div className="trading-analytics-chart-panel">
           <div className="trading-ticker-chart-head trading-analytics-corridor-head">

@@ -6572,3 +6572,13 @@
   height: 15px;
   font-size: 9px;
 }
+
+:global(.trading-analytics-base-case strong) {
+  font-size: clamp(34px, 4.2vw, 52px);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+:global(.trading-analytics-verdict) {
+  gap: 14px;
+}
