@@ -87,6 +87,7 @@ Protected zones are approval-gated, not permanently off-limits.
 - Direct installed-package dist hotfixes are fragile across npm reinstall/update/rebuild events. Prefer source-level fixes or a verified reapplication checklist.
 - Backup posture is present. Do not re-flag backup/DR as missing unless there is evidence of drift, failure, or coverage change.
 - For Docker-hosted OpenClaw/plugin trust diagnostics, verify ownership and trust warnings under the actual runtime user context first. Root-run `openclaw doctor` can produce false positives for workspace plugins such as `lossless-claw`.
+- Nexos config should remain absent. If Nexos entries appear again in `openclaw.json`, `models.json`, or `auth-profiles.json`, treat that as configuration drift and investigate.
 
 ## Review and Validation Rules
 ### Overnight reviews
@@ -149,3 +150,20 @@ Protected zones are approval-gated, not permanently off-limits.
 
 Keep this file lean. Promote only rules and truths that should still matter after the current week is forgotten.
 
+
+## Promoted From Short-Term Memory (2026-04-28)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-04-20.md:28:28 -->
+- *(Note: cron executed at 02:00 GMT+8 on 2026-04-20; content covers Apr 19 conversation window.)* [score=0.870 recalls=0 avg=0.620 source=memory/2026-04-20.md:28-28]
+
+## Promoted From Short-Term Memory (2026-04-29)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-04-22.md:5:5 -->
+- Extracted from cron session `7201afb2` running at 02:00 GMT+8 on 2026-04-22, covering the 2026-04-21 conversation window. [score=0.866 recalls=0 avg=0.620 source=memory/2026-04-22.md:5-5]
+<!-- openclaw-memory-promotion:memory:memory/2026-04-22.md:11:11 -->
+- *(carried forward from 2026-04-21 daily memory — cron ran at 02:00 GMT+8 on Apr 21 covering the Apr 20 window)* [score=0.866 recalls=0 avg=0.620 source=memory/2026-04-22.md:11-11]
+
+## Promoted From Short-Term Memory (2026-05-05)
+
+<!-- openclaw-memory-promotion:memory:memory/2026-04-28.md:4:4 -->
+- No active sessions found other than this cron run. Reviewed today's daily memory and entity files. [score=0.866 recalls=0 avg=0.620 source=memory/2026-04-28.md:4-4]

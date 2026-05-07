@@ -24,7 +24,6 @@ Quick rule:
 - Canonical OpenClaw CLI path: `/data/.npm-global/bin/openclaw`
 - Current rule: use the host/container restart path for runtime restarts, not `openclaw gateway restart` from inside the container
 - Current operational posture: OpenClaw `2026.4.23` is installed and smoke-tested, but post-update follow-up is still in progress. Prefer targeted cleanup and validation over broad `doctor --fix` or patch stacking.
-- Nexos provider note: Nexos config was removed and verified absent from `openclaw.json`, `models.json`, and `auth-profiles.json` on Apr 25, 2026. Treat new Nexos entries as drift requiring investigation, not expected background runtime config.
 
 ## Container Access
 - Root shell from host: `docker exec -it openclaw-ktrt-openclaw-1 bash`
