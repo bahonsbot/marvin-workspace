@@ -13,13 +13,29 @@ export type AnalyticsTickerSelection = {
   isPrimary: boolean;
 };
 
+export type ValuationModelName = 'dcfProxy' | 'multiples' | 'reverseDcf' | 'qualityRisk';
+
 export type ValuationModel = {
   name: string;
+  key?: ValuationModelName;
   range: string;
   weight: string;
   note: string;
+  value?: number | null;
   low?: number;
   high?: number;
+};
+
+export type ValuationSubmodel = {
+  key: ValuationModelName;
+  label: string;
+  weight: number;
+  value: number | null;
+  low: number | null;
+  high: number | null;
+  confidence: 'Low' | 'Medium' | 'High';
+  assumptions: Record<string, number | string | null>;
+  notes: string[];
 };
 
 export type QuickValuationResult = {
@@ -39,9 +55,10 @@ export type QuickValuationResult = {
   valuationSeries: number[];
   benchmarkSeries: number[];
   riskSeries: number[];
+  submodels: ValuationSubmodel[];
   assumptions: {
     modelVersion: string;
-    modelType: 'first-pass-proxy';
+    modelType: 'submodel-proxy';
     currency: string;
     revenueCagr: number | null;
     netIncomeCagr: number | null;
@@ -51,11 +68,13 @@ export type QuickValuationResult = {
     latestWacc: number | null;
     latestRoe: number | null;
     latestRoic: number | null;
-    growthAdjustment: number;
+    dcfValue: number | null;
+    multiplesValue: number | null;
+    reverseDcfValue: number | null;
+    qualityRiskValue: number | null;
     qualityAdjustment: number;
     riskPenalty: number;
-    valuationAdjustment: number;
-    spread: number;
+    confidenceSpread: number;
   };
 };
 
@@ -64,10 +83,10 @@ export const fallbackBenchmarkSeries = [100, 104, 102, 109, 112, 118, 121, 127, 
 export const fallbackRiskSeries = [64, 58, 61, 54, 49, 46, 51, 44, 41, 38, 36, 34];
 
 export const fallbackMethods: ValuationModel[] = [
-  { name: 'DCF base case', range: '$148-$184', weight: '40%', note: 'FCF path, WACC, terminal growth' },
-  { name: 'Multiples check', range: '$136-$171', weight: '25%', note: 'PE, EV/EBITDA, PS vs history and peers' },
-  { name: 'Reverse DCF', range: '$128-$166', weight: '20%', note: 'Growth implied by current market price' },
-  { name: 'Quality adjustment', range: '+6%', weight: '15%', note: 'ROIC-WACC spread, balance sheet, cyclicality' },
+  { name: 'DCF base case', key: 'dcfProxy', range: '$148-$184', weight: '40%', note: 'FCF path, WACC, terminal growth' },
+  { name: 'Multiples check', key: 'multiples', range: '$136-$171', weight: '25%', note: 'PE, EV/EBITDA, PS vs history and peers' },
+  { name: 'Reverse DCF', key: 'reverseDcf', range: '$128-$166', weight: '20%', note: 'Growth implied by current market price' },
+  { name: 'Quality/risk overlay', key: 'qualityRisk', range: '+6%', weight: '15%', note: 'ROIC-WACC spread, balance sheet, cyclicality' },
 ];
 
 export const fallbackEvidence: Array<[string, string]> = [
@@ -76,6 +95,13 @@ export const fallbackEvidence: Array<[string, string]> = [
   ['Capital quality', 'ROE, ROIC, WACC, reinvestment runway'],
   ['Market context', 'Relative strength, sector momentum, rate sensitivity'],
 ];
+
+const SUBMODEL_WEIGHTS: Record<ValuationModelName, number> = {
+  dcfProxy: 0.4,
+  multiples: 0.25,
+  reverseDcf: 0.2,
+  qualityRisk: 0.15,
+};
 
 export function formatCurrency(value: number | null | undefined, currency = 'USD') {
   if (value == null || !Number.isFinite(value)) return '—';
@@ -112,10 +138,176 @@ function average(values: Array<number | null>) {
   return usable.reduce((sum, value) => sum + value, 0) / usable.length;
 }
 
+function clamp(value: number, low: number, high: number) {
+  return Math.min(Math.max(value, low), high);
+}
+
+function rangeAround(value: number | null, spread: number) {
+  if (value == null || !Number.isFinite(value)) return { low: null, high: null };
+  return { low: value * (1 - spread), high: value * (1 + spread) };
+}
+
 function chartSeriesFromRange(low: number | null, base: number | null, high: number | null, current: number | null) {
   if (low == null || base == null || high == null) return fallbackValuationSeries;
   const spot = current ?? base;
   return [spot * 0.92, spot * 0.97, low, (low + base) / 2, base, (base + high) / 2, high].map((value) => Math.max(value, 1));
+}
+
+function weightedBlend(submodels: ValuationSubmodel[]) {
+  const usable = submodels.filter((model) => model.value != null && Number.isFinite(model.value));
+  const totalWeight = usable.reduce((sum, model) => sum + model.weight, 0);
+  if (!usable.length || totalWeight <= 0) return null;
+  return usable.reduce((sum, model) => sum + model.value! * model.weight, 0) / totalWeight;
+}
+
+function buildDcfProxy(input: {
+  currentPrice: number | null;
+  revenueCagr: number | null;
+  netIncomeCagr: number | null;
+  wacc: number | null;
+  coverage: boolean;
+}): ValuationSubmodel {
+  const anchor = input.currentPrice ?? 100;
+  const growthScore = average([input.revenueCagr, input.netIncomeCagr]);
+  const normalizedWacc = input.wacc != null ? input.wacc * 100 : 10;
+  const forecastGrowth = clamp(growthScore, -8, 16);
+  const terminalGrowth = clamp(forecastGrowth * 0.28, 0, 4);
+  const discountSpread = clamp((normalizedWacc - terminalGrowth) / 100, 0.045, 0.16);
+  const growthLift = clamp(forecastGrowth / 100, -0.08, 0.18);
+  const discountDrag = clamp((normalizedWacc - 9) / 100, -0.04, 0.08);
+  const value = anchor * (1 + growthLift - discountDrag + (input.coverage ? 0.02 : -0.04));
+  const range = rangeAround(value, input.coverage ? 0.16 : 0.24);
+
+  return {
+    key: 'dcfProxy',
+    label: 'DCF proxy',
+    weight: SUBMODEL_WEIGHTS.dcfProxy,
+    value,
+    ...range,
+    confidence: input.coverage ? 'Medium' : 'Low',
+    assumptions: {
+      anchor,
+      forecastGrowth,
+      terminalGrowth,
+      normalizedWacc,
+      discountSpread,
+    },
+    notes: ['Uses price as anchor until share count / FCF-per-share normalization is wired.', 'Penalizes high WACC and low statement coverage.'],
+  };
+}
+
+function buildMultiplesModel(input: {
+  currentPrice: number | null;
+  pe: number | null;
+  ps: number | null;
+  pb: number | null;
+  revenueCagr: number | null;
+  coverage: boolean;
+}): ValuationSubmodel {
+  const anchor = input.currentPrice ?? 100;
+  const growth = clamp(input.revenueCagr ?? 4, -8, 18);
+  const fairPe = clamp(18 + growth * 0.55, 10, 32);
+  const fairPs = clamp(3.2 + growth * 0.12, 1.2, 8.5);
+  const fairPb = clamp(4 + growth * 0.16, 1.4, 12);
+  const peSignal = input.pe ? clamp(fairPe / input.pe, 0.72, 1.32) : 1;
+  const psSignal = input.ps ? clamp(fairPs / input.ps, 0.75, 1.28) : 1;
+  const pbSignal = input.pb ? clamp(fairPb / input.pb, 0.75, 1.24) : 1;
+  const multipleSignal = average([peSignal, psSignal, pbSignal]);
+  const value = anchor * multipleSignal;
+  const range = rangeAround(value, input.coverage ? 0.18 : 0.26);
+
+  return {
+    key: 'multiples',
+    label: 'Multiples check',
+    weight: SUBMODEL_WEIGHTS.multiples,
+    value,
+    ...range,
+    confidence: input.coverage ? 'Medium' : 'Low',
+    assumptions: {
+      anchor,
+      fairPe,
+      fairPs,
+      fairPb,
+      observedPe: input.pe,
+      observedPs: input.ps,
+      observedPb: input.pb,
+      multipleSignal,
+    },
+    notes: ['Normalizes PE/PS/PB against a growth-adjusted fair multiple band.', 'Still needs sector-specific peer bands later.'],
+  };
+}
+
+function buildReverseDcfModel(input: {
+  currentPrice: number | null;
+  revenueCagr: number | null;
+  netIncomeCagr: number | null;
+  wacc: number | null;
+}): ValuationSubmodel {
+  const anchor = input.currentPrice ?? 100;
+  const observedGrowth = average([input.revenueCagr, input.netIncomeCagr]);
+  const normalizedWacc = input.wacc != null ? input.wacc * 100 : 10;
+  const impliedGrowth = clamp(normalizedWacc - 6, -2, 9);
+  const growthGap = clamp((observedGrowth - impliedGrowth) / 100, -0.12, 0.14);
+  const value = anchor * (1 + growthGap * 0.65);
+  const range = rangeAround(value, 0.2);
+
+  return {
+    key: 'reverseDcf',
+    label: 'Reverse DCF',
+    weight: SUBMODEL_WEIGHTS.reverseDcf,
+    value,
+    ...range,
+    confidence: input.currentPrice != null ? 'Medium' : 'Low',
+    assumptions: {
+      anchor,
+      observedGrowth,
+      impliedGrowth,
+      growthGap,
+      normalizedWacc,
+    },
+    notes: ['Estimates whether current market price implies more or less growth than recent fundamentals support.'],
+  };
+}
+
+function buildQualityRiskOverlay(input: {
+  currentPrice: number | null;
+  roe: number | null;
+  roic: number | null;
+  wacc: number | null;
+  coverage: boolean;
+}): ValuationSubmodel {
+  const anchor = input.currentPrice ?? 100;
+  const roePct = input.roe != null ? input.roe * 100 : null;
+  const roicPct = input.roic != null ? input.roic * 100 : null;
+  const waccPct = input.wacc != null ? input.wacc * 100 : null;
+  const capitalQuality = average([roePct, roicPct]);
+  const spreadOverWacc = roicPct != null && waccPct != null ? roicPct - waccPct : null;
+  const qualityAdjustment = clamp(capitalQuality / 100, -0.08, 0.18);
+  const spreadAdjustment = spreadOverWacc != null ? clamp(spreadOverWacc / 100, -0.08, 0.14) : 0;
+  const missingCoveragePenalty = input.coverage ? 0 : -0.06;
+  const value = anchor * (1 + qualityAdjustment * 0.55 + spreadAdjustment * 0.45 + missingCoveragePenalty);
+  const range = rangeAround(value, input.coverage ? 0.15 : 0.24);
+
+  return {
+    key: 'qualityRisk',
+    label: 'Quality/risk overlay',
+    weight: SUBMODEL_WEIGHTS.qualityRisk,
+    value,
+    ...range,
+    confidence: input.coverage ? 'Medium' : 'Low',
+    assumptions: {
+      anchor,
+      roePct,
+      roicPct,
+      waccPct,
+      capitalQuality,
+      spreadOverWacc,
+      qualityAdjustment,
+      spreadAdjustment,
+      missingCoveragePenalty,
+    },
+    notes: ['Rewards ROIC/WACC spread and high capital quality, penalizes missing quality coverage.'],
+  };
 }
 
 export function buildQuickValuation(input: {
@@ -136,20 +328,21 @@ export function buildQuickValuation(input: {
   const revenueCagr = trendCagr(statementMetric(summary, 'Total Revenue'));
   const netIncomeCagr = trendCagr(statementMetric(summary, 'Net Income Common Stockholders'));
 
-  const qualityScore = average([roe, roic]);
-  const growthScore = average([revenueCagr, netIncomeCagr]);
-  const riskPenalty = wacc != null ? Math.min(Math.max(wacc * 100 - 8, -3), 8) : 2;
-  const modelAnchor = currentPrice ?? 100;
-  const growthAdjustment = Math.min(Math.max(growthScore / 100, -0.12), 0.22);
-  const qualityAdjustment = Math.min(Math.max(qualityScore / 100, -0.08), 0.18);
-  const valuationAdjustment = Math.min(Math.max(((pe ?? 22) - 22) / 220, -0.12), 0.1);
-  const baseValue = modelAnchor * (1 + growthAdjustment + qualityAdjustment - riskPenalty / 100 - valuationAdjustment);
-  const spread = Math.max(0.14, 0.28 - Math.min(Math.max((summary.coverage.statements ? 0.05 : 0) + (summary.coverage.ratios ? 0.04 : 0) + (summary.coverage.quality ? 0.04 : 0), 0), 0.12));
-  const fairLow = baseValue * (1 - spread);
-  const fairHigh = baseValue * (1 + spread);
-  const impliedUpside = currentPrice ? ((baseValue - currentPrice) / currentPrice) * 100 : null;
+  const dcfModel = buildDcfProxy({ currentPrice, revenueCagr, netIncomeCagr, wacc, coverage: summary.coverage.statements });
+  const multiplesModel = buildMultiplesModel({ currentPrice, pe, ps, pb, revenueCagr, coverage: summary.coverage.ratios });
+  const reverseDcfModel = buildReverseDcfModel({ currentPrice, revenueCagr, netIncomeCagr, wacc });
+  const qualityRiskModel = buildQualityRiskOverlay({ currentPrice, roe, roic, wacc, coverage: summary.coverage.quality });
+  const submodels = [dcfModel, multiplesModel, reverseDcfModel, qualityRiskModel];
+
+  const baseValue = weightedBlend(submodels);
+  const confidenceSpread = Math.max(0.14, 0.28 - Math.min(Math.max((summary.coverage.statements ? 0.05 : 0) + (summary.coverage.ratios ? 0.04 : 0) + (summary.coverage.quality ? 0.04 : 0), 0), 0.12));
+  const fairLow = baseValue != null ? baseValue * (1 - confidenceSpread) : null;
+  const fairHigh = baseValue != null ? baseValue * (1 + confidenceSpread) : null;
+  const impliedUpside = currentPrice && baseValue != null ? ((baseValue - currentPrice) / currentPrice) * 100 : null;
   const confidence = summary.coverage.statements && summary.coverage.ratios && summary.coverage.quality ? 'Medium' : 'Low';
   const decisionZone = impliedUpside == null ? 'Needs quote' : impliedUpside > 15 ? 'Undervalued watch' : impliedUpside < -10 ? 'Overvalued' : 'Watch / Buy weakness';
+  const qualityAdjustment = Number(qualityRiskModel.assumptions.qualityAdjustment ?? 0);
+  const riskPenalty = wacc != null ? clamp(wacc * 100 - 8, -3, 8) : 2;
 
   return {
     status: ok ? 'ready' : 'unavailable',
@@ -164,10 +357,10 @@ export function buildQuickValuation(input: {
     confidence,
     decisionZone,
     methods: [
-      { name: 'DCF proxy', range: `${formatCurrency(fairLow, currency)}-${formatCurrency(fairHigh, currency)}`, weight: '40%', note: `WACC ${wacc != null ? formatPercent(wacc * 100, { decimals: 1 }) : 'pending'}, FCF/growth proxy from statements`, low: fairLow, high: fairHigh },
-      { name: 'Multiples check', range: pe != null ? `${pe.toFixed(1)}x PE` : 'Pending', weight: '25%', note: `PS ${ps != null ? ps.toFixed(1) : '—'} · PB ${pb != null ? pb.toFixed(1) : '—'}` },
-      { name: 'Reverse DCF', range: currentPrice ? formatCurrency(currentPrice, currency) : 'Needs quote', weight: '20%', note: 'Uses current price as the market-implied anchor for the next hardening pass' },
-      { name: 'Quality adjustment', range: `${formatPercent(qualityAdjustment * 100, { signed: true })}`, weight: '15%', note: `ROE ${roe != null ? formatPercent(roe * 100) : '—'} · ROIC ${roic != null ? formatPercent(roic * 100) : '—'}` },
+      { name: dcfModel.label, key: dcfModel.key, value: dcfModel.value, range: `${formatCurrency(dcfModel.low, currency)}-${formatCurrency(dcfModel.high, currency)}`, weight: '40%', note: `WACC ${wacc != null ? formatPercent(wacc * 100, { decimals: 1 }) : 'pending'}, growth ${formatPercent(Number(dcfModel.assumptions.forecastGrowth ?? 0))}`, low: dcfModel.low ?? undefined, high: dcfModel.high ?? undefined },
+      { name: multiplesModel.label, key: multiplesModel.key, value: multiplesModel.value, range: multiplesModel.value != null ? formatCurrency(multiplesModel.value, currency) : 'Pending', weight: '25%', note: `PE ${pe != null ? pe.toFixed(1) : '—'} · PS ${ps != null ? ps.toFixed(1) : '—'} · PB ${pb != null ? pb.toFixed(1) : '—'}` },
+      { name: reverseDcfModel.label, key: reverseDcfModel.key, value: reverseDcfModel.value, range: reverseDcfModel.value != null ? formatCurrency(reverseDcfModel.value, currency) : 'Needs quote', weight: '20%', note: `Implied growth ${formatPercent(Number(reverseDcfModel.assumptions.impliedGrowth ?? 0))}` },
+      { name: qualityRiskModel.label, key: qualityRiskModel.key, value: qualityRiskModel.value, range: `${formatPercent(qualityAdjustment * 100, { signed: true })}`, weight: '15%', note: `ROE ${roe != null ? formatPercent(roe * 100) : '—'} · ROIC ${roic != null ? formatPercent(roic * 100) : '—'}` },
     ],
     evidence: [
       ['Revenue trend', revenueCagr != null ? `${formatPercent(revenueCagr, { signed: true })} annualized across available annual points` : 'Annual revenue trend unavailable'],
@@ -178,9 +371,10 @@ export function buildQuickValuation(input: {
     valuationSeries: chartSeriesFromRange(fairLow, baseValue, fairHigh, currentPrice),
     benchmarkSeries: summary.ratios.pe.map((point) => point.value).slice(0, 12).reverse().map((value) => Math.max(value, 1)).concat(fallbackBenchmarkSeries).slice(0, 12),
     riskSeries: summary.ratios.wacc.map((point) => point.value * 1000).slice(0, 12).reverse().map((value) => Math.max(value, 1)).concat(fallbackRiskSeries).slice(0, 12),
+    submodels,
     assumptions: {
-      modelVersion: 'quick-valuation-proxy-v1',
-      modelType: 'first-pass-proxy',
+      modelVersion: 'quick-valuation-submodels-v1',
+      modelType: 'submodel-proxy',
       currency,
       revenueCagr,
       netIncomeCagr,
@@ -190,11 +384,13 @@ export function buildQuickValuation(input: {
       latestWacc: wacc,
       latestRoe: roe,
       latestRoic: roic,
-      growthAdjustment,
+      dcfValue: dcfModel.value,
+      multiplesValue: multiplesModel.value,
+      reverseDcfValue: reverseDcfModel.value,
+      qualityRiskValue: qualityRiskModel.value,
       qualityAdjustment,
       riskPenalty,
-      valuationAdjustment,
-      spread,
+      confidenceSpread,
     },
   };
 }
