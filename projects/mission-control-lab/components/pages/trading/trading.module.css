@@ -6622,3 +6622,54 @@
   background: rgba(168, 93, 66, 0.08);
   color: #a85d42;
 }
+
+:global(.trading-analytics-search .trading-analytics-action-group) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(118px, 1fr));
+  gap: 8px;
+  align-items: end;
+}
+
+:global(.trading-analytics-search .trading-analytics-action-group button) {
+  width: 100%;
+  white-space: nowrap;
+}
+
+:global(.trading-analytics-search .trading-analytics-action-group button.secondary) {
+  background: rgba(255, 253, 249, 0.78);
+  color: #17241e;
+}
+
+:global(.trading-analytics-full-thesis) {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(340px, 1.1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+:global(.trading-analytics-full-thesis h2) {
+  margin: 6px 0 0;
+  font-family: var(--font-serif);
+  font-size: clamp(30px, 3.5vw, 50px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 400;
+  color: #111915;
+}
+
+:global(.trading-analytics-full-thesis p) {
+  margin: 10px 0 0;
+  color: rgba(34, 48, 41, 0.64);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+:global(.trading-analytics-thesis-outline) {
+  margin: 0;
+}
+
+@media (max-width: 980px) {
+  :global(.trading-analytics-full-thesis) {
+    grid-template-columns: 1fr;
+  }
+}

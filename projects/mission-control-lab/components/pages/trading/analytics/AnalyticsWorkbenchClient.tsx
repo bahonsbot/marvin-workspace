@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useId, useState } from 'react';
-import { MiniLineChart, TabScaffold, tradingCardStyle } from '@/components/pages/trading/shared';
+import { MiniLineChart, tradingCardStyle } from '@/components/pages/trading/shared';
 import type { DefeatBetaAnalyticsSummary } from '@/lib/trading/sources/defeatbeta';
 
 type SearchResult = {
@@ -160,6 +160,25 @@ function analysisStatusPill(status: QuickValuation['status']) {
   return { label: 'Idle', state: 'idle' };
 }
 
+function AnalyticsTabRow({ active, onSelect, status }: { active: 'quick' | 'full'; onSelect: (tab: 'quick' | 'full') => void; status: QuickValuation['status'] }) {
+  return (
+    <div className="trading-tab-row" role="tablist" aria-label="Analytics sections">
+      {tabs.map((tab) => {
+        const target = tab === 'Milou' ? 'full' : 'quick';
+        const isActive = active === target && (target === 'full' ? tab === 'Milou' : tab === 'Valuation');
+        return (
+          <button key={tab} type="button" className={isActive ? 'active' : ''} role="tab" aria-selected={isActive} onClick={() => onSelect(target)}>
+            {tab}
+          </button>
+        );
+      })}
+      <div className="trading-tab-row-trailing">
+        <span className="trading-analytics-tab-status" data-state={analysisStatusPill(status).state}>{active === 'full' ? 'Thesis draft' : analysisStatusPill(status).label}</span>
+      </div>
+    </div>
+  );
+}
+
 function exchangeSymbolForDefeatBeta(symbol: string) {
   const normalized = symbol.toUpperCase();
   if (normalized.endsWith('.US')) return normalized.replace(/\.US$/, '');
@@ -269,7 +288,7 @@ const initialValuation: QuickValuation = {
 
 export function AnalyticsWorkbenchClient() {
   const [query, setQuery] = useState('ASML.AS');
-  const [mode, setMode] = useState<'quick' | 'full'>('quick');
+  const [activeAnalysisTab, setActiveAnalysisTab] = useState<'quick' | 'full'>('quick');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
@@ -364,7 +383,12 @@ export function AnalyticsWorkbenchClient() {
     }
   }
 
+  function openFullThesis() {
+    setActiveAnalysisTab('full');
+  }
+
   async function generateQuickValuation() {
+    setActiveAnalysisTab('quick');
     const match = selected?.symbol === query.trim().toUpperCase() ? selected : await validateTicker();
     if (!match) return;
     setError(null);
@@ -456,14 +480,10 @@ export function AnalyticsWorkbenchClient() {
               ) : null}
             </div>
           </label>
-          <label>
-            <span>Mode</span>
-            <select value={mode} onChange={(event) => setMode(event.target.value as 'quick' | 'full')}>
-              <option value="quick">Quick valuation</option>
-              <option value="full">Full thesis</option>
-            </select>
-          </label>
-          <button type="submit" disabled={valuation.status === 'validating' || valuation.status === 'generating'}>{mode === 'full' ? 'Start thesis draft' : 'Generate analysis'}</button>
+          <div className="trading-analytics-action-group" aria-label="Analysis actions">
+            <button type="submit" disabled={valuation.status === 'validating' || valuation.status === 'generating'}>Quick analysis</button>
+            <button type="button" className="secondary" onClick={openFullThesis}>Full thesis</button>
+          </div>
         </form>
         <div className="trading-analytics-validation" data-state={valuation.status}>
           <span>{selected ? 'Validated match' : 'Validation'}</span>
@@ -474,11 +494,24 @@ export function AnalyticsWorkbenchClient() {
         </div>
       </section>
 
-      <TabScaffold
-        tabs={tabs}
-        trailing={<span className="trading-analytics-tab-status" data-state={analysisStatusPill(valuation.status).state}>{analysisStatusPill(valuation.status).label}</span>}
-      />
+      <AnalyticsTabRow active={activeAnalysisTab} onSelect={setActiveAnalysisTab} status={valuation.status} />
 
+      {activeAnalysisTab === 'full' ? (
+        <section className="trading-analytics-full-thesis" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+          <div>
+            <div className="trading-section-label">Full thesis</div>
+            <h2>Thesis workspace placeholder.</h2>
+            <p>Later this tab will turn the selected ticker, valuation assumptions, evidence map, risks, and Milou context into a structured investment thesis.</p>
+          </div>
+          <dl className="trading-profile-facts trading-analytics-thesis-outline">
+            <div><dt>Company</dt><dd>{selected?.name ?? 'Select a ticker first'}</dd></div>
+            <div><dt>Inputs</dt><dd>Quick valuation · evidence map · assumptions · risks</dd></div>
+            <div><dt>Output</dt><dd>Business quality, valuation argument, risks, watch triggers</dd></div>
+            <div><dt>Status</dt><dd>Placeholder only · generation not wired yet</dd></div>
+          </dl>
+        </section>
+      ) : (
+      <>
       <section className="trading-analytics-hero" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
         <div className="trading-analytics-verdict">
           <div className="trading-section-label">Valuation verdict</div>
@@ -564,6 +597,9 @@ export function AnalyticsWorkbenchClient() {
           <p className="trading-analytics-note">The final range should always show which variable changed the answer most: WACC, margin/cash conversion, revenue growth, or multiple compression. <Explainer id="sensitivity" /></p>
         </section>
       </div>
+
+      </>
+      )}
 
       <section className="trading-analytics-milou" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
         <div className="trading-analytics-milou-copy">
