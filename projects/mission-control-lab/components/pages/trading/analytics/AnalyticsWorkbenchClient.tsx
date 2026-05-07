@@ -34,11 +34,35 @@ type ValuationRunStatus = {
 
 type ValuationModel = {
   name: string;
+  key?: string;
   range: string;
   weight: string;
   note: string;
-  low?: number;
-  high?: number;
+  value?: number | null;
+  low?: number | null;
+  high?: number | null;
+};
+
+type ValuationSubmodel = {
+  key: string;
+  label: string;
+  weight: number;
+  value: number | null;
+  bear: number | null;
+  base: number | null;
+  bull: number | null;
+  confidence: 'Low' | 'Medium' | 'High';
+  driver: string;
+  warning: string | null;
+  notes: string[];
+};
+
+type ValuationSensitivity = {
+  factor: string;
+  bear: number | null;
+  base: number | null;
+  bull: number | null;
+  note: string;
 };
 
 type QuickValuation = {
@@ -54,6 +78,8 @@ type QuickValuation = {
   confidence: 'Low' | 'Medium' | 'High';
   decisionZone: string;
   methods: ValuationModel[];
+  submodels?: ValuationSubmodel[];
+  sensitivity?: ValuationSensitivity[];
   evidence: Array<[string, string]>;
   valuationSeries: number[];
   benchmarkSeries: number[];
@@ -100,6 +126,19 @@ const milouPrompts = [
   'Explain this DCF simply',
   'Compare this against QQQ/SPY',
 ];
+
+const explainers: Record<string, string> = {
+  dcfProxy: "DCF proxy estimates intrinsic value from growth, cash conversion, WACC, and terminal assumptions. Useful because it tests whether fundamentals can justify today's price.",
+  multiples: 'Multiples compare valuation ratios such as PE, PS, and PB against a growth-adjusted fair band. Useful as a market reality check.',
+  reverseDcf: 'Reverse DCF asks what growth the current market price already implies. Useful for spotting when optimism is already priced in.',
+  qualityRisk: 'Quality/risk overlay adjusts for capital efficiency, ROIC versus WACC, and missing coverage. Useful because better businesses deserve different valuation tolerance.',
+  fairValue: 'The corridor shows bear, base, and bull valuation outputs across the model blend. It is uncertainty, not a price target.',
+  sensitivity: 'Sensitivity shows which assumption moves fair value most. Wider bands mean the output is more fragile.',
+};
+
+function Explainer({ id }: { id: keyof typeof explainers }) {
+  return <span className="trading-analytics-explainer" title={explainers[id]} aria-label={explainers[id]}>?</span>;
+}
 
 function formatCurrency(value: number | null | undefined, currency = 'USD') {
   if (value == null || !Number.isFinite(value)) return '—';
@@ -158,6 +197,73 @@ function bestValidatedMatch(query: string, results: SearchResult[]) {
   return results[0] ?? null;
 }
 
+function valuePoints(valuation: QuickValuation) {
+  const submodels = valuation.submodels?.filter((model) => model.value != null) ?? [];
+  if (!submodels.length) {
+    return [
+      { label: 'Bear', value: valuation.fairLow },
+      { label: 'Base', value: valuation.baseValue },
+      { label: 'Bull', value: valuation.fairHigh },
+    ];
+  }
+  return submodels.map((model) => ({ label: model.label.replace(' check', '').replace(' overlay', ''), value: model.value }));
+}
+
+function rangeScale(values: Array<number | null | undefined>) {
+  const usable = values.filter((value): value is number => value != null && Number.isFinite(value));
+  const min = Math.min(...usable, 0);
+  const max = Math.max(...usable, 1);
+  return { min, max, span: Math.max(max - min, 1) };
+}
+
+function CorridorChart({ valuation, currency }: { valuation: QuickValuation; currency: string }) {
+  const points = valuePoints(valuation);
+  const values = [valuation.fairLow, valuation.baseValue, valuation.fairHigh, ...points.map((point) => point.value)];
+  const scale = rangeScale(values);
+  const low = valuation.fairLow;
+  const base = valuation.baseValue;
+  const high = valuation.fairHigh;
+  const lowPct = low == null ? 0 : ((low - scale.min) / scale.span) * 100;
+  const highPct = high == null ? 0 : ((high - scale.min) / scale.span) * 100;
+  const basePct = base == null ? 0 : ((base - scale.min) / scale.span) * 100;
+  return (
+    <div className="trading-analytics-corridor" aria-label="Fair value corridor">
+      <div className="trading-analytics-corridor-track">
+        {low != null && high != null ? <span className="range" style={{ left: `${lowPct}%`, width: `${Math.max(highPct - lowPct, 2)}%` }} /> : null}
+        {base != null ? <span className="base" style={{ left: `${basePct}%` }} /> : null}
+      </div>
+      <div className="trading-analytics-corridor-labels"><span>{formatCurrency(low, currency)}</span><strong>{formatCurrency(base, currency)}</strong><span>{formatCurrency(high, currency)}</span></div>
+      <div className="trading-analytics-contribution-bars">
+        {points.map((point) => {
+          const width = point.value == null ? 0 : Math.max(((point.value - scale.min) / scale.span) * 100, 4);
+          return <div key={point.label}><span>{point.label}</span><i style={{ width: `${width}%` }} /><em>{formatCurrency(point.value, currency)}</em></div>;
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SensitivityBands({ rows, currency }: { rows: ValuationSensitivity[] | undefined; currency: string }) {
+  const usable = rows?.length ? rows : [];
+  const scale = rangeScale(usable.flatMap((row) => [row.bear, row.base, row.bull]));
+  return (
+    <div className="trading-analytics-sensitivity-bands">
+      {usable.map((row) => {
+        const left = row.bear == null ? 0 : ((row.bear - scale.min) / scale.span) * 100;
+        const right = row.bull == null ? 0 : ((row.bull - scale.min) / scale.span) * 100;
+        const base = row.base == null ? 0 : ((row.base - scale.min) / scale.span) * 100;
+        return (
+          <div key={row.factor} className="trading-analytics-sensitivity-row">
+            <span>{row.factor}</span>
+            <div><i style={{ left: `${left}%`, width: `${Math.max(right - left, 2)}%` }} /><b style={{ left: `${base}%` }} /></div>
+            <em>{formatCurrency(row.bear, currency)} / {formatCurrency(row.bull, currency)}</em>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 const initialValuation: QuickValuation = {
   status: 'idle',
   message: 'Validate a ticker, then generate the first Quick Valuation.',
@@ -171,6 +277,8 @@ const initialValuation: QuickValuation = {
   confidence: 'Medium',
   decisionZone: 'Watch / Buy weakness',
   methods: fallbackMethods,
+  submodels: [],
+  sensitivity: [],
   evidence: fallbackEvidence,
   valuationSeries: fallbackValuationSeries,
   benchmarkSeries: fallbackBenchmarkSeries,
@@ -432,7 +540,7 @@ export function AnalyticsWorkbenchClient() {
         <div className="trading-analytics-chart-panel">
           <div className="trading-ticker-chart-head">
             <div>
-              <div className="trading-section-label">Fair value corridor</div>
+              <div className="trading-section-label">Fair value corridor <Explainer id="fairValue" /></div>
               <h3>{valuationReady ? 'Quick valuation complete. Uses simplified DCF proxy and available historical data.' : 'Generate a provider-backed run before treating the range as meaningful.'}</h3>
             </div>
             <div className="trading-ticker-range-tabs" role="tablist" aria-label="Analysis ranges">
@@ -441,8 +549,8 @@ export function AnalyticsWorkbenchClient() {
               ))}
             </div>
           </div>
-          <MiniLineChart values={valuation.valuationSeries} />
-          <div className="trading-ticker-chart-axis"><span>DCF</span><span>Multiples</span><span>Reverse DCF</span><span>Quality</span><span>Blend</span><span>Risk</span><span>Verdict</span></div>
+          <CorridorChart valuation={valuation} currency={currency} />
+          <div className="trading-ticker-chart-axis"><span>Bear</span><span>DCF</span><span>Multiples</span><span>Reverse DCF</span><span>Quality</span><span>Bull</span></div>
         </div>
       </section>
 
@@ -458,7 +566,7 @@ export function AnalyticsWorkbenchClient() {
           <dl className="trading-analytics-methods">
             {valuation.methods.map((method) => (
               <div key={method.name}>
-                <dt>{method.name}<span>{method.note}</span></dt>
+                <dt>{method.name} {method.key ? <Explainer id={method.key as keyof typeof explainers} /> : null}<span>{method.note}</span>{valuation.submodels?.find((model) => model.key === method.key)?.driver ? <small>{valuation.submodels.find((model) => model.key === method.key)?.driver}</small> : null}</dt>
                 <dd><strong>{method.range}</strong><em>{method.weight}</em></dd>
               </div>
             ))}
@@ -501,12 +609,12 @@ export function AnalyticsWorkbenchClient() {
           <div className="trading-ticker-head">
             <div>
               <span>Risk sensitivity</span>
-              <h2>Assumptions that matter</h2>
+              <h2>Assumptions that matter <Explainer id="sensitivity" /></h2>
             </div>
             <em>Bear/base/bull</em>
           </div>
-          <MiniLineChart values={valuation.riskSeries} />
-          <p className="trading-analytics-note">The final range should always show which variable changed the answer most: WACC, terminal margin, revenue growth, or multiple compression.</p>
+          <SensitivityBands rows={valuation.sensitivity} currency={currency} />
+          <p className="trading-analytics-note">The final range should always show which variable changed the answer most: WACC, margin/cash conversion, revenue growth, or multiple compression. <Explainer id="sensitivity" /></p>
         </section>
       </div>
 

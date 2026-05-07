@@ -33,9 +33,22 @@ export type ValuationSubmodel = {
   value: number | null;
   low: number | null;
   high: number | null;
+  bear: number | null;
+  base: number | null;
+  bull: number | null;
   confidence: 'Low' | 'Medium' | 'High';
+  driver: string;
+  warning: string | null;
   assumptions: Record<string, number | string | null>;
   notes: string[];
+};
+
+export type ValuationSensitivity = {
+  factor: string;
+  bear: number | null;
+  base: number | null;
+  bull: number | null;
+  note: string;
 };
 
 export type ValuationRunStatus = {
@@ -68,6 +81,7 @@ export type QuickValuationResult = {
   benchmarkSeries: number[];
   riskSeries: number[];
   submodels: ValuationSubmodel[];
+  sensitivity: ValuationSensitivity[];
   run: ValuationRunStatus;
   assumptions: {
     modelVersion: string;
@@ -177,8 +191,8 @@ function clamp(value: number, low: number, high: number) {
 }
 
 function rangeAround(value: number | null, spread: number) {
-  if (value == null || !Number.isFinite(value)) return { low: null, high: null };
-  return { low: value * (1 - spread), high: value * (1 + spread) };
+  if (value == null || !Number.isFinite(value)) return { low: null, high: null, bear: null, base: null, bull: null };
+  return { low: value * (1 - spread), high: value * (1 + spread), bear: value * (1 - spread), base: value, bull: value * (1 + spread) };
 }
 
 function chartSeriesFromRange(low: number | null, base: number | null, high: number | null, current: number | null) {
@@ -192,12 +206,32 @@ function flatSeries(anchor: number | null) {
   return Array.from({ length: 7 }, () => value);
 }
 
+function sensitivityRows(input: { baseValue: number | null; wacc: number | null; revenueCagr: number | null; netIncomeCagr: number | null; qualityAdjustment: number }): ValuationSensitivity[] {
+  const base = input.baseValue;
+  if (base == null || !Number.isFinite(base)) {
+    return [
+      { factor: 'WACC', bear: null, base: null, bull: null, note: 'Pending until discount-rate assumptions are available.' },
+      { factor: 'Growth', bear: null, base: null, bull: null, note: 'Pending until revenue and income trends are available.' },
+      { factor: 'Quality', bear: null, base: null, bull: null, note: 'Pending until ROE/ROIC coverage is available.' },
+    ];
+  }
+  const waccPct = input.wacc != null ? input.wacc * 100 : null;
+  const growth = average([input.revenueCagr, input.netIncomeCagr]);
+  const qualityLift = input.qualityAdjustment * 100;
+  return [
+    { factor: 'WACC', bear: base * 0.88, base, bull: base * 1.1, note: waccPct != null ? `Discount-rate stress around ${formatPercent(waccPct)} WACC.` : 'Uses default WACC stress until source coverage improves.' },
+    { factor: 'Growth', bear: base * 0.9, base, bull: base * 1.13, note: `Revenue/income trend stress around ${formatPercent(growth, { signed: true })}.` },
+    { factor: 'Margin / FCF', bear: base * 0.92, base, bull: base * 1.09, note: 'Approximates cash-conversion sensitivity until full FCF-per-share model is wired.' },
+    { factor: 'Quality', bear: base * 0.94, base, bull: base * (1 + clamp(qualityLift / 100, 0.04, 0.16)), note: `ROE/ROIC overlay contributes ${formatPercent(qualityLift, { signed: true })}.` },
+  ];
+}
+
 function pendingSubmodels(reason: string): ValuationSubmodel[] {
   return [
-    { key: 'dcfProxy', label: 'DCF proxy', weight: SUBMODEL_WEIGHTS.dcfProxy, value: null, low: null, high: null, confidence: 'Low', assumptions: {}, notes: [reason] },
-    { key: 'multiples', label: 'Multiples check', weight: SUBMODEL_WEIGHTS.multiples, value: null, low: null, high: null, confidence: 'Low', assumptions: {}, notes: [reason] },
-    { key: 'reverseDcf', label: 'Reverse DCF', weight: SUBMODEL_WEIGHTS.reverseDcf, value: null, low: null, high: null, confidence: 'Low', assumptions: {}, notes: [reason] },
-    { key: 'qualityRisk', label: 'Quality/risk overlay', weight: SUBMODEL_WEIGHTS.qualityRisk, value: null, low: null, high: null, confidence: 'Low', assumptions: {}, notes: [reason] },
+    { key: 'dcfProxy', label: 'DCF proxy', weight: SUBMODEL_WEIGHTS.dcfProxy, value: null, low: null, high: null, bear: null, base: null, bull: null, confidence: 'Low', driver: 'No provider data', warning: reason, assumptions: {}, notes: [reason] },
+    { key: 'multiples', label: 'Multiples check', weight: SUBMODEL_WEIGHTS.multiples, value: null, low: null, high: null, bear: null, base: null, bull: null, confidence: 'Low', driver: 'No ratio coverage', warning: reason, assumptions: {}, notes: [reason] },
+    { key: 'reverseDcf', label: 'Reverse DCF', weight: SUBMODEL_WEIGHTS.reverseDcf, value: null, low: null, high: null, bear: null, base: null, bull: null, confidence: 'Low', driver: 'No quote/fundamental bridge', warning: reason, assumptions: {}, notes: [reason] },
+    { key: 'qualityRisk', label: 'Quality/risk overlay', weight: SUBMODEL_WEIGHTS.qualityRisk, value: null, low: null, high: null, bear: null, base: null, bull: null, confidence: 'Low', driver: 'No ROE/ROIC coverage', warning: reason, assumptions: {}, notes: [reason] },
   ];
 }
 
@@ -242,6 +276,8 @@ function buildDcfProxy(input: {
     value,
     ...range,
     confidence: input.coverage ? 'Medium' : 'Low',
+    driver: `Growth ${formatPercent(forecastGrowth, { signed: true })} vs WACC ${formatPercent(normalizedWacc)}`,
+    warning: input.coverage ? 'Price-anchored proxy until FCF/share normalization is added.' : 'Statement coverage missing; DCF proxy is weak.',
     assumptions: {
       anchor,
       forecastGrowth,
@@ -280,6 +316,8 @@ function buildMultiplesModel(input: {
     value,
     ...range,
     confidence: input.coverage ? 'Medium' : 'Low',
+    driver: `Observed PE ${input.pe != null ? input.pe.toFixed(1) : '—'} vs fair PE ${fairPe.toFixed(1)}`,
+    warning: input.coverage ? 'Peer/sector bands are still generic.' : 'Ratio coverage missing; multiples model is weak.',
     assumptions: {
       anchor,
       fairPe,
@@ -315,6 +353,8 @@ function buildReverseDcfModel(input: {
     value,
     ...range,
     confidence: input.currentPrice != null ? 'Medium' : 'Low',
+    driver: `Observed growth ${formatPercent(observedGrowth, { signed: true })} vs implied ${formatPercent(impliedGrowth)}`,
+    warning: input.currentPrice != null ? 'Reverse DCF is directional, not a standalone fair value.' : 'Needs a current price anchor.',
     assumptions: {
       anchor,
       observedGrowth,
@@ -352,6 +392,8 @@ function buildQualityRiskOverlay(input: {
     value,
     ...range,
     confidence: input.coverage ? 'Medium' : 'Low',
+    driver: `ROIC-WACC spread ${spreadOverWacc != null ? formatPercent(spreadOverWacc, { signed: true }) : '—'}`,
+    warning: input.coverage ? 'Quality overlay adjusts valuation; it is not a separate price target.' : 'Quality coverage missing; overlay is weak.',
     assumptions: {
       anchor,
       roePct,
@@ -410,6 +452,7 @@ export function buildQuickValuation(input: {
       benchmarkSeries: fallbackBenchmarkSeries,
       riskSeries: fallbackRiskSeries,
       submodels: pendingSubmodels(unavailableReason),
+      sensitivity: sensitivityRows({ baseValue: null, wacc, revenueCagr, netIncomeCagr, qualityAdjustment: 0 }),
       run: runStatus({ state: 'unavailable', selected, summary }),
       assumptions: {
         modelVersion: MODEL_VERSION,
@@ -478,6 +521,7 @@ export function buildQuickValuation(input: {
     benchmarkSeries: summary.ratios.pe.map((point) => point.value).slice(0, 12).reverse().map((value) => Math.max(value, 1)).concat(fallbackBenchmarkSeries).slice(0, 12),
     riskSeries: summary.ratios.wacc.map((point) => point.value * 1000).slice(0, 12).reverse().map((value) => Math.max(value, 1)).concat(fallbackRiskSeries).slice(0, 12),
     submodels,
+    sensitivity: sensitivityRows({ baseValue, wacc, revenueCagr, netIncomeCagr, qualityAdjustment }),
     run: runStatus({ state: 'ready', selected, summary }),
     assumptions: {
       modelVersion: MODEL_VERSION,
