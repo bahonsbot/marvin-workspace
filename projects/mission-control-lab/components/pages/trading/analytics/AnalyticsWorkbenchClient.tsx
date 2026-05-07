@@ -201,12 +201,12 @@ function valuePoints(valuation: QuickValuation) {
   const submodels = valuation.submodels?.filter((model) => model.value != null) ?? [];
   if (!submodels.length) {
     return [
-      { label: 'Bear', value: valuation.fairLow },
-      { label: 'Base', value: valuation.baseValue },
-      { label: 'Bull', value: valuation.fairHigh },
+      { key: 'bear', label: 'Bear', value: valuation.fairLow },
+      { key: 'base', label: 'Base', value: valuation.baseValue },
+      { key: 'bull', label: 'Bull', value: valuation.fairHigh },
     ];
   }
-  return submodels.map((model) => ({ label: model.label.replace(' check', '').replace(' overlay', ''), value: model.value }));
+  return submodels.map((model) => ({ key: model.key, label: model.label.replace(' check', '').replace(' overlay', ''), value: model.value }));
 }
 
 function rangeScale(values: Array<number | null | undefined>) {
@@ -232,11 +232,15 @@ function CorridorChart({ valuation, currency }: { valuation: QuickValuation; cur
         {low != null && high != null ? <span className="range" style={{ left: `${lowPct}%`, width: `${Math.max(highPct - lowPct, 2)}%` }} /> : null}
         {base != null ? <span className="base" style={{ left: `${basePct}%` }} /> : null}
       </div>
-      <div className="trading-analytics-corridor-labels"><span>{formatCurrency(low, currency)}</span><strong>{formatCurrency(base, currency)}</strong><span>{formatCurrency(high, currency)}</span></div>
+      <div className="trading-analytics-corridor-labels">
+        {low != null ? <span style={{ left: `${lowPct}%` }}>Bear<br /><b>{formatCurrency(low, currency)}</b></span> : null}
+        {base != null ? <strong style={{ left: `${basePct}%` }}>Base<br /><b>{formatCurrency(base, currency)}</b></strong> : null}
+        {high != null ? <span style={{ left: `${highPct}%` }}>Bull<br /><b>{formatCurrency(high, currency)}</b></span> : null}
+      </div>
       <div className="trading-analytics-contribution-bars">
         {points.map((point) => {
           const width = point.value == null ? 0 : Math.max(((point.value - scale.min) / scale.span) * 100, 4);
-          return <div key={point.label}><span>{point.label}</span><i style={{ width: `${width}%` }} /><em>{formatCurrency(point.value, currency)}</em></div>;
+          return <div key={point.label} data-model={point.key}><span>{point.label}</span><i style={{ width: `${width}%` }} /><em>{formatCurrency(point.value, currency)}</em></div>;
         })}
       </div>
     </div>
@@ -538,19 +542,11 @@ export function AnalyticsWorkbenchClient() {
           <p className="trading-analytics-status-copy">{valuation.message}</p>
         </div>
         <div className="trading-analytics-chart-panel">
-          <div className="trading-ticker-chart-head">
-            <div>
-              <div className="trading-section-label">Fair value corridor <Explainer id="fairValue" /></div>
-              <h3>{valuationReady ? 'Quick valuation complete. Uses simplified DCF proxy and available historical data.' : 'Generate a provider-backed run before treating the range as meaningful.'}</h3>
-            </div>
-            <div className="trading-ticker-range-tabs" role="tablist" aria-label="Analysis ranges">
-              {['Bear', 'Base', 'Bull'].map((range, index) => (
-                <button key={range} type="button" className={index === 1 ? 'active' : ''}>{range}</button>
-              ))}
-            </div>
+          <div className="trading-ticker-chart-head trading-analytics-corridor-head">
+            <div className="trading-section-label">Fair value corridor <Explainer id="fairValue" /></div>
+            <p>Bear/base/bull range from the blended model. The vertical marker is the base estimate.</p>
           </div>
           <CorridorChart valuation={valuation} currency={currency} />
-          <div className="trading-ticker-chart-axis"><span>Bear</span><span>DCF</span><span>Multiples</span><span>Reverse DCF</span><span>Quality</span><span>Bull</span></div>
         </div>
       </section>
 

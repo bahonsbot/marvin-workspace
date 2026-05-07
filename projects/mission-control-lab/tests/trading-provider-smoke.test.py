@@ -491,6 +491,9 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("CorridorChart", workbench)
         self.assertIn("SensitivityBands", workbench)
         self.assertIn("Explainer", workbench)
+        self.assertIn("Bear/base/bull range from the blended model", workbench)
+        self.assertIn("trading-analytics-corridor-head", workbench)
+        self.assertNotIn("Quick valuation complete. Uses simplified DCF proxy and available historical data.", workbench)
         valuation_model = (ROOT / "lib" / "trading" / "valuation" / "quick-valuation.ts").read_text(encoding="utf-8")
         self.assertIn("buildQuickValuation", valuation_model)
         self.assertIn("QuickValuationResult", valuation_model)
@@ -533,6 +536,8 @@ class TradingProviderSmokeTests(unittest.TestCase):
         self.assertIn("trading-analytics-corridor", styles)
         self.assertIn("trading-analytics-sensitivity-bands", styles)
         self.assertIn("trading-analytics-explainer", styles)
+        self.assertIn("data-model='dcfProxy'", styles)
+        self.assertIn("trading-analytics-corridor-head", styles)
 
     def test_watchlist_add_symbol_reuses_ticker_search_endpoint(self) -> None:
         watchlist = read_source("watchlist_client")
