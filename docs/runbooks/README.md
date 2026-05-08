@@ -18,6 +18,7 @@ Quick index for the workspace runbooks folder so common references are easier to
 - [Mission Control Agents Operating Model](./mission-control-agents-operating-model.md)
 - [Mission Control Agents Page Design Handoff](./mission-control-agents-page-design-handoff.md)
 - [Mission Control Runtime Preview Runbook](./mission-control-runtime-preview-runbook.md)
+- [DefeatBeta Analytics Sidecar Plan](../../projects/mission-control-lab/docs/defeatbeta-analytics-sidecar-plan.md)
 
 ## Network, Egress, and Placement
 - [Egress Enforcement Deferred Until Trading Isolation](./egress-enforcement-deferred-until-trading-isolation.md)
@@ -34,8 +35,12 @@ Quick index for the workspace runbooks folder so common references are easier to
 ## External Integration Notes
 - [Stitch MCP Codex GitHub Pages Workflow](./stitch-mcp-codex-github-pages-workflow.md)
 
+## Quick Maintenance Picks
+- Home-improvement pass: start with `workspace-home-improvement-pass.md` and run `python3 scripts/autonomy_gate.py improve` before doing any bounded workspace cleanup.
+- Memory checks: use `memory-system-health.md` when a workspace pass touches memory hygiene, note structure, or recall reliability.
+- Index validation: run `python3 scripts/check_runbook_index.py` after runbook additions, removals, or renames to catch link drift quickly.
+
 ## Usage Notes
 - Prefer the most specific runbook first.
 - Keep new runbooks linked here when they are durable references rather than one-off notes.
 - If a runbook becomes obsolete, remove it from this index in the same change that replaces or archives it.
-- Run `python3 scripts/check_runbook_index.py` after runbook additions, removals, or renames to catch index drift quickly.
