@@ -119,6 +119,14 @@ Script-only jobs belong on the host deterministic scheduler.
   - internal Next server: `3017`
   - Piper TTS: `3022`
   - Moonshine STT: `3023`
+  - DefeatBeta analytics sidecar: `8791` on `127.0.0.1` only
+- DefeatBeta Lab analytics sidecar:
+  - role: Lab-only analytics enrichment for Trading Analytics; not quote truth and not promoted to Dashboard/live
+  - service: `projects/mission-control-lab/services/defeatbeta-sidecar/app.py`
+  - adapter/API: `projects/mission-control-lab/lib/trading/sources/defeatbeta.ts` and `projects/mission-control-lab/app/api/trading/defeatbeta/[symbol]/route.ts`
+  - env defaults: `DEFEATBETA_SIDECAR_HOST=127.0.0.1`, `DEFEATBETA_SIDECAR_PORT=8791`, `DEFEATBETA_SIDECAR_URL=http://127.0.0.1:8791` from `projects/mission-control-lab/scripts/lab-env.sh`
+  - lifecycle/health: managed by Lab `preview-start.sh` / `preview-stop.sh`; checked by `scripts/mission-control-service-health.sh` and Lab lane smoke
+  - cache caveat: DefeatBeta/NLTK may write local runtime artifacts under `/tmp/defeatbeta` plus Lab service caches; do not commit `.python-packages`, `.duckdb`, `.cache`, reports, or `.venv`
 - Lane role rule: treat Dashboard as the live/stable Mission Control surface; treat Lab as the experimental Mission Control lane for sandboxed work and new sections until Philippe explicitly approves promotion. Trading / BOILER ROOM is the current active Lab project, not the only intended Lab scope.
 - Preview stop rule: `projects/mission-control/scripts/preview-stop.sh` and Lab equivalents must remain PID-file scoped. Do not revert to broad `pkill` patterns.
 - Runtime bridge dependencies: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js`, `projects/mission-control/scripts/preview-origin-proxy.js`, and Lab equivalents require the `ws` package
