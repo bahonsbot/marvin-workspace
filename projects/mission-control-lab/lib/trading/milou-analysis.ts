@@ -71,6 +71,14 @@ function benchmarkLines(benchmark: MilouContextPayload['benchmark']) {
   ].join('\n');
 }
 
+function webAccessInstruction(enabled: boolean) {
+  if (!enabled) {
+    return 'No. Do not use web search. If the user asks for fresh news, competitors, filings, or live market context, say web search is off and explain what external checks would be needed.';
+  }
+
+  return 'Yes. Web search was explicitly enabled by the user. For competitors, peer sets, news, filings, recent market context, or anything not present in the supplied valuation pack, first try available web/search tooling or current-source capability before saying the data was not supplied. If web/search tooling is unavailable in this runtime, say exactly that in one short sentence, then answer from the supplied context and list the external checks needed. Do not pretend you searched if you did not.';
+}
+
 export function buildMilouAnalysisPrompt(input: MilouContextPayload) {
   const selected = input.selected;
   const identity = selected
@@ -109,12 +117,13 @@ ${sensitivityLines(input.valuation.sensitivity)}
 Market comparison:
 ${benchmarkLines(input.benchmark)}
 
-Web access requested by user/UI: ${input.webAccessRequested ? 'yes. Use external search only if the runtime has it and it would materially improve the answer; cite uncertainty and do not invent live facts.' : 'no'}
+Web/search instruction:
+${webAccessInstruction(Boolean(input.webAccessRequested))}
 
 Respond in a compact analyst style:
 1. Direct answer.
 2. What supports it.
 3. What could break the thesis.
 4. What to check next.
-Keep it practical and risk-first.`;
+Keep it practical and risk-first. Use Markdown sparingly: do not bold full sentences, labels, numbers, or section bodies. Prefer plain text; if emphasis is necessary, use at most one or two short bold phrases in the whole answer.`;
 }

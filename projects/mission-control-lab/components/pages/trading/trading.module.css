@@ -6056,8 +6056,8 @@
 }
 
 :global(.trading-analytics-milou-answer strong) {
-  color: rgba(17, 29, 23, 0.94);
-  font-weight: 720;
+  color: rgba(17, 29, 23, 0.86);
+  font-weight: 560;
 }
 
 :global(.trading-analytics-milou-answer em) {
@@ -6068,8 +6068,8 @@
 :global(.trading-analytics-milou-marker) {
   flex: 0 0 auto;
   min-width: 18px;
-  color: rgba(22, 120, 70, 0.78);
-  font-weight: 800;
+  color: rgba(22, 120, 70, 0.72);
+  font-weight: 650;
 }
 
 :global(.trading-analytics-chat-message small) {
