@@ -616,7 +616,7 @@ export function AnalyticsWorkbenchClient() {
       });
       const payload = (await response.json()) as MilouAnalysisRouteResult;
       if (!response.ok || !payload.ok) throw new Error(payload.error || `Milou route failed (${response.status})`);
-      setMilou({ status: 'ready', message: `Answered by Milou specialist session${payload.sessionKey ? ` · ${payload.sessionKey}` : ''}.`, answer: payload.answer ?? 'Milou returned an empty answer.' });
+      setMilou({ status: 'ready', message: payload.sessionKey ? `Milou answered in ${payload.sessionKey}.` : 'Milou answered.', answer: payload.answer?.trim() || 'Milou finished the run, but the answer was not returned to Analytics yet. Open the Milou session history if this repeats.' });
     } catch (cause) {
       setMilou({ status: 'error', message: cause instanceof Error ? cause.message : 'Milou analysis failed.', answer: null });
     }
@@ -875,14 +875,17 @@ export function AnalyticsWorkbenchClient() {
         </div>
         <div className="trading-analytics-chat-panel">
           <div className="trading-analytics-chat-message expert" data-state={milou.status}>
-            <span>Milou</span>
+            <div className="trading-analytics-chat-message-head">
+              <span>Milou</span>
+              {milou.status === 'ready' ? <em>Live answer</em> : null}
+            </div>
             <p>{milou.answer ?? (valuationReady && selected ? `${selected.name} has a first-pass valuation pack. Ask me to challenge the assumptions, compare it with SPY/QQQ, or explain the valuation in plain English.` : 'Validate a ticker and generate a Quick Analysis, then I can challenge the assumptions in context.')}</p>
             <small>{milou.message}</small>
           </div>
           <form className="trading-analytics-milou-form" onSubmit={(event) => { event.preventDefault(); void askMilou(milouQuestion); }}>
             <label>
               <span>Your question</span>
-              <textarea value={milouQuestion} onChange={(event) => setMilouQuestion(event.target.value)} placeholder="Ask Milou about the valuation, risks, benchmark comparison, or what to check next." rows={3} />
+              <textarea value={milouQuestion} onChange={(event) => setMilouQuestion(event.target.value)} placeholder="Ask Milou about the valuation, risks, benchmark comparison, or what to check next." rows={5} />
             </label>
             <button type="submit" disabled={!valuationReady || !selected || milou.status === 'sending' || !milouQuestion.trim()}>{milou.status === 'sending' ? 'Asking Milou…' : 'Ask Milou'}</button>
           </form>

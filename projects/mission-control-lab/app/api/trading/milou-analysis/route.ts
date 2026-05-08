@@ -7,8 +7,11 @@ export const revalidate = 0;
 
 const GATEWAY_CALL_TIMEOUT_MS = 45_000;
 const ROUTE_TIMEOUT_MS = 50_000;
-const MILOU_SESSION_KEY = 'agent:main:main';
-const MILOU_SEAT_CONTEXT = 'Milou trading-advisor specialist seat (currently routed through the configured main OpenClaw runtime because standalone trading-advisor agent id is not present).';
+const HISTORY_CALL_TIMEOUT_MS = 40_000;
+const HISTORY_ROUTE_TIMEOUT_MS = 45_000;
+const MILOU_SESSION_KEY = 'agent:main:lab-milou-analytics';
+const MILOU_SEAT_CONTEXT = 'Milou trading-advisor specialist seat (currently routed through a dedicated main-agent Lab Analytics session because standalone trading-advisor agent id is not present).';
+const ANSWER_POLL_DELAYS_MS = [1_000, 1_800, 2_800, 4_000, 5_500, 7_000] as const;
 
 function shellQuote(value: string): string {
   return `'${value.replace(/'/g, `'"'"'`)}'`;
@@ -44,6 +47,37 @@ function extractMilouAnswer(payload: Record<string, unknown>): string {
   return result ? extractMilouAnswer(result) : '';
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function extractAssistantTextFromMessage(message: Record<string, unknown>): string {
+  if (message.role !== 'assistant') return '';
+  return textFromUnknown(message.content ?? message.message ?? message.output ?? message.text);
+}
+
+async function loadLatestMilouAnswer(sessionKey: string, runStartedAt: number): Promise<string> {
+  const params = { sessionKey, limit: 12 };
+  const command = `openclaw gateway call chat.history --json --timeout ${HISTORY_CALL_TIMEOUT_MS} --params ${shellQuote(JSON.stringify(params))}`;
+
+  for (let attempt = 0; attempt < ANSWER_POLL_DELAYS_MS.length; attempt += 1) {
+    await sleep(ANSWER_POLL_DELAYS_MS[attempt]);
+    const { stdout } = await runShellCommand(command, HISTORY_ROUTE_TIMEOUT_MS);
+    const parsed = JSON.parse(stdout) as Record<string, unknown>;
+    const messages = Array.isArray(parsed.messages) ? parsed.messages : [];
+    for (let index = messages.length - 1; index >= 0; index -= 1) {
+      const message = asRecord(messages[index]);
+      if (!message) continue;
+      const timestamp = typeof message.timestamp === 'number' ? message.timestamp : 0;
+      if (timestamp && timestamp < runStartedAt - 1_000) continue;
+      const answer = extractAssistantTextFromMessage(message).trim();
+      if (answer) return answer;
+    }
+  }
+
+  return '';
+}
+
 function isMilouPayload(value: unknown): value is MilouContextPayload {
   if (!value || typeof value !== 'object') return false;
   const payload = value as Partial<MilouContextPayload>;
@@ -74,12 +108,14 @@ export async function POST(request: Request) {
   };
 
   try {
+    const runStartedAt = Date.now();
     const { stdout } = await runShellCommand(
       `openclaw gateway call chat.send --expect-final --json --timeout ${GATEWAY_CALL_TIMEOUT_MS} --params ${shellQuote(JSON.stringify(params))}`,
       ROUTE_TIMEOUT_MS,
     );
     const parsed = JSON.parse(stdout) as Record<string, unknown>;
-    const answer = extractMilouAnswer(parsed);
+    const directAnswer = extractMilouAnswer(parsed);
+    const answer = directAnswer || await loadLatestMilouAnswer(MILOU_SESSION_KEY, runStartedAt);
     return NextResponse.json({ ok: true, sessionKey: MILOU_SESSION_KEY, answer, result: parsed }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
   } catch (cause) {
     return NextResponse.json({ ok: false, error: cause instanceof Error ? cause.message : 'Milou analysis failed.' }, { status: 502 });

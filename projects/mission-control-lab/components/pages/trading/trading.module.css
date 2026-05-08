@@ -6002,12 +6002,20 @@
   border: 1px solid rgba(28, 37, 32, 0.12);
   border-radius: 18px;
   background: rgba(244, 240, 232, 0.58);
-  padding: 14px;
+  padding: 16px;
+  max-height: 420px;
+  overflow: auto;
 }
 
-:global(.trading-analytics-chat-message span) {
-  display: block;
-  margin-bottom: 7px;
+:global(.trading-analytics-chat-message-head) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+
+:global(.trading-analytics-chat-message-head span) {
   color: rgba(34, 48, 41, 0.56);
   font-size: 10px;
   text-transform: uppercase;
@@ -6015,11 +6023,20 @@
   font-weight: 800;
 }
 
+:global(.trading-analytics-chat-message-head em) {
+  color: rgba(22, 120, 70, 0.72);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
 :global(.trading-analytics-chat-message p) {
   margin: 0;
   color: rgba(24, 33, 28, 0.82);
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 14.5px;
+  line-height: 1.68;
   white-space: pre-wrap;
 }
 
@@ -6056,6 +6073,8 @@
 
 :global(.trading-analytics-milou-form textarea) {
   width: 100%;
+  min-height: 132px;
+  max-height: 300px;
   resize: vertical;
   border: 1px solid rgba(28, 37, 32, 0.12);
   border-radius: 16px;
