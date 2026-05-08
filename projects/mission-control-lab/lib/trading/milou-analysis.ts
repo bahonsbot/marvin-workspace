@@ -52,7 +52,10 @@ function methodLines(methods: MilouContextPayload['valuation']['methods']) {
 
 function sensitivityLines(rows: MilouContextPayload['valuation']['sensitivity']) {
   if (!rows?.length) return '- No sensitivity rows available.';
-  return rows.map((row) => `- ${row.factor}: bear ${formatNumber(row.bear)}, base ${formatNumber(row.base)}, bull ${formatNumber(row.bull)}. ${row.note}`).join('\n');
+  return rows.map((row, index) => {
+    const factor = row.factor?.trim() || `Sensitivity factor ${index + 1}`;
+    return `- ${factor}: bear ${formatNumber(row.bear)}, base ${formatNumber(row.base)}, bull ${formatNumber(row.bull)}. ${row.note}`;
+  }).join('\n');
 }
 
 function benchmarkLines(benchmark: MilouContextPayload['benchmark']) {
@@ -104,7 +107,7 @@ ${sensitivityLines(input.valuation.sensitivity)}
 Market comparison:
 ${benchmarkLines(input.benchmark)}
 
-Web access requested by user/UI: ${input.webAccessRequested ? 'yes' : 'no'}
+Web access requested by user/UI: ${input.webAccessRequested ? 'yes. Use external search only if the runtime has it and it would materially improve the answer; cite uncertainty and do not invent live facts.' : 'no'}
 
 Respond in a compact analyst style:
 1. Direct answer.

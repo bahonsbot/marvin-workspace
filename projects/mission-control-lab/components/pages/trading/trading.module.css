@@ -6040,6 +6040,38 @@
   white-space: pre-wrap;
 }
 
+:global(.trading-analytics-milou-answer) {
+  display: grid;
+  gap: 10px;
+}
+
+:global(.trading-analytics-milou-answer p) {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+
+:global(.trading-analytics-milou-answer p[data-kind='paragraph']) {
+  display: block;
+}
+
+:global(.trading-analytics-milou-answer strong) {
+  color: rgba(17, 29, 23, 0.94);
+  font-weight: 720;
+}
+
+:global(.trading-analytics-milou-answer em) {
+  color: rgba(34, 48, 41, 0.72);
+  font-style: italic;
+}
+
+:global(.trading-analytics-milou-marker) {
+  flex: 0 0 auto;
+  min-width: 18px;
+  color: rgba(22, 120, 70, 0.78);
+  font-weight: 800;
+}
+
 :global(.trading-analytics-chat-message small) {
   display: block;
   margin-top: 10px;
@@ -6090,6 +6122,30 @@
 :global(.trading-analytics-milou-form textarea:focus) {
   border-color: rgba(22, 180, 95, 0.34);
   box-shadow: 0 0 0 3px rgba(22, 180, 95, 0.08);
+}
+
+:global(.trading-analytics-web-toggle) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  color: rgba(34, 48, 41, 0.68);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+:global(.trading-analytics-web-toggle input) {
+  width: 15px;
+  height: 15px;
+  accent-color: #16B45F;
+}
+
+:global(.trading-analytics-web-toggle span) {
+  color: rgba(34, 48, 41, 0.68);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 :global(.trading-analytics-milou-form button:disabled),

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { Fragment, useEffect, useId, useState } from 'react';
 import { tradingCardStyle } from '@/components/pages/trading/shared';
 import type { DefeatBetaAnalyticsSummary } from '@/lib/trading/sources/defeatbeta';
 
@@ -61,6 +61,9 @@ type MilouState = {
   message: string;
   answer: string | null;
 };
+type MilouRichSegment = { kind: 'text' | 'bold' | 'italic'; text: string };
+type MilouRichBlock = { kind: 'paragraph' | 'bullet' | 'numbered'; index?: string; segments: MilouRichSegment[] };
+
 type MilouAnalysisRouteResult = {
   ok: boolean;
   sessionKey?: string;
@@ -231,6 +234,70 @@ function formatBenchmarkDate(value: string | null | undefined) {
 
 function formatIndexedValue(value: number) {
   return value.toFixed(0);
+}
+
+function parseInlineMarkdown(input: string): MilouRichSegment[] {
+  const segments: MilouRichSegment[] = [];
+  const pattern = /(\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  let cursor = 0;
+  for (const match of input.matchAll(pattern)) {
+    const start = match.index ?? 0;
+    if (start > cursor) segments.push({ kind: 'text', text: input.slice(cursor, start) });
+    const token = match[0];
+    if (token.startsWith('**')) {
+      segments.push({ kind: 'bold', text: token.slice(2, -2) });
+    } else {
+      segments.push({ kind: 'italic', text: token.slice(1, -1) });
+    }
+    cursor = start + token.length;
+  }
+  if (cursor < input.length) segments.push({ kind: 'text', text: input.slice(cursor) });
+  return segments.length ? segments : [{ kind: 'text', text: input }];
+}
+
+function parseMilouMarkdown(input: string | null): MilouRichBlock[] {
+  if (!input?.trim()) return [];
+  const blocks: MilouRichBlock[] = [];
+  for (const rawLine of input.split(/\n+/)) {
+    const line = rawLine.trim();
+    if (!line) continue;
+    const bullet = line.match(/^[-•]\s+(.+)$/);
+    if (bullet) {
+      blocks.push({ kind: 'bullet', segments: parseInlineMarkdown(bullet[1]) });
+      continue;
+    }
+    const numbered = line.match(/^(\d+)[.)]\s+(.+)$/);
+    if (numbered) {
+      blocks.push({ kind: 'numbered', index: numbered[1], segments: parseInlineMarkdown(numbered[2]) });
+      continue;
+    }
+    blocks.push({ kind: 'paragraph', segments: parseInlineMarkdown(line) });
+  }
+  return blocks;
+}
+
+function MilouMarkdown({ text }: { text: string | null }) {
+  const blocks = parseMilouMarkdown(text);
+  if (!blocks.length) return null;
+  return (
+    <div className="trading-analytics-milou-answer">
+      {blocks.map((block, blockIndex) => (
+        <p key={`${block.kind}-${blockIndex}`} data-kind={block.kind}>
+          {block.kind === 'bullet' ? <span className="trading-analytics-milou-marker">•</span> : null}
+          {block.kind === 'numbered' ? <span className="trading-analytics-milou-marker">{block.index}.</span> : null}
+          <span>
+            {block.segments.map((segment, segmentIndex) => (
+              <Fragment key={`${segment.kind}-${segmentIndex}`}>
+                {segment.kind === 'bold' ? <strong>{segment.text}</strong> : null}
+                {segment.kind === 'italic' ? <em>{segment.text}</em> : null}
+                {segment.kind === 'text' ? segment.text : null}
+              </Fragment>
+            ))}
+          </span>
+        </p>
+      ))}
+    </div>
+  );
 }
 
 function analysisStatusPill(status: QuickValuation['status']) {
@@ -454,6 +521,7 @@ export function AnalyticsWorkbenchClient() {
   const [benchmark, setBenchmark] = useState<BenchmarkState>({ status: 'idle', message: 'Select a ticker to compare against SPY and QQQ.', comparison: null });
   const [milou, setMilou] = useState<MilouState>(initialMilou);
   const [milouQuestion, setMilouQuestion] = useState('');
+  const [milouUseWeb, setMilouUseWeb] = useState(false);
   const [selectedMetadata, setSelectedMetadata] = useState<TickerMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -611,7 +679,7 @@ export function AnalyticsWorkbenchClient() {
             stats: benchmark.comparison.stats,
             note: benchmark.comparison.note,
           } : null,
-          webAccessRequested: /web|news|latest|recent|current/i.test(trimmed),
+          webAccessRequested: milouUseWeb || /web|news|latest|recent|current/i.test(trimmed),
         }),
       });
       const payload = (await response.json()) as MilouAnalysisRouteResult;
@@ -879,13 +947,17 @@ export function AnalyticsWorkbenchClient() {
               <span>Milou</span>
               {milou.status === 'ready' ? <em>Live answer</em> : null}
             </div>
-            <p>{milou.answer ?? (valuationReady && selected ? `${selected.name} has a first-pass valuation pack. Ask me to challenge the assumptions, compare it with SPY/QQQ, or explain the valuation in plain English.` : 'Validate a ticker and generate a Quick Analysis, then I can challenge the assumptions in context.')}</p>
+            {milou.answer ? <MilouMarkdown text={milou.answer} /> : <p>{valuationReady && selected ? `${selected.name} has a first-pass valuation pack. Ask me to challenge the assumptions, compare it with SPY/QQQ, or explain the valuation in plain English.` : 'Validate a ticker and generate a Quick Analysis, then I can challenge the assumptions in context.'}</p>}
             <small>{milou.message}</small>
           </div>
           <form className="trading-analytics-milou-form" onSubmit={(event) => { event.preventDefault(); void askMilou(milouQuestion); }}>
             <label>
               <span>Your question</span>
               <textarea value={milouQuestion} onChange={(event) => setMilouQuestion(event.target.value)} placeholder="Ask Milou about the valuation, risks, benchmark comparison, or what to check next." rows={5} />
+            </label>
+            <label className="trading-analytics-web-toggle">
+              <input type="checkbox" checked={milouUseWeb} onChange={(event) => setMilouUseWeb(event.target.checked)} />
+              <span>Use external web search when useful</span>
             </label>
             <button type="submit" disabled={!valuationReady || !selected || milou.status === 'sending' || !milouQuestion.trim()}>{milou.status === 'sending' ? 'Asking Milou…' : 'Ask Milou'}</button>
           </form>
