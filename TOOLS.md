@@ -130,6 +130,7 @@ Script-only jobs belong on the host deterministic scheduler.
 - Lane role rule: treat Dashboard as the live/stable Mission Control surface; treat Lab as the experimental Mission Control lane for sandboxed work and new sections until Philippe explicitly approves promotion. Trading / BOILER ROOM is the current active Lab project, not the only intended Lab scope.
 - Preview stop rule: `projects/mission-control/scripts/preview-stop.sh` and Lab equivalents must remain PID-file scoped. Do not revert to broad `pkill` patterns.
 - Runtime bridge dependencies: `projects/mission-control/scripts/runtime-bridge-ws-sidecar.js`, `projects/mission-control/scripts/preview-origin-proxy.js`, and Lab equivalents require the `ws` package
+- Lab Convex deployment reminder: after editing `projects/mission-control-lab/convex/schema.ts` or `projects/mission-control-lab/convex/*.ts`, run `npx convex dev --once --typecheck disable` from `projects/mission-control-lab` before live UI smoke; validator errors like `Object contains extra field` often mean the dev deployment was not pushed yet
 - Preview public TLS note: `preview.motiondisplay.cloud` currently has a certificate/hostname mismatch under strict TLS; local preview smoke can still pass, and this is deferred/non-blocking for dashboard/lab.
 - Tasks truth rule:
   - authoritative store: `projects/mission-control/data/autonomous-tasks.json`
