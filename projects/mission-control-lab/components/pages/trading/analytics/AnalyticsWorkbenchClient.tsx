@@ -10,6 +10,8 @@ type SearchResult = {
   exchange: string;
   name: string;
   type: string;
+  sector?: string | null;
+  industry?: string | null;
   country: string;
   currency: string;
   previousClose: number | null;
@@ -168,12 +170,46 @@ const emptyEvidence: Array<[string, string]> = [
   ['Quality & events', '—'],
 ];
 
-const milouPrompts = [
+const defaultMilouPrompts = [
   'Challenge the bull case',
   'What assumption moves fair value most?',
   'Explain this DCF simply',
   'Compare this against QQQ/SPY',
 ];
+
+function promptContextForSelection(selected: SearchResult | null) {
+  const context = [selected?.sector, selected?.industry, selected?.type, selected?.name].filter(Boolean).join(' ').toLowerCase();
+  if (!context.trim()) return 'default';
+  if (/etf|fund|trust|index|ucits/.test(context)) return 'fund';
+  if (/semiconductor|chip|foundry|equipment|software|cloud|technology|internet|ai|digital/.test(context)) return 'technology';
+  if (/bank|insurance|broker|financial|asset manager|capital market|fintech/.test(context)) return 'financials';
+  if (/pharma|biotech|health|medical|drug|therapeutic|hospital/.test(context)) return 'healthcare';
+  if (/energy|oil|gas|renewable|utility|utilities|power/.test(context)) return 'energy';
+  if (/retail|consumer|restaurant|apparel|luxury|auto|travel|discretionary|staples/.test(context)) return 'consumer';
+  if (/industrial|aerospace|defense|machinery|logistics|transport|construction/.test(context)) return 'industrial';
+  return 'default';
+}
+
+function milouPromptsForSelection(selected: SearchResult | null) {
+  switch (promptContextForSelection(selected)) {
+    case 'fund':
+      return ['What drives this ETF versus SPY/QQQ?', 'Where can tracking or currency risk show up?', 'What holdings risk matters most?', 'Is this fund useful for portfolio balance?'];
+    case 'technology':
+      return ['Is growth already priced in?', 'Which margin assumption matters most?', 'Challenge the moat durability', 'Compare this against QQQ/SPY'];
+    case 'financials':
+      return ['What does the market doubt here?', 'Check rate and credit sensitivity', 'Challenge the capital return story', 'Which metric fits this business best?'];
+    case 'healthcare':
+      return ['What pipeline or patent risk matters?', 'Challenge the earnings quality', 'Which catalyst could change fair value?', 'Explain the downside case simply'];
+    case 'energy':
+      return ['How sensitive is this to commodity prices?', 'Challenge the cash-flow durability', 'What balance-sheet risk matters?', 'Compare this against the market cycle'];
+    case 'consumer':
+      return ['What demand risk matters most?', 'Challenge pricing power', 'Which margin assumption moves value?', 'What would prove the bull case wrong?'];
+    case 'industrial':
+      return ['Where is cycle risk hiding?', 'Challenge backlog and margin durability', 'What assumption moves fair value most?', 'Compare this against SPY/QQQ'];
+    default:
+      return defaultMilouPrompts;
+  }
+}
 
 const initialMilou: MilouState = {
   status: 'idle',
@@ -533,6 +569,7 @@ export function AnalyticsWorkbenchClient() {
   const showSearchPanel = searchOpen && Boolean(trimmedQuery) && (searchLoading || searchError || searchResults.length > 0);
   const valuationReady = valuation.status === 'ready';
   const hasAnalysis = valuation.status === 'ready' || valuation.status === 'unavailable' || valuation.status === 'error';
+  const milouPrompts = milouPromptsForSelection(selected);
 
   useEffect(() => {
     if (!trimmedQuery || valuation.selected?.symbol === trimmedQuery.toUpperCase()) {
@@ -658,6 +695,8 @@ export function AnalyticsWorkbenchClient() {
             country: selected.country,
             currency: selected.currency,
             type: selected.type,
+            sector: selected.sector ?? null,
+            industry: selected.industry ?? null,
           },
           valuation: {
             status: valuation.status,
@@ -938,7 +977,7 @@ export function AnalyticsWorkbenchClient() {
           <div className="trading-section-label">Milou analysis</div>
           <h2>Ask the stock expert</h2>
           <p>
-            Milou can answer all your questions and provide additional insights in the provided analysis. She answers against the evidence provided or can access the web for additional information.
+            Milou checks valuation work like a trading analyst: she can stress-test the bull and bear case, explain DCF and multiples in plain English, compare relative performance against SPY/QQQ, surface risk drivers, and use web search for fresh news or filings when you allow it.
           </p>
         </div>
         <div className="trading-analytics-chat-panel">
@@ -957,7 +996,7 @@ export function AnalyticsWorkbenchClient() {
             </label>
             <label className="trading-analytics-web-toggle">
               <input type="checkbox" checked={milouUseWeb} onChange={(event) => setMilouUseWeb(event.target.checked)} />
-              <span>Use external web search when useful</span>
+              <span>Use web search</span>
             </label>
             <button type="submit" disabled={!valuationReady || !selected || milou.status === 'sending' || !milouQuestion.trim()}>{milou.status === 'sending' ? 'Asking Milou…' : 'Ask Milou'}</button>
           </form>

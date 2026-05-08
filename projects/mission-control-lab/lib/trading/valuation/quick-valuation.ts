@@ -6,6 +6,8 @@ export type AnalyticsTickerSelection = {
   exchange: string;
   name: string;
   type: string;
+  sector?: string | null;
+  industry?: string | null;
   country: string;
   currency: string;
   previousClose: number | null;

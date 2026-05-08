@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchEodhdSearch, type EodhdSearchResult } from '@/lib/trading/sources/eodhd';
-import { searchFinanceDatabase } from '@/lib/trading/sources/finance-database';
+import { findFinanceDatabaseProfile, searchFinanceDatabase } from '@/lib/trading/sources/finance-database';
 
 const FALLBACK_EXPANSIONS: Record<string, string[]> = {
   TSM: ['Taiwan Semiconductor Manufacturing'],
@@ -71,18 +71,24 @@ export async function GET(request: Request) {
     .filter((item) => item.Code && item.Exchange)
     .sort((a, b) => rankSearchResult(b, query) - rankSearchResult(a, query))
     .slice(0, 10)
-    .map((item) => ({
-      symbol: `${item.Code!.toUpperCase()}.${item.Exchange!.toUpperCase()}`,
-      code: item.Code,
-      exchange: item.Exchange,
-      name: item.Name ?? `${item.Code}.${item.Exchange}`,
-      type: item.Type ?? 'Instrument',
-      country: item.Country ?? 'Unknown',
-      currency: item.Currency ?? '—',
-      previousClose: item.previousClose ?? null,
-      previousCloseDate: item.previousCloseDate ?? null,
-      isPrimary: Boolean(item.isPrimary),
-    }));
+    .map((item) => {
+      const symbol = `${item.Code!.toUpperCase()}.${item.Exchange!.toUpperCase()}`;
+      const referenceProfile = findFinanceDatabaseProfile(symbol) ?? findFinanceDatabaseProfile(item.Code!.toUpperCase());
+      return {
+        symbol,
+        code: item.Code,
+        exchange: item.Exchange,
+        name: item.Name ?? `${item.Code}.${item.Exchange}`,
+        type: item.Type ?? 'Instrument',
+        country: item.Country ?? 'Unknown',
+        currency: item.Currency ?? '—',
+        sector: referenceProfile?.sector ?? null,
+        industry: referenceProfile?.industry ?? null,
+        previousClose: item.previousClose ?? null,
+        previousCloseDate: item.previousCloseDate ?? null,
+        isPrimary: Boolean(item.isPrimary),
+      };
+    });
 
   return NextResponse.json({ query, results });
 }

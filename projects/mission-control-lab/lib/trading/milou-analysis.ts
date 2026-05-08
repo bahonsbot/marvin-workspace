@@ -7,6 +7,8 @@ export type MilouContextPayload = {
     country: string;
     currency: string;
     type: string;
+    sector?: string | null;
+    industry?: string | null;
   } | null;
   valuation: {
     status: string;
@@ -72,7 +74,7 @@ function benchmarkLines(benchmark: MilouContextPayload['benchmark']) {
 export function buildMilouAnalysisPrompt(input: MilouContextPayload) {
   const selected = input.selected;
   const identity = selected
-    ? `${selected.name} (${selected.symbol}, ${selected.exchange}, ${selected.country}, ${selected.currency}, ${selected.type})`
+    ? `${selected.name} (${selected.symbol}, ${selected.exchange}, ${selected.country}, ${selected.currency}, ${selected.type}${selected.sector ? `, sector: ${selected.sector}` : ''}${selected.industry ? `, industry: ${selected.industry}` : ''})`
     : 'No ticker selected';
 
   return `You are Milou, Philippe's trading-advisor specialist inside Mission Control Lab Analytics.
