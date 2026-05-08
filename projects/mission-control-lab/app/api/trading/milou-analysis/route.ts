@@ -9,8 +9,8 @@ const GATEWAY_CALL_TIMEOUT_MS = 45_000;
 const ROUTE_TIMEOUT_MS = 50_000;
 const HISTORY_CALL_TIMEOUT_MS = 40_000;
 const HISTORY_ROUTE_TIMEOUT_MS = 45_000;
-const MILOU_SESSION_KEY = 'agent:main:lab-milou-analytics';
-const MILOU_SEAT_CONTEXT = 'Milou trading-advisor specialist seat (currently routed through a dedicated main-agent Lab Analytics session because standalone trading-advisor agent id is not present).';
+const MILOU_SESSION_KEY = 'agent:trading-advisor:main';
+const MILOU_SEAT_CONTEXT = 'Milou trading-advisor specialist seat using the registered trading-advisor runtime workspace and skill posture.';
 const ANSWER_POLL_DELAYS_MS = [1_000, 1_800, 2_800, 4_000, 5_500, 7_000] as const;
 
 function shellQuote(value: string): string {
