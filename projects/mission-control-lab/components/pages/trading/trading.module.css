@@ -6781,3 +6781,50 @@
 :global(.trading-analytics-empty-chart) {
   min-height: 220px;
 }
+
+:global(.trading-analytics-benchmark-chart-shell) {
+  display: grid;
+  gap: 8px;
+}
+
+:global(.trading-analytics-benchmark-chart) {
+  height: 220px;
+}
+
+:global(.trading-analytics-benchmark-legend) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  color: rgba(34, 48, 41, 0.62);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+:global(.trading-analytics-benchmark-legend span) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+:global(.trading-analytics-benchmark-legend i) {
+  width: 18px;
+  height: 3px;
+  border-radius: 999px;
+  background: #17241e;
+}
+
+:global(.trading-analytics-benchmark-legend span[data-series='spy'] i) {
+  background: #16b45f;
+}
+
+:global(.trading-analytics-benchmark-legend span[data-series='qqq'] i) {
+  background: #4f6f7d;
+}
+
+:global(.trading-analytics-benchmark-note) {
+  margin: 0;
+  color: rgba(34, 48, 41, 0.5);
+  font-size: 11px;
+  line-height: 1.35;
+}

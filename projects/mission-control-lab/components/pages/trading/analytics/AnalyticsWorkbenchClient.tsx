@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useId, useState } from 'react';
-import { MiniLineChart, tradingCardStyle } from '@/components/pages/trading/shared';
+import { tradingCardStyle } from '@/components/pages/trading/shared';
 import type { DefeatBetaAnalyticsSummary } from '@/lib/trading/sources/defeatbeta';
 
 type SearchResult = {
@@ -20,6 +20,39 @@ type SearchResult = {
 type SearchResponse = { query: string; results: SearchResult[] };
 type QuickValuationRouteResult = { ok: boolean; valuation: QuickValuation };
 type TickerMetadata = { symbol: string; name: string; logoUrl: string | null; logoAlt: string };
+
+type BenchmarkSeriesKey = 'selected' | 'spy' | 'qqq';
+type BenchmarkComparisonSeries = {
+  key: BenchmarkSeriesKey;
+  label: string;
+  symbol: string;
+  returnPct: number | null;
+  points: Array<{ date: string; value: number }>;
+};
+type BenchmarkComparison = {
+  ok: boolean;
+  range: string;
+  source: 'yfinance';
+  asOf: string;
+  selectedSymbol: string;
+  benchmarks: string[];
+  series: BenchmarkComparisonSeries[];
+  stats: {
+    selectedReturnPct: number | null;
+    spyReturnPct: number | null;
+    qqqReturnPct: number | null;
+    vsSpyPct: number | null;
+    vsQqqPct: number | null;
+  };
+  missing: string[];
+  note: string;
+};
+type BenchmarkComparisonRouteResult = { ok: boolean; comparison: BenchmarkComparison };
+type BenchmarkState = {
+  status: 'idle' | 'loading' | 'ready' | 'unavailable' | 'error';
+  message: string;
+  comparison: BenchmarkComparison | null;
+};
 
 type ValuationRunStatus = {
   id: string;
@@ -169,6 +202,13 @@ function formatPercent(value: number | null | undefined, options: { signed?: boo
   return `${prefix}${value.toFixed(decimals)}%`;
 }
 
+function formatBenchmarkDate(value: string | null | undefined) {
+  if (!value) return '—';
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', timeZone: 'UTC' }).format(parsed);
+}
+
 function analysisStatusPill(status: QuickValuation['status']) {
   if (status === 'generating' || status === 'validating') return { label: 'Analyzing', state: 'running' };
   if (status === 'ready') return { label: 'Ready', state: 'ready' };
@@ -284,6 +324,50 @@ function CorridorChart({ valuation, currency }: { valuation: QuickValuation; cur
   );
 }
 
+function BenchmarkOverlayChart({ comparison }: { comparison: BenchmarkComparison }) {
+  const width = 720;
+  const height = 220;
+  const plotTop = 18;
+  const plotBottom = 34;
+  const plotHeight = height - plotTop - plotBottom;
+  const colors: Record<BenchmarkSeriesKey, string> = {
+    selected: '#17241e',
+    spy: '#16B45F',
+    qqq: '#4F6F7D',
+  };
+  const usableSeries = comparison.series.filter((series) => series.points.length >= 2);
+  const values = usableSeries.flatMap((series) => series.points.map((point) => point.value));
+  const min = Math.min(...values, 100);
+  const max = Math.max(...values, 100);
+  const span = Math.max(max - min, 1);
+  const maxPoints = Math.max(...usableSeries.map((series) => series.points.length), 1);
+  const pathFor = (series: BenchmarkComparisonSeries) => series.points
+    .map((point, index) => {
+      const x = 12 + (index / Math.max(maxPoints - 1, 1)) * (width - 44);
+      const y = plotTop + (1 - (point.value - min) / span) * plotHeight;
+      return `${index === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`;
+    })
+    .join(' ');
+
+  return (
+    <div className="trading-analytics-benchmark-chart-shell">
+      <svg className="trading-mini-chart trading-analytics-benchmark-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Indexed benchmark comparison chart">
+        {[0, 1, 2, 3].map((line) => {
+          const y = plotTop + (line / 3) * plotHeight;
+          return <line key={line} x1="12" y1={y} x2={width - 22} y2={y} stroke="rgba(28,37,32,0.08)" strokeWidth="1" />;
+        })}
+        <line x1="12" y1={plotTop + (1 - (100 - min) / span) * plotHeight} x2={width - 22} y2={plotTop + (1 - (100 - min) / span) * plotHeight} stroke="rgba(28,37,32,0.16)" strokeDasharray="4 5" />
+        {usableSeries.map((series) => <path key={series.key} d={pathFor(series)} fill="none" stroke={colors[series.key]} strokeWidth={series.key === 'selected' ? 2.8 : 2} strokeLinecap="round" strokeLinejoin="round" />)}
+        <line x1="12" y1={height - plotBottom} x2={width - 22} y2={height - plotBottom} stroke="rgba(28,37,32,0.14)" />
+      </svg>
+      <div className="trading-analytics-benchmark-legend">
+        {usableSeries.map((series) => <span key={series.key} data-series={series.key}><i />{series.label} {formatPercent(series.returnPct, { signed: true })}</span>)}
+      </div>
+      <p className="trading-analytics-benchmark-note">{comparison.note} Source: yfinance · Updated {formatBenchmarkDate(comparison.asOf)}</p>
+    </div>
+  );
+}
+
 function SensitivityBands({ rows, currency }: { rows: ValuationSensitivity[] | undefined; currency: string }) {
   const usable = rows?.length ? rows : [];
   const scale = rangeScale(usable.flatMap((row) => [row.bear, row.base, row.bull]));
@@ -336,6 +420,7 @@ export function AnalyticsWorkbenchClient() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [valuation, setValuation] = useState<QuickValuation>(initialValuation);
+  const [benchmark, setBenchmark] = useState<BenchmarkState>({ status: 'idle', message: 'Select a ticker to compare against SPY and QQQ.', comparison: null });
   const [selectedMetadata, setSelectedMetadata] = useState<TickerMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -415,6 +500,7 @@ export function AnalyticsWorkbenchClient() {
     setError(null);
     setSelectedMetadata(null);
     setValuation((current) => ({ ...current, status: 'validated', selected: result, message: `Validated ${result.name} on ${result.exchange}.` }));
+    setBenchmark({ status: 'idle', message: 'Run Quick analysis to compare this ticker against SPY and QQQ.', comparison: null });
   }
 
   async function validateTicker() {
@@ -468,6 +554,24 @@ export function AnalyticsWorkbenchClient() {
       if (!response.ok) throw new Error(`Quick valuation route returned HTTP ${response.status}`);
       const payload = (await response.json()) as QuickValuationRouteResult;
       setValuation(payload.valuation);
+      setBenchmark({ status: 'loading', message: `Loading yfinance benchmark history for ${match.symbol}, SPY, and QQQ…`, comparison: null });
+      try {
+        const benchmarkResponse = await fetch('/api/trading/benchmark-comparison', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', accept: 'application/json' },
+          cache: 'no-store',
+          body: JSON.stringify({ symbol: match.symbol, range: '1y' }),
+        });
+        if (!benchmarkResponse.ok) throw new Error(`Benchmark route returned HTTP ${benchmarkResponse.status}`);
+        const benchmarkPayload = (await benchmarkResponse.json()) as BenchmarkComparisonRouteResult;
+        setBenchmark({
+          status: benchmarkPayload.comparison.ok ? 'ready' : 'unavailable',
+          message: benchmarkPayload.comparison.ok ? 'Benchmark comparison loaded from yfinance.' : benchmarkPayload.comparison.note,
+          comparison: benchmarkPayload.comparison,
+        });
+      } catch (benchmarkError) {
+        setBenchmark({ status: 'error', message: benchmarkError instanceof Error ? benchmarkError.message : 'Benchmark comparison failed.', comparison: null });
+      }
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : 'Quick Valuation failed.';
       setError(message);
@@ -497,6 +601,7 @@ export function AnalyticsWorkbenchClient() {
                   setSearchOpen(true);
                   setSelectedMetadata(null);
                   setValuation({ ...initialValuation, message: 'Choose a ticker result, then generate Quick Valuation.', selected: null });
+                  setBenchmark({ status: 'idle', message: 'Select a ticker to compare against SPY and QQQ.', comparison: null });
                 }}
                 onFocus={() => setSearchOpen(true)}
                 onKeyDown={(event) => {
@@ -623,12 +728,12 @@ export function AnalyticsWorkbenchClient() {
               <span>Market comparison</span>
             </div>
           </div>
-          {valuation.benchmarkSeries.length ? <MiniLineChart values={valuation.benchmarkSeries} /> : <div className="trading-analytics-empty-chart">Needs benchmark price series (for example SPY/QQQ and sector ETF) to render true relative performance overlays.</div>}
+          {benchmark.comparison?.ok ? <BenchmarkOverlayChart comparison={benchmark.comparison} /> : <div className="trading-analytics-empty-chart">{benchmark.status === 'loading' ? benchmark.message : benchmark.comparison?.missing.length ? `Missing yfinance history for ${benchmark.comparison.missing.join(', ')}.` : benchmark.message}</div>}
           <dl className="trading-ticker-chart-stats">
-            <div><dt>Vs QQQ</dt><dd>{hasAnalysis ? 'Needs benchmark series' : '—'}</dd></div>
-            <div><dt>Vs SPY</dt><dd>{hasAnalysis ? 'Needs benchmark series' : '—'}</dd></div>
-            <div><dt>Overlay status</dt><dd>{valuation.summary?.coverage.prices ? 'Price history available' : 'Missing price history'}</dd></div>
-            <div><dt>Trend risk</dt><dd>{hasAnalysis ? (valuation.confidence === 'Low' ? 'Higher uncertainty' : 'Moderate uncertainty') : '—'}</dd></div>
+            <div><dt>Vs QQQ</dt><dd>{benchmark.comparison ? formatPercent(benchmark.comparison.stats.vsQqqPct, { signed: true }) : '—'}</dd></div>
+            <div><dt>Vs SPY</dt><dd>{benchmark.comparison ? formatPercent(benchmark.comparison.stats.vsSpyPct, { signed: true }) : '—'}</dd></div>
+            <div><dt>{selected?.symbol ?? 'Ticker'}</dt><dd>{benchmark.comparison ? formatPercent(benchmark.comparison.stats.selectedReturnPct, { signed: true }) : '—'}</dd></div>
+            <div><dt>Overlay source</dt><dd>{benchmark.comparison ? 'yfinance · 1Y indexed' : '—'}</dd></div>
           </dl>
         </section>
 
