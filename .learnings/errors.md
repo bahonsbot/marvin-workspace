@@ -1518,3 +1518,14 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** medium
 **Status:** active reminder
+
+## [ERR-20260508-2306]
+
+**What failed:** Mission Control Lab Analytics Milou answer return path after a web-search run.
+**Error:** The Analytics page showed `Milou finished the run, but the answer was not returned to Analytics yet. Open the Milou session history if this repeats.` while the actual Milou answer existed in `agent:trading-advisor:main` history after web-search tool calls.
+**Context:** Milou's backend route successfully triggered the specialist runtime and web search, but the route's timeout/history polling window was too short for web-search-heavy answers. The UI therefore displayed the fallback even though the run itself succeeded.
+**Suggested fix:** When a route bridges async agent runs into a UI answer, validate both execution and return-path timing. Poll enough recent history after `chat.send`, use a generous timeout for web-enabled runs, and smoke with a live POST that proves the route response contains a non-empty answer, not just that the agent session eventually has one.
+**Resolution:** Resolved in Lab with commit `cd929ac` by increasing `chat.send` timeout to 90s, route timeout to 95s, increasing history limit to 30, extending polling delays, rebuilding/restarting Lab, passing health/lane smoke, and verifying a live POST returned `ok: true` with a non-empty answer.
+
+**Priority:** high
+**Status:** resolved

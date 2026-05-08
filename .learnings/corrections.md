@@ -934,3 +934,12 @@ User corrections and feedback. Log when user explicitly corrects you.
 - Context: During the May 7 Morning Meeting, a self-improvement review suggested documenting absent `projects/autonomous-trading-bot/.env.local` in `TOOLS.md`. Verification found no code/script/docs references to `.env.local`; only `.env` exists and is correctly mode 600.
 - Correction: Do not add TOOLS.md notes for absent unused files or non-existent workflows. Document only live runtime setup facts. Reopen only when code/scripts reference the file or a real local override workflow is introduced.
 - Related placement rule: removed-provider drift rules, such as Nexos staying absent, belong in `MEMORY.md`, not `TOOLS.md`.
+
+## [CORR-20260508-2249]
+
+**Trigger:** Philippe noticed that checking `Use web search` in Mission Control Lab Analytics still let Milou answer competitor questions as if no peer data had been supplied, and that Milou's transcript bold styling felt too heavy and frequent for the clean/light UI.
+**What was wrong:** The checkbox semantics were too weak: the prompt treated web as optional context rather than an explicit user intent to use available search/current-source capability before claiming missing data. The transcript renderer also allowed model-generated Markdown bold to dominate the visual hierarchy.
+**Lesson:** For AI UI controls, a visible capability toggle must map to truthful operational behavior. If `Use web search` is enabled, the agent should try available web/search tooling for current, peer, competitor, filing, or news context, or explicitly say tooling is unavailable; it should not imply the user failed to provide data. For light financial-dashboard UI, constrain model Markdown and style emphasis lightly: reserve bold for rare short phrases, not full sentences/labels/numbers.
+
+**Priority:** high
+**Status:** active
