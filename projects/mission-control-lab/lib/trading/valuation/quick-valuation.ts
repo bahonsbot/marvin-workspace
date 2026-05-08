@@ -236,9 +236,9 @@ function buildEvidence(summary: DefeatBetaAnalyticsSummary): Array<[string, stri
     `Dividends ${pointCount(summary.events.dividends)}`,
     `Splits ${summary.events.splits.length}`,
   ];
-  const coverage = capitalizedSegments(`${coverageList(summary)} · ${summary.status}`);
+  const coverage = coverageList(summary);
   return [
-    ['Coverage', coverage],
+    ['Coverage', coverage === 'Unavailable' ? 'No provider coverage detected' : `Using ${coverage}`],
     ['Ratios', capitalizedSegments(`${ratioParts.join(' · ')}${latestRatioDate ? ` · latest ${latestRatioDate}` : ''}`)],
     ['Statements', statementPoints ? capitalizedSegments(`${statementMetrics} metrics · ${statementPoints} points${latestPeriod ? ` · latest ${latestPeriod}` : ''}`) : 'No statement history available'],
     ['Quality and events', capitalizedSegments(qualityParts.join(' · '))],

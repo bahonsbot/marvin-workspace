@@ -5924,7 +5924,7 @@
   gap: 0;
 }
 
-:global(.trading-analytics-methods div) {
+:global(.trading-analytics-methods > div) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 14px;
@@ -5946,7 +5946,16 @@
   gap: 4px;
 }
 
-:global(.trading-analytics-methods dt span),
+:global(.trading-analytics-method-title span) {
+  color: #17241e;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+}
+
+:global(.trading-analytics-methods dt > span),
 :global(.trading-analytics-methods dd em) {
   color: rgba(34, 48, 41, 0.52);
   font-size: 11px;
