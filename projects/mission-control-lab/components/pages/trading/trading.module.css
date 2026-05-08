@@ -5940,6 +5940,12 @@
   font-weight: 750;
 }
 
+:global(.trading-analytics-method-title) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 :global(.trading-analytics-methods dt span),
 :global(.trading-analytics-methods dd em) {
   color: rgba(34, 48, 41, 0.52);
@@ -6418,6 +6424,22 @@
   bottom: 4px;
   border-radius: 999px;
   background: rgba(79, 111, 125, 0.42);
+}
+
+:global(.trading-analytics-sensitivity-row[data-factor='wacc'] i) {
+  background: rgba(79, 111, 125, 0.52);
+}
+
+:global(.trading-analytics-sensitivity-row[data-factor='growth'] i) {
+  background: rgba(22, 180, 95, 0.46);
+}
+
+:global(.trading-analytics-sensitivity-row[data-factor='margin-fcf'] i) {
+  background: rgba(189, 129, 78, 0.5);
+}
+
+:global(.trading-analytics-sensitivity-row[data-factor='quality'] i) {
+  background: rgba(112, 93, 166, 0.48);
 }
 
 :global(.trading-analytics-sensitivity-row b) {

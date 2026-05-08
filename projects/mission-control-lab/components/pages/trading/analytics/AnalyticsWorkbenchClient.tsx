@@ -131,12 +131,30 @@ const explainers: Record<string, string> = {
   reverseDcf: 'Reverse DCF asks what growth the current market price already implies. Useful for spotting when optimism is already priced in.',
   qualityRisk: 'Quality/risk overlay adjusts for capital efficiency, ROIC versus WACC, and missing coverage. Useful because better businesses deserve different valuation tolerance.',
   fairValue: 'The corridor shows bear, base, and bull valuation outputs across the model blend. It is uncertainty, not a price target.',
-  decisionZone: 'Decision zone is a model interpretation, not advice. It summarizes whether the valuation model sees upside, downside, or needs more analytics data before making a useful read.',
-  sensitivity: 'Sensitivity shows which assumption moves fair value most. Wider bands mean the output is more fragile.',
+  decisionZone: 'Decision zone is a model interpretation, not advice.',
+  sensitivity: 'Read the bars like this: wider bar means that assumption can move fair value more. The marker shows the current base estimate.',
 };
 
-function Explainer({ id }: { id: keyof typeof explainers }) {
-  return <span className="trading-analytics-explainer" title={explainers[id]} aria-label={explainers[id]}>?</span>;
+function Explainer({ id, text }: { id: keyof typeof explainers; text?: string }) {
+  const label = text ?? explainers[id];
+  return <span className="trading-analytics-explainer" title={label} aria-label={label}>?</span>;
+}
+
+function decisionZoneExplainerText(zone: string) {
+  switch (zone) {
+    case 'Needs analytics data':
+      return 'Needs analytics data: coverage is missing, so this read is incomplete. Wait for statements, ratios, and quality coverage.';
+    case 'Needs quote':
+      return 'Needs quote: valuation exists but there is no current price anchor, so upside/downside cannot be computed yet.';
+    case 'Undervalued watch':
+      return 'Undervalued watch: base fair value sits above current price. Watch setup quality and wait for confirmation before acting.';
+    case 'Overvalued':
+      return 'Overvalued: base fair value sits below current price. Treat this as downside risk context, not a trade signal.';
+    case 'Watch / Buy weakness':
+      return 'Watch / Buy weakness: price is near model fair value. Favor patience and add only on better risk/reward entries.';
+    default:
+      return 'Decision zone is unavailable or still loading. It updates when valuation and quote inputs are present.';
+  }
 }
 
 function formatCurrency(value: number | null | undefined, currency = 'USD') {
@@ -275,8 +293,9 @@ function SensitivityBands({ rows, currency }: { rows: ValuationSensitivity[] | u
         const left = row.bear == null ? 0 : ((row.bear - scale.min) / scale.span) * 100;
         const right = row.bull == null ? 0 : ((row.bull - scale.min) / scale.span) * 100;
         const base = row.base == null ? 0 : ((row.base - scale.min) / scale.span) * 100;
+        const factorSlug = row.factor.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         return (
-          <div key={row.factor} className="trading-analytics-sensitivity-row">
+          <div key={row.factor} className="trading-analytics-sensitivity-row" data-factor={factorSlug}>
             <span>{row.factor}</span>
             <div><i style={{ left: `${left}%`, width: `${Math.max(right - left, 2)}%` }} /><b style={{ left: `${base}%` }} /></div>
             <em>{formatCurrency(row.bear, currency)} / {formatCurrency(row.bull, currency)}</em>
@@ -461,7 +480,7 @@ export function AnalyticsWorkbenchClient() {
       <section className="trading-analytics-command" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none', overflow: 'visible' })}>
         <div>
           <div className="trading-section-label">Analytics</div>
-          <h2>From symbol to fair-value range.</h2>
+          <h2>Read between the rows.</h2>
           <p>
             Generate a quick analysis or full thesis to get proper valuations and insights. Chat with stock expert Milou to get the answers to all your questions.
           </p>
@@ -569,7 +588,7 @@ export function AnalyticsWorkbenchClient() {
           <div className="trading-analytics-verdict-row">
             <span>Current price</span><strong>{formatCurrency(valuation.currentPrice, currency)}</strong>
             <span>Implied upside</span><strong className={(valuation.impliedUpside ?? 0) >= 0 ? 'positive' : 'negative'}>{formatPercent(valuation.impliedUpside, { signed: true })}</strong>
-            <span>Decision zone</span><strong className="trading-analytics-decision-chip">{valuation.decisionZone}<Explainer id="decisionZone" /></strong>
+            <span>Decision zone</span><strong className="trading-analytics-decision-chip">{valuation.decisionZone}<Explainer id="decisionZone" text={decisionZoneExplainerText(valuation.decisionZone)} /></strong>
           </div>
           <p className="trading-analytics-verdict-meta">{hasAnalysis ? `12 – 24 month horizon · ${valuation.confidence} confidence` : 'Select a ticker to generate valuation context'}</p>
         </div>
@@ -586,13 +605,12 @@ export function AnalyticsWorkbenchClient() {
           <div className="trading-ticker-head">
             <div>
               <span>Valuation stack</span>
-              <h2>Four models, one blended range</h2>
             </div>
           </div>
           <dl className="trading-analytics-methods">
             {valuation.methods.map((method) => (
               <div key={method.name}>
-                <dt>{method.name} {method.key ? <Explainer id={method.key as keyof typeof explainers} /> : null}<span>{method.note}</span>{valuation.submodels?.find((model) => model.key === method.key)?.driver ? <small>{valuation.submodels.find((model) => model.key === method.key)?.driver}</small> : null}</dt>
+                <dt><div className="trading-analytics-method-title"><span>{method.name}</span>{method.key ? <Explainer id={method.key as keyof typeof explainers} /> : null}</div><span>{method.note}</span>{valuation.submodels?.find((model) => model.key === method.key)?.driver ? <small>{valuation.submodels.find((model) => model.key === method.key)?.driver}</small> : null}</dt>
                 <dd><strong>{method.range}</strong><em>{method.weight}</em></dd>
               </div>
             ))}
@@ -603,15 +621,14 @@ export function AnalyticsWorkbenchClient() {
           <div className="trading-ticker-head">
             <div>
               <span>Market comparison</span>
-              <h2>Relative performance</h2>
             </div>
           </div>
-          {valuation.benchmarkSeries.length ? <MiniLineChart values={valuation.benchmarkSeries} /> : <div className="trading-analytics-empty-chart">Select a ticker to compare market performance.</div>}
+          {valuation.benchmarkSeries.length ? <MiniLineChart values={valuation.benchmarkSeries} /> : <div className="trading-analytics-empty-chart">Needs benchmark price series (for example SPY/QQQ and sector ETF) to render true relative performance overlays.</div>}
           <dl className="trading-ticker-chart-stats">
-            <div><dt>Vs QQQ</dt><dd>{hasAnalysis ? 'Pending' : '—'}</dd></div>
-            <div><dt>Vs SPY</dt><dd>{hasAnalysis ? 'Pending' : '—'}</dd></div>
-            <div><dt>Momentum</dt><dd>{valuation.summary?.coverage.prices ? 'DefeatBeta-backed' : '—'}</dd></div>
-            <div><dt>Trend risk</dt><dd>{hasAnalysis ? (valuation.confidence === 'Low' ? 'High' : 'Medium') : '—'}</dd></div>
+            <div><dt>Vs QQQ</dt><dd>{hasAnalysis ? 'Needs benchmark series' : '—'}</dd></div>
+            <div><dt>Vs SPY</dt><dd>{hasAnalysis ? 'Needs benchmark series' : '—'}</dd></div>
+            <div><dt>Overlay status</dt><dd>{valuation.summary?.coverage.prices ? 'Price history available' : 'Missing price history'}</dd></div>
+            <div><dt>Trend risk</dt><dd>{hasAnalysis ? (valuation.confidence === 'Low' ? 'Higher uncertainty' : 'Moderate uncertainty') : '—'}</dd></div>
           </dl>
         </section>
 
@@ -619,7 +636,6 @@ export function AnalyticsWorkbenchClient() {
           <div className="trading-ticker-head">
             <div>
               <span>Evidence map</span>
-              <h2>What the model reads</h2>
             </div>
           </div>
           <dl className="trading-profile-facts trading-analytics-evidence">
@@ -633,23 +649,38 @@ export function AnalyticsWorkbenchClient() {
           <div className="trading-ticker-head">
             <div>
               <span>Risk sensitivity</span>
-              <h2>Assumptions that matter <Explainer id="sensitivity" /></h2>
             </div>
           </div>
           <SensitivityBands rows={valuation.sensitivity} currency={currency} />
-          <p className="trading-analytics-note">The final range should always show which variable changed the answer most: WACC, margin/cash conversion, revenue growth, or multiple compression. <Explainer id="sensitivity" /></p>
+          <p className="trading-analytics-note">How to read this: a wider bar means that assumption can move fair value more. The marker is the current base estimate. <Explainer id="sensitivity" /></p>
         </section>
       </div>
+
+      <section className="trading-finance-glossary" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+        <div className="trading-section-label">Finance glossary</div>
+        <dl className="trading-glossary-grid">
+          <div><dt>P/E</dt><dd>Price-to-earnings. How much the market pays for each dollar of earnings.</dd></div>
+          <div><dt>P/S</dt><dd>Price-to-sales. Useful when profits are volatile but revenue is more stable.</dd></div>
+          <div><dt>P/B</dt><dd>Price-to-book. Compares market value with net assets on the balance sheet.</dd></div>
+          <div><dt>ROIC</dt><dd>Return on invested capital. Measures how efficiently capital turns into profit.</dd></div>
+          <div><dt>WACC</dt><dd>Weighted average cost of capital. The hurdle rate used to discount future cash flows.</dd></div>
+          <div><dt>DCF</dt><dd>Discounted cash flow. Values a business from expected future cash generation.</dd></div>
+          <div><dt>Reverse DCF</dt><dd>Starts from today&apos;s price and solves for the growth expectations implied by that price.</dd></div>
+          <div><dt>FCF</dt><dd>Free cash flow. Cash left after operating costs and capital spending.</dd></div>
+          <div><dt>Fair-value corridor</dt><dd>Bear/base/bull range from model uncertainty, not a guaranteed price target.</dd></div>
+          <div><dt>Decision zone</dt><dd>A model read of valuation context, used for watchlist discipline, not financial advice.</dd></div>
+        </dl>
+      </section>
 
       </>
       )}
 
       <section className="trading-analytics-milou" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
         <div className="trading-analytics-milou-copy">
-          <div className="trading-section-label">Milou analysis panel</div>
-          <h2>Ask the stock expert inside the context of this valuation.</h2>
+          <div className="trading-section-label">Milou analysis</div>
+          <h2>Ask the stock expert</h2>
           <p>
-            Milou receives the selected ticker, valuation assumptions, DefeatBeta summary, benchmark context, and generated thesis. She answers against the evidence, not from a blank chat box.
+            Milou can answer all your questions and provide additional insights in the provided analysis. She answers against the evidence provided or can access the web for additional information.
           </p>
         </div>
         <div className="trading-analytics-chat-panel">

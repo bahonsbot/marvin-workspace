@@ -204,7 +204,19 @@ function latestStatementPeriod(items: DefeatBetaAnalyticsSummary['statements']['
 }
 
 function coverageList(summary: DefeatBetaAnalyticsSummary) {
-  return Object.entries(summary.coverage).filter(([, value]) => value).map(([key]) => key).join(', ') || 'Unavailable';
+  return Object.entries(summary.coverage)
+    .filter(([, value]) => value)
+    .map(([key]) => key.charAt(0).toUpperCase() + key.slice(1))
+    .join(', ') || 'Unavailable';
+}
+
+function capitalizedSegments(value: string) {
+  return value
+    .split('·')
+    .map((segment) => segment.trim())
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' · ');
 }
 
 function buildEvidence(summary: DefeatBetaAnalyticsSummary): Array<[string, string]> {
@@ -221,14 +233,15 @@ function buildEvidence(summary: DefeatBetaAnalyticsSummary): Array<[string, stri
   const qualityParts = [
     `ROE ${pointCount(summary.quality.roe)}`,
     `ROIC ${pointCount(summary.quality.roic)}`,
-    `dividends ${pointCount(summary.events.dividends)}`,
-    `splits ${summary.events.splits.length}`,
+    `Dividends ${pointCount(summary.events.dividends)}`,
+    `Splits ${summary.events.splits.length}`,
   ];
+  const coverage = capitalizedSegments(`${coverageList(summary)} · ${summary.status}`);
   return [
-    ['Coverage', `${coverageList(summary)} · ${summary.status}`],
-    ['Ratios', `${ratioParts.join(' · ')}${latestRatioDate ? ` · latest ${latestRatioDate}` : ''}`],
-    ['Statements', statementPoints ? `${statementMetrics} metrics · ${statementPoints} points${latestPeriod ? ` · latest ${latestPeriod}` : ''}` : 'No statement history available'],
-    ['Quality & events', qualityParts.join(' · ')],
+    ['Coverage', coverage],
+    ['Ratios', capitalizedSegments(`${ratioParts.join(' · ')}${latestRatioDate ? ` · latest ${latestRatioDate}` : ''}`)],
+    ['Statements', statementPoints ? capitalizedSegments(`${statementMetrics} metrics · ${statementPoints} points${latestPeriod ? ` · latest ${latestPeriod}` : ''}`) : 'No statement history available'],
+    ['Quality and events', capitalizedSegments(qualityParts.join(' · '))],
   ];
 }
 
