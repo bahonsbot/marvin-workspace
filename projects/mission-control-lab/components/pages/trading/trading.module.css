@@ -6020,6 +6020,63 @@
   color: rgba(24, 33, 28, 0.82);
   font-size: 14px;
   line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+:global(.trading-analytics-chat-message small) {
+  display: block;
+  margin-top: 10px;
+  color: rgba(34, 48, 41, 0.52);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+:global(.trading-analytics-chat-message[data-state='error']) {
+  border-color: rgba(168, 93, 66, 0.26);
+  background: rgba(168, 93, 66, 0.07);
+}
+
+:global(.trading-analytics-milou-form) {
+  display: grid;
+  gap: 10px;
+}
+
+:global(.trading-analytics-milou-form label) {
+  display: grid;
+  gap: 7px;
+}
+
+:global(.trading-analytics-milou-form label span) {
+  color: rgba(34, 48, 41, 0.56);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+}
+
+:global(.trading-analytics-milou-form textarea) {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid rgba(28, 37, 32, 0.12);
+  border-radius: 16px;
+  padding: 12px 13px;
+  background: rgba(255, 253, 249, 0.8);
+  color: #17241e;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.45;
+  outline: none;
+}
+
+:global(.trading-analytics-milou-form textarea:focus) {
+  border-color: rgba(22, 180, 95, 0.34);
+  box-shadow: 0 0 0 3px rgba(22, 180, 95, 0.08);
+}
+
+:global(.trading-analytics-milou-form button:disabled),
+:global(.trading-analytics-prompt-grid button:disabled) {
+  opacity: 0.48;
+  cursor: not-allowed;
 }
 
 :global(.trading-analytics-prompt-grid) {

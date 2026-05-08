@@ -56,6 +56,18 @@ type BenchmarkState = {
   comparison: BenchmarkComparison | null;
 };
 
+type MilouState = {
+  status: 'idle' | 'sending' | 'ready' | 'error';
+  message: string;
+  answer: string | null;
+};
+type MilouAnalysisRouteResult = {
+  ok: boolean;
+  sessionKey?: string;
+  answer?: string;
+  error?: string;
+};
+
 type ValuationRunStatus = {
   id: string;
   state: 'ready' | 'unavailable' | 'error';
@@ -159,6 +171,12 @@ const milouPrompts = [
   'Explain this DCF simply',
   'Compare this against QQQ/SPY',
 ];
+
+const initialMilou: MilouState = {
+  status: 'idle',
+  message: 'Generate Quick Analysis, then ask Milou to challenge it in context.',
+  answer: null,
+};
 
 const explainers: Record<string, string> = {
   dcfProxy: "DCF proxy estimates intrinsic value from growth, cash conversion, WACC, and terminal assumptions. Useful because it tests whether fundamentals can justify today's price.",
@@ -434,6 +452,8 @@ export function AnalyticsWorkbenchClient() {
   const [activeResultIndex, setActiveResultIndex] = useState(0);
   const [valuation, setValuation] = useState<QuickValuation>(initialValuation);
   const [benchmark, setBenchmark] = useState<BenchmarkState>({ status: 'idle', message: 'Select a ticker to compare against SPY and QQQ.', comparison: null });
+  const [milou, setMilou] = useState<MilouState>(initialMilou);
+  const [milouQuestion, setMilouQuestion] = useState('');
   const [selectedMetadata, setSelectedMetadata] = useState<TickerMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -514,6 +534,7 @@ export function AnalyticsWorkbenchClient() {
     setSelectedMetadata(null);
     setValuation((current) => ({ ...current, status: 'validated', selected: result, message: `Validated ${result.name} on ${result.exchange}.` }));
     setBenchmark({ status: 'idle', message: 'Run Quick analysis to compare this ticker against SPY and QQQ.', comparison: null });
+    setMilou(initialMilou);
   }
 
   async function validateTicker() {
@@ -549,6 +570,56 @@ export function AnalyticsWorkbenchClient() {
 
   function openFullThesis() {
     setActiveAnalysisTab('full');
+  }
+
+  async function askMilou(question: string) {
+    const trimmed = question.trim();
+    if (!trimmed || !selected) return;
+    setMilou({ status: 'sending', message: 'Milou is reading the valuation context…', answer: null });
+    try {
+      const response = await fetch('/api/trading/milou-analysis', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', accept: 'application/json' },
+        cache: 'no-store',
+        body: JSON.stringify({
+          question: trimmed,
+          selected: {
+            symbol: selected.symbol,
+            name: selected.name,
+            exchange: selected.exchange,
+            country: selected.country,
+            currency: selected.currency,
+            type: selected.type,
+          },
+          valuation: {
+            status: valuation.status,
+            message: valuation.message,
+            decisionZone: valuation.decisionZone,
+            confidence: valuation.confidence,
+            baseValue: valuation.baseValue,
+            fairLow: valuation.fairLow,
+            fairHigh: valuation.fairHigh,
+            currentPrice: valuation.currentPrice,
+            impliedUpside: valuation.impliedUpside,
+            evidence: valuation.evidence,
+            sensitivity: valuation.sensitivity,
+            methods: valuation.methods,
+          },
+          benchmark: benchmark.comparison ? {
+            selectedSymbol: benchmark.comparison.selectedSymbol,
+            resolvedSymbol: benchmark.comparison.resolvedSymbol,
+            stats: benchmark.comparison.stats,
+            note: benchmark.comparison.note,
+          } : null,
+          webAccessRequested: /web|news|latest|recent|current/i.test(trimmed),
+        }),
+      });
+      const payload = (await response.json()) as MilouAnalysisRouteResult;
+      if (!response.ok || !payload.ok) throw new Error(payload.error || `Milou route failed (${response.status})`);
+      setMilou({ status: 'ready', message: `Answered by Milou specialist session${payload.sessionKey ? ` · ${payload.sessionKey}` : ''}.`, answer: payload.answer ?? 'Milou returned an empty answer.' });
+    } catch (cause) {
+      setMilou({ status: 'error', message: cause instanceof Error ? cause.message : 'Milou analysis failed.', answer: null });
+    }
   }
 
   async function generateQuickValuation() {
@@ -615,6 +686,7 @@ export function AnalyticsWorkbenchClient() {
                   setSelectedMetadata(null);
                   setValuation({ ...initialValuation, message: 'Choose a ticker result, then generate Quick Valuation.', selected: null });
                   setBenchmark({ status: 'idle', message: 'Select a ticker to compare against SPY and QQQ.', comparison: null });
+                  setMilou(initialMilou);
                 }}
                 onFocus={() => setSearchOpen(true)}
                 onKeyDown={(event) => {
@@ -802,12 +874,20 @@ export function AnalyticsWorkbenchClient() {
           </p>
         </div>
         <div className="trading-analytics-chat-panel">
-          <div className="trading-analytics-chat-message expert">
+          <div className="trading-analytics-chat-message expert" data-state={milou.status}>
             <span>Milou</span>
-            <p>{valuationReady && selected ? `${selected.name} has a first-pass valuation pack. I would challenge the revenue-growth path and WACC before treating the range as investable.` : 'Validate a ticker and generate a Quick Valuation, then I can challenge the assumptions in context.'}</p>
+            <p>{milou.answer ?? (valuationReady && selected ? `${selected.name} has a first-pass valuation pack. Ask me to challenge the assumptions, compare it with SPY/QQQ, or explain the valuation in plain English.` : 'Validate a ticker and generate a Quick Analysis, then I can challenge the assumptions in context.')}</p>
+            <small>{milou.message}</small>
           </div>
+          <form className="trading-analytics-milou-form" onSubmit={(event) => { event.preventDefault(); void askMilou(milouQuestion); }}>
+            <label>
+              <span>Your question</span>
+              <textarea value={milouQuestion} onChange={(event) => setMilouQuestion(event.target.value)} placeholder="Ask Milou about the valuation, risks, benchmark comparison, or what to check next." rows={3} />
+            </label>
+            <button type="submit" disabled={!valuationReady || !selected || milou.status === 'sending' || !milouQuestion.trim()}>{milou.status === 'sending' ? 'Asking Milou…' : 'Ask Milou'}</button>
+          </form>
           <div className="trading-analytics-prompt-grid">
-            {milouPrompts.map((prompt) => <button key={prompt} type="button">{prompt}</button>)}
+            {milouPrompts.map((prompt) => <button key={prompt} type="button" disabled={!valuationReady || milou.status === 'sending'} onClick={() => { setMilouQuestion(prompt); void askMilou(prompt); }}>{prompt}</button>)}
           </div>
         </div>
       </section>
