@@ -6787,6 +6787,16 @@
   gap: 8px;
 }
 
+:global(.trading-analytics-benchmark-axis-title) {
+  justify-self: end;
+  color: rgba(34, 48, 41, 0.5);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
 :global(.trading-analytics-benchmark-chart) {
   height: 220px;
 }
@@ -6819,7 +6829,7 @@
 }
 
 :global(.trading-analytics-benchmark-legend span[data-series='qqq'] i) {
-  background: #4f6f7d;
+  background: #b56a3a;
 }
 
 :global(.trading-analytics-benchmark-note) {

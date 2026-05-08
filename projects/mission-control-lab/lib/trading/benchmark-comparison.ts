@@ -23,6 +23,8 @@ export type BenchmarkComparisonResult = {
   source: 'yfinance';
   asOf: string;
   selectedSymbol: string;
+  resolvedSymbol: string;
+  attemptedSymbols: string[];
   benchmarks: string[];
   points: BenchmarkComparisonPoint[];
   series: BenchmarkComparisonSeries[];
@@ -41,6 +43,36 @@ const BENCHMARKS = [
   { key: 'spy' as const, symbol: 'SPY', label: 'SPY' },
   { key: 'qqq' as const, symbol: 'QQQ', label: 'QQQ' },
 ];
+
+const YFINANCE_SUFFIX_OVERRIDES: Record<string, string | null> = {
+  US: null,
+  NASDAQ: null,
+  NYSE: null,
+  AMEX: null,
+  LSE: 'L',
+};
+
+function unique(values: string[]) {
+  return Array.from(new Set(values.map((value) => value.trim().toUpperCase()).filter(Boolean)));
+}
+
+function yfinanceCandidates(symbol: string) {
+  const normalized = symbol.trim().toUpperCase();
+  const [code, exchange] = normalized.split('.');
+  if (!code || !exchange) return unique([normalized]);
+  const override = YFINANCE_SUFFIX_OVERRIDES[exchange];
+  const mapped = override === undefined ? normalized : (override ? `${code}.${override}` : code);
+  return unique([mapped, normalized, code]);
+}
+
+async function fetchFirstAvailableHistory(symbol: string, range: string) {
+  const attemptedSymbols = yfinanceCandidates(symbol);
+  for (const candidate of attemptedSymbols) {
+    const history = await fetchYfinancePriceHistory(candidate, { period: range });
+    if (history?.points.length) return { history, resolvedSymbol: candidate, attemptedSymbols };
+  }
+  return { history: null, resolvedSymbol: attemptedSymbols[0] ?? symbol.trim().toUpperCase(), attemptedSymbols };
+}
 
 function historyMap(history: YfinancePriceHistory | null) {
   const map = new Map<string, number>();
@@ -71,11 +103,12 @@ function sortedPoints(history: YfinancePriceHistory | null) {
 export async function buildBenchmarkComparison(input: { symbol: string; range?: string }): Promise<BenchmarkComparisonResult> {
   const selectedSymbol = input.symbol.trim().toUpperCase();
   const range = input.range ?? '1y';
-  const [selectedHistory, spyHistory, qqqHistory] = await Promise.all([
-    fetchYfinancePriceHistory(selectedSymbol, { period: range }),
+  const [selectedResolved, spyHistory, qqqHistory] = await Promise.all([
+    fetchFirstAvailableHistory(selectedSymbol, range),
     fetchYfinancePriceHistory('SPY', { period: range }),
     fetchYfinancePriceHistory('QQQ', { period: range }),
   ]);
+  const selectedHistory = selectedResolved.history;
 
   const histories = {
     selected: selectedHistory,
@@ -122,10 +155,12 @@ export async function buildBenchmarkComparison(input: { symbol: string; range?: 
     source: 'yfinance',
     asOf: [histories.selected?.asOf, histories.spy?.asOf, histories.qqq?.asOf].filter(Boolean).sort().at(-1) ?? new Date().toISOString(),
     selectedSymbol,
+    resolvedSymbol: selectedResolved.resolvedSymbol,
+    attemptedSymbols: selectedResolved.attemptedSymbols,
     benchmarks: BENCHMARKS.map((benchmark) => benchmark.symbol),
     points,
     series: [
-      { key: 'selected', label: selectedSymbol, symbol: selectedSymbol, returnPct: selectedReturnPct, points: selectedSeriesPoints },
+      { key: 'selected', label: selectedResolved.resolvedSymbol, symbol: selectedResolved.resolvedSymbol, returnPct: selectedReturnPct, points: selectedSeriesPoints },
       { key: 'spy', label: 'SPY', symbol: 'SPY', returnPct: spyReturnPct, points: spySeriesPoints },
       { key: 'qqq', label: 'QQQ', symbol: 'QQQ', returnPct: qqqReturnPct, points: qqqSeriesPoints },
     ],
@@ -137,6 +172,8 @@ export async function buildBenchmarkComparison(input: { symbol: string; range?: 
       vsQqqPct: selectedReturnPct != null && qqqReturnPct != null ? selectedReturnPct - qqqReturnPct : null,
     },
     missing,
-    note: points.length >= 2 ? 'Indexed to 100 at the first shared trading date.' : 'Not enough shared yfinance history to compare the selected ticker with SPY and QQQ.',
+    note: points.length >= 2
+      ? `Indexed to 100 at the first shared trading date.${selectedResolved.resolvedSymbol !== selectedSymbol ? ` ${selectedSymbol} resolved to ${selectedResolved.resolvedSymbol} for yfinance.` : ''}`
+      : `Not enough shared yfinance history to compare the selected ticker with SPY and QQQ. Tried ${selectedResolved.attemptedSymbols.join(', ')}.`,
   };
 }

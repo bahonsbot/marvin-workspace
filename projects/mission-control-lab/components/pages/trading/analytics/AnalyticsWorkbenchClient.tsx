@@ -35,6 +35,8 @@ type BenchmarkComparison = {
   source: 'yfinance';
   asOf: string;
   selectedSymbol: string;
+  resolvedSymbol: string;
+  attemptedSymbols: string[];
   benchmarks: string[];
   series: BenchmarkComparisonSeries[];
   stats: {
@@ -209,6 +211,10 @@ function formatBenchmarkDate(value: string | null | undefined) {
   return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', timeZone: 'UTC' }).format(parsed);
 }
 
+function formatIndexedValue(value: number) {
+  return value.toFixed(0);
+}
+
 function analysisStatusPill(status: QuickValuation['status']) {
   if (status === 'generating' || status === 'validating') return { label: 'Analyzing', state: 'running' };
   if (status === 'ready') return { label: 'Ready', state: 'ready' };
@@ -333,7 +339,7 @@ function BenchmarkOverlayChart({ comparison }: { comparison: BenchmarkComparison
   const colors: Record<BenchmarkSeriesKey, string> = {
     selected: '#17241e',
     spy: '#16B45F',
-    qqq: '#4F6F7D',
+    qqq: '#B56A3A',
   };
   const usableSeries = comparison.series.filter((series) => series.points.length >= 2);
   const values = usableSeries.flatMap((series) => series.points.map((point) => point.value));
@@ -341,6 +347,9 @@ function BenchmarkOverlayChart({ comparison }: { comparison: BenchmarkComparison
   const max = Math.max(...values, 100);
   const span = Math.max(max - min, 1);
   const maxPoints = Math.max(...usableSeries.map((series) => series.points.length), 1);
+  const axisValues = [max, (max + min) / 2, min];
+  const firstDate = usableSeries[0]?.points[0]?.date;
+  const lastDate = usableSeries[0]?.points.at(-1)?.date;
   const pathFor = (series: BenchmarkComparisonSeries) => series.points
     .map((point, index) => {
       const x = 12 + (index / Math.max(maxPoints - 1, 1)) * (width - 44);
@@ -351,6 +360,7 @@ function BenchmarkOverlayChart({ comparison }: { comparison: BenchmarkComparison
 
   return (
     <div className="trading-analytics-benchmark-chart-shell">
+      <div className="trading-analytics-benchmark-axis-title">Indexed performance · start = 100</div>
       <svg className="trading-mini-chart trading-analytics-benchmark-chart" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Indexed benchmark comparison chart">
         {[0, 1, 2, 3].map((line) => {
           const y = plotTop + (line / 3) * plotHeight;
@@ -358,6 +368,9 @@ function BenchmarkOverlayChart({ comparison }: { comparison: BenchmarkComparison
         })}
         <line x1="12" y1={plotTop + (1 - (100 - min) / span) * plotHeight} x2={width - 22} y2={plotTop + (1 - (100 - min) / span) * plotHeight} stroke="rgba(28,37,32,0.16)" strokeDasharray="4 5" />
         {usableSeries.map((series) => <path key={series.key} d={pathFor(series)} fill="none" stroke={colors[series.key]} strokeWidth={series.key === 'selected' ? 2.8 : 2} strokeLinecap="round" strokeLinejoin="round" />)}
+        {axisValues.map((value, index) => <text key={`${value}-${index}`} x={width - 20} y={plotTop + (1 - (value - min) / span) * plotHeight + 4} textAnchor="end" fill="rgba(34,48,41,0.46)" fontSize="10">{formatIndexedValue(value)}</text>)}
+        <text x="12" y={height - 12} fill="rgba(34,48,41,0.46)" fontSize="10">{formatBenchmarkDate(firstDate)}</text>
+        <text x={width - 22} y={height - 12} textAnchor="end" fill="rgba(34,48,41,0.46)" fontSize="10">{formatBenchmarkDate(lastDate)}</text>
         <line x1="12" y1={height - plotBottom} x2={width - 22} y2={height - plotBottom} stroke="rgba(28,37,32,0.14)" />
       </svg>
       <div className="trading-analytics-benchmark-legend">
