@@ -144,6 +144,13 @@ Script-only jobs belong on the host deterministic scheduler.
 ## Specialist Workspaces
 - Canonical specialist data lives under: `/data/.openclaw/workspace/agent-workspaces/<seat>/...`
 - Seat-local roots like `/data/.openclaw/workspace-job-advisor` are compatibility/runtime shells, not a second source of truth
+- Live specialist seat: `trading-advisor` / Milou `📈`
+  - route/session: `agent:trading-advisor:main`
+  - workspace: `/data/.openclaw/workspace/agent-workspaces/trading-advisor`
+  - agent dir: `/data/.openclaw/agents/trading-advisor/agent`
+  - model: `openai-codex/gpt-5.4`
+  - skills allowlist: `trading-advisor`, `stock-market-pro`, `us-stock-analysis`
+  - current Lab use: Trading Analytics Milou panel via `projects/mission-control-lab/app/api/trading/milou-analysis/route.ts`
 - Repair/check helper: `python3 scripts/specialist_workspace_aliases.py --apply`
 
 ## Trading Bot Operations
