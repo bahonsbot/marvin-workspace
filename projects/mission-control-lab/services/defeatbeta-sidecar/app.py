@@ -291,6 +291,151 @@ def build_summary(symbol: str) -> dict[str, Any]:
     return result
 
 
+def transcript_records_from_frame(df, limit: int = 8) -> list[dict[str, Any]]:
+    if df is None or df.empty:
+        return []
+    usable = df.copy()
+    for column in ("fiscal_year", "fiscal_quarter", "report_date"):
+        if column not in usable.columns:
+            return []
+    usable = usable.sort_values(["fiscal_year", "fiscal_quarter"], ascending=False)
+    records: list[dict[str, Any]] = []
+    for _, row in usable.head(limit).iterrows():
+        transcripts = row.get("transcripts")
+        paragraphs = list(transcripts) if hasattr(transcripts, "__iter__") and not isinstance(transcripts, (str, bytes, dict)) else []
+        speakers: list[str] = []
+        for paragraph in paragraphs:
+            speaker = None
+            if isinstance(paragraph, dict):
+                speaker = paragraph.get("speaker")
+            elif hasattr(paragraph, "get"):
+                speaker = paragraph.get("speaker")
+            if speaker and speaker not in speakers:
+                speakers.append(str(speaker))
+            if len(speakers) >= 8:
+                break
+        records.append({
+            "symbol": jsonable(row.get("symbol")),
+            "fiscalYear": int(row.get("fiscal_year")) if finite_number(row.get("fiscal_year")) is not None else None,
+            "fiscalQuarter": int(row.get("fiscal_quarter")) if finite_number(row.get("fiscal_quarter")) is not None else None,
+            "reportDate": jsonable(row.get("report_date")),
+            "transcriptId": jsonable(row.get("transcripts_id")),
+            "paragraphCount": len(paragraphs),
+            "sampleSpeakers": speakers,
+        })
+    return records
+
+
+def build_transcript_catalog(symbol: str) -> dict[str, Any]:
+    from defeatbeta_api.data.ticker import Ticker  # type: ignore
+
+    requested = symbol.strip().upper().replace("/", ".")
+    candidates = symbol_candidates(requested)
+    attempts: list[dict[str, Any]] = []
+    for candidate in candidates:
+        started = time.perf_counter()
+
+        def load_catalog(candidate_symbol: str = candidate):
+            transcripts = Ticker(candidate_symbol).earning_call_transcripts()
+            list_fn = getattr(transcripts, "get_transcripts_list", None)
+            return list_fn() if callable(list_fn) else transcripts
+
+        value, diag = safe_call(f"transcripts:{candidate}", load_catalog)
+        df = df_from(value)
+        records = transcript_records_from_frame(df, limit=8)
+        attempts.append({
+            "candidate": candidate,
+            "ok": diag.get("ok"),
+            "elapsedMs": round((time.perf_counter() - started) * 1000),
+            "recordCount": len(df.index) if df is not None else 0,
+            "error": diag.get("error"),
+        })
+        if records:
+            return {
+                "requestedSymbol": requested,
+                "resolvedSymbol": candidate,
+                "status": "available",
+                "source": DATA_SOURCE,
+                "asOf": now_iso(),
+                "latest": records[0],
+                "recent": records,
+                "coverage": {"transcripts": True, "llmConfigured": bool(os.environ.get("OPEN_AI_API_KEY"))},
+                "llmAnalysis": {
+                    "status": "requires_config" if not os.environ.get("OPEN_AI_API_KEY") else "available_in_library",
+                    "availableMethods": ["keyFinancialData", "metricChanges", "forecastDrivers"],
+                    "underlyingMethods": ["summarize_key_financial_data_with_ai", "analyze_financial_metrics_change_for_this_quarter_with_ai", "analyze_financial_metrics_forecast_for_future_with_ai"],
+                    "note": "DefeatBeta LLM transcript methods require an OpenAI-compatible API key/model configuration before Lab can run extraction.",
+                },
+                "attempts": attempts,
+                "notes": ["Transcript catalogue is metadata only; raw transcript text is not exposed by this endpoint."],
+            }
+    return {
+        "requestedSymbol": requested,
+        "resolvedSymbol": candidates[0] if candidates else requested,
+        "status": "unavailable",
+        "source": DATA_SOURCE,
+        "asOf": now_iso(),
+        "latest": None,
+        "recent": [],
+        "coverage": {"transcripts": False, "llmConfigured": bool(os.environ.get("OPEN_AI_API_KEY"))},
+        "llmAnalysis": {
+            "status": "unavailable",
+            "availableMethods": ["keyFinancialData", "metricChanges", "forecastDrivers"],
+            "underlyingMethods": ["summarize_key_financial_data_with_ai", "analyze_financial_metrics_change_for_this_quarter_with_ai", "analyze_financial_metrics_forecast_for_future_with_ai"],
+            "note": "No transcript catalogue was available for this symbol through DefeatBeta.",
+        },
+        "attempts": attempts,
+        "notes": ["No DefeatBeta candidate returned earnings-call transcript metadata."],
+    }
+
+
+def build_economy_context() -> dict[str, Any]:
+    from defeatbeta_api.data.treasure import Treasure  # type: ignore
+    from defeatbeta_api.utils import util  # type: ignore
+
+    diagnostics: list[dict[str, Any]] = []
+    annual, diag = safe_call("sp500AnnualReturns", util.load_sp500_historical_annual_returns)
+    diagnostics.append(diag)
+    cagr_10, diag = safe_call("sp500Cagr10", lambda: util.sp500_cagr_returns(10))
+    diagnostics.append(diag)
+    yields, diag = safe_call("dailyTreasureYield", lambda: Treasure().daily_treasure_yield())
+    diagnostics.append(diag)
+
+    annual_df = df_from(annual)
+    cagr_df = df_from(cagr_10)
+    yields_df = df_from(yields)
+    latest_annual = None
+    if non_empty_frame(annual_df):
+        row = annual_df.sort_values("report_date", ascending=False).iloc[0]
+        latest_annual = {"date": jsonable(row.get("report_date")), "annualReturn": finite_number(row.get("annual_returns"))}
+    latest_yield = None
+    if non_empty_frame(yields_df):
+        row = yields_df.sort_values("report_date", ascending=False).iloc[0]
+        latest_yield = {
+            "date": jsonable(row.get("report_date")),
+            "bc3Month": finite_number(row.get("bc3_month")),
+            "bc2Year": finite_number(row.get("bc2_year")),
+            "bc10Year": finite_number(row.get("bc10_year")),
+            "bc30Year": finite_number(row.get("bc30_year")),
+        }
+        if latest_yield["bc10Year"] is not None and latest_yield["bc2Year"] is not None:
+            latest_yield["twoTenSpread"] = latest_yield["bc10Year"] - latest_yield["bc2Year"]
+    cagr_value = None
+    if non_empty_frame(cagr_df):
+        row = cagr_df.iloc[0]
+        cagr_value = finite_number(row.get("cagr_returns"))
+    status = "available" if latest_annual or latest_yield or cagr_value is not None else "unavailable"
+    return {
+        "status": status,
+        "source": DATA_SOURCE,
+        "asOf": now_iso(),
+        "sp500": {"latestAnnualReturn": latest_annual, "cagr10Year": cagr_value},
+        "yieldCurve": latest_yield,
+        "notes": ["Economy context is broad market backdrop only; it is not ticker-specific quote truth."],
+        "diagnostics": diagnostics,
+    }
+
+
 
 @app.get("/health")
 def health() -> dict[str, Any]:
@@ -325,6 +470,47 @@ def analytics_summary(symbol: str, includeDiagnostics: bool = Query(default=Fals
             status_code=500,
             content={
                 "requestedSymbol": symbol,
+                "status": "error",
+                "source": DATA_SOURCE,
+                "asOf": now_iso(),
+                "error": {"type": type(exc).__name__, "message": str(exc)},
+                "tracebackTail": traceback.format_exc().splitlines()[-8:],
+            },
+        )
+
+
+@app.get("/v1/ticker/{symbol}/transcript-catalog")
+def transcript_catalog(symbol: str, includeAttempts: bool = Query(default=False)):
+    try:
+        result = build_transcript_catalog(symbol)
+        if not includeAttempts:
+            result.pop("attempts", None)
+        return JSONResponse(result)
+    except Exception as exc:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "requestedSymbol": symbol,
+                "status": "error",
+                "source": DATA_SOURCE,
+                "asOf": now_iso(),
+                "error": {"type": type(exc).__name__, "message": str(exc)},
+                "tracebackTail": traceback.format_exc().splitlines()[-8:],
+            },
+        )
+
+
+@app.get("/v1/economy/context")
+def economy_context(includeDiagnostics: bool = Query(default=False)):
+    try:
+        result = build_economy_context()
+        if not includeDiagnostics:
+            result.pop("diagnostics", None)
+        return JSONResponse(result)
+    except Exception as exc:
+        return JSONResponse(
+            status_code=500,
+            content={
                 "status": "error",
                 "source": DATA_SOURCE,
                 "asOf": now_iso(),

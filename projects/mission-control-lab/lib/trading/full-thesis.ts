@@ -1,7 +1,27 @@
 import type { MilouContextPayload } from './milou-analysis';
 
+export type FullThesisEvidencePack = {
+  transcripts?: {
+    status: string;
+    latest?: { fiscalYear: number | null; fiscalQuarter: number | null; reportDate?: string | null; paragraphCount?: number | null; sampleSpeakers?: string[] } | null;
+    recent?: Array<{ fiscalYear: number | null; fiscalQuarter: number | null; reportDate?: string | null; paragraphCount?: number | null }>;
+    llmAnalysis?: { status: string; note: string; availableMethods?: string[] };
+    notes?: string[];
+  } | null;
+  economy?: {
+    status: string;
+    sp500?: { latestAnnualReturn?: { date?: string | null; annualReturn: number | null } | null; cagr10Year?: number | null };
+    yieldCurve?: { date?: string | null; bc3Month?: number | null; bc2Year?: number | null; bc10Year?: number | null; bc30Year?: number | null; twoTenSpread?: number | null } | null;
+    notes?: string[];
+  } | null;
+  llmKeyData?: { status: string; note: string } | null;
+  llmMetricChanges?: { status: string; note: string } | null;
+  llmForecastDrivers?: { status: string; note: string } | null;
+};
+
 export type FullThesisPayload = MilouContextPayload & {
   priorMilouAnswer?: string | null;
+  evidencePack?: FullThesisEvidencePack | null;
 };
 
 function formatNumber(value: number | null | undefined, suffix = '') {
@@ -33,6 +53,23 @@ function benchmarkLines(benchmark: MilouContextPayload['benchmark']) {
     `SPY return: ${formatNumber(benchmark.stats.spyReturnPct, '%')} · vs SPY: ${formatNumber(benchmark.stats.vsSpyPct, ' pp')}`,
     `QQQ return: ${formatNumber(benchmark.stats.qqqReturnPct, '%')} · vs QQQ: ${formatNumber(benchmark.stats.vsQqqPct, ' pp')}`,
     benchmark.note,
+  ].join('\n');
+}
+
+function fullThesisEvidenceLines(evidencePack: FullThesisEvidencePack | null | undefined) {
+  if (!evidencePack) return 'No Full Thesis evidence pipeline modules were loaded yet.';
+  const transcript = evidencePack.transcripts;
+  const latest = transcript?.latest;
+  const economy = evidencePack.economy;
+  const yieldCurve = economy?.yieldCurve;
+  return [
+    `Transcript catalogue: ${transcript?.status ?? 'not loaded'}${latest ? ` · latest FY${latest.fiscalYear} Q${latest.fiscalQuarter} (${latest.reportDate ?? 'no date'}, ${latest.paragraphCount ?? '—'} paragraphs)` : ''}`,
+    `Transcript speakers: ${latest?.sampleSpeakers?.length ? latest.sampleSpeakers.slice(0, 6).join(', ') : '—'}`,
+    `LLM key-data extraction: ${evidencePack.llmKeyData?.status ?? transcript?.llmAnalysis?.status ?? 'not loaded'} · ${evidencePack.llmKeyData?.note ?? transcript?.llmAnalysis?.note ?? 'No key-data extraction result supplied.'}`,
+    `LLM metric-change analysis: ${evidencePack.llmMetricChanges?.status ?? 'not loaded'} · ${evidencePack.llmMetricChanges?.note ?? 'No metric-change analysis result supplied.'}`,
+    `LLM forecast-driver analysis: ${evidencePack.llmForecastDrivers?.status ?? 'not loaded'} · ${evidencePack.llmForecastDrivers?.note ?? 'No forecast-driver analysis result supplied.'}`,
+    `Economy context: ${economy?.status ?? 'not loaded'} · S&P latest annual return ${formatNumber(economy?.sp500?.latestAnnualReturn?.annualReturn != null ? economy.sp500.latestAnnualReturn.annualReturn * 100 : null, '%')} · S&P 10Y CAGR ${formatNumber(economy?.sp500?.cagr10Year != null ? economy.sp500.cagr10Year * 100 : null, '%')}`,
+    `Yield curve: ${yieldCurve ? `${yieldCurve.date ?? 'latest'} · 3M ${formatNumber(yieldCurve.bc3Month != null ? yieldCurve.bc3Month * 100 : null, '%')} · 2Y ${formatNumber(yieldCurve.bc2Year != null ? yieldCurve.bc2Year * 100 : null, '%')} · 10Y ${formatNumber(yieldCurve.bc10Year != null ? yieldCurve.bc10Year * 100 : null, '%')} · 2s10s ${formatNumber(yieldCurve.twoTenSpread != null ? yieldCurve.twoTenSpread * 100 : null, ' pp')}` : 'not loaded'}`,
   ].join('\n');
 }
 
@@ -79,6 +116,9 @@ ${sensitivityLines(input.valuation.sensitivity)}
 Market comparison:
 ${benchmarkLines(input.benchmark)}
 
+Full Thesis evidence pipeline:
+${fullThesisEvidenceLines(input.evidencePack)}
+
 Prior Milou answer from this Analytics session, if any:
 ${input.priorMilouAnswer?.trim() || 'No prior Milou answer supplied.'}
 
@@ -101,5 +141,7 @@ Style rules:
 - Use bullets where helpful.
 - Avoid heavy Markdown emphasis. Do not bold full sentences, labels, numbers, or section bodies.
 - Include a clear line that this is not financial advice.
-- If valuation status is not ready, say the thesis is provisional and explain which inputs are missing.`;
+- If valuation status is not ready, say the thesis is provisional and explain which inputs are missing.
+- If transcript LLM modules are not configured or not loaded, do not hallucinate earnings-call analysis; list them under Data gaps.
+- Use economy context only as backdrop, not as a ticker-specific conclusion.`;
 }

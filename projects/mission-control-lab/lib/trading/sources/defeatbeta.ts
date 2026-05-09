@@ -57,6 +57,36 @@ export type DefeatBetaAdapterResult =
   | { ok: true; summary: DefeatBetaAnalyticsSummary }
   | { ok: false; status: 'unavailable' | 'error'; reason: string; summary: DefeatBetaAnalyticsSummary };
 
+export type DefeatBetaTranscriptCatalog = {
+  requestedSymbol: string;
+  resolvedSymbol: string;
+  status: 'available' | 'unavailable' | 'error';
+  source: { id: 'defeatbeta'; label: string; note?: string };
+  asOf: string;
+  latest: {
+    symbol?: string | null;
+    fiscalYear: number | null;
+    fiscalQuarter: number | null;
+    reportDate?: string | null;
+    transcriptId?: string | null;
+    paragraphCount: number;
+    sampleSpeakers: string[];
+  } | null;
+  recent: Array<NonNullable<DefeatBetaTranscriptCatalog['latest']>>;
+  coverage: { transcripts: boolean; llmConfigured: boolean };
+  llmAnalysis: { status: 'requires_config' | 'available_in_library' | 'unavailable' | 'error'; availableMethods: string[]; note: string };
+  notes: string[];
+};
+
+export type DefeatBetaEconomyContext = {
+  status: 'available' | 'unavailable' | 'error';
+  source: { id: 'defeatbeta'; label: string; note?: string };
+  asOf: string;
+  sp500: { latestAnnualReturn: { date?: string | null; annualReturn: number | null } | null; cagr10Year: number | null };
+  yieldCurve: { date?: string | null; bc3Month: number | null; bc2Year: number | null; bc10Year: number | null; bc30Year: number | null; twoTenSpread?: number | null } | null;
+  notes: string[];
+};
+
 function configuredBaseUrl() {
   return (process.env.DEFEATBETA_SIDECAR_URL || DEFAULT_BASE_URL).replace(/\/$/, '');
 }
@@ -86,27 +116,30 @@ function hasUsableCoverage(summary: DefeatBetaAnalyticsSummary) {
   return summary.status === 'available' || summary.status === 'partial';
 }
 
+async function fetchSidecarJson<T>(path: string, options?: { timeoutMs?: number }): Promise<T> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), options?.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+  try {
+    const response = await fetch(`${configuredBaseUrl()}${path}`, {
+      signal: controller.signal,
+      headers: { accept: 'application/json' },
+      cache: 'no-store',
+    });
+    if (!response.ok) throw new Error(`DefeatBeta sidecar returned HTTP ${response.status}.`);
+    return (await response.json()) as T;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function getDefeatBetaAnalyticsSummary(symbol: string, options?: { timeoutMs?: number }): Promise<DefeatBetaAdapterResult> {
   const normalized = symbol.trim().toUpperCase();
   if (!normalized) {
     return { ok: false, status: 'unavailable', reason: 'Symbol is required.', summary: emptySummary(symbol, 'unavailable', 'Symbol is required.') };
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), options?.timeoutMs ?? DEFAULT_TIMEOUT_MS);
-  const url = `${configuredBaseUrl()}/v1/ticker/${encodeURIComponent(normalized)}/analytics-summary`;
-
   try {
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: { accept: 'application/json' },
-      cache: 'no-store',
-    });
-    if (!response.ok) {
-      const reason = `DefeatBeta sidecar returned HTTP ${response.status}.`;
-      return { ok: false, status: 'error', reason, summary: emptySummary(normalized, 'error', reason) };
-    }
-    const summary = (await response.json()) as DefeatBetaAnalyticsSummary;
+    const summary = await fetchSidecarJson<DefeatBetaAnalyticsSummary>(`/v1/ticker/${encodeURIComponent(normalized)}/analytics-summary`, options);
     if (!hasUsableCoverage(summary)) {
       const reason = summary.notes?.[0] || 'DefeatBeta has no usable analytics coverage for this symbol.';
       return { ok: false, status: 'unavailable', reason, summary };
@@ -117,7 +150,54 @@ export async function getDefeatBetaAnalyticsSummary(symbol: string, options?: { 
       ? 'DefeatBeta sidecar request timed out.'
       : 'DefeatBeta sidecar is not reachable.';
     return { ok: false, status: 'unavailable', reason, summary: emptySummary(normalized, 'unavailable', reason) };
-  } finally {
-    clearTimeout(timeout);
+  }
+}
+
+export async function getDefeatBetaTranscriptCatalog(symbol: string, options?: { timeoutMs?: number }): Promise<DefeatBetaTranscriptCatalog> {
+  const normalized = symbol.trim().toUpperCase();
+  if (!normalized) {
+    return {
+      requestedSymbol: normalized,
+      resolvedSymbol: normalized,
+      status: 'unavailable',
+      source: { id: 'defeatbeta', label: 'DefeatBeta API', note: 'Transcript enrichment only.' },
+      asOf: new Date().toISOString(),
+      latest: null,
+      recent: [],
+      coverage: { transcripts: false, llmConfigured: false },
+      llmAnalysis: { status: 'unavailable', availableMethods: ['keyFinancialData', 'metricChanges', 'forecastDrivers'], note: 'Symbol is required.' },
+      notes: ['Symbol is required.'],
+    };
+  }
+  try {
+    return await fetchSidecarJson<DefeatBetaTranscriptCatalog>(`/v1/ticker/${encodeURIComponent(normalized)}/transcript-catalog`, options);
+  } catch (error) {
+    return {
+      requestedSymbol: normalized,
+      resolvedSymbol: normalized,
+      status: 'error',
+      source: { id: 'defeatbeta', label: 'DefeatBeta API', note: 'Transcript enrichment only.' },
+      asOf: new Date().toISOString(),
+      latest: null,
+      recent: [],
+      coverage: { transcripts: false, llmConfigured: false },
+      llmAnalysis: { status: 'error', availableMethods: ['keyFinancialData', 'metricChanges', 'forecastDrivers'], note: error instanceof Error ? error.message : 'DefeatBeta transcript catalogue failed.' },
+      notes: [error instanceof Error ? error.message : 'DefeatBeta transcript catalogue failed.'],
+    };
+  }
+}
+
+export async function getDefeatBetaEconomyContext(options?: { timeoutMs?: number }): Promise<DefeatBetaEconomyContext> {
+  try {
+    return await fetchSidecarJson<DefeatBetaEconomyContext>('/v1/economy/context', options);
+  } catch (error) {
+    return {
+      status: 'error',
+      source: { id: 'defeatbeta', label: 'DefeatBeta API', note: 'Economy context only.' },
+      asOf: new Date().toISOString(),
+      sp500: { latestAnnualReturn: null, cagr10Year: null },
+      yieldCurve: null,
+      notes: [error instanceof Error ? error.message : 'DefeatBeta economy context failed.'],
+    };
   }
 }
