@@ -63,6 +63,12 @@ type MilouState = {
   message: string;
   answer: string | null;
 };
+type FullThesisState = {
+  status: 'idle' | 'generating' | 'ready' | 'error';
+  message: string;
+  thesis: string | null;
+  sessionKey?: string;
+};
 type MilouRichSegment = { kind: 'text' | 'bold' | 'italic'; text: string };
 type MilouRichBlock = { kind: 'paragraph' | 'bullet' | 'numbered'; index?: string; segments: MilouRichSegment[] };
 
@@ -70,6 +76,12 @@ type MilouAnalysisRouteResult = {
   ok: boolean;
   sessionKey?: string;
   answer?: string;
+  error?: string;
+};
+type FullThesisRouteResult = {
+  ok: boolean;
+  sessionKey?: string;
+  thesis?: string;
   error?: string;
 };
 
@@ -215,6 +227,12 @@ const initialMilou: MilouState = {
   status: 'idle',
   message: 'Generate Quick Analysis, then ask Milou to challenge it in context.',
   answer: null,
+};
+
+const initialFullThesis: FullThesisState = {
+  status: 'idle',
+  message: 'Generate Quick Analysis first, then draft a Full Thesis from the same evidence pack.',
+  thesis: null,
 };
 
 const explainers: Record<string, string> = {
@@ -556,6 +574,7 @@ export function AnalyticsWorkbenchClient() {
   const [valuation, setValuation] = useState<QuickValuation>(initialValuation);
   const [benchmark, setBenchmark] = useState<BenchmarkState>({ status: 'idle', message: 'Select a ticker to compare against SPY and QQQ.', comparison: null });
   const [milou, setMilou] = useState<MilouState>(initialMilou);
+  const [fullThesis, setFullThesis] = useState<FullThesisState>(initialFullThesis);
   const [milouQuestion, setMilouQuestion] = useState('');
   const [milouUseWeb, setMilouUseWeb] = useState(false);
   const [selectedMetadata, setSelectedMetadata] = useState<TickerMetadata | null>(null);
@@ -640,6 +659,7 @@ export function AnalyticsWorkbenchClient() {
     setValuation((current) => ({ ...current, status: 'validated', selected: result, message: `Validated ${result.name} on ${result.exchange}.` }));
     setBenchmark({ status: 'idle', message: 'Run Quick analysis to compare this ticker against SPY and QQQ.', comparison: null });
     setMilou(initialMilou);
+    setFullThesis(initialFullThesis);
   }
 
   async function validateTicker() {
@@ -673,8 +693,75 @@ export function AnalyticsWorkbenchClient() {
     }
   }
 
+  function milouContextPayload(question: string) {
+    return {
+      question,
+      selected: selected ? {
+        symbol: selected.symbol,
+        name: selected.name,
+        exchange: selected.exchange,
+        country: selected.country,
+        currency: selected.currency,
+        type: selected.type,
+        sector: selected.sector ?? null,
+        industry: selected.industry ?? null,
+      } : null,
+      valuation: {
+        status: valuation.status,
+        message: valuation.message,
+        decisionZone: valuation.decisionZone,
+        confidence: valuation.confidence,
+        baseValue: valuation.baseValue,
+        fairLow: valuation.fairLow,
+        fairHigh: valuation.fairHigh,
+        currentPrice: valuation.currentPrice,
+        impliedUpside: valuation.impliedUpside,
+        evidence: valuation.evidence,
+        sensitivity: valuation.sensitivity,
+        methods: valuation.methods,
+      },
+      benchmark: benchmark.comparison ? {
+        selectedSymbol: benchmark.comparison.selectedSymbol,
+        resolvedSymbol: benchmark.comparison.resolvedSymbol,
+        stats: benchmark.comparison.stats,
+        note: benchmark.comparison.note,
+      } : null,
+      webAccessRequested: milouUseWeb || /web|news|latest|recent|current/i.test(question),
+    };
+  }
+
   function openFullThesis() {
     setActiveAnalysisTab('full');
+  }
+
+  async function generateFullThesis() {
+    if (!valuationReady || !selected) {
+      setFullThesis({ status: 'error', message: 'Generate Quick Analysis before drafting a Full Thesis.', thesis: null });
+      return;
+    }
+    setActiveAnalysisTab('full');
+    setFullThesis({ status: 'generating', message: 'Milou is drafting the Full Thesis from valuation, evidence, risks, and benchmarks…', thesis: null });
+    try {
+      const response = await fetch('/api/trading/full-thesis', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', accept: 'application/json' },
+        cache: 'no-store',
+        body: JSON.stringify({
+          ...milouContextPayload('Generate a Full Thesis from this Analytics pack.'),
+          priorMilouAnswer: milou.answer,
+        }),
+      });
+      const payload = (await response.json()) as FullThesisRouteResult;
+      if (!response.ok || !payload.ok) throw new Error(payload.error || `Full Thesis route failed (${response.status})`);
+      setFullThesis({
+        status: 'ready',
+        message: payload.sessionKey ? `Full Thesis drafted by Milou in ${payload.sessionKey}.` : 'Full Thesis drafted by Milou.',
+        thesis: payload.thesis?.trim() || 'Milou finished the run, but the Full Thesis was not returned to Analytics yet. Open the Milou session history if this repeats.',
+        sessionKey: payload.sessionKey,
+      });
+    } catch (cause) {
+      setFullThesis({ status: 'error', message: cause instanceof Error ? cause.message : 'Full Thesis generation failed.', thesis: null });
+    }
   }
 
   async function askMilou(question: string) {
@@ -686,40 +773,7 @@ export function AnalyticsWorkbenchClient() {
         method: 'POST',
         headers: { 'content-type': 'application/json', accept: 'application/json' },
         cache: 'no-store',
-        body: JSON.stringify({
-          question: trimmed,
-          selected: {
-            symbol: selected.symbol,
-            name: selected.name,
-            exchange: selected.exchange,
-            country: selected.country,
-            currency: selected.currency,
-            type: selected.type,
-            sector: selected.sector ?? null,
-            industry: selected.industry ?? null,
-          },
-          valuation: {
-            status: valuation.status,
-            message: valuation.message,
-            decisionZone: valuation.decisionZone,
-            confidence: valuation.confidence,
-            baseValue: valuation.baseValue,
-            fairLow: valuation.fairLow,
-            fairHigh: valuation.fairHigh,
-            currentPrice: valuation.currentPrice,
-            impliedUpside: valuation.impliedUpside,
-            evidence: valuation.evidence,
-            sensitivity: valuation.sensitivity,
-            methods: valuation.methods,
-          },
-          benchmark: benchmark.comparison ? {
-            selectedSymbol: benchmark.comparison.selectedSymbol,
-            resolvedSymbol: benchmark.comparison.resolvedSymbol,
-            stats: benchmark.comparison.stats,
-            note: benchmark.comparison.note,
-          } : null,
-          webAccessRequested: milouUseWeb || /web|news|latest|recent|current/i.test(trimmed),
-        }),
+        body: JSON.stringify(milouContextPayload(trimmed)),
       });
       const payload = (await response.json()) as MilouAnalysisRouteResult;
       if (!response.ok || !payload.ok) throw new Error(payload.error || `Milou route failed (${response.status})`);
@@ -794,6 +848,7 @@ export function AnalyticsWorkbenchClient() {
                   setValuation({ ...initialValuation, message: 'Choose a ticker result, then generate Quick Valuation.', selected: null });
                   setBenchmark({ status: 'idle', message: 'Select a ticker to compare against SPY and QQQ.', comparison: null });
                   setMilou(initialMilou);
+                  setFullThesis(initialFullThesis);
                 }}
                 onFocus={() => setSearchOpen(true)}
                 onKeyDown={(event) => {
@@ -845,7 +900,7 @@ export function AnalyticsWorkbenchClient() {
           </label>
           <div className="trading-analytics-action-group" aria-label="Analysis actions">
             <button type="submit" disabled={valuation.status === 'validating' || valuation.status === 'generating'}>Quick analysis</button>
-            <button type="button" className="secondary" onClick={openFullThesis}>Full thesis</button>
+            <button type="button" className="secondary" onClick={() => { if (valuationReady) { void generateFullThesis(); } else { openFullThesis(); } }} disabled={fullThesis.status === 'generating'}>{fullThesis.status === 'generating' ? 'Drafting thesis…' : 'Full thesis'}</button>
           </div>
         </form>
         <div className="trading-analytics-validation" data-state={valuation.status}>
@@ -860,18 +915,30 @@ export function AnalyticsWorkbenchClient() {
       <AnalyticsTabRow active={activeAnalysisTab} onSelect={setActiveAnalysisTab} status={valuation.status} />
 
       {activeAnalysisTab === 'full' ? (
-        <section className="trading-analytics-full-thesis" style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
-          <div>
+        <section className="trading-analytics-full-thesis" data-state={fullThesis.status} style={tradingCardStyle({ minHeight: 0, maxHeight: 'none' })}>
+          <div className="trading-analytics-thesis-intro">
             <div className="trading-section-label">Full thesis</div>
-            <h2>Thesis workspace placeholder.</h2>
-            <p>Later this tab will turn the selected ticker, valuation assumptions, evidence map, risks, and Milou context into a structured investment thesis.</p>
+            <h2>Draft the investment case.</h2>
+            <p>Milou turns the selected ticker, Quick Analysis, evidence map, risk sensitivity, market comparison, and optional web context into a structured thesis draft.</p>
+            <div className="trading-analytics-thesis-actions">
+              <button type="button" onClick={() => { void generateFullThesis(); }} disabled={!valuationReady || !selected || fullThesis.status === 'generating'}>{fullThesis.status === 'generating' ? 'Drafting thesis…' : fullThesis.thesis ? 'Regenerate thesis' : 'Generate Full Thesis'}</button>
+              <label className="trading-analytics-web-toggle">
+                <input type="checkbox" checked={milouUseWeb} onChange={(event) => setMilouUseWeb(event.target.checked)} />
+                <span>Use web search</span>
+              </label>
+            </div>
+            <p className="trading-analytics-thesis-status" data-state={fullThesis.status}>{fullThesis.message}</p>
           </div>
-          <dl className="trading-profile-facts trading-analytics-thesis-outline">
-            <div><dt>Company</dt><dd>{selected?.name ?? 'Select a ticker first'}</dd></div>
-            <div><dt>Inputs</dt><dd>Quick valuation · evidence map · assumptions · risks</dd></div>
-            <div><dt>Output</dt><dd>Business quality, valuation argument, risks, watch triggers</dd></div>
-            <div><dt>Status</dt><dd>Placeholder only · generation not wired yet</dd></div>
-          </dl>
+          <div className="trading-analytics-thesis-output">
+            {fullThesis.thesis ? <MilouMarkdown text={fullThesis.thesis} /> : (
+              <dl className="trading-profile-facts trading-analytics-thesis-outline">
+                <div><dt>Company</dt><dd>{selected?.name ?? 'Select a ticker first'}</dd></div>
+                <div><dt>Inputs</dt><dd>Quick valuation · evidence map · risk sensitivity · SPY/QQQ comparison</dd></div>
+                <div><dt>Output</dt><dd>Business quality · valuation case · risks · invalidation · watchlist plan</dd></div>
+                <div><dt>Status</dt><dd>{valuationReady ? 'Ready to draft' : 'Needs Quick Analysis first'}</dd></div>
+              </dl>
+            )}
+          </div>
         </section>
       ) : (
       <>

@@ -6850,7 +6850,7 @@
 
 :global(.trading-analytics-full-thesis) {
   display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(340px, 1.1fr);
+  grid-template-columns: minmax(280px, 0.82fr) minmax(360px, 1.18fr);
   gap: 18px;
   align-items: start;
 }
@@ -6870,6 +6870,48 @@
   color: rgba(34, 48, 41, 0.64);
   font-size: 13px;
   line-height: 1.55;
+}
+
+:global(.trading-analytics-thesis-actions) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 18px;
+}
+
+:global(.trading-analytics-thesis-actions button) {
+  min-height: 40px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 18px;
+  background: #17241e;
+  color: #fffdf8;
+  font-size: 12px;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+:global(.trading-analytics-thesis-actions button:disabled) {
+  opacity: 0.46;
+  cursor: not-allowed;
+}
+
+:global(.trading-analytics-thesis-status[data-state='error']) {
+  color: #a85d42;
+}
+
+:global(.trading-analytics-thesis-output) {
+  min-height: 240px;
+  border-left: 1px solid rgba(28, 37, 32, 0.1);
+  padding-left: 18px;
+}
+
+:global(.trading-analytics-thesis-output .trading-analytics-milou-answer) {
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 :global(.trading-analytics-thesis-outline) {
