@@ -98,7 +98,7 @@ export async function POST(request: Request) {
     timeoutMs: 60_000,
   });
   if (transcript.status !== 'available' || !transcript.paragraphs.length) {
-    return NextResponse.json({ ok: false, error: 'Transcript detail is unavailable for this symbol/quarter.', transcript }, { status: 424 });
+    return NextResponse.json({ ok: false, error: 'Transcript detail is unavailable for this symbol/quarter.', transcript: { status: transcript.status, resolvedSymbol: transcript.resolvedSymbol, fiscalYear: transcript.fiscalYear, fiscalQuarter: transcript.fiscalQuarter, paragraphCount: transcript.paragraphCount } }, { status: 424 });
   }
 
   const prompt = buildFullThesisExtractionPrompt({
@@ -123,8 +123,23 @@ export async function POST(request: Request) {
     const parsed = JSON.parse(stdout) as Record<string, unknown>;
     const directAnswer = extractAnswer(parsed);
     const analysis = directAnswer || await loadLatestExtractionAnswer(MILOU_SESSION_KEY, runStartedAt);
-    return NextResponse.json({ ok: true, kind, symbol, sessionKey: MILOU_SESSION_KEY, transcript, analysis, result: parsed }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+    return NextResponse.json({
+      ok: true,
+      kind,
+      symbol,
+      sessionKey: MILOU_SESSION_KEY,
+      transcript: {
+        status: transcript.status,
+        resolvedSymbol: transcript.resolvedSymbol,
+        fiscalYear: transcript.fiscalYear,
+        fiscalQuarter: transcript.fiscalQuarter,
+        reportDate: transcript.reportDate,
+        paragraphCount: transcript.paragraphCount,
+        includedParagraphCount: transcript.includedParagraphCount,
+      },
+      analysis,
+    }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
   } catch (cause) {
-    return NextResponse.json({ ok: false, error: cause instanceof Error ? cause.message : 'Full Thesis extraction failed.', transcript }, { status: 502 });
+    return NextResponse.json({ ok: false, error: cause instanceof Error ? cause.message : 'Full Thesis extraction failed.', transcript: { status: transcript.status, resolvedSymbol: transcript.resolvedSymbol, fiscalYear: transcript.fiscalYear, fiscalQuarter: transcript.fiscalQuarter, paragraphCount: transcript.paragraphCount } }, { status: 502 });
   }
 }

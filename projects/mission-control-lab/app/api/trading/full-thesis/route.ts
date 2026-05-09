@@ -117,7 +117,7 @@ export async function POST(request: Request) {
     const parsed = JSON.parse(stdout) as Record<string, unknown>;
     const directAnswer = extractThesisAnswer(parsed);
     const thesis = directAnswer || await loadLatestThesisAnswer(MILOU_SESSION_KEY, runStartedAt);
-    return NextResponse.json({ ok: true, sessionKey: MILOU_SESSION_KEY, thesis, result: parsed }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
+    return NextResponse.json({ ok: true, sessionKey: MILOU_SESSION_KEY, thesis }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
   } catch (cause) {
     return NextResponse.json({ ok: false, error: cause instanceof Error ? cause.message : 'Full thesis generation failed.' }, { status: 502 });
   }

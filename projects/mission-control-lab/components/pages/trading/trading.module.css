@@ -6892,6 +6892,11 @@
   cursor: pointer;
 }
 
+:global(.trading-analytics-thesis-actions button.secondary) {
+  background: rgba(23, 36, 30, 0.08);
+  color: #17241e;
+}
+
 :global(.trading-analytics-thesis-actions button:disabled) {
   opacity: 0.46;
   cursor: not-allowed;

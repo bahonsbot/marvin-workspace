@@ -89,7 +89,7 @@ type FullThesisEvidenceRouteResult = {
   error?: string;
 };
 type FullThesisState = {
-  status: 'idle' | 'loading-evidence' | 'generating' | 'ready' | 'error';
+  status: 'idle' | 'loading-evidence' | 'evidence-ready' | 'generating' | 'ready' | 'partial' | 'error';
   message: string;
   thesis: string | null;
   evidence: FullThesisEvidenceRouteResult | null;
@@ -793,50 +793,69 @@ export function AnalyticsWorkbenchClient() {
     return payload.analysis?.trim() || 'Milou finished extraction, but no analysis was returned to Analytics yet.';
   }
 
+  function updateEvidenceModule(
+    evidence: FullThesisEvidenceRouteResult,
+    key: 'llmKeyData' | 'llmMetricChanges' | 'llmForecastDrivers',
+    module: FullThesisEvidenceRouteResult['modules']['llmKeyData'],
+  ): FullThesisEvidenceRouteResult {
+    return { ...evidence, modules: { ...evidence.modules, [key]: module } };
+  }
+
+  async function gatherFullThesisEvidence() {
+    if (!valuationReady || !selected) {
+      setFullThesis({ status: 'error', message: 'Generate Quick Analysis before gathering Full Thesis evidence.', thesis: null, evidence: fullThesis.evidence });
+      return null;
+    }
+    setActiveAnalysisTab('full');
+    setFullThesis((current) => ({ ...current, status: 'loading-evidence', message: 'Loading transcript catalogue and economy context from DefeatBeta…', thesis: null }));
+    try {
+      let enrichedEvidence = await loadFullThesisEvidence();
+      const extractionSteps: Array<{ key: 'llmKeyData' | 'llmMetricChanges' | 'llmForecastDrivers'; kind: FullThesisExtractionRouteResult['kind']; loading: string; ready: string; failed: string }> = [
+        { key: 'llmKeyData', kind: 'key-data', loading: 'Milou is extracting key financial data from the latest DefeatBeta transcript…', ready: 'Milou/OpenClaw key-data extraction completed from DefeatBeta transcript detail.', failed: 'Key-data extraction failed. You can retry Gather Evidence.' },
+        { key: 'llmMetricChanges', kind: 'metric-changes', loading: 'Milou is analyzing quarterly metric changes and stated causes from the transcript…', ready: 'Milou/OpenClaw metric-change extraction completed from DefeatBeta transcript detail.', failed: 'Metric-change extraction failed. Partial evidence is still usable.' },
+        { key: 'llmForecastDrivers', kind: 'forecast-drivers', loading: 'Milou is extracting forecast and guidance drivers from the transcript…', ready: 'Milou/OpenClaw forecast-driver extraction completed from DefeatBeta transcript detail.', failed: 'Forecast-driver extraction failed. Partial evidence is still usable.' },
+      ];
+      const shouldExtract = enrichedEvidence.modules.transcripts.status === 'available';
+      let failures = 0;
+      for (const step of extractionSteps) {
+        if (!shouldExtract) break;
+        if (enrichedEvidence.modules[step.key].status === 'ready') continue;
+        setFullThesis({ status: 'loading-evidence', message: step.loading, thesis: null, evidence: enrichedEvidence });
+        try {
+          const analysis = await runFullThesisExtraction(step.kind);
+          enrichedEvidence = updateEvidenceModule(enrichedEvidence, step.key, { ...enrichedEvidence.modules[step.key], status: 'ready', note: step.ready, analysis });
+        } catch (cause) {
+          failures += 1;
+          enrichedEvidence = updateEvidenceModule(enrichedEvidence, step.key, { ...enrichedEvidence.modules[step.key], status: 'error', note: cause instanceof Error ? cause.message : step.failed, analysis: null });
+        }
+        setFullThesis({ status: failures ? 'partial' : 'loading-evidence', message: failures ? 'Evidence gathering has partial failures. You can still generate a provisional thesis or retry Gather Evidence.' : 'Evidence module completed. Continuing…', thesis: null, evidence: enrichedEvidence });
+      }
+      const readyCount = extractionSteps.filter((step) => enrichedEvidence.modules[step.key].status === 'ready').length;
+      const status: FullThesisState['status'] = failures ? 'partial' : 'evidence-ready';
+      const message = failures
+        ? `Evidence gathered with ${readyCount}/3 transcript modules ready. Generate a provisional thesis or retry Gather Evidence.`
+        : 'Evidence gathered. Review the extraction previews, then generate the thesis.';
+      setFullThesis({ status, message, thesis: null, evidence: enrichedEvidence });
+      return enrichedEvidence;
+    } catch (cause) {
+      setFullThesis((current) => ({ ...current, status: 'error', message: cause instanceof Error ? cause.message : 'Full Thesis evidence gathering failed.', thesis: null }));
+      return null;
+    }
+  }
+
   async function generateFullThesis() {
     if (!valuationReady || !selected) {
       setFullThesis({ status: 'error', message: 'Generate Quick Analysis before drafting a Full Thesis.', thesis: null, evidence: fullThesis.evidence });
       return;
     }
     setActiveAnalysisTab('full');
-    setFullThesis((current) => ({ ...current, status: 'loading-evidence', message: 'Loading transcript catalogue and economy context from DefeatBeta…', thesis: null }));
+    const evidence = fullThesis.evidence;
+    if (!evidence) {
+      setFullThesis((current) => ({ ...current, status: 'error', message: 'Gather Full Thesis evidence first, then generate the thesis.', thesis: null }));
+      return;
+    }
+    setFullThesis({ status: 'generating', message: 'Milou is drafting the Full Thesis from the gathered evidence pack…', thesis: null, evidence });
     try {
-      const evidence = await loadFullThesisEvidence();
-      let enrichedEvidence = evidence;
-      if (evidence.modules.llmKeyData.status === 'ready-to-run') {
-        setFullThesis({ status: 'generating', message: 'Milou is extracting key financial data from the latest DefeatBeta transcript…', thesis: null, evidence: enrichedEvidence });
-        const keyData = await runFullThesisExtraction('key-data');
-        enrichedEvidence = {
-          ...enrichedEvidence,
-          modules: {
-            ...enrichedEvidence.modules,
-            llmKeyData: { ...enrichedEvidence.modules.llmKeyData, status: 'ready', note: 'Milou/OpenClaw key-data extraction completed from DefeatBeta transcript detail.', analysis: keyData },
-          },
-        };
-      }
-      if (evidence.modules.transcripts.status === 'available') {
-        setFullThesis({ status: 'generating', message: 'Milou is analyzing quarterly metric changes and stated causes from the transcript…', thesis: null, evidence: enrichedEvidence });
-        const metricChanges = await runFullThesisExtraction('metric-changes');
-        enrichedEvidence = {
-          ...enrichedEvidence,
-          modules: {
-            ...enrichedEvidence.modules,
-            llmMetricChanges: { ...enrichedEvidence.modules.llmMetricChanges, status: 'ready', note: 'Milou/OpenClaw metric-change extraction completed from DefeatBeta transcript detail.', analysis: metricChanges },
-          },
-        };
-      }
-      if (evidence.modules.transcripts.status === 'available') {
-        setFullThesis({ status: 'generating', message: 'Milou is extracting forecast and guidance drivers from the transcript…', thesis: null, evidence: enrichedEvidence });
-        const forecastDrivers = await runFullThesisExtraction('forecast-drivers');
-        enrichedEvidence = {
-          ...enrichedEvidence,
-          modules: {
-            ...enrichedEvidence.modules,
-            llmForecastDrivers: { ...enrichedEvidence.modules.llmForecastDrivers, status: 'ready', note: 'Milou/OpenClaw forecast-driver extraction completed from DefeatBeta transcript detail.', analysis: forecastDrivers },
-          },
-        };
-      }
-      setFullThesis({ status: 'generating', message: 'Milou is drafting the Full Thesis from valuation, extracted transcript evidence, economy context, risks, and benchmarks…', thesis: null, evidence: enrichedEvidence });
       const response = await fetch('/api/trading/full-thesis', {
         method: 'POST',
         headers: { 'content-type': 'application/json', accept: 'application/json' },
@@ -844,7 +863,7 @@ export function AnalyticsWorkbenchClient() {
         body: JSON.stringify({
           ...milouContextPayload('Generate a Full Thesis from this Analytics pack.'),
           priorMilouAnswer: milou.answer,
-          evidencePack: enrichedEvidence.modules,
+          evidencePack: evidence.modules,
         }),
       });
       const payload = (await response.json()) as FullThesisRouteResult;
@@ -853,7 +872,7 @@ export function AnalyticsWorkbenchClient() {
         status: 'ready',
         message: payload.sessionKey ? `Full Thesis drafted by Milou in ${payload.sessionKey}.` : 'Full Thesis drafted by Milou.',
         thesis: payload.thesis?.trim() || 'Milou finished the run, but the Full Thesis was not returned to Analytics yet. Open the Milou session history if this repeats.',
-        evidence: enrichedEvidence,
+        evidence,
         sessionKey: payload.sessionKey,
       });
     } catch (cause) {
@@ -997,7 +1016,7 @@ export function AnalyticsWorkbenchClient() {
           </label>
           <div className="trading-analytics-action-group" aria-label="Analysis actions">
             <button type="submit" disabled={valuation.status === 'validating' || valuation.status === 'generating'}>Quick analysis</button>
-            <button type="button" className="secondary" onClick={() => { if (valuationReady) { void generateFullThesis(); } else { openFullThesis(); } }} disabled={fullThesis.status === 'generating' || fullThesis.status === 'loading-evidence'}>{fullThesis.status === 'loading-evidence' ? 'Loading evidence…' : fullThesis.status === 'generating' ? 'Drafting thesis…' : 'Full thesis'}</button>
+            <button type="button" className="secondary" onClick={() => { if (valuationReady) { void gatherFullThesisEvidence(); } else { openFullThesis(); } }} disabled={fullThesis.status === 'generating' || fullThesis.status === 'loading-evidence'}>{fullThesis.status === 'loading-evidence' ? 'Gathering evidence…' : fullThesis.status === 'generating' ? 'Drafting thesis…' : fullThesis.evidence ? 'Refresh evidence' : 'Full thesis'}</button>
           </div>
         </form>
         <div className="trading-analytics-validation" data-state={valuation.status}>
@@ -1018,7 +1037,8 @@ export function AnalyticsWorkbenchClient() {
             <h2>Draft the investment case.</h2>
             <p>Milou turns the selected ticker, Quick Analysis, evidence map, risk sensitivity, market comparison, and optional web context into a structured thesis draft.</p>
             <div className="trading-analytics-thesis-actions">
-              <button type="button" onClick={() => { void generateFullThesis(); }} disabled={!valuationReady || !selected || fullThesis.status === 'generating' || fullThesis.status === 'loading-evidence'}>{fullThesis.status === 'loading-evidence' ? 'Loading evidence…' : fullThesis.status === 'generating' ? 'Drafting thesis…' : fullThesis.thesis ? 'Regenerate thesis' : 'Generate Full Thesis'}</button>
+              <button type="button" onClick={() => { void gatherFullThesisEvidence(); }} disabled={!valuationReady || !selected || fullThesis.status === 'generating' || fullThesis.status === 'loading-evidence'}>{fullThesis.status === 'loading-evidence' ? 'Gathering evidence…' : fullThesis.evidence ? 'Refresh evidence' : 'Gather evidence'}</button>
+              <button type="button" className="secondary" onClick={() => { void generateFullThesis(); }} disabled={!valuationReady || !selected || !fullThesis.evidence || fullThesis.status === 'generating' || fullThesis.status === 'loading-evidence'}>{fullThesis.status === 'generating' ? 'Drafting thesis…' : fullThesis.thesis ? 'Regenerate thesis' : 'Generate thesis'}</button>
               <label className="trading-analytics-web-toggle">
                 <input type="checkbox" checked={milouUseWeb} onChange={(event) => setMilouUseWeb(event.target.checked)} />
                 <span>Use web search</span>
@@ -1058,7 +1078,7 @@ export function AnalyticsWorkbenchClient() {
                 <div><dt>Company</dt><dd>{selected?.name ?? 'Select a ticker first'}</dd></div>
                 <div><dt>Inputs</dt><dd>Quick valuation · transcript catalogue · LLM extraction readiness · economy context · risk sensitivity · SPY/QQQ comparison</dd></div>
                 <div><dt>Output</dt><dd>Business quality · valuation case · earnings-call data gaps · forecast drivers · macro backdrop · watchlist plan</dd></div>
-                <div><dt>Status</dt><dd>{valuationReady ? 'Ready to load Full Thesis evidence' : 'Needs Quick Analysis first'}</dd></div>
+                <div><dt>Status</dt><dd>{valuationReady ? fullThesis.evidence ? 'Evidence ready. Generate or refresh the thesis.' : 'Ready to gather Full Thesis evidence' : 'Needs Quick Analysis first'}</dd></div>
               </dl>
             )}
           </div>
