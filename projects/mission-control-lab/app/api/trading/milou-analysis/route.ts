@@ -5,14 +5,14 @@ import { runShellCommand } from '@/lib/adapters/runtime';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const GATEWAY_CALL_TIMEOUT_MS = 90_000;
-const ROUTE_TIMEOUT_MS = 95_000;
-const HISTORY_CALL_TIMEOUT_MS = 45_000;
-const HISTORY_ROUTE_TIMEOUT_MS = 50_000;
+const GATEWAY_CALL_TIMEOUT_MS = 180_000;
+const ROUTE_TIMEOUT_MS = 190_000;
+const HISTORY_CALL_TIMEOUT_MS = 60_000;
+const HISTORY_ROUTE_TIMEOUT_MS = 70_000;
 const MILOU_SESSION_KEY = 'agent:trading-advisor:main';
 const MILOU_SEAT_CONTEXT = 'Milou trading-advisor specialist seat using the registered trading-advisor runtime workspace and skill posture.';
-const ANSWER_HISTORY_LIMIT = 30;
-const ANSWER_POLL_DELAYS_MS = [1_000, 1_800, 2_800, 4_000, 5_500, 7_000, 9_000, 11_000, 14_000, 17_000] as const;
+const ANSWER_HISTORY_LIMIT = 50;
+const ANSWER_POLL_DELAYS_MS = [1_000, 1_800, 2_800, 4_000, 5_500, 7_000, 9_000, 11_000, 14_000, 17_000, 21_000, 25_000, 30_000] as const;
 
 function shellQuote(value: string): string {
   return `'${value.replace(/'/g, `'"'"'`)}'`;
