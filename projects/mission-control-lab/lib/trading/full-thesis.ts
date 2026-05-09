@@ -14,9 +14,9 @@ export type FullThesisEvidencePack = {
     yieldCurve?: { date?: string | null; bc3Month?: number | null; bc2Year?: number | null; bc10Year?: number | null; bc30Year?: number | null; twoTenSpread?: number | null } | null;
     notes?: string[];
   } | null;
-  llmKeyData?: { status: string; note: string } | null;
-  llmMetricChanges?: { status: string; note: string } | null;
-  llmForecastDrivers?: { status: string; note: string } | null;
+  llmKeyData?: { status: string; note: string; analysis?: string | null } | null;
+  llmMetricChanges?: { status: string; note: string; analysis?: string | null } | null;
+  llmForecastDrivers?: { status: string; note: string; analysis?: string | null } | null;
 };
 
 export type FullThesisPayload = MilouContextPayload & {
@@ -65,7 +65,7 @@ function fullThesisEvidenceLines(evidencePack: FullThesisEvidencePack | null | u
   return [
     `Transcript catalogue: ${transcript?.status ?? 'not loaded'}${latest ? ` · latest FY${latest.fiscalYear} Q${latest.fiscalQuarter} (${latest.reportDate ?? 'no date'}, ${latest.paragraphCount ?? '—'} paragraphs)` : ''}`,
     `Transcript speakers: ${latest?.sampleSpeakers?.length ? latest.sampleSpeakers.slice(0, 6).join(', ') : '—'}`,
-    `LLM key-data extraction: ${evidencePack.llmKeyData?.status ?? transcript?.llmAnalysis?.status ?? 'not loaded'} · ${evidencePack.llmKeyData?.note ?? transcript?.llmAnalysis?.note ?? 'No key-data extraction result supplied.'}`,
+    `LLM key-data extraction: ${evidencePack.llmKeyData?.status ?? transcript?.llmAnalysis?.status ?? 'not loaded'} · ${evidencePack.llmKeyData?.note ?? transcript?.llmAnalysis?.note ?? 'No key-data extraction result supplied.'}${evidencePack.llmKeyData?.analysis ? `\n${evidencePack.llmKeyData.analysis}` : ''}`,
     `LLM metric-change analysis: ${evidencePack.llmMetricChanges?.status ?? 'not loaded'} · ${evidencePack.llmMetricChanges?.note ?? 'No metric-change analysis result supplied.'}`,
     `LLM forecast-driver analysis: ${evidencePack.llmForecastDrivers?.status ?? 'not loaded'} · ${evidencePack.llmForecastDrivers?.note ?? 'No forecast-driver analysis result supplied.'}`,
     `Economy context: ${economy?.status ?? 'not loaded'} · S&P latest annual return ${formatNumber(economy?.sp500?.latestAnnualReturn?.annualReturn != null ? economy.sp500.latestAnnualReturn.annualReturn * 100 : null, '%')} · S&P 10Y CAGR ${formatNumber(economy?.sp500?.cagr10Year != null ? economy.sp500.cagr10Year * 100 : null, '%')}`,

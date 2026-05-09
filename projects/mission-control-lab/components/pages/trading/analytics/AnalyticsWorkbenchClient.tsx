@@ -82,9 +82,9 @@ type FullThesisEvidenceRouteResult = {
       yieldCurve: { date?: string | null; bc3Month: number | null; bc2Year: number | null; bc10Year: number | null; bc30Year: number | null; twoTenSpread?: number | null } | null;
       notes: string[];
     };
-    llmKeyData: { status: string; label: string; note: string };
-    llmMetricChanges: { status: string; label: string; note: string };
-    llmForecastDrivers: { status: string; label: string; note: string };
+    llmKeyData: { status: string; label: string; note: string; analysis?: string | null };
+    llmMetricChanges: { status: string; label: string; note: string; analysis?: string | null };
+    llmForecastDrivers: { status: string; label: string; note: string; analysis?: string | null };
   };
   error?: string;
 };
@@ -108,6 +108,12 @@ type FullThesisRouteResult = {
   ok: boolean;
   sessionKey?: string;
   thesis?: string;
+  error?: string;
+};
+type FullThesisExtractionRouteResult = {
+  ok: boolean;
+  kind: 'key-data' | 'metric-changes' | 'forecast-drivers';
+  analysis?: string;
   error?: string;
 };
 
@@ -774,6 +780,19 @@ export function AnalyticsWorkbenchClient() {
     return payload;
   }
 
+  async function runFullThesisExtraction(kind: FullThesisExtractionRouteResult['kind']) {
+    if (!selected) throw new Error('Select a ticker before running Full Thesis extraction.');
+    const response = await fetch('/api/trading/full-thesis/extract', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', accept: 'application/json' },
+      cache: 'no-store',
+      body: JSON.stringify({ symbol: selected.symbol, companyName: selected.name, kind }),
+    });
+    const payload = (await response.json()) as FullThesisExtractionRouteResult;
+    if (!response.ok || !payload.ok) throw new Error(payload.error || `Full Thesis extraction route failed (${response.status})`);
+    return payload.analysis?.trim() || 'Milou finished extraction, but no analysis was returned to Analytics yet.';
+  }
+
   async function generateFullThesis() {
     if (!valuationReady || !selected) {
       setFullThesis({ status: 'error', message: 'Generate Quick Analysis before drafting a Full Thesis.', thesis: null, evidence: fullThesis.evidence });
@@ -783,7 +802,19 @@ export function AnalyticsWorkbenchClient() {
     setFullThesis((current) => ({ ...current, status: 'loading-evidence', message: 'Loading transcript catalogue and economy context from DefeatBeta…', thesis: null }));
     try {
       const evidence = await loadFullThesisEvidence();
-      setFullThesis({ status: 'generating', message: 'Milou is drafting the Full Thesis from valuation, transcript metadata, economy context, risks, and benchmarks…', thesis: null, evidence });
+      let enrichedEvidence = evidence;
+      if (evidence.modules.llmKeyData.status === 'ready-to-run') {
+        setFullThesis({ status: 'generating', message: 'Milou is extracting key financial data from the latest DefeatBeta transcript…', thesis: null, evidence });
+        const keyData = await runFullThesisExtraction('key-data');
+        enrichedEvidence = {
+          ...evidence,
+          modules: {
+            ...evidence.modules,
+            llmKeyData: { ...evidence.modules.llmKeyData, status: 'ready', note: 'Milou/OpenClaw extraction completed from DefeatBeta transcript detail.', analysis: keyData },
+          },
+        };
+      }
+      setFullThesis({ status: 'generating', message: 'Milou is drafting the Full Thesis from valuation, extracted transcript evidence, economy context, risks, and benchmarks…', thesis: null, evidence: enrichedEvidence });
       const response = await fetch('/api/trading/full-thesis', {
         method: 'POST',
         headers: { 'content-type': 'application/json', accept: 'application/json' },
@@ -791,7 +822,7 @@ export function AnalyticsWorkbenchClient() {
         body: JSON.stringify({
           ...milouContextPayload('Generate a Full Thesis from this Analytics pack.'),
           priorMilouAnswer: milou.answer,
-          evidencePack: evidence.modules,
+          evidencePack: enrichedEvidence.modules,
         }),
       });
       const payload = (await response.json()) as FullThesisRouteResult;
@@ -800,7 +831,7 @@ export function AnalyticsWorkbenchClient() {
         status: 'ready',
         message: payload.sessionKey ? `Full Thesis drafted by Milou in ${payload.sessionKey}.` : 'Full Thesis drafted by Milou.',
         thesis: payload.thesis?.trim() || 'Milou finished the run, but the Full Thesis was not returned to Analytics yet. Open the Milou session history if this repeats.',
-        evidence,
+        evidence: enrichedEvidence,
         sessionKey: payload.sessionKey,
       });
     } catch (cause) {
@@ -977,11 +1008,17 @@ export function AnalyticsWorkbenchClient() {
             <div className="trading-analytics-evidence-pipeline">
               <div data-state={valuationReady ? 'ready' : 'pending'}><span>Valuation pack</span><strong>{valuationReady ? 'Ready' : 'Needs Quick Analysis'}</strong></div>
               <div data-state={fullThesis.evidence?.modules.transcripts.status === 'available' ? 'ready' : 'pending'}><span>Transcript catalogue</span><strong>{fullThesis.evidence?.modules.transcripts.latest ? `FY${fullThesis.evidence.modules.transcripts.latest.fiscalYear} Q${fullThesis.evidence.modules.transcripts.latest.fiscalQuarter}` : 'Pending'}</strong></div>
-              <div data-state={fullThesis.evidence?.modules.llmKeyData.status === 'ready-to-wire' ? 'ready' : 'pending'}><span>LLM key data</span><strong>{fullThesis.evidence?.modules.llmKeyData.status ?? 'Requires config'}</strong></div>
+              <div data-state={fullThesis.evidence?.modules.llmKeyData.status === 'ready' ? 'ready' : 'pending'}><span>LLM key data</span><strong>{fullThesis.evidence?.modules.llmKeyData.status ?? 'Pending'}</strong></div>
               <div data-state={fullThesis.evidence?.modules.llmMetricChanges.status === 'ready-to-wire' ? 'ready' : 'pending'}><span>Metric changes</span><strong>{fullThesis.evidence?.modules.llmMetricChanges.status ?? 'Requires config'}</strong></div>
               <div data-state={fullThesis.evidence?.modules.llmForecastDrivers.status === 'ready-to-wire' ? 'ready' : 'pending'}><span>Forecast drivers</span><strong>{fullThesis.evidence?.modules.llmForecastDrivers.status ?? 'Requires config'}</strong></div>
               <div data-state={fullThesis.evidence?.modules.economy.status === 'available' ? 'ready' : 'pending'}><span>Economy context</span><strong>{fullThesis.evidence?.modules.economy.yieldCurve ? `10Y ${formatPercent((fullThesis.evidence.modules.economy.yieldCurve.bc10Year ?? 0) * 100)}` : 'Pending'}</strong></div>
             </div>
+            {fullThesis.evidence?.modules.llmKeyData.analysis ? (
+              <div className="trading-analytics-extraction-preview">
+                <span>Key-data extraction</span>
+                <MilouMarkdown text={fullThesis.evidence.modules.llmKeyData.analysis} />
+              </div>
+            ) : null}
             {fullThesis.thesis ? <MilouMarkdown text={fullThesis.thesis} /> : (
               <dl className="trading-profile-facts trading-analytics-thesis-outline">
                 <div><dt>Company</dt><dd>{selected?.name ?? 'Select a ticker first'}</dd></div>

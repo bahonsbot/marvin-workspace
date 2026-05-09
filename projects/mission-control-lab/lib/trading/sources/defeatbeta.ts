@@ -78,6 +78,21 @@ export type DefeatBetaTranscriptCatalog = {
   notes: string[];
 };
 
+export type DefeatBetaTranscriptDetail = {
+  requestedSymbol: string;
+  resolvedSymbol: string;
+  status: 'available' | 'unavailable' | 'error';
+  source: { id: 'defeatbeta'; label: string; note?: string };
+  asOf: string;
+  fiscalYear: number | null;
+  fiscalQuarter: number | null;
+  reportDate?: string | null;
+  paragraphCount?: number;
+  includedParagraphCount?: number;
+  paragraphs: Array<{ paragraphNumber: number; speaker?: string | null; content: string }>;
+  notes: string[];
+};
+
 export type DefeatBetaEconomyContext = {
   status: 'available' | 'unavailable' | 'error';
   source: { id: 'defeatbeta'; label: string; note?: string };
@@ -183,6 +198,29 @@ export async function getDefeatBetaTranscriptCatalog(symbol: string, options?: {
       coverage: { transcripts: false, llmConfigured: false },
       llmAnalysis: { status: 'error', availableMethods: ['keyFinancialData', 'metricChanges', 'forecastDrivers'], note: error instanceof Error ? error.message : 'DefeatBeta transcript catalogue failed.' },
       notes: [error instanceof Error ? error.message : 'DefeatBeta transcript catalogue failed.'],
+    };
+  }
+}
+
+export async function getDefeatBetaTranscriptDetail(symbol: string, options?: { fiscalYear?: number | null; fiscalQuarter?: number | null; timeoutMs?: number }): Promise<DefeatBetaTranscriptDetail> {
+  const normalized = symbol.trim().toUpperCase();
+  const params = new URLSearchParams();
+  if (options?.fiscalYear) params.set('fiscalYear', String(options.fiscalYear));
+  if (options?.fiscalQuarter) params.set('fiscalQuarter', String(options.fiscalQuarter));
+  const query = params.toString() ? `?${params.toString()}` : '';
+  try {
+    return await fetchSidecarJson<DefeatBetaTranscriptDetail>(`/v1/ticker/${encodeURIComponent(normalized)}/transcript${query}`, options);
+  } catch (error) {
+    return {
+      requestedSymbol: normalized,
+      resolvedSymbol: normalized,
+      status: 'error',
+      source: { id: 'defeatbeta', label: 'DefeatBeta API', note: 'Transcript detail only.' },
+      asOf: new Date().toISOString(),
+      fiscalYear: options?.fiscalYear ?? null,
+      fiscalQuarter: options?.fiscalQuarter ?? null,
+      paragraphs: [],
+      notes: [error instanceof Error ? error.message : 'DefeatBeta transcript detail failed.'],
     };
   }
 }

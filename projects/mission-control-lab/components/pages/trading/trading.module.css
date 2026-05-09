@@ -6950,6 +6950,24 @@
   font-weight: 680;
 }
 
+:global(.trading-analytics-extraction-preview) {
+  border: 1px solid rgba(22, 180, 95, 0.16);
+  border-radius: 16px;
+  background: rgba(22, 180, 95, 0.05);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+:global(.trading-analytics-extraction-preview > span) {
+  display: block;
+  color: rgba(34, 48, 41, 0.52);
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
 :global(.trading-analytics-thesis-outline) {
   margin: 0;
 }

@@ -326,6 +326,22 @@ def transcript_records_from_frame(df, limit: int = 8) -> list[dict[str, Any]]:
     return records
 
 
+def transcript_paragraph_records(df, limit: int = 90) -> list[dict[str, Any]]:
+    if df is None or df.empty:
+        return []
+    records: list[dict[str, Any]] = []
+    for _, row in df.head(limit).iterrows():
+        content = str(row.get("content") or "").strip()
+        if not content:
+            continue
+        records.append({
+            "paragraphNumber": int(row.get("paragraph_number")) if finite_number(row.get("paragraph_number")) is not None else len(records) + 1,
+            "speaker": jsonable(row.get("speaker")),
+            "content": content[:2_000],
+        })
+    return records
+
+
 def build_transcript_catalog(symbol: str) -> dict[str, Any]:
     from defeatbeta_api.data.ticker import Ticker  # type: ignore
 
@@ -386,6 +402,50 @@ def build_transcript_catalog(symbol: str) -> dict[str, Any]:
         },
         "attempts": attempts,
         "notes": ["No DefeatBeta candidate returned earnings-call transcript metadata."],
+    }
+
+
+def build_transcript_detail(symbol: str, fiscal_year: int | None = None, fiscal_quarter: int | None = None) -> dict[str, Any]:
+    from defeatbeta_api.data.ticker import Ticker  # type: ignore
+
+    catalog = build_transcript_catalog(symbol)
+    latest = catalog.get("latest") or {}
+    year = fiscal_year or latest.get("fiscalYear")
+    quarter = fiscal_quarter or latest.get("fiscalQuarter")
+    resolved = str(catalog.get("resolvedSymbol") or symbol).strip().upper()
+    if catalog.get("status") != "available" or not year or not quarter:
+        return {
+            "requestedSymbol": symbol.strip().upper().replace("/", "."),
+            "resolvedSymbol": resolved,
+            "status": "unavailable",
+            "source": DATA_SOURCE,
+            "asOf": now_iso(),
+            "fiscalYear": year,
+            "fiscalQuarter": quarter,
+            "paragraphs": [],
+            "notes": ["No transcript detail was available for this symbol/quarter."],
+        }
+
+    def load_transcript():
+        return Ticker(resolved).earning_call_transcripts().get_transcript(int(year), int(quarter))
+
+    value, diag = safe_call(f"transcriptDetail:{resolved}:{year}Q{quarter}", load_transcript)
+    df = df_from(value)
+    paragraphs = transcript_paragraph_records(df, limit=90)
+    return {
+        "requestedSymbol": catalog.get("requestedSymbol"),
+        "resolvedSymbol": resolved,
+        "status": "available" if paragraphs else "unavailable",
+        "source": DATA_SOURCE,
+        "asOf": now_iso(),
+        "fiscalYear": int(year),
+        "fiscalQuarter": int(quarter),
+        "reportDate": latest.get("reportDate"),
+        "paragraphCount": len(df.index) if df is not None else 0,
+        "includedParagraphCount": len(paragraphs),
+        "paragraphs": paragraphs,
+        "diagnostics": [diag],
+        "notes": ["Transcript detail is capped to the first 90 paragraphs and 2,000 characters per paragraph for Lab extraction prompts."],
     }
 
 
@@ -485,6 +545,27 @@ def transcript_catalog(symbol: str, includeAttempts: bool = Query(default=False)
         result = build_transcript_catalog(symbol)
         if not includeAttempts:
             result.pop("attempts", None)
+        return JSONResponse(result)
+    except Exception as exc:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "requestedSymbol": symbol,
+                "status": "error",
+                "source": DATA_SOURCE,
+                "asOf": now_iso(),
+                "error": {"type": type(exc).__name__, "message": str(exc)},
+                "tracebackTail": traceback.format_exc().splitlines()[-8:],
+            },
+        )
+
+
+@app.get("/v1/ticker/{symbol}/transcript")
+def transcript_detail(symbol: str, fiscalYear: int | None = Query(default=None), fiscalQuarter: int | None = Query(default=None), includeDiagnostics: bool = Query(default=False)):
+    try:
+        result = build_transcript_detail(symbol, fiscalYear, fiscalQuarter)
+        if not includeDiagnostics:
+            result.pop("diagnostics", None)
         return JSONResponse(result)
     except Exception as exc:
         return JSONResponse(

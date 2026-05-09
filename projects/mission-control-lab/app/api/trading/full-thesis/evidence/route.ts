@@ -34,25 +34,21 @@ export async function POST(request: Request) {
       transcripts,
       economy,
       llmKeyData: {
-        status: transcripts.coverage.llmConfigured ? 'ready-to-wire' : 'requires-config',
+        status: transcripts.status === 'available' ? 'ready-to-run' : 'unavailable',
         label: 'Key financial data extraction',
-        note: transcripts.coverage.llmConfigured
-          ? 'DefeatBeta LLM methods are available in the library and can be wired next.'
-          : 'Requires OpenAI-compatible API key/model config before extraction can run.',
+        note: transcripts.status === 'available'
+          ? 'Milou/OpenClaw extraction can run from DefeatBeta transcript detail. DefeatBeta-native LLM extraction still requires OpenAI-compatible config.'
+          : 'Transcript catalogue is unavailable, so key-data extraction cannot run yet.',
       },
       llmMetricChanges: {
-        status: transcripts.coverage.llmConfigured ? 'ready-to-wire' : 'requires-config',
+        status: 'not-run',
         label: 'Financial metrics changes analysis',
-        note: transcripts.coverage.llmConfigured
-          ? 'DefeatBeta can analyze quarterly metric changes and drivers once route wiring is added.'
-          : 'Requires OpenAI-compatible API key/model config before change analysis can run.',
+        note: 'Next Milou/OpenClaw extraction module. DefeatBeta-native LLM extraction still requires OpenAI-compatible config.',
       },
       llmForecastDrivers: {
-        status: transcripts.coverage.llmConfigured ? 'ready-to-wire' : 'requires-config',
+        status: 'not-run',
         label: 'Financial metrics forecast analysis',
-        note: transcripts.coverage.llmConfigured
-          ? 'DefeatBeta can analyze forecast/guidance drivers once route wiring is added.'
-          : 'Requires OpenAI-compatible API key/model config before forecast analysis can run.',
+        note: 'Next Milou/OpenClaw extraction module. DefeatBeta-native LLM extraction still requires OpenAI-compatible config.',
       },
     },
   }, { headers: { 'Cache-Control': 'no-store, max-age=0' } });
