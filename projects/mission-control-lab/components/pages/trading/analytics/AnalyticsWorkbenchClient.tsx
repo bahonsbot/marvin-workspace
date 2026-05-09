@@ -804,13 +804,35 @@ export function AnalyticsWorkbenchClient() {
       const evidence = await loadFullThesisEvidence();
       let enrichedEvidence = evidence;
       if (evidence.modules.llmKeyData.status === 'ready-to-run') {
-        setFullThesis({ status: 'generating', message: 'Milou is extracting key financial data from the latest DefeatBeta transcript…', thesis: null, evidence });
+        setFullThesis({ status: 'generating', message: 'Milou is extracting key financial data from the latest DefeatBeta transcript…', thesis: null, evidence: enrichedEvidence });
         const keyData = await runFullThesisExtraction('key-data');
         enrichedEvidence = {
-          ...evidence,
+          ...enrichedEvidence,
           modules: {
-            ...evidence.modules,
-            llmKeyData: { ...evidence.modules.llmKeyData, status: 'ready', note: 'Milou/OpenClaw extraction completed from DefeatBeta transcript detail.', analysis: keyData },
+            ...enrichedEvidence.modules,
+            llmKeyData: { ...enrichedEvidence.modules.llmKeyData, status: 'ready', note: 'Milou/OpenClaw key-data extraction completed from DefeatBeta transcript detail.', analysis: keyData },
+          },
+        };
+      }
+      if (evidence.modules.transcripts.status === 'available') {
+        setFullThesis({ status: 'generating', message: 'Milou is analyzing quarterly metric changes and stated causes from the transcript…', thesis: null, evidence: enrichedEvidence });
+        const metricChanges = await runFullThesisExtraction('metric-changes');
+        enrichedEvidence = {
+          ...enrichedEvidence,
+          modules: {
+            ...enrichedEvidence.modules,
+            llmMetricChanges: { ...enrichedEvidence.modules.llmMetricChanges, status: 'ready', note: 'Milou/OpenClaw metric-change extraction completed from DefeatBeta transcript detail.', analysis: metricChanges },
+          },
+        };
+      }
+      if (evidence.modules.transcripts.status === 'available') {
+        setFullThesis({ status: 'generating', message: 'Milou is extracting forecast and guidance drivers from the transcript…', thesis: null, evidence: enrichedEvidence });
+        const forecastDrivers = await runFullThesisExtraction('forecast-drivers');
+        enrichedEvidence = {
+          ...enrichedEvidence,
+          modules: {
+            ...enrichedEvidence.modules,
+            llmForecastDrivers: { ...enrichedEvidence.modules.llmForecastDrivers, status: 'ready', note: 'Milou/OpenClaw forecast-driver extraction completed from DefeatBeta transcript detail.', analysis: forecastDrivers },
           },
         };
       }
@@ -1009,14 +1031,26 @@ export function AnalyticsWorkbenchClient() {
               <div data-state={valuationReady ? 'ready' : 'pending'}><span>Valuation pack</span><strong>{valuationReady ? 'Ready' : 'Needs Quick Analysis'}</strong></div>
               <div data-state={fullThesis.evidence?.modules.transcripts.status === 'available' ? 'ready' : 'pending'}><span>Transcript catalogue</span><strong>{fullThesis.evidence?.modules.transcripts.latest ? `FY${fullThesis.evidence.modules.transcripts.latest.fiscalYear} Q${fullThesis.evidence.modules.transcripts.latest.fiscalQuarter}` : 'Pending'}</strong></div>
               <div data-state={fullThesis.evidence?.modules.llmKeyData.status === 'ready' ? 'ready' : 'pending'}><span>LLM key data</span><strong>{fullThesis.evidence?.modules.llmKeyData.status ?? 'Pending'}</strong></div>
-              <div data-state={fullThesis.evidence?.modules.llmMetricChanges.status === 'ready-to-wire' ? 'ready' : 'pending'}><span>Metric changes</span><strong>{fullThesis.evidence?.modules.llmMetricChanges.status ?? 'Requires config'}</strong></div>
-              <div data-state={fullThesis.evidence?.modules.llmForecastDrivers.status === 'ready-to-wire' ? 'ready' : 'pending'}><span>Forecast drivers</span><strong>{fullThesis.evidence?.modules.llmForecastDrivers.status ?? 'Requires config'}</strong></div>
+              <div data-state={fullThesis.evidence?.modules.llmMetricChanges.status === 'ready' ? 'ready' : 'pending'}><span>Metric changes</span><strong>{fullThesis.evidence?.modules.llmMetricChanges.status ?? 'Pending'}</strong></div>
+              <div data-state={fullThesis.evidence?.modules.llmForecastDrivers.status === 'ready' ? 'ready' : 'pending'}><span>Forecast drivers</span><strong>{fullThesis.evidence?.modules.llmForecastDrivers.status ?? 'Pending'}</strong></div>
               <div data-state={fullThesis.evidence?.modules.economy.status === 'available' ? 'ready' : 'pending'}><span>Economy context</span><strong>{fullThesis.evidence?.modules.economy.yieldCurve ? `10Y ${formatPercent((fullThesis.evidence.modules.economy.yieldCurve.bc10Year ?? 0) * 100)}` : 'Pending'}</strong></div>
             </div>
             {fullThesis.evidence?.modules.llmKeyData.analysis ? (
               <div className="trading-analytics-extraction-preview">
                 <span>Key-data extraction</span>
                 <MilouMarkdown text={fullThesis.evidence.modules.llmKeyData.analysis} />
+              </div>
+            ) : null}
+            {fullThesis.evidence?.modules.llmMetricChanges.analysis ? (
+              <div className="trading-analytics-extraction-preview">
+                <span>Metric-change extraction</span>
+                <MilouMarkdown text={fullThesis.evidence.modules.llmMetricChanges.analysis} />
+              </div>
+            ) : null}
+            {fullThesis.evidence?.modules.llmForecastDrivers.analysis ? (
+              <div className="trading-analytics-extraction-preview">
+                <span>Forecast-driver extraction</span>
+                <MilouMarkdown text={fullThesis.evidence.modules.llmForecastDrivers.analysis} />
               </div>
             ) : null}
             {fullThesis.thesis ? <MilouMarkdown text={fullThesis.thesis} /> : (
