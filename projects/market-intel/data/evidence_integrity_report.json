@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-05-14T16:48:39.298682",
+  "source_corpus": "signal_review_ledger.jsonl",
+  "total_rows": 11,
+  "reviewed_rows": 11,
+  "suspicious_count": 1,
+  "suspicious_rows": [
+    {
+      "corpus_index": 1,
+      "title": "Saudi Aramco CEO Nasser: Even in the most optimistic scenario, energy and commod",
+      "pattern": "Saudi Oil Attacks",
+      "outcome": "correct",
+      "evidence_summary": "Putin publicly signaled Ukraine war winding down; ceasefire rhetoric repriced risk assets",
+      "flags": [
+        {
+          "type": "semantic_topic_conflict",
+          "signal_topic": "saudi_oil",
+          "evidence_topic": "russia_ukraine",
+          "signal_terms": [
+            "aramco",
+            "oil",
+            "saudi"
+          ],
+          "evidence_terms": [
+            "donetsk",
+            "kremlin",
+            "putin",
+            "ruble",
+            "ukraine"
+          ]
+        },
+        {
+          "type": "low_title_evidence_overlap",
+          "signal_topics": [
+            "saudi_oil"
+          ],
+          "evidence_topics": [
+            "russia_ukraine",
+            "saudi_oil"
+          ]
+        }
+      ]
+    }
+  ],
+  "mode": "report_only_no_mutation"
+}

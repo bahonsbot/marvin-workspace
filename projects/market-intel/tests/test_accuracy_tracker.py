@@ -85,9 +85,77 @@ class AccuracyTrackerTest(unittest.TestCase):
 
             self.assertEqual(stats["evidence_coverage"], 50.0)
 
-    def _row(self, title: str, *, outcome: str | None = None, notes: str = "", evidence_pack: dict | None = None) -> dict:
+    def test_evidence_integrity_report_flags_semantic_cross_wire_without_mutating(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            data_dir = Path(tmp) / "data"
+            data_dir.mkdir()
+            rows = [
+                self._row(
+                    "Saudi Aramco CEO warns oil supply is tight",
+                    pattern="Saudi Oil Attacks",
+                    outcome="correct",
+                    evidence_pack={
+                        "summary": "Putin signaled Ukraine war winding down and ceasefire rhetoric repriced risk assets",
+                        "drivers": ["Kremlin comments", "Ukraine negotiations", "Ruble strengthened"],
+                        "metrics": {},
+                    },
+                )
+            ]
+            tracked_path = data_dir / "tracked_signals.json"
+            tracked_path.write_text(json.dumps(rows), encoding="utf-8")
+
+            cwd = Path.cwd()
+            try:
+                os.chdir(tmp)
+                tracker = AccuracyTracker()
+                report = tracker.write_evidence_integrity_report()
+                persisted_rows = json.loads(tracked_path.read_text(encoding="utf-8"))
+            finally:
+                os.chdir(cwd)
+
+            self.assertEqual(report["suspicious_count"], 1)
+            self.assertEqual(report["mode"], "report_only_no_mutation")
+            self.assertEqual(persisted_rows, rows)
+
+    def test_evidence_integrity_report_does_not_overflag_houthi_iran_ceasefire(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            data_dir = Path(tmp) / "data"
+            data_dir.mkdir()
+            rows = [
+                self._row(
+                    "First Houthi Drones Sent On Israel Since Iran Ceasefire Took Effect",
+                    pattern="Red Sea Shipping Disruption 2024",
+                    outcome="correct",
+                    evidence_pack={
+                        "summary": "Houthi resumed drone attacks on Israel post-ceasefire; Red Sea route risk repriced",
+                        "drivers": ["Houthi drone attacks", "Red Sea route risk"],
+                        "metrics": {},
+                    },
+                )
+            ]
+            (data_dir / "tracked_signals.json").write_text(json.dumps(rows), encoding="utf-8")
+
+            cwd = Path.cwd()
+            try:
+                os.chdir(tmp)
+                tracker = AccuracyTracker()
+                report = tracker.evidence_integrity_report()
+            finally:
+                os.chdir(cwd)
+
+            self.assertEqual(report["suspicious_count"], 0)
+
+    def _row(
+        self,
+        title: str,
+        *,
+        outcome: str | None = None,
+        notes: str = "",
+        evidence_pack: dict | None = None,
+        pattern: str = "Test Pattern",
+    ) -> dict:
         row = {
-            "signal": {"title": title, "category": "macro", "pattern": "Test Pattern"},
+            "signal": {"title": title, "category": "macro", "pattern": pattern},
             "added_at": "2026-05-14T00:00:00",
             "verified": bool(outcome),
             "actual_outcome": outcome.upper() if outcome and outcome != "duplicate" else ("DUPLICATE" if outcome == "duplicate" else None),

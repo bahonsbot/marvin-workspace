@@ -70,6 +70,19 @@ Every review summary should report:
 - evidence-pack coverage
 - session evidence file path
 
+## Evidence Integrity Guard
+
+After structured reviews or backfills, run the non-destructive integrity guard:
+
+```bash
+cd /data/.openclaw/workspace/projects/market-intel
+python3 src/accuracy_tracker.py --integrity-report
+```
+
+This writes `data/evidence_integrity_report.json` and **does not mutate** `tracked_signals.json` or `signal_review_ledger.jsonl`.
+Use it to catch semantic cross-wiring where the signal title/pattern and evidence pack discuss different catalysts, e.g. a Saudi Aramco/oil signal with Putin/Ukraine ceasefire evidence.
+Suspicious rows should be reviewed manually and fixed through the canonical helper/backfill path, not auto-rewritten.
+
 ## Guidance for Lighter Models
 
 When running signal review:

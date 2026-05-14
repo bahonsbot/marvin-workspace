@@ -4,6 +4,7 @@ Signal Accuracy Tracker: Tracks signal accuracy over time
 """
 import json
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
@@ -17,6 +18,46 @@ class AccuracyTracker:
         'incorrect': 0.0,
         'partial': 0.5,
         'correct': 1.0,
+    }
+    STOPWORDS = {
+        'about', 'after', 'against', 'amid', 'and', 'are', 'but', 'can', 'could',
+        'from', 'into', 'near', 'over', 'said', 'says', 'that', 'the', 'their',
+        'this', 'through', 'with', 'would', 'will', 'while', 'what', 'when',
+    }
+    TOPIC_KEYWORDS = {
+        'saudi_oil': {
+            'saudi', 'aramco', 'opec', 'gulf', 'hormuz', 'iran', 'tehran',
+            'riyadh', 'oil', 'crude', 'brent', 'tanker', 'tankers', 'middle east'
+        },
+        'russia_ukraine': {
+            'russia', 'russian', 'ukraine', 'ukrainian', 'putin', 'kremlin',
+            'zelensky', 'zelenskiy', 'kyiv', 'donetsk', 'ruble'
+        },
+        'fed_rates': {
+            'fed', 'federal reserve', 'warsh', 'powell', 'fomc', 'inflation',
+            'senate', 'rate cut', 'rate hike', 'treasury', 'yields'
+        },
+        'meme_squeeze': {
+            'gamestop', 'gme', 'ebay', 'ryan cohen', 'short squeeze',
+            'gamma squeeze', 'borrow fees', 'meme', 'retail traders'
+        },
+        'red_sea_shipping': {
+            'houthi', 'red sea', 'suez', 'bab el-mandeb', 'shipping', 'container',
+            'freight', 'reroute', 'rerouting'
+        },
+        'japan_shipping': {
+            'nyk', 'japan', 'japanese', 'tanker', 'tankers', 'shipping'
+        },
+        'central_bank_independence': {
+            'central bank', 'independence', 'ecb', 'fed', 'political pressure'
+        },
+    }
+    CONFLICTING_TOPIC_PAIRS = {
+        frozenset({'saudi_oil', 'russia_ukraine'}),
+        frozenset({'meme_squeeze', 'fed_rates'}),
+        frozenset({'meme_squeeze', 'saudi_oil'}),
+        frozenset({'meme_squeeze', 'russia_ukraine'}),
+        frozenset({'fed_rates', 'red_sea_shipping'}),
     }
 
     def __init__(self):
@@ -89,6 +130,148 @@ class AccuracyTracker:
     def _review_corpus(self) -> List[Dict[str, Any]]:
         ledger = self._load_review_ledger()
         return ledger if ledger else self.tracked
+
+    def _token_set(self, text: str) -> set[str]:
+        tokens = set(re.findall(r"[a-z0-9][a-z0-9'/-]{2,}", (text or '').lower()))
+        return {t for t in tokens if t not in self.STOPWORDS}
+
+    def _flatten_values(self, value: Any) -> List[str]:
+        if value is None:
+            return []
+        if isinstance(value, str):
+            return [value]
+        if isinstance(value, (int, float, bool)):
+            return [str(value)]
+        if isinstance(value, list):
+            output: List[str] = []
+            for item in value:
+                output.extend(self._flatten_values(item))
+            return output
+        if isinstance(value, dict):
+            output: List[str] = []
+            for key, item in value.items():
+                output.append(str(key))
+                output.extend(self._flatten_values(item))
+            return output
+        return [str(value)]
+
+    def _evidence_text(self, row: Dict[str, Any]) -> str:
+        evidence = row.get('evidence_pack') or {}
+        parts = self._flatten_values(evidence)
+        parts.extend([
+            str(row.get('verification_note') or ''),
+            str(row.get('notes') or ''),
+        ])
+        return ' '.join(part for part in parts if part)
+
+    def _signal_text(self, row: Dict[str, Any]) -> str:
+        signal = row.get('signal') or {}
+        parts = [
+            signal.get('title'),
+            signal.get('pattern'),
+            signal.get('pattern_name'),
+            signal.get('category'),
+        ]
+        return ' '.join(str(part) for part in parts if part)
+
+    def _topic_hits(self, text: str) -> Dict[str, List[str]]:
+        lowered = (text or '').lower()
+        hits: Dict[str, List[str]] = {}
+        for topic, terms in self.TOPIC_KEYWORDS.items():
+            matched = []
+            for term in terms:
+                pattern = r'(?<![a-z0-9])' + re.escape(term.lower()) + r'(?![a-z0-9])'
+                if re.search(pattern, lowered):
+                    matched.append(term)
+            if matched:
+                hits[topic] = sorted(matched)
+        return hits
+
+    def _evidence_integrity_flags(self, row: Dict[str, Any]) -> List[Dict[str, Any]]:
+        if not self._is_reviewed(row) or self._is_duplicate(row):
+            return []
+
+        signal_text = self._signal_text(row)
+        evidence_text = self._evidence_text(row)
+        if not signal_text.strip() or not evidence_text.strip():
+            return []
+
+        signal_topics = self._topic_hits(signal_text)
+        evidence_topics = self._topic_hits(evidence_text)
+        flags: List[Dict[str, Any]] = []
+
+        for signal_topic in signal_topics:
+            for evidence_topic in evidence_topics:
+                if signal_topic == evidence_topic:
+                    continue
+                pair = frozenset({signal_topic, evidence_topic})
+                if pair in self.CONFLICTING_TOPIC_PAIRS:
+                    signal_terms = signal_topics[signal_topic]
+                    evidence_terms = evidence_topics[evidence_topic]
+                    # Avoid flagging one-word geopolitical ambiguity. Require a richer
+                    # off-topic evidence cluster, e.g. Putin/Kremlin/Ukraine together,
+                    # before calling it semantic cross-wiring.
+                    if len(signal_terms) < 2 or len(evidence_terms) < 2:
+                        continue
+                    flags.append({
+                        'type': 'semantic_topic_conflict',
+                        'signal_topic': signal_topic,
+                        'evidence_topic': evidence_topic,
+                        'signal_terms': signal_terms,
+                        'evidence_terms': evidence_terms,
+                    })
+
+        signal_tokens = self._token_set(signal_text)
+        evidence_tokens = self._token_set(evidence_text)
+        overlap = sorted(signal_tokens & evidence_tokens)
+        if signal_topics and evidence_topics and not overlap:
+            flags.append({
+                'type': 'low_title_evidence_overlap',
+                'signal_topics': sorted(signal_topics),
+                'evidence_topics': sorted(evidence_topics),
+            })
+
+        return flags
+
+    def evidence_integrity_report(self) -> Dict[str, Any]:
+        """Build a non-destructive report of suspicious reviewed evidence rows."""
+        corpus = self._review_corpus()
+        source = 'signal_review_ledger.jsonl' if self._load_review_ledger() else 'tracked_signals.json'
+        reviewed = [row for row in corpus if self._is_reviewed(row)]
+        suspicious = []
+
+        for idx, row in enumerate(corpus):
+            flags = self._evidence_integrity_flags(row)
+            if not flags:
+                continue
+            signal = row.get('signal') or {}
+            evidence = row.get('evidence_pack') or {}
+            suspicious.append({
+                'corpus_index': idx,
+                'title': signal.get('title') or row.get('title') or '',
+                'pattern': signal.get('pattern') or signal.get('pattern_name') or signal.get('pattern_id') or '',
+                'outcome': row.get('outcome') or row.get('actual_outcome') or '',
+                'evidence_summary': evidence.get('summary') if isinstance(evidence, dict) else '',
+                'flags': flags,
+            })
+
+        return {
+            'generated_at': datetime.now().isoformat(),
+            'source_corpus': source,
+            'total_rows': len(corpus),
+            'reviewed_rows': len(reviewed),
+            'suspicious_count': len(suspicious),
+            'suspicious_rows': suspicious,
+            'mode': 'report_only_no_mutation',
+        }
+
+    def write_evidence_integrity_report(self, output_file: str = 'data/evidence_integrity_report.json') -> Dict[str, Any]:
+        report = self.evidence_integrity_report()
+        output_path = Path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, 'w') as f:
+            json.dump(report, f, indent=2)
+        return report
 
     def _append_review_ledger(self, row: Dict[str, Any]) -> None:
         self.review_ledger_file.parent.mkdir(parents=True, exist_ok=True)
@@ -312,7 +495,7 @@ class AccuracyTracker:
             if not already_tracked and top.get('confidence_level') in ['HIGH_PRIORITY', 'WATCH', 'STRONG BUY', 'BUY']:
                 self.add_signal(top)
     
-    def run(self, auto_track=False, review=False, eval_args=None):
+    def run(self, auto_track=False, review=False, eval_args=None, integrity_report=False):
         print("=== Signal Accuracy Tracker ===")
         
         if auto_track:
@@ -332,7 +515,15 @@ class AccuracyTracker:
             except (ValueError, IndexError) as e:
                 print(f"  Usage: --eval INDEX OUTCOME")
                 print(f"  Example: --eval 0 correct")
-        
+
+        if integrity_report:
+            report = self.write_evidence_integrity_report()
+            print(
+                "  ✓ Evidence integrity report: "
+                f"{report['suspicious_count']} suspicious / {report['reviewed_rows']} reviewed "
+                f"({report['source_corpus']})"
+            )
+
         self.get_stats()
 
 
@@ -344,6 +535,7 @@ if __name__ == "__main__":
     # Parse arguments
     auto_track = '--track' in sys.argv
     review = '--review' in sys.argv
+    integrity_report = '--integrity-report' in sys.argv
     
     eval_args = None
     if '--eval' in sys.argv:
@@ -351,4 +543,4 @@ if __name__ == "__main__":
         if len(sys.argv) > idx + 2:
             eval_args = [sys.argv[idx + 1], sys.argv[idx + 2]]
     
-    tracker.run(auto_track=auto_track, review=review, eval_args=eval_args)
+    tracker.run(auto_track=auto_track, review=review, eval_args=eval_args, integrity_report=integrity_report)

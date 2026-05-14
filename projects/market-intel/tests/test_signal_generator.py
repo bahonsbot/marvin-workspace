@@ -169,6 +169,12 @@ class SignalGeneratorTest(unittest.TestCase):
             with self.subTest(title=title):
                 self.assertEqual(gen.match_alert_to_patterns({"source": "rss", "title": title}), [])
 
+    def test_pattern_quality_audit_has_no_known_warnings_for_full_ruleset(self) -> None:
+        gen = SignalGenerator()
+        report = gen.pattern_coverage_report()
+        self.assertEqual(report["unsupported_count"], 0)
+        self.assertEqual(report["rule_quality_warnings"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

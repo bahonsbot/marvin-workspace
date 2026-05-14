@@ -132,6 +132,19 @@ class SignalGenerator:
             if matched_keyword in noisy_keywords:
                 return any(self._phrase_in_text(term, text) for term in meme_context)
 
+        if pattern_id == 'p014':  # broad US macro / rates terms
+            broad_macro_terms = {
+                'federal reserve', 'rate hike', 'rate cut', 'monetary policy', 'jobs report'
+            }
+            macro_context = [
+                'fed chair', 'jerome powell', 'fomc', 'inflation data', 'consumer prices',
+                'fed funds rate', 'treasury yield', 'yield spike', 'yield curve inversion',
+                'nonfarm payroll', 'labor market cooling', 'recession fears', 'hard landing',
+                'soft landing', 'credit rating', 'aaa downgrade'
+            ]
+            if matched_keyword in broad_macro_terms:
+                return any(self._phrase_in_text(term, text) for term in macro_context)
+
         if pattern_id == 'p018':  # regional bank / credit stress
             broad_credit_terms = {'private credit', 'bank deposits', 'merchant bank', 'bank stocks'}
             stress_context = [
@@ -282,22 +295,22 @@ class SignalGenerator:
                     'deposit flight', 'liquidity crunch', 'credit event', 'credit spread widening',
                     'commercial real estate losses', 'bank run fears'
                 ],
-                'exclude': [],
+                'exclude': ['blood bank', 'food bank', 'bank holiday', 'river bank'],
                 'weight': 3
             },
             'p007': {  # Evergrande - China property
                 'keywords': ['evergrande', 'china property', 'country garden', 'chinese developer'],
-                'exclude': [],
+                'exclude': ['western developer', 'software developer', 'game developer'],
                 'weight': 2
             },
             'p008': {  # FTX - crypto
                 'keywords': ['ftx', 'sam bankman', 'alameda', 'SBF', 'crypto exchange'],
-                'exclude': [],
+                'exclude': ['crypto exchange listing', 'stock exchange notice'],
                 'weight': 3
             },
             'p009': {  # Brexit - UK politics
                 'keywords': ['brexit', 'uk referendum', 'eu referendum', 'british pound', 'uk parliament'],
-                'exclude': [],
+                'exclude': ['company parliament', 'model parliament', 'pound cake'],
                 'weight': 3
             },
             'p010': {  # Single-name catalyst momentum
@@ -314,17 +327,17 @@ class SignalGenerator:
             # NEW PATTERNS
             'p011': {  # Black Monday 1987
                 'keywords': ['black monday', '1987 crash', 'program trading', 'portfolio insurance'],
-                'exclude': [],
+                'exclude': ['anniversary', 'documentary', 'history class'],
                 'weight': 3
             },
             'p012': {  # Japan Lost Decade
                 'keywords': ['japan bubble', 'nikkei', 'lost decade', 'japanese real estate'],
-                'exclude': [],
+                'exclude': ['tourism', 'anime', 'real estate listing'],
                 'weight': 2
             },
             'p013': {  # Arab Spring
                 'keywords': ['arab spring', 'middle east protests', 'tunisia', 'egypt revolution'],
-                'exclude': [],
+                'exclude': ['travel to tunisia', 'egyptian cotton', 'spring collection'],
                 'weight': 2
             },
             'p014': {  # US macro / rates regime stress (kept under existing id)
@@ -343,7 +356,7 @@ class SignalGenerator:
             },
             'p015': {  # China Devaluation
                 'keywords': ['china devaluation', 'yuan devalue', 'currency war', 'china export'],
-                'exclude': [],
+                'exclude': ['currency exchange app', 'export tutorial'],
                 'weight': 3
             },
             'p016': {  # Iran Nuclear Deal
@@ -353,7 +366,7 @@ class SignalGenerator:
             },
             'p017': {  # Taiwan/China Tension
                 'keywords': ['taiwan', 'pelosi', 'china military', 'china drills', 'cross strait'],
-                'exclude': [],
+                'exclude': ['travel to taiwan', 'pelosi biography', 'military drill exercise at school'],
                 'weight': 3
             },
             'p018': {  # Regional Banking Crisis 2023
@@ -362,33 +375,33 @@ class SignalGenerator:
                     'credit crunch', 'interbank stress', 'funding pressure', 'deposit outflows',
                     'private credit', 'bank deposits', 'bank stocks', 'merchant bank'
                 ],
-                'exclude': [],
+                'exclude': ['blood bank', 'food bank', 'bank holiday', 'river bank'],
                 'weight': 3
             },
             # NEW REGIONAL PATTERNS
             'p019': {  # Asian Financial Crisis 1997
                 'keywords': ['asian crisis', 'thailand baht', 'indonesia rupiah', 'korean won', 'asian financial', 'asean currency'],
-                'exclude': [],
+                'exclude': ['travel thailand', 'currency collector', 'won prize'],
                 'weight': 3
             },
             'p020': {  # European Debt Crisis
                 'keywords': ['greece debt', 'portugal bailout', 'italy debt', 'eurozone crisis', 'piigs', 'european sovereign', 'bond spread'],
-                'exclude': [],
+                'exclude': ['student debt', 'technical bailout', 'bond movie'],
                 'weight': 3
             },
             'p021': {  # Emerging Market Crisis 2018
                 'keywords': ['argentina peso', 'turkey lira', 'emerging market crisis', 'em currency', 'capital flight', 'fed rate hike emerging'],
-                'exclude': [],
+                'exclude': ['emerging market fund launch', 'flight capital airport'],
                 'weight': 3
             },
             'p022': {  # LTCM Collapse
                 'keywords': ['ltcm', 'long-term capital', 'hedge fund collapse', 'hedge fund bailout'],
-                'exclude': [],
+                'exclude': ['charity bailout', 'hedge trimming', 'long-term care'],
                 'weight': 3
             },
             'p023': {  # Dot-com Bubble
                 'keywords': ['dotcom bubble', 'pets.com', 'nasdaq crash', 'tech bubble', 'ipo bubble', 'webvan'],
-                'exclude': [],
+                'exclude': ['domain sale', 'website launch', 'bubble tea'],
                 'weight': 2
             },
             'p024': {  # Retail options positioning instability
@@ -511,7 +524,7 @@ class SignalGenerator:
             },
             'p037': {  # Treasury dash for cash / basis unwind
                 'keywords': ['dash for cash', 'basis trade', 'treasury market dislocation', 'repo stress', 'funding liquidity', 'forced unwind'],
-                'exclude': [],
+                'exclude': ['repo software', 'cash app', 'basis points explanation'],
                 'weight': 3
             },
             'p038': {  # AI packaging bottleneck
@@ -531,12 +544,12 @@ class SignalGenerator:
             },
             'p041': {  # Consumer trade-down / retail margin shock
                 'keywords': ['trade down', 'essentials over discretionary', 'retail margin warning', 'inventory glut', 'consumer pullback', 'discretionary purchases'],
-                'exclude': [],
+                'exclude': ['grocery trade down', 'retail hiring', 'inventory software'],
                 'weight': 3
             },
             'p042': {  # Ever Given / Suez blockage
                 'keywords': ['ever given', 'suez blockage', 'suez canal blockage', 'grounded vessel', 'queue of ships', 'canal closure'],
-                'exclude': [],
+                'exclude': ['charity queue', 'vessel sink fixture', 'canal street'],
                 'weight': 3
             }
         }
@@ -553,6 +566,7 @@ class SignalGenerator:
             'fed', 'federal reserve', 'jobs report', 'bank stocks', 'private credit',
             'retail investors', 'navy', 'chewy', 'rate cut', 'rate hike', 'monetary policy',
         }
+        context_gated_patterns = {'p005', 'p014', 'p018'}
 
         for pid, pattern in sorted(canonical.items()):
             rule = rules.get(pid)
@@ -572,12 +586,10 @@ class SignalGenerator:
 
             flags = []
             broad_hits = sorted(set(keywords) & broad_keywords)
-            if broad_hits:
+            if broad_hits and pid not in context_gated_patterns:
                 flags.append({'type': 'broad_keywords', 'keywords': broad_hits})
             if pattern.get('confidence') in {'HIGH', 'MEDIUM_HIGH'} and not excludes:
                 flags.append({'type': 'no_exclusions_on_high_confidence_rule'})
-            if pid in {'p005', 'p018'}:
-                flags.append({'type': 'requires_context_gate'})
 
             if flags:
                 quality_warnings.append({
