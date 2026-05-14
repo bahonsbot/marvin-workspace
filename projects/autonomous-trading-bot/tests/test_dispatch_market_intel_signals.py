@@ -8,6 +8,15 @@ from scripts import dispatch_market_intel_signals as dispatcher
 
 
 class TestDispatchMarketIntelSignals(unittest.TestCase):
+    def test_quoted_confidence_env_normalizes(self):
+        self.assertEqual(dispatcher._normalize_confidence_label('"HIGH_PRIORITY"'), "HIGH_PRIORITY")
+        self.assertEqual(dispatcher._normalize_confidence_label('"STRONG BUY"'), "HIGH_PRIORITY")
+
+    @patch.dict("os.environ", {"AUTO_MIN_CONFIDENCE": '"HIGH_PRIORITY"'}, clear=False)
+    def test_cfg_strips_quoted_confidence_env(self):
+        cfg = dispatcher._cfg()
+        self.assertEqual(cfg.confidence, "HIGH_PRIORITY")
+
     def test_unknown_recommendation_does_not_default_to_buy(self):
         self.assertIsNone(dispatcher._normalize_side({"recommendation": "HOLD"}))
         self.assertIsNone(dispatcher._normalize_side({"recommendation": ""}))

@@ -65,8 +65,13 @@ class Config:
     fast_high_conf_threshold: int
 
 
+def _env_value(name: str, default: str = "") -> str:
+    """Read env values defensively, accepting shell-style quoted values."""
+    return os.getenv(name, default).strip().strip('"\'').strip()
+
+
 def _normalize_confidence_label(value: str) -> str:
-    label = (value or "").strip().upper()
+    label = (value or "").strip().strip('"\'').strip().upper()
     legacy_map = {
         "STRONG BUY": "HIGH_PRIORITY",
         "BUY": "WATCH",
@@ -92,18 +97,18 @@ def _cfg() -> Config:
 
     return Config(
         webhook_url=webhook_url,
-        webhook_secret=os.getenv("WEBHOOK_SHARED_SECRET", "").strip(),
-        execution_candidates_enabled=os.getenv("EXECUTION_CANDIDATES_ENABLED", "false").lower() in {"1", "true", "yes", "on"},
-        confidence=_normalize_confidence_label(os.getenv("AUTO_MIN_CONFIDENCE", "HIGH_PRIORITY")),
-        min_reasoning_score=float(os.getenv("AUTO_MIN_REASONING_SCORE", "80")),
-        qty=float(os.getenv("AUTO_BASE_QTY", "1")),
-        max_qty=float(os.getenv("AUTO_MAX_QTY", "1")),
-        market_hours_only=os.getenv("AUTO_MARKET_HOURS_ONLY", "true").lower() in {"1", "true", "yes", "on"},
-        fast_regime_enabled=os.getenv("AUTO_FAST_REGIME_ENABLED", "true").lower() in {"1", "true", "yes", "on"},
-        fast_min_reasoning_score=float(os.getenv("AUTO_FAST_MIN_REASONING_SCORE", "75")),
-        fast_qty_multiplier=float(os.getenv("AUTO_FAST_QTY_MULTIPLIER", "1.25")),
-        fast_geo_threshold=int(os.getenv("AUTO_FAST_GEO_THRESHOLD", "3")),
-        fast_high_conf_threshold=int(os.getenv("AUTO_FAST_HIGH_CONF_THRESHOLD", "30")),
+        webhook_secret=_env_value("WEBHOOK_SHARED_SECRET"),
+        execution_candidates_enabled=_env_value("EXECUTION_CANDIDATES_ENABLED", "false").lower() in {"1", "true", "yes", "on"},
+        confidence=_normalize_confidence_label(_env_value("AUTO_MIN_CONFIDENCE", "HIGH_PRIORITY")),
+        min_reasoning_score=float(_env_value("AUTO_MIN_REASONING_SCORE", "80")),
+        qty=float(_env_value("AUTO_BASE_QTY", "1")),
+        max_qty=float(_env_value("AUTO_MAX_QTY", "1")),
+        market_hours_only=_env_value("AUTO_MARKET_HOURS_ONLY", "true").lower() in {"1", "true", "yes", "on"},
+        fast_regime_enabled=_env_value("AUTO_FAST_REGIME_ENABLED", "true").lower() in {"1", "true", "yes", "on"},
+        fast_min_reasoning_score=float(_env_value("AUTO_FAST_MIN_REASONING_SCORE", "75")),
+        fast_qty_multiplier=float(_env_value("AUTO_FAST_QTY_MULTIPLIER", "1.25")),
+        fast_geo_threshold=int(_env_value("AUTO_FAST_GEO_THRESHOLD", "3")),
+        fast_high_conf_threshold=int(_env_value("AUTO_FAST_HIGH_CONF_THRESHOLD", "30")),
     )
 
 

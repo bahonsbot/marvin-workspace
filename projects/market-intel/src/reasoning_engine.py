@@ -6,7 +6,7 @@ Integrates with Knowledge Graph for outcome prediction
 import json
 import os
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Dict
 
 # Import knowledge graph
@@ -306,7 +306,7 @@ class ReasoningEngine:
                 'predicted_causal_chain': fallback['causal_chain'],
                 'signal_briefing': signal_briefing,
                 'root_causes': root_causes,
-                'timestamp': datetime.now().isoformat()
+                'timestamp': datetime.now(timezone.utc).isoformat()
             }
             enhanced_signals.append(enhanced)
 
