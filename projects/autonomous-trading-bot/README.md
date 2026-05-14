@@ -332,9 +332,9 @@ AUTO_MIN_CONFIDENCE="STRONG BUY"
 ### Webhook Watchdog (auto-restart)
 Lightweight background process that restarts receiver if it dies:
 ```bash
-./scripts/webhook_watchdog.sh &
+bash scripts/run_webhook_watchdog.sh
 ```
-Runs in background, checks every 60s, minimal overhead (no cron).
+Runs in background, writes/refreshes the watchdog PID file, checks `/health` and `/health/auth` every 60s, and uses endpoint truth instead of trusting stale PID files alone.
 
 ## Symbol Mapping (Intelligent Ticker Selection)
 
