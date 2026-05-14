@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-04-08T23:05:40.293432",
-  "sample_size": 5,
+  "generated_at": "2026-05-14T15:19:11.427439",
+  "sample_size": 9,
   "by_category": {
-    "macroeconomic": {
-      "count": 2,
+    "geopolitical": {
+      "count": 5,
       "avg_outcome_score": 1.0,
       "bias_points": 5.0
     },
-    "financial_credit": {
-      "count": 2,
-      "avg_outcome_score": 0.0,
-      "bias_points": -5.0
+    "macroeconomic": {
+      "count": 3,
+      "avg_outcome_score": 1.0,
+      "bias_points": 5.0
     },
     "sentiment_social": {
       "count": 1,
@@ -19,25 +19,30 @@
     }
   },
   "by_pattern": {
+    "Saudi Oil Attacks": {
+      "count": 4,
+      "avg_outcome_score": 1.0,
+      "bias_points": 5.0
+    },
     "US Credit Rating Downgrade": {
       "count": 2,
       "avg_outcome_score": 1.0,
       "bias_points": 5.0
     },
-    "Regional Banking Crisis 2023": {
-      "count": 1,
-      "avg_outcome_score": 0.0,
-      "bias_points": -5.0
-    },
-    "SVB Collapse": {
-      "count": 1,
-      "avg_outcome_score": 0.0,
-      "bias_points": -5.0
-    },
     "GameStop Short Squeeze": {
       "count": 1,
       "avg_outcome_score": 0.0,
       "bias_points": -5.0
+    },
+    "Red Sea Shipping Disruption 2024": {
+      "count": 1,
+      "avg_outcome_score": 1.0,
+      "bias_points": 5.0
+    },
+    "Japan Lost Decade": {
+      "count": 1,
+      "avg_outcome_score": 1.0,
+      "bias_points": 5.0
     }
   }
 }

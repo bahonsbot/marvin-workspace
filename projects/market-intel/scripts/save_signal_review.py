@@ -26,6 +26,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 TRACKED_FILE = DATA_DIR / "tracked_signals.json"
+REVIEW_LEDGER_FILE = DATA_DIR / "signal_review_ledger.jsonl"
 
 
 def load_tracked() -> list[dict[str, Any]]:
@@ -36,6 +37,13 @@ def load_tracked() -> list[dict[str, Any]]:
 
 def save_tracked(rows: list[dict[str, Any]]) -> None:
     TRACKED_FILE.write_text(json.dumps(rows, indent=2) + "\n")
+
+
+def append_review_ledger(row: dict[str, Any]) -> None:
+    REVIEW_LEDGER_FILE.parent.mkdir(parents=True, exist_ok=True)
+    payload = {**row, "ledger_recorded_at": datetime.now().astimezone().isoformat()}
+    with REVIEW_LEDGER_FILE.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(payload, sort_keys=True) + "\n")
 
 
 def normalize_title(value: str) -> str:
@@ -105,6 +113,35 @@ def build_evidence_pack(args: argparse.Namespace) -> dict[str, Any]:
     if args.session_file:
         evidence_pack["session_evidence_file"] = str(args.session_file)
     return evidence_pack
+
+
+def validate_evidence_pack(outcome: str, evidence_pack: dict[str, Any]) -> None:
+    errors = []
+    if not str(evidence_pack.get("summary") or "").strip():
+        errors.append("evidence_pack.summary is required")
+
+    drivers = evidence_pack.get("drivers") or []
+    sector_impact = evidence_pack.get("sector_impact") or []
+    metrics = evidence_pack.get("metrics") or {}
+    has_structured_observation = (
+        (isinstance(drivers, list) and any(str(item).strip() for item in drivers))
+        or (isinstance(sector_impact, list) and any(str(item).strip() for item in sector_impact))
+        or bool(metrics)
+    )
+    if outcome != "duplicate" and not has_structured_observation:
+        errors.append("non-duplicate reviews require at least one driver, metric, or sector impact")
+
+    if outcome == "duplicate":
+        if not evidence_pack.get("duplicate_of"):
+            errors.append("duplicate reviews require --duplicate-of")
+    else:
+        if not evidence_pack.get("causal_verdict"):
+            errors.append("non-duplicate reviews require --causal-verdict")
+        if not evidence_pack.get("asset_expression_verdict"):
+            errors.append("non-duplicate reviews require --asset-expression-verdict")
+
+    if errors:
+        raise SystemExit("Invalid evidence pack:\n- " + "\n- ".join(errors))
 
 
 def apply_review(row: dict[str, Any], outcome: str, verification_note: str, evidence_pack: dict[str, Any]) -> None:
@@ -185,7 +222,18 @@ def parse_evidence_markdown(path: Path) -> list[dict[str, Any]]:
                 if line.startswith("- "):
                     bullets.append(line[2:].strip())
         verdict_text = verdict_match.group(1).strip()
-        outcome = "duplicate" if "duplicate" in chunk.lower() else ("correct" if "✅" in verdict_text or "strong buy" in verdict_text.lower() else "partial")
+        verdict_norm = normalize_title(verdict_text)
+        chunk_norm = normalize_title(chunk)
+        if "duplicate" in verdict_norm or "duplicate" in chunk_norm:
+            outcome = "duplicate"
+        elif "incorrect" in verdict_norm or "miss" in verdict_norm:
+            outcome = "incorrect"
+        elif "partial" in verdict_norm or "hold" in verdict_norm:
+            outcome = "partial"
+        elif "correct" in verdict_norm or "strong buy" in verdict_norm or "buy" in verdict_norm or "✅" in verdict_text:
+            outcome = "correct"
+        else:
+            raise SystemExit(f"Ambiguous verdict in {path}: {verdict_text}")
         entries.append({
             "title": title_match.group(1).strip(),
             "pattern": pattern_match.group(1).strip() if pattern_match else "",
@@ -224,6 +272,7 @@ def backfill_from_markdown(path: Path) -> None:
         idx, row = matches[0]
         apply_review(row, entry["outcome"], entry["verification_note"], entry["evidence_pack"])
         rows[idx] = row
+        append_review_ledger(row)
         updates += 1
     save_tracked(rows)
     refresh_feedback()
@@ -264,9 +313,11 @@ def main() -> None:
         session_file = args.session_file if args.session_file.is_absolute() else ROOT / args.session_file
         args.session_file = session_file.relative_to(ROOT)
     evidence_pack = build_evidence_pack(args)
+    validate_evidence_pack(args.outcome, evidence_pack)
     apply_review(row, args.outcome, args.verification_note, evidence_pack)
     rows[idx] = row
     save_tracked(rows)
+    append_review_ledger(row)
     refresh_feedback()
     if session_file and args.append_session_note:
         append_session_note(row, session_file, args.outcome, evidence_pack, args.verification_note)

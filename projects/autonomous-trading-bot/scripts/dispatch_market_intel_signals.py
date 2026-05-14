@@ -65,6 +65,17 @@ class Config:
     fast_high_conf_threshold: int
 
 
+def _normalize_confidence_label(value: str) -> str:
+    label = (value or "").strip().upper()
+    legacy_map = {
+        "STRONG BUY": "HIGH_PRIORITY",
+        "BUY": "WATCH",
+        "HOLD": "OBSERVE",
+        "WEAK": "LOW_CONFIDENCE",
+    }
+    return legacy_map.get(label, label)
+
+
 def _cfg() -> Config:
     webhook_url = os.getenv("AUTO_WEBHOOK_URL", "http://127.0.0.1:8000/webhook").strip()
     # Enforce HTTPS for non-local webhook URLs (allow plain HTTP only for local loopback)
@@ -83,7 +94,7 @@ def _cfg() -> Config:
         webhook_url=webhook_url,
         webhook_secret=os.getenv("WEBHOOK_SHARED_SECRET", "").strip(),
         execution_candidates_enabled=os.getenv("EXECUTION_CANDIDATES_ENABLED", "false").lower() in {"1", "true", "yes", "on"},
-        confidence=os.getenv("AUTO_MIN_CONFIDENCE", "STRONG BUY").strip().upper(),
+        confidence=_normalize_confidence_label(os.getenv("AUTO_MIN_CONFIDENCE", "HIGH_PRIORITY")),
         min_reasoning_score=float(os.getenv("AUTO_MIN_REASONING_SCORE", "80")),
         qty=float(os.getenv("AUTO_BASE_QTY", "1")),
         max_qty=float(os.getenv("AUTO_MAX_QTY", "1")),
@@ -171,7 +182,7 @@ def _normalize_side(sig: dict[str, Any]) -> str:
             return "buy"
 
     rec = str(sig.get("recommendation", "TAKE")).upper()
-    if rec in {"TAKE", "BUY", "LONG", "STRONG BUY"}:
+    if rec in {"TAKE", "BUY", "LONG", "STRONG BUY", "HIGH_PRIORITY", "WATCH"}:
         return "buy"
     if rec in {"SELL", "SHORT"}:
         return "sell"
@@ -381,14 +392,14 @@ def main() -> int:
             continue
 
         if signal_source == "execution_candidates":
-            conf = str(sig.get("confidence_level", "")).upper()
+            conf = _normalize_confidence_label(str(sig.get("confidence_level", "")))
             reasoning = float(sig.get("reasoning_score", 0) or 0)
             if conf != cfg.confidence:
                 continue
             if reasoning < min_reasoning_score:
                 continue
         else:
-            conf = str(sig.get("confidence_level", "")).upper()
+            conf = _normalize_confidence_label(str(sig.get("confidence_level", "")))
             reasoning = float(sig.get("reasoning_score", 0) or 0)
             if conf != cfg.confidence:
                 continue

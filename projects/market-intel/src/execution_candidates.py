@@ -417,9 +417,13 @@ def confidence_to_score(value: str) -> float:
 
 def confidence_level_to_score(value: str) -> float:
     return {
+        "HIGH_PRIORITY": 0.95,
         "STRONG BUY": 0.95,
+        "WATCH": 0.80,
         "BUY": 0.80,
+        "OBSERVE": 0.60,
         "HOLD": 0.60,
+        "LOW_CONFIDENCE": 0.35,
         "WEAK": 0.35,
         "SKIP": 0.10,
     }.get(str(value or "").upper(), 0.50)
@@ -1038,7 +1042,7 @@ def dispatch_readiness(
 
     if recommendation != "TAKE":
         reasons.append("recommendation_not_take")
-    if confidence_level in {"WEAK", "SKIP"}:
+    if confidence_level in {"LOW_CONFIDENCE", "WEAK", "SKIP"}:
         reasons.append("pattern_confidence_too_weak")
     if reasoning_score < 60.0:
         reasons.append("reasoning_score_too_weak")

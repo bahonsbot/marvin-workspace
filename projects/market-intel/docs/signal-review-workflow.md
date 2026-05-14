@@ -4,13 +4,15 @@ Purpose: make signal verification durable, machine-readable, and consistent even
 
 ## Core Rule
 
-A signal review is only complete when it writes **both**:
+A signal review is only complete when it writes **all three**:
 
 1. **Structured per-signal review data** into `data/tracked_signals.json`
-2. **A dated human-readable session note** in `data/signal-verification-evidence-YYYY-MM-DD.md`
+2. **An append-only structured ledger record** into `data/signal_review_ledger.jsonl`
+3. **A dated human-readable session note** in `data/signal-verification-evidence-YYYY-MM-DD.md`
 
 If only the markdown note is written, the review is incomplete.
 If only a shallow verification note is written to `tracked_signals.json`, the review is incomplete.
+If the append-only ledger is not updated, aggregate accuracy/model feedback is incomplete.
 
 ## Required Review Outputs
 
@@ -81,6 +83,7 @@ When running signal review:
 
 ## Downstream Learning Contract
 
-- `tracked_signals.json` is the canonical per-signal review store
-- `model_feedback.json` is the aggregate learning output regenerated from tracked reviews
+- `tracked_signals.json` is the rolling active/pending queue
+- `signal_review_ledger.jsonl` is the canonical append-only reviewed-signal corpus
+- `model_feedback.json` is the aggregate learning output regenerated from the ledger when present
 - the dated markdown session file is the human audit trail, not the primary machine-learning store

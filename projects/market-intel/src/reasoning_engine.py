@@ -24,9 +24,34 @@ class ReasoningEngine:
         self.signals = []
         self.feedback = {}
         self.kg = KnowledgeGraph()  # Initialize knowledge graph
-        self.minimum_actionable_score = 50.0
+        self.minimum_actionable_score = 60.0
+        self.minimum_feedback_sample_size = 20
+        self.minimum_bucket_sample_size = 5
         self.data_dir = Path(__file__).resolve().parent.parent / 'data'
         self.load_data()
+
+    def canonical_source(self, source: str) -> str:
+        """Normalize feed names to the credibility-map namespace."""
+        value = (source or '').strip().lower().replace('-', '_').replace(' ', '_')
+        aliases = {
+            'reuters_finance': 'reuters',
+            'reuters_business': 'reuters',
+            'reuters_breakingviews': 'reuters',
+            'reuters_breaking_views': 'reuters',
+            'financial_times': 'financial_times',
+            'ft': 'financial_times',
+            'ap_top': 'ap_top',
+            'associated_press': 'ap_top',
+            'business_bloomberg': 'business',
+            'bloomberg': 'business',
+            'marketwatch': 'market_watch',
+            'market_watch': 'market_watch',
+            'financialjuice': 'financialjuice',
+            'firstsquawk': 'financialjuice',
+            'deltaone': 'financialjuice',
+            'unusual_whales': 'unusualwhales',
+        }
+        return aliases.get(value, value)
     
     def load_data(self):
         """Load patterns and signals"""
@@ -66,7 +91,7 @@ class ReasoningEngine:
             'r/stockmarket': 0.45,
             'r/securityanalysis': 0.60
         }
-        return credibility.get(source.lower(), 0.50)
+        return credibility.get(self.canonical_source(source), 0.50)
     
     def calculate_pattern_strength(self, pattern_id: str) -> float:
         """Calculate historical pattern strength (0-1)"""
@@ -100,8 +125,23 @@ class ReasoningEngine:
         category = (signal.get('category') or '').lower()
         pattern = signal.get('pattern') or signal.get('pattern_id') or ''
 
-        category_bias = self.feedback.get('by_category', {}).get(category, {}).get('bias_points', 0.0)
-        pattern_bias = self.feedback.get('by_pattern', {}).get(pattern, {}).get('bias_points', 0.0)
+        feedback_sample_size = int(self.feedback.get('sample_size', 0) or 0)
+        category_bucket = self.feedback.get('by_category', {}).get(category, {})
+        pattern_bucket = self.feedback.get('by_pattern', {}).get(pattern, {})
+        category_count = int(category_bucket.get('count', 0) or 0)
+        pattern_count = int(pattern_bucket.get('count', 0) or 0)
+
+        if feedback_sample_size < self.minimum_feedback_sample_size:
+            return {
+                'category_bias_points': 0.0,
+                'pattern_bias_points': 0.0,
+                'total_bias_points': 0.0,
+                'feedback_sample_size': feedback_sample_size,
+                'feedback_status': 'insufficient_sample',
+            }
+
+        category_bias = category_bucket.get('bias_points', 0.0) if category_count >= self.minimum_bucket_sample_size else 0.0
+        pattern_bias = pattern_bucket.get('bias_points', 0.0) if pattern_count >= self.minimum_bucket_sample_size else 0.0
 
         # keep small and stable so learned feedback nudges, not dominates
         total = max(-7.5, min(7.5, category_bias + (0.7 * pattern_bias)))
@@ -109,7 +149,8 @@ class ReasoningEngine:
             'category_bias_points': round(category_bias, 2),
             'pattern_bias_points': round(pattern_bias, 2),
             'total_bias_points': round(total, 2),
-            'feedback_sample_size': self.feedback.get('sample_size', 0),
+            'feedback_sample_size': feedback_sample_size,
+            'feedback_status': 'applied',
         }
 
     def calculate_reasoning_score(self, signal: Dict) -> Dict:
@@ -145,7 +186,8 @@ class ReasoningEngine:
                 'time_horizon_fit': round(horizon_score * 100, 1),
                 'base_score': base_score_100,
                 'feedback_bias_points': feedback_bias['total_bias_points'],
-                'feedback_sample_size': feedback_bias['feedback_sample_size']
+                'feedback_sample_size': feedback_bias['feedback_sample_size'],
+                'feedback_status': feedback_bias.get('feedback_status', 'none')
             },
             'confidence_level': self.get_confidence_label(score_100),
             'recommendation': 'TAKE' if score_100 >= self.minimum_actionable_score else 'SKIP',
@@ -154,13 +196,13 @@ class ReasoningEngine:
     
     def get_confidence_label(self, score_100: float) -> str:
         if score_100 >= 75:
-            return "STRONG BUY"
+            return "HIGH_PRIORITY"
         elif score_100 >= 60:
-            return "BUY"
-        elif score_100 >= self.minimum_actionable_score:
-            return "HOLD"
+            return "WATCH"
+        elif score_100 >= 50:
+            return "OBSERVE"
         elif score_100 >= 35:
-            return "WEAK"
+            return "LOW_CONFIDENCE"
         else:
             return "SKIP"
     
@@ -279,14 +321,14 @@ class ReasoningEngine:
         """Print reasoning analysis"""
         print("=== MARKET INTEL: REASONING ANALYSIS ===\n")
         
-        strong = [s for s in signals if s['confidence_level'] == 'STRONG BUY']
-        buy = [s for s in signals if s['confidence_level'] == 'BUY']
-        hold = [s for s in signals if s['confidence_level'] == 'HOLD']
+        strong = [s for s in signals if s['confidence_level'] == 'HIGH_PRIORITY']
+        buy = [s for s in signals if s['confidence_level'] == 'WATCH']
+        hold = [s for s in signals if s['confidence_level'] == 'OBSERVE']
         
         print(f"📊 Total: {len(signals)}")
-        print(f"   🟢 STRONG BUY: {len(strong)}")
-        print(f"   🟢 BUY: {len(buy)}")
-        print(f"   🟡 HOLD: {len(hold)}\n")
+        print(f"   🟢 HIGH_PRIORITY: {len(strong)}")
+        print(f"   🟢 WATCH: {len(buy)}")
+        print(f"   🟡 OBSERVE: {len(hold)}\n")
         
         # Show top 5 with reasoning
         print("🎯 TOP SIGNALS WITH REASONING:\n")

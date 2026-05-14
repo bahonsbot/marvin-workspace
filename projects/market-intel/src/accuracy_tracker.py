@@ -22,6 +22,7 @@ class AccuracyTracker:
     def __init__(self):
         self.data_dir = Path('data')
         self.tracked_file = self.data_dir / 'tracked_signals.json'
+        self.review_ledger_file = self.data_dir / 'signal_review_ledger.jsonl'
         self.history_file = self.data_dir / 'signal_accuracy_history.json'
         self.feedback_file = self.data_dir / 'model_feedback.json'
         
@@ -49,6 +50,51 @@ class AccuracyTracker:
 
     def _outcome_score(self, outcome: str) -> float:
         return self.OUTCOME_SCORE.get(self._normalize_outcome(outcome), 0.0)
+
+    def _review_outcome(self, row: Dict[str, Any]) -> str:
+        return self._normalize_outcome(row.get('actual_outcome', '') or row.get('outcome', ''))
+
+    def _has_structured_evidence(self, row: Dict[str, Any]) -> bool:
+        evidence = row.get('evidence_pack') or {}
+        if not isinstance(evidence, dict):
+            return False
+        if not str(evidence.get('summary') or '').strip():
+            return False
+
+        drivers = evidence.get('drivers') or []
+        sector_impact = evidence.get('sector_impact') or []
+        metrics = evidence.get('metrics') or {}
+        has_drivers = isinstance(drivers, list) and any(str(item).strip() for item in drivers)
+        has_sector_impact = isinstance(sector_impact, list) and any(str(item).strip() for item in sector_impact)
+        has_metrics = bool(metrics) if isinstance(metrics, dict) else bool(metrics)
+        return has_drivers or has_sector_impact or has_metrics
+
+    def _load_review_ledger(self) -> List[Dict[str, Any]]:
+        if not self.review_ledger_file.exists():
+            return []
+        rows: List[Dict[str, Any]] = []
+        with open(self.review_ledger_file, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    item = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(item, dict):
+                    rows.append(item)
+        return rows
+
+    def _review_corpus(self) -> List[Dict[str, Any]]:
+        ledger = self._load_review_ledger()
+        return ledger if ledger else self.tracked
+
+    def _append_review_ledger(self, row: Dict[str, Any]) -> None:
+        self.review_ledger_file.parent.mkdir(parents=True, exist_ok=True)
+        payload = {**row, 'ledger_recorded_at': datetime.now().isoformat()}
+        with open(self.review_ledger_file, 'a') as f:
+            f.write(json.dumps(payload, sort_keys=True) + '\n')
 
     def _extract_evidence_pack(self, notes: str = '', evidence_pack: Dict[str, Any] | None = None) -> Dict[str, Any]:
         if evidence_pack:
@@ -105,28 +151,31 @@ class AccuracyTracker:
         with open(self.tracked_file, 'w') as f:
             json.dump(self.tracked, f, indent=2)
 
+        self._append_review_ledger(self.tracked[index])
+
         print(f"  ✓ Evaluated signal {index}: {normalized_outcome}")
         self.update_accuracy_history()
     
     def update_accuracy_history(self):
         """Update accuracy statistics and learning feedback."""
-        reviewed = [s for s in self.tracked if self._is_reviewed(s)]
+        corpus = self._review_corpus()
+        reviewed = [s for s in corpus if self._is_reviewed(s)]
         unique_verified = [s for s in reviewed if not self._is_duplicate(s)]
         duplicates = [s for s in reviewed if self._is_duplicate(s)]
 
         if not reviewed:
             return
 
-        strong_buy = sum(1 for s in unique_verified if self._normalize_outcome(s.get('actual_outcome', '') or s.get('outcome', '')) == 'strong buy')
-        buy = sum(1 for s in unique_verified if self._normalize_outcome(s.get('actual_outcome', '') or s.get('outcome', '')) == 'buy')
-        hold = sum(1 for s in unique_verified if self._normalize_outcome(s.get('actual_outcome', '') or s.get('outcome', '')) in {'hold', 'partial'})
-        miss = sum(1 for s in unique_verified if self._normalize_outcome(s.get('actual_outcome', '') or s.get('outcome', '')) in {'miss', 'incorrect'})
+        strong_buy = sum(1 for s in unique_verified if self._review_outcome(s) == 'strong buy')
+        buy = sum(1 for s in unique_verified if self._review_outcome(s) == 'buy')
+        hold = sum(1 for s in unique_verified if self._review_outcome(s) in {'hold', 'partial'})
+        miss = sum(1 for s in unique_verified if self._review_outcome(s) in {'miss', 'incorrect'})
 
-        weighted_score = sum(self._outcome_score(s.get('actual_outcome', '') or s.get('outcome', '')) for s in unique_verified)
+        weighted_score = sum(self._outcome_score(self._review_outcome(s)) for s in unique_verified)
         weighted_accuracy = round((weighted_score / len(unique_verified)) * 100, 1) if unique_verified else 0.0
 
         evidence_coverage = round(
-            100 * sum(1 for s in unique_verified if s.get('evidence_pack', {}).get('summary') or s.get('notes')) / len(unique_verified),
+            100 * sum(1 for s in unique_verified if self._has_structured_evidence(s)) / len(unique_verified),
             1,
         ) if unique_verified else 0.0
 
@@ -140,6 +189,7 @@ class AccuracyTracker:
             'miss': miss,
             'weighted_accuracy': weighted_accuracy,
             'evidence_coverage': evidence_coverage,
+            'review_corpus': 'signal_review_ledger.jsonl' if self._load_review_ledger() else 'tracked_signals.json',
             'last_updated': datetime.now().isoformat()
         }
 
@@ -156,7 +206,7 @@ class AccuracyTracker:
 
         for row in verified:
             signal = row.get('signal', {})
-            score = self._outcome_score(row.get('actual_outcome', ''))
+            score = self._outcome_score(self._review_outcome(row))
             category = (signal.get('category') or 'unknown').lower()
             pattern = signal.get('pattern') or signal.get('pattern_id') or 'unknown'
             by_category.setdefault(category, []).append(score)
@@ -210,25 +260,32 @@ class AccuracyTracker:
     
     def review_pending(self):
         """Show pending signals for review"""
-        pending = [s for s in self.tracked if not self._is_reviewed(s)]
+        rendered = self.format_pending_reviews()
+        print(rendered)
+
+    def format_pending_reviews(self) -> str:
+        """Render pending reviews using original tracked indexes, not filtered indexes."""
+        pending = [(i, s) for i, s in enumerate(self.tracked) if not self._is_reviewed(s)]
         
         if not pending:
-            print("\nNo pending signals to review.")
-            return
+            return "\nNo pending signals to review."
         
-        print("\n=== Pending Signal Reviews ===")
-        for i, s in enumerate(pending):
+        lines = ["\n=== Pending Signal Reviews ==="]
+        for i, s in pending:
             signal = s.get('signal', {})
-            print(f"\n[{i}] {signal.get('title', 'Unknown')[:60]}")
-            print(f"    Pattern: {signal.get('pattern_name', 'N/A')}")
-            print(f"    Confidence: {signal.get('confidence_level', 'N/A')}")
-            print(f"    Added: {s.get('added_at', 'N/A')[:10]}")
+            lines.append(f"\n[{i}] {signal.get('title', 'Unknown')[:60]}")
+            lines.append(f"    Pattern: {signal.get('pattern_name') or signal.get('pattern') or 'N/A'}")
+            lines.append(f"    Confidence: {signal.get('confidence_level', 'N/A')}")
+            lines.append(f"    Added: {s.get('added_at', 'N/A')[:10]}")
             if signal.get('predicted_outcomes'):
-                print(f"    Predicted: {' → '.join(signal.get('predicted_outcomes', [])[:2])}")
+                lines.append(f"    Predicted: {' → '.join(signal.get('predicted_outcomes', [])[:2])}")
         
-        print("\n--- To evaluate a signal, run with --eval INDEX OUTCOME ---")
-        print("    Example: accuracy_tracker.py --eval 0 correct")
-        print("    Outcomes: correct, partial, incorrect")
+        lines.extend([
+            "\n--- To evaluate a signal, run with --eval TRACKED_INDEX OUTCOME ---",
+            "    Example: accuracy_tracker.py --eval 7 correct",
+            "    Outcomes: correct, partial, incorrect, duplicate",
+        ])
+        return "\n".join(lines)
     
     def auto_track_top_signals(self):
         """Auto-track HIGH confidence signals"""
@@ -252,7 +309,7 @@ class AccuracyTracker:
                 for t in self.tracked
             )
             
-            if not already_tracked and top.get('confidence_level') in ['STRONG BUY', 'BUY']:
+            if not already_tracked and top.get('confidence_level') in ['HIGH_PRIORITY', 'WATCH', 'STRONG BUY', 'BUY']:
                 self.add_signal(top)
     
     def run(self, auto_track=False, review=False, eval_args=None):
@@ -268,7 +325,7 @@ class AccuracyTracker:
             try:
                 idx = int(eval_args[0])
                 outcome = eval_args[1]
-                if outcome not in ['correct', 'partial', 'incorrect']:
+                if outcome not in ['correct', 'partial', 'incorrect', 'duplicate']:
                     print(f"  Invalid outcome: {outcome}")
                 else:
                     self.evaluate_signal(idx, outcome)

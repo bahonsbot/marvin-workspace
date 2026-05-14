@@ -121,14 +121,16 @@ final_score = (source_credibility × 0.30) + (pattern_strength × 0.50) + (time_
 | r/investing | 0.50 |
 | r/wallstreetbets | 0.30 |
 
-#### Confidence Labels (Final)
+#### Research Priority Labels
+
+These are research-triage labels, not trade instructions.
 
 | Score Range | Label |
 |-------------|-------|
-| 75+ | STRONG BUY |
-| 60-74 | BUY |
-| 50-59 | HOLD |
-| 35-49 | WEAK |
+| 75+ | HIGH_PRIORITY |
+| 60-74 | WATCH |
+| 50-59 | OBSERVE |
+| 35-49 | LOW_CONFIDENCE |
 | <35 | SKIP |
 
 ---
@@ -157,7 +159,7 @@ Source: Reuters
 
 ```
 Final score = (0.95 × 0.30) + (0.90 × 0.50) + (1.0 × 0.20) = 0.935 → 93.5/100
-Confidence: STRONG BUY
+Confidence: HIGH_PRIORITY
 ```
 
 ---

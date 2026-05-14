@@ -110,6 +110,40 @@ class SignalGenerator:
             parts.append(' '.join(str(x) for x in top_comments if isinstance(x, str)))
         return ' '.join(p for p in parts if p).lower()
 
+    def _phrase_in_text(self, phrase: str, text: str) -> bool:
+        """Match phrases on token boundaries instead of raw substrings."""
+        phrase = (phrase or '').strip().lower()
+        if not phrase:
+            return False
+        pattern = r'(?<![a-z0-9])' + re.escape(phrase) + r'(?![a-z0-9])'
+        return re.search(pattern, text, flags=re.IGNORECASE) is not None
+
+    def _pattern_context_ok(self, pattern_id: str, matched_keyword: str, text: str) -> bool:
+        """Require extra context for historically noisy keyword families."""
+        matched_keyword = (matched_keyword or '').lower()
+
+        if pattern_id == 'p005':  # meme / squeeze signals
+            meme_context = [
+                'short squeeze', 'gamma squeeze', 'meme stock', 'gamestop', 'gme',
+                'amc', 'bbby', 'robinhood', 'short interest', 'borrow fee',
+                'call buying', 'calls surge', 'retail traders', 'reddit rally'
+            ]
+            noisy_keywords = {'navy', 'chewy', 'retail investors'}
+            if matched_keyword in noisy_keywords:
+                return any(self._phrase_in_text(term, text) for term in meme_context)
+
+        if pattern_id == 'p018':  # regional bank / credit stress
+            broad_credit_terms = {'private credit', 'bank deposits', 'merchant bank', 'bank stocks'}
+            stress_context = [
+                'deposit outflows', 'funding pressure', 'liquidity crunch', 'bank run',
+                'bank failure', 'bank collapse', 'fdic', 'credit spread widening',
+                'regional banking crisis', 'interbank stress', 'credit crunch'
+            ]
+            if matched_keyword in broad_credit_terms:
+                return any(self._phrase_in_text(term, text) for term in stress_context)
+
+        return True
+
     def match_alert_to_patterns(self, alert: Dict, use_enriched: bool = False) -> List[Dict]:
         """Match an alert to relevant patterns.
 
@@ -332,15 +366,15 @@ class SignalGenerator:
             weight = rule.get('weight', 1)
             
             for kw in keywords:
-                if kw in text:
+                if self._phrase_in_text(kw, text):
                     # Check exclusions - skip if any exclusion keyword found
                     should_exclude = False
                     for exc in excludes:
-                        if exc in text:
+                        if self._phrase_in_text(exc, text):
                             should_exclude = True
                             break
                     
-                    if not should_exclude:
+                    if not should_exclude and self._pattern_context_ok(pattern['id'], kw, text):
                         matches.append({
                         'pattern_id': pattern['id'],
                         'pattern_name': pattern['name'],
@@ -501,9 +535,9 @@ class SignalGenerator:
             
             # Count by confidence
             high_count = len([s for s in baseline if s.get('confidence') == 'HIGH'])
-            strong_buy_count = len([s for s in baseline if s.get('confidence_level') == 'STRONG BUY'])
-            buy_count = len([s for s in baseline if s.get('confidence_level') == 'BUY'])
-            hold_count = len([s for s in baseline if s.get('confidence_level') == 'HOLD'])
+            strong_buy_count = len([s for s in baseline if s.get('confidence_level') in {'HIGH_PRIORITY', 'STRONG BUY'}])
+            buy_count = len([s for s in baseline if s.get('confidence_level') in {'WATCH', 'BUY'}])
+            hold_count = len([s for s in baseline if s.get('confidence_level') in {'OBSERVE', 'HOLD'}])
             
             # Count by category
             categories = {}
@@ -512,7 +546,7 @@ class SignalGenerator:
                 categories[cat] = categories.get(cat, 0) + 1
             
             signals_generated = len(baseline)
-            summary = f"{signals_generated} signals generated ({strong_buy_count} STRONG BUY, {buy_count} BUY, {hold_count} HOLD). Top categories: {', '.join([f'{k}={v}' for k, v in sorted(categories.items(), key=lambda x: x[1], reverse=True)[:3]])}"
+            summary = f"{signals_generated} signals generated ({strong_buy_count} high priority, {buy_count} watch, {hold_count} observe). Top categories: {', '.join([f'{k}={v}' for k, v in sorted(categories.items(), key=lambda x: x[1], reverse=True)[:3]])}"
             
             ctx.update_job('market-signal-generator', {
                 'last_run': datetime.now(timezone.utc).isoformat(),
@@ -521,9 +555,9 @@ class SignalGenerator:
                 'summary': summary,
                 'context': {
                     'by_confidence': {
-                        'STRONG_BUY': strong_buy_count,
-                        'BUY': buy_count,
-                        'HOLD': hold_count,
+                        'HIGH_PRIORITY': strong_buy_count,
+                        'WATCH': buy_count,
+                        'OBSERVE': hold_count,
                         'HIGH_confidence': high_count
                     },
                     'by_category': categories,
