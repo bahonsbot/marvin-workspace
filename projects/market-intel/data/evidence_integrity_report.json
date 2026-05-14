@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-05-14T16:48:39.298682",
+  "generated_at": "2026-05-14T17:33:37.566682",
   "source_corpus": "signal_review_ledger.jsonl",
-  "total_rows": 11,
-  "reviewed_rows": 11,
+  "total_rows": 21,
+  "reviewed_rows": 21,
   "suspicious_count": 1,
   "suspicious_rows": [
     {

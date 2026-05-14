@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-05-14T15:19:11.427439",
-  "sample_size": 9,
+  "generated_at": "2026-05-14T17:25:06.100290",
+  "sample_size": 17,
   "by_category": {
     "geopolitical": {
-      "count": 5,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+      "count": 13,
+      "avg_outcome_score": 0.885,
+      "bias_points": 3.85
     },
     "macroeconomic": {
       "count": 3,
@@ -20,9 +20,9 @@
   },
   "by_pattern": {
     "Saudi Oil Attacks": {
-      "count": 4,
-      "avg_outcome_score": 1.0,
-      "bias_points": 5.0
+      "count": 8,
+      "avg_outcome_score": 0.938,
+      "bias_points": 4.38
     },
     "US Credit Rating Downgrade": {
       "count": 2,
@@ -43,6 +43,11 @@
       "count": 1,
       "avg_outcome_score": 1.0,
       "bias_points": 5.0
+    },
+    "Russia-Ukraine Conflict": {
+      "count": 4,
+      "avg_outcome_score": 0.75,
+      "bias_points": 2.5
     }
   }
 }

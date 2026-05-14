@@ -1,13 +1,13 @@
 {
-  "total_reviewed_raw": 11,
-  "duplicate_count": 2,
-  "total_verified": 9,
+  "total_reviewed_raw": 21,
+  "duplicate_count": 4,
+  "total_verified": 17,
   "strong_buy": 0,
   "buy": 0,
-  "hold": 0,
+  "hold": 3,
   "miss": 1,
-  "weighted_accuracy": 88.9,
+  "weighted_accuracy": 85.3,
   "evidence_coverage": 100.0,
   "review_corpus": "signal_review_ledger.jsonl",
-  "last_updated": "2026-05-14T15:19:11.426914"
+  "last_updated": "2026-05-14T17:25:06.099777"
 }

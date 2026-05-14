@@ -53,9 +53,36 @@
       "structural_interpretation_confidence": 0.86
     },
     "added_at": "2026-05-11T20:47:33.297953",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Reuters/CNBC evidence supports the headline: Aramco could reach 12 mbpd maximum sustainable capacity in under three weeks if needed, while Hormuz disruption and tanker constraints were already driving oil-market stress and risk repricing.",
+    "outcome": "correct",
+    "verified_at": "2026-05-14T17:24:25.655449+08:00",
+    "verification_note": "Reuters/CNBC evidence supports the headline: Aramco could reach 12 mbpd maximum sustainable capacity in under three weeks if needed, while Hormuz disruption and tanker constraints were already driving oil-market stress and risk repricing.",
+    "evidence_pack": {
+      "summary": "Amin Nasser said Aramco could reach maximum sustainable crude capacity if needed, against ongoing Hormuz disruption and supply stress.",
+      "drivers": [
+        "Reuters reported Nasser said Aramco could reach 12 mbpd in less than three weeks if needed.",
+        "CNBC/Reuters coverage framed the remark against Hormuz disruption and delayed oil-market normalization.",
+        "Aramco East-West routing capacity and tanker dislocation showed emergency supply constraints were active.",
+        "Brent/oil price action stayed elevated as supply fears persisted."
+      ],
+      "metrics": {
+        "max_capacity_mbd": 12,
+        "time_to_capacity_weeks": 3,
+        "east_west_pipeline_mbd": 7.0,
+        "lost_barrels_per_week": 100000000
+      },
+      "sector_impact": [
+        "Energy: crude/products risk premium elevated",
+        "Transport: tanker dislocation supported freight volatility",
+        "Airlines/refiners: import-dependent margins pressured"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -190,9 +217,34 @@
       "structural_interpretation_confidence": 0.86
     },
     "added_at": "2026-05-12T00:47:32.839969",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "FT and parallel Reuters/CNBC coverage support the signal: Aramco warned gasoline/jet-fuel stocks were falling toward critically low levels under Hormuz disruption, confirming volatility spike and risk repricing.",
+    "outcome": "correct",
+    "verified_at": "2026-05-14T17:24:25.756078+08:00",
+    "verification_note": "FT and parallel Reuters/CNBC coverage support the signal: Aramco warned gasoline/jet-fuel stocks were falling toward critically low levels under Hormuz disruption, confirming volatility spike and risk repricing.",
+    "evidence_pack": {
+      "summary": "Aramco warned refined-fuel inventories were being drawn down rapidly and could reach critically low levels if Hormuz stayed shut.",
+      "drivers": [
+        "FT reported fuel stocks heading for critically low levels.",
+        "The warning was tied directly to continued Hormuz disruption.",
+        "Parallel CNBC/Reuters coverage described severe tanker bottlenecks and rapid inventory drawdown.",
+        "Refined-product tightness amplified the crude-market volatility signal."
+      ],
+      "metrics": {
+        "ships_stuck_gulf": 600,
+        "ships_waiting_hormuz": 240
+      },
+      "sector_impact": [
+        "Energy: refined-product cracks and crude risk premium supported",
+        "Transport: freight/tanker volatility increased",
+        "Airlines/importers: fuel-cost pressure increased"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -248,9 +300,33 @@
       "structural_interpretation_confidence": 0.8
     },
     "added_at": "2026-05-12T02:47:32.770269",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "PARTIAL",
+    "notes": "The core drone-cooperation story is supported, but the wording is stronger than the evidence: reports say nearly/around 20 countries were involved or interested, with four signed agreements, not exactly 20 confirmed active deals.",
+    "outcome": "partial",
+    "verified_at": "2026-05-14T17:24:25.942636+08:00",
+    "verification_note": "The core drone-cooperation story is supported, but the wording is stronger than the evidence: reports say nearly/around 20 countries were involved or interested, with four signed agreements, not exactly 20 confirmed active deals.",
+    "evidence_pack": {
+      "summary": "Zelensky said nearly/around 20 countries were involved or interested in Ukraine drone deals, but the headline compresses that into a stronger claim than the evidence supports.",
+      "drivers": [
+        "Reuters reported nearly 20 countries were involved at various stages.",
+        "Reuters and related pickups said four agreements had already been signed.",
+        "Ukrainska Pravda described cooperation with around 20 countries under the Drone Deal programme.",
+        "The headline overstates interest/involvement as a clean count of countries seeking deals."
+      ],
+      "metrics": {
+        "countries_involved": 20,
+        "agreements_signed": 4
+      },
+      "sector_impact": [
+        "Defense/UAV supply chain: mild positive cooperation signal",
+        "Macro/risk assets: limited immediate impact"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "partial",
+      "asset_expression_verdict": "partial",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -306,9 +382,33 @@
       "structural_interpretation_confidence": 0.86
     },
     "added_at": "2026-05-12T05:47:40.851662",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "PARTIAL",
+    "notes": "DW provides useful second-order context for Gulf oil disruption and China insulation, but it does not itself confirm a new Saudi attack or fresh volatility catalyst, so partial is the safer review outcome.",
+    "outcome": "partial",
+    "verified_at": "2026-05-14T17:24:26.037772+08:00",
+    "verification_note": "DW provides useful second-order context for Gulf oil disruption and China insulation, but it does not itself confirm a new Saudi attack or fresh volatility catalyst, so partial is the safer review outcome.",
+    "evidence_pack": {
+      "summary": "DW confirms China is comparatively insulated from Gulf oil crises, supporting ongoing energy-stress context but not a fresh Saudi attack or escalation.",
+      "drivers": [
+        "DW framed the backdrop as Iran/Gulf tensions disrupting global oil markets.",
+        "China was described as shielded by stockpiles, diversified supply, domestic output, and EV growth.",
+        "The article points to uneven regional exposure rather than a discrete new shock.",
+        "It supports persistence of the crisis more than incremental escalation."
+      ],
+      "metrics": {
+        "gulf_oil_exports_east_pct": 80
+      },
+      "sector_impact": [
+        "Asia ex-China importers: sustained oil-security pressure",
+        "China: relatively less exposed than peers",
+        "Energy: supports ongoing risk-premium context"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "partial",
+      "asset_expression_verdict": "partial",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -364,9 +464,35 @@
       "structural_interpretation_confidence": 0.8
     },
     "added_at": "2026-05-12T06:47:33.874489",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Reuters and regional sources support the attribution: Yermak was named as a suspect in a major corruption probe. The political/governance risk is real, though direct market expression is modest.",
+    "outcome": "correct",
+    "verified_at": "2026-05-14T17:24:26.079850+08:00",
+    "verification_note": "Reuters and regional sources support the attribution: Yermak was named as a suspect in a major corruption probe. The political/governance risk is real, though direct market expression is modest.",
+    "evidence_pack": {
+      "summary": "Andrii Yermak, Zelenskyy\u2019s former chief of staff, was named as a suspect in a major corruption/money-laundering probe.",
+      "drivers": [
+        "Reuters reported Zelenskyy\u2019s former chief of staff was named as a suspect in a major corruption probe.",
+        "RFE/RL said prosecutors sought detention or bail pending investigation.",
+        "Ukrainska Pravda linked the case to alleged laundering through the Dynasty housing complex.",
+        "Euronews reported multiple additional suspects and a large hryvnia amount under probe."
+      ],
+      "metrics": {
+        "amount_uah": 460000000,
+        "amount_usd": 10500000,
+        "other_suspects": 6,
+        "proposed_bail_uah": 180000000
+      },
+      "sector_impact": [
+        "Ukraine sovereign/political risk: modest negative governance signal",
+        "Reconstruction/aid sentiment: possible marginal pressure"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "partial",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -502,9 +628,30 @@
       "structural_interpretation_confidence": 0.8
     },
     "added_at": "2026-05-12T18:47:38.261563",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "PARTIAL",
+    "notes": "The quote is real and correctly attributed, but no concrete plan or concession accompanied it and Ukraine disputed Moscow\u2019s intent. Partial is safer than marking it fully correct for the predicted volatility/risk-repricing thesis.",
+    "outcome": "partial",
+    "verified_at": "2026-05-14T17:24:26.118541+08:00",
+    "verification_note": "The quote is real and correctly attributed, but no concrete plan or concession accompanied it and Ukraine disputed Moscow\u2019s intent. Partial is safer than marking it fully correct for the predicted volatility/risk-repricing thesis.",
+    "evidence_pack": {
+      "summary": "The Kremlin statement was accurately reported, but it was unsupported by specifics and disputed by Ukraine, making it a weak de-escalation/risk-repricing signal.",
+      "drivers": [
+        "Reuters reported the Kremlin repeated Putin\u2019s assertion that the war was almost over.",
+        "Le Monde quoted Peskov saying accumulated peace-process groundwork allowed Russia to say the end was drawing near.",
+        "The same briefing stressed there were no specifics on ending the war.",
+        "Zelensky disputed that Moscow intended to end the war."
+      ],
+      "metrics": {},
+      "sector_impact": [
+        "Geopolitical risk: possible short-lived sentiment move",
+        "European defense/gas/rates: only headline-sensitive without durable confirmation"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "partial",
+      "asset_expression_verdict": "partial",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -1186,9 +1333,31 @@
       "structural_interpretation_confidence": 0.86
     },
     "added_at": "2026-05-13T08:47:36.844881",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Reuters and ISW/CTP support the underlying claim that Saudi Arabia carried out covert/unpublicized strikes on Iran; the headline is sensational, but the regional escalation and oil-risk repricing thesis is supported.",
+    "outcome": "correct",
+    "verified_at": "2026-05-14T17:24:26.158669+08:00",
+    "verification_note": "Reuters and ISW/CTP support the underlying claim that Saudi Arabia carried out covert/unpublicized strikes on Iran; the headline is sensational, but the regional escalation and oil-risk repricing thesis is supported.",
+    "evidence_pack": {
+      "summary": "Reuters-backed reporting says Saudi Arabia carried out undisclosed retaliatory strikes on Iran during the regional war, despite the sensational headline wording.",
+      "drivers": [
+        "Reuters reported Saudi Arabia launched numerous unpublicized strikes on Iran.",
+        "The strikes were described as retaliation for attacks on the kingdom.",
+        "ISW/CTP cited the Reuters report in its May 12 update.",
+        "The report widened the regional-conflict frame and supported geopolitical oil-risk premia."
+      ],
+      "metrics": {},
+      "sector_impact": [
+        "Energy: geopolitical crude premium supported",
+        "Defense/risk-off: regional escalation supports hedging demand",
+        "Gulf transport/risk assets: negative risk premium"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -1244,9 +1413,35 @@
       "structural_interpretation_confidence": 0.8
     },
     "added_at": "2026-05-14T13:26:30.105860",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "CORRECT",
+    "notes": "Reuters and Kyiv Independent support the reported 675 drones and 56 missiles. This is a factual military-escalation headline consistent with geopolitical volatility and risk repricing.",
+    "outcome": "correct",
+    "verified_at": "2026-05-14T17:24:26.246329+08:00",
+    "verification_note": "Reuters and Kyiv Independent support the reported 675 drones and 56 missiles. This is a factual military-escalation headline consistent with geopolitical volatility and risk repricing.",
+    "evidence_pack": {
+      "summary": "Ukraine\u2019s Air Force said Russia launched 675 drones and 56 missiles in a major overnight assault on May 14.",
+      "drivers": [
+        "Reuters reported the barrage included 675 drones and 56 missiles.",
+        "Kyiv Independent cited Ukraine\u2019s Air Force with the same figures.",
+        "Coverage described it as a large combined overnight attack on Kyiv and other areas.",
+        "The signal correctly attributes the claim to Kyiv."
+      ],
+      "metrics": {
+        "drones": 675,
+        "missiles": 56,
+        "drones_intercepted_or_jammed": 652
+      },
+      "sector_impact": [
+        "Defense: demand/geopolitical-risk narrative supported",
+        "Regional risk sentiment: negative",
+        "Energy/FX/rates: broad risk-premium channel only"
+      ],
+      "confidence": "HIGH",
+      "causal_verdict": "correct",
+      "asset_expression_verdict": "correct",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -1302,9 +1497,31 @@
       "structural_interpretation_confidence": 0.8
     },
     "added_at": "2026-05-14T14:47:39.286337",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "DUPLICATE",
+    "notes": "Duplicate of tracked signal 17: same May 14 overnight assault, same 675-drone/56-missile figures, and same underlying Ukraine Air Force attribution.",
+    "outcome": "duplicate",
+    "verified_at": "2026-05-14T17:24:26.360472+08:00",
+    "verification_note": "Duplicate of tracked signal 17: same May 14 overnight assault, same 675-drone/56-missile figures, and same underlying Ukraine Air Force attribution.",
+    "evidence_pack": {
+      "summary": "Same May 14 Ukraine-reported overnight assault as signal 17, with identical 675-drone and 56-missile figures.",
+      "drivers": [
+        "Identical core figures: 675 drones and 56 missiles.",
+        "Same date and same overnight assault event.",
+        "Same attribution chain from Ukraine\u2019s Air Force/Kyiv reporting.",
+        "Adds no distinct causal information versus signal 17."
+      ],
+      "metrics": {
+        "drones": 675,
+        "missiles": 56
+      },
+      "sector_impact": [
+        "Same as signal 17: defense/geopolitical risk channel"
+      ],
+      "confidence": "HIGH",
+      "duplicate_of": "tracked_signals[17] Kyiv says Russia launched a massive overnight assault using 675 drones and 56 missiles",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   },
   {
     "signal": {
@@ -1362,8 +1579,35 @@
       "structural_interpretation_confidence": 0.68
     },
     "added_at": "2026-05-14T15:22:02.305485",
-    "verified": false,
-    "actual_outcome": null,
-    "notes": ""
+    "verified": true,
+    "actual_outcome": "DUPLICATE",
+    "notes": "Duplicate of the existing Warsh confirmation/rates story: Reuters 'big plans' is follow-on analysis of the already-reviewed Warsh confirmation macro narrative, not a distinct new catalyst. Treasury curve data around May 11-13 did not show a clean fresh front-end breakout attributable to this article alone.",
+    "outcome": "duplicate",
+    "verified_at": "2026-05-14T17:25:06.073680+08:00",
+    "verification_note": "Duplicate of the existing Warsh confirmation/rates story: Reuters 'big plans' is follow-on analysis of the already-reviewed Warsh confirmation macro narrative, not a distinct new catalyst. Treasury curve data around May 11-13 did not show a clean fresh front-end breakout attributable to this article alone.",
+    "evidence_pack": {
+      "summary": "Reuters follow-up analysis on Warsh's Fed reform agenda reuses the already-reviewed Warsh confirmation/rates narrative; incremental immediate market confirmation is weak.",
+      "drivers": [
+        "Reuters article centers on Warsh's confirmation and broader reform agenda, not a new policy action.",
+        "Existing tracked data already contains a reviewed Warsh confirmation signal and a Warsh confirmation duplicate.",
+        "Reuters says changes may take time, weakening immediate-catalyst status.",
+        "Treasury curve stayed near prior highs without a clean new front-end breakout attributable to this article."
+      ],
+      "metrics": {
+        "2y_ust_2026_05_11": 3.79,
+        "2y_ust_2026_05_12": 3.8,
+        "2y_ust_2026_05_13": 3.79,
+        "3y_ust_2026_05_11": 3.95,
+        "3y_ust_2026_05_12": 4.0,
+        "3y_ust_2026_05_13": 3.98
+      },
+      "sector_impact": [
+        "Rates/FX impact belongs to the broader Warsh-confirmation and inflation/higher-for-longer regime already captured.",
+        "No clear new sector expression from this follow-up analysis alone."
+      ],
+      "confidence": "HIGH",
+      "duplicate_of": "tracked_signals[8] US Senate confirms Kevin Warsh to be Federal Reserve Governor",
+      "session_evidence_file": "data/signal-verification-evidence-2026-05-14.md"
+    }
   }
 ]
