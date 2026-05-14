@@ -290,24 +290,6 @@
       "title": "Draft: Creative-tool automation script plan",
       "sections": {}
     },
-    "label": "executor-Career-202604131000",
-    "instruction": "Execute this task: Draft: Creative-tool automation script plan\n\nDeliverable: \nProof: \n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
-    "queuedAt": "2026-04-13 10:00",
-    "status": "blocked",
-    "executionMode": "agent_team",
-    "agentTeam": true,
-    "startedAt": "2026-04-13 11:15",
-    "updatedAt": "2026-04-13 14:15",
-    "note": "Auto-healed stale spawned task after >2h without completion; active slot released"
-  },
-  {
-    "task": "[Career] Draft: Creative-tool automation script plan",
-    "parsed": {
-      "emoji": "",
-      "category": "Career",
-      "title": "Draft: Creative-tool automation script plan",
-      "sections": {}
-    },
     "label": "executor-Career-202604151000",
     "instruction": "Execute this task: Draft: Creative-tool automation script plan\n\nDeliverable: \nProof: \n\nCreate the deliverable in the appropriate location within /data/.openclaw/workspace.\n\nBe practical and create something useful.",
     "queuedAt": "2026-04-15 10:00",

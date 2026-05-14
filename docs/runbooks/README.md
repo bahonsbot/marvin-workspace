@@ -18,7 +18,6 @@ Quick index for the workspace runbooks folder so common references are easier to
 - [Mission Control Agents Operating Model](./mission-control-agents-operating-model.md)
 - [Mission Control Agents Page Design Handoff](./mission-control-agents-page-design-handoff.md)
 - [Mission Control Runtime Preview Runbook](./mission-control-runtime-preview-runbook.md)
-- [DefeatBeta Analytics Sidecar Plan](../../projects/mission-control-lab/docs/defeatbeta-analytics-sidecar-plan.md)
 
 ## Network, Egress, and Placement
 - [Egress Enforcement Deferred Until Trading Isolation](./egress-enforcement-deferred-until-trading-isolation.md)
