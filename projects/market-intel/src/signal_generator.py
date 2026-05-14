@@ -142,6 +142,52 @@ class SignalGenerator:
             if matched_keyword in broad_credit_terms:
                 return any(self._phrase_in_text(term, text) for term in stress_context)
 
+        if pattern_id == 'p029':  # CRE stress wave
+            broad_cre_terms = {'office loans', 'office landlords', 'cre loans', 'commercial real estate'}
+            stress_context = [
+                'refinancing wall', 'maturity wall', 'loan losses', 'loan loss provisions',
+                'cmbs spread', 'delinquency spike', 'default risk', 'regional bank exposure',
+                'distressed debt', 'vacancy rate', 'write-down', 'writedown'
+            ]
+            if matched_keyword in broad_cre_terms:
+                return any(self._phrase_in_text(term, text) for term in stress_context)
+
+        if pattern_id == 'p030':  # mega-cap earnings shock
+            broad_earnings_terms = {'earnings miss', 'guidance cut', 'profit warning', 'revenue miss'}
+            megacap_context = [
+                'apple', 'microsoft', 'amazon', 'alphabet', 'google', 'meta', 'nvidia',
+                'tesla', 'mag 7', 'magnificent seven', 'mega-cap', 'megacap', 'nasdaq 100'
+            ]
+            if matched_keyword in broad_earnings_terms:
+                return any(self._phrase_in_text(term, text) for term in megacap_context)
+
+        if pattern_id == 'p031':  # M&A antitrust block
+            broad_deal_terms = {'merger blocked', 'deal blocked', 'takeover blocked'}
+            antitrust_context = [
+                'antitrust', 'doj', 'ftc', 'competition regulator', 'competition authority',
+                'cma', 'eu commission', 'regulator sues', 'regulatory approval'
+            ]
+            if matched_keyword in broad_deal_terms:
+                return any(self._phrase_in_text(term, text) for term in antitrust_context)
+
+        if pattern_id == 'p032':  # US government shutdown
+            broad_shutdown_terms = {'government shutdown', 'shutdown deadline', 'funding deadline'}
+            us_budget_context = [
+                'congress', 'house speaker', 'senate', 'white house', 'appropriations',
+                'continuing resolution', 'federal workers', 'stopgap funding', 'budget impasse'
+            ]
+            if matched_keyword in broad_shutdown_terms:
+                return any(self._phrase_in_text(term, text) for term in us_budget_context)
+
+        if pattern_id == 'p034':  # accounting scandal
+            broad_scandal_terms = {'accounting scandal', 'accounting fraud', 'financial restatement'}
+            governance_context = [
+                'auditor resigns', 'auditor resignation', 'sec investigation', 'short seller',
+                'whistleblower', 'internal controls', 'revenue recognition', 'forensic audit'
+            ]
+            if matched_keyword in broad_scandal_terms:
+                return any(self._phrase_in_text(term, text) for term in governance_context)
+
         return True
 
     def match_alert_to_patterns(self, alert: Dict, use_enriched: bool = False) -> List[Dict]:
@@ -352,6 +398,105 @@ class SignalGenerator:
                     'volatility squeeze', 'days to cover', 'forced covering'
                 ],
                 'exclude': ['iron condor', 'credit spread tutorial', 'options strategy guide'],
+                'weight': 2
+            },
+            'p025': {  # UK LDI / gilt crisis
+                'keywords': [
+                    'ldi funds', 'liability-driven investment', 'liability driven investment',
+                    'uk pension margin calls', 'gilt margin calls', 'gilt yields spike',
+                    'long-dated gilts', 'boe emergency gilt purchases', 'pension fund leverage',
+                    'gilt market dysfunction', 'mini-budget gilt selloff'
+                ],
+                'exclude': ['corporate pension enrollment', 'pension app', 'retirement planning'],
+                'weight': 3
+            },
+            'p026': {  # Volmageddon / short-vol product unwind
+                'keywords': [
+                    'volmageddon', 'short vix etn', 'xiv etn', 'inverse vix etn',
+                    'short volatility unwind', 'short vol unwind', 'vix spike',
+                    'vix futures backwardation', 'volatility product liquidation', 'short-vol feedback loop'
+                ],
+                'exclude': ['vix options tutorial', 'volatility education', 'etn prospectus'],
+                'weight': 3
+            },
+            'p027': {  # Swiss franc unpeg / FX peg shock
+                'keywords': [
+                    'swiss franc unpeg', 'snb removes floor', 'snb abandons cap',
+                    'eur/chf floor', 'eurchf floor', 'swiss franc peg', 'franc peg',
+                    'snb shock', 'swiss franc surge', 'fx peg removed', 'currency floor removed'
+                ],
+                'exclude': ['floor price target', 'housing floor', 'peg ratio tutorial'],
+                'weight': 3
+            },
+            'p028': {  # Yen carry unwind / BOJ regime shift
+                'keywords': [
+                    'yen carry unwind', 'carry trade unwind', 'jpy carry trade',
+                    'boj ycc adjustment', 'yield curve control tweak', 'boj policy shift',
+                    'yen volatility', 'japanese yields spike', 'jgb yields rise',
+                    'boj abandons ycc', 'yen-funded carry'
+                ],
+                'exclude': ['carry-on luggage', 'yen travel money', 'anime currency'],
+                'weight': 3
+            },
+            'p029': {  # US regional CRE stress wave
+                'keywords': [
+                    'office refinancing wall', 'cre maturity wall', 'commercial real estate default',
+                    'office loan losses', 'office vacancy rate', 'regional bank cre exposure',
+                    'cmbs spread widening', 'office landlords', 'cre loans', 'commercial real estate',
+                    'office loans', 'distressed office debt'
+                ],
+                'exclude': ['residential mortgage', 'homebuilder', 'apartment rent growth'],
+                'weight': 2
+            },
+            'p030': {  # Mega-cap earnings shock
+                'keywords': [
+                    'mega-cap earnings miss', 'megacap earnings miss', 'mag 7 earnings miss',
+                    'magnificent seven earnings miss', 'nvidia guidance cut', 'apple guidance cut',
+                    'microsoft guidance cut', 'amazon guidance cut', 'alphabet guidance cut',
+                    'meta guidance cut', 'tesla guidance cut', 'earnings miss', 'guidance cut',
+                    'profit warning', 'revenue miss'
+                ],
+                'exclude': ['small-cap', 'microcap', 'penny stock', 'local business'],
+                'weight': 2
+            },
+            'p031': {  # M&A antitrust block
+                'keywords': [
+                    'doj sues to block merger', 'ftc sues to block merger', 'antitrust block',
+                    'regulator blocks merger', 'competition regulator blocks', 'cma blocks deal',
+                    'eu blocks merger', 'merger blocked', 'deal blocked', 'takeover blocked',
+                    'regulatory approval denied', 'antitrust lawsuit merger'
+                ],
+                'exclude': ['road block', 'block trade', 'blockchain merger rumor'],
+                'weight': 2
+            },
+            'p032': {  # US government shutdown
+                'keywords': [
+                    'us government shutdown', 'federal government shutdown', 'shutdown deadline',
+                    'funding deadline', 'continuing resolution', 'stopgap funding',
+                    'appropriations impasse', 'budget impasse', 'federal workers furloughed',
+                    'congress shutdown talks'
+                ],
+                'exclude': ['company shutdown', 'factory shutdown', 'plant shutdown', 'website shutdown'],
+                'weight': 2
+            },
+            'p033': {  # US tariff war escalation
+                'keywords': [
+                    'tariff escalation', 'new tariffs on china', 'section 301 tariffs',
+                    'trade war escalation', 'retaliatory tariffs', 'us tariffs', 'china tariffs',
+                    'import duties', 'tariff retaliation', 'ustr investigation',
+                    'farm subsidies tariff'
+                ],
+                'exclude': ['mobile phone tariff plan', 'utility tariff', 'electricity tariff'],
+                'weight': 3
+            },
+            'p034': {  # Major accounting scandal
+                'keywords': [
+                    'accounting scandal', 'accounting fraud', 'auditor resigns', 'auditor resignation',
+                    'financial restatement', 'sec investigation accounting', 'short seller report',
+                    'whistleblower accounting', 'internal controls failure', 'revenue recognition probe',
+                    'forensic audit', 'wirecard-style'
+                ],
+                'exclude': ['accounting software', 'accounting class', 'bookkeeping tips'],
                 'weight': 2
             },
             'p035': {  # Red Sea shipping disruption

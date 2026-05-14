@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-05-14T07:49:25.783974+00:00",
+  "generated_at": "2026-05-14T08:36:19.694678+00:00",
   "total_patterns": 42,
-  "supported_count": 32,
-  "unsupported_count": 10,
-  "coverage_pct": 76.2,
+  "supported_count": 42,
+  "unsupported_count": 0,
+  "coverage_pct": 100.0,
   "supported_pattern_ids": [
     "p001",
     "p002",
@@ -29,6 +29,16 @@
     "p022",
     "p023",
     "p024",
+    "p025",
+    "p026",
+    "p027",
+    "p028",
+    "p029",
+    "p030",
+    "p031",
+    "p032",
+    "p033",
+    "p034",
     "p035",
     "p036",
     "p037",
@@ -38,78 +48,7 @@
     "p041",
     "p042"
   ],
-  "unsupported_patterns": [
-    {
-      "pattern_id": "p025",
-      "pattern_name": "UK LDI/Gilt Crisis 2022",
-      "category": "financial_credit",
-      "confidence": "HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p026",
-      "pattern_name": "VIX ETN Volmageddon 2018",
-      "category": "financial_credit",
-      "confidence": "HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p027",
-      "pattern_name": "Swiss Franc Unpeg Shock 2015",
-      "category": "macroeconomic",
-      "confidence": "HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p028",
-      "pattern_name": "Yen Carry Unwind Regime",
-      "category": "macroeconomic",
-      "confidence": "MEDIUM_HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p029",
-      "pattern_name": "US Regional CRE Stress Wave",
-      "category": "financial_credit",
-      "confidence": "MEDIUM_HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p030",
-      "pattern_name": "Mega-Cap Earnings Shock",
-      "category": "corporate",
-      "confidence": "MEDIUM_HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p031",
-      "pattern_name": "M&A Antitrust Block",
-      "category": "corporate",
-      "confidence": "MEDIUM_HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p032",
-      "pattern_name": "US Government Shutdown",
-      "category": "political",
-      "confidence": "MEDIUM_HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p033",
-      "pattern_name": "US Tariff War Escalation",
-      "category": "political",
-      "confidence": "HIGH",
-      "reason": "no_keyword_rule"
-    },
-    {
-      "pattern_id": "p034",
-      "pattern_name": "Major Accounting Scandal",
-      "category": "corporate",
-      "confidence": "MEDIUM_HIGH",
-      "reason": "no_keyword_rule"
-    }
-  ],
+  "unsupported_patterns": [],
   "rule_quality_warnings": [
     {
       "pattern_id": "p005",
