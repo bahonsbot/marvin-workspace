@@ -1529,3 +1529,14 @@ That means rollback can fail unless the raw pre-upgrade `openclaw.json` is resto
 
 **Priority:** high
 **Status:** resolved
+## [ERR-20260514-1748]
+
+**What failed:** Autonomous Trading Bot stopped placing Alpaca paper orders after Mar 13 even though the deterministic dispatcher kept running.
+**Error:** The execution handoff and dispatch filters silently starved the bot: `projects/market-intel/data/execution_candidates.json` was stale because the Market Intel generator cron did not run `src/execution_candidates.py`, and `AUTO_MIN_CONFIDENCE="HIGH_PRIORITY"` was read with literal quote characters so it never matched normalized candidate confidence `HIGH_PRIORITY`. A related timestamp issue meant regenerated candidates used naive local timestamps that the webhook freshness guard could reject as future/stale.
+**Context:** Philippe noticed Alpaca's last order was Mar 13 despite favourable market conditions. Investigation showed `auto-signal-dispatcher` had many successful cron runs with `dispatched=0 blocked=0`, no post-Mar-13 webhook order attempts, and no Alpaca rejection evidence.
+**Suggested fix:** For any auto-trading/dispatch pipeline, verify the full handoff chain, not just scheduler liveness: upstream artifact freshness, dispatch candidate count, confidence/score filters, timestamp validity, webhook accepted/executed semantics, idempotency state, and broker order records. Env parsing should strip shell-style quote characters. Cron contracts that refresh source signals must also refresh downstream executable handoff artifacts. Add regression tests for quoted env values and candidate timestamp validity when freshness guards exist.
+**Resolution:** Resolved on 2026-05-14 with commit `0138d59`: dispatcher env parsing strips quotes, Market Intel cron now runs `signal_generator.py && reasoning_engine.py && execution_candidates.py`, reasoning timestamps are UTC-aware, `execution_candidates.json` was regenerated, and validation found 7 ready candidates / 2 passing HIGH_PRIORITY score filters with webhook-valid timestamps. A market-open verification reminder was scheduled.
+
+**Priority:** high
+**Status:** resolved
+
