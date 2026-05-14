@@ -19,6 +19,7 @@ class RiskConfig:
 class AccountState:
     daily_pnl: float
     open_positions: int
+    positions: Dict[str, float] | None = None
 
 
 def _check_kill_switch(config: RiskConfig) -> str | None:
@@ -55,6 +56,22 @@ def _check_max_open_positions(config: RiskConfig, state: AccountState) -> str | 
     return None
 
 
+def _check_sell_inventory(signal: Dict[str, Any], state: AccountState) -> str | None:
+    side = str(signal.get("side", "")).lower().strip()
+    if side != "sell":
+        return None
+
+    symbol = str(signal.get("symbol", "")).upper().strip()
+    qty = float(signal.get("qty", 0) or 0)
+    positions = state.positions or {}
+    available_qty = float(positions.get(symbol, 0.0) or 0.0)
+    if available_qty <= 0:
+        return f"Sell blocked: no long position available for {symbol}."
+    if qty > available_qty:
+        return f"Sell blocked: qty={qty} exceeds long position for {symbol} ({available_qty})."
+    return None
+
+
 def evaluate_risk_decision(
     signal: Dict[str, Any],
     state: AccountState,
@@ -68,6 +85,7 @@ def evaluate_risk_decision(
         _check_daily_loss_cap(config, state),
         _check_max_position_size(config, signal),
         _check_max_open_positions(config, state),
+        _check_sell_inventory(signal, state),
     ):
         if check:
             reasons.append(check)
@@ -81,5 +99,6 @@ def evaluate_risk_decision(
             "daily_loss_cap",
             "max_position_size",
             "max_open_positions",
+            "sell_inventory",
         ],
     }

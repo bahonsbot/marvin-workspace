@@ -143,6 +143,77 @@ def _env_int(name: str, *, default: int) -> int:
     return parsed if parsed > 0 else default
 
 
+def _env_float(name: str, *, default: float, minimum: float | None = None) -> float:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return default
+    if minimum is not None and parsed < minimum:
+        return default
+    return parsed
+
+
+def _env_nonnegative_int(name: str, *, default: int) -> int:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return default
+    return parsed if parsed >= 0 else default
+
+
+def _risk_config_from_env() -> RiskConfig:
+    """Build runtime risk config from environment, fail-closed on missing kill switch."""
+    return RiskConfig(
+        kill_switch_enabled=_env_flag("KILL_SWITCH", default=True),
+        daily_loss_cap=_env_float("DAILY_LOSS_CAP", default=100.0, minimum=0.0),
+        max_position_size=_env_float("MAX_POSITION_SIZE", default=1.0, minimum=0.0),
+        max_open_positions=_env_nonnegative_int("MAX_OPEN_POSITIONS", default=3),
+    )
+
+
+def _default_account_state() -> AccountState:
+    """Return conservative local account state until broker-backed state is wired in."""
+    return AccountState(daily_pnl=0.0, open_positions=0, positions={})
+
+
+def _account_state_from_broker(adapter: AlpacaPaperAdapter) -> tuple[AccountState, list[str]]:
+    """Fetch paper account/position state for runtime risk gates.
+
+    Returns a conservative empty state with warnings if broker state is unavailable.
+    """
+    warnings: list[str] = []
+    daily_pnl = 0.0
+    positions: dict[str, float] = {}
+
+    try:
+        account = adapter.get_account()
+        equity = float(account.get("equity", 0) or 0)
+        last_equity = float(account.get("last_equity", equity) or equity)
+        daily_pnl = equity - last_equity
+    except Exception as exc:
+        warnings.append(f"account_state_unavailable:{exc.__class__.__name__}")
+
+    try:
+        for row in adapter.list_positions():
+            if not isinstance(row, dict):
+                continue
+            symbol = str(row.get("symbol", "")).upper().strip()
+            if not symbol:
+                continue
+            qty = float(row.get("qty", 0) or 0)
+            positions[symbol] = qty
+    except Exception as exc:
+        warnings.append(f"position_state_unavailable:{exc.__class__.__name__}")
+
+    return AccountState(daily_pnl=daily_pnl, open_positions=len(positions), positions=positions), warnings
+
+
 def _get_client_ip(headers: Dict[str, str], client_address: tuple | None) -> str:
     """Get client IP with X-Forwarded-For support and trusted proxy validation.
 
@@ -334,17 +405,23 @@ def process_webhook_payload(
     """Validate signal, derive context modifiers, run risk, optionally execute paper order."""
     validation = validate_signal_payload(payload)
 
-    if state is None:
-        state = AccountState(daily_pnl=0.0, open_positions=0)
     if config is None:
-        config = RiskConfig(
-            kill_switch_enabled=False,
-            daily_loss_cap=100.0,
-            max_position_size=1.0,
-            max_open_positions=3,
-        )
+        config = _risk_config_from_env()
     if paper_execute is None:
         paper_execute = _env_flag("PAPER_EXECUTE", default=False)
+
+    state_warnings: list[str] = []
+    if state is None:
+        if _env_flag("BROKER_ACCOUNT_STATE_ENABLED", default=True):
+            try:
+                state_adapter = AlpacaPaperAdapter()
+                state, state_warnings = _account_state_from_broker(state_adapter)
+            except Exception as exc:
+                logger.warning("Broker account state unavailable; using conservative empty state: %s", exc)
+                state_warnings = [f"account_state_adapter_unavailable:{exc.__class__.__name__}"]
+                state = _default_account_state()
+        else:
+            state = _default_account_state()
 
     if not validation["ok"]:
         return {
@@ -439,6 +516,19 @@ def process_webhook_payload(
                 "paper_execute": True,
                 "paper_only": True,
             }
+            accepted = False
+            reasons.append(str(exc))
+        except Exception as exc:
+            logger.exception("Paper execution failed")
+            execution = {
+                "executed": False,
+                "status": "execution_failed",
+                "reason": exc.__class__.__name__,
+                "paper_execute": True,
+                "paper_only": True,
+            }
+            accepted = False
+            reasons.append(f"Paper execution failed: {exc.__class__.__name__}")
 
     return {
         "accepted": accepted,
@@ -453,9 +543,31 @@ def process_webhook_payload(
             "confidence_adjustment": decision_context["confidence_adjustment"],
         },
         "risk": risk_decision,
+        "state_warnings": state_warnings,
         "execution": execution,
         "paper_only": True,
     }
+
+
+def _public_webhook_response(result: Dict[str, Any]) -> Dict[str, Any]:
+    """Return a non-secret webhook response with explicit execution semantics."""
+    execution = result.get("execution") if isinstance(result.get("execution"), dict) else {}
+    execution_status = execution.get("status") or ("accepted" if result.get("accepted") else "rejected")
+    broker_result = execution.get("broker_result") if isinstance(execution.get("broker_result"), dict) else {}
+    response: Dict[str, Any] = {
+        "accepted": bool(result.get("accepted")),
+        "status": execution_status,
+        "execution_status": execution_status,
+        "executed": bool(execution.get("executed", False)),
+        "paper_execute": bool(execution.get("paper_execute", False)),
+        "paper_only": True,
+    }
+    if result.get("reasons"):
+        response["reasons"] = result.get("reasons")
+    order_id = broker_result.get("id") or broker_result.get("order_id")
+    if order_id:
+        response["order_id"] = str(order_id)
+    return response
 
 
 def _append_log(record: Dict[str, Any], *, log_path: Path = LOG_PATH) -> None:
@@ -571,12 +683,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
         })
         _append_log(record)
 
-        accepted = bool(result.get("accepted"))
-        response = {
-            "accepted": accepted,
-            "status": "accepted" if accepted else "rejected",
-            "paper_only": True,
-        }
+        response = _public_webhook_response(result)
         self._send_json(status, response)
 
     def do_GET(self) -> None:  # noqa: N802

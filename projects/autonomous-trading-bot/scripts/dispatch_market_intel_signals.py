@@ -172,7 +172,7 @@ def _signal_key(sig: dict[str, Any]) -> str:
     return hashlib.sha256(f"{title}|{ts}|{src}".encode()).hexdigest()
 
 
-def _normalize_side(sig: dict[str, Any]) -> str:
+def _normalize_side(sig: dict[str, Any]) -> str | None:
     primary_instrument = sig.get("primary_instrument")
     if isinstance(primary_instrument, dict):
         direction_bias = str(primary_instrument.get("direction_bias", "")).lower().strip()
@@ -181,12 +181,12 @@ def _normalize_side(sig: dict[str, Any]) -> str:
         if direction_bias == "long":
             return "buy"
 
-    rec = str(sig.get("recommendation", "TAKE")).upper()
+    rec = str(sig.get("recommendation", "")).upper().strip()
     if rec in {"TAKE", "BUY", "LONG", "STRONG BUY", "HIGH_PRIORITY", "WATCH"}:
         return "buy"
     if rec in {"SELL", "SHORT"}:
         return "sell"
-    return "buy"
+    return None
 
 
 def _post_webhook(url: str, body: dict[str, Any], secret: str | None = None) -> tuple[int, dict[str, Any] | str]:
@@ -255,12 +255,15 @@ def _legacy_dispatch_payload(sig: dict[str, Any], *, now: datetime, qty: float) 
     symbol_decision = map_signal_to_symbol(sig)
     if not symbol_decision.symbol:
         return None
+    side = _normalize_side(sig)
+    if side is None:
+        return None
 
     return {
         "symbol": symbol_decision.symbol,
-        "side": _normalize_side(sig),
+        "side": side,
         "qty": qty,
-        "timestamp": now.isoformat(),
+        "timestamp": sig.get("timestamp") or now.isoformat(),
         "strategy": "market-intel-auto",
         "source_title": sig.get("title", ""),
         "source_url": sig.get("url", ""),
@@ -280,11 +283,15 @@ def _candidate_dispatch_payload(candidate: dict[str, Any], *, now: datetime, qty
     if not symbol:
         return None
 
+    side = _normalize_side(candidate)
+    if side is None:
+        return None
+
     return {
         "symbol": symbol,
-        "side": _normalize_side(candidate),
+        "side": side,
         "qty": qty,
-        "timestamp": now.isoformat(),
+        "timestamp": candidate.get("source_timestamp") or now.isoformat(),
         "strategy": "market-intel-auto",
         "source_title": candidate.get("source_title", ""),
         "source_url": candidate.get("source_url", ""),
@@ -434,14 +441,15 @@ def main() -> int:
         if isinstance(resp, dict):
             stored_resp = {k: v for k, v in resp.items() if k.lower() not in ("secret", "token", "auth", "api_key")}
         
-        sent[key] = {
-            "title": sig.get("source_title", sig.get("title", "")),
-            "timestamp": now.isoformat(),
-            "status": status,
-            "accepted": accepted,
-            "source_mode": signal_source,
-            "response": stored_resp,
-        }
+        if accepted:
+            sent[key] = {
+                "title": sig.get("source_title", sig.get("title", "")),
+                "timestamp": now.isoformat(),
+                "status": status,
+                "accepted": accepted,
+                "source_mode": signal_source,
+                "response": stored_resp,
+            }
 
         value_chain_suffix = ""
         if signal_source == "execution_candidates":

@@ -127,6 +127,12 @@ class AlpacaPaperAdapter:
             return data
         return []
 
+    def get_account(self) -> Dict[str, Any]:
+        data = self._request("GET", "/v2/account")
+        if isinstance(data, dict):
+            return data
+        return {}
+
     def validate_symbol(self, symbol: str) -> tuple[bool, str]:
         """Validate symbol against Alpaca assets endpoint.
 

@@ -56,6 +56,15 @@ class TestRiskManager(unittest.TestCase):
 
         self.assertTrue(decision["allow"])
 
+    def test_allows_sell_when_long_inventory_exists(self):
+        """Test that sell signals are allowed when matching long inventory exists."""
+        state = AccountState(daily_pnl=0.0, open_positions=1, positions={"AAPL": 2.0})
+        signal = {"symbol": "AAPL", "side": "sell", "qty": 1, "timestamp": "2026-03-01T00:00:00Z"}
+
+        decision = evaluate_risk_decision(signal, state, self._base_config())
+
+        self.assertTrue(decision["allow"])
+
     # === Kill Switch Tests ===
 
     def test_denies_when_kill_switch_enabled(self):
@@ -177,6 +186,28 @@ class TestRiskManager(unittest.TestCase):
 
         self.assertTrue(decision["allow"])
 
+    # === Sell Inventory Tests ===
+
+    def test_denies_sell_without_long_inventory(self):
+        """Test that sell signals are denied when no matching long position exists."""
+        state = AccountState(daily_pnl=0.0, open_positions=0, positions={})
+        signal = {"symbol": "AAPL", "side": "sell", "qty": 1, "timestamp": "2026-03-01T00:00:00Z"}
+
+        decision = evaluate_risk_decision(signal, state, self._base_config())
+
+        self.assertFalse(decision["allow"])
+        self.assertTrue(any("Sell blocked" in reason for reason in decision["reasons"]))
+
+    def test_denies_sell_larger_than_long_inventory(self):
+        """Test that sell signals cannot exceed available long inventory."""
+        state = AccountState(daily_pnl=0.0, open_positions=1, positions={"AAPL": 0.5})
+        signal = {"symbol": "AAPL", "side": "sell", "qty": 1, "timestamp": "2026-03-01T00:00:00Z"}
+
+        decision = evaluate_risk_decision(signal, state, self._base_config())
+
+        self.assertFalse(decision["allow"])
+        self.assertTrue(any("exceeds long position" in reason for reason in decision["reasons"]))
+
     # === Max Open Positions Tests ===
 
     def test_denies_when_max_open_positions_reached(self):
@@ -253,8 +284,8 @@ class TestRiskManager(unittest.TestCase):
         decision = evaluate_risk_decision(self._base_signal(), self._base_state(), self._base_config())
 
         self.assertIn("checked_rules", decision)
-        self.assertEqual(len(decision["checked_rules"]), 4)
-        expected_rules = ["kill_switch", "daily_loss_cap", "max_position_size", "max_open_positions"]
+        self.assertEqual(len(decision["checked_rules"]), 5)
+        expected_rules = ["kill_switch", "daily_loss_cap", "max_position_size", "max_open_positions", "sell_inventory"]
         for rule in expected_rules:
             self.assertIn(rule, decision["checked_rules"])
 

@@ -1,4 +1,6 @@
 import unittest
+from datetime import datetime, timedelta, timezone
+from unittest.mock import patch
 
 from src.signal_validator import validate_signal_payload
 from tests.fixtures import VALID_PAYLOADS, INVALID_PAYLOADS, EDGE_CASE_PAYLOADS
@@ -9,6 +11,7 @@ class TestSignalValidator(unittest.TestCase):
 
     # === Valid Payload Tests ===
 
+    @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)
     def test_valid_payload_basic_buy(self):
         """Test basic valid buy signal."""
         payload = {
@@ -22,6 +25,7 @@ class TestSignalValidator(unittest.TestCase):
         self.assertEqual(result["errors"], [])
         self.assertEqual(result["normalized"]["side"], "buy")
 
+    @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)
     def test_valid_payload_basic_sell(self):
         """Test basic valid sell signal."""
         payload = {
@@ -34,6 +38,7 @@ class TestSignalValidator(unittest.TestCase):
         self.assertTrue(result["ok"])
         self.assertEqual(result["normalized"]["side"], "sell")
 
+    @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)
     def test_valid_payload_float_quantity(self):
         """Test valid payload with float quantity."""
         payload = {
@@ -45,6 +50,7 @@ class TestSignalValidator(unittest.TestCase):
         result = validate_signal_payload(payload)
         self.assertTrue(result["ok"])
 
+    @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)
     def test_valid_payload_side_normalization_uppercase(self):
         """Test that uppercase side is normalized to lowercase."""
         payload = {
@@ -57,6 +63,7 @@ class TestSignalValidator(unittest.TestCase):
         self.assertTrue(result["ok"])
         self.assertEqual(result["normalized"]["side"], "buy")
 
+    @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)
     def test_valid_payload_side_normalization_mixed_case(self):
         """Test that mixed case side is normalized to lowercase."""
         payload = {
@@ -221,6 +228,7 @@ class TestSignalValidator(unittest.TestCase):
         # Should have errors for all 4 required fields
         self.assertGreaterEqual(len(result["errors"]), 4)
 
+    @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)
     def test_extra_fields_ignored(self):
         """Test that extra fields are ignored and don't cause errors."""
         payload = {
@@ -238,8 +246,38 @@ class TestSignalValidator(unittest.TestCase):
         self.assertIn("price", result["normalized"])
         self.assertIn("strategy", result["normalized"])
 
+    def test_stale_signal_timestamp_is_rejected(self):
+        """Test that old source signals cannot be freshly signed and executed."""
+        old_ts = (datetime.now(timezone.utc) - timedelta(seconds=901)).isoformat()
+        payload = {
+            "symbol": "AAPL",
+            "side": "buy",
+            "qty": 10,
+            "timestamp": old_ts,
+        }
+
+        result = validate_signal_payload(payload)
+
+        self.assertFalse(result["ok"])
+        self.assertTrue(any("timestamp' is stale" in error for error in result["errors"]))
+
+    def test_recent_signal_timestamp_is_valid(self):
+        """Test that recent source signals remain valid."""
+        recent_ts = (datetime.now(timezone.utc) - timedelta(seconds=60)).isoformat()
+        payload = {
+            "symbol": "AAPL",
+            "side": "buy",
+            "qty": 10,
+            "timestamp": recent_ts,
+        }
+
+        result = validate_signal_payload(payload)
+
+        self.assertTrue(result["ok"], result["errors"])
+
     # === Fixture-Based Tests ===
 
+    @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)
     def test_all_valid_payloads_from_fixtures(self):
         """Test all valid payloads from fixtures."""
         for fixture in VALID_PAYLOADS:
@@ -265,6 +303,7 @@ class TestSignalValidator(unittest.TestCase):
                         f"Expected error containing '{fixture['expected_error']}' not found in {result['errors']}"
                     )
 
+    @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)
     def test_all_edge_cases_from_fixtures(self):
         """Test all edge case payloads from fixtures."""
         for fixture in EDGE_CASE_PAYLOADS:

@@ -1,14 +1,15 @@
 import unittest
-from unittest.mock import patch
+from datetime import datetime, timezone
+from unittest.mock import Mock, patch
 
 from src.risk_manager import AccountState, RiskConfig
-from src.webhook_receiver import process_webhook_payload
+from src.webhook_receiver import _public_webhook_response, process_webhook_payload
 
 
 class TestWebhookReceiver(unittest.TestCase):
     @staticmethod
     def _payload():
-        return {"symbol": "AAPL", "side": "buy", "qty": 1, "timestamp": "2026-03-01T00:00:00Z"}
+        return {"symbol": "AAPL", "side": "buy", "qty": 1, "timestamp": datetime.now(timezone.utc).isoformat()}
 
     @staticmethod
     def _state():
@@ -62,6 +63,111 @@ class TestWebhookReceiver(unittest.TestCase):
         self.assertEqual(result["validation"]["normalized"]["candidate_id"], "cand_1")
         self.assertEqual(result["validation"]["normalized"]["pattern_name"], "AI Momentum")
         self.assertEqual(result["execution"]["status"], "dry_run")
+
+    @patch.dict("os.environ", {"KILL_SWITCH": "true"}, clear=False)
+    @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})
+    def test_default_risk_config_honors_env_kill_switch(self, _mock_context):
+        result = process_webhook_payload(
+            self._payload(),
+            state=self._state(),
+            config=None,
+            paper_execute=False,
+        )
+
+        self.assertFalse(result["accepted"])
+        self.assertIn("Kill switch is enabled. Trading is blocked.", result["reasons"])
+        self.assertFalse(result["risk"]["allow"])
+
+    @patch.dict("os.environ", {"KILL_SWITCH": "false", "MAX_POSITION_SIZE": "0.5"}, clear=False)
+    @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})
+    def test_default_risk_config_honors_env_position_size(self, _mock_context):
+        result = process_webhook_payload(
+            self._payload(),
+            state=self._state(),
+            config=None,
+            paper_execute=False,
+        )
+
+        self.assertFalse(result["accepted"])
+        self.assertIn("Position size exceeds max: qty=1.0 > max_position_size=0.5.", result["reasons"])
+
+    @patch.dict("os.environ", {"KILL_SWITCH": "false", "BROKER_ACCOUNT_STATE_ENABLED": "true"}, clear=False)
+    @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})
+    @patch("src.webhook_receiver.AlpacaPaperAdapter")
+    def test_default_account_state_uses_broker_positions_for_sell_guard(self, mock_adapter_cls, _mock_context):
+        adapter = Mock()
+        adapter.get_account.return_value = {"equity": "1000.00", "last_equity": "1000.00"}
+        adapter.list_positions.return_value = [{"symbol": "AAPL", "qty": "2"}]
+        mock_adapter_cls.return_value = adapter
+        payload = {**self._payload(), "side": "sell"}
+
+        result = process_webhook_payload(
+            payload,
+            state=None,
+            config=None,
+            paper_execute=False,
+        )
+
+        self.assertTrue(result["accepted"])
+        self.assertEqual(result["state_warnings"], [])
+        self.assertTrue(adapter.get_account.called)
+        self.assertTrue(adapter.list_positions.called)
+
+    @patch.dict("os.environ", {"KILL_SWITCH": "false", "BROKER_ACCOUNT_STATE_ENABLED": "true"}, clear=False)
+    @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})
+    @patch("src.webhook_receiver.AlpacaPaperAdapter")
+    def test_default_account_state_blocks_sell_without_inventory(self, mock_adapter_cls, _mock_context):
+        adapter = Mock()
+        adapter.get_account.return_value = {"equity": "1000.00", "last_equity": "1000.00"}
+        adapter.list_positions.return_value = []
+        mock_adapter_cls.return_value = adapter
+        payload = {**self._payload(), "side": "sell"}
+
+        result = process_webhook_payload(
+            payload,
+            state=None,
+            config=None,
+            paper_execute=False,
+        )
+
+        self.assertFalse(result["accepted"])
+        self.assertTrue(any("Sell blocked" in reason for reason in result["reasons"]))
+
+    def test_public_response_includes_execution_status_for_dry_run(self):
+        result = process_webhook_payload(
+            self._payload(),
+            state=self._state(),
+            config=self._config(),
+            paper_execute=False,
+        )
+
+        response = _public_webhook_response(result)
+
+        self.assertTrue(response["accepted"])
+        self.assertFalse(response["executed"])
+        self.assertEqual(response["execution_status"], "dry_run")
+        self.assertEqual(response["status"], "dry_run")
+
+    @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})
+    @patch("src.webhook_receiver.ExecutionOrchestrator")
+    @patch("src.webhook_receiver.AlpacaPaperAdapter")
+    def test_paper_execution_failure_is_rejected(self, _mock_adapter_cls, mock_orchestrator_cls, _mock_context):
+        orchestrator = Mock()
+        orchestrator.execute.side_effect = RuntimeError("broker unavailable")
+        mock_orchestrator_cls.return_value = orchestrator
+
+        result = process_webhook_payload(
+            self._payload(),
+            state=self._state(),
+            config=self._config(),
+            paper_execute=True,
+        )
+
+        self.assertFalse(result["accepted"])
+        self.assertEqual(result["execution"]["status"], "execution_failed")
+        response = _public_webhook_response(result)
+        self.assertFalse(response["accepted"])
+        self.assertEqual(response["execution_status"], "execution_failed")
 
 
 if __name__ == "__main__":

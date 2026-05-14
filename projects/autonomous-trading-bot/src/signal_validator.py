@@ -1,5 +1,6 @@
 """Basic webhook payload schema validation for paper-mode foundation."""
 
+import os
 import re
 from datetime import datetime, timezone
 from typing import Any, Dict, List
@@ -23,15 +24,49 @@ MAX_STRING_LENGTH = 1000
 TICKER_REGEX = re.compile(r'^[A-Z0-9]{1,10}(\.[A-Z0-9]{1,5})?$')
 
 
+def _parse_timestamp(ts: str) -> datetime | None:
+    """Parse ISO-8601 timestamp into an aware datetime."""
+    try:
+        ts_clean = ts.replace("Z", "+00:00")
+        parsed = datetime.fromisoformat(ts_clean)
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc)
+    except (ValueError, TypeError):
+        return None
+
+
 def _validate_timestamp(ts: str) -> bool:
     """Validate ISO-8601 timestamp format."""
+    return _parse_timestamp(ts) is not None
+
+
+def _max_signal_age_seconds() -> int:
+    value = os.getenv("MAX_SIGNAL_AGE_SECONDS", "900")
     try:
-        # Accept various ISO-8601 formats
-        ts_clean = ts.replace("Z", "+00:00")
-        datetime.fromisoformat(ts_clean)
-        return True
-    except (ValueError, TypeError):
-        return False
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return 900
+    return parsed if parsed > 0 else 900
+
+
+def _validate_signal_freshness(ts: str) -> str | None:
+    """Reject stale or far-future trading signals.
+
+    Request HMAC freshness only proves the request is fresh. This check ensures
+    the source trading signal itself is also recent enough to act on.
+    """
+    parsed = _parse_timestamp(ts)
+    if parsed is None:
+        return None
+    now = datetime.now(timezone.utc)
+    age = (now - parsed).total_seconds()
+    max_age = _max_signal_age_seconds()
+    if age > max_age:
+        return f"Field 'timestamp' is stale: age_seconds={age:.0f} > max_signal_age_seconds={max_age}."
+    if age < -300:
+        return "Field 'timestamp' is too far in the future."
+    return None
 
 
 def _validate_ticker(symbol: str) -> bool:
@@ -89,10 +124,14 @@ def validate_signal_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
     if isinstance(qty, (int, float)) and qty <= 0:
         errors.append("Field 'qty' must be greater than 0.")
 
-    # Validate timestamp format
+    # Validate timestamp format and signal freshness. HMAC request freshness is separate.
     timestamp = str(payload.get("timestamp", ""))
     if timestamp and not _validate_timestamp(timestamp):
         errors.append("Field 'timestamp' must be valid ISO-8601 format")
+    elif timestamp:
+        freshness_error = _validate_signal_freshness(timestamp)
+        if freshness_error:
+            errors.append(freshness_error)
 
     # Validate optional string fields length
     for field_name, max_len in [
