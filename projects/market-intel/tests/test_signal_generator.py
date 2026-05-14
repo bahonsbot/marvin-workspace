@@ -29,6 +29,13 @@ class SignalGeneratorTest(unittest.TestCase):
                 "confidence": "HIGH",
                 "time_horizon": "intraday",
             },
+            {
+                "id": "p025",
+                "name": "UK LDI/Gilt Crisis 2022",
+                "category": "financial_credit",
+                "confidence": "HIGH",
+                "time_horizon": "intraday",
+            },
         ]
         return gen
 
@@ -43,6 +50,25 @@ class SignalGeneratorTest(unittest.TestCase):
         stressed = gen.match_alert_to_patterns({"source": "rss", "title": "Regional bank deposit outflows trigger funding pressure"})
         self.assertEqual(normal, [])
         self.assertTrue(any(item["pattern_id"] == "p018" for item in stressed))
+
+    def test_pattern_coverage_report_exposes_unsupported_patterns(self) -> None:
+        gen = self._generator()
+        report = gen.pattern_coverage_report()
+        unsupported = {item["pattern_id"] for item in report["unsupported_patterns"]}
+        self.assertIn("p025", unsupported)
+        self.assertEqual(report["total_patterns"], 3)
+        self.assertEqual(report["supported_count"], 2)
+
+    def test_false_positive_regression_cases_remain_suppressed(self) -> None:
+        gen = self._generator()
+        cases = [
+            "Quick favor: 1-minute survey for college research project",
+            "MSTR investor Q&A delayed while retail holders ask questions",
+            "ABN Amro CEO says loan growth can withstand rate hikes",
+        ]
+        for title in cases:
+            with self.subTest(title=title):
+                self.assertEqual(gen.match_alert_to_patterns({"source": "rss", "title": title}), [])
 
 
 if __name__ == "__main__":

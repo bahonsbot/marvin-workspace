@@ -151,9 +151,47 @@ class SignalGenerator:
         """
         matches = []
         text = self._alert_text_enriched(alert) if use_enriched else self._alert_text_baseline(alert)
-        
-        # Pattern-specific keywords with scoring - REFINED
-        pattern_keywords = {
+
+        pattern_keywords = self.pattern_rules()
+
+        # Check each pattern
+        for pattern in self.patterns:
+            rule = pattern_keywords.get(pattern['id'], {'keywords': [], 'exclude': [], 'weight': 1})
+            keywords = rule.get('keywords', [])
+            excludes = rule.get('exclude', [])
+            weight = rule.get('weight', 1)
+
+            for kw in keywords:
+                if self._phrase_in_text(kw, text):
+                    # Check exclusions - skip if any exclusion keyword found
+                    should_exclude = False
+                    for exc in excludes:
+                        if self._phrase_in_text(exc, text):
+                            should_exclude = True
+                            break
+
+                    if not should_exclude and self._pattern_context_ok(pattern['id'], kw, text):
+                        matches.append({
+                            'pattern_id': pattern['id'],
+                            'pattern_name': pattern['name'],
+                            'category': pattern['category'],
+                            'confidence': pattern['confidence'],
+                            'time_horizon': pattern['time_horizon'],
+                            'matched_keyword': kw,
+                            'match_weight': weight
+                        })
+                    break  # Only match once per pattern
+
+        return matches
+
+    def pattern_rules(self) -> Dict[str, Dict]:
+        """Return explicit keyword rules used by the signal matcher.
+
+        Keeping this as a method, rather than a local variable inside matching,
+        lets tests and audit scripts report which canonical patterns are actually
+        detectable.
+        """
+        return {
             'p001': {  # Saudi Oil - ONLY Middle East
                 'keywords': ['saudi', 'opec', 'abqaiq', 'khurais', 'aramco', 'gulf oil'],
                 'exclude': ['ukraine', 'russia', 'drone strike', 'military facility'],
@@ -357,36 +395,71 @@ class SignalGenerator:
                 'weight': 3
             }
         }
-        
-        # Check each pattern
-        for pattern in self.patterns:
-            rule = pattern_keywords.get(pattern['id'], {'keywords': [], 'exclude': [], 'weight': 1})
-            keywords = rule.get('keywords', [])
-            excludes = rule.get('exclude', [])
-            weight = rule.get('weight', 1)
-            
-            for kw in keywords:
-                if self._phrase_in_text(kw, text):
-                    # Check exclusions - skip if any exclusion keyword found
-                    should_exclude = False
-                    for exc in excludes:
-                        if self._phrase_in_text(exc, text):
-                            should_exclude = True
-                            break
-                    
-                    if not should_exclude and self._pattern_context_ok(pattern['id'], kw, text):
-                        matches.append({
-                        'pattern_id': pattern['id'],
-                        'pattern_name': pattern['name'],
-                        'category': pattern['category'],
-                        'confidence': pattern['confidence'],
-                        'time_horizon': pattern['time_horizon'],
-                        'matched_keyword': kw,
-                        'match_weight': weight
-                    })
-                    break  # Only match once per pattern
-        
-        return matches
+
+    def pattern_coverage_report(self) -> Dict:
+        """Audit canonical pattern coverage and known rule-quality risks."""
+        rules = self.pattern_rules()
+        canonical = {p.get('id'): p for p in self.patterns if p.get('id')}
+        supported = []
+        unsupported = []
+        quality_warnings = []
+
+        broad_keywords = {
+            'fed', 'federal reserve', 'jobs report', 'bank stocks', 'private credit',
+            'retail investors', 'navy', 'chewy', 'rate cut', 'rate hike', 'monetary policy',
+        }
+
+        for pid, pattern in sorted(canonical.items()):
+            rule = rules.get(pid)
+            keywords = list(rule.get('keywords', [])) if rule else []
+            excludes = list(rule.get('exclude', [])) if rule else []
+            if keywords:
+                supported.append(pid)
+            else:
+                unsupported.append({
+                    'pattern_id': pid,
+                    'pattern_name': pattern.get('name'),
+                    'category': pattern.get('category'),
+                    'confidence': pattern.get('confidence'),
+                    'reason': 'no_keyword_rule',
+                })
+                continue
+
+            flags = []
+            broad_hits = sorted(set(keywords) & broad_keywords)
+            if broad_hits:
+                flags.append({'type': 'broad_keywords', 'keywords': broad_hits})
+            if pattern.get('confidence') in {'HIGH', 'MEDIUM_HIGH'} and not excludes:
+                flags.append({'type': 'no_exclusions_on_high_confidence_rule'})
+            if pid in {'p005', 'p018'}:
+                flags.append({'type': 'requires_context_gate'})
+
+            if flags:
+                quality_warnings.append({
+                    'pattern_id': pid,
+                    'pattern_name': pattern.get('name'),
+                    'flags': flags,
+                })
+
+        total = len(canonical)
+        return {
+            'generated_at': datetime.now(timezone.utc).isoformat(),
+            'total_patterns': total,
+            'supported_count': len(supported),
+            'unsupported_count': len(unsupported),
+            'coverage_pct': round((len(supported) / total) * 100, 1) if total else 0.0,
+            'supported_pattern_ids': supported,
+            'unsupported_patterns': unsupported,
+            'rule_quality_warnings': quality_warnings,
+        }
+
+    def save_pattern_coverage_report(self, output_file: str = 'data/pattern_quality_audit.json') -> Dict:
+        report = self.pattern_coverage_report()
+        output_path = self.resolve_path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with output_path.open('w', encoding='utf-8') as f:
+            json.dump(report, f, indent=2)
+        return report
     
     def generate_signals(self, use_enriched: bool = False) -> List[Dict]:
         """Generate signals from all alerts.

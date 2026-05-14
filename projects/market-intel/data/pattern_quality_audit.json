@@ -1,0 +1,320 @@
+{
+  "generated_at": "2026-05-14T07:49:25.783974+00:00",
+  "total_patterns": 42,
+  "supported_count": 32,
+  "unsupported_count": 10,
+  "coverage_pct": 76.2,
+  "supported_pattern_ids": [
+    "p001",
+    "p002",
+    "p003",
+    "p004",
+    "p005",
+    "p006",
+    "p007",
+    "p008",
+    "p009",
+    "p010",
+    "p011",
+    "p012",
+    "p013",
+    "p014",
+    "p015",
+    "p016",
+    "p017",
+    "p018",
+    "p019",
+    "p020",
+    "p021",
+    "p022",
+    "p023",
+    "p024",
+    "p035",
+    "p036",
+    "p037",
+    "p038",
+    "p039",
+    "p040",
+    "p041",
+    "p042"
+  ],
+  "unsupported_patterns": [
+    {
+      "pattern_id": "p025",
+      "pattern_name": "UK LDI/Gilt Crisis 2022",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p026",
+      "pattern_name": "VIX ETN Volmageddon 2018",
+      "category": "financial_credit",
+      "confidence": "HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p027",
+      "pattern_name": "Swiss Franc Unpeg Shock 2015",
+      "category": "macroeconomic",
+      "confidence": "HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p028",
+      "pattern_name": "Yen Carry Unwind Regime",
+      "category": "macroeconomic",
+      "confidence": "MEDIUM_HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p029",
+      "pattern_name": "US Regional CRE Stress Wave",
+      "category": "financial_credit",
+      "confidence": "MEDIUM_HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p030",
+      "pattern_name": "Mega-Cap Earnings Shock",
+      "category": "corporate",
+      "confidence": "MEDIUM_HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p031",
+      "pattern_name": "M&A Antitrust Block",
+      "category": "corporate",
+      "confidence": "MEDIUM_HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p032",
+      "pattern_name": "US Government Shutdown",
+      "category": "political",
+      "confidence": "MEDIUM_HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p033",
+      "pattern_name": "US Tariff War Escalation",
+      "category": "political",
+      "confidence": "HIGH",
+      "reason": "no_keyword_rule"
+    },
+    {
+      "pattern_id": "p034",
+      "pattern_name": "Major Accounting Scandal",
+      "category": "corporate",
+      "confidence": "MEDIUM_HIGH",
+      "reason": "no_keyword_rule"
+    }
+  ],
+  "rule_quality_warnings": [
+    {
+      "pattern_id": "p005",
+      "pattern_name": "GameStop Short Squeeze",
+      "flags": [
+        {
+          "type": "broad_keywords",
+          "keywords": [
+            "chewy",
+            "navy",
+            "retail investors"
+          ]
+        },
+        {
+          "type": "requires_context_gate"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p006",
+      "pattern_name": "SVB Collapse",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p007",
+      "pattern_name": "Evergrande Crisis",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p008",
+      "pattern_name": "FTX Collapse",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p009",
+      "pattern_name": "Brexit Vote",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p011",
+      "pattern_name": "Black Monday 1987",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p012",
+      "pattern_name": "Japan Lost Decade",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p013",
+      "pattern_name": "Arab Spring",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p014",
+      "pattern_name": "US Credit Rating Downgrade",
+      "flags": [
+        {
+          "type": "broad_keywords",
+          "keywords": [
+            "federal reserve",
+            "jobs report",
+            "monetary policy",
+            "rate cut",
+            "rate hike"
+          ]
+        }
+      ]
+    },
+    {
+      "pattern_id": "p015",
+      "pattern_name": "China Devaluation 2015",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p017",
+      "pattern_name": "Tension Taiwan/China",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p018",
+      "pattern_name": "Regional Banking Crisis 2023",
+      "flags": [
+        {
+          "type": "broad_keywords",
+          "keywords": [
+            "bank stocks",
+            "private credit"
+          ]
+        },
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        },
+        {
+          "type": "requires_context_gate"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p019",
+      "pattern_name": "Asian Financial Crisis 1997",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p020",
+      "pattern_name": "European Debt Crisis",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p021",
+      "pattern_name": "Emerging Market Crisis 2018",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p022",
+      "pattern_name": "LTCM Collapse",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p023",
+      "pattern_name": "Dot-com Bubble",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p037",
+      "pattern_name": "Treasury Dash for Cash 2020",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p041",
+      "pattern_name": "Consumer Trade-Down / Retail Margin Shock",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    },
+    {
+      "pattern_id": "p042",
+      "pattern_name": "Ever Given / Suez Blockage",
+      "flags": [
+        {
+          "type": "no_exclusions_on_high_confidence_rule"
+        }
+      ]
+    }
+  ]
+}
