@@ -353,3 +353,21 @@ The dispatch script now uses intelligent symbol mapping instead of defaulting to
 - 60+ company tickers (mega-cap + frequently mentioned)
 
 **Fallback:** Signals without valid ticker mapping are skipped (no blind AAPL trades).
+
+### Paper Explorer Lane (optional)
+A separate paper-only explorer lane can dispatch one creative idea from the Market Intel shadow ticker research artifact:
+- source artifact: `projects/market-intel/data/ticker_research_shadow.json`
+- enable with `AUTO_EXPLORER_ENABLED=true`
+- default size: `AUTO_EXPLORER_QTY=0.5`
+- default cap: `AUTO_EXPLORER_MAX_PER_RUN=1`
+- default minimum research confidence: `AUTO_EXPLORER_MIN_CONFIDENCE=0.60`
+
+The conservative lane remains unchanged. Explorer orders use strategy `market-intel-explorer`, mode `ticker_research_explorer`, and their own `explorer_sent` idempotency bucket in `data/state/auto_signal_dispatch.json`.
+
+Explorer selection prefers, in order:
+1. hidden supplier
+2. second-order beneficiary
+3. hedge/short leg
+4. ETF fallback
+
+This lane is intended for paper-learning only: it lets the bot test more creative/niche ticker expressions without promoting the shadow artifact into the main execution path.

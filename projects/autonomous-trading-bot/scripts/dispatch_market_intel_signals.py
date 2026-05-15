@@ -34,6 +34,7 @@ except ImportError:
     from symbol_mapper import map_signal_to_symbol
 MI_DATA = ROOT.parent / "market-intel" / "data"
 STATE_PATH = ROOT / "data" / "state" / "auto_signal_dispatch.json"
+TICKER_RESEARCH_SHADOW_PATH = ROOT.parent / "market-intel" / "data" / "ticker_research_shadow.json"
 
 
 def _load_env() -> None:
@@ -63,6 +64,10 @@ class Config:
     fast_qty_multiplier: float
     fast_geo_threshold: int
     fast_high_conf_threshold: int
+    explorer_enabled: bool
+    explorer_qty: float
+    explorer_max_per_run: int
+    explorer_min_confidence: float
 
 
 def _env_value(name: str, default: str = "") -> str:
@@ -109,6 +114,10 @@ def _cfg() -> Config:
         fast_qty_multiplier=float(_env_value("AUTO_FAST_QTY_MULTIPLIER", "1.25")),
         fast_geo_threshold=int(_env_value("AUTO_FAST_GEO_THRESHOLD", "3")),
         fast_high_conf_threshold=int(_env_value("AUTO_FAST_HIGH_CONF_THRESHOLD", "30")),
+        explorer_enabled=_env_value("AUTO_EXPLORER_ENABLED", "false").lower() in {"1", "true", "yes", "on"},
+        explorer_qty=float(_env_value("AUTO_EXPLORER_QTY", "0.5")),
+        explorer_max_per_run=int(_env_value("AUTO_EXPLORER_MAX_PER_RUN", "1")),
+        explorer_min_confidence=float(_env_value("AUTO_EXPLORER_MIN_CONFIDENCE", "0.60")),
     )
 
 
@@ -329,6 +338,89 @@ def _candidate_dispatch_payload(candidate: dict[str, Any], *, now: datetime, qty
     }
 
 
+
+def _load_ticker_research_shadow(path: Path = TICKER_RESEARCH_SHADOW_PATH) -> dict[str, Any]:
+    payload = _read_json(path, {})
+    if not isinstance(payload, dict):
+        return {}
+    promotion = payload.get("promotion")
+    if not isinstance(promotion, dict) or promotion.get("status") != "shadow_only":
+        return {}
+    by_candidate: dict[str, dict[str, Any]] = {}
+    for row in payload.get("candidates", []):
+        if not isinstance(row, dict):
+            continue
+        candidate_id = str(row.get("candidate_id") or "").strip()
+        if candidate_id:
+            by_candidate[candidate_id] = row
+    return by_candidate
+
+
+def _select_explorer_idea(row: dict[str, Any], *, min_confidence: float) -> dict[str, Any] | None:
+    role_preference = ["hidden_supplier", "second_order_beneficiary", "hedge_or_short_leg", "etf_fallback"]
+    ideas = [idea for idea in row.get("research_ideas", []) if isinstance(idea, dict)]
+    eligible = []
+    for idea in ideas:
+        if idea.get("executable") is not False or idea.get("dispatcher_eligible") is not False:
+            continue
+        symbol = str(idea.get("symbol") or "").upper().strip()
+        side = str(idea.get("side") or "").lower().strip()
+        if not symbol or side not in {"buy", "sell"}:
+            continue
+        if float(idea.get("research_confidence") or 0) < min_confidence:
+            continue
+        if str(idea.get("liquidity_tier") or "") not in {"very_high", "high", "medium"}:
+            continue
+        eligible.append(idea)
+
+    if not eligible:
+        return None
+
+    def rank(idea: dict[str, Any]) -> tuple[int, float, str]:
+        role = str(idea.get("role") or "")
+        try:
+            role_rank = role_preference.index(role)
+        except ValueError:
+            role_rank = len(role_preference)
+        return (role_rank, -float(idea.get("research_confidence") or 0), str(idea.get("symbol") or ""))
+
+    return sorted(eligible, key=rank)[0]
+
+
+def _explorer_dispatch_payload(candidate: dict[str, Any], idea: dict[str, Any], *, now: datetime, qty: float) -> dict[str, Any] | None:
+    symbol = str(idea.get("symbol") or "").upper().strip()
+    side = str(idea.get("side") or "").lower().strip()
+    if not symbol or side not in {"buy", "sell"}:
+        return None
+
+    return {
+        "symbol": symbol,
+        "side": side,
+        "qty": qty,
+        "timestamp": candidate.get("source_timestamp") or now.isoformat(),
+        "strategy": "market-intel-explorer",
+        "source_title": candidate.get("source_title", ""),
+        "source_url": candidate.get("source_url", ""),
+        "candidate_id": f"{candidate.get('candidate_id')}:explorer:{idea.get('role')}:{symbol}",
+        "signal_id": candidate.get("signal_id"),
+        "pattern_id": candidate.get("pattern_id"),
+        "pattern_name": candidate.get("pattern_name"),
+        "expected_horizon": candidate.get("expected_horizon"),
+        "evidence_strength": candidate.get("evidence_strength"),
+        "theme": candidate.get("theme"),
+        "chain_layer": candidate.get("chain_layer"),
+        "chain_sublayer": candidate.get("chain_sublayer"),
+        "market_intel_mode": "ticker_research_explorer",
+        "symbol_reasoning": f"explorer_{idea.get('role')}",
+        "symbol_category": candidate.get("category"),
+        "symbol_confidence": idea.get("research_confidence"),
+        "explorer_role": idea.get("role"),
+        "explorer_rationale": idea.get("rationale", ""),
+        "explorer_liquidity_tier": idea.get("liquidity_tier"),
+        "explorer_source": idea.get("source"),
+        "explorer_promotion_status": idea.get("promotion_status"),
+    }
+
 def _fast_regime_active(cfg: Config, context_summary: dict[str, Any]) -> bool:
     if not cfg.fast_regime_enabled:
         return False
@@ -391,9 +483,13 @@ def main() -> int:
 
     state = _load_state()
     sent = state["sent"]
+    explorer_sent = state.setdefault("explorer_sent", {})
+    shadow_by_candidate = _load_ticker_research_shadow() if cfg.explorer_enabled and signal_source == "execution_candidates" else {}
 
     dispatched = 0
     blocked = 0
+    explorer_dispatched = 0
+    explorer_blocked = 0
     lines: list[str] = []
 
     for warning in (candidate_load or {}).get("warnings", []):
@@ -482,6 +578,46 @@ def main() -> int:
                 f"⚠️ blocked status={status} [{signal_source}] | {str(body.get('source_title',''))[:60]}{value_chain_suffix}"
             )
 
+        if (
+            cfg.explorer_enabled
+            and signal_source == "execution_candidates"
+            and explorer_dispatched < max(0, cfg.explorer_max_per_run)
+        ):
+            shadow_row = shadow_by_candidate.get(str(sig.get("candidate_id") or ""))
+            idea = _select_explorer_idea(shadow_row or {}, min_confidence=cfg.explorer_min_confidence)
+            if idea is not None:
+                explorer_key = f"explorer:{sig.get('candidate_id')}:{idea.get('role')}:{idea.get('symbol')}"
+                if explorer_key not in explorer_sent:
+                    explorer_body = _explorer_dispatch_payload(sig, idea, now=now, qty=cfg.explorer_qty)
+                    if explorer_body is None:
+                        explorer_blocked += 1
+                    else:
+                        explorer_status, explorer_resp = _post_webhook(cfg.webhook_url, explorer_body, cfg.webhook_secret)
+                        explorer_accepted = isinstance(explorer_resp, dict) and bool(explorer_resp.get("accepted")) and explorer_status in {200, 201}
+                        stored_explorer_resp = explorer_resp
+                        if isinstance(explorer_resp, dict):
+                            stored_explorer_resp = {k: v for k, v in explorer_resp.items() if k.lower() not in ("secret", "token", "auth", "api_key")}
+                        if explorer_accepted:
+                            explorer_sent[explorer_key] = {
+                                "title": sig.get("source_title", ""),
+                                "timestamp": now.isoformat(),
+                                "status": explorer_status,
+                                "accepted": True,
+                                "source_mode": "ticker_research_explorer",
+                                "response": stored_explorer_resp,
+                            }
+                            explorer_dispatched += 1
+                            lines.append(
+                                f"🧪 explorer {explorer_body['symbol']} {explorer_body['side']} qty={cfg.explorer_qty} "
+                                f"role={idea.get('role')} | {str(idea.get('rationale', ''))[:60]}"
+                            )
+                        else:
+                            explorer_blocked += 1
+                            lines.append(
+                                f"⚠️ explorer blocked status={explorer_status} {explorer_body['symbol']} "
+                                f"role={idea.get('role')}"
+                            )
+
     mode_name = 'FAST' if fast_mode else 'CONSERVATIVE'
     mode_line = (
         f"mode={mode_name} "
@@ -500,8 +636,8 @@ def main() -> int:
     if mode_changed:
         _send_digest([f"🔁 mode switched: {state.get('last_mode')} → {mode_name}", mode_line, source_line])
 
-    if dispatched or blocked:
-        _send_digest([mode_line, source_line, f"dispatched={dispatched} blocked={blocked}"] + lines[:8])
+    if dispatched or blocked or explorer_dispatched or explorer_blocked:
+        _send_digest([mode_line, source_line, f"dispatched={dispatched} blocked={blocked} explorer_dispatched={explorer_dispatched} explorer_blocked={explorer_blocked}"] + lines[:8])
 
     state["last_mode"] = mode_name
     state["last_signal_source"] = signal_source
@@ -510,7 +646,7 @@ def main() -> int:
 
     print(
         f"dispatch complete: {mode_line} {source_line} "
-        f"dispatched={dispatched} blocked={blocked} mode_changed={mode_changed}"
+        f"dispatched={dispatched} blocked={blocked} explorer_dispatched={explorer_dispatched} explorer_blocked={explorer_blocked} mode_changed={mode_changed}"
     )
     return 0
 
