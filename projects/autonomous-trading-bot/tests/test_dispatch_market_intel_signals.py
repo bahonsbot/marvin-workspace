@@ -35,6 +35,24 @@ class TestDispatchMarketIntelSignals(unittest.TestCase):
         self.assertEqual(payload["timestamp"], "2026-05-14T11:55:00Z")
         self.assertEqual(payload["side"], "buy")
 
+    def test_shadow_ticker_research_artifact_is_not_loaded_for_dispatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            shadow_path = Path(tmp) / "ticker_research_shadow.json"
+            shadow_path.write_text(
+                '{"promotion":{"dispatcher_eligible":false},"candidates":[{"research_ideas":[{"symbol":"ZZZ","executable":false}]}]}',
+                encoding="utf-8",
+            )
+
+            with patch.object(dispatcher, "_read_json", return_value=[]), \
+                patch.object(dispatcher, "load_ready_execution_candidates", return_value={"ok": True, "candidates": [], "warnings": []}), \
+                patch.object(dispatcher, "_check_webhook_health", return_value=True), \
+                patch.object(dispatcher, "_post_webhook") as post_webhook, \
+                patch.dict("os.environ", {"WEBHOOK_SHARED_SECRET": "secret", "EXECUTION_CANDIDATES_ENABLED": "true"}, clear=False):
+                exit_code = dispatcher.main()
+
+            self.assertEqual(exit_code, 0)
+            post_webhook.assert_not_called()
+
     def test_rejected_webhook_response_is_not_marked_sent(self):
         with tempfile.TemporaryDirectory() as tmp:
             state_path = Path(tmp) / "auto_signal_dispatch.json"

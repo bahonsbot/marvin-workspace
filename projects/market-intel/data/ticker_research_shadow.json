@@ -1,0 +1,1032 @@
+{
+  "artifact": "ticker_research_shadow",
+  "schema_version": 1,
+  "mode": "research_only_shadow",
+  "generated_from": "execution_candidates.json",
+  "source_generated_at": "2026-05-15T11:47:40.487622Z",
+  "llm_assist": {
+    "status": "not_called_in_runtime",
+    "intended_role": "Future optional analyst pass can review and expand these deterministic ideas before promotion.",
+    "safety_note": "No LLM output is trusted for execution without deterministic validation and explicit promotion."
+  },
+  "promotion": {
+    "status": "shadow_only",
+    "dispatcher_eligible": false,
+    "live_order_path_changed": false
+  },
+  "summary": {
+    "candidate_count": 10,
+    "total_research_ideas": 27,
+    "ready_candidate_count": 2
+  },
+  "candidates": [
+    {
+      "candidate_id": "cand_4ca4a929213106fc",
+      "signal_id": "sig_ee56c1201eebf2fa",
+      "source_title": "Xi tells Nvidia, Tesla and Apple CEOs that China will \u2018open wider\u2019",
+      "source_url": "https://www.ft.com/content/013a9dd3-8835-4a0e-839e-ca8ed539233d",
+      "source_timestamp": "2026-05-15T03:47:40.531894+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": true,
+        "reasons": []
+      },
+      "execution_priority": 0.807,
+      "current_primary_instrument": {
+        "symbol": "AAPL",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: apple"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "AAPL",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: apple",
+          "research_confidence": 0.9,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.855,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_90559d90278d6b2a",
+      "signal_id": "sig_415dcdc7f3ca4ba4",
+      "source_title": "*CHINA SAYS THE WAR SHOULD NOT CONTINUE *CHINA TO CONTRIBUTE TO MIDDLE EAST PEAC",
+      "source_url": "https://x.com/zerohedge/status/2055119111466672335",
+      "source_timestamp": "2026-05-15T03:47:40.531801+00:00",
+      "pattern_id": "p016",
+      "pattern_name": "Iran Nuclear Deal",
+      "theme": "defense_supply_chain",
+      "chain_layer": "defense_subsystems",
+      "chain_sublayer": "electronics_sensors",
+      "dispatch_readiness": {
+        "ready": true,
+        "reasons": []
+      },
+      "execution_priority": 0.734,
+      "current_primary_instrument": {
+        "symbol": "LHX",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.86,
+        "mapping_confidence": 0.86,
+        "mapping_type": "value_chain_operator",
+        "reason": "Defense electronics, ISR, and tactical systems exposure"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "LHX",
+          "side": "buy",
+          "rationale": "Defense electronics, ISR, and tactical systems exposure",
+          "research_confidence": 0.86,
+          "liquidity_tier": "high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.86,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "RTX",
+          "side": "buy",
+          "rationale": "Radar and targeting-systems exposure",
+          "research_confidence": 0.76,
+          "liquidity_tier": "high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.8,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "BA",
+          "side": "sell",
+          "rationale": "Less subsystem-pure exposure than electronics specialists",
+          "research_confidence": 0.544,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.64,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "ITA",
+          "side": "buy",
+          "rationale": "Defense and aerospace demand sensitivity",
+          "research_confidence": 0.631,
+          "liquidity_tier": "high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "sector_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.77,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_28d69926fc35e973",
+      "signal_id": "sig_e93b182ceb7ac821",
+      "source_title": "JAPAN PM TAKAICHI PLANNING TO HOLD PHONE TALKS WITH US PRESIDENT TRUMP AS EARLY ",
+      "source_url": "https://x.com/DeItaone/status/2055065079603658759",
+      "source_timestamp": "2026-05-15T03:47:40.531650+00:00",
+      "pattern_id": "p012",
+      "pattern_name": "Japan Lost Decade",
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "mapping_confidence_too_low"
+        ]
+      },
+      "execution_priority": 0.531,
+      "current_primary_instrument": {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "direction_bias": "long",
+        "relevance_score": 0.521,
+        "mapping_confidence": 0.521,
+        "mapping_type": "macro_proxy",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.521,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.521,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "SH",
+          "side": "buy",
+          "rationale": "Broad equity downside hedge for macro uncertainty",
+          "research_confidence": 0.55,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.427,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.521,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 3,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg"
+        ],
+        "missing_roles": [
+          "hidden_supplier",
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_140954c85199c698",
+      "signal_id": "sig_b047b21c879f76de",
+      "source_title": "On NFP and CPI days, my edge is literally just doing less. my routine so i don't",
+      "source_url": "https://reddit.com/r/CryptoCurrency/comments/1so4x4c/on_nfp_and_cpi_days_my_edge_is_literally_just/",
+      "source_timestamp": "2026-05-15T03:47:40.531753+00:00",
+      "pattern_id": "p014",
+      "pattern_name": "US Credit Rating Downgrade",
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "mapping_confidence_too_low"
+        ]
+      },
+      "execution_priority": 0.529,
+      "current_primary_instrument": {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "direction_bias": "long",
+        "relevance_score": 0.516,
+        "mapping_confidence": 0.516,
+        "mapping_type": "macro_proxy",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.516,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.516,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "SH",
+          "side": "buy",
+          "rationale": "Broad equity downside hedge for macro uncertainty",
+          "research_confidence": 0.55,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.423,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.516,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 3,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg"
+        ],
+        "missing_roles": [
+          "hidden_supplier",
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_52a3c3b19cab8436",
+      "signal_id": "sig_18ee8b4eb509e57d",
+      "source_title": "Tech carries Wall Street to records, even as most stocks fall after discouraging",
+      "source_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxON1ZyLXd3OUlLaDZOVEExU25xWmZtSk1wclRMek9ENnpNQWhEYTBxdUdVU0VzdDVnMnFGRFFmLWVjbFZUUzQ2MmtmdGNvTGFnanBHbHhIUmJLUjR2XzdjTHFCaUhYU3RFMUs5NVFpNFUtUXFnRVlWNW5SSXVJRzBxdXRWSXYwQTZnNk0wcmR5WWZ6dDg?oc=5",
+      "source_timestamp": "2026-05-15T03:47:40.531696+00:00",
+      "pattern_id": "p014",
+      "pattern_name": "US Credit Rating Downgrade",
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "mapping_confidence_too_low"
+        ]
+      },
+      "execution_priority": 0.529,
+      "current_primary_instrument": {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "direction_bias": "long",
+        "relevance_score": 0.516,
+        "mapping_confidence": 0.516,
+        "mapping_type": "macro_proxy",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.516,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.516,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "SH",
+          "side": "buy",
+          "rationale": "Broad equity downside hedge for macro uncertainty",
+          "research_confidence": 0.55,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.423,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.516,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 3,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg"
+        ],
+        "missing_roles": [
+          "hidden_supplier",
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_282f33edb8f7ec34",
+      "signal_id": "sig_1dc2d108ac892cf3",
+      "source_title": "China warns Trump over Taiwan question at high-stakes summit - DW.com",
+      "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOdG1JUlRwenZUX0FjRXZTaXUtUFh0SU5DTGYtMGNCdFFHS2hmY1FmWENJTnlHQm5zcExSNVhiT1JzVlUyYXRaMWZqT0lpS1pHQ2UtZ09EYXBVMWJrWmhlVG5XaE9NbHphS2x6M3ZZenhFU010TjN1SGJTZzFBN0dZbmVFeXU0VFZUczFFUU9MZERYRU5PdjFDWFZhSXE?oc=5",
+      "source_timestamp": "2026-05-15T03:47:40.531606+00:00",
+      "pattern_id": "p017",
+      "pattern_name": "Tension Taiwan/China",
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "mapping_confidence_too_low"
+        ]
+      },
+      "execution_priority": 0.475,
+      "current_primary_instrument": {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "direction_bias": "long",
+        "relevance_score": 0.508,
+        "mapping_confidence": 0.508,
+        "mapping_type": "macro_proxy",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.508,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.508,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "SH",
+          "side": "buy",
+          "rationale": "Broad equity downside hedge for geopolitical risk-off shocks",
+          "research_confidence": 0.55,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.417,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.508,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 3,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg"
+        ],
+        "missing_roles": [
+          "hidden_supplier",
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_aadc240d16590dfe",
+      "signal_id": "sig_d46cf41e89b2b4d1",
+      "source_title": "TSMC says global chip market to hit $1.5 trillion by 2030 as AI drives growth, p",
+      "source_url": "https://x.com/unusual_whales/status/2055053290799300862",
+      "source_timestamp": "2026-05-15T03:47:40.531846+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "recommendation_not_take",
+          "reasoning_score_too_weak",
+          "evidence_strength_too_weak"
+        ]
+      },
+      "execution_priority": 0.471,
+      "current_primary_instrument": {
+        "symbol": "TSM",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: tsmc"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "TSM",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: tsmc",
+          "research_confidence": 0.9,
+          "liquidity_tier": "unknown",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Primary AI compute design operator",
+          "research_confidence": 0.817,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.86,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor sector proxy",
+          "research_confidence": 0.672,
+          "liquidity_tier": "high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "sector_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_42baddc2b2f738b4",
+      "signal_id": "sig_31a016bb31a8ffbd",
+      "source_title": "I need advice trading 0DTE SPY or any other ticker. 10k to 11.2k to 6.7k",
+      "source_url": "https://reddit.com/r/Daytrading/comments/1smo45a/i_need_advice_trading_0dte_spy_or_any_other/",
+      "source_timestamp": "2026-05-15T03:47:40.531937+00:00",
+      "pattern_id": "p024",
+      "pattern_name": "Retail Options Sentiment",
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "mapping_confidence_too_low"
+        ]
+      },
+      "execution_priority": 0.416,
+      "current_primary_instrument": {
+        "symbol": "SPY",
+        "instrument_type": "etf",
+        "direction_bias": "long",
+        "relevance_score": 0.492,
+        "mapping_confidence": 0.492,
+        "mapping_type": "macro_proxy",
+        "reason": "Fallback broad-market proxy for a macro signal"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.492,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.492,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "VIXY",
+          "side": "buy",
+          "rationale": "Volatility ETF hedge for unstable sentiment/options regimes",
+          "research_confidence": 0.55,
+          "liquidity_tier": "medium",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SPY",
+          "side": "buy",
+          "rationale": "Fallback broad-market proxy for a macro signal",
+          "research_confidence": 0.403,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "macro_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.492,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 3,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg"
+        ],
+        "missing_roles": [
+          "hidden_supplier",
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_615184fb754274f4",
+      "signal_id": "sig_cfa77a96f9756437",
+      "source_title": "Jaguar Land Rover annual profit falls 99% after US tariffs and cyber-attack take",
+      "source_url": "https://www.theguardian.com/business/2026/may/14/jaguar-land-rover-annual-profit-falls-99-per-cent-us-tariffs-cyber-attack",
+      "source_timestamp": "2026-05-15T03:47:40.531445+00:00",
+      "pattern_id": "p033",
+      "pattern_name": "US Tariff War Escalation",
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "no_tradable_proxy"
+        ]
+      },
+      "execution_priority": 0.4,
+      "current_primary_instrument": null,
+      "research_ideas": [],
+      "coverage": {
+        "idea_count": 0,
+        "roles_present": [],
+        "missing_roles": [
+          "direct_beneficiary",
+          "hidden_supplier",
+          "second_order_beneficiary",
+          "hedge_or_short_leg",
+          "etf_fallback"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_5b824e6859fc2641",
+      "signal_id": "sig_08168bcd4c3df166",
+      "source_title": "Nigel Farage now says \u00a35m from crypto billionaire was \u2018reward\u2019 for Brexit push",
+      "source_url": "https://www.theguardian.com/politics/2026/may/14/nigel-farage-5m-gift-crypto-billionaire-brexit-reward",
+      "source_timestamp": "2026-05-15T03:47:40.531555+00:00",
+      "pattern_id": "p009",
+      "pattern_name": "Brexit Vote",
+      "theme": "none_clear",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "no_tradable_proxy"
+        ]
+      },
+      "execution_priority": 0.343,
+      "current_primary_instrument": null,
+      "research_ideas": [],
+      "coverage": {
+        "idea_count": 0,
+        "roles_present": [],
+        "missing_roles": [
+          "direct_beneficiary",
+          "hidden_supplier",
+          "second_order_beneficiary",
+          "hedge_or_short_leg",
+          "etf_fallback"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    }
+  ]
+}
