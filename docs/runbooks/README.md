@@ -26,11 +26,6 @@ Quick index for the workspace runbooks folder so common references are easier to
 - [Network Endpoint Observations](./network-endpoint-observations.md)
 - [Job Placement Decision Table](./job-placement-decision-table.md)
 
-## Trading Path
-- [Trading Path Container Cutover](./trading-path-container-cutover.md)
-- [Trading Path Container Implementation Proposal](./trading-path-container-implementation-proposal.md)
-- [Trading Path Container Isolation Plan](./trading-path-container-isolation-plan.md)
-
 ## External Integration Notes
 - [Stitch MCP Codex GitHub Pages Workflow](./stitch-mcp-codex-github-pages-workflow.md)
 
