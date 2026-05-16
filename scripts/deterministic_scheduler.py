@@ -54,6 +54,7 @@ TASKS: tuple[Task, ...] = (
     Task("audit-sensitive-snapshot", "weekly", day_of_week=6, hour=3, minute=15),
     Task("data-manager", "weekly", day_of_week=0, hour=5, minute=0),
     Task("session-log-cleanup", "daily", hour=5, minute=20),
+    Task("cron-run-details-cleanup", "daily", hour=5, minute=25),
 )
 
 

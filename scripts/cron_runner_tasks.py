@@ -37,6 +37,16 @@ TASKS = {
         "notify_policy": "failure",
         "artifacts": [],
     },
+    "cron-run-details-cleanup": {
+        "name": "cron-run-details-cleanup",
+        "kind": "script_only",
+        "cwd": str(WORKSPACE_ROOT),
+        "command": ["python3", "scripts/cron_tasks/cron_run_details_cleanup.py"],
+        "timeout_seconds": 120,
+        "lock_name": "cron-run-details-cleanup",
+        "notify_policy": "failure",
+        "artifacts": ["memory/cron-run-details/"],
+    },
     "data-manager": {
         "name": "data-manager",
         "kind": "script_only",
