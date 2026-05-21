@@ -36,6 +36,10 @@ This file is not autonomy policy; operational autonomy rules live in AUTONOMY.md
 | Why: Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output | Proof: Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift | Unlocks: Unlocks a safer token-efficiency or reliability fix with clear evidence behind it
 ## Open Backlog
 
+- [Trading] Improve: ATB observability and rejection health signals
+**Brief:** Preserve structured public-safe rejection reasons, emit explicit webhook/broker health state transitions, and replace or remove the ATB reporter stub so operator-facing diagnostics do not imply more coverage than exists.
+| Why: The audit found operator signals are too lossy when validation, broker health, or execution paths degrade. | Proof: Daily/reporting output distinguishes validation failure, broker-state outage, risk denial, health transition, and execution failure without exposing secrets. | Unlocks: Faster diagnosis when ATB blocks, degrades, or silently skips dispatch.
+
 - [Trading] Improve: Market Intel pattern ambiguity preservation
 **Brief:** Preserve the top 2-3 pattern matches and winner-vs-runner-up margin from signal generation into reasoning/execution candidates, instead of collapsing every headline into a single best pattern too early.
 | Why: Messy headlines can be multi-hypothesis; throwing away competing matches makes false confidence harder to detect downstream. | Proof: Generated signals include competing pattern candidates and tests show weak winner margins reduce readiness or execution priority. | Unlocks: Cleaner semantic-fit scoring and better handling of ambiguous macro/geopolitical headlines.
