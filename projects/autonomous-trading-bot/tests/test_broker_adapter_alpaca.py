@@ -27,6 +27,21 @@ class TestAlpacaPaperAdapter(unittest.TestCase):
         self.assertEqual(result["equity"], "1010.50")
         self.assertEqual(calls, [("GET", "/v2/account", None)])
 
+    def test_list_positions_uses_paper_request_path(self):
+        adapter = AlpacaPaperAdapter(base_url="https://paper-api.alpaca.markets", paper_mode=True)
+        calls = []
+
+        def fake_request(method, path, body=None):
+            calls.append((method, path, body))
+            return [{"symbol": "AAPL", "qty": "1", "side": "long"}]
+
+        adapter._request = fake_request
+
+        result = adapter.list_positions()
+
+        self.assertEqual(result[0]["symbol"], "AAPL")
+        self.assertEqual(calls, [("GET", "/v2/positions", None)])
+
 
 if __name__ == "__main__":
     unittest.main()

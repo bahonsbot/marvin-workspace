@@ -144,10 +144,12 @@ If keys are absent now, no action is needed yet.
 ```bash
 python3 scripts/run_simulation.py \
   --input data/simulations/sample_signals.jsonl \
-  --output-dir data/simulations
+  --output-dir data/simulations \
+  --max-signal-age-seconds 999999999
 ```
 
 This command is strictly paper-only. It does not place orders, call broker APIs, or execute trades.
+The freshness override is for historical replay fixtures only; omit it for runtime-like validation.
 
 ## Dry-Run Runbook
 1. Start with default conservative settings in `scripts/dry_run.py` or `config/settings.example.yaml`.
@@ -242,6 +244,8 @@ Current limitations:
   - Concise daily report metrics:
     - counts (`total`, `accepted`, `denied`)
     - denial reason breakdown
+    - top symbols / strategies / patterns
+    - ticker-fit directness breakdown when present
     - average size multiplier
     - average confidence adjustment
     - top context warnings encountered

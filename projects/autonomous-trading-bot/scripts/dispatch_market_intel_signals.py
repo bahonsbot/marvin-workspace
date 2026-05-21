@@ -309,6 +309,9 @@ def _candidate_dispatch_payload(candidate: dict[str, Any], *, now: datetime, qty
     if side is None:
         return None
 
+    semantic_fit = candidate.get("semantic_fit") if isinstance(candidate.get("semantic_fit"), dict) else {}
+    ticker_fit = primary_instrument.get("ticker_fit") if isinstance(primary_instrument.get("ticker_fit"), dict) else {}
+
     return {
         "symbol": symbol,
         "side": side,
@@ -344,6 +347,11 @@ def _candidate_dispatch_payload(candidate: dict[str, Any], *, now: datetime, qty
         "symbol_reasoning": primary_instrument.get("mapping_type", "execution_candidate_primary"),
         "symbol_category": candidate.get("category"),
         "symbol_confidence": primary_instrument.get("mapping_confidence"),
+        "semantic_fit_score": semantic_fit.get("score"),
+        "semantic_fit_reasons": ",".join(str(reason) for reason in semantic_fit.get("reasons", [])[:5]),
+        "ticker_fit_score": ticker_fit.get("score"),
+        "ticker_fit_directness": ticker_fit.get("directness"),
+        "ticker_fit_reasons": ",".join(str(reason) for reason in ticker_fit.get("reasons", [])[:5]),
     }
 
 

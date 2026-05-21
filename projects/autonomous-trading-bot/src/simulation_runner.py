@@ -74,6 +74,9 @@ def _state_from_dict(raw: Dict[str, Any] | None) -> AccountState:
     return AccountState(
         daily_pnl=float(raw.get("daily_pnl", 0.0) or 0.0),
         open_positions=int(raw.get("open_positions", 0) or 0),
+        positions=dict(raw.get("positions") or {}),
+        position_values=dict(raw.get("position_values") or {}),
+        position_sectors=dict(raw.get("position_sectors") or {}),
     )
 
 
@@ -84,6 +87,9 @@ def _config_from_dict(raw: Dict[str, Any] | None) -> RiskConfig:
         daily_loss_cap=float(raw.get("daily_loss_cap", 100.0) or 100.0),
         max_position_size=float(raw.get("max_position_size", 1.0) or 1.0),
         max_open_positions=int(raw.get("max_open_positions", 3) or 3),
+        max_symbol_position_qty=float(raw.get("max_symbol_position_qty", 0.0) or 0.0),
+        max_symbol_position_value=float(raw.get("max_symbol_position_value", 0.0) or 0.0),
+        max_sector_positions=int(raw.get("max_sector_positions", 0) or 0),
     )
 
 
@@ -109,12 +115,18 @@ def run_simulation(signals: List[Dict[str, Any]]) -> Dict[str, Any]:
                 "state": {
                     "daily_pnl": state.daily_pnl,
                     "open_positions": state.open_positions,
+                    "positions": state.positions or {},
+                    "position_values": state.position_values or {},
+                    "position_sectors": state.position_sectors or {},
                 },
                 "config": {
                     "kill_switch_enabled": config.kill_switch_enabled,
                     "daily_loss_cap": config.daily_loss_cap,
                     "max_position_size": config.max_position_size,
                     "max_open_positions": config.max_open_positions,
+                    "max_symbol_position_qty": config.max_symbol_position_qty,
+                    "max_symbol_position_value": config.max_symbol_position_value,
+                    "max_sector_positions": config.max_sector_positions,
                 },
                 **result,
             }

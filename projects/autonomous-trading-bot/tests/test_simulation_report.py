@@ -8,6 +8,12 @@ class TestSimulationReport(unittest.TestCase):
         rows = [
             {
                 "accepted": True,
+                "signal": {
+                    "symbol": "NVDA",
+                    "strategy": "market-intel-auto",
+                    "pattern_name": "Reddit GPU/Semis Thread",
+                    "ticker_fit_directness": "direct_company",
+                },
                 "reasons": [],
                 "proposal": {"size_multiplier": 1.0, "confidence_adjustment": 0.1},
                 "context": {"warnings": ["missing:tracked_signals.json"]},
@@ -15,6 +21,12 @@ class TestSimulationReport(unittest.TestCase):
             },
             {
                 "accepted": False,
+                "signal": {
+                    "symbol": "LMT",
+                    "strategy": "market-intel-explorer",
+                    "pattern_name": "Russia-Ukraine Conflict",
+                    "ticker_fit_directness": "theme_proxy",
+                },
                 "reasons": ["Kill switch is enabled. Trading is blocked."],
                 "proposal": {"size_multiplier": 0.0, "confidence_adjustment": -0.5},
                 "context": {"warnings": ["missing:tracked_signals.json"]},
@@ -33,6 +45,10 @@ class TestSimulationReport(unittest.TestCase):
         )
         self.assertEqual(summary["avg_size_multiplier"], 0.5)
         self.assertEqual(summary["avg_confidence_adjustment"], -0.2)
+        self.assertEqual(summary["top_symbols"], {"NVDA": 1, "LMT": 1})
+        self.assertEqual(summary["top_strategies"], {"market-intel-auto": 1, "market-intel-explorer": 1})
+        self.assertEqual(summary["top_patterns"], {"Reddit GPU/Semis Thread": 1, "Russia-Ukraine Conflict": 1})
+        self.assertEqual(summary["ticker_directness_breakdown"], {"direct_company": 1, "theme_proxy": 1})
         self.assertTrue(len(summary["top_context_warnings"]) >= 1)
 
 

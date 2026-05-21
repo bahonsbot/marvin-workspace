@@ -158,11 +158,21 @@ def validate_signal_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
         ("pair_trade_rationale", 512),
         ("valuation_context", 64),
         ("value_chain_notes", 800),
+        ("semantic_fit_reasons", 512),
+        ("ticker_fit_directness", 64),
+        ("ticker_fit_reasons", 512),
     ]:
         if field_name in payload and isinstance(payload[field_name], str):
             err = _validate_string_length(payload[field_name], max_len, field_name)
             if err:
                 errors.append(err)
+
+    for field_name in ["semantic_fit_score", "ticker_fit_score"]:
+        if field_name in payload and payload[field_name] not in (None, ""):
+            if not isinstance(payload[field_name], (int, float)):
+                errors.append(f"Field '{field_name}' must be numeric")
+            elif not 0 <= float(payload[field_name]) <= 1:
+                errors.append(f"Field '{field_name}' must be between 0 and 1")
 
     return {
         "ok": len(errors) == 0,

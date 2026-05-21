@@ -82,6 +82,9 @@ class TestExecutionOrchestrator(unittest.TestCase):
             "expected_horizon": "intraday",
             "evidence_strength": 0.92,
             "risk_overlay_hint": "macro_event_risk",
+            "semantic_fit_score": 0.92,
+            "ticker_fit_score": 0.9,
+            "ticker_fit_directness": "direct_company",
         }
 
         first = self.orchestrator.execute(
@@ -103,6 +106,9 @@ class TestExecutionOrchestrator(unittest.TestCase):
 
         self.assertEqual(first["idempotency_key"], expected_key)
         self.assertEqual(first["order_intent"]["meta"]["candidate_metadata"]["candidate_id"], "cand_123")
+        self.assertEqual(first["order_intent"]["meta"]["candidate_metadata"]["semantic_fit_score"], 0.92)
+        self.assertEqual(first["order_intent"]["meta"]["candidate_metadata"]["ticker_fit_score"], 0.9)
+        self.assertEqual(first["order_intent"]["meta"]["candidate_metadata"]["ticker_fit_directness"], "direct_company")
         self.assertFalse(second["executed"])
         self.assertEqual(second["status"], "duplicate_suppressed")
         self.assertEqual(second["audit"]["candidate_metadata"]["signal_id"], "sig_456")

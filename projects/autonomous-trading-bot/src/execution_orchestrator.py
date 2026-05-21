@@ -34,6 +34,9 @@ def _candidate_metadata(signal: Dict[str, Any]) -> Dict[str, Any] | None:
         "expected_horizon": signal.get("expected_horizon"),
         "evidence_strength": signal.get("evidence_strength"),
         "risk_overlay_hint": signal.get("risk_overlay_hint"),
+        "semantic_fit_score": signal.get("semantic_fit_score"),
+        "ticker_fit_score": signal.get("ticker_fit_score"),
+        "ticker_fit_directness": signal.get("ticker_fit_directness"),
     }
     filtered = {k: v for k, v in metadata.items() if v not in (None, "")}
     return filtered or None

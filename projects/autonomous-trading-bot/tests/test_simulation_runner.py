@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 
 from src.simulation_runner import load_signals, run_simulation
@@ -68,6 +69,37 @@ class TestSimulationRunner(unittest.TestCase):
         self.assertIn("summary", output)
         self.assertEqual(output["summary"]["counts"]["total"], 2)
         self.assertGreaterEqual(output["summary"]["counts"]["denied"], 1)
+
+    def test_run_simulation_honors_concentration_state_and_config(self):
+        signals = [
+            {
+                "signal": {"symbol": "LMT", "side": "buy", "qty": 1, "timestamp": datetime.now(timezone.utc).isoformat()},
+                "state": {
+                    "daily_pnl": 0,
+                    "open_positions": 1,
+                    "positions": {"LMT": 1},
+                    "position_values": {"LMT": 500.0},
+                    "position_sectors": {"LMT": "defense"},
+                },
+                "config": {
+                    "kill_switch_enabled": False,
+                    "daily_loss_cap": 100,
+                    "max_position_size": 2,
+                    "max_open_positions": 3,
+                    "max_symbol_position_qty": 1,
+                    "max_sector_positions": 3,
+                },
+            }
+        ]
+
+        output = run_simulation(signals)
+
+        self.assertFalse(output["results"][0]["accepted"])
+        self.assertTrue(
+            any("Symbol concentration reached" in reason for reason in output["results"][0]["reasons"])
+        )
+        self.assertEqual(output["results"][0]["state"]["positions"], {"LMT": 1})
+        self.assertEqual(output["results"][0]["config"]["max_symbol_position_qty"], 1)
 
 
 if __name__ == "__main__":

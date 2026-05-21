@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import urllib.request
 from collections import Counter
@@ -24,6 +25,35 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+
+# Load minimal broker env from project .env when not already exported by the parent runtime.
+# Keep this allowlisted so diagnostics can inspect positions without leaking or loading
+# unrelated runtime settings.
+_ENV_PATH = ROOT / ".env"
+_ALLOWED_ENV_KEYS = {
+    "PAPER_MODE",
+    "ALPACA_API_KEY",
+    "ALPACA_API_SECRET",
+    "ALPACA_BASE_URL",
+}
+
+
+def _load_env_file(env_path: Path = _ENV_PATH) -> int:
+    loaded = 0
+    if not env_path.exists():
+        return loaded
+    for line in env_path.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, val = line.split("=", 1)
+            key = key.strip()
+            if key in _ALLOWED_ENV_KEYS and key not in os.environ:
+                os.environ[key] = val.strip()
+                loaded += 1
+    return loaded
+
+
+_load_env_file()
 
 from src.broker_adapter_alpaca import AlpacaPaperAdapter
 
@@ -76,6 +106,68 @@ def filter_log_by_date(log_path: Path, date: str) -> list[dict]:
     return records
 
 
+def classify_outcome(result: dict[str, Any]) -> str:
+    """Return an operational outcome bucket for one webhook decision result."""
+    exec_info = result.get("execution", {}) or {}
+    status = str(exec_info.get("status") or "").strip().lower()
+    reason = str(exec_info.get("reason") or "").strip().lower()
+    accepted = bool(result.get("accepted", False))
+
+    if status == "submitted":
+        return "submitted"
+    if status == "dry_run":
+        return "dry_run"
+    if status == "duplicate_suppressed":
+        return "duplicate_suppressed"
+    if status == "validation_failed":
+        return "validation_failed"
+    if status == "denied" or reason == "risk_denied":
+        return "risk_denied"
+    if status == "paper_guard_blocked":
+        return "paper_guard_blocked"
+    if status in {"execution_failed", "type_error"}:
+        return status
+    if accepted:
+        return "accepted_no_execution"
+    return "blocked_unknown"
+
+
+def normalize_denial_reason(reason: str) -> str:
+    """Group noisy reason strings into stable report buckets."""
+    lowered = reason.lower()
+    if "timestamp" in lowered and "stale" in lowered:
+        return "stale_timestamp"
+    if "daily loss cap" in lowered:
+        return "daily_loss_cap"
+    if "kill switch" in lowered:
+        return "kill_switch"
+    if "max open positions" in lowered:
+        return "max_open_positions"
+    if "max position size" in lowered:
+        return "max_position_size"
+    if "sell" in lowered and "inventory" in lowered:
+        return "sell_inventory"
+    if "symbol" in lowered and ("invalid" in lowered or "not" in lowered):
+        return "symbol_validation"
+    return reason[:100]
+
+
+def _score_bucket(value: Any) -> str | None:
+    if value in (None, ""):
+        return None
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        return None
+    if score >= 0.85:
+        return ">=0.85"
+    if score >= 0.70:
+        return "0.70-0.84"
+    if score >= 0.55:
+        return "0.55-0.69"
+    return "<0.55"
+
+
 # ---------------------------------------------------------------------------
 # Section collectors
 # ---------------------------------------------------------------------------
@@ -89,9 +181,17 @@ def collect_performance(records: list[dict]) -> dict:
         "submitted": 0,
         "paper_execute": 0,
         "blocked": 0,
+        "outcomes": Counter(),
         "symbols": Counter(),
         "sides": Counter(),
+        "strategies": Counter(),
+        "patterns": Counter(),
+        "market_intel_modes": Counter(),
+        "semantic_fit_buckets": Counter(),
+        "ticker_fit_buckets": Counter(),
+        "ticker_directness": Counter(),
         "denial_reasons": Counter(),
+        "denial_reason_buckets": Counter(),
         "risk_warnings": Counter(),
     }
     for rec in records:
@@ -114,12 +214,29 @@ def collect_performance(records: list[dict]) -> dict:
         else:
             stats["blocked"] += 1
 
+        outcome = classify_outcome(result)
+        stats["outcomes"][outcome] += 1
+
         req = rec.get("request", {})
         stats["symbols"][req.get("symbol", "UNKNOWN")] += 1
         stats["sides"][req.get("side", "UNKNOWN")] += 1
+        stats["strategies"][req.get("strategy", "unknown")] += 1
+        stats["patterns"][req.get("pattern_name") or req.get("pattern_id") or "unknown"] += 1
+        stats["market_intel_modes"][req.get("market_intel_mode", "unknown")] += 1
+
+        semantic_bucket = _score_bucket(req.get("semantic_fit_score"))
+        if semantic_bucket:
+            stats["semantic_fit_buckets"][semantic_bucket] += 1
+        ticker_bucket = _score_bucket(req.get("ticker_fit_score"))
+        if ticker_bucket:
+            stats["ticker_fit_buckets"][ticker_bucket] += 1
+        ticker_directness = req.get("ticker_fit_directness")
+        if ticker_directness:
+            stats["ticker_directness"][str(ticker_directness)] += 1
 
         for reason in result.get("reasons", []):
             stats["denial_reasons"][reason] += 1
+            stats["denial_reason_buckets"][normalize_denial_reason(str(reason))] += 1
 
         ctx = result.get("decision_context") or {}
         for warning in ctx.get("reasons", []):
@@ -239,8 +356,73 @@ def render_report(
             lines.append(f"| {sym} | {cnt} |")
         lines.append("")
 
+    if perf["outcomes"]:
+        lines += [
+            "### Outcome Buckets",
+            "",
+            "| Outcome | Count |",
+            "|---------|-------|",
+        ]
+        for outcome, cnt in perf["outcomes"].most_common():
+            lines.append(f"| {outcome} | {cnt} |")
+        lines.append("")
+
+    if perf["strategies"]:
+        lines += [
+            "### Strategies / Modes",
+            "",
+            "| Strategy | Count |",
+            "|----------|-------|",
+        ]
+        for strategy, cnt in perf["strategies"].most_common(8):
+            lines.append(f"| {strategy} | {cnt} |")
+        lines += ["", "| Market Intel mode | Count |", "|-------------------|-------|"]
+        for mode, cnt in perf["market_intel_modes"].most_common(8):
+            lines.append(f"| {mode} | {cnt} |")
+        lines.append("")
+
+    if perf["patterns"]:
+        lines += [
+            "### Top Patterns",
+            "",
+            "| Pattern | Count |",
+            "|---------|-------|",
+        ]
+        for pattern, cnt in perf["patterns"].most_common(8):
+            escaped = str(pattern).replace("|", "\\|")
+            lines.append(f"| {escaped} | {cnt} |")
+        lines.append("")
+
+    if perf["semantic_fit_buckets"] or perf["ticker_fit_buckets"] or perf["ticker_directness"]:
+        lines += [
+            "### Fit Score Summary",
+            "",
+        ]
+        if perf["semantic_fit_buckets"]:
+            lines += ["**Semantic fit buckets**", "", "| Score bucket | Count |", "|--------------|-------|"]
+            for bucket, cnt in perf["semantic_fit_buckets"].most_common():
+                lines.append(f"| {bucket} | {cnt} |")
+            lines.append("")
+        if perf["ticker_fit_buckets"]:
+            lines += ["**Ticker fit buckets**", "", "| Score bucket | Count |", "|--------------|-------|"]
+            for bucket, cnt in perf["ticker_fit_buckets"].most_common():
+                lines.append(f"| {bucket} | {cnt} |")
+            lines.append("")
+        if perf["ticker_directness"]:
+            lines += ["**Ticker directness**", "", "| Directness | Count |", "|------------|-------|"]
+            for directness, cnt in perf["ticker_directness"].most_common():
+                lines.append(f"| {directness} | {cnt} |")
+            lines.append("")
+
     if perf["denial_reasons"]:
         lines += [
+            "### Denial Reason Buckets",
+            "",
+        ]
+        for reason, cnt in perf["denial_reason_buckets"].most_common(8):
+            lines.append(f"- **{cnt}×** {reason}")
+        lines += [
+            "",
             "### Denial Reasons",
             "",
         ]

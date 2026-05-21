@@ -70,7 +70,13 @@ class TestDispatchMarketIntelSignals(unittest.TestCase):
         candidate = {
             "candidate_id": "cand_one",
             "event_cluster_id": "event_one",
-            "primary_instrument": {"symbol": "AAPL", "direction_bias": "long", "mapping_type": "company_direct"},
+            "semantic_fit": {"score": 0.92, "reasons": ["semantic_exact_family_match"]},
+            "primary_instrument": {
+                "symbol": "AAPL",
+                "direction_bias": "long",
+                "mapping_type": "company_direct",
+                "ticker_fit": {"score": 0.9, "directness": "direct_company", "reasons": ["ticker_direct_company_mention"]},
+            },
             "source_timestamp": "2026-05-14T11:55:00Z",
             "source_title": "Apple headline",
         }
@@ -80,6 +86,9 @@ class TestDispatchMarketIntelSignals(unittest.TestCase):
         self.assertIsNotNone(payload)
         self.assertEqual(payload["candidate_id"], "cand_one")
         self.assertEqual(payload["event_cluster_id"], "event_one")
+        self.assertEqual(payload["semantic_fit_score"], 0.92)
+        self.assertEqual(payload["ticker_fit_score"], 0.9)
+        self.assertEqual(payload["ticker_fit_directness"], "direct_company")
 
     def test_rejected_webhook_response_is_not_marked_sent(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -275,6 +275,42 @@ class TestSignalValidator(unittest.TestCase):
 
         self.assertTrue(result["ok"], result["errors"])
 
+    def test_fit_score_metadata_is_validated(self):
+        """Test semantic/ticker fit metadata accepts bounded numeric scores."""
+        recent_ts = datetime.now(timezone.utc).isoformat()
+        payload = {
+            "symbol": "NVDA",
+            "side": "buy",
+            "qty": 1,
+            "timestamp": recent_ts,
+            "semantic_fit_score": 0.92,
+            "semantic_fit_reasons": "semantic_exact_family_match",
+            "ticker_fit_score": 0.9,
+            "ticker_fit_directness": "direct_company",
+            "ticker_fit_reasons": "ticker_direct_company_mention",
+        }
+
+        result = validate_signal_payload(payload)
+
+        self.assertTrue(result["ok"], result["errors"])
+
+    def test_fit_score_metadata_rejects_out_of_range_values(self):
+        recent_ts = datetime.now(timezone.utc).isoformat()
+        payload = {
+            "symbol": "NVDA",
+            "side": "buy",
+            "qty": 1,
+            "timestamp": recent_ts,
+            "semantic_fit_score": 1.2,
+            "ticker_fit_score": "high",
+        }
+
+        result = validate_signal_payload(payload)
+
+        self.assertFalse(result["ok"])
+        self.assertIn("Field 'semantic_fit_score' must be between 0 and 1", result["errors"])
+        self.assertIn("Field 'ticker_fit_score' must be numeric", result["errors"])
+
     # === Fixture-Based Tests ===
 
     @patch.dict("os.environ", {"MAX_SIGNAL_AGE_SECONDS": "999999999"}, clear=False)

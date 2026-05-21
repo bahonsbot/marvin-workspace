@@ -55,11 +55,21 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_OUTPUT_DIR,
         help=f"Output directory for artifacts (default: {DEFAULT_OUTPUT_DIR})",
     )
+    parser.add_argument(
+        "--max-signal-age-seconds",
+        type=int,
+        help=(
+            "Optional replay freshness override. Use a large value for historical fixtures; "
+            "omitted means use the normal runtime validator default."
+        ),
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if args.max_signal_age_seconds is not None:
+        os.environ["MAX_SIGNAL_AGE_SECONDS"] = str(args.max_signal_age_seconds)
     signals = load_signals(args.input)
     run_output = run_simulation(signals)
     paths = write_artifacts(run_output, args.output_dir)
