@@ -176,6 +176,10 @@ def _load_state() -> dict[str, Any]:
 
 
 def _signal_key(sig: dict[str, Any]) -> str:
+    event_cluster_id = str(sig.get("event_cluster_id", "")).strip()
+    if event_cluster_id:
+        return f"event_cluster:{event_cluster_id}"
+
     candidate_id = str(sig.get("candidate_id", "")).strip()
     if candidate_id:
         return f"candidate:{candidate_id}"
@@ -314,6 +318,7 @@ def _candidate_dispatch_payload(candidate: dict[str, Any], *, now: datetime, qty
         "source_title": candidate.get("source_title", ""),
         "source_url": candidate.get("source_url", ""),
         "candidate_id": candidate.get("candidate_id"),
+        "event_cluster_id": candidate.get("event_cluster_id"),
         "signal_id": candidate.get("signal_id"),
         "pattern_id": candidate.get("pattern_id"),
         "pattern_name": candidate.get("pattern_name"),
@@ -406,6 +411,7 @@ def _explorer_dispatch_payload(candidate: dict[str, Any], idea: dict[str, Any], 
         "source_title": candidate.get("source_title", ""),
         "source_url": candidate.get("source_url", ""),
         "candidate_id": f"{candidate.get('candidate_id')}:explorer:{idea.get('role')}:{symbol}",
+        "event_cluster_id": candidate.get("event_cluster_id"),
         "signal_id": candidate.get("signal_id"),
         "pattern_id": candidate.get("pattern_id"),
         "pattern_name": candidate.get("pattern_name"),
@@ -620,6 +626,8 @@ def main() -> int:
         if accepted:
             sent[key] = {
                 "title": sig.get("source_title", sig.get("title", "")),
+                "candidate_id": sig.get("candidate_id"),
+                "event_cluster_id": sig.get("event_cluster_id"),
                 "timestamp": now.isoformat(),
                 "status": status,
                 "accepted": accepted,

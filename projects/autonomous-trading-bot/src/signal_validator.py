@@ -139,6 +139,7 @@ def validate_signal_payload(payload: Dict[str, Any]) -> Dict[str, Any]:
         ("source_url", MAX_URL_LENGTH),
         ("strategy", MAX_STRING_LENGTH),
         ("candidate_id", 128),
+        ("event_cluster_id", 128),
         ("signal_id", 128),
         ("pattern_id", 128),
         ("pattern_name", 256),

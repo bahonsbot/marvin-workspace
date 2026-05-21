@@ -407,6 +407,106 @@ def hash_id(prefix: str, *parts: Any, length: int = 16) -> str:
     return f"{prefix}_{digest}"
 
 
+EVENT_CLUSTER_STOPWORDS = {
+    "about",
+    "after",
+    "amid",
+    "and",
+    "are",
+    "as",
+    "at",
+    "before",
+    "by",
+    "for",
+    "from",
+    "has",
+    "have",
+    "into",
+    "its",
+    "more",
+    "new",
+    "news",
+    "over",
+    "report",
+    "reports",
+    "said",
+    "says",
+    "stock",
+    "stocks",
+    "shares",
+    "the",
+    "this",
+    "through",
+    "to",
+    "with",
+    "will",
+    "would",
+    "wsj",
+}
+
+EVENT_CLUSTER_ALIASES = {
+    "arabia": "saudi",
+    "arabian": "saudi",
+    "asked": "ask",
+    "asks": "ask",
+    "clashes": "clash",
+    "chips": "chip",
+    "defence": "defense",
+    "drones": "drone",
+    "missiles": "missile",
+    "pakistani": "pakistan",
+    "rates": "rate",
+    "tankers": "tanker",
+    "talks": "talk",
+    "yields": "yield",
+}
+
+
+def event_cluster_terms(title: str) -> list[str]:
+    """Return deterministic salient terms for near-duplicate event clustering.
+
+    This intentionally stays conservative and transparent: it removes market-news
+    boilerplate, normalizes a few plural/nationality aliases, and keeps the
+    sorted unique terms. The dispatcher uses the resulting cluster id as an
+    idempotency key while retaining the original candidate_id for traceability.
+    """
+    title_norm = normalize_text(title)
+    terms: set[str] = set()
+    for raw in re.findall(r"[a-z0-9]+", title_norm):
+        token = EVENT_CLUSTER_ALIASES.get(raw, raw)
+        if len(token) < 3 or token in EVENT_CLUSTER_STOPWORDS:
+            continue
+        terms.add(token)
+    return sorted(terms)[:12]
+
+
+def event_cluster_id_for_candidate(
+    signal: dict[str, Any],
+    primary_instrument: dict[str, Any] | None,
+) -> tuple[str, dict[str, Any]]:
+    terms = event_cluster_terms(str(signal.get("title", "")))
+    timestamp = str(signal.get("timestamp", ""))
+    day_bucket = timestamp[:10] if len(timestamp) >= 10 else "unknown-day"
+    primary_symbol = primary_instrument.get("symbol") if primary_instrument else "none"
+    primary_direction = primary_instrument.get("direction_bias") if primary_instrument else "none"
+    signature = {
+        "day_bucket": day_bucket,
+        "pattern_id": normalize_text(signal.get("pattern_id", "")),
+        "category": normalize_text(signal.get("category", "")),
+        "primary_symbol": normalize_text(primary_symbol),
+        "primary_direction": normalize_text(primary_direction),
+        "terms": terms or [normalize_text(signal.get("title", ""))[:80]],
+    }
+    cluster_id = hash_id(
+        "event",
+        signature["day_bucket"],
+        signature["pattern_id"],
+        signature["category"],
+        " ".join(signature["terms"]),
+    )
+    return cluster_id, signature
+
+
 def fingerprint_for_signal(signal: dict[str, Any]) -> str:
     identity = [
         signal.get("source", ""),
@@ -1226,9 +1326,12 @@ def build_candidate(
         primary_direction,
         pattern_info.get("time_horizon") or signal.get("time_horizon", ""),
     )
+    event_cluster_id, event_cluster_signature = event_cluster_id_for_candidate(signal, primary_instrument)
 
     return {
         "candidate_id": candidate_id,
+        "event_cluster_id": event_cluster_id,
+        "event_cluster_signature": event_cluster_signature,
         "signal_id": signal_id,
         "signal_fingerprint": fingerprint,
         "generated_at": generated_at,

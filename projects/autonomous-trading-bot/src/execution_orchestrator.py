@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 def _candidate_metadata(signal: Dict[str, Any]) -> Dict[str, Any] | None:
     metadata = {
         "candidate_id": signal.get("candidate_id"),
+        "event_cluster_id": signal.get("event_cluster_id"),
         "signal_id": signal.get("signal_id"),
         "pattern_id": signal.get("pattern_id"),
         "pattern_name": signal.get("pattern_name"),
@@ -164,6 +165,7 @@ class ExecutionOrchestrator:
                     "source": source,
                     "client_order_id": order_intent["client_order_id"],
                     "candidate_id": signal.get("candidate_id"),
+                    "event_cluster_id": signal.get("event_cluster_id"),
                     "signal_id": signal.get("signal_id"),
                 }
                 self._write_store(store)
@@ -187,6 +189,12 @@ class ExecutionOrchestrator:
 
     @staticmethod
     def build_idempotency_key(*, signal: Dict[str, Any], source: str) -> str:
+        event_cluster_id = str(signal.get("event_cluster_id", "")).strip()
+        if event_cluster_id:
+            strategy = str(signal.get("strategy", "unspecified")).strip() or "unspecified"
+            raw = f"event_cluster:{event_cluster_id}|strategy:{strategy}|{source}"
+            return hashlib.sha256(raw.encode("utf-8")).hexdigest()
+
         candidate_id = str(signal.get("candidate_id", "")).strip()
         if candidate_id:
             raw = f"candidate:{candidate_id}|{source}"

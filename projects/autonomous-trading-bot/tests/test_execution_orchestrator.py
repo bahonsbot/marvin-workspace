@@ -107,6 +107,46 @@ class TestExecutionOrchestrator(unittest.TestCase):
         self.assertEqual(second["status"], "duplicate_suppressed")
         self.assertEqual(second["audit"]["candidate_metadata"]["signal_id"], "sig_456")
 
+    def test_event_cluster_identity_takes_precedence_over_candidate_id(self):
+        first_signal = {
+            **self.signal,
+            "candidate_id": "cand_first",
+            "event_cluster_id": "event_same_story",
+            "signal_id": "sig_first",
+            "strategy": "market-intel-auto",
+        }
+        second_signal = {
+            **self.signal,
+            "timestamp": "2026-03-01T12:05:00Z",
+            "candidate_id": "cand_second",
+            "event_cluster_id": "event_same_story",
+            "signal_id": "sig_second",
+            "strategy": "market-intel-auto",
+        }
+
+        first = self.orchestrator.execute(
+            signal=first_signal,
+            context={"summary": {}},
+            decision_context={"size_multiplier": 1.0, "confidence_adjustment": 0.0},
+            risk_decision={"allow": True, "reasons": []},
+            source="webhook",
+        )
+        second = self.orchestrator.execute(
+            signal=second_signal,
+            context={"summary": {}},
+            decision_context={"size_multiplier": 1.0, "confidence_adjustment": 0.0},
+            risk_decision={"allow": True, "reasons": []},
+            source="webhook",
+        )
+
+        expected_key = hashlib.sha256("event_cluster:event_same_story|strategy:market-intel-auto|webhook".encode("utf-8")).hexdigest()
+
+        self.assertEqual(first["idempotency_key"], expected_key)
+        self.assertEqual(first["order_intent"]["meta"]["candidate_metadata"]["event_cluster_id"], "event_same_story")
+        self.assertFalse(second["executed"])
+        self.assertEqual(second["status"], "duplicate_suppressed")
+        self.assertEqual(second["audit"]["candidate_metadata"]["candidate_id"], "cand_second")
+
 
 if __name__ == "__main__":
     unittest.main()

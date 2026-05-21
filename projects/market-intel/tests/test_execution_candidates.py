@@ -138,6 +138,21 @@ class ExecutionCandidatesTest(unittest.TestCase):
             self.assertIsNone(esports["primary_instrument"])
             self.assertFalse(any(item["symbol"] in {"XOM", "CVX", "USO"} for item in esports["instrument_candidates"]))
 
+    def test_near_duplicate_headline_waves_share_event_cluster_id_but_keep_trace_ids(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            data_dir = Path(tmp)
+            self._write_fixture_files(data_dir)
+
+            candidates = build_execution_candidates(data_dir)
+            first = self._find_candidate(candidates, "Pakistan asks Saudi Arabia")
+            second = self._find_candidate(candidates, "Pakistan asked Saudi Arabia")
+
+            self.assertEqual(first["event_cluster_id"], second["event_cluster_id"])
+            self.assertNotEqual(first["candidate_id"], second["candidate_id"])
+            self.assertEqual(first["event_cluster_signature"]["day_bucket"], "2026-03-13")
+            self.assertIn("pakistan", first["event_cluster_signature"]["terms"])
+            self.assertIn("saudi", first["event_cluster_signature"]["terms"])
+
     def _find_candidate(self, candidates: list[dict], title_fragment: str) -> dict:
         for candidate in candidates:
             if title_fragment in candidate["source_title"]:
@@ -357,6 +372,48 @@ class ExecutionCandidatesTest(unittest.TestCase):
                     "predicted_outcomes": ["venue_shift"],
                     "predicted_causal_chain": ["Tournament host changes"],
                     "signal_briefing": "Non-oil Saudi false positive",
+                },
+                {
+                    "source": "rss",
+                    "feed": "Reuters",
+                    "title": "Pakistan asks Saudi Arabia for urgent air-defense support after border clashes",
+                    "url": "https://example.com/pakistan-saudi-defense-one",
+                    "timestamp": "2026-03-13T06:00:00Z",
+                    "pattern_id": "p003",
+                    "pattern": "Russia-Ukraine Conflict",
+                    "category": "geopolitical",
+                    "confidence": "HIGH",
+                    "time_horizon": "short-term",
+                    "signal_score": 240,
+                    "reasoning_score": 89.0,
+                    "confidence_level": "BUY",
+                    "recommendation": "TAKE",
+                    "reasoning_components": {"feedback_bias_points": 3.0, "feedback_sample_size": 8},
+                    "reasoning": "Defense support request after clashes.",
+                    "predicted_outcomes": ["defense_bid"],
+                    "predicted_causal_chain": ["Escalation", "Defense demand"],
+                    "signal_briefing": "Defense headline wave one",
+                },
+                {
+                    "source": "rss",
+                    "feed": "Financial_Times",
+                    "title": "Pakistan asked Saudi Arabia for urgent air defence support after border clash",
+                    "url": "https://example.com/pakistan-saudi-defense-two",
+                    "timestamp": "2026-03-13T06:20:00Z",
+                    "pattern_id": "p003",
+                    "pattern": "Russia-Ukraine Conflict",
+                    "category": "geopolitical",
+                    "confidence": "HIGH",
+                    "time_horizon": "short-term",
+                    "signal_score": 238,
+                    "reasoning_score": 88.0,
+                    "confidence_level": "BUY",
+                    "recommendation": "TAKE",
+                    "reasoning_components": {"feedback_bias_points": 3.0, "feedback_sample_size": 8},
+                    "reasoning": "Same defense support request with slightly different wording.",
+                    "predicted_outcomes": ["defense_bid"],
+                    "predicted_causal_chain": ["Escalation", "Defense demand"],
+                    "signal_briefing": "Defense headline wave two",
                 },
             ],
         )
