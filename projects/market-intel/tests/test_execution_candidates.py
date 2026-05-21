@@ -29,6 +29,8 @@ class ExecutionCandidatesTest(unittest.TestCase):
             oil_signal = self._find_candidate(first, "Oil tankers reroute after Strait disruption lifts crude prices")
             self.assertTrue(oil_signal["dispatch_readiness"]["ready"])
             self.assertEqual(oil_signal["primary_instrument"]["symbol"], "USO")
+            self.assertGreaterEqual(oil_signal["semantic_fit"]["score"], 0.90)
+            self.assertIn("semantic_exact_family_match", oil_signal["semantic_fit"]["reasons"])
             self.assertEqual(oil_signal["signal_id"], self._find_candidate(second, oil_signal["source_title"])["signal_id"])
             self.assertEqual(oil_signal["candidate_id"], self._find_candidate(second, oil_signal["source_title"])["candidate_id"])
 
@@ -43,6 +45,9 @@ class ExecutionCandidatesTest(unittest.TestCase):
             self.assertFalse(mismatch["dispatch_readiness"]["ready"])
             self.assertIn("pattern_topic_mismatch", mismatch["dispatch_readiness"]["reasons"])
             self.assertIn("title_pattern_family_mismatch", mismatch["dispatch_readiness"]["reasons"])
+            self.assertIn("semantic_fit_too_weak", mismatch["dispatch_readiness"]["reasons"])
+            self.assertLess(mismatch["semantic_fit"]["score"], 0.55)
+            self.assertIn("semantic_family_mismatch", mismatch["semantic_fit"]["reasons"])
             self.assertEqual(mismatch["primary_instrument"]["symbol"], "USO")
 
     def test_family_mismatch_blocks_semis_title_with_geopolitical_pattern(self) -> None:
@@ -55,6 +60,8 @@ class ExecutionCandidatesTest(unittest.TestCase):
 
             self.assertFalse(mismatch["dispatch_readiness"]["ready"])
             self.assertIn("pattern_topic_mismatch", mismatch["dispatch_readiness"]["reasons"])
+            self.assertIn("semantic_fit_too_weak", mismatch["dispatch_readiness"]["reasons"])
+            self.assertLess(mismatch["semantic_fit"]["score"], 0.55)
             self.assertEqual(mismatch["primary_instrument"]["symbol"], "SOXX")
 
     def test_broad_macro_roundup_is_not_ready_and_does_not_pick_uso(self) -> None:
@@ -134,6 +141,9 @@ class ExecutionCandidatesTest(unittest.TestCase):
             esports = self._find_candidate(candidates, "France will host the Esports World Cup")
 
             self.assertFalse(esports["dispatch_readiness"]["ready"])
+            self.assertIn("semantic_fit_too_weak", esports["dispatch_readiness"]["reasons"])
+            self.assertEqual(esports["semantic_fit"]["score"], 0.20)
+            self.assertIn("semantic_non_market_context", esports["semantic_fit"]["reasons"])
             self.assertIn("no_tradable_proxy", esports["dispatch_readiness"]["reasons"])
             self.assertIsNone(esports["primary_instrument"])
             self.assertFalse(any(item["symbol"] in {"XOM", "CVX", "USO"} for item in esports["instrument_candidates"]))

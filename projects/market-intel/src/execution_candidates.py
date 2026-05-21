@@ -727,6 +727,66 @@ def has_strong_family_mismatch(title_context: TitleContext, upstream: frozenset[
     return title_supers.isdisjoint(upstream_supers)
 
 
+def semantic_fit(
+    signal: dict[str, Any],
+    pattern_info: dict[str, Any] | None,
+    title_context: TitleContext,
+    upstream_topic_families: frozenset[str],
+) -> dict[str, Any]:
+    """Score whether the detected upstream pattern semantically fits the headline.
+
+    This is a softer, inspectable layer above the existing hard mismatch guards.
+    It lets downstream ranking/readiness penalize suspicious pattern matches before
+    they become dispatch candidates while preserving the exact reason trail.
+    """
+    title_specific = {family for family in title_context.families if family in TOPIC_FAMILY_SUPERSETS}
+    upstream_specific = {family for family in upstream_topic_families if family in TOPIC_FAMILY_SUPERSETS}
+    title_supers = {TOPIC_FAMILY_SUPERSETS[family] for family in title_specific}
+    upstream_supers = {TOPIC_FAMILY_SUPERSETS[family] for family in upstream_specific}
+    reasons: list[str] = []
+
+    if "non_market_event" in title_context.families:
+        score = 0.20
+        reasons.append("semantic_non_market_context")
+    elif title_specific and upstream_specific and title_specific & upstream_specific:
+        score = 0.92
+        reasons.append("semantic_exact_family_match")
+    elif title_supers and upstream_supers and title_supers & upstream_supers:
+        score = 0.74
+        reasons.append("semantic_superfamily_match")
+    elif title_specific and upstream_specific:
+        score = 0.34
+        reasons.append("semantic_family_mismatch")
+    elif not title_specific and upstream_specific:
+        score = 0.56
+        reasons.append("semantic_title_family_unknown")
+    elif title_specific and not upstream_specific:
+        score = 0.58
+        reasons.append("semantic_pattern_family_unknown")
+    else:
+        score = 0.62
+        reasons.append("semantic_family_ambiguous")
+
+    if title_context.broad_roundup:
+        score = min(score, 0.52)
+        reasons.append("semantic_broad_roundup")
+    if title_context.mixed_theme and not title_context.explicit_single_name and not has_clean_oil_execution_title(str(signal.get("title", ""))):
+        score = min(score, 0.60)
+        reasons.append("semantic_mixed_theme")
+    if title_context.fx_stress and not title_context.explicit_single_name:
+        score = min(score, 0.58)
+        reasons.append("semantic_fx_stress_secondary")
+
+    pattern_name = str((pattern_info or {}).get("name") or signal.get("pattern") or "")
+    return {
+        "score": round3(clamp(score)),
+        "reasons": reasons,
+        "title_families": sorted(title_context.families),
+        "upstream_families": sorted(upstream_topic_families),
+        "pattern_name": pattern_name,
+    }
+
+
 def has_clean_oil_execution_title(title: str) -> bool:
     title_norm = normalize_text(title)
     if any(term in title_norm for term in OIL_FALSE_CONTEXT_TERMS) and not any(term in title_norm for term in OIL_PRODUCER_TERMS):
@@ -1176,6 +1236,7 @@ def tracked_context(signal: dict[str, Any], tracked_by_pattern: dict[str, list[d
 def dispatch_readiness(
     signal: dict[str, Any],
     evidence_strength: float,
+    semantic_fit_report: dict[str, Any],
     instrument_candidates: list[dict[str, Any]],
     primary_instrument: dict[str, Any] | None,
     title_context: TitleContext,
@@ -1194,6 +1255,8 @@ def dispatch_readiness(
         reasons.append("reasoning_score_too_weak")
     if evidence_strength < 0.62:
         reasons.append("evidence_strength_too_weak")
+    if safe_float(semantic_fit_report.get("score")) < 0.55:
+        reasons.append("semantic_fit_too_weak")
     if title_context.broad_roundup:
         reasons.append("broad_roundup_title")
     if (
@@ -1235,7 +1298,7 @@ def dispatch_readiness(
 
     if ready:
         execution_bias = "allow"
-    elif "no_tradable_proxy" in reasons or "mapping_too_ambiguous" in reasons:
+    elif "no_tradable_proxy" in reasons or "mapping_too_ambiguous" in reasons or "semantic_fit_too_weak" in reasons:
         execution_bias = "block"
     elif "evidence_strength_too_weak" in reasons or "reasoning_score_too_weak" in reasons:
         execution_bias = "observe"
@@ -1248,6 +1311,7 @@ def dispatch_readiness(
 def execution_priority(
     signal: dict[str, Any],
     evidence_strength: float,
+    semantic_fit_report: dict[str, Any],
     primary_instrument: dict[str, Any] | None,
     ready: bool,
     shadow_match: dict[str, Any] | None,
@@ -1255,7 +1319,14 @@ def execution_priority(
     reasoning_component = clamp(safe_float(signal.get("reasoning_score")) / 100.0)
     mapping_component = safe_float(primary_instrument.get("mapping_confidence")) if primary_instrument else 0.0
     confidence_component = confidence_level_to_score(str(signal.get("confidence_level", "")))
-    score = (evidence_strength * 0.40) + (mapping_component * 0.25) + (reasoning_component * 0.20) + (confidence_component * 0.10)
+    semantic_component = clamp(safe_float(semantic_fit_report.get("score"), 0.62))
+    score = (
+        (evidence_strength * 0.34)
+        + (mapping_component * 0.22)
+        + (reasoning_component * 0.18)
+        + (semantic_component * 0.16)
+        + (confidence_component * 0.10)
+    )
     score += 0.03 if shadow_match else 0.0
     score += 0.02 if ready else -0.20
     return round3(clamp(score))
@@ -1300,15 +1371,17 @@ def build_candidate(
     instrument_candidates = build_instrument_candidates(signal, title_context)
     primary_instrument = choose_primary_instrument(signal, instrument_candidates, title_context)
     evidence_strength = compute_evidence_strength(signal, pattern_info, shadow_match)
+    semantic_fit_report = semantic_fit(signal, pattern_info, title_context, upstream_topic_families)
     ready, readiness_reasons, execution_bias = dispatch_readiness(
         signal,
         evidence_strength,
+        semantic_fit_report,
         instrument_candidates,
         primary_instrument,
         title_context,
         upstream_topic_families,
     )
-    priority = execution_priority(signal, evidence_strength, primary_instrument, ready, shadow_match)
+    priority = execution_priority(signal, evidence_strength, semantic_fit_report, primary_instrument, ready, shadow_match)
     fingerprint = fingerprint_for_signal(signal)
     signal_id = hash_id(
         "sig",
@@ -1352,6 +1425,7 @@ def build_candidate(
         "reasoning": signal.get("reasoning", ""),
         "reasoning_components": signal.get("reasoning_components") or {},
         "evidence_strength": evidence_strength,
+        "semantic_fit": semantic_fit_report,
         "signal_briefing": signal.get("signal_briefing", ""),
         "predicted_outcomes": signal.get("predicted_outcomes") or [],
         "predicted_causal_chain": signal.get("predicted_causal_chain") or [],
