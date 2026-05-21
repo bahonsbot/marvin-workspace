@@ -36,6 +36,50 @@ This file is not autonomy policy; operational autonomy rules live in AUTONOMY.md
 | Why: Turns the log-analysis goal into a concrete anti-looping audit with an operator-usable output | Proof: Audit cites one real loop pattern, why it happens, and one bounded mitigation that avoids risky control-plane drift | Unlocks: Unlocks a safer token-efficiency or reliability fix with clear evidence behind it
 ## Open Backlog
 
+- [Trading] Improve: Market Intel pattern ambiguity preservation
+**Brief:** Preserve the top 2-3 pattern matches and winner-vs-runner-up margin from signal generation into reasoning/execution candidates, instead of collapsing every headline into a single best pattern too early.
+| Why: Messy headlines can be multi-hypothesis; throwing away competing matches makes false confidence harder to detect downstream. | Proof: Generated signals include competing pattern candidates and tests show weak winner margins reduce readiness or execution priority. | Unlocks: Cleaner semantic-fit scoring and better handling of ambiguous macro/geopolitical headlines.
+
+- [Trading] Build: ATB challenger alternative scoring report
+**Brief:** Create a reporting artifact that compares each ready primary ticker with shadow/challenger alternatives, including confidence deltas, role, liquidity, and later paper-performance comparison.
+| Why: The system already generates alternatives, but they are hard to evaluate because they do not compete visibly with the primary path. | Proof: Report shows primary vs challenger candidates for each ready signal and records whether liquid ETF fallbacks or hidden suppliers would have been better paper expressions. | Unlocks: Evidence-based promotion of conservative challenger lanes instead of guessing which alternatives deserve trust.
+
+- [Trading] Fix: ATB sell/open-position guard
+**Brief:** Fix ATB risk logic so de-risking sells with valid inventory are not blocked merely because max_open_positions is reached; add regression coverage for sell-with-inventory when the book is full.
+| Why: Prevents the bot from blocking exposure-reducing sells during a full-book or stress state. | Proof: Risk manager test shows sell with matching inventory is allowed even when open_positions >= max_open_positions; buy/opening exposure remains capped. | Unlocks: Safer paper execution and a correct foundation for later exit management.
+
+- [Trading] Fix: ATB fail-closed broker state in execution mode
+**Brief:** Change ATB webhook/execution behavior so PAPER_EXECUTE=true blocks new orders when broker account/position state cannot be fetched, while dry-run mode may warn and continue.
+| Why: Avoids treating unknown Alpaca state as empty exposure, which can bypass inventory, loss, symbol, and sector safeguards. | Proof: Tests cover broker-state outage in dry-run vs paper-execution mode, and reports surface a structured state-health warning. | Unlocks: Trustworthy risk controls that depend on real account state.
+
+- [Trading] Implement: ATB event-cluster dedupe
+**Brief:** Add event_cluster_id generation from normalized entity/topic/time-window and use it to suppress or down-rank repeated headline waves while retaining candidate_id for traceability.
+| Why: Candidate IDs are too literal, so near-identical Saudi/Iran/Pakistan or Nvidia headline waves can dispatch repeatedly. | Proof: Repeated similar headlines within a window share an event_cluster_id and only the best/new materially stronger candidate is dispatch-eligible. | Unlocks: Less overtrading of the same story and cleaner signal-quality measurement.
+
+- [Trading] Improve: Market Intel semantic-fit scoring
+**Brief:** Move title-pattern/event-type fit penalties upstream into Market Intel reasoning so false positives are penalized before HIGH_PRIORITY promotion, not only blocked later by execution readiness.
+| Why: Broad keyword matches can still score as HIGH_PRIORITY even when the pattern is semantically wrong. | Proof: Tests cover Aramco labor/Saudi oil and social macro chatter examples; bad semantic fits receive lower actionable scores before execution-candidate gating. | Unlocks: Cleaner tracked signals, less review noise, and safer downstream dispatch assumptions.
+
+- [Trading] Implement: ATB diversified ranked selection
+**Brief:** Replace brittle exact-label dispatch gating with ranked top-N selection using minimum score/evidence plus per-symbol, per-theme, and per-window caps; allow reviewed challenger alternatives to compete conservatively.
+| Why: Current ready sets can collapse into one obvious name such as NVDA, while shadow alternatives remain mostly quarantined. | Proof: Dispatcher selects distinct top candidates per run/window and tests show repeated same-symbol clusters are capped or reranked. | Unlocks: More meaningful paper exploration without weakening main safety controls.
+
+- [Trading] Build: ATB trade ledger and true performance reports
+**Brief:** Create a durable trade ledger keyed by client_order_id/idempotency/candidate metadata with submit/fill/close/P&L fields, then base daily and accuracy reports on the ledger instead of current position snapshots.
+| Why: Current reports are operationally useful but do not yet measure realized strategy performance causally. | Proof: Daily report can show submitted, filled, open, closed, realized/unrealized P&L, and source candidate metadata from the ledger. | Unlocks: Real evaluation of whether signals, explorer ideas, and challenger alternatives are working.
+
+- [Trading] Design: ATB exit-management path
+**Brief:** Design and implement a first paper-only exit model: bracket orders, protective stop placement, or a position monitor with hard exit rules; reject strategies without an explicit exit model once enabled.
+| Why: The bot can open exposure but does not yet have stop-loss, bracket, or autonomous exit discipline. | Proof: Paper execution path records an exit model and tests verify protective-order or monitor behavior without touching live trading. | Unlocks: Safer expansion beyond toy-size paper entries.
+
+- [Trading] Improve: ATB risk simulation fixtures
+**Brief:** Extend ATB simulations to exercise positions, position values, sector exposure, symbol caps, inventory-constrained sells, and broker-state-unavailable scenarios.
+| Why: Simulation currently does not fully cover the richer risk model, so it can overstate readiness. | Proof: Simulation fixtures and tests cover concentration breaches, sell inventory, and state-outage behavior. | Unlocks: Safer validation before changing dispatch or risk policy.
+
+- [Trading] Chore: ATB state retention and pruning
+**Brief:** Add retention/compaction for idempotency and auto-signal dispatch state, or shard state by date/month, without losing recent duplicate-suppression safety.
+| Why: Long-lived JSON state files increase inspection friction, cold-read cost, and corruption blast radius. | Proof: State retention tests or dry-run output show old entries archived/pruned while recent idempotency keys remain protected. | Unlocks: Lower-maintenance ATB operations as paper history grows.
+
 - [Trading] Design: Signal outcome-linkage checklist
 **Brief:** design a checklist that links each tracked signal to its verification evidence, outcome status, and follow-up review notes; deliverable: markdown checklist in projects/market-intel/notes/
 | Why: Turns signal-tracking improvement into a concrete operator checklist instead of another high-level audit | Proof: Checklist shows how a signal moves from creation to verified outcome without losing evidence context | Unlocks: Unlocks cleaner data integrity and review quality in the signal workflow
