@@ -29,6 +29,8 @@ class ExecutionCandidatesTest(unittest.TestCase):
             oil_signal = self._find_candidate(first, "Oil tankers reroute after Strait disruption lifts crude prices")
             self.assertTrue(oil_signal["dispatch_readiness"]["ready"])
             self.assertEqual(oil_signal["primary_instrument"]["symbol"], "USO")
+            self.assertGreaterEqual(oil_signal["primary_instrument"]["ticker_fit"]["score"], 0.80)
+            self.assertIn("ticker_clean_oil_catalyst", oil_signal["primary_instrument"]["ticker_fit"]["reasons"])
             self.assertGreaterEqual(oil_signal["semantic_fit"]["score"], 0.90)
             self.assertIn("semantic_exact_family_match", oil_signal["semantic_fit"]["reasons"])
             self.assertEqual(oil_signal["signal_id"], self._find_candidate(second, oil_signal["source_title"])["signal_id"])
@@ -48,7 +50,9 @@ class ExecutionCandidatesTest(unittest.TestCase):
             self.assertIn("semantic_fit_too_weak", mismatch["dispatch_readiness"]["reasons"])
             self.assertLess(mismatch["semantic_fit"]["score"], 0.55)
             self.assertIn("semantic_family_mismatch", mismatch["semantic_fit"]["reasons"])
-            self.assertEqual(mismatch["primary_instrument"]["symbol"], "USO")
+            self.assertIsNone(mismatch["primary_instrument"])
+            uso = next(item for item in mismatch["instrument_candidates"] if item["symbol"] == "USO")
+            self.assertLess(uso["ticker_fit"]["score"], 0.55)
 
     def test_family_mismatch_blocks_semis_title_with_geopolitical_pattern(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -62,7 +66,8 @@ class ExecutionCandidatesTest(unittest.TestCase):
             self.assertIn("pattern_topic_mismatch", mismatch["dispatch_readiness"]["reasons"])
             self.assertIn("semantic_fit_too_weak", mismatch["dispatch_readiness"]["reasons"])
             self.assertLess(mismatch["semantic_fit"]["score"], 0.55)
-            self.assertEqual(mismatch["primary_instrument"]["symbol"], "SOXX")
+            self.assertEqual(mismatch["primary_instrument"]["symbol"], "NVDA")
+            self.assertEqual(mismatch["primary_instrument"]["ticker_fit"]["directness"], "direct_company")
 
     def test_broad_macro_roundup_is_not_ready_and_does_not_pick_uso(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -147,6 +152,40 @@ class ExecutionCandidatesTest(unittest.TestCase):
             self.assertIn("no_tradable_proxy", esports["dispatch_readiness"]["reasons"])
             self.assertIsNone(esports["primary_instrument"])
             self.assertFalse(any(item["symbol"] in {"XOM", "CVX", "USO"} for item in esports["instrument_candidates"]))
+
+    def test_ticker_fit_downgrades_defense_proxy_without_explicit_defense_context(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            data_dir = Path(tmp)
+            self._write_fixture_files(data_dir)
+
+            candidates = build_execution_candidates(data_dir)
+            fx_stress = self._find_candidate(candidates, "Iran war pushes Indian rupee towards perfect storm")
+
+            self.assertFalse(any(item["symbol"] == "ITA" for item in fx_stress["instrument_candidates"]))
+
+            defense = self._find_candidate(candidates, "Pakistan asks Saudi Arabia")
+            self.assertTrue(defense["dispatch_readiness"]["ready"])
+            self.assertIn(defense["primary_instrument"]["symbol"], {"ITA", "LMT"})
+            self.assertGreaterEqual(defense["primary_instrument"]["ticker_fit"]["score"], 0.70)
+            self.assertIn("ticker_explicit_defense_context", defense["primary_instrument"]["ticker_fit"]["reasons"])
+
+    def test_ticker_fit_requires_direct_nvidia_mention_for_high_nvda_fit(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            data_dir = Path(tmp)
+            self._write_fixture_files(data_dir)
+
+            candidates = build_execution_candidates(data_dir)
+            direct_nvda = self._find_candidate(candidates, "ByteDance gets access to top Nvidia AI chips")
+            nvda = next(item for item in direct_nvda["instrument_candidates"] if item["symbol"] == "NVDA")
+
+            self.assertGreaterEqual(nvda["ticker_fit"]["score"], 0.90)
+            self.assertEqual(nvda["ticker_fit"]["directness"], "direct_company")
+
+            generic_ai = self._find_candidate(candidates, "AI server makers rally as chip demand rises")
+            generic_nvda = next(item for item in generic_ai["instrument_candidates"] if item["symbol"] == "NVDA")
+
+            self.assertLess(generic_nvda["ticker_fit"]["score"], 0.70)
+            self.assertIn("ticker_nvda_sector_proxy_not_direct_mention", generic_nvda["ticker_fit"]["reasons"])
 
     def test_near_duplicate_headline_waves_share_event_cluster_id_but_keep_trace_ids(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -424,6 +463,27 @@ class ExecutionCandidatesTest(unittest.TestCase):
                     "predicted_outcomes": ["defense_bid"],
                     "predicted_causal_chain": ["Escalation", "Defense demand"],
                     "signal_briefing": "Defense headline wave two",
+                },
+                {
+                    "source": "rss",
+                    "feed": "Reuters",
+                    "title": "AI server makers rally as chip demand rises across data centers",
+                    "url": "https://example.com/generic-ai-chip-demand",
+                    "timestamp": "2026-03-13T05:40:00Z",
+                    "pattern_id": "p003",
+                    "pattern": "AI Infrastructure Buildout",
+                    "category": "sentiment_social",
+                    "confidence": "HIGH",
+                    "time_horizon": "short-term",
+                    "signal_score": 236,
+                    "reasoning_score": 88.0,
+                    "confidence_level": "BUY",
+                    "recommendation": "TAKE",
+                    "reasoning_components": {"feedback_bias_points": 3.0, "feedback_sample_size": 8},
+                    "reasoning": "Generic AI infrastructure demand, without a direct Nvidia mention.",
+                    "predicted_outcomes": ["semis_bid"],
+                    "predicted_causal_chain": ["AI server demand", "Semis sentiment"],
+                    "signal_briefing": "Generic AI demand headline",
                 },
             ],
         )

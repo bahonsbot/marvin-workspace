@@ -348,6 +348,21 @@ DEFENSE_EXPLICIT_TERMS = (
     "fighter",
 )
 
+DEFENSE_SYMBOLS = {"ITA", "LMT", "RTX", "NOC", "LHX", "CW", "GD", "HII", "BA"}
+OIL_SYMBOLS = {"USO", "XLE", "XOM", "CVX"}
+
+
+def company_names_for_symbol(symbol: str) -> list[str]:
+    return sorted({name for name, ticker in COMPANY_TICKER.items() if ticker == symbol}, key=lambda item: (-len(item), item))
+
+
+def title_mentions_symbol_company(title: str, symbol: str) -> bool:
+    title_norm = normalize_text(title)
+    symbol_norm = normalize_text(symbol)
+    if len(symbol_norm) >= 3 and title_has_keyword(title_norm, symbol_norm):
+        return True
+    return any(title_has_keyword(title_norm, name) for name in company_names_for_symbol(symbol))
+
 
 @dataclass(frozen=True)
 class InstrumentCandidate:
@@ -1071,6 +1086,116 @@ def adjust_candidates_for_title_context(
     return adjusted
 
 
+def ticker_fit_for_candidate(
+    title: str,
+    candidate: dict[str, Any],
+    title_context: TitleContext,
+    semantic_fit_report: dict[str, Any],
+) -> dict[str, Any]:
+    """Score whether this specific ticker/proxy is justified by the headline."""
+    title_norm = normalize_text(title)
+    symbol = str(candidate.get("symbol", "")).upper()
+    mapping_type = str(candidate.get("mapping_type", ""))
+    mapping_confidence = clamp(safe_float(candidate.get("mapping_confidence")))
+    semantic_score = clamp(safe_float(semantic_fit_report.get("score"), 0.62))
+    directness = "fallback"
+    reasons: list[str] = []
+
+    if title_mentions_symbol_company(title, symbol):
+        directness = "direct_company"
+        score = max(mapping_confidence, 0.90)
+        reasons.append("ticker_direct_company_mention")
+    elif mapping_type in {"company_direct", "value_chain_company"}:
+        directness = "company_proxy"
+        score = min(mapping_confidence, 0.82)
+        reasons.append("ticker_company_proxy")
+    elif mapping_type in {"value_chain_operator", "commodity_proxy", "sector_proxy", "value_chain_theme", "value_chain_macro"}:
+        directness = "theme_proxy"
+        score = mapping_confidence * 0.90
+        reasons.append("ticker_theme_proxy")
+    elif "second_order" in mapping_type:
+        directness = "second_order"
+        score = mapping_confidence * 0.74
+        reasons.append("ticker_second_order")
+    elif mapping_type == "macro_proxy":
+        directness = "fallback"
+        score = min(mapping_confidence * 0.78, 0.54)
+        reasons.append("ticker_macro_fallback")
+    else:
+        score = mapping_confidence * 0.70
+        reasons.append("ticker_mapping_type_uncertain")
+
+    if symbol in OIL_SYMBOLS:
+        if has_clean_oil_execution_title(title):
+            score = max(score, min(0.88, mapping_confidence))
+            reasons.append("ticker_clean_oil_catalyst")
+        else:
+            score = min(score, 0.46)
+            reasons.append("ticker_oil_proxy_without_clean_oil_catalyst")
+
+    if symbol in DEFENSE_SYMBOLS:
+        if any(term in title_norm for term in DEFENSE_EXPLICIT_TERMS):
+            score = max(score, min(0.82, mapping_confidence))
+            reasons.append("ticker_explicit_defense_context")
+        elif title_context.fx_stress or "geopolitical_conflict" in title_context.families:
+            score = min(score, 0.52)
+            reasons.append("ticker_defense_proxy_without_explicit_defense_context")
+
+    if symbol == "NVDA" and not title_mentions_symbol_company(title, symbol):
+        if any(title_has_keyword(title_norm, term) for term in ("chip", "chips", "gpu", "semiconductor", "semis", "ai")):
+            score = min(score, 0.64)
+            reasons.append("ticker_nvda_sector_proxy_not_direct_mention")
+        else:
+            score = min(score, 0.48)
+            reasons.append("ticker_nvda_without_ai_semis_context")
+
+    if title_context.broad_roundup and directness != "direct_company":
+        score = min(score, 0.50)
+        reasons.append("ticker_broad_roundup_penalty")
+    if title_context.mixed_theme and directness != "direct_company" and not has_clean_oil_execution_title(title):
+        score = min(score, 0.54)
+        reasons.append("ticker_mixed_theme_penalty")
+    if title_context.fx_stress and directness != "direct_company" and symbol not in {"UUP", "FXE", "FXY"}:
+        score = min(score, 0.50)
+        reasons.append("ticker_fx_secondary_penalty")
+    if semantic_score < 0.55 and directness != "direct_company":
+        score = min(score, 0.50)
+        reasons.append("ticker_weak_semantic_fit_penalty")
+
+    return {
+        "score": round3(clamp(score)),
+        "directness": directness,
+        "reasons": reasons,
+    }
+
+
+def apply_ticker_fit(
+    title: str,
+    instrument_candidates: list[dict[str, Any]],
+    title_context: TitleContext,
+    semantic_fit_report: dict[str, Any],
+) -> list[dict[str, Any]]:
+    fitted: list[dict[str, Any]] = []
+    for candidate in instrument_candidates:
+        item = dict(candidate)
+        fit = ticker_fit_for_candidate(title, item, title_context, semantic_fit_report)
+        item["ticker_fit"] = fit
+        item["relevance_score"] = round3(clamp((safe_float(item.get("relevance_score")) * 0.70) + (fit["score"] * 0.30)))
+        item["mapping_confidence"] = round3(min(safe_float(item.get("mapping_confidence")), max(fit["score"], 0.40)))
+        fitted.append(item)
+
+    return sorted(
+        fitted,
+        key=lambda item: (
+            -safe_float(item.get("ticker_fit", {}).get("score")),
+            -safe_float(item.get("relevance_score")),
+            -safe_float(item.get("mapping_confidence")),
+            item.get("symbol", ""),
+            item.get("direction_bias", ""),
+        ),
+    )
+
+
 def fallback_macro_candidates(category: str, pattern_name: str, reasoning_score: float, title_context: TitleContext) -> list[InstrumentCandidate]:
     if "non_market_event" in title_context.families:
         return []
@@ -1197,6 +1322,8 @@ def choose_primary_instrument(
         return None
     if title_context.fx_stress and top["mapping_type"] != "company_direct":
         return None
+    if safe_float(top.get("ticker_fit", {}).get("score")) < 0.55:
+        return None
     return {
         "symbol": top["symbol"],
         "instrument_type": top["instrument_type"],
@@ -1204,6 +1331,7 @@ def choose_primary_instrument(
         "relevance_score": top["relevance_score"],
         "mapping_confidence": top["mapping_confidence"],
         "mapping_type": top.get("mapping_type"),
+        "ticker_fit": top.get("ticker_fit"),
         "reason": top.get("reason"),
     }
 
@@ -1279,6 +1407,8 @@ def dispatch_readiness(
         top = instrument_candidates[0]
         if top["mapping_confidence"] < 0.60:
             reasons.append("mapping_confidence_too_low")
+        if safe_float(top.get("ticker_fit", {}).get("score")) < 0.55:
+            reasons.append("ticker_fit_too_weak")
         if top["mapping_type"].startswith("second_order") and not title_context.clean_theme:
             reasons.append("mapping_too_second_order")
 
@@ -1298,7 +1428,7 @@ def dispatch_readiness(
 
     if ready:
         execution_bias = "allow"
-    elif "no_tradable_proxy" in reasons or "mapping_too_ambiguous" in reasons or "semantic_fit_too_weak" in reasons:
+    elif "no_tradable_proxy" in reasons or "mapping_too_ambiguous" in reasons or "semantic_fit_too_weak" in reasons or "ticker_fit_too_weak" in reasons:
         execution_bias = "block"
     elif "evidence_strength_too_weak" in reasons or "reasoning_score_too_weak" in reasons:
         execution_bias = "observe"
@@ -1368,10 +1498,15 @@ def build_candidate(
     shadow_match = shadow_by_key.get(shadow_key(signal))
     title_context = infer_title_context(str(signal.get("title", "")))
     upstream_topic_families = upstream_families(signal, pattern_info)
-    instrument_candidates = build_instrument_candidates(signal, title_context)
-    primary_instrument = choose_primary_instrument(signal, instrument_candidates, title_context)
     evidence_strength = compute_evidence_strength(signal, pattern_info, shadow_match)
     semantic_fit_report = semantic_fit(signal, pattern_info, title_context, upstream_topic_families)
+    instrument_candidates = apply_ticker_fit(
+        str(signal.get("title", "")),
+        build_instrument_candidates(signal, title_context),
+        title_context,
+        semantic_fit_report,
+    )
+    primary_instrument = choose_primary_instrument(signal, instrument_candidates, title_context)
     ready, readiness_reasons, execution_bias = dispatch_readiness(
         signal,
         evidence_strength,
