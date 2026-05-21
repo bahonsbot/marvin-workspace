@@ -52,7 +52,10 @@ def _check_max_position_size(config: RiskConfig, signal: Dict[str, Any]) -> str 
     return None
 
 
-def _check_max_open_positions(config: RiskConfig, state: AccountState) -> str | None:
+def _check_max_open_positions(config: RiskConfig, signal: Dict[str, Any], state: AccountState) -> str | None:
+    side = str(signal.get("side", "")).lower().strip()
+    if side == "sell":
+        return None
     if state.open_positions >= config.max_open_positions:
         return (
             f"Max open positions reached: open_positions={state.open_positions} "
@@ -135,7 +138,7 @@ def evaluate_risk_decision(
         _check_kill_switch(config),
         _check_daily_loss_cap(config, state),
         _check_max_position_size(config, signal),
-        _check_max_open_positions(config, state),
+        _check_max_open_positions(config, signal, state),
         _check_symbol_concentration(config, signal, state),
         _check_sector_concentration(config, signal, state),
         _check_sell_inventory(signal, state),

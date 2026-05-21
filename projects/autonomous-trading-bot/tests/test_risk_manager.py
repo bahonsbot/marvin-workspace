@@ -65,6 +65,16 @@ class TestRiskManager(unittest.TestCase):
 
         self.assertTrue(decision["allow"])
 
+    def test_allows_sell_with_inventory_when_max_open_positions_reached(self):
+        """Test that de-risking sells are not blocked by the open-position cap."""
+        state = AccountState(daily_pnl=0.0, open_positions=3, positions={"AAPL": 2.0})
+        signal = {"symbol": "AAPL", "side": "sell", "qty": 1, "timestamp": "2026-03-01T00:00:00Z"}
+
+        decision = evaluate_risk_decision(signal, state, self._base_config())
+
+        self.assertTrue(decision["allow"])
+        self.assertFalse(any("Max open positions reached" in reason for reason in decision["reasons"]))
+
     def test_denies_buy_when_symbol_quantity_cap_reached(self):
         config = RiskConfig(
             kill_switch_enabled=False,
