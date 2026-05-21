@@ -97,7 +97,7 @@ class TestWebhookReceiver(unittest.TestCase):
     def test_default_account_state_uses_broker_positions_for_sell_guard(self, mock_adapter_cls, _mock_context):
         adapter = Mock()
         adapter.get_account.return_value = {"equity": "1000.00", "last_equity": "1000.00"}
-        adapter.list_positions.return_value = [{"symbol": "AAPL", "qty": "2"}]
+        adapter.list_positions.return_value = [{"symbol": "AAPL", "qty": "2", "market_value": "300.00"}]
         mock_adapter_cls.return_value = adapter
         payload = {**self._payload(), "side": "sell"}
 
@@ -112,6 +112,26 @@ class TestWebhookReceiver(unittest.TestCase):
         self.assertEqual(result["state_warnings"], [])
         self.assertTrue(adapter.get_account.called)
         self.assertTrue(adapter.list_positions.called)
+
+    @patch.dict("os.environ", {"KILL_SWITCH": "false", "BROKER_ACCOUNT_STATE_ENABLED": "true", "MAX_SYMBOL_POSITION_QTY": "3"}, clear=False)
+    @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})
+    @patch("src.webhook_receiver.AlpacaPaperAdapter")
+    def test_default_account_state_blocks_symbol_concentration(self, mock_adapter_cls, _mock_context):
+        adapter = Mock()
+        adapter.get_account.return_value = {"equity": "1000.00", "last_equity": "1000.00"}
+        adapter.list_positions.return_value = [{"symbol": "LMT", "qty": "4.2", "market_value": "2200.00"}]
+        mock_adapter_cls.return_value = adapter
+        payload = {**self._payload(), "symbol": "LMT"}
+
+        result = process_webhook_payload(
+            payload,
+            state=None,
+            config=None,
+            paper_execute=False,
+        )
+
+        self.assertFalse(result["accepted"])
+        self.assertTrue(any("Symbol concentration reached" in reason for reason in result["reasons"]))
 
     @patch.dict("os.environ", {"KILL_SWITCH": "false", "BROKER_ACCOUNT_STATE_ENABLED": "true"}, clear=False)
     @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})

@@ -84,6 +84,8 @@ class TestDispatchMarketIntelSignals(unittest.TestCase):
                 explorer_qty=0.5,
                 explorer_max_per_run=1,
                 explorer_min_confidence=0.60,
+                max_symbol_attempts_per_run=2,
+                max_sector_attempts_per_run=4,
             )
 
             with patch.object(dispatcher, "STATE_PATH", state_path), \
@@ -149,6 +151,8 @@ class TestDispatchMarketIntelSignals(unittest.TestCase):
                 explorer_qty=0.5,
                 explorer_max_per_run=1,
                 explorer_min_confidence=0.60,
+                max_symbol_attempts_per_run=2,
+                max_sector_attempts_per_run=4,
             )
             posts = []
 
@@ -175,6 +179,64 @@ class TestDispatchMarketIntelSignals(unittest.TestCase):
             self.assertEqual(posts[1]["market_intel_mode"], "ticker_research_explorer")
             state = dispatcher._read_json(state_path, {})
             self.assertIn("explorer:cand_explorer:hidden_supplier:NVDA", state.get("explorer_sent", {}))
+
+    def test_concentration_caps_skip_repeated_symbol_without_webhook_post(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            state_path = Path(tmp) / "auto_signal_dispatch.json"
+            candidates = []
+            for idx in range(3):
+                candidates.append(
+                    {
+                        "candidate_id": f"cand_lmt_{idx}",
+                        "signal_id": f"sig_lmt_{idx}",
+                        "confidence_level": "HIGH_PRIORITY",
+                        "reasoning_score": 95,
+                        "dispatch_readiness": {"ready": True},
+                        "primary_instrument": {"symbol": "LMT", "direction_bias": "long", "mapping_type": "value_chain_operator"},
+                        "source_timestamp": datetime.now(UTC).isoformat(),
+                        "source_title": f"LMT concentration test {idx}",
+                    }
+                )
+            cfg = dispatcher.Config(
+                webhook_url="http://127.0.0.1:8000/webhook",
+                webhook_secret="secret",
+                execution_candidates_enabled=True,
+                confidence="HIGH_PRIORITY",
+                min_reasoning_score=80,
+                qty=1,
+                max_qty=1,
+                market_hours_only=False,
+                fast_regime_enabled=False,
+                fast_min_reasoning_score=75,
+                fast_qty_multiplier=1.25,
+                fast_geo_threshold=3,
+                fast_high_conf_threshold=30,
+                explorer_enabled=False,
+                explorer_qty=0.5,
+                explorer_max_per_run=1,
+                explorer_min_confidence=0.60,
+                max_symbol_attempts_per_run=2,
+                max_sector_attempts_per_run=10,
+            )
+            posts = []
+
+            def fake_post(_url, body, _secret):
+                posts.append(body)
+                return 200, {"accepted": True, "status": "accepted"}
+
+            with patch.object(dispatcher, "STATE_PATH", state_path), \
+                patch.object(dispatcher, "_cfg", return_value=cfg), \
+                patch.object(dispatcher, "_check_webhook_health", return_value=True), \
+                patch.object(dispatcher, "_read_json", return_value=[]), \
+                patch.object(dispatcher, "load_context_snapshot", return_value={"summary": {}}), \
+                patch.object(dispatcher, "load_ready_execution_candidates", return_value={"ok": True, "candidates": candidates, "warnings": []}), \
+                patch.object(dispatcher, "_post_webhook", side_effect=fake_post), \
+                patch.object(dispatcher, "_send_digest"):
+                exit_code = dispatcher.main()
+
+            self.assertEqual(exit_code, 0)
+            self.assertEqual(len(posts), 2)
+            self.assertTrue(all(post["symbol"] == "LMT" for post in posts))
 
 
 if __name__ == "__main__":

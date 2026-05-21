@@ -68,6 +68,8 @@ class Config:
     explorer_qty: float
     explorer_max_per_run: int
     explorer_min_confidence: float
+    max_symbol_attempts_per_run: int
+    max_sector_attempts_per_run: int
 
 
 def _env_value(name: str, default: str = "") -> str:
@@ -118,6 +120,8 @@ def _cfg() -> Config:
         explorer_qty=float(_env_value("AUTO_EXPLORER_QTY", "0.5")),
         explorer_max_per_run=int(_env_value("AUTO_EXPLORER_MAX_PER_RUN", "1")),
         explorer_min_confidence=float(_env_value("AUTO_EXPLORER_MIN_CONFIDENCE", "0.60")),
+        max_symbol_attempts_per_run=int(_env_value("AUTO_MAX_SYMBOL_ATTEMPTS_PER_RUN", "2")),
+        max_sector_attempts_per_run=int(_env_value("AUTO_MAX_SECTOR_ATTEMPTS_PER_RUN", "4")),
     )
 
 
@@ -421,6 +425,50 @@ def _explorer_dispatch_payload(candidate: dict[str, Any], idea: dict[str, Any], 
         "explorer_promotion_status": idea.get("promotion_status"),
     }
 
+
+SECTOR_BY_SYMBOL = {
+    "XOM": "energy",
+    "CVX": "energy",
+    "USO": "energy",
+    "XLE": "energy",
+    "LMT": "defense",
+    "RTX": "defense",
+    "NOC": "defense",
+    "LHX": "defense",
+    "GD": "defense",
+    "ITA": "defense",
+    "DAL": "airlines",
+    "AAL": "airlines",
+    "JETS": "airlines",
+    "ZIM": "shipping",
+    "MATX": "shipping",
+    "SEA": "shipping",
+    "SH": "hedge",
+    "SPY": "broad_market",
+}
+
+
+def _symbol_sector(symbol: str) -> str:
+    return SECTOR_BY_SYMBOL.get(str(symbol or "").upper().strip(), "unknown")
+
+
+def _concentration_block_reason(body: dict[str, Any], symbol_attempts: dict[str, int], sector_attempts: dict[str, int], cfg: Config) -> str | None:
+    symbol = str(body.get("symbol") or "").upper().strip()
+    sector = _symbol_sector(symbol)
+    if cfg.max_symbol_attempts_per_run > 0 and symbol_attempts.get(symbol, 0) >= cfg.max_symbol_attempts_per_run:
+        return f"symbol_attempt_cap:{symbol}:{symbol_attempts.get(symbol, 0)}>={cfg.max_symbol_attempts_per_run}"
+    if cfg.max_sector_attempts_per_run > 0 and sector_attempts.get(sector, 0) >= cfg.max_sector_attempts_per_run:
+        return f"sector_attempt_cap:{sector}:{sector_attempts.get(sector, 0)}>={cfg.max_sector_attempts_per_run}"
+    return None
+
+
+def _record_concentration_attempt(body: dict[str, Any], symbol_attempts: dict[str, int], sector_attempts: dict[str, int]) -> None:
+    symbol = str(body.get("symbol") or "").upper().strip()
+    sector = _symbol_sector(symbol)
+    if symbol:
+        symbol_attempts[symbol] = symbol_attempts.get(symbol, 0) + 1
+    sector_attempts[sector] = sector_attempts.get(sector, 0) + 1
+
 def _fast_regime_active(cfg: Config, context_summary: dict[str, Any]) -> bool:
     if not cfg.fast_regime_enabled:
         return False
@@ -490,6 +538,9 @@ def main() -> int:
     blocked = 0
     explorer_dispatched = 0
     explorer_blocked = 0
+    concentration_blocked = 0
+    symbol_attempts: dict[str, int] = {}
+    sector_attempts: dict[str, int] = {}
     lines: list[str] = []
 
     for warning in (candidate_load or {}).get("warnings", []):
@@ -534,6 +585,30 @@ def main() -> int:
                 lines.append(f"⚠️ skipped (no ticker) | {str(sig.get('title',''))[:70]}")
                 continue
 
+        value_chain_suffix = ""
+        if signal_source == "execution_candidates":
+            vc_bits = []
+            if body.get("theme"):
+                vc_bits.append(str(body.get("theme")))
+            if body.get("chain_layer"):
+                vc_bits.append(str(body.get("chain_layer")))
+            if body.get("bottleneck_type") and body.get("bottleneck_type") != "none_clear":
+                vc_bits.append(f"bottleneck={body.get('bottleneck_type')}")
+            if body.get("beneficiary_class") and body.get("beneficiary_class") != "none_clear":
+                vc_bits.append(f"beneficiary={body.get('beneficiary_class')}")
+            if vc_bits:
+                value_chain_suffix = " | " + " / ".join(vc_bits[:4])
+
+        concentration_reason = _concentration_block_reason(body, symbol_attempts, sector_attempts, cfg)
+        if concentration_reason:
+            blocked += 1
+            concentration_blocked += 1
+            lines.append(
+                f"⚠️ skipped concentration {concentration_reason} | {str(body.get('source_title',''))[:60]}{value_chain_suffix}"
+            )
+            continue
+
+        _record_concentration_attempt(body, symbol_attempts, sector_attempts)
         status, resp = _post_webhook(cfg.webhook_url, body, cfg.webhook_secret)
         accepted = isinstance(resp, dict) and bool(resp.get("accepted")) and status in {200, 201}
 
@@ -551,20 +626,6 @@ def main() -> int:
                 "source_mode": signal_source,
                 "response": stored_resp,
             }
-
-        value_chain_suffix = ""
-        if signal_source == "execution_candidates":
-            vc_bits = []
-            if body.get("theme"):
-                vc_bits.append(str(body.get("theme")))
-            if body.get("chain_layer"):
-                vc_bits.append(str(body.get("chain_layer")))
-            if body.get("bottleneck_type") and body.get("bottleneck_type") != "none_clear":
-                vc_bits.append(f"bottleneck={body.get('bottleneck_type')}")
-            if body.get("beneficiary_class") and body.get("beneficiary_class") != "none_clear":
-                vc_bits.append(f"beneficiary={body.get('beneficiary_class')}")
-            if vc_bits:
-                value_chain_suffix = " | " + " / ".join(vc_bits[:4])
 
         if accepted:
             dispatched += 1
@@ -592,6 +653,17 @@ def main() -> int:
                     if explorer_body is None:
                         explorer_blocked += 1
                     else:
+                        concentration_reason = _concentration_block_reason(explorer_body, symbol_attempts, sector_attempts, cfg)
+                        if concentration_reason:
+                            explorer_blocked += 1
+                            concentration_blocked += 1
+                            lines.append(
+                                f"⚠️ explorer skipped concentration {concentration_reason} {explorer_body['symbol']} "
+                                f"role={idea.get('role')}"
+                            )
+                            continue
+
+                        _record_concentration_attempt(explorer_body, symbol_attempts, sector_attempts)
                         explorer_status, explorer_resp = _post_webhook(cfg.webhook_url, explorer_body, cfg.webhook_secret)
                         explorer_accepted = isinstance(explorer_resp, dict) and bool(explorer_resp.get("accepted")) and explorer_status in {200, 201}
                         stored_explorer_resp = explorer_resp
@@ -637,7 +709,7 @@ def main() -> int:
         _send_digest([f"🔁 mode switched: {state.get('last_mode')} → {mode_name}", mode_line, source_line])
 
     if dispatched or blocked or explorer_dispatched or explorer_blocked:
-        _send_digest([mode_line, source_line, f"dispatched={dispatched} blocked={blocked} explorer_dispatched={explorer_dispatched} explorer_blocked={explorer_blocked}"] + lines[:8])
+        _send_digest([mode_line, source_line, f"dispatched={dispatched} blocked={blocked} explorer_dispatched={explorer_dispatched} explorer_blocked={explorer_blocked} concentration_blocked={concentration_blocked}"] + lines[:8])
 
     state["last_mode"] = mode_name
     state["last_signal_source"] = signal_source
@@ -646,7 +718,7 @@ def main() -> int:
 
     print(
         f"dispatch complete: {mode_line} {source_line} "
-        f"dispatched={dispatched} blocked={blocked} explorer_dispatched={explorer_dispatched} explorer_blocked={explorer_blocked} mode_changed={mode_changed}"
+        f"dispatched={dispatched} blocked={blocked} explorer_dispatched={explorer_dispatched} explorer_blocked={explorer_blocked} concentration_blocked={concentration_blocked} mode_changed={mode_changed}"
     )
     return 0
 

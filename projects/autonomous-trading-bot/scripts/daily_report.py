@@ -15,8 +15,9 @@ from __future__ import annotations
 import json
 import os
 import sys
+import argparse
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -31,6 +32,18 @@ def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _load_env() -> None:
+    env_path = ROOT / ".env"
+    if not env_path.exists():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip().strip('"\''))
+
+
 def parse_log_line(line: str) -> dict | None:
     try:
         return json.loads(line.strip())
@@ -38,7 +51,32 @@ def parse_log_line(line: str) -> dict | None:
         return None
 
 
-def summarize_log(log_path: Path) -> dict:
+def _parse_ts(value: Any) -> datetime | None:
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _record_in_window(record: dict, since: datetime | None, until: datetime | None) -> bool:
+    if since is None and until is None:
+        return True
+    ts = _parse_ts(record.get("timestamp"))
+    if ts is None:
+        return False
+    if since is not None and ts < since:
+        return False
+    if until is not None and ts >= until:
+        return False
+    return True
+
+
+def summarize_log(log_path: Path, *, since: datetime | None = None, until: datetime | None = None) -> dict:
     stats = {
         "total": 0,
         "accepted": 0,
@@ -59,6 +97,9 @@ def summarize_log(log_path: Path) -> dict:
             continue
         record = parse_log_line(line)
         if not record:
+            continue
+
+        if not _record_in_window(record, since, until):
             continue
 
         stats["total"] += 1
@@ -100,10 +141,14 @@ def summarize_log(log_path: Path) -> dict:
         for warning in warnings:
             stats["risk_warnings"][warning] += 1
 
+    stats["period"] = {
+        "since": since.isoformat() if since else None,
+        "until": until.isoformat() if until else None,
+    }
     return stats
 
 
-def extract_pnl_data(log_path: Path) -> list[tuple[datetime, float]]:
+def extract_pnl_data(log_path: Path, *, since: datetime | None = None, until: datetime | None = None) -> list[tuple[datetime, float]]:
     """Extract P&L data from executed trades in the log.
     
     Returns list of (timestamp, cumulative_pnl) tuples.
@@ -117,6 +162,8 @@ def extract_pnl_data(log_path: Path) -> list[tuple[datetime, float]]:
             continue
         record = parse_log_line(line)
         if not record:
+            continue
+        if not _record_in_window(record, since, until):
             continue
         
         # Get timestamp
@@ -258,11 +305,26 @@ def fetch_open_positions() -> list[dict]:
         return []
 
 
+def _period_label(stats: dict) -> str:
+    period = stats.get("period") or {}
+    since = period.get("since")
+    until = period.get("until")
+    if since and until:
+        return f"Period: {since} to {until}"
+    if since:
+        return f"Period: since {since}"
+    if until:
+        return f"Period: before {until}"
+    return "Period: all available log history"
+
+
 def format_report(stats: dict, pnl_data: list[tuple[datetime, float]] = None, positions: list[dict] = None) -> str:
     lines = [
         "=" * 50,
         "DAILY TRADING BOT SUMMARY",
         "=" * 50,
+        "",
+        _period_label(stats),
         "",
         f"Total signals received: {stats['total']}",
         f"  Accepted: {stats['accepted']}",
@@ -326,16 +388,42 @@ def format_report(stats: dict, pnl_data: list[tuple[datetime, float]] = None, po
     return "\n".join(lines)
 
 
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Summarize ATB webhook decisions for a bounded report window.")
+    parser.add_argument("--all", action="store_true", help="Summarize all available log history instead of the current UTC day")
+    parser.add_argument("--date", help="UTC date to summarize, YYYY-MM-DD. Defaults to current UTC day")
+    parser.add_argument("--since", help="Inclusive UTC ISO timestamp lower bound")
+    parser.add_argument("--until", help="Exclusive UTC ISO timestamp upper bound")
+    return parser.parse_args()
+
+
+def _report_window(args: argparse.Namespace) -> tuple[datetime | None, datetime | None]:
+    if args.all:
+        return None, None
+    if args.since or args.until:
+        return _parse_ts(args.since) if args.since else None, _parse_ts(args.until) if args.until else None
+    if args.date:
+        report_date = datetime.strptime(args.date, "%Y-%m-%d").date()
+    else:
+        report_date = datetime.now(timezone.utc).date()
+    since = datetime.combine(report_date, time.min, tzinfo=timezone.utc)
+    # Use an exclusive midnight boundary, not 23:59:59.
+    until = since + timedelta(days=1)
+    return since, until
+
+
 def main() -> None:
-    ROOT = Path(__file__).resolve().parents[1]
+    args = _parse_args()
     LOG_PATH = ROOT / "logs" / "webhook_decisions.jsonl"
 
     if not LOG_PATH.exists():
         print(f"Log file not found: {LOG_PATH}")
         sys.exit(1)
 
-    stats = summarize_log(LOG_PATH)
-    pnl_data = extract_pnl_data(LOG_PATH)
+    _load_env()
+    since, until = _report_window(args)
+    stats = summarize_log(LOG_PATH, since=since, until=until)
+    pnl_data = extract_pnl_data(LOG_PATH, since=since, until=until)
     positions = fetch_open_positions()
     report = format_report(stats, pnl_data, positions)
     print(report)

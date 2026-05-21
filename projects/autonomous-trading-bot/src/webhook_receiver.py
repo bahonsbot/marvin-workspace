@@ -174,12 +174,37 @@ def _risk_config_from_env() -> RiskConfig:
         daily_loss_cap=_env_float("DAILY_LOSS_CAP", default=100.0, minimum=0.0),
         max_position_size=_env_float("MAX_POSITION_SIZE", default=1.0, minimum=0.0),
         max_open_positions=_env_nonnegative_int("MAX_OPEN_POSITIONS", default=3),
+        max_symbol_position_qty=_env_float("MAX_SYMBOL_POSITION_QTY", default=0.0, minimum=0.0),
+        max_symbol_position_value=_env_float("MAX_SYMBOL_POSITION_VALUE", default=0.0, minimum=0.0),
+        max_sector_positions=_env_nonnegative_int("MAX_SECTOR_POSITIONS", default=0),
     )
 
 
 def _default_account_state() -> AccountState:
     """Return conservative local account state until broker-backed state is wired in."""
-    return AccountState(daily_pnl=0.0, open_positions=0, positions={})
+    return AccountState(daily_pnl=0.0, open_positions=0, positions={}, position_values={}, position_sectors={})
+
+
+SYMBOL_SECTOR_MAP = {
+    "XOM": "energy",
+    "CVX": "energy",
+    "USO": "energy",
+    "XLE": "energy",
+    "LMT": "defense",
+    "RTX": "defense",
+    "NOC": "defense",
+    "LHX": "defense",
+    "GD": "defense",
+    "ITA": "defense",
+    "DAL": "airlines",
+    "AAL": "airlines",
+    "JETS": "airlines",
+    "ZIM": "shipping",
+    "MATX": "shipping",
+    "SEA": "shipping",
+    "SH": "hedge",
+    "SPY": "broad_market",
+}
 
 
 def _account_state_from_broker(adapter: AlpacaPaperAdapter) -> tuple[AccountState, list[str]]:
@@ -190,6 +215,8 @@ def _account_state_from_broker(adapter: AlpacaPaperAdapter) -> tuple[AccountStat
     warnings: list[str] = []
     daily_pnl = 0.0
     positions: dict[str, float] = {}
+    position_values: dict[str, float] = {}
+    position_sectors: dict[str, str] = {}
 
     try:
         account = adapter.get_account()
@@ -208,10 +235,23 @@ def _account_state_from_broker(adapter: AlpacaPaperAdapter) -> tuple[AccountStat
                 continue
             qty = float(row.get("qty", 0) or 0)
             positions[symbol] = qty
+            try:
+                position_values[symbol] = abs(float(row.get("market_value", 0) or 0))
+            except (TypeError, ValueError):
+                position_values[symbol] = 0.0
+            sector = SYMBOL_SECTOR_MAP.get(symbol)
+            if sector:
+                position_sectors[symbol] = sector
     except Exception as exc:
         warnings.append(f"position_state_unavailable:{exc.__class__.__name__}")
 
-    return AccountState(daily_pnl=daily_pnl, open_positions=len(positions), positions=positions), warnings
+    return AccountState(
+        daily_pnl=daily_pnl,
+        open_positions=len(positions),
+        positions=positions,
+        position_values=position_values,
+        position_sectors=position_sectors,
+    ), warnings
 
 
 def _get_client_ip(headers: Dict[str, str], client_address: tuple | None) -> str:

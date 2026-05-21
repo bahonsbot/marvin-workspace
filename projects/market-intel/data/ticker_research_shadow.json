@@ -3,7 +3,7 @@
   "schema_version": 1,
   "mode": "research_only_shadow",
   "generated_from": "execution_candidates.json",
-  "source_generated_at": "2026-05-15T11:47:40.487622Z",
+  "source_generated_at": "2026-05-21T14:47:34.920933Z",
   "llm_assist": {
     "status": "not_called_in_runtime",
     "intended_role": "Future optional analyst pass can review and expand these deterministic ideas before promotion.",
@@ -15,17 +15,17 @@
     "live_order_path_changed": false
   },
   "summary": {
-    "candidate_count": 10,
-    "total_research_ideas": 27,
-    "ready_candidate_count": 2
+    "candidate_count": 17,
+    "total_research_ideas": 60,
+    "ready_candidate_count": 7
   },
   "candidates": [
     {
-      "candidate_id": "cand_4ca4a929213106fc",
-      "signal_id": "sig_ee56c1201eebf2fa",
-      "source_title": "Xi tells Nvidia, Tesla and Apple CEOs that China will \u2018open wider\u2019",
-      "source_url": "https://www.ft.com/content/013a9dd3-8835-4a0e-839e-ca8ed539233d",
-      "source_timestamp": "2026-05-15T03:47:40.531894+00:00",
+      "candidate_id": "cand_9e1da838133860f5",
+      "signal_id": "sig_309d1e42fba42d12",
+      "source_title": "Nvidia: No shipments of data center hopper products to China $NVDA",
+      "source_url": "https://x.com/financialjuice/status/2057195779324842288",
+      "source_timestamp": "2026-05-21T06:47:34.973433+00:00",
       "pattern_id": "p003",
       "pattern_name": "Reddit GPU/Semis Thread",
       "theme": "ai_infrastructure",
@@ -35,22 +35,22 @@
         "ready": true,
         "reasons": []
       },
-      "execution_priority": 0.807,
+      "execution_priority": 0.759,
       "current_primary_instrument": {
-        "symbol": "AAPL",
+        "symbol": "NVDA",
         "instrument_type": "equity",
         "direction_bias": "long",
         "relevance_score": 0.9,
         "mapping_confidence": 0.9,
         "mapping_type": "value_chain_company",
-        "reason": "Explicit operator mention in AI design chain: Direct company mention: apple"
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
       },
       "research_ideas": [
         {
           "role": "direct_beneficiary",
-          "symbol": "AAPL",
+          "symbol": "NVDA",
           "side": "buy",
-          "rationale": "Explicit operator mention in AI design chain: Direct company mention: apple",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
           "research_confidence": 0.9,
           "liquidity_tier": "very_high",
           "source": "primary_instrument",
@@ -68,15 +68,15 @@
         },
         {
           "role": "hidden_supplier",
-          "symbol": "NVDA",
+          "symbol": "AVGO",
           "side": "buy",
-          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
-          "research_confidence": 0.855,
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
           "liquidity_tier": "very_high",
           "source": "instrument_candidates",
-          "source_mapping_type": "value_chain_company",
+          "source_mapping_type": "value_chain_operator",
           "source_direction_bias": "long",
-          "source_mapping_confidence": 0.9,
+          "source_mapping_confidence": 0.82,
           "provenance": {
             "derived_from": "execution_candidates.json",
             "method": "deterministic_shadow_research_expansion",
@@ -148,42 +148,42 @@
       }
     },
     {
-      "candidate_id": "cand_90559d90278d6b2a",
-      "signal_id": "sig_415dcdc7f3ca4ba4",
-      "source_title": "*CHINA SAYS THE WAR SHOULD NOT CONTINUE *CHINA TO CONTRIBUTE TO MIDDLE EAST PEAC",
-      "source_url": "https://x.com/zerohedge/status/2055119111466672335",
-      "source_timestamp": "2026-05-15T03:47:40.531801+00:00",
-      "pattern_id": "p016",
-      "pattern_name": "Iran Nuclear Deal",
-      "theme": "defense_supply_chain",
-      "chain_layer": "defense_subsystems",
-      "chain_sublayer": "electronics_sensors",
+      "candidate_id": "cand_e17562d6096d4d91",
+      "signal_id": "sig_390bce4b0801b09a",
+      "source_title": "The latest report from Nvidia may have left its investors wanting more but it ga",
+      "source_url": "https://x.com/business/status/2057330265106596184",
+      "source_timestamp": "2026-05-21T06:47:34.973384+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
       "dispatch_readiness": {
         "ready": true,
         "reasons": []
       },
-      "execution_priority": 0.734,
+      "execution_priority": 0.753,
       "current_primary_instrument": {
-        "symbol": "LHX",
+        "symbol": "NVDA",
         "instrument_type": "equity",
         "direction_bias": "long",
-        "relevance_score": 0.86,
-        "mapping_confidence": 0.86,
-        "mapping_type": "value_chain_operator",
-        "reason": "Defense electronics, ISR, and tactical systems exposure"
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
       },
       "research_ideas": [
         {
           "role": "direct_beneficiary",
-          "symbol": "LHX",
+          "symbol": "NVDA",
           "side": "buy",
-          "rationale": "Defense electronics, ISR, and tactical systems exposure",
-          "research_confidence": 0.86,
-          "liquidity_tier": "high",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.9,
+          "liquidity_tier": "very_high",
           "source": "primary_instrument",
-          "source_mapping_type": "value_chain_operator",
+          "source_mapping_type": "value_chain_company",
           "source_direction_bias": "long",
-          "source_mapping_confidence": 0.86,
+          "source_mapping_confidence": 0.9,
           "provenance": {
             "derived_from": "execution_candidates.json",
             "method": "deterministic_shadow_research_expansion",
@@ -195,15 +195,15 @@
         },
         {
           "role": "hidden_supplier",
-          "symbol": "RTX",
+          "symbol": "AVGO",
           "side": "buy",
-          "rationale": "Radar and targeting-systems exposure",
-          "research_confidence": 0.76,
-          "liquidity_tier": "high",
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
+          "liquidity_tier": "very_high",
           "source": "instrument_candidates",
           "source_mapping_type": "value_chain_operator",
           "source_direction_bias": "long",
-          "source_mapping_confidence": 0.8,
+          "source_mapping_confidence": 0.82,
           "provenance": {
             "derived_from": "execution_candidates.json",
             "method": "deterministic_shadow_research_expansion",
@@ -215,15 +215,15 @@
         },
         {
           "role": "hedge_or_short_leg",
-          "symbol": "BA",
+          "symbol": "INTC",
           "side": "sell",
-          "rationale": "Less subsystem-pure exposure than electronics specialists",
-          "research_confidence": 0.544,
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
           "liquidity_tier": "unknown",
           "source": "instrument_candidates",
           "source_mapping_type": "value_chain_operator",
           "source_direction_bias": "short",
-          "source_mapping_confidence": 0.64,
+          "source_mapping_confidence": 0.74,
           "provenance": {
             "derived_from": "execution_candidates.json",
             "method": "deterministic_shadow_research_expansion",
@@ -235,15 +235,15 @@
         },
         {
           "role": "etf_fallback",
-          "symbol": "ITA",
+          "symbol": "SOXX",
           "side": "buy",
-          "rationale": "Defense and aerospace demand sensitivity",
-          "research_confidence": 0.631,
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
           "liquidity_tier": "high",
-          "source": "instrument_candidates",
-          "source_mapping_type": "sector_proxy",
-          "source_direction_bias": "long",
-          "source_mapping_confidence": 0.77,
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
           "provenance": {
             "derived_from": "execution_candidates.json",
             "method": "deterministic_shadow_research_expansion",
@@ -275,14 +275,759 @@
       }
     },
     {
-      "candidate_id": "cand_28d69926fc35e973",
-      "signal_id": "sig_e93b182ceb7ac821",
-      "source_title": "JAPAN PM TAKAICHI PLANNING TO HOLD PHONE TALKS WITH US PRESIDENT TRUMP AS EARLY ",
-      "source_url": "https://x.com/DeItaone/status/2055065079603658759",
-      "source_timestamp": "2026-05-15T03:47:40.531650+00:00",
-      "pattern_id": "p012",
-      "pattern_name": "Japan Lost Decade",
-      "theme": "none_clear",
+      "candidate_id": "cand_787e998af2c30b18",
+      "signal_id": "sig_b0d056481f79eb7a",
+      "source_title": "*NVIDIA BOOSTS QTRLY CASH DIV TO 25C/SHR FROM 1C/SHR",
+      "source_url": "https://x.com/DeItaone/status/2057195659342586189",
+      "source_timestamp": "2026-05-21T06:47:34.973635+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": true,
+        "reasons": []
+      },
+      "execution_priority": 0.747,
+      "current_primary_instrument": {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.9,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "AVGO",
+          "side": "buy",
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_eed923fe5f838c98",
+      "signal_id": "sig_5c8b215777626719",
+      "source_title": "*NVIDIA 1Q ADJ GROSS MARGIN 75% *NVIDIA REPORTS $80.0B ADDED SHARE BUYBACK AUTHO",
+      "source_url": "https://x.com/DeItaone/status/2057195175370264936",
+      "source_timestamp": "2026-05-21T06:47:34.973678+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": true,
+        "reasons": []
+      },
+      "execution_priority": 0.747,
+      "current_primary_instrument": {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.9,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "AVGO",
+          "side": "buy",
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_290f92ad5a9773fe",
+      "signal_id": "sig_4bb87bb5c23b424a",
+      "source_title": "BREAKING: SoftBank stock surges over +15% as Nvidia earnings signal strong AI mo",
+      "source_url": "https://x.com/KobeissiLetter/status/2057260916849164655",
+      "source_timestamp": "2026-05-21T06:47:34.973732+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": true,
+        "reasons": []
+      },
+      "execution_priority": 0.73,
+      "current_primary_instrument": {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.9,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "AVGO",
+          "side": "buy",
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor sector proxy",
+          "research_confidence": 0.672,
+          "liquidity_tier": "high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "sector_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_4672cc9657b24def",
+      "signal_id": "sig_d331adea83fd597b",
+      "source_title": "BREAKING: Nvidia, $NVDA, announces an additional massive share buyback authoriza",
+      "source_url": "https://x.com/KobeissiLetter/status/2057196658115428696",
+      "source_timestamp": "2026-05-21T06:47:34.973812+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": true,
+        "reasons": []
+      },
+      "execution_priority": 0.73,
+      "current_primary_instrument": {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.9,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "AVGO",
+          "side": "buy",
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_8bcc9f1da38b7e61",
+      "signal_id": "sig_d0ae588c440e1245",
+      "source_title": "BREAKING: Nvidia, $NVDA, is boosting its quarterly cash dividend from $0.01/shar",
+      "source_url": "https://x.com/KobeissiLetter/status/2057196130077741209",
+      "source_timestamp": "2026-05-21T06:47:34.973852+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": true,
+        "reasons": []
+      },
+      "execution_priority": 0.73,
+      "current_primary_instrument": {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.9,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "AVGO",
+          "side": "buy",
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_0a5e904a46785a01",
+      "signal_id": "sig_b822ac9baaa98762",
+      "source_title": "New Fed Chair Pledges 'Regime Change' To Fight Inflation - Here's What That Coul",
+      "source_url": "https://x.com/zerohedge/status/2057263885170741757",
+      "source_timestamp": "2026-05-21T06:47:34.973274+00:00",
+      "pattern_id": "p014",
+      "pattern_name": "US Credit Rating Downgrade",
+      "theme": "macro_rates_regime",
+      "chain_layer": "none_clear",
+      "chain_sublayer": "none_clear",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "mapping_too_ambiguous",
+          "direction_unclear"
+        ]
+      },
+      "execution_priority": 0.628,
+      "current_primary_instrument": {
+        "symbol": "UUP",
+        "instrument_type": "etf",
+        "direction_bias": "long",
+        "relevance_score": 0.81,
+        "mapping_confidence": 0.81,
+        "mapping_type": "value_chain_macro",
+        "reason": "Rates regime supports dollar / tightening proxy"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "UUP",
+          "side": "buy",
+          "rationale": "Rates regime supports dollar / tightening proxy",
+          "research_confidence": 0.81,
+          "liquidity_tier": "high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_macro",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.81,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "TLT",
+          "side": "sell",
+          "rationale": "Long-duration bonds pressured by rising rates",
+          "research_confidence": 0.663,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_macro",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.78,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "UUP",
+          "side": "buy",
+          "rationale": "Rates regime supports dollar / tightening proxy",
+          "research_confidence": 0.664,
+          "liquidity_tier": "high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_macro",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.81,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 3,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg"
+        ],
+        "missing_roles": [
+          "hidden_supplier",
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_4745f443ec9678e2",
+      "signal_id": "sig_7c7ae1fe4a71d026",
+      "source_title": "On NFP and CPI days, my edge is literally just doing less. my routine so i don't",
+      "source_url": "https://reddit.com/r/CryptoCurrency/comments/1so4x4c/on_nfp_and_cpi_days_my_edge_is_literally_just/",
+      "source_timestamp": "2026-05-21T06:47:34.973328+00:00",
+      "pattern_id": "p014",
+      "pattern_name": "US Credit Rating Downgrade",
+      "theme": "macro_rates_regime",
       "chain_layer": "none_clear",
       "chain_sublayer": "none_clear",
       "dispatch_readiness": {
@@ -291,7 +1036,7 @@
           "mapping_confidence_too_low"
         ]
       },
-      "execution_priority": 0.531,
+      "execution_priority": 0.546,
       "current_primary_instrument": {
         "symbol": "SPY",
         "instrument_type": "etf",
@@ -384,44 +1129,64 @@
       }
     },
     {
-      "candidate_id": "cand_140954c85199c698",
-      "signal_id": "sig_b047b21c879f76de",
-      "source_title": "On NFP and CPI days, my edge is literally just doing less. my routine so i don't",
-      "source_url": "https://reddit.com/r/CryptoCurrency/comments/1so4x4c/on_nfp_and_cpi_days_my_edge_is_literally_just/",
-      "source_timestamp": "2026-05-15T03:47:40.531753+00:00",
-      "pattern_id": "p014",
-      "pattern_name": "US Credit Rating Downgrade",
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
+      "candidate_id": "cand_556aa9d9c15b7cae",
+      "signal_id": "sig_06ab04e7797393e5",
+      "source_title": "BREAKING: Nvidia stock, $NVDA, falls over -3% after posting record quarterly rev",
+      "source_url": "https://x.com/KobeissiLetter/status/2057195490781823099",
+      "source_timestamp": "2026-05-21T06:47:34.973889+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
       "dispatch_readiness": {
         "ready": false,
         "reasons": [
-          "mapping_confidence_too_low"
+          "mapping_too_ambiguous"
         ]
       },
-      "execution_priority": 0.529,
+      "execution_priority": 0.51,
       "current_primary_instrument": {
-        "symbol": "SPY",
-        "instrument_type": "etf",
-        "direction_bias": "long",
-        "relevance_score": 0.516,
-        "mapping_confidence": 0.516,
-        "mapping_type": "macro_proxy",
-        "reason": "Fallback broad-market proxy for a macro signal"
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "direction_bias": "short",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
       },
       "research_ideas": [
         {
           "role": "direct_beneficiary",
-          "symbol": "SPY",
-          "side": "buy",
-          "rationale": "Fallback broad-market proxy for a macro signal",
-          "research_confidence": 0.516,
+          "symbol": "NVDA",
+          "side": "sell",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.9,
           "liquidity_tier": "very_high",
           "source": "primary_instrument",
-          "source_mapping_type": "macro_proxy",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "AVGO",
+          "side": "buy",
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
           "source_direction_bias": "long",
-          "source_mapping_confidence": 0.516,
+          "source_mapping_confidence": 0.82,
           "provenance": {
             "derived_from": "execution_candidates.json",
             "method": "deterministic_shadow_research_expansion",
@@ -433,10 +1198,30 @@
         },
         {
           "role": "hedge_or_short_leg",
-          "symbol": "SH",
+          "symbol": "NVDA",
+          "side": "sell",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.765,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
           "side": "buy",
-          "rationale": "Broad equity downside hedge for macro uncertainty",
-          "research_confidence": 0.55,
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
           "liquidity_tier": "high",
           "source": "theme_fallback",
           "source_mapping_type": null,
@@ -450,37 +1235,17 @@
           "promotion_status": "shadow_only",
           "dispatcher_eligible": false,
           "executable": false
-        },
-        {
-          "role": "etf_fallback",
-          "symbol": "SPY",
-          "side": "buy",
-          "rationale": "Fallback broad-market proxy for a macro signal",
-          "research_confidence": 0.423,
-          "liquidity_tier": "very_high",
-          "source": "instrument_candidates",
-          "source_mapping_type": "macro_proxy",
-          "source_direction_bias": "long",
-          "source_mapping_confidence": 0.516,
-          "provenance": {
-            "derived_from": "execution_candidates.json",
-            "method": "deterministic_shadow_research_expansion",
-            "llm_status": "not_called_in_runtime"
-          },
-          "promotion_status": "shadow_only",
-          "dispatcher_eligible": false,
-          "executable": false
         }
       ],
       "coverage": {
-        "idea_count": 3,
+        "idea_count": 4,
         "roles_present": [
           "direct_beneficiary",
           "etf_fallback",
-          "hedge_or_short_leg"
+          "hedge_or_short_leg",
+          "hidden_supplier"
         ],
         "missing_roles": [
-          "hidden_supplier",
           "second_order_beneficiary"
         ]
       },
@@ -493,229 +1258,11 @@
       }
     },
     {
-      "candidate_id": "cand_52a3c3b19cab8436",
-      "signal_id": "sig_18ee8b4eb509e57d",
-      "source_title": "Tech carries Wall Street to records, even as most stocks fall after discouraging",
-      "source_url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxON1ZyLXd3OUlLaDZOVEExU25xWmZtSk1wclRMek9ENnpNQWhEYTBxdUdVU0VzdDVnMnFGRFFmLWVjbFZUUzQ2MmtmdGNvTGFnanBHbHhIUmJLUjR2XzdjTHFCaUhYU3RFMUs5NVFpNFUtUXFnRVlWNW5SSXVJRzBxdXRWSXYwQTZnNk0wcmR5WWZ6dDg?oc=5",
-      "source_timestamp": "2026-05-15T03:47:40.531696+00:00",
-      "pattern_id": "p014",
-      "pattern_name": "US Credit Rating Downgrade",
-      "theme": "macro_rates_regime",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "dispatch_readiness": {
-        "ready": false,
-        "reasons": [
-          "mapping_confidence_too_low"
-        ]
-      },
-      "execution_priority": 0.529,
-      "current_primary_instrument": {
-        "symbol": "SPY",
-        "instrument_type": "etf",
-        "direction_bias": "long",
-        "relevance_score": 0.516,
-        "mapping_confidence": 0.516,
-        "mapping_type": "macro_proxy",
-        "reason": "Fallback broad-market proxy for a macro signal"
-      },
-      "research_ideas": [
-        {
-          "role": "direct_beneficiary",
-          "symbol": "SPY",
-          "side": "buy",
-          "rationale": "Fallback broad-market proxy for a macro signal",
-          "research_confidence": 0.516,
-          "liquidity_tier": "very_high",
-          "source": "primary_instrument",
-          "source_mapping_type": "macro_proxy",
-          "source_direction_bias": "long",
-          "source_mapping_confidence": 0.516,
-          "provenance": {
-            "derived_from": "execution_candidates.json",
-            "method": "deterministic_shadow_research_expansion",
-            "llm_status": "not_called_in_runtime"
-          },
-          "promotion_status": "shadow_only",
-          "dispatcher_eligible": false,
-          "executable": false
-        },
-        {
-          "role": "hedge_or_short_leg",
-          "symbol": "SH",
-          "side": "buy",
-          "rationale": "Broad equity downside hedge for macro uncertainty",
-          "research_confidence": 0.55,
-          "liquidity_tier": "high",
-          "source": "theme_fallback",
-          "source_mapping_type": null,
-          "source_direction_bias": null,
-          "source_mapping_confidence": null,
-          "provenance": {
-            "derived_from": "execution_candidates.json",
-            "method": "deterministic_shadow_research_expansion",
-            "llm_status": "not_called_in_runtime"
-          },
-          "promotion_status": "shadow_only",
-          "dispatcher_eligible": false,
-          "executable": false
-        },
-        {
-          "role": "etf_fallback",
-          "symbol": "SPY",
-          "side": "buy",
-          "rationale": "Fallback broad-market proxy for a macro signal",
-          "research_confidence": 0.423,
-          "liquidity_tier": "very_high",
-          "source": "instrument_candidates",
-          "source_mapping_type": "macro_proxy",
-          "source_direction_bias": "long",
-          "source_mapping_confidence": 0.516,
-          "provenance": {
-            "derived_from": "execution_candidates.json",
-            "method": "deterministic_shadow_research_expansion",
-            "llm_status": "not_called_in_runtime"
-          },
-          "promotion_status": "shadow_only",
-          "dispatcher_eligible": false,
-          "executable": false
-        }
-      ],
-      "coverage": {
-        "idea_count": 3,
-        "roles_present": [
-          "direct_beneficiary",
-          "etf_fallback",
-          "hedge_or_short_leg"
-        ],
-        "missing_roles": [
-          "hidden_supplier",
-          "second_order_beneficiary"
-        ]
-      },
-      "promotion": {
-        "status": "shadow_only",
-        "dispatcher_eligible": false,
-        "requires_human_review": true,
-        "requires_code_promotion": true,
-        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
-      }
-    },
-    {
-      "candidate_id": "cand_282f33edb8f7ec34",
-      "signal_id": "sig_1dc2d108ac892cf3",
-      "source_title": "China warns Trump over Taiwan question at high-stakes summit - DW.com",
-      "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOdG1JUlRwenZUX0FjRXZTaXUtUFh0SU5DTGYtMGNCdFFHS2hmY1FmWENJTnlHQm5zcExSNVhiT1JzVlUyYXRaMWZqT0lpS1pHQ2UtZ09EYXBVMWJrWmhlVG5XaE9NbHphS2x6M3ZZenhFU010TjN1SGJTZzFBN0dZbmVFeXU0VFZUczFFUU9MZERYRU5PdjFDWFZhSXE?oc=5",
-      "source_timestamp": "2026-05-15T03:47:40.531606+00:00",
-      "pattern_id": "p017",
-      "pattern_name": "Tension Taiwan/China",
-      "theme": "none_clear",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
-      "dispatch_readiness": {
-        "ready": false,
-        "reasons": [
-          "mapping_confidence_too_low"
-        ]
-      },
-      "execution_priority": 0.475,
-      "current_primary_instrument": {
-        "symbol": "SPY",
-        "instrument_type": "etf",
-        "direction_bias": "long",
-        "relevance_score": 0.508,
-        "mapping_confidence": 0.508,
-        "mapping_type": "macro_proxy",
-        "reason": "Fallback broad-market proxy for a macro signal"
-      },
-      "research_ideas": [
-        {
-          "role": "direct_beneficiary",
-          "symbol": "SPY",
-          "side": "buy",
-          "rationale": "Fallback broad-market proxy for a macro signal",
-          "research_confidence": 0.508,
-          "liquidity_tier": "very_high",
-          "source": "primary_instrument",
-          "source_mapping_type": "macro_proxy",
-          "source_direction_bias": "long",
-          "source_mapping_confidence": 0.508,
-          "provenance": {
-            "derived_from": "execution_candidates.json",
-            "method": "deterministic_shadow_research_expansion",
-            "llm_status": "not_called_in_runtime"
-          },
-          "promotion_status": "shadow_only",
-          "dispatcher_eligible": false,
-          "executable": false
-        },
-        {
-          "role": "hedge_or_short_leg",
-          "symbol": "SH",
-          "side": "buy",
-          "rationale": "Broad equity downside hedge for geopolitical risk-off shocks",
-          "research_confidence": 0.55,
-          "liquidity_tier": "high",
-          "source": "theme_fallback",
-          "source_mapping_type": null,
-          "source_direction_bias": null,
-          "source_mapping_confidence": null,
-          "provenance": {
-            "derived_from": "execution_candidates.json",
-            "method": "deterministic_shadow_research_expansion",
-            "llm_status": "not_called_in_runtime"
-          },
-          "promotion_status": "shadow_only",
-          "dispatcher_eligible": false,
-          "executable": false
-        },
-        {
-          "role": "etf_fallback",
-          "symbol": "SPY",
-          "side": "buy",
-          "rationale": "Fallback broad-market proxy for a macro signal",
-          "research_confidence": 0.417,
-          "liquidity_tier": "very_high",
-          "source": "instrument_candidates",
-          "source_mapping_type": "macro_proxy",
-          "source_direction_bias": "long",
-          "source_mapping_confidence": 0.508,
-          "provenance": {
-            "derived_from": "execution_candidates.json",
-            "method": "deterministic_shadow_research_expansion",
-            "llm_status": "not_called_in_runtime"
-          },
-          "promotion_status": "shadow_only",
-          "dispatcher_eligible": false,
-          "executable": false
-        }
-      ],
-      "coverage": {
-        "idea_count": 3,
-        "roles_present": [
-          "direct_beneficiary",
-          "etf_fallback",
-          "hedge_or_short_leg"
-        ],
-        "missing_roles": [
-          "hidden_supplier",
-          "second_order_beneficiary"
-        ]
-      },
-      "promotion": {
-        "status": "shadow_only",
-        "dispatcher_eligible": false,
-        "requires_human_review": true,
-        "requires_code_promotion": true,
-        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
-      }
-    },
-    {
-      "candidate_id": "cand_aadc240d16590dfe",
-      "signal_id": "sig_d46cf41e89b2b4d1",
-      "source_title": "TSMC says global chip market to hit $1.5 trillion by 2030 as AI drives growth, p",
-      "source_url": "https://x.com/unusual_whales/status/2055053290799300862",
-      "source_timestamp": "2026-05-15T03:47:40.531846+00:00",
+      "candidate_id": "cand_46f7a68e6f1ae13f",
+      "signal_id": "sig_1d8630d07cdcd766",
+      "source_title": "JUST IN: Nvidia, $NVDA, is boosting its cash dividend from $0.01/share to $0.25/",
+      "source_url": "https://x.com/unusual_whales/status/2057245791308439886",
+      "source_timestamp": "2026-05-21T06:47:34.973596+00:00",
       "pattern_id": "p003",
       "pattern_name": "Reddit GPU/Semis Thread",
       "theme": "ai_infrastructure",
@@ -731,22 +1278,22 @@
       },
       "execution_priority": 0.471,
       "current_primary_instrument": {
-        "symbol": "TSM",
+        "symbol": "NVDA",
         "instrument_type": "equity",
         "direction_bias": "long",
         "relevance_score": 0.9,
         "mapping_confidence": 0.9,
         "mapping_type": "value_chain_company",
-        "reason": "Explicit operator mention in AI design chain: Direct company mention: tsmc"
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
       },
       "research_ideas": [
         {
           "role": "direct_beneficiary",
-          "symbol": "TSM",
+          "symbol": "NVDA",
           "side": "buy",
-          "rationale": "Explicit operator mention in AI design chain: Direct company mention: tsmc",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
           "research_confidence": 0.9,
-          "liquidity_tier": "unknown",
+          "liquidity_tier": "very_high",
           "source": "primary_instrument",
           "source_mapping_type": "value_chain_company",
           "source_direction_bias": "long",
@@ -762,15 +1309,146 @@
         },
         {
           "role": "hidden_supplier",
-          "symbol": "NVDA",
+          "symbol": "AVGO",
           "side": "buy",
-          "rationale": "Primary AI compute design operator",
-          "research_confidence": 0.817,
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
           "liquidity_tier": "very_high",
           "source": "instrument_candidates",
           "source_mapping_type": "value_chain_operator",
           "source_direction_bias": "long",
-          "source_mapping_confidence": 0.86,
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 4,
+        "roles_present": [
+          "direct_beneficiary",
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_d75a3e4224e43597",
+      "signal_id": "sig_a976fb09d23ebc26",
+      "source_title": "Nvidia says it has \u2018largely conceded\u2019 China\u2019s AI chip market to Huawei, per CNBC",
+      "source_url": "https://x.com/unusual_whales/status/2057281293860454901",
+      "source_timestamp": "2026-05-21T06:47:34.973541+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "recommendation_not_take",
+          "reasoning_score_too_weak",
+          "evidence_strength_too_weak"
+        ]
+      },
+      "execution_priority": 0.471,
+      "current_primary_instrument": {
+        "symbol": "NVDA",
+        "instrument_type": "equity",
+        "direction_bias": "long",
+        "relevance_score": 0.9,
+        "mapping_confidence": 0.9,
+        "mapping_type": "value_chain_company",
+        "reason": "Explicit operator mention in AI design chain: Direct company mention: nvidia"
+      },
+      "research_ideas": [
+        {
+          "role": "direct_beneficiary",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.9,
+          "liquidity_tier": "very_high",
+          "source": "primary_instrument",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hidden_supplier",
+          "symbol": "AVGO",
+          "side": "buy",
+          "rationale": "AI networking/custom silicon operator",
+          "research_confidence": 0.779,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
           "provenance": {
             "derived_from": "execution_candidates.json",
             "method": "deterministic_shadow_research_expansion",
@@ -842,11 +1520,92 @@
       }
     },
     {
-      "candidate_id": "cand_42baddc2b2f738b4",
-      "signal_id": "sig_31a016bb31a8ffbd",
+      "candidate_id": "cand_ae5752861875ce02",
+      "signal_id": "sig_e11f159b530538de",
+      "source_title": "\u2018Aramco is selling our sweat and blood\u2019: workers in World Cup sponsor\u2019s supply c",
+      "source_url": "https://www.theguardian.com/business/2026/may/21/aramco-migrant-workers-oil-firm-supply-chain-fairsquare",
+      "source_timestamp": "2026-05-21T06:47:34.973150+00:00",
+      "pattern_id": "p001",
+      "pattern_name": "Saudi Oil Attacks",
+      "theme": "energy_infrastructure",
+      "chain_layer": "industrial_inputs",
+      "chain_sublayer": "oil_supply",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "no_tradable_proxy"
+        ]
+      },
+      "execution_priority": 0.431,
+      "current_primary_instrument": null,
+      "research_ideas": [
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "SH",
+          "side": "buy",
+          "rationale": "Broad equity downside hedge for geopolitical risk-off shocks",
+          "research_confidence": 0.55,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "XLE",
+          "side": "buy",
+          "rationale": "Energy-sector ETF fallback for oil or infrastructure shocks",
+          "research_confidence": 0.58,
+          "liquidity_tier": "very_high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 2,
+        "roles_present": [
+          "etf_fallback",
+          "hedge_or_short_leg"
+        ],
+        "missing_roles": [
+          "direct_beneficiary",
+          "hidden_supplier",
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_5ed2613a9b8909c2",
+      "signal_id": "sig_285321f71c5319a9",
       "source_title": "I need advice trading 0DTE SPY or any other ticker. 10k to 11.2k to 6.7k",
       "source_url": "https://reddit.com/r/Daytrading/comments/1smo45a/i_need_advice_trading_0dte_spy_or_any_other/",
-      "source_timestamp": "2026-05-15T03:47:40.531937+00:00",
+      "source_timestamp": "2026-05-21T06:47:34.973988+00:00",
       "pattern_id": "p024",
       "pattern_name": "Retail Options Sentiment",
       "theme": "none_clear",
@@ -951,34 +1710,96 @@
       }
     },
     {
-      "candidate_id": "cand_615184fb754274f4",
-      "signal_id": "sig_cfa77a96f9756437",
-      "source_title": "Jaguar Land Rover annual profit falls 99% after US tariffs and cyber-attack take",
-      "source_url": "https://www.theguardian.com/business/2026/may/14/jaguar-land-rover-annual-profit-falls-99-per-cent-us-tariffs-cyber-attack",
-      "source_timestamp": "2026-05-15T03:47:40.531445+00:00",
-      "pattern_id": "p033",
-      "pattern_name": "US Tariff War Escalation",
-      "theme": "none_clear",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
+      "candidate_id": "cand_c1ca08626bce04ec",
+      "signal_id": "sig_888285f907c14d9b",
+      "source_title": "$NVDA NVIDIA Q1 Earnings & Q2 Guidance Adjusted EPS $1.87 Revenue $81.62B, est. ",
+      "source_url": "https://x.com/financialjuice/status/2057194900894929281",
+      "source_timestamp": "2026-05-21T06:47:34.973482+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
       "dispatch_readiness": {
         "ready": false,
         "reasons": [
-          "no_tradable_proxy"
+          "no_clear_primary_instrument"
         ]
       },
-      "execution_priority": 0.4,
+      "execution_priority": 0.314,
       "current_primary_instrument": null,
-      "research_ideas": [],
+      "research_ideas": [
+        {
+          "role": "hidden_supplier",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.855,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
       "coverage": {
-        "idea_count": 0,
-        "roles_present": [],
+        "idea_count": 3,
+        "roles_present": [
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
         "missing_roles": [
           "direct_beneficiary",
-          "hidden_supplier",
-          "second_order_beneficiary",
-          "hedge_or_short_leg",
-          "etf_fallback"
+          "second_order_beneficiary"
         ]
       },
       "promotion": {
@@ -990,34 +1811,197 @@
       }
     },
     {
-      "candidate_id": "cand_5b824e6859fc2641",
-      "signal_id": "sig_08168bcd4c3df166",
-      "source_title": "Nigel Farage now says \u00a35m from crypto billionaire was \u2018reward\u2019 for Brexit push",
-      "source_url": "https://www.theguardian.com/politics/2026/may/14/nigel-farage-5m-gift-crypto-billionaire-brexit-reward",
-      "source_timestamp": "2026-05-15T03:47:40.531555+00:00",
-      "pattern_id": "p009",
-      "pattern_name": "Brexit Vote",
-      "theme": "none_clear",
-      "chain_layer": "none_clear",
-      "chain_sublayer": "none_clear",
+      "candidate_id": "cand_0e504fbd70ad863b",
+      "signal_id": "sig_c609aa7f70764e3f",
+      "source_title": "Nvidia\u2019s revenue blows past Wall Street expectations as AI boom accelerates",
+      "source_url": "https://www.theguardian.com/technology/2026/may/20/nvidia-revenue-ai-boom",
+      "source_timestamp": "2026-05-21T06:47:34.973935+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
       "dispatch_readiness": {
         "ready": false,
         "reasons": [
-          "no_tradable_proxy"
+          "no_clear_primary_instrument"
         ]
       },
-      "execution_priority": 0.343,
+      "execution_priority": 0.285,
       "current_primary_instrument": null,
-      "research_ideas": [],
+      "research_ideas": [
+        {
+          "role": "hidden_supplier",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.855,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor sector proxy",
+          "research_confidence": 0.672,
+          "liquidity_tier": "high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "sector_proxy",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.82,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
       "coverage": {
-        "idea_count": 0,
-        "roles_present": [],
+        "idea_count": 3,
+        "roles_present": [
+          "etf_fallback",
+          "hedge_or_short_leg",
+          "hidden_supplier"
+        ],
         "missing_roles": [
           "direct_beneficiary",
-          "hidden_supplier",
-          "second_order_beneficiary",
+          "second_order_beneficiary"
+        ]
+      },
+      "promotion": {
+        "status": "shadow_only",
+        "dispatcher_eligible": false,
+        "requires_human_review": true,
+        "requires_code_promotion": true,
+        "reason": "Research expansion is intentionally disconnected from order dispatch until explicitly approved."
+      }
+    },
+    {
+      "candidate_id": "cand_129560293af41bba",
+      "signal_id": "sig_2817b80f76fcd4e0",
+      "source_title": "NVIDIA, $NVDA, EARNINGS SUMMARY: 1. Record quarterly revenue of $81.6 billion, a",
+      "source_url": "https://x.com/KobeissiLetter/status/2057197655852261864",
+      "source_timestamp": "2026-05-21T06:47:34.973774+00:00",
+      "pattern_id": "p003",
+      "pattern_name": "Reddit GPU/Semis Thread",
+      "theme": "ai_infrastructure",
+      "chain_layer": "semis_design",
+      "chain_sublayer": "gpu_compute",
+      "dispatch_readiness": {
+        "ready": false,
+        "reasons": [
+          "no_clear_primary_instrument"
+        ]
+      },
+      "execution_priority": 0.285,
+      "current_primary_instrument": null,
+      "research_ideas": [
+        {
+          "role": "hidden_supplier",
+          "symbol": "NVDA",
+          "side": "buy",
+          "rationale": "Explicit operator mention in AI design chain: Direct company mention: nvidia",
+          "research_confidence": 0.855,
+          "liquidity_tier": "very_high",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_company",
+          "source_direction_bias": "long",
+          "source_mapping_confidence": 0.9,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "hedge_or_short_leg",
+          "symbol": "INTC",
+          "side": "sell",
+          "rationale": "Structurally weaker AI design/foundry position",
+          "research_confidence": 0.629,
+          "liquidity_tier": "unknown",
+          "source": "instrument_candidates",
+          "source_mapping_type": "value_chain_operator",
+          "source_direction_bias": "short",
+          "source_mapping_confidence": 0.74,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        },
+        {
+          "role": "etf_fallback",
+          "symbol": "SOXX",
+          "side": "buy",
+          "rationale": "Semiconductor ETF fallback for AI infrastructure signals",
+          "research_confidence": 0.58,
+          "liquidity_tier": "high",
+          "source": "theme_fallback",
+          "source_mapping_type": null,
+          "source_direction_bias": null,
+          "source_mapping_confidence": null,
+          "provenance": {
+            "derived_from": "execution_candidates.json",
+            "method": "deterministic_shadow_research_expansion",
+            "llm_status": "not_called_in_runtime"
+          },
+          "promotion_status": "shadow_only",
+          "dispatcher_eligible": false,
+          "executable": false
+        }
+      ],
+      "coverage": {
+        "idea_count": 3,
+        "roles_present": [
+          "etf_fallback",
           "hedge_or_short_leg",
-          "etf_fallback"
+          "hidden_supplier"
+        ],
+        "missing_roles": [
+          "direct_beneficiary",
+          "second_order_beneficiary"
         ]
       },
       "promotion": {

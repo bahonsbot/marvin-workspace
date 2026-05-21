@@ -296,11 +296,22 @@ Default conservative rules (via `.env`):
 - `AUTO_BASE_QTY=1`
 - `AUTO_MAX_QTY=1`
 - `AUTO_MARKET_HOURS_ONLY=true` (US market session gate)
+- `AUTO_MAX_SYMBOL_ATTEMPTS_PER_RUN=2`
+- `AUTO_MAX_SECTOR_ATTEMPTS_PER_RUN=4`
 
 State/idempotency file:
 - `data/state/auto_signal_dispatch.json`
 
 This avoids duplicate dispatches for the same signal key.
+
+Per-run concentration controls stop one noisy theme from flooding the webhook before broker/risk guards see it. They count main and explorer attempts together, then skip extra same-symbol or same-sector candidates in the current dispatcher run.
+
+Broker-backed concentration risk guards are also available when `BROKER_ACCOUNT_STATE_ENABLED=true`:
+- `MAX_SYMBOL_POSITION_QTY=0` disables per-symbol quantity caps; set a positive value to block buys once the current paper position quantity is already at/above that value.
+- `MAX_SYMBOL_POSITION_VALUE=0` disables per-symbol market-value caps; set a positive value to block buys once the current paper position market value is already at/above that value.
+- `MAX_SECTOR_POSITIONS=0` disables sector-count caps; set a positive value to block new symbols in an already crowded sector.
+
+These guards do not block sells; sell inventory protection remains separate.
 
 ### Fast Regime Mode (optional, enabled by default)
 When macro stress is high, dispatch can switch to FAST mode:

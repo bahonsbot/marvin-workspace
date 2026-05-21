@@ -266,6 +266,37 @@ OIL_DISRUPTION_TERMS = (
     "chokes", "halts", "halt", "surge", "spike", "spikes", "escort",
 )
 
+OIL_FALSE_CONTEXT_TERMS = (
+    "esports",
+    "world cup",
+    "gaming",
+    "tournament",
+    "football",
+    "tourism",
+    "concert",
+    "entertainment",
+    "venue",
+    "paris",
+    "riyadh",
+)
+
+OIL_PRODUCER_TERMS = (
+    "oil",
+    "crude",
+    "opec",
+    "aramco",
+    "abqaiq",
+    "khurais",
+    "hormuz",
+    "tanker",
+    "tankers",
+    "red sea",
+    "bab al-mandab",
+    "strait",
+    "gulf oil",
+    "exports",
+)
+
 OIL_EXECUTION_TERMS = (
     "disruption",
     "reroute",
@@ -561,6 +592,8 @@ def infer_topic_families(text: str, category: str = "") -> frozenset[str]:
 def infer_title_context(title: str) -> TitleContext:
     title_norm = normalize_text(title)
     families = infer_topic_families(title)
+    if any(term in title_norm for term in OIL_FALSE_CONTEXT_TERMS) and not has_clean_oil_execution_title(title):
+        families = frozenset(sorted(set(families) | {"non_market_event"}))
     broad_roundup = any(phrase in title_norm for phrase in BROAD_ROUNDUP_PHRASES)
     explicit_single_name = bool(detect_company_candidates(title))
     mixed_theme = len(families) > 1
@@ -596,7 +629,9 @@ def has_strong_family_mismatch(title_context: TitleContext, upstream: frozenset[
 
 def has_clean_oil_execution_title(title: str) -> bool:
     title_norm = normalize_text(title)
-    return any(term in title_norm for term in OIL_EXECUTION_TERMS)
+    if any(term in title_norm for term in OIL_FALSE_CONTEXT_TERMS) and not any(term in title_norm for term in OIL_PRODUCER_TERMS):
+        return False
+    return any(term in title_norm for term in OIL_EXECUTION_TERMS) and any(term in title_norm for term in OIL_PRODUCER_TERMS)
 
 
 
@@ -621,7 +656,7 @@ def detect_value_chain_candidates(signal: dict[str, Any], title_context: TitleCo
             )
         )
 
-    if theme == "energy_infrastructure" and sublayer == "oil_supply":
+    if theme == "energy_infrastructure" and sublayer == "oil_supply" and has_clean_oil_execution_title(str(signal.get("title", ""))):
         add("XOM", "equity", 0.90, "value_chain_operator", "long", "Integrated oil major with direct supply sensitivity")
         add("CVX", "equity", 0.88, "value_chain_operator", "long", "Integrated oil major with direct supply sensitivity")
         add("USO", "etf", 0.87, "value_chain_theme", "long", "Value-chain oil supply proxy")
@@ -877,6 +912,8 @@ def adjust_candidates_for_title_context(
 
 
 def fallback_macro_candidates(category: str, pattern_name: str, reasoning_score: float, title_context: TitleContext) -> list[InstrumentCandidate]:
+    if "non_market_event" in title_context.families:
+        return []
     if normalize_text(category) not in {"geopolitical", "macroeconomic", "sentiment_news", "sentiment_social"}:
         return []
     title_score = clamp(reasoning_score / 100.0)
@@ -972,6 +1009,15 @@ def choose_primary_instrument(
     instrument_candidates: list[dict[str, Any]],
     title_context: TitleContext,
 ) -> dict[str, Any] | None:
+    title = str(signal.get("title", ""))
+    title_norm = normalize_text(title)
+    if (
+        signal.get("theme") == "energy_infrastructure"
+        and signal.get("chain_sublayer") == "oil_supply"
+        and any(term in title_norm for term in OIL_FALSE_CONTEXT_TERMS)
+        and not has_clean_oil_execution_title(title)
+    ):
+        return None
     if not instrument_candidates:
         return None
     if title_context.broad_roundup and not title_context.explicit_single_name:

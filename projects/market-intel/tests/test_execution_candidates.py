@@ -125,6 +125,19 @@ class ExecutionCandidatesTest(unittest.TestCase):
             self.assertIn("pattern_topic_mismatch", mismatch["dispatch_readiness"]["reasons"])
             self.assertEqual(mismatch["primary_instrument"]["symbol"], "ULTA")
 
+    def test_saudi_esports_headline_does_not_map_to_oil_supply_trade(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            data_dir = Path(tmp)
+            self._write_fixture_files(data_dir)
+
+            candidates = build_execution_candidates(data_dir)
+            esports = self._find_candidate(candidates, "France will host the Esports World Cup")
+
+            self.assertFalse(esports["dispatch_readiness"]["ready"])
+            self.assertIn("no_tradable_proxy", esports["dispatch_readiness"]["reasons"])
+            self.assertIsNone(esports["primary_instrument"])
+            self.assertFalse(any(item["symbol"] in {"XOM", "CVX", "USO"} for item in esports["instrument_candidates"]))
+
     def _find_candidate(self, candidates: list[dict], title_fragment: str) -> dict:
         for candidate in candidates:
             if title_fragment in candidate["source_title"]:
@@ -323,6 +336,27 @@ class ExecutionCandidatesTest(unittest.TestCase):
                     "predicted_outcomes": ["risk_off"],
                     "predicted_causal_chain": ["Policy concern", "Pandemic memory", "Risk-off hedge bid"],
                     "signal_briefing": "AP duplicate two",
+                },
+                {
+                    "source": "rss",
+                    "feed": "Bloomberg",
+                    "title": "France will host the Esports World Cup this summer in Paris, switching from Riyadh",
+                    "url": "https://example.com/esports-world-cup",
+                    "timestamp": "2026-03-13T06:30:00Z",
+                    "pattern_id": "p001",
+                    "pattern": "Saudi Oil Attacks",
+                    "category": "geopolitical",
+                    "confidence": "HIGH",
+                    "time_horizon": "intraday",
+                    "signal_score": 230,
+                    "reasoning_score": 86.0,
+                    "confidence_level": "BUY",
+                    "recommendation": "TAKE",
+                    "reasoning_components": {"feedback_bias_points": 2.0, "feedback_sample_size": 6},
+                    "reasoning": "Saudi/Riyadh mention but no oil supply disruption.",
+                    "predicted_outcomes": ["venue_shift"],
+                    "predicted_causal_chain": ["Tournament host changes"],
+                    "signal_briefing": "Non-oil Saudi false positive",
                 },
             ],
         )

@@ -65,6 +65,43 @@ class TestRiskManager(unittest.TestCase):
 
         self.assertTrue(decision["allow"])
 
+    def test_denies_buy_when_symbol_quantity_cap_reached(self):
+        config = RiskConfig(
+            kill_switch_enabled=False,
+            daily_loss_cap=100.0,
+            max_position_size=2.0,
+            max_open_positions=10,
+            max_symbol_position_qty=3.0,
+        )
+        state = AccountState(daily_pnl=0.0, open_positions=2, positions={"LMT": 4.2})
+        signal = {"symbol": "LMT", "side": "buy", "qty": 1, "timestamp": "2026-03-01T00:00:00Z"}
+
+        decision = evaluate_risk_decision(signal, state, config)
+
+        self.assertFalse(decision["allow"])
+        self.assertTrue(any("Symbol concentration reached" in reason for reason in decision["reasons"]))
+
+    def test_denies_new_sector_when_sector_cap_reached(self):
+        config = RiskConfig(
+            kill_switch_enabled=False,
+            daily_loss_cap=100.0,
+            max_position_size=2.0,
+            max_open_positions=10,
+            max_sector_positions=2,
+        )
+        state = AccountState(
+            daily_pnl=0.0,
+            open_positions=2,
+            positions={"XOM": 1.0, "CVX": 1.0},
+            position_sectors={"XOM": "energy", "CVX": "energy", "USO": "energy"},
+        )
+        signal = {"symbol": "USO", "side": "buy", "qty": 1, "timestamp": "2026-03-01T00:00:00Z"}
+
+        decision = evaluate_risk_decision(signal, state, config)
+
+        self.assertFalse(decision["allow"])
+        self.assertTrue(any("Sector concentration reached" in reason for reason in decision["reasons"]))
+
     # === Kill Switch Tests ===
 
     def test_denies_when_kill_switch_enabled(self):
@@ -284,8 +321,16 @@ class TestRiskManager(unittest.TestCase):
         decision = evaluate_risk_decision(self._base_signal(), self._base_state(), self._base_config())
 
         self.assertIn("checked_rules", decision)
-        self.assertEqual(len(decision["checked_rules"]), 5)
-        expected_rules = ["kill_switch", "daily_loss_cap", "max_position_size", "max_open_positions", "sell_inventory"]
+        self.assertEqual(len(decision["checked_rules"]), 7)
+        expected_rules = [
+            "kill_switch",
+            "daily_loss_cap",
+            "max_position_size",
+            "max_open_positions",
+            "symbol_concentration",
+            "sector_concentration",
+            "sell_inventory",
+        ]
         for rule in expected_rules:
             self.assertIn(rule, decision["checked_rules"])
 
