@@ -153,6 +153,59 @@ class TestWebhookReceiver(unittest.TestCase):
         self.assertFalse(result["accepted"])
         self.assertTrue(any("Sell blocked" in reason for reason in result["reasons"]))
 
+    @patch.dict(
+        "os.environ",
+        {"KILL_SWITCH": "false", "BROKER_ACCOUNT_STATE_ENABLED": "true", "BROKER_SYMBOL_VALIDATION_ENABLED": "false"},
+        clear=False,
+    )
+    @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})
+    @patch("src.webhook_receiver.AlpacaPaperAdapter")
+    def test_broker_state_warning_can_continue_in_dry_run(self, mock_adapter_cls, _mock_context):
+        adapter = Mock()
+        adapter.get_account.side_effect = RuntimeError("account unavailable")
+        adapter.list_positions.return_value = []
+        mock_adapter_cls.return_value = adapter
+
+        result = process_webhook_payload(
+            self._payload(),
+            state=None,
+            config=None,
+            paper_execute=False,
+        )
+
+        self.assertTrue(result["accepted"])
+        self.assertEqual(result["execution"]["status"], "dry_run")
+        self.assertTrue(any("account_state_unavailable" in warning for warning in result["state_warnings"]))
+
+    @patch.dict(
+        "os.environ",
+        {"KILL_SWITCH": "false", "BROKER_ACCOUNT_STATE_ENABLED": "true", "BROKER_SYMBOL_VALIDATION_ENABLED": "false"},
+        clear=False,
+    )
+    @patch("src.webhook_receiver.load_context_snapshot", return_value={"summary": {"available_context": False}})
+    @patch("src.webhook_receiver.ExecutionOrchestrator")
+    @patch("src.webhook_receiver.AlpacaPaperAdapter")
+    def test_broker_state_warning_fails_closed_in_paper_execution(self, mock_adapter_cls, mock_orchestrator_cls, _mock_context):
+        adapter = Mock()
+        adapter.get_account.side_effect = RuntimeError("account unavailable")
+        adapter.list_positions.return_value = []
+        mock_adapter_cls.return_value = adapter
+
+        result = process_webhook_payload(
+            self._payload(),
+            state=None,
+            config=None,
+            paper_execute=True,
+        )
+
+        self.assertFalse(result["accepted"])
+        self.assertEqual(result["execution"]["status"], "broker_state_unavailable")
+        self.assertTrue(any("Broker account state unavailable" in reason for reason in result["reasons"]))
+        self.assertFalse(mock_orchestrator_cls.called)
+        response = _public_webhook_response(result)
+        self.assertFalse(response["accepted"])
+        self.assertEqual(response["execution_status"], "broker_state_unavailable")
+
     def test_public_response_includes_execution_status_for_dry_run(self):
         result = process_webhook_payload(
             self._payload(),

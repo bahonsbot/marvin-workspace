@@ -481,6 +481,28 @@ def process_webhook_payload(
             "paper_only": True,
         }
 
+    if paper_execute and state_warnings:
+        reasons = [
+            "Broker account state unavailable; paper execution is blocked fail-closed."
+        ] + state_warnings
+        return {
+            "accepted": False,
+            "reasons": reasons,
+            "validation": validation,
+            "context": None,
+            "decision_context": None,
+            "proposal": None,
+            "risk": None,
+            "state_warnings": state_warnings,
+            "execution": {
+                "executed": False,
+                "status": "broker_state_unavailable",
+                "paper_execute": True,
+                "paper_only": True,
+            },
+            "paper_only": True,
+        }
+
     normalized = dict(validation["normalized"])
 
     # Broker-backed symbol existence/tradability validation (fail-open on broker outage).
